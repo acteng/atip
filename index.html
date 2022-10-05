@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ATIP</title>
+  </head>
+  <body>
+    <h1>Welcome to the ATIP prototype</h1>
+    <p>Select a transportation authority:</p>
+    <ul id="authorities"></ul>
+    <script>
+      async function createList() {
+        const list = document.getElementById("authorities");
+
+        const resp = await fetch("authorities.geojson");
+        const body = await resp.text();
+        const json = JSON.parse(body);
+        for (const feature of json.features) {
+          const name = feature.properties.Name;
+          var li = document.createElement("li");
+          li.innerHTML = `<a href="area.html?authority=${name}">${name}</a>`;
+          list.appendChild(li);
+        }
+      }
+
+      createList();
+    </script>
+  </body>
+</html>
