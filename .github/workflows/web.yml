@@ -13,8 +13,7 @@ jobs:
       - name: Build web app
         run: |
                 mkdir publish
-                cp -RLv * publish
-                rm -fv publish/README.md publish/LICENSE publish/serve_locally.sh
+                cp -Rv *.html *.geojson deps publish
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
