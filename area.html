@@ -8,11 +8,18 @@
     />
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <script src="deps/geojson-extent.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
     <link
       href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.css"
+      type="text/css"
+    />
     <style>
+      /* The map */
       body {
         margin: 0;
         padding: 0;
@@ -23,6 +30,8 @@
         bottom: 0;
         width: 100%;
       }
+
+      /* The sidebar */
 
       .rounded-rect {
         background: white;
@@ -77,6 +86,12 @@
 
       .left.collapsed {
         transform: translateX(-295px);
+      }
+
+      /* The modal popup */
+      .mapboxgl-popup {
+        width: 600px;
+        /* TODO Height seems responsive to content, can't make it take lots of the screen */
       }
     </style>
   </head>
@@ -141,6 +156,24 @@
             "line-color": "black",
             "line-width": 3,
           },
+        });
+
+        map.addControl(
+          new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+              polygon: true,
+            },
+          })
+        );
+
+        map.on("draw.create", function (e) {
+          // closeOnClick is needed, because finishing drawing also counts as a click
+          new maplibregl.Popup({ closeOnClick: false, maxWidth: "none" })
+            // TODO Center on the new polygon?
+            .setLngLat(e.features[0].geometry.coordinates[0][0])
+            .setHTML(`<u>Fill out some stuff</u>`)
+            .addTo(map);
         });
       });
     </script>
