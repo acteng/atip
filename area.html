@@ -23,10 +23,78 @@
         bottom: 0;
         width: 100%;
       }
+
+      .rounded-rect {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 50px -25px black;
+      }
+
+      .flex-center {
+        position: absolute;
+        display: flex;
+        align-items: center;
+      }
+
+      .flex-center.left {
+        left: 0px;
+      }
+
+      .sidebar-content {
+        position: absolute;
+        width: 95%;
+        height: 95%;
+        flex-direction: column;
+      }
+
+      .sidebar-toggle {
+        position: absolute;
+        width: 1.3em;
+        height: 1.3em;
+        overflow: visible;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 32px;
+      }
+
+      .sidebar-toggle.left {
+        right: -1.5em;
+      }
+
+      .sidebar-toggle:hover {
+        color: #0aa1cf;
+        cursor: pointer;
+      }
+
+      .sidebar {
+        transition: transform 0.1s;
+        z-index: 1;
+        width: 300px;
+        height: 100%;
+      }
+
+      .left.collapsed {
+        transform: translateX(-295px);
+      }
     </style>
   </head>
   <body>
-    <div id="map"></div>
+    <div id="map">
+      <div id="left" class="sidebar flex-center left">
+        <div class="sidebar-content rounded-rect flex-center">
+          <a href="index.html">Back</a>
+          <div
+            class="sidebar-toggle rounded-rect left"
+            onclick="document.getElementById('left').classList.toggle('collapsed')"
+          >
+            &rarr;
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       const authority = new URLSearchParams(window.location.search).get(
         "authority"
@@ -50,6 +118,10 @@
 
       map.on("load", async function () {
         const boundaryGeojson = await loadBoundary();
+
+        const sidebar = document.getElementsByClassName("sidebar-content")[0];
+        sidebar.innerHTML += `<h1>${authority}</h1>`;
+        sidebar.innerHTML += `<i>Population (2020): ${boundaryGeojson.features[0].properties.Population_2020}</i>`;
 
         map.fitBounds(geojsonExtent(boundaryGeojson), {
           padding: 20,
