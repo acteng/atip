@@ -130,6 +130,15 @@
         style:
           "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
       });
+      // For debugging
+      window.map = map;
+
+      const drawControls = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: {
+          polygon: true,
+        },
+      });
 
       map.on("load", async function () {
         const boundaryGeojson = await loadBoundary();
@@ -158,24 +167,51 @@
           },
         });
 
-        map.addControl(
-          new MapboxDraw({
-            displayControlsDefault: false,
-            controls: {
-              polygon: true,
-            },
-          })
-        );
+        map.addControl(drawControls);
 
-        map.on("draw.create", function (e) {
-          // closeOnClick is needed, because finishing drawing also counts as a click
-          new maplibregl.Popup({ closeOnClick: false, maxWidth: "none" })
-            // TODO Center on the new polygon?
-            .setLngLat(e.features[0].geometry.coordinates[0][0])
-            .setHTML(`<u>Fill out some stuff</u>`)
-            .addTo(map);
+        map.on("draw.selectionchange", function (e) {
+          if (e.features.length == 1) {
+            const feature = e.features[0];
+            new maplibregl.Popup({ closeOnClick: false, maxWidth: "none" })
+              // TODO Center on the new polygon?
+              .setLngLat(feature.geometry.coordinates[0][0])
+              .setHTML(areaForm(feature.id, feature.properties))
+              .addTo(map);
+          }
         });
       });
+
+      // Properties may all be missing
+      function areaForm(id, props) {
+        return `
+<form>
+
+<label for="scheme_name">Scheme name:</label>
+<input type="text" id="scheme_name" value="${props.scheme_name || ""}"><br>
+
+<label for="start_date">Proposed construction start:</label>
+<input type="date" id="start_date" value="${props.start_date || ""}"><br>
+
+<button type="button" onclick='saveForm("${id}");'>Save</button>
+
+</form>
+`;
+      }
+
+      function saveForm(id) {
+        // TODO Why can't we do drawControls.get(id) and then just modify it?
+        drawControls.setFeatureProperty(
+          id,
+          "scheme_name",
+          document.getElementById("scheme_name").value
+        );
+        drawControls.setFeatureProperty(
+          id,
+          "start_date",
+          document.getElementById("start_date").value
+        );
+        console.log(`Saved ${id}: ${JSON.stringify(feature)}`);
+      }
     </script>
   </body>
 </html>
