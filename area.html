@@ -140,6 +140,8 @@
         },
       });
 
+      var openPopup = null;
+
       map.on("load", async function () {
         const boundaryGeojson = await loadBoundary();
 
@@ -170,19 +172,33 @@
         map.addControl(drawControls);
 
         map.on("draw.selectionchange", function (e) {
+          if (openPopup != null) {
+            openPopup.remove();
+            openPopup = null;
+          }
+
           if (e.features.length == 1) {
             const feature = e.features[0];
-            new maplibregl.Popup({ closeOnClick: false, maxWidth: "none" })
+            openPopup = new maplibregl.Popup({
+              closeOnClick: false,
+              maxWidth: "none",
+            })
               // TODO Center on the new polygon?
               .setLngLat(feature.geometry.coordinates[0][0])
-              .setHTML(areaForm(feature.id, feature.properties))
+              .setHTML(areaForm(feature.properties))
               .addTo(map);
+
+            document.getElementById("save").onclick = function (_) {
+              saveForm(feature.id);
+              openPopup.remove();
+              openPopup = null;
+            };
           }
         });
       });
 
       // Properties may all be missing
-      function areaForm(id, props) {
+      function areaForm(props) {
         return `
 <form>
 
@@ -192,7 +208,7 @@
 <label for="start_date">Proposed construction start:</label>
 <input type="date" id="start_date" value="${props.start_date || ""}"><br>
 
-<button type="button" onclick='saveForm("${id}");'>Save</button>
+<button type="button" id="save">Save</button>
 
 </form>
 `;
@@ -210,7 +226,6 @@
           "start_date",
           document.getElementById("start_date").value
         );
-        console.log(`Saved ${id}: ${JSON.stringify(feature)}`);
       }
     </script>
   </body>
