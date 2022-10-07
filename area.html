@@ -100,6 +100,13 @@
       <div id="left" class="sidebar flex-center left">
         <div class="sidebar-content rounded-rect flex-center">
           <a href="index.html">Back</a>
+          <h1 id="authority"></h1>
+          Population: <i id="population"></i><br />
+          Number of areas drawn:
+          <p id="num_areas">0</p>
+          <br />
+          <button type="button" id="export">Export to GeoJSON</button>
+
           <div
             class="sidebar-toggle rounded-rect left"
             onclick="document.getElementById('left').classList.toggle('collapsed')"
@@ -114,6 +121,18 @@
       const authority = new URLSearchParams(window.location.search).get(
         "authority"
       );
+
+      function downloadGeneratedFile(filename, textInput) {
+        var element = document.createElement("a");
+        element.setAttribute(
+          "href",
+          "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput)
+        );
+        element.setAttribute("download", filename);
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      }
 
       async function loadBoundary() {
         const resp = await fetch("authorities.geojson");
@@ -130,8 +149,6 @@
         style:
           "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
       });
-      // For debugging
-      window.map = map;
 
       const drawControls = new MapboxDraw({
         displayControlsDefault: false,
@@ -140,14 +157,25 @@
         },
       });
 
+      // For debugging
+      window.map = map;
+      window.drawControls = drawControls;
+
+      document.getElementById("export").onclick = function (_) {
+        downloadGeneratedFile(
+          `${authority}_areas.geojson`,
+          JSON.stringify(drawControls.getAll())
+        );
+      };
+
       var openPopup = null;
 
       map.on("load", async function () {
         const boundaryGeojson = await loadBoundary();
 
-        const sidebar = document.getElementsByClassName("sidebar-content")[0];
-        sidebar.innerHTML += `<h1>${authority}</h1>`;
-        sidebar.innerHTML += `<i>Population (2020): ${boundaryGeojson.features[0].properties.Population_2020}</i>`;
+        document.getElementById("authority").innerText = authority;
+        document.getElementById("population").innerText =
+          boundaryGeojson.features[0].properties.Population_2020;
 
         map.fitBounds(geojsonExtent(boundaryGeojson), {
           padding: 20,
@@ -176,6 +204,9 @@
             openPopup.remove();
             openPopup = null;
           }
+
+          document.getElementById("num_areas").innerText =
+            drawControls.getAll().features.length;
 
           if (e.features.length == 1) {
             const feature = e.features[0];
