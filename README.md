@@ -1,6 +1,6 @@
 # Active Travel Intervention Platform
 
-A very early prototype, without explanation.
+A very early prototype, without explanation. Go play with <https://acteng.github.io/atip>.
 
 ## Development
 
