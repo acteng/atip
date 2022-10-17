@@ -1,288 +1,118 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>ATIP Area Intervention</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <script src="deps/geojson-extent.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
+    <script type="module">
+      import { App } from "./app.js";
 
-<head>
-  <title>ATIP Area Intervention</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
-  <script src="deps/geojson-extent.js"></script>
-  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
-  <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.css"
-    type="text/css" />
-  <style>
-    /* The map */
-    body {
-      margin: 0;
-      padding: 0;
-    }
+      const drawControls = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: {
+          polygon: true,
+        },
+      });
+      window.app = new App(
+        "areas",
+        drawControls,
+        updateSidebar,
+        makeForm,
+        saveForm
+      );
 
-    #map {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 100%;
-    }
+      document.getElementById("export").onclick = () => {
+        window.app.downloadGeojsonFile();
+      };
+      document.getElementById("load_geojson").onchange = (e) => {
+        window.app.loadFromGeojson(e);
+      };
 
-    /* The sidebar */
+      function updateSidebar(app) {
+        document.getElementById("num_areas").innerText =
+          app.drawControls.getAll().features.length;
+      }
 
-    .rounded-rect {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 50px -25px black;
-    }
+      // Properties may all be missing
+      function makeForm(props) {
+        return `
+      <form>
 
-    .flex-center {
-      position: absolute;
-      display: flex;
-      align-items: center;
-    }
+      <label for="scheme_name">Scheme name:</label>
+      <input type="text" id="scheme_name" value="${
+        props.scheme_name || ""
+      }"><br>
 
-    .flex-center.left {
-      left: 0px;
-    }
+      <label for="start_date">Proposed construction start:</label>
+      <input type="date" id="start_date" value="${props.start_date || ""}"><br>
 
-    .sidebar-content {
-      position: absolute;
-      width: 95%;
-      height: 95%;
-      flex-direction: column;
-    }
+      <button type="button" id="save">Save</button>
 
-    .sidebar-toggle {
-      position: absolute;
-      width: 1.3em;
-      height: 1.3em;
-      overflow: visible;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 32px;
-    }
+      </form>
+      `;
+      }
 
-    .sidebar-toggle.left {
-      right: -1.5em;
-    }
+      function saveForm(app, id) {
+        // TODO Why can't we do drawControls.get(id) and then just modify it?
+        app.drawControls.setFeatureProperty(
+          id,
+          "scheme_name",
+          document.getElementById("scheme_name").value
+        );
+        app.drawControls.setFeatureProperty(
+          id,
+          "start_date",
+          document.getElementById("start_date").value
+        );
+      }
+    </script>
+    <link
+      href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.css"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="map_with_sidebar.css" type="text/css" />
+    <style>
+      .mapboxgl-popup {
+        width: 600px;
+        /* TODO Height seems responsive to content, can't make it take lots of the screen */
+      }
+    </style>
+  </head>
 
-    .sidebar-toggle:hover {
-      color: #0aa1cf;
-      cursor: pointer;
-    }
+  <body>
+    <div id="map">
+      <div id="left" class="sidebar flex-center left">
+        <div class="sidebar-content rounded-rect flex-center">
+          <a href="index.html">Home</a>
+          <h2>Area Interventions</h2>
+          Draw the boundaries by clicking on draw button (top right of the map).
+          Click on the first point of when the boundary is complete and add data
+          fields.
+          <h1 id="authority"></h1>
+          Population: <i id="population"></i><br />
+          Number of areas drawn: <i id="num_areas">0</i><br />
 
-    .sidebar {
-      transition: transform 0.1s;
-      z-index: 1;
-      width: 300px;
-      height: 100%;
-    }
+          <button type="button" id="export">Export to GeoJSON</button>
+          Load from GeoJSON: <input type="file" id="load_geojson" />
 
-    .left.collapsed {
-      transform: translateX(-295px);
-    }
-
-    /* The modal popup */
-    .mapboxgl-popup {
-      width: 600px;
-      /* TODO Height seems responsive to content, can't make it take lots of the screen */
-    }
-  </style>
-</head>
-
-<body>
-  <div id="map">
-    <div id="left" class="sidebar flex-center left">
-      <div class="sidebar-content rounded-rect flex-center">
-        <a href="index.html">Home</a>
-        <h2>Area Interventions</h2>
-        Draw the boundaries by clicking on draw button (top right of the map).
-        Click on the first point of when the boundary is complete and add data fields.
-        <h1 id="authority"></h1>
-        Population: <i id="population"></i><br />
-        Number of areas drawn: <i id="num_areas">0</i><br />
-
-        <button type="button" id="export">Export to GeoJSON</button>
-        Load from GeoJSON: <input type="file" id="load_geojson" />
-
-        <div class="sidebar-toggle rounded-rect left"
-          onclick="document.getElementById('left').classList.toggle('collapsed')">
-          &rarr;
+          <div
+            class="sidebar-toggle rounded-rect left"
+            onclick="document.getElementById('left').classList.toggle('collapsed')"
+          >
+            &rarr;
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <script>
-    const authority = new URLSearchParams(window.location.search).get(
-      "authority"
-    );
-    const currentFilename = `${authority}_areas.geojson`;
-
-    function downloadGeneratedFile(filename, textInput) {
-      var element = document.createElement("a");
-      element.setAttribute(
-        "href",
-        "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput)
-      );
-      element.setAttribute("download", filename);
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
-
-    async function loadBoundary() {
-      const resp = await fetch("authorities.geojson");
-      const body = await resp.text();
-      const geojson = JSON.parse(body);
-      geojson.features = geojson.features.filter(
-        (feature) => feature.properties.Name == authority
-      );
-      return geojson;
-    }
-
-    var map = new maplibregl.Map({
-      container: "map",
-      style:
-        "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
-    });
-
-    const drawControls = new MapboxDraw({
-      displayControlsDefault: false,
-      controls: {
-        polygon: true,
-      },
-    });
-
-    // For debugging
-    window.map = map;
-    window.drawControls = drawControls;
-
-    document.getElementById("export").onclick = function (_) {
-      downloadGeneratedFile(currentFilename,
-        JSON.stringify(drawControls.getAll())
-      );
-    };
-
-    function loadFromText(text) {
-      const geojson = JSON.parse(text);
-      drawControls.set(geojson);
-      document.getElementById("num_areas").innerText =
-        drawControls.getAll().features.length;
-    }
-
-    document.getElementById("load_geojson").onchange = function (e) {
-      const reader = new FileReader();
-      // TODO No await? :(
-      reader.onload = function (e) {
-        loadFromText(e.target.result);
-
-        // Sync to local storage
-        window.localStorage.setItem(currentFilename,
-          JSON.stringify(drawControls.getAll()));
-      };
-      reader.readAsText(e.target.files[0]);
-    };
-
-    var openPopup = null;
-
-    map.on("load", async function () {
-      const boundaryGeojson = await loadBoundary();
-
-      document.getElementById("authority").innerText = authority;
-      document.getElementById("population").innerText =
-        boundaryGeojson.features[0].properties.Population_2020;
-
-      map.fitBounds(geojsonExtent(boundaryGeojson), {
-        padding: 20,
-        animate: false,
-      });
-
-      map.addSource("boundary", {
-        type: "geojson",
-        data: boundaryGeojson,
-      });
-      map.addLayer({
-        id: "boundary",
-        type: "line",
-        source: "boundary",
-        layout: {},
-        paint: {
-          "line-color": "black",
-          "line-width": 3,
-        },
-      });
-
-      map.addControl(drawControls);
-
-      // Load from local storage
-      const loadLocal = window.localStorage.getItem(currentFilename);
-      if (loadLocal) {
-        loadFromText(loadLocal);
-      }
-
-      map.on("draw.selectionchange", function (e) {
-        if (openPopup != null) {
-          openPopup.remove();
-          openPopup = null;
-        }
-
-        document.getElementById("num_areas").innerText =
-          drawControls.getAll().features.length;
-        // Sync to local storage
-        window.localStorage.setItem(currentFilename,
-          JSON.stringify(drawControls.getAll()));
-
-        if (e.features.length == 1) {
-          const feature = e.features[0];
-          openPopup = new maplibregl.Popup({
-            closeOnClick: false,
-            maxWidth: "none",
-          })
-            // TODO Center on the new polygon?
-            .setLngLat(feature.geometry.coordinates[0][0])
-            .setHTML(areaForm(feature.properties))
-            .addTo(map);
-
-          document.getElementById("save").onclick = function (_) {
-            saveForm(feature.id);
-            openPopup.remove();
-            openPopup = null;
-          };
-        }
-      });
-    });
-
-    // Properties may all be missing
-    function areaForm(props) {
-      return `
-<form>
-
-<label for="scheme_name">Scheme name:</label>
-<input type="text" id="scheme_name" value="${props.scheme_name || ""}"><br>
-
-<label for="start_date">Proposed construction start:</label>
-<input type="date" id="start_date" value="${props.start_date || ""}"><br>
-
-<button type="button" id="save">Save</button>
-
-</form>
-`;
-    }
-
-    function saveForm(id) {
-      // TODO Why can't we do drawControls.get(id) and then just modify it?
-      drawControls.setFeatureProperty(
-        id,
-        "scheme_name",
-        document.getElementById("scheme_name").value
-      );
-      drawControls.setFeatureProperty(
-        id,
-        "start_date",
-        document.getElementById("start_date").value
-      );
-    }
-  </script>
-</body>
-
+  </body>
 </html>
