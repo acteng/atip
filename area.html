@@ -1,238 +1,243 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ATIP Area Intervention</title>
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
-    <script src="deps/geojson-extent.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
-    <link
-      href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.css"
-      type="text/css"
-    />
-    <style>
-      /* The map */
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-      }
 
-      /* The sidebar */
+<head>
+  <title>ATIP Area Intervention</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+  <script src="deps/geojson-extent.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.css"
+    type="text/css" />
+  <style>
+    /* The map */
+    body {
+      margin: 0;
+      padding: 0;
+    }
 
-      .rounded-rect {
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 0 50px -25px black;
-      }
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
 
-      .flex-center {
-        position: absolute;
-        display: flex;
-        align-items: center;
-      }
+    /* The sidebar */
 
-      .flex-center.left {
-        left: 0px;
-      }
+    .rounded-rect {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 50px -25px black;
+    }
 
-      .sidebar-content {
-        position: absolute;
-        width: 95%;
-        height: 95%;
-        flex-direction: column;
-      }
+    .flex-center {
+      position: absolute;
+      display: flex;
+      align-items: center;
+    }
 
-      .sidebar-toggle {
-        position: absolute;
-        width: 1.3em;
-        height: 1.3em;
-        overflow: visible;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 32px;
-      }
+    .flex-center.left {
+      left: 0px;
+    }
 
-      .sidebar-toggle.left {
-        right: -1.5em;
-      }
+    .sidebar-content {
+      position: absolute;
+      width: 95%;
+      height: 95%;
+      flex-direction: column;
+    }
 
-      .sidebar-toggle:hover {
-        color: #0aa1cf;
-        cursor: pointer;
-      }
+    .sidebar-toggle {
+      position: absolute;
+      width: 1.3em;
+      height: 1.3em;
+      overflow: visible;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 32px;
+    }
 
-      .sidebar {
-        transition: transform 0.1s;
-        z-index: 1;
-        width: 300px;
-        height: 100%;
-      }
+    .sidebar-toggle.left {
+      right: -1.5em;
+    }
 
-      .left.collapsed {
-        transform: translateX(-295px);
-      }
+    .sidebar-toggle:hover {
+      color: #0aa1cf;
+      cursor: pointer;
+    }
 
-      /* The modal popup */
-      .mapboxgl-popup {
-        width: 600px;
-        /* TODO Height seems responsive to content, can't make it take lots of the screen */
-      }
-    </style>
-  </head>
-  <body>
-    <div id="map">
-      <div id="left" class="sidebar flex-center left">
-        <div class="sidebar-content rounded-rect flex-center">
-          <a href="index.html">Home</a>
-          <h2>Area Interventions</h2>
-          Draw the boundaries by clicking on draw button (top right of the map).
-          Click on the first point of when the boundary is complete and add data fields.
-          <h1 id="authority"></h1>
-          Population: <i id="population"></i><br />
-          Number of areas drawn: <i id="num_areas">0</i><br />
+    .sidebar {
+      transition: transform 0.1s;
+      z-index: 1;
+      width: 300px;
+      height: 100%;
+    }
 
-          <button type="button" id="export">Export to GeoJSON</button>
+    .left.collapsed {
+      transform: translateX(-295px);
+    }
 
-          <div
-            class="sidebar-toggle rounded-rect left"
-            onclick="document.getElementById('left').classList.toggle('collapsed')"
-          >
-            &rarr;
-          </div>
+    /* The modal popup */
+    .mapboxgl-popup {
+      width: 600px;
+      /* TODO Height seems responsive to content, can't make it take lots of the screen */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map">
+    <div id="left" class="sidebar flex-center left">
+      <div class="sidebar-content rounded-rect flex-center">
+        <a href="index.html">Home</a>
+        <h2>Area Interventions</h2>
+        Draw the boundaries by clicking on draw button (top right of the map).
+        Click on the first point of when the boundary is complete and add data fields.
+        <h1 id="authority"></h1>
+        Population: <i id="population"></i><br />
+        Number of areas drawn: <i id="num_areas">0</i><br />
+
+        <button type="button" id="export">Export to GeoJSON</button>
+        Load from GeoJSON: <input type="file" id="load_geojson" />
+
+        <div class="sidebar-toggle rounded-rect left"
+          onclick="document.getElementById('left').classList.toggle('collapsed')">
+          &rarr;
         </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      const authority = new URLSearchParams(window.location.search).get(
-        "authority"
+  <script>
+    const authority = new URLSearchParams(window.location.search).get(
+      "authority"
+    );
+
+    function downloadGeneratedFile(filename, textInput) {
+      var element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput)
       );
+      element.setAttribute("download", filename);
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
 
-      function downloadGeneratedFile(filename, textInput) {
-        var element = document.createElement("a");
-        element.setAttribute(
-          "href",
-          "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput)
-        );
-        element.setAttribute("download", filename);
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-      }
+    async function loadBoundary() {
+      const resp = await fetch("authorities.geojson");
+      const body = await resp.text();
+      const geojson = JSON.parse(body);
+      geojson.features = geojson.features.filter(
+        (feature) => feature.properties.Name == authority
+      );
+      return geojson;
+    }
 
-      async function loadBoundary() {
-        const resp = await fetch("authorities.geojson");
-        const body = await resp.text();
-        const geojson = JSON.parse(body);
-        geojson.features = geojson.features.filter(
-          (feature) => feature.properties.Name == authority
-        );
-        return geojson;
-      }
+    var map = new maplibregl.Map({
+      container: "map",
+      style:
+        "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
+    });
 
-      var map = new maplibregl.Map({
-        container: "map",
-        style:
-          "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
+    const drawControls = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+        polygon: true,
+      },
+    });
+
+    // For debugging
+    window.map = map;
+    window.drawControls = drawControls;
+
+    document.getElementById("export").onclick = function (_) {
+      downloadGeneratedFile(
+        `${authority}_areas.geojson`,
+        JSON.stringify(drawControls.getAll())
+      );
+    };
+
+    document.getElementById("load_geojson").onchange = function (e) {
+      const reader = new FileReader();
+      // TODO No await? :(
+      reader.onload = function (e) {
+        const geojson = JSON.parse(e.target.result);
+        drawControls.set(geojson);
+        document.getElementById("num_areas").innerText =
+          drawControls.getAll().features.length;
+      };
+      reader.readAsText(e.target.files[0]);
+    };
+
+    var openPopup = null;
+
+    map.on("load", async function () {
+      const boundaryGeojson = await loadBoundary();
+
+      document.getElementById("authority").innerText = authority;
+      document.getElementById("population").innerText =
+        boundaryGeojson.features[0].properties.Population_2020;
+
+      map.fitBounds(geojsonExtent(boundaryGeojson), {
+        padding: 20,
+        animate: false,
       });
 
-      const drawControls = new MapboxDraw({
-        displayControlsDefault: false,
-        controls: {
-          polygon: true,
+      map.addSource("boundary", {
+        type: "geojson",
+        data: boundaryGeojson,
+      });
+      map.addLayer({
+        id: "boundary",
+        type: "line",
+        source: "boundary",
+        layout: {},
+        paint: {
+          "line-color": "black",
+          "line-width": 3,
         },
       });
 
-      // For debugging
-      window.map = map;
-      window.drawControls = drawControls;
+      map.addControl(drawControls);
 
-      document.getElementById("export").onclick = function (_) {
-        downloadGeneratedFile(
-          `${authority}_areas.geojson`,
-          JSON.stringify(drawControls.getAll())
-        );
-      };
+      map.on("draw.selectionchange", function (e) {
+        if (openPopup != null) {
+          openPopup.remove();
+          openPopup = null;
+        }
 
-      var openPopup = null;
+        document.getElementById("num_areas").innerText =
+          drawControls.getAll().features.length;
 
-      map.on("load", async function () {
-        const boundaryGeojson = await loadBoundary();
+        if (e.features.length == 1) {
+          const feature = e.features[0];
+          openPopup = new maplibregl.Popup({
+            closeOnClick: false,
+            maxWidth: "none",
+          })
+            // TODO Center on the new polygon?
+            .setLngLat(feature.geometry.coordinates[0][0])
+            .setHTML(areaForm(feature.properties))
+            .addTo(map);
 
-        document.getElementById("authority").innerText = authority;
-        document.getElementById("population").innerText =
-          boundaryGeojson.features[0].properties.Population_2020;
-
-        map.fitBounds(geojsonExtent(boundaryGeojson), {
-          padding: 20,
-          animate: false,
-        });
-
-        map.addSource("boundary", {
-          type: "geojson",
-          data: boundaryGeojson,
-        });
-        map.addLayer({
-          id: "boundary",
-          type: "line",
-          source: "boundary",
-          layout: {},
-          paint: {
-            "line-color": "black",
-            "line-width": 3,
-          },
-        });
-
-        map.addControl(drawControls);
-
-        map.on("draw.selectionchange", function (e) {
-          if (openPopup != null) {
+          document.getElementById("save").onclick = function (_) {
+            saveForm(feature.id);
             openPopup.remove();
             openPopup = null;
-          }
-
-          document.getElementById("num_areas").innerText =
-            drawControls.getAll().features.length;
-
-          if (e.features.length == 1) {
-            const feature = e.features[0];
-            openPopup = new maplibregl.Popup({
-              closeOnClick: false,
-              maxWidth: "none",
-            })
-              // TODO Center on the new polygon?
-              .setLngLat(feature.geometry.coordinates[0][0])
-              .setHTML(areaForm(feature.properties))
-              .addTo(map);
-
-            document.getElementById("save").onclick = function (_) {
-              saveForm(feature.id);
-              openPopup.remove();
-              openPopup = null;
-            };
-          }
-        });
+          };
+        }
       });
+    });
 
-      // Properties may all be missing
-      function areaForm(props) {
-        return `
+    // Properties may all be missing
+    function areaForm(props) {
+      return `
 <form>
 
 <label for="scheme_name">Scheme name:</label>
@@ -245,21 +250,22 @@
 
 </form>
 `;
-      }
+    }
 
-      function saveForm(id) {
-        // TODO Why can't we do drawControls.get(id) and then just modify it?
-        drawControls.setFeatureProperty(
-          id,
-          "scheme_name",
-          document.getElementById("scheme_name").value
-        );
-        drawControls.setFeatureProperty(
-          id,
-          "start_date",
-          document.getElementById("start_date").value
-        );
-      }
-    </script>
-  </body>
+    function saveForm(id) {
+      // TODO Why can't we do drawControls.get(id) and then just modify it?
+      drawControls.setFeatureProperty(
+        id,
+        "scheme_name",
+        document.getElementById("scheme_name").value
+      );
+      drawControls.setFeatureProperty(
+        id,
+        "start_date",
+        document.getElementById("start_date").value
+      );
+    }
+  </script>
+</body>
+
 </html>
