@@ -1,0 +1,83 @@
+/* This is for a page with a fullscreen map and a collapsible left sidebar */
+
+/* The map */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+#basemaps-wrapper {
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0);
+}
+
+#basemaps {
+  font-size: 16px;
+  padding: 4px 8px;
+}
+
+/* The sidebar */
+
+.rounded-rect {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 50px -25px black;
+}
+
+.flex-center {
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
+.flex-center.left {
+  left: 0px;
+}
+
+.sidebar-content {
+  position: absolute;
+  width: 95%;
+  height: 95%;
+  flex-direction: column;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  width: 1.3em;
+  height: 1.3em;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 32px;
+}
+
+.sidebar-toggle.left {
+  right: -1.5em;
+}
+
+.sidebar-toggle:hover {
+  color: #0aa1cf;
+  cursor: pointer;
+}
+
+.sidebar {
+  transition: transform 0.1s;
+  z-index: 1;
+  width: 300px;
+  height: 100%;
+}
+
+.left.collapsed {
+  transform: translateX(-295px);
+}
