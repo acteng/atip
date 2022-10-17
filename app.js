@@ -14,6 +14,8 @@ export class App {
     this.currentFilename = `${this.authority}_${interventionName}.geojson`;
     this.updateSidebar = updateSidebar;
 
+    setupNavBar(interventionName, this.authority);
+
     this.map = new maplibregl.Map({
       container: "map",
       style:
@@ -107,12 +109,19 @@ export class App {
 
         if (e.features.length == 1) {
           const feature = e.features[0];
+          // TODO I miss georust. Just grab some point from the geometry.
+          var center;
+          if (feature.geometry.type == "Polgon") {
+            center = feature.geometry.coordinates[0][0];
+          } else {
+            center = feature.geometry.coordinates[0];
+          }
+
           this.openPopup = new maplibregl.Popup({
             closeOnClick: false,
             maxWidth: "none",
           })
-            // TODO Center on the new polygon?
-            .setLngLat(feature.geometry.coordinates[0][0])
+            .setLngLat(center)
             .setHTML(this.makeForm(feature.properties))
             .addTo(this.map);
 
@@ -148,4 +157,18 @@ async function loadBoundary(authority) {
     (feature) => feature.properties.Name == authority
   );
   return geojson;
+}
+
+function setupNavBar(interventionName, authority) {
+  const div = document.getElementById("app_nav");
+  for (const type of ["areas", "crossings", "routes"]) {
+    if (interventionName == type) {
+      continue;
+    }
+    var elem = document.createElement("a");
+    elem.href = `${type}.html?authority=${authority}`;
+    elem.innerText = type;
+    div.append(elem);
+    div.append(document.createElement("br"));
+  }
 }

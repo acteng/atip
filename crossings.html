@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ATIP Area Intervention</title>
+    <title>ATIP Crossing Intervention</title>
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
@@ -15,11 +15,11 @@
       const drawControls = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
-          polygon: true,
+          line_string: true,
         },
       });
       window.app = new App(
-        "areas",
+        "crossings",
         drawControls,
         updateSidebar,
         makeForm,
@@ -34,7 +34,7 @@
       };
 
       function updateSidebar(app) {
-        document.getElementById("num_areas").innerText =
+        document.getElementById("num_crossings").innerText =
           app.drawControls.getAll().features.length;
       }
 
@@ -94,13 +94,11 @@
       <div id="left" class="sidebar flex-center left">
         <div class="sidebar-content rounded-rect flex-center">
           <a href="index.html">Home</a>
-          <h2>Area Interventions</h2>
-          Draw the boundaries by clicking on draw button (top right of the map).
-          Click on the first point of when the boundary is complete and add data
-          fields.
+          <div id="app_nav"></div>
+          <h2>Crossing Interventions</h2>
           <h1 id="authority"></h1>
           Population: <i id="population"></i><br />
-          Number of areas drawn: <i id="num_areas">0</i><br />
+          Number of crossings drawn: <i id="num_crossings">0</i><br />
 
           <button type="button" id="export">Export to GeoJSON</button>
           Load from GeoJSON: <input type="file" id="load_geojson" />

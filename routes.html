@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ATIP Route Intervention</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <script src="deps/geojson-extent.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
+    <script type="module">
+      import { App } from "./app.js";
+
+      const drawControls = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: {
+          line_string: true,
+        },
+      });
+      window.app = new App(
+        "routes",
+        drawControls,
+        updateSidebar,
+        makeForm,
+        saveForm
+      );
+
+      document.getElementById("export").onclick = () => {
+        window.app.downloadGeojsonFile();
+      };
+      document.getElementById("load_geojson").onchange = (e) => {
+        window.app.loadFromGeojson(e);
+      };
+
+      function updateSidebar(app) {
+        document.getElementById("num_routes").innerText =
+          app.drawControls.getAll().features.length;
+      }
+
+      // Properties may all be missing
+      function makeForm(props) {
+        return `
+      <form>
+
+      <label for="scheme_name">Scheme name:</label>
+      <input type="text" id="scheme_name" value="${
+        props.scheme_name || ""
+      }"><br>
+
+      <label for="start_date">Proposed construction start:</label>
+      <input type="date" id="start_date" value="${props.start_date || ""}"><br>
+
+      <button type="button" id="save">Save</button>
+
+      </form>
+      `;
+      }
+
+      function saveForm(app, id) {
+        // TODO Why can't we do drawControls.get(id) and then just modify it?
+        app.drawControls.setFeatureProperty(
+          id,
+          "scheme_name",
+          document.getElementById("scheme_name").value
+        );
+        app.drawControls.setFeatureProperty(
+          id,
+          "start_date",
+          document.getElementById("start_date").value
+        );
+      }
+    </script>
+    <link
+      href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.css"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="map_with_sidebar.css" type="text/css" />
+    <style>
+      .mapboxgl-popup {
+        width: 600px;
+        /* TODO Height seems responsive to content, can't make it take lots of the screen */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map">
+      <div id="left" class="sidebar flex-center left">
+        <div class="sidebar-content rounded-rect flex-center">
+          <a href="index.html">Home</a>
+          <div id="app_nav"></div>
+          <h2>Route Interventions</h2>
+          <h1 id="authority"></h1>
+          Population: <i id="population"></i><br />
+          Number of routes drawn: <i id="num_routes">0</i><br />
+
+          <button type="button" id="export">Export to GeoJSON</button>
+          Load from GeoJSON: <input type="file" id="load_geojson" />
+
+          <div
+            class="sidebar-toggle rounded-rect left"
+            onclick="document.getElementById('left').classList.toggle('collapsed')"
+          >
+            &rarr;
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
