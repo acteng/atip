@@ -134,6 +134,12 @@ export class App {
         }
       });
     });
+
+    document.getElementById("basemaps").onchange = (e) => {
+      this.map.setStyle(
+        `https://api.maptiler.com/maps/${e.target.value}/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL`
+      );
+    };
   }
 }
 
