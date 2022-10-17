@@ -44,7 +44,7 @@
         for (const feature of json.features) {
           const name = feature.properties.Name;
           var li = document.createElement("li");
-          li.innerHTML = `<a href="area.html?authority=${name}">${name}</a>`;
+          li.innerHTML = `<a href="areas.html?authority=${name}">${name}</a>`;
           list.appendChild(li);
         }
 
@@ -75,7 +75,7 @@
 
           map.on("click", "boundary", function (e) {
             window.location.href =
-              "area.html?authority=" + e.features[0].properties.Name;
+              "areas.html?authority=" + e.features[0].properties.Name;
           });
         });
       }
