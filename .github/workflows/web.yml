@@ -13,7 +13,7 @@ jobs:
       - name: Build web app
         run: |
                 mkdir publish
-                cp -Rv *.html *.geojson deps publish
+                cp -Rv *.html *.geojson *.js *.css deps publish
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
