@@ -111,7 +111,7 @@ export class App {
           const feature = e.features[0];
           // TODO I miss georust. Just grab some point from the geometry.
           var center;
-          if (feature.geometry.type == "Polgon") {
+          if (feature.geometry.type == "Polygon") {
             center = feature.geometry.coordinates[0][0];
           } else {
             center = feature.geometry.coordinates[0];
