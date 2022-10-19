@@ -166,36 +166,27 @@ impl JsRouteSnapper {
         }
     }
 
-    /*fn update_mode(&mut self, ctx: &mut EventCtx, app: &App) {
-            Mode::Hovering(i) => {
-                if ctx.input.left_mouse_button_pressed() {
-                    if let Some(idx) = self.route.idx(i) {
-                        self.mode = Mode::Dragging { idx, at: i };
-                        return;
-                    }
-                }
-
-                ctx.canvas_movement();
-
-                if ctx.normal_left_click() {
-                    self.route.add_waypoint(app, i);
-                    return;
-                }
-
-                if ctx.redo_mouseover() {
-                }
-            }
-            Mode::Dragging { idx, at } => {
-                if ctx.input.left_mouse_button_released() {
-                    self.mode = Mode::Hovering(at);
-                    return;
-                }
-
-                if ctx.redo_mouseover() {
-                }
+    // True if we should hijack the drag controls
+    #[wasm_bindgen(js_name = onDragStart)]
+    pub fn on_drag_start(&mut self) -> bool {
+        if let Mode::Hovering(i) = self.mode {
+            if let Some(idx) = self.route.idx(i) {
+                self.mode = Mode::Dragging { idx, at: i };
+                return true;
             }
         }
-    }*/
+        false
+    }
+
+    // True if we're done dragging
+    #[wasm_bindgen(js_name = onMouseUp)]
+    pub fn on_mouse_up(&mut self) -> bool {
+        if let Mode::Dragging { at, .. } = self.mode {
+            self.mode = Mode::Hovering(at);
+            return true;
+        }
+        false
+    }
 }
 
 impl JsRouteSnapper {

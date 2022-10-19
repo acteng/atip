@@ -64,6 +64,18 @@ export class RouteSnapper {
           .getSource("route-snapper")
           .setData(JSON.parse(this.inner.renderGeojson()));
       });
+
+      this.map.on("dragstart", (e) => {
+        if (this.inner.onDragStart()) {
+          this.map.dragPan.disable();
+        }
+      });
+
+      this.map.on("mouseup", (e) => {
+        if (this.inner.onMouseUp()) {
+          this.map.dragPan.enable();
+        }
+      });
     });
   }
 }
