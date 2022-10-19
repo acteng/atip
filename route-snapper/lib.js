@@ -10,7 +10,10 @@ export class RouteSnapper {
     this.map.on("load", () => {
       this.map.addSource("route-snapper", {
         type: "geojson",
-        data: {},
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
       });
       this.map.addLayer({
         id: "route-polygons",
