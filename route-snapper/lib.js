@@ -20,7 +20,18 @@ export class RouteSnapper {
         type: "fill",
         source: "route-snapper",
         paint: {
-          "fill-color": "rgb(255, 0, 0)",
+          "fill-color": [
+            "match",
+            ["get", "type"],
+            "confirmed route intersection",
+            "blue",
+            "hovering intersection",
+            "red",
+            "preview intersection",
+            "green",
+            // other
+            "black",
+          ],
         },
         filter: ["in", "$type", "Polygon"],
       });
@@ -40,7 +51,11 @@ export class RouteSnapper {
       });
 
       this.map.on("mousemove", (e) => {
-        this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat);
+        if (this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat)) {
+          this.map
+            .getSource("route-snapper")
+            .setData(JSON.parse(this.inner.renderGeojson()));
+        }
       });
 
       this.map.on("click", () => {
@@ -48,8 +63,6 @@ export class RouteSnapper {
         this.map
           .getSource("route-snapper")
           .setData(JSON.parse(this.inner.renderGeojson()));
-
-        document.getElementById("textbox").value = this.inner.renderGeojson();
       });
     });
   }

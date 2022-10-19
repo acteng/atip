@@ -77,48 +77,52 @@ impl JsRouteSnapper {
         }
 
         // Draw the current operation
-        /*if let Mode::Hovering(i) = self.mode {
-            shapes.add_circle(
-                map.get_i(i).polygon.center(),
-                INTERSECTON_RADIUS,
-                Color::BLUE,
-            );
+        if let Mode::Hovering(i) = self.mode {
+            pairs.push((
+                Circle::new(self.map.get_i(i).polygon.center(), INTERSECTON_RADIUS)
+                    .to_polygon()
+                    .to_geojson(gps_bounds),
+                make_props("type", "hovering intersection"),
+            ));
             if self.route.waypoints.len() == 1 {
                 if let Some((roads, intersections)) =
-                    map.simple_path_btwn_v2(self.route.waypoints[0], i, PathConstraints::Car)
+                    self.map
+                        .simple_path_btwn_v2(self.route.waypoints[0], i, PathConstraints::Car)
                 {
                     for r in roads {
-                        let r = map.get_r(r);
-                        shapes.add_line(
-                            r.center_pts.clone(),
-                            r.get_width(),
-                            Color::BLUE.alpha(0.5),
-                        );
+                        let r = self.map.get_r(r);
+                        pairs.push((
+                            r.center_pts.to_geojson(gps_bounds),
+                            make_props("type", "preview route leg"),
+                        ));
                     }
                     for i in intersections {
-                        shapes.add_circle(
-                            map.get_i(i).polygon.center(),
-                            INTERSECTON_RADIUS,
-                            Color::BLUE.alpha(0.5),
-                        );
+                        pairs.push((
+                            Circle::new(self.map.get_i(i).polygon.center(), INTERSECTON_RADIUS)
+                                .to_polygon()
+                                .to_geojson(gps_bounds),
+                            make_props("type", "preview intersection"),
+                        ));
                     }
                 }
             }
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            shapes.add_circle(
-                map.get_i(at).polygon.center(),
-                INTERSECTON_RADIUS,
-                Color::BLUE,
-            );
-        }*/
+            pairs.push((
+                Circle::new(self.map.get_i(at).polygon.center(), INTERSECTON_RADIUS)
+                    .to_polygon()
+                    .to_geojson(gps_bounds),
+                make_props("type", "drag intersection"),
+            ));
+        }
 
         let obj = geom::geometries_with_properties_to_geojson(pairs);
         serde_json::to_string_pretty(&obj).unwrap()
     }
 
+    // True if something has changed
     #[wasm_bindgen(js_name = onMouseMove)]
-    pub fn on_mouse_move(&mut self, lon: f64, lat: f64) {
+    pub fn on_mouse_move(&mut self, lon: f64, lat: f64) -> bool {
         let pt = LonLat::new(lon, lat).to_pt(self.map.get_gps_bounds());
 
         //web_sys::console::log_1(&format!("got {}, mode {:?}", pt, self.mode).into());
@@ -127,6 +131,7 @@ impl JsRouteSnapper {
             Mode::Neutral => {
                 if let Some(i) = self.mouseover_i(pt) {
                     self.mode = Mode::Hovering(i);
+                    return true;
                 }
             }
             Mode::Hovering(_) => {
@@ -135,6 +140,7 @@ impl JsRouteSnapper {
                 } else {
                     self.mode = Mode::Neutral;
                 }
+                return true;
             }
             Mode::Dragging { idx, at } => {
                 if let Some(i) = self.mouseover_i(pt) {
@@ -144,10 +150,13 @@ impl JsRouteSnapper {
                             idx: new_idx,
                             at: i,
                         };
+                        return true;
                     }
                 }
             }
         }
+
+        false
     }
 
     #[wasm_bindgen(js_name = onClick)]
