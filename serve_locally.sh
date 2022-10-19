@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 -m http.server --directory .
+wasm-pack build --dev --target web route-snapper && python3 -m http.server --directory .
