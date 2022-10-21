@@ -121,6 +121,7 @@ export class App {
             this.makeForm(feature.properties) +
             `
 		<button type="button" id="save">Save</button>
+		<button type="button" id="delete">Delete</button>
 		`;
           this.openPopup = new maplibregl.Popup({
             closeOnClick: false,
@@ -132,6 +133,11 @@ export class App {
 
           document.getElementById("save").onclick = () => {
             app.saveForm(app, feature.id);
+            app.openPopup.remove();
+            app.openPopup = null;
+          };
+          document.getElementById("delete").onclick = () => {
+            this.drawControls.delete(feature.id);
             app.openPopup.remove();
             app.openPopup = null;
           };
