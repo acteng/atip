@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <script src="deps/geojson-extent.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
+    <script src="forms.js"></script>
     <script type="module">
       import { App } from "./app.js";
 
@@ -56,25 +57,57 @@
 
       <fieldset>
       <legend>What will this scheme achieve?</legend>
+      ${checkbox(props, "achieve_a", "Reduce motor traffic in the area")}
+      ${checkbox(
+        props,
+        "achieve_b",
+        "Add to the pedestrian and cycle networks"
+      )}
+      ${checkbox(
+        props,
+        "achieve_c",
+        "Reduce severance around the area's perimeter"
+      )}
+      ${checkbox(props, "achieve_d", "Make the area more liveable")}
+      </fieldset>
 
-      <input type="checkbox" id="achieve_a" ${props.achieve_a ? "checked" : ""}>
-      <label for="achieve_a">Reduce motor traffic in the area</label><br>
+      <fieldset>
+      <legend>Porosity</legend>
+      ${dropdown(
+        props,
+        "porosity_pedestrians",
+        "How porous will the area be for <b>pedestrians</b>?",
+        ["fully porous", "semi-porous", "no improvements"]
+      )}
+      ${dropdown(
+        props,
+        "porosity_cyclists",
+        "How porous will the area be for <b>cyclists</b>?",
+        ["fully porous", "semi-porous", "no improvements"]
+      )}
+      </fieldset>
 
-      <input type="checkbox" id="achieve_b" ${props.achieve_b ? "checked" : ""}>
-      <label for="achieve_b">Add to the pedestrian and cycle networks</label><br>
-
-      <input type="checkbox" id="achieve_c" ${props.achieve_c ? "checked" : ""}>
-      <label for="achieve_c">Reduce severance around the area's perimeter</label><br>
-
-      <input type="checkbox" id="achieve_d" ${props.achieve_d ? "checked" : ""}>
-      <label for="achieve_d">Make the area more liveable</label><br>
-
+      <fieldset>
+      <legend>Mesh density</legend>
+      ${dropdown(
+        props,
+        "mesh_density",
+        "Mesh density in the wider area (for both walking and cycling networks)",
+        ["250m", "251-800m", "801-1400m", "over 1400m", "no improvement"]
+      )}
       </fieldset>
       `;
       }
 
       function saveForm(app, id) {
-        for (const key of ["scheme_name", "start_date", "budget"]) {
+        for (const key of [
+          "scheme_name",
+          "start_date",
+          "budget",
+          "porosity_pedestrians",
+          "porosity_cyclists",
+          "mesh_density",
+        ]) {
           // TODO Why can't we do drawControls.get(id) and then just modify it?
           app.drawControls.setFeatureProperty(
             id,
