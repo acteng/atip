@@ -47,17 +47,51 @@
       }"><br>
 
       <label for="start_date">Proposed construction start:</label>
-      <input type="date" id="start_date" value="${props.start_date || ""}"><br>
+      <input type="month" id="start_date" value="${props.start_date || ""}"><br>
+
+      <label for="budget">Requested budget (&pound;):</label>
+      <input type="number" id="budget" value="${
+        props.budget || ""
+      }" min="0" step="100"><br>
+
+      <fieldset>
+      <legend>What will this scheme achieve?</legend>
+
+      <input type="checkbox" id="achieve_a" ${props.achieve_a ? "checked" : ""}>
+      <label for="achieve_a">Reduce motor traffic in the area</label><br>
+
+      <input type="checkbox" id="achieve_b" ${props.achieve_b ? "checked" : ""}>
+      <label for="achieve_b">Add to the pedestrian and cycle networks</label><br>
+
+      <input type="checkbox" id="achieve_c" ${props.achieve_c ? "checked" : ""}>
+      <label for="achieve_c">Reduce severance around the area's perimeter</label><br>
+
+      <input type="checkbox" id="achieve_d" ${props.achieve_d ? "checked" : ""}>
+      <label for="achieve_d">Make the area more liveable</label><br>
+
+      </fieldset>
       `;
       }
 
       function saveForm(app, id) {
-        for (const key of ["scheme_name", "start_date"]) {
+        for (const key of ["scheme_name", "start_date", "budget"]) {
           // TODO Why can't we do drawControls.get(id) and then just modify it?
           app.drawControls.setFeatureProperty(
             id,
             key,
             document.getElementById(key).value
+          );
+        }
+        for (const key of [
+          "achieve_a",
+          "achieve_b",
+          "achieve_c",
+          "achieve_d",
+        ]) {
+          app.drawControls.setFeatureProperty(
+            id,
+            key,
+            document.getElementById(key).checked
           );
         }
       }
