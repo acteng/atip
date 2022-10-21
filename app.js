@@ -16,17 +16,21 @@ export class App {
 
     setupNavBar(interventionName, this.authority);
 
+    // Before creating the map, check if there's a hash, because one will get set below
+    const setCamera = !window.location.hash;
+
     this.map = new maplibregl.Map({
       container: "map",
       style:
         "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
+      hash: true,
     });
     this.drawControls = drawControls;
     this.openPopup = null;
     this.makeForm = makeForm;
     this.saveForm = saveForm;
 
-    this.#setupMap();
+    this.#setupMap(setCamera);
   }
 
   downloadGeojsonFile() {
@@ -57,7 +61,7 @@ export class App {
     this.updateSidebar(this);
   }
 
-  #setupMap() {
+  #setupMap(setCamera) {
     this.map.on("load", async () => {
       const boundaryGeojson = await loadBoundary(this.authority);
 
@@ -66,10 +70,12 @@ export class App {
       document.getElementById("population").innerText =
         boundaryGeojson.features[0].properties.Population_2020;
 
-      this.map.fitBounds(geojsonExtent(boundaryGeojson), {
-        padding: 20,
-        animate: false,
-      });
+      if (setCamera) {
+        this.map.fitBounds(geojsonExtent(boundaryGeojson), {
+          padding: 20,
+          animate: false,
+        });
+      }
 
       this.map.addSource("boundary", {
         type: "geojson",
