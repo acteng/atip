@@ -17,7 +17,7 @@
       const drawControls = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
-          //line_string: true,
+          line_string: true,
         },
         // make the lines thicker and dashed
         styles: [
@@ -45,7 +45,7 @@
         saveForm
       );
 
-      window.routeSnapper = new RouteSnapper(window.app.map);
+      window.routeSnapper = new RouteSnapper(window.app.map, drawControls);
 
       document.getElementById("export").onclick = () => {
         window.app.downloadGeojsonFile();

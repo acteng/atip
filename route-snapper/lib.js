@@ -3,8 +3,9 @@ import init, { JsRouteSnapper } from "./pkg/route_snapper.js";
 await init();
 
 export class RouteSnapper {
-  constructor(map) {
+  constructor(map, drawControls) {
     this.map = map;
+    this.drawControls = drawControls;
     this.inner = new JsRouteSnapper();
 
     this.map.on("load", () => {
@@ -55,6 +56,10 @@ export class RouteSnapper {
           this.map
             .getSource("route-snapper")
             .setData(JSON.parse(this.inner.renderGeojson()));
+          const x = this.inner.toFinalFeature();
+          if (x) {
+            this.drawControls.add(JSON.parse(x));
+          }
         }
       });
 
@@ -63,6 +68,10 @@ export class RouteSnapper {
         this.map
           .getSource("route-snapper")
           .setData(JSON.parse(this.inner.renderGeojson()));
+        const x = this.inner.toFinalFeature();
+        if (x) {
+          this.drawControls.add(JSON.parse(x));
+        }
       });
 
       this.map.on("dragstart", (e) => {

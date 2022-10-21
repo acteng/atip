@@ -1403,6 +1403,7 @@ version = "0.1.0"
 dependencies = [
  "abstutil",
  "console_error_panic_hook",
+ "geojson",
  "geom",
  "getrandom",
  "map_model",

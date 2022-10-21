@@ -1,4 +1,4 @@
-use geom::{Circle, Distance, FindClosest, LonLat, Pt2D};
+use geom::{Circle, Distance, FindClosest, LonLat, PolyLine, Pt2D};
 use map_model::{IntersectionID, Map, PathConstraints, RoadID};
 use wasm_bindgen::prelude::*;
 
@@ -118,6 +118,26 @@ impl JsRouteSnapper {
 
         let obj = geom::geometries_with_properties_to_geojson(pairs);
         serde_json::to_string_pretty(&obj).unwrap()
+    }
+
+    #[wasm_bindgen(js_name = toFinalFeature)]
+    pub fn to_final_feature(&self) -> Option<String> {
+        let mut pts = Vec::new();
+        for pair in self.route.full_path.windows(2) {
+            let r = self
+                .map
+                .get_r(self.map.find_road_between(pair[0], pair[1]).unwrap());
+            pts.extend(r.center_pts.clone().into_points());
+        }
+        let pl = PolyLine::deduping_new(pts).ok()?;
+        let feature = geojson::Feature {
+            bbox: None,
+            geometry: Some(pl.to_geojson(Some(self.map.get_gps_bounds()))),
+            id: Some(geojson::feature::Id::String("snappy-route".to_string())),
+            properties: None,
+            foreign_members: None,
+        };
+        Some(serde_json::to_string_pretty(&feature).unwrap())
     }
 
     // True if something has changed

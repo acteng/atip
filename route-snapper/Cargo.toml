@@ -9,6 +9,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 abstutil = { git = "https://github.com/a-b-street/abstreet" }
 console_error_panic_hook = "0.1.6"
+geojson = "0.24.0"
 geom = { git = "https://github.com/a-b-street/abstreet" }
 getrandom = { version = "0.2.3", features = ["js"] }
 map_model = { git = "https://github.com/a-b-street/abstreet" }
