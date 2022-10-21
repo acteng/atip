@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <script src="deps/geojson-extent.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
+    <script src="forms.js"></script>
     <script type="module">
       import { App } from "./app.js";
 
@@ -17,6 +18,23 @@
         controls: {
           line_string: true,
         },
+        // make the lines thicker and dashed
+        styles: [
+          {
+            id: "gl-draw-line",
+            type: "line",
+            filter: ["==", "$type", "LineString"],
+            layout: {
+              "line-cap": "round",
+              "line-join": "round",
+            },
+            paint: {
+              "line-color": "black",
+              "line-dasharray": [0.2, 2],
+              "line-width": 5,
+            },
+          },
+        ],
       });
       window.app = new App(
         "routes",
@@ -47,12 +65,39 @@
       }"><br>
 
       <label for="start_date">Proposed construction start:</label>
-      <input type="date" id="start_date" value="${props.start_date || ""}"><br>
+      <input type="month" id="start_date" value="${props.start_date || ""}"><br>
+
+      <label for="budget">Requested budget (&pound;):</label>
+      <input type="number" id="budget" value="${
+        props.budget || ""
+      }" min="0" step="100"><br>
+
+      <fieldset>
+      <legend>Physical infrastructure</legend>
+      ${dropdown(
+        props,
+        "segregation",
+        "How will this route be segregated from the parallel road?",
+        [
+          "separate trail",
+          "fully segregated",
+          "stepped",
+          "wands/bollards",
+          "shared bus lane",
+          "paint",
+        ]
+      )}
+      </fieldset>
       `;
       }
 
       function saveForm(app, id) {
-        for (const key of ["scheme_name", "start_date"]) {
+        for (const key of [
+          "scheme_name",
+          "start_date",
+          "budget",
+          "segregation",
+        ]) {
           // TODO Why can't we do drawControls.get(id) and then just modify it?
           app.drawControls.setFeatureProperty(
             id,
