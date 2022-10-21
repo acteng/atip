@@ -41,8 +41,6 @@
       // Properties may all be missing
       function makeForm(props) {
         return `
-      <form>
-
       <label for="scheme_name">Scheme name:</label>
       <input type="text" id="scheme_name" value="${
         props.scheme_name || ""
@@ -50,25 +48,18 @@
 
       <label for="start_date">Proposed construction start:</label>
       <input type="date" id="start_date" value="${props.start_date || ""}"><br>
-
-      <button type="button" id="save">Save</button>
-
-      </form>
       `;
       }
 
       function saveForm(app, id) {
-        // TODO Why can't we do drawControls.get(id) and then just modify it?
-        app.drawControls.setFeatureProperty(
-          id,
-          "scheme_name",
-          document.getElementById("scheme_name").value
-        );
-        app.drawControls.setFeatureProperty(
-          id,
-          "start_date",
-          document.getElementById("start_date").value
-        );
+        for (const key of ["scheme_name", "start_date"]) {
+          // TODO Why can't we do drawControls.get(id) and then just modify it?
+          app.drawControls.setFeatureProperty(
+            id,
+            key,
+            document.getElementById(key).value
+          );
+        }
       }
     </script>
     <link

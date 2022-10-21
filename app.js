@@ -117,15 +117,19 @@ export class App {
             center = feature.geometry.coordinates[0];
           }
 
+          const formContents =
+            this.makeForm(feature.properties) +
+            `
+		<button type="button" id="save">Save</button>
+		`;
           this.openPopup = new maplibregl.Popup({
             closeOnClick: false,
             maxWidth: "none",
           })
             .setLngLat(center)
-            .setHTML(this.makeForm(feature.properties))
+            .setHTML(formContents)
             .addTo(this.map);
 
-          // TODO Assumes the form has a "save" ID
           document.getElementById("save").onclick = () => {
             app.saveForm(app, feature.id);
             app.openPopup.remove();
