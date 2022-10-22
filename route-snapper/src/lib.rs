@@ -32,10 +32,8 @@ impl JsRouteSnapper {
         // Panics shouldn't happen, but if they do, console.log them.
         console_error_panic_hook::set_once();
 
-        let map: Map = abstutil::from_binary(include_bytes!(
-            "/home/dabreegster/abstreet/data/system/gb/bristol/maps/east.bin"
-        ))
-        .map_err(|err| JsValue::from_str(&err.to_string()))?;
+        let map: Map = abstutil::from_binary(include_bytes!("../bristol.bin"))
+            .map_err(|err| JsValue::from_str(&err.to_string()))?;
 
         let mut snap_to_intersections = FindClosest::new(map.get_bounds());
         for i in map.all_intersections() {
@@ -144,8 +142,6 @@ impl JsRouteSnapper {
     #[wasm_bindgen(js_name = onMouseMove)]
     pub fn on_mouse_move(&mut self, lon: f64, lat: f64) -> bool {
         let pt = LonLat::new(lon, lat).to_pt(self.map.get_gps_bounds());
-
-        //web_sys::console::log_1(&format!("got {}, mode {:?}", pt, self.mode).into());
 
         match self.mode {
             Mode::Neutral => {

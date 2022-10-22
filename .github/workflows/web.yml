@@ -10,10 +10,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.3.0
+
       - name: Build web app
         run: |
+	        curl http://play.abstreet.org/dev/data/system/gb/bristol/maps/east.bin.gz -o route-snapper/bristol.bin.gz
+	        gunzip route-snapper/bristol.bin.gz
+                wasm-pack build --release --target web route-snapper
+
                 mkdir publish
-                cp -Rv *.html *.geojson *.js *.css deps publish
+                cp -Rv *.html *.geojson *.js *.css deps route-snapper publish
+                rm -f publish/route-snapper/bristol.bin
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3

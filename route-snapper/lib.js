@@ -85,7 +85,6 @@ export class RouteSnapper {
     const rawJSON = this.inner.toFinalFeature();
     if (rawJSON) {
       const json = JSON.parse(rawJSON);
-      console.log(rawJSON);
       // This won't have any properties, so if we've filled out the form,
       // preserve those properties and just overwrite the geometry
       const existing = this.drawControls.get(json.id);
