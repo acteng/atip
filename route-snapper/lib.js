@@ -53,25 +53,13 @@ export class RouteSnapper {
 
       this.map.on("mousemove", (e) => {
         if (this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat)) {
-          this.map
-            .getSource("route-snapper")
-            .setData(JSON.parse(this.inner.renderGeojson()));
-          const x = this.inner.toFinalFeature();
-          if (x) {
-            this.drawControls.add(JSON.parse(x));
-          }
+          this.#syncToDrawControls();
         }
       });
 
       this.map.on("click", () => {
         this.inner.onClick();
-        this.map
-          .getSource("route-snapper")
-          .setData(JSON.parse(this.inner.renderGeojson()));
-        const x = this.inner.toFinalFeature();
-        if (x) {
-          this.drawControls.add(JSON.parse(x));
-        }
+        this.#syncToDrawControls();
       });
 
       this.map.on("dragstart", (e) => {
@@ -86,5 +74,25 @@ export class RouteSnapper {
         }
       });
     });
+  }
+
+  #syncToDrawControls() {
+    // Render the tool
+    this.map
+      .getSource("route-snapper")
+      .setData(JSON.parse(this.inner.renderGeojson()));
+    // Update the source-of-truth in drawControls
+    const rawJSON = this.inner.toFinalFeature();
+    if (rawJSON) {
+      const json = JSON.parse(rawJSON);
+      console.log(rawJSON);
+      // This won't have any properties, so if we've filled out the form,
+      // preserve those properties and just overwrite the geometry
+      const existing = this.drawControls.get(json.id);
+      if (existing) {
+        json.properties = existing.properties;
+      }
+      this.drawControls.add(json);
+    }
   }
 }
