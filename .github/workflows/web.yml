@@ -15,8 +15,8 @@ jobs:
 
       - name: Build web app
         run: |
-	        curl http://play.abstreet.org/dev/data/system/gb/bristol/maps/east.bin.gz -o route-snapper/bristol.bin.gz
-	        gunzip route-snapper/bristol.bin.gz
+                curl http://play.abstreet.org/dev/data/system/gb/bristol/maps/east.bin.gz -o route-snapper/bristol.bin.gz
+                gunzip route-snapper/bristol.bin.gz
                 wasm-pack build --release --target web route-snapper
 
                 mkdir publish
