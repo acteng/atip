@@ -19,9 +19,10 @@ jobs:
                 gunzip route-snapper/bristol.bin.gz
                 wasm-pack build --release --target web route-snapper
 
-                mkdir publish
-                cp -Rv *.html *.geojson *.js *.css deps route-snapper publish
-                rm -f publish/route-snapper/bristol.bin
+                mkdir -p publish/route-snapper
+                cp -Rv *.html *.geojson *.js *.css deps publish
+                cp -Rv route-snapper/lib.js route-snapper/pkg publish/route-snapper
+                rm -f publish/route-snapper/pkg/.gitignore
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
