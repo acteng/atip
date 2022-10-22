@@ -1,1 +1,0 @@
-{"rustc":11934069355019162238,"features":"","target":0,"profile":0,"path":0,"deps":[[5767378431555344746,"build_script_build",false,15688958230434683734]],"local":[{"RerunIfChanged":{"output":"wasm32-unknown-unknown/release/build/priority-queue-eefa2524d3f8e7cb/output","paths":["build.rs"]}}],"rustflags":[],"metadata":0,"config":0,"compile_kind":0}
