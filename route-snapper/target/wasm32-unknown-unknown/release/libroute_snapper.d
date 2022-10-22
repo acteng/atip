@@ -1,0 +1,1 @@
+/home/runner/work/atip/atip/route-snapper/target/wasm32-unknown-unknown/release/libroute_snapper.rlib: /home/runner/work/atip/atip/route-snapper/bristol.bin /home/runner/work/atip/atip/route-snapper/src/lib.rs

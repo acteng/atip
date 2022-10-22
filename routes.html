@@ -12,6 +12,7 @@
     <script src="forms.js"></script>
     <script type="module">
       import { App } from "./app.js";
+      import { RouteSnapper } from "./route-snapper/lib.js";
 
       const drawControls = new MapboxDraw({
         displayControlsDefault: false,
@@ -43,6 +44,8 @@
         makeForm,
         saveForm
       );
+
+      window.routeSnapper = new RouteSnapper(window.app.map, drawControls);
 
       document.getElementById("export").onclick = () => {
         window.app.downloadGeojsonFile();

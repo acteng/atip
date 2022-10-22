@@ -1,0 +1,18 @@
+[package]
+name = "route-snapper"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+abstutil = { git = "https://github.com/a-b-street/abstreet" }
+console_error_panic_hook = "0.1.6"
+geojson = "0.24.0"
+geom = { git = "https://github.com/a-b-street/abstreet" }
+getrandom = { version = "0.2.3", features = ["js"] }
+map_model = { git = "https://github.com/a-b-street/abstreet" }
+serde_json = "1.0.61"
+wasm-bindgen = "0.2.70"
+web-sys = { version = "0.3.47", features = ["Document"] }
