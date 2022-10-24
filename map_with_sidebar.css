@@ -1,6 +1,11 @@
 /* This is for a page with a map, collapsable sidebar, and collapsable bottom form area. */
+
+/* Defaults */
 * {
   box-sizing: border-box;
+}
+body {
+  font: 16px Helvetica Nueu,Arial,Helvetica,sans-serif;
 }
 
 /* The application layout */
@@ -14,8 +19,6 @@ body {
   bottom: 0;
 
   overflow: hidden;
-
-  font-size: 16px;
 
   /* Two columns, the sidebar on the left, and the main content on the right. */
   display: flex;
@@ -31,6 +34,9 @@ body > aside {
 }
 .sidebar-content {
   width: 25em; /* Keep the size constant, so the map overlaps it when it collapses. */
+
+  max-height: 100%;
+  overflow-y: auto;
 }
 body > aside.collapsed {
   min-width: 1.5rem;
@@ -53,12 +59,14 @@ body > main {
 
 #panel {
   flex-grow: 0;
-  height: 50vh;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 #panel:empty {
-  height: 0 !important;
+  display: none;
 }
 
+/* The map */
 #basemaps-wrapper {
   z-index: 1;
   position: absolute;
@@ -88,7 +96,7 @@ body > main {
 .sidebar-toggle {
   position: absolute;
   z-index: 1;
-  top: 0.5rem;
+  top: 1rem;
   right: -2rem;
 
   width: 2.5rem;
@@ -98,7 +106,7 @@ body > main {
   justify-content: center;
   align-items: center;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 2rem;
+  font-size: 1.8rem;
   user-select: none;
 
   transition: transform 0.2s;
@@ -110,4 +118,47 @@ body > main {
 }
 .collapsed .sidebar-toggle {
   transform: rotate(0deg);
+}
+
+.sidebar-content > nav {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+.sidebar-content > nav a {
+  margin-right: 1em;
+  padding: 0.5rem;
+  background: #ddd;
+  border-radius: 0.5rem;
+
+  text-decoration: none;
+}
+.sidebar-content > nav a.current {
+  text-decoration: underline;
+  background-color: #aaa;
+}
+.sidebar-content > nav a:hover {
+  background-color: #bbb;
+}
+.sidebar-content > nav a:active {
+  background-color: #999;
+}
+
+/* The forms */
+
+fieldset {
+  margin: 0.25em -8px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+}
+
+.form-row {
+  margin: 0.25rem 0;
+}
+
+.form-row label {
+  display: inline-block;
+  width: 25em;
+  margin-right: 2em;
 }

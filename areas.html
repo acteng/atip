@@ -42,60 +42,66 @@
       // Properties may all be missing
       function makeForm(props) {
         return `
-      <label for="scheme_name">Scheme name:</label>
-      <input type="text" id="scheme_name" value="${
-        props.scheme_name || ""
-      }"><br>
+          <div class="form-row">
+            <label for="scheme_name">Scheme name:</label>
+            <input type="text" id="scheme_name" value="${
+                props.scheme_name || ""
+              }">
+          </div>
 
-      <label for="start_date">Proposed construction start:</label>
-      <input type="month" id="start_date" value="${props.start_date || ""}"><br>
+          <div class="form-row">
+            <label for="start_date">Proposed construction start:</label>
+            <input type="month" id="start_date" value="${props.start_date || ""}">
+          </div>
 
-      <label for="budget">Requested budget (&pound;):</label>
-      <input type="number" id="budget" value="${
-        props.budget || ""
-      }" min="0" step="100"><br>
+          <div class="form-row">
+            <label for="budget">Requested budget (&pound;):</label>
+            <input type="number" id="budget" value="${
+              props.budget || ""
+            }" min="0" step="100">
+          </div>
 
-      <fieldset>
-      <legend>What will this scheme achieve?</legend>
-      ${checkbox(props, "achieve_a", "Reduce motor traffic in the area")}
-      ${checkbox(
-        props,
-        "achieve_b",
-        "Add to the pedestrian and cycle networks"
-      )}
-      ${checkbox(
-        props,
-        "achieve_c",
-        "Reduce severance around the area's perimeter"
-      )}
-      ${checkbox(props, "achieve_d", "Make the area more liveable")}
-      </fieldset>
+          <fieldset>
+            <legend>What will this scheme achieve?</legend>
+            ${checkbox(props, "achieve_a", "Reduce motor traffic in the area")}
+            ${checkbox(
+              props,
+              "achieve_b",
+              "Add to the pedestrian and cycle networks"
+            )}
+            ${checkbox(
+              props,
+              "achieve_c",
+              "Reduce severance around the area's perimeter"
+            )}
+            ${checkbox(props, "achieve_d", "Make the area more liveable")}
+          </fieldset>
 
-      <fieldset>
-      <legend>Porosity</legend>
-      ${dropdown(
-        props,
-        "porosity_pedestrians",
-        "How porous will the area be for <b>pedestrians</b>?",
-        ["fully porous", "semi-porous", "no improvements"]
-      )}
-      ${dropdown(
-        props,
-        "porosity_cyclists",
-        "How porous will the area be for <b>cyclists</b>?",
-        ["fully porous", "semi-porous", "no improvements"]
-      )}
-      </fieldset>
+          <fieldset>
+            <legend>Porosity</legend>
+            ${dropdown(
+              props,
+              "porosity_pedestrians",
+              "How porous will the area be for <b>pedestrians</b>?",
+              ["fully porous", "semi-porous", "no improvements"]
+            )}
+            ${dropdown(
+              props,
+              "porosity_cyclists",
+              "How porous will the area be for <b>cyclists</b>?",
+              ["fully porous", "semi-porous", "no improvements"]
+            )}
+          </fieldset>
 
-      <fieldset>
-      <legend>Mesh density</legend>
-      ${dropdown(
-        props,
-        "mesh_density",
-        "Mesh density in the wider area (for both walking and cycling networks)",
-        ["250m", "251-800m", "801-1400m", "over 1400m", "no improvement"]
-      )}
-      </fieldset>
+          <fieldset>
+            <legend>Mesh density</legend>
+            ${dropdown(
+              props,
+              "mesh_density",
+              "Mesh density in the wider area (for both walking and cycling networks)",
+              ["250m", "251-800m", "801-1400m", "over 1400m", "no improvement"]
+            )}
+          </fieldset>
       `;
       }
 
@@ -146,7 +152,9 @@
       <div class="sidebar-content content-container">
         <nav>
           <a href="index.html">Home</a>
-          <div id="app_nav"></div>
+          <a href="areas.html" class="authority-link">Areas</a>
+          <a href="crossings.html" class="authority-link">Crossings</a>
+          <a href="routes.html" class="authority-link">Routes</a>
         </nav>
         <h2>Area Interventions</h2>
         <p>
@@ -154,7 +162,7 @@
           map). Click on the first point of when the boundary is complete and
           add data fields.
         </p>
-        <h1 id="authority"></h1>
+        <h1 id="authority">Loading...</h1>
         <p>Population: <span id="population"></span></p>
         <p>Number of areas drawn: <span id="num_areas">0</span></p>
 
@@ -178,7 +186,7 @@
           </select>
         </div>
       </div>
-      <div id="panel"></div>
+      <div id="panel" class="content-container"></div>
     </main>
   </body>
 </html>
