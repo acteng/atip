@@ -1,22 +1,77 @@
-/* This is for a page with a fullscreen map and a collapsible left sidebar */
+/* This is for a page with a map, collapsable sidebar, and collapsable bottom form area. */
 
-/* The map */
+/* Defaults */
+* {
+  box-sizing: border-box;
+}
+body {
+  font: 16px Helvetica Nueu,Arial,Helvetica,sans-serif;
+}
+
+/* The application layout */
 body {
   margin: 0;
   padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  overflow: hidden;
+
+  /* Two columns, the sidebar on the left, and the main content on the right. */
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+body > aside {
+  position: relative; /* for children who want to position:absolute */
+
+  flex: 0;
+  min-width: 25rem; /* use min/max-width because we're in a flex containter. */
+  max-width: 25rem;
+}
+.sidebar-content {
+  width: 25em; /* Keep the size constant, so the map overlaps it when it collapses. */
+
+  max-height: 100%;
+  overflow-y: auto;
+}
+body > aside.collapsed {
+  min-width: 0px;
+  max-width: 0px;
+}
+
+body > main {
+  flex-grow: 1;
+
+  /* Potentially split in two: map on the top, form on the bottom. */
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 #map {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
+  position: relative; /* for children who want to position:absolute */
+
+  flex-grow: 1;
 }
 
+#panel {
+  flex-grow: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+#panel:empty {
+  display: none;
+}
+
+/* The map */
 #basemaps-wrapper {
+  z-index: 1;
   position: absolute;
-  bottom: 100px;
-  right: 20px;
+  bottom: 80px;
+  right: 10px;
   background: rgba(255, 255, 255, 0);
 }
 
@@ -25,7 +80,11 @@ body {
   padding: 4px 8px;
 }
 
-/* The sidebar */
+
+/* Components */
+.content-container {
+  padding: 1rem;
+}
 
 .rounded-rect {
   background: white;
@@ -33,51 +92,73 @@ body {
   box-shadow: 0 0 50px -25px black;
 }
 
-.flex-center {
-  position: absolute;
-  display: flex;
-  align-items: center;
-}
-
-.flex-center.left {
-  left: 0px;
-}
-
-.sidebar-content {
-  position: absolute;
-  width: 95%;
-  height: 95%;
-  flex-direction: column;
-}
-
+/* The sidebar */
 .sidebar-toggle {
   position: absolute;
-  width: 1.3em;
-  height: 1.3em;
+  z-index: 1;
+  top: 1rem;
+  right: -2rem;
+
+  width: 2.5rem;
+  height: 2.5rem;
+
   overflow: visible;
-  display: flex;
   justify-content: center;
   align-items: center;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 32px;
-}
+  font-size: 1.8rem;
+  user-select: none;
 
-.sidebar-toggle.left {
-  right: -1.5em;
+  transition: transform 0.2s;
+  transform: rotate(180deg);
 }
-
 .sidebar-toggle:hover {
   color: #0aa1cf;
   cursor: pointer;
 }
-
-.sidebar {
-  transition: transform 0.1s;
-  z-index: 1;
-  width: 300px;
-  height: 100%;
+.collapsed .sidebar-toggle {
+  transform: rotate(0deg);
 }
 
-.left.collapsed {
-  transform: translateX(-295px);
+.sidebar-content > nav {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+.sidebar-content > nav a {
+  margin-right: 1em;
+  padding: 0.5rem;
+  background: #ddd;
+  border-radius: 0.5rem;
+
+  text-decoration: none;
+}
+.sidebar-content > nav a.current {
+  text-decoration: underline;
+  background-color: #aaa;
+}
+.sidebar-content > nav a:hover {
+  background-color: #bbb;
+}
+.sidebar-content > nav a:active {
+  background-color: #999;
+}
+
+/* The forms */
+
+fieldset {
+  margin: 0.25em -8px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+}
+
+.form-row {
+  margin: 0.25rem 0;
+}
+
+.form-row label {
+  display: inline-block;
+  width: 25em;
+  margin-right: 2em;
 }

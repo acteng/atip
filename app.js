@@ -113,39 +113,31 @@ export class App {
           JSON.stringify(this.drawControls.getAll())
         );
 
-        if (e.features.length == 1) {
+        if (e.features.length === 1) {
           const feature = e.features[0];
-          // TODO I miss georust. Just grab some point from the geometry.
-          var center;
-          if (feature.geometry.type == "Polygon") {
-            center = feature.geometry.coordinates[0][0];
-          } else {
-            center = feature.geometry.coordinates[0];
-          }
 
           const formContents =
             this.makeForm(feature.properties) +
             `
 		<button type="button" id="save">Save</button>
+		<button type="button" id="cancel">Cancel</button>
 		<button type="button" id="delete">Delete</button>
 		`;
-          this.openPopup = new maplibregl.Popup({
-            closeOnClick: false,
-            maxWidth: "none",
-          })
-            .setLngLat(center)
-            .setHTML(formContents)
-            .addTo(this.map);
+          document.getElementById("panel").innerHTML = formContents;
 
           document.getElementById("save").onclick = () => {
             app.saveForm(app, feature.id);
-            app.openPopup.remove();
-            app.openPopup = null;
+            document.getElementById("panel").innerHTML = "";
+            app.map.resize();
+          };
+          document.getElementById("cancel").onclick = () => {
+            document.getElementById("panel").innerHTML = "";
+            app.map.resize();
           };
           document.getElementById("delete").onclick = () => {
             this.drawControls.delete(feature.id);
-            app.openPopup.remove();
-            app.openPopup = null;
+            document.getElementById("panel").innerHTML = "";
+            app.map.resize();
           };
         }
       });
@@ -182,15 +174,11 @@ async function loadBoundary(authority) {
 }
 
 function setupNavBar(interventionName, authority) {
-  const div = document.getElementById("app_nav");
-  for (const type of ["areas", "crossings", "routes"]) {
-    if (interventionName == type) {
-      continue;
+  // Very brittle way of adding the authority to the nav links.
+  for (const a of document.getElementsByClassName("authority-link")) {
+    a.href += `?authority=${authority}`;
+    if (a.pathname === location.pathname) {
+      a.classList.add("current");
     }
-    var elem = document.createElement("a");
-    elem.href = `${type}.html?authority=${authority}`;
-    elem.innerText = type;
-    div.append(elem);
-    div.append(document.createElement("br"));
   }
 }
