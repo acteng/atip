@@ -39,8 +39,8 @@ body > aside {
   overflow-y: auto;
 }
 body > aside.collapsed {
-  min-width: 1.5rem;
-  max-width: 1.5rem;
+  min-width: 0px;
+  max-width: 0px;
 }
 
 body > main {
