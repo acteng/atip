@@ -58,18 +58,26 @@
       // Properties may all be missing
       function makeForm(props) {
         return `
-      <label for="scheme_name">Scheme name:</label>
-      <input type="text" id="scheme_name" value="${
-        props.scheme_name || ""
-      }"><br>
+          <div class="form-row">
+            <label for="scheme_name">Scheme name:</label>
+            <input type="text" id="scheme_name" value="${
+              props.scheme_name || ""
+            }">
+          </div>
 
-      <label for="start_date">Proposed construction start:</label>
-      <input type="month" id="start_date" value="${props.start_date || ""}"><br>
+          <div class="form-row">
+            <label for="start_date">Proposed construction start:</label>
+            <input type="month" id="start_date" value="${
+              props.start_date || ""
+            }">
+          </div>
 
-      <label for="budget">Requested budget (&pound;):</label>
-      <input type="number" id="budget" value="${
-        props.budget || ""
-      }" min="0" step="100"><br>
+          <div class="form-row">
+            <label for="budget">Requested budget (&pound;):</label>
+            <input type="number" id="budget" value="${
+              props.budget || ""
+            }" min="0" step="100">
+          </div>
 
       <fieldset>
       <legend>Crossing info</legend>
@@ -146,8 +154,8 @@
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
 
         <div
-            class="sidebar-toggle rounded-rect left"
-            onclick="document.getElementById('sidebar').classList.toggle('collapsed'); app.map.resize();"
+          class="sidebar-toggle rounded-rect left"
+          onclick="document.getElementById('sidebar').classList.toggle('collapsed'); app.map.resize();"
         >
           &rarr;
         </div>
