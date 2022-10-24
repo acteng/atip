@@ -128,13 +128,16 @@ export class App {
           document.getElementById("save").onclick = () => {
             app.saveForm(app, feature.id);
             document.getElementById("panel").innerHTML = "";
+            app.map.resize();
           };
           document.getElementById("cancel").onclick = () => {
             document.getElementById("panel").innerHTML = "";
+            app.map.resize();
           };
           document.getElementById("delete").onclick = () => {
             this.drawControls.delete(feature.id);
             document.getElementById("panel").innerHTML = "";
+            app.map.resize();
           };
         }
       });
@@ -174,8 +177,8 @@ function setupNavBar(interventionName, authority) {
   // Very brittle way of adding the authority to the nav links.
   for (const a of document.getElementsByClassName("authority-link")) {
     a.href += `?authority=${authority}`;
-    if (a.pathname === location.pathname)  {
-      a.classList.add('current');
+    if (a.pathname === location.pathname) {
+      a.classList.add("current");
     }
   }
 }
