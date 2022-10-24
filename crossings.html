@@ -128,33 +128,39 @@
   </head>
 
   <body>
-    <div id="map">
-      <div id="left" class="sidebar flex-center left">
-        <div class="sidebar-content rounded-rect flex-center">
+    <aside id="sidebar">
+      <div class="sidebar-content content-container">
+        <nav>
           <a href="index.html">Home</a>
           <div id="app_nav"></div>
-          <h2>Crossing Interventions</h2>
-          <h1 id="authority"></h1>
-          <p>Population: <span id="population"></span></p>
-          <p>Number of crossings drawn: <span id="num_crossings">0</span></p>
+        </nav>
 
-          <button type="button" id="export">Export to GeoJSON</button>
-          <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
+        <h2>Crossing Interventions</h2>
+        <h1 id="authority"></h1>
+        <p>Population: <span id="population"></span></p>
+        <p>Number of crossings drawn: <span id="num_crossings">0</span></p>
 
-          <div
+        <button type="button" id="export">Export to GeoJSON</button>
+        <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
+
+        <div
             class="sidebar-toggle rounded-rect left"
-            onclick="document.getElementById('left').classList.toggle('collapsed')"
-          >
-            &rarr;
-          </div>
+            onclick="document.getElementById('sidebar').classList.toggle('collapsed'); app.map.resize();"
+        >
+          &rarr;
         </div>
       </div>
-    </div>
-    <div id="basemaps-wrapper">
-      <select id="basemaps">
-        <option value="streets">Streets</option>
-        <option value="hybrid">Hybrid</option>
-      </select>
-    </div>
+    </aside>
+    <main>
+      <div id="map">
+        <div id="basemaps-wrapper">
+          <select id="basemaps">
+            <option value="streets">Streets</option>
+            <option value="hybrid">Hybrid</option>
+          </select>
+        </div>
+      </div>
+      <div id="panel"></div>
+    </main>
   </body>
 </html>
