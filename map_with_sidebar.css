@@ -136,6 +136,8 @@ body > main {
 .sidebar-content > nav a.current {
   text-decoration: underline;
   background-color: #aaa;
+  /* Clicking the current tab just erases state; it's not useful */
+  pointer-events: none;
 }
 .sidebar-content > nav a:hover {
   background-color: #bbb;

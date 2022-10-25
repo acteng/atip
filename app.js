@@ -26,7 +26,6 @@ export class App {
       hash: true,
     });
     this.drawControls = drawControls;
-    this.openPopup = null;
     this.makeForm = makeForm;
     this.saveForm = saveForm;
 
@@ -101,11 +100,6 @@ export class App {
       }
 
       this.map.on("draw.selectionchange", (e) => {
-        if (this.openPopup != null) {
-          this.openPopup.remove();
-          this.openPopup = null;
-        }
-
         this.updateSidebar(this);
         // Sync to local storage
         window.localStorage.setItem(
@@ -124,6 +118,7 @@ export class App {
 		<button type="button" id="delete">Delete</button>
 		`;
           document.getElementById("panel").innerHTML = formContents;
+          app.map.resize();
 
           document.getElementById("save").onclick = () => {
             app.saveForm(app, feature.id);
