@@ -45,13 +45,15 @@
           <div class="form-row">
             <label for="scheme_name">Scheme name:</label>
             <input type="text" id="scheme_name" value="${
-                props.scheme_name || ""
-              }">
+              props.scheme_name || ""
+            }">
           </div>
 
           <div class="form-row">
             <label for="start_date">Proposed construction start:</label>
-            <input type="month" id="start_date" value="${props.start_date || ""}">
+            <input type="month" id="start_date" value="${
+              props.start_date || ""
+            }">
           </div>
 
           <div class="form-row">
@@ -102,6 +104,35 @@
               ["250m", "251-800m", "801-1400m", "over 1400m", "no improvement"]
             )}
           </fieldset>
+          <fieldset>
+            <legend>Permeability</legend>
+            ${dropdown(
+              props,
+              "permeability_cycling",
+              "Number of quality cycle routes through the area. (Each route will start and end with high-quality crossings into adjacent neighbourhoods or other routes.",
+              ["more than two", "two", "one", "none"]
+            )}
+            ${checkbox(
+              props,
+              "permeability_walking",
+              "Pedestrian routes through the area will be high-quality and served by high-quality crossings"
+            )}
+          </fieldset>
+          <fieldset>
+            <legend>Motorised through-traffic</legend>
+            ${dropdown(
+              props,
+              "motorised_through_traffic",
+              "(Excluding exemptions for emergency vehicles, services and blue badge holders etc.)",
+              [
+                "The scheme will not allow any motorised through traffic in the area. Motor traffic will be able to enter the area for access only.",
+                "The scheme will close most motorised through traffic routes in the area.  There is a good reason why remaining motor traffic through routes will be left in place, and there are plans in place to mitigate any potential issues relating to them.",
+                "The scheme will close some motorised through traffic routes in the area.  There is a good reason why remaining motor traffic through routes will be left in place, and there are plans in place to mitigate any potential issues relating to them.",
+                "The scheme will close some motorised through traffic routes in the area.  There are no plans in place to mitigate any potential issues relating to remaining motorised through traffic routes.",
+                "The scheme will not close any substantial through traffic routes. The measures will have more of an effect on vehicle speeds than vehicle volumes.",
+              ]
+            )}
+          </fieldset>
       `;
       }
 
@@ -113,6 +144,8 @@
           "porosity_pedestrians",
           "porosity_cyclists",
           "mesh_density",
+          "permeability_cycling",
+          "motorised_through_traffic",
         ]) {
           // TODO Why can't we do drawControls.get(id) and then just modify it?
           app.drawControls.setFeatureProperty(
@@ -126,6 +159,7 @@
           "achieve_b",
           "achieve_c",
           "achieve_d",
+          "permeability_walking",
         ]) {
           app.drawControls.setFeatureProperty(
             id,
@@ -158,9 +192,9 @@
         </nav>
         <h2>Area Interventions</h2>
         <p>
-          Draw the boundaries by clicking on draw button (top right of the
-          map). Click on the first point of when the boundary is complete and
-          add data fields.
+          Draw the boundaries by clicking on draw button (top right of the map).
+          Click on the first point of when the boundary is complete and add data
+          fields.
         </p>
         <h1 id="authority">Loading...</h1>
         <p>Population: <span id="population"></span></p>
