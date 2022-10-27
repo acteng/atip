@@ -5,4 +5,4 @@ if ! [ -f route-snapper/bristol.bin ]; then
 	gunzip route-snapper/bristol.bin.gz
 fi
 
-wasm-pack build --dev --target web route-snapper && python3 -m http.server --directory .
+wasm-pack build --release --target web route-snapper && python3 -m http.server --directory .
