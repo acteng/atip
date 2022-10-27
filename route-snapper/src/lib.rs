@@ -76,10 +76,13 @@ impl JsRouteSnapper {
 
         // Draw the confirmed route
         for pair in self.route.full_path.windows(2) {
-            pairs.push((
-                self.map.get_r(pair).center_pts.to_geojson(gps_bounds),
-                make_props("type", "confirmed route"),
-            ));
+            // TODO Why would it fail?
+            if let Some(road) = self.map.get_r(pair) {
+                pairs.push((
+                    road.center_pts.to_geojson(gps_bounds),
+                    make_props("type", "confirmed route"),
+                ));
+            }
         }
         for i in &self.route.full_path {
             pairs.push((
@@ -136,7 +139,10 @@ impl JsRouteSnapper {
     pub fn to_final_feature(&self) -> Option<String> {
         let mut pts = Vec::new();
         for pair in self.route.full_path.windows(2) {
-            pts.extend(self.map.get_r(pair).center_pts.clone().into_points());
+            // TODO Why would it fail?
+            if let Some(road) = self.map.get_r(pair) {
+                pts.extend(road.center_pts.clone().into_points());
+            }
         }
         let pl = PolyLine::deduping_new(pts).ok()?;
         let feature = geojson::Feature {
@@ -367,7 +373,8 @@ impl RouteSnapperMap {
     }
 
     // TODO Inefficient!
-    fn get_r(&self, pair: &[IntersectionID]) -> &Road {
-        &self.roads[self.road_lookup[&(pair[0], pair[1])].0]
+    fn get_r(&self, pair: &[IntersectionID]) -> Option<&Road> {
+        let id = self.road_lookup.get(&(pair[0], pair[1]))?;
+        Some(&self.roads[id.0])
     }
 }
