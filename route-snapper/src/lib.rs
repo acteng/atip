@@ -7,9 +7,13 @@ use wasm_bindgen::prelude::*;
 
 const INTERSECTON_RADIUS: Distance = Distance::const_meters(10.0);
 
+type Graph = UnGraphMap<IntersectionID, RoadID>;
+
 #[wasm_bindgen]
 pub struct JsRouteSnapper {
+    // TODO Blurring the line where state lives, all of this needs a re-work
     map: RouteSnapperMap,
+    graph: Graph,
     snap_to_intersections: FindClosest<IntersectionID>,
     route: Route,
     mode: Mode,
@@ -40,6 +44,11 @@ impl JsRouteSnapper {
         ))
         .map_err(|err| JsValue::from_str(&err.to_string()))?;
 
+        let mut graph: Graph = UnGraphMap::new();
+        for (idx, r) in map.roads.iter().enumerate() {
+            graph.add_edge(r.i1, r.i2, RoadID(idx));
+        }
+
         let mut snap_to_intersections = FindClosest::new(&map.gps_bounds.to_bounds());
         for (idx, pt) in map.intersections.iter().enumerate() {
             // TODO Time to rethink FindClosest. It can't handle a single point, it needs something
@@ -50,18 +59,9 @@ impl JsRouteSnapper {
             );
         }
 
-        web_sys::console::log_1(&format!("made {} snappy things", map.intersections.len()).into());
-        web_sys::console::log_1(
-            &format!(
-                "gps bounds {:?}, full bounds {:?}",
-                map.gps_bounds,
-                map.gps_bounds.to_bounds()
-            )
-            .into(),
-        );
-
         Ok(Self {
             map,
+            graph,
             snap_to_intersections,
             route: Route::new(),
             mode: Mode::Neutral,
@@ -99,7 +99,8 @@ impl JsRouteSnapper {
                 make_props("type", "hovering intersection"),
             ));
             if self.route.waypoints.len() == 1 {
-                if let Some((roads, intersections)) = self.map.pathfind(self.route.waypoints[0], i)
+                if let Some((roads, intersections)) =
+                    self.map.pathfind(&self.graph, self.route.waypoints[0], i)
                 {
                     for r in roads {
                         pairs.push((
@@ -171,7 +172,7 @@ impl JsRouteSnapper {
             Mode::Dragging { idx, at } => {
                 if let Some(i) = self.mouseover_i(pt) {
                     if i != at {
-                        let new_idx = self.route.move_waypoint(&self.map, idx, i);
+                        let new_idx = self.route.move_waypoint(&self.map, &self.graph, idx, i);
                         self.mode = Mode::Dragging {
                             idx: new_idx,
                             at: i,
@@ -188,7 +189,7 @@ impl JsRouteSnapper {
     #[wasm_bindgen(js_name = onClick)]
     pub fn on_click(&mut self) {
         if let Mode::Hovering(i) = self.mode {
-            self.route.add_waypoint(&self.map, i);
+            self.route.add_waypoint(&self.map, &self.graph, i);
         }
     }
 
@@ -242,7 +243,7 @@ impl Route {
         }
     }
 
-    fn add_waypoint(&mut self, map: &RouteSnapperMap, i: IntersectionID) {
+    fn add_waypoint(&mut self, map: &RouteSnapperMap, graph: &Graph, i: IntersectionID) {
         if self.waypoints.is_empty() {
             self.waypoints.push(i);
             assert!(self.full_path.is_empty());
@@ -251,7 +252,7 @@ impl Route {
             // Route for cars, because we're doing this to transform roads meant for cars. We could
             // equivalently use Bike in most cases, except for highways where biking is currently
             // banned. This tool could be used to carve out space and allow that.
-            if let Some((_, intersections)) = map.pathfind(self.waypoints[0], i) {
+            if let Some((_, intersections)) = map.pathfind(graph, self.waypoints[0], i) {
                 self.waypoints.push(i);
                 assert_eq!(self.full_path.len(), 1);
                 self.full_path = intersections;
@@ -268,6 +269,7 @@ impl Route {
     fn move_waypoint(
         &mut self,
         map: &RouteSnapperMap,
+        graph: &Graph,
         full_idx: usize,
         new_i: IntersectionID,
     ) -> usize {
@@ -301,7 +303,7 @@ impl Route {
         // changed, but eh.
         self.full_path.clear();
         for pair in self.waypoints.windows(2) {
-            if let Some((_, intersections)) = map.pathfind(pair[0], pair[1]) {
+            if let Some((_, intersections)) = map.pathfind(graph, pair[0], pair[1]) {
                 self.full_path.pop();
                 self.full_path.extend(intersections);
             } else {
@@ -346,15 +348,12 @@ struct IntersectionID(usize);
 impl RouteSnapperMap {
     fn pathfind(
         &self,
+        graph: &Graph,
         i1: IntersectionID,
         i2: IntersectionID,
     ) -> Option<(Vec<RoadID>, Vec<IntersectionID>)> {
-        let mut graph: UnGraphMap<IntersectionID, RoadID> = UnGraphMap::new();
-        for (idx, r) in self.roads.iter().enumerate() {
-            graph.add_edge(r.i1, r.i2, RoadID(idx));
-        }
         let (_, path) = petgraph::algo::astar(
-            &graph,
+            graph,
             i1,
             |i| i == i2,
             |(_, _, r)| self.roads[r.0].length,
