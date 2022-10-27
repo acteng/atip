@@ -5,8 +5,9 @@
 export class JsRouteSnapper {
   free(): void;
 /**
+* @param {Uint8Array} map_bytes
 */
-  constructor();
+  constructor(map_bytes: Uint8Array);
 /**
 * @returns {string}
 */
@@ -39,7 +40,7 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly __wbg_jsroutesnapper_free: (a: number) => void;
-  readonly jsroutesnapper_new: (a: number) => void;
+  readonly jsroutesnapper_new: (a: number, b: number, c: number) => void;
   readonly jsroutesnapper_renderGeojson: (a: number, b: number) => void;
   readonly jsroutesnapper_toFinalFeature: (a: number, b: number) => void;
   readonly jsroutesnapper_onMouseMove: (a: number, b: number, c: number) => number;
@@ -47,8 +48,8 @@ export interface InitOutput {
   readonly jsroutesnapper_onDragStart: (a: number) => number;
   readonly jsroutesnapper_onMouseUp: (a: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
-  readonly __wbindgen_free: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
+  readonly __wbindgen_free: (a: number, b: number) => void;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
 }
 

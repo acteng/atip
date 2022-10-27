@@ -3,10 +3,11 @@ import init, { JsRouteSnapper } from "./pkg/route_snapper.js";
 await init();
 
 export class RouteSnapper {
-  constructor(map, drawControls) {
+  constructor(map, drawControls, mapBytes) {
     this.map = map;
     this.drawControls = drawControls;
-    this.inner = new JsRouteSnapper();
+    this.inner = new JsRouteSnapper(mapBytes);
+    console.log("JsRouteSnapper done setting up");
 
     this.map.on("load", () => {
       this.map.addSource("route-snapper", {
