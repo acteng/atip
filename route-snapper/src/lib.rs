@@ -42,7 +42,12 @@ impl JsRouteSnapper {
 
         let mut snap_to_intersections = FindClosest::new(&map.gps_bounds.to_bounds());
         for (idx, pt) in map.intersections.iter().enumerate() {
-            snap_to_intersections.add(IntersectionID(idx), &[*pt]);
+            // TODO Time to rethink FindClosest. It can't handle a single point, it needs something
+            // with a real bbox
+            snap_to_intersections.add_polygon(
+                IntersectionID(idx),
+                &Circle::new(*pt, INTERSECTON_RADIUS).to_polygon(),
+            );
         }
 
         web_sys::console::log_1(&format!("made {} snappy things", map.intersections.len()).into());
@@ -148,13 +153,9 @@ impl JsRouteSnapper {
     pub fn on_mouse_move(&mut self, lon: f64, lat: f64) -> bool {
         let pt = LonLat::new(lon, lat).to_pt(&self.map.gps_bounds);
 
-        web_sys::console::log_1(&format!("mouse at {lon}, {lat} aka {pt}").into());
-
         match self.mode {
             Mode::Neutral => {
-                web_sys::console::log_1(&format!("try to mouseover").into());
                 if let Some(i) = self.mouseover_i(pt) {
-                    web_sys::console::log_1(&format!("and succeed mouseover").into());
                     self.mode = Mode::Hovering(i);
                     return true;
                 }
