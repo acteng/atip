@@ -35,14 +35,16 @@ enum Mode {
 #[wasm_bindgen]
 impl JsRouteSnapper {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> Result<JsRouteSnapper, JsValue> {
+    pub fn new(map_bytes: &[u8]) -> Result<JsRouteSnapper, JsValue> {
         // Panics shouldn't happen, but if they do, console.log them.
         console_error_panic_hook::set_once();
 
-        let map: RouteSnapperMap = abstutil::from_binary(include_bytes!(
-            "/home/dabreegster/Downloads/abstreet-to-atip/Gloucestershire.bin"
-        ))
-        .map_err(|err| JsValue::from_str(&err.to_string()))?;
+        web_sys::console::log_1(&format!("Got {} bytes, deserializing", map_bytes.len()).into());
+
+        let map: RouteSnapperMap =
+            abstutil::from_binary(map_bytes).map_err(|err| JsValue::from_str(&err.to_string()))?;
+
+        web_sys::console::log_1(&"Finalizing JsRouteSnapper".into());
 
         let mut graph: Graph = UnGraphMap::new();
         for (idx, r) in map.roads.iter().enumerate() {
