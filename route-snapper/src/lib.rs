@@ -1,12 +1,15 @@
-use geom::{Circle, Distance, FindClosest, LonLat, PolyLine, Pt2D};
-use map_model::{IntersectionID, Map, PathConstraints, RoadID};
+use std::collections::HashMap;
+
+use geom::{Circle, Distance, FindClosest, GPSBounds, LonLat, PolyLine, Pt2D};
+use petgraph::graphmap::UnGraphMap;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 const INTERSECTON_RADIUS: Distance = Distance::const_meters(10.0);
 
 #[wasm_bindgen]
 pub struct JsRouteSnapper {
-    map: Map,
+    map: RouteSnapperMap,
     snap_to_intersections: FindClosest<IntersectionID>,
     route: Route,
     mode: Mode,
@@ -18,7 +21,7 @@ struct Route {
     full_path: Vec<IntersectionID>,
 }
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq)]
 enum Mode {
     Neutral,
     Hovering(IntersectionID),
@@ -32,13 +35,25 @@ impl JsRouteSnapper {
         // Panics shouldn't happen, but if they do, console.log them.
         console_error_panic_hook::set_once();
 
-        let map: Map = abstutil::from_binary(include_bytes!("../bristol.bin"))
-            .map_err(|err| JsValue::from_str(&err.to_string()))?;
+        let map: RouteSnapperMap = abstutil::from_binary(include_bytes!(
+            "/home/dabreegster/Downloads/abstreet-to-atip/Gloucestershire.bin"
+        ))
+        .map_err(|err| JsValue::from_str(&err.to_string()))?;
 
-        let mut snap_to_intersections = FindClosest::new(map.get_bounds());
-        for i in map.all_intersections() {
-            snap_to_intersections.add_polygon(i.id, &i.polygon);
+        let mut snap_to_intersections = FindClosest::new(&map.gps_bounds.to_bounds());
+        for (idx, pt) in map.intersections.iter().enumerate() {
+            snap_to_intersections.add(IntersectionID(idx), &[*pt]);
         }
+
+        web_sys::console::log_1(&format!("made {} snappy things", map.intersections.len()).into());
+        web_sys::console::log_1(
+            &format!(
+                "gps bounds {:?}, full bounds {:?}",
+                map.gps_bounds,
+                map.gps_bounds.to_bounds()
+            )
+            .into(),
+        );
 
         Ok(Self {
             map,
@@ -52,22 +67,18 @@ impl JsRouteSnapper {
     pub fn render_geojson(&self) -> String {
         let mut pairs = Vec::new();
 
-        let gps_bounds = Some(self.map.get_gps_bounds());
+        let gps_bounds = Some(&self.map.gps_bounds);
 
         // Draw the confirmed route
         for pair in self.route.full_path.windows(2) {
-            // TODO Inefficient!
-            let r = self
-                .map
-                .get_r(self.map.find_road_between(pair[0], pair[1]).unwrap());
             pairs.push((
-                r.center_pts.to_geojson(gps_bounds),
+                self.map.get_r(pair).center_pts.to_geojson(gps_bounds),
                 make_props("type", "confirmed route"),
             ));
         }
         for i in &self.route.full_path {
             pairs.push((
-                Circle::new(self.map.get_i(*i).polygon.center(), INTERSECTON_RADIUS)
+                Circle::new(self.map.intersections[i.0], INTERSECTON_RADIUS)
                     .to_polygon()
                     .to_geojson(gps_bounds),
                 make_props("type", "confirmed route intersection"),
@@ -77,26 +88,23 @@ impl JsRouteSnapper {
         // Draw the current operation
         if let Mode::Hovering(i) = self.mode {
             pairs.push((
-                Circle::new(self.map.get_i(i).polygon.center(), INTERSECTON_RADIUS)
+                Circle::new(self.map.intersections[i.0], INTERSECTON_RADIUS)
                     .to_polygon()
                     .to_geojson(gps_bounds),
                 make_props("type", "hovering intersection"),
             ));
             if self.route.waypoints.len() == 1 {
-                if let Some((roads, intersections)) =
-                    self.map
-                        .simple_path_btwn_v2(self.route.waypoints[0], i, PathConstraints::Car)
+                if let Some((roads, intersections)) = self.map.pathfind(self.route.waypoints[0], i)
                 {
                     for r in roads {
-                        let r = self.map.get_r(r);
                         pairs.push((
-                            r.center_pts.to_geojson(gps_bounds),
+                            self.map.roads[r.0].center_pts.to_geojson(gps_bounds),
                             make_props("type", "preview route leg"),
                         ));
                     }
                     for i in intersections {
                         pairs.push((
-                            Circle::new(self.map.get_i(i).polygon.center(), INTERSECTON_RADIUS)
+                            Circle::new(self.map.intersections[i.0], INTERSECTON_RADIUS)
                                 .to_polygon()
                                 .to_geojson(gps_bounds),
                             make_props("type", "preview intersection"),
@@ -107,7 +115,7 @@ impl JsRouteSnapper {
         }
         if let Mode::Dragging { at, .. } = self.mode {
             pairs.push((
-                Circle::new(self.map.get_i(at).polygon.center(), INTERSECTON_RADIUS)
+                Circle::new(self.map.intersections[at.0], INTERSECTON_RADIUS)
                     .to_polygon()
                     .to_geojson(gps_bounds),
                 make_props("type", "drag intersection"),
@@ -122,15 +130,12 @@ impl JsRouteSnapper {
     pub fn to_final_feature(&self) -> Option<String> {
         let mut pts = Vec::new();
         for pair in self.route.full_path.windows(2) {
-            let r = self
-                .map
-                .get_r(self.map.find_road_between(pair[0], pair[1]).unwrap());
-            pts.extend(r.center_pts.clone().into_points());
+            pts.extend(self.map.get_r(pair).center_pts.clone().into_points());
         }
         let pl = PolyLine::deduping_new(pts).ok()?;
         let feature = geojson::Feature {
             bbox: None,
-            geometry: Some(pl.to_geojson(Some(self.map.get_gps_bounds()))),
+            geometry: Some(pl.to_geojson(Some(&self.map.gps_bounds))),
             id: Some(geojson::feature::Id::String("snappy-route".to_string())),
             properties: None,
             foreign_members: None,
@@ -141,11 +146,15 @@ impl JsRouteSnapper {
     // True if something has changed
     #[wasm_bindgen(js_name = onMouseMove)]
     pub fn on_mouse_move(&mut self, lon: f64, lat: f64) -> bool {
-        let pt = LonLat::new(lon, lat).to_pt(self.map.get_gps_bounds());
+        let pt = LonLat::new(lon, lat).to_pt(&self.map.gps_bounds);
+
+        web_sys::console::log_1(&format!("mouse at {lon}, {lat} aka {pt}").into());
 
         match self.mode {
             Mode::Neutral => {
+                web_sys::console::log_1(&format!("try to mouseover").into());
                 if let Some(i) = self.mouseover_i(pt) {
+                    web_sys::console::log_1(&format!("and succeed mouseover").into());
                     self.mode = Mode::Hovering(i);
                     return true;
                 }
@@ -222,25 +231,6 @@ impl JsRouteSnapper {
         }
         Some(i)
     }
-
-    pub fn all_roads(&self) -> Vec<RoadID> {
-        let mut roads = Vec::new();
-        for pair in self.route.full_path.windows(2) {
-            // TODO Inefficient!
-            roads.push(self.map.find_road_between(pair[0], pair[1]).unwrap());
-        }
-        roads
-    }
-
-    /// Has the user even picked a start point?
-    pub fn is_route_started(&self) -> bool {
-        !self.route.waypoints.is_empty()
-    }
-
-    /// Has the user specified a full route?
-    pub fn is_route_valid(&self) -> bool {
-        self.route.waypoints.len() > 1
-    }
 }
 
 impl Route {
@@ -251,7 +241,7 @@ impl Route {
         }
     }
 
-    fn add_waypoint(&mut self, map: &Map, i: IntersectionID) {
+    fn add_waypoint(&mut self, map: &RouteSnapperMap, i: IntersectionID) {
         if self.waypoints.is_empty() {
             self.waypoints.push(i);
             assert!(self.full_path.is_empty());
@@ -260,9 +250,7 @@ impl Route {
             // Route for cars, because we're doing this to transform roads meant for cars. We could
             // equivalently use Bike in most cases, except for highways where biking is currently
             // banned. This tool could be used to carve out space and allow that.
-            if let Some((_, intersections)) =
-                map.simple_path_btwn_v2(self.waypoints[0], i, PathConstraints::Car)
-            {
+            if let Some((_, intersections)) = map.pathfind(self.waypoints[0], i) {
                 self.waypoints.push(i);
                 assert_eq!(self.full_path.len(), 1);
                 self.full_path = intersections;
@@ -276,7 +264,12 @@ impl Route {
     }
 
     // Returns the new full_path index
-    fn move_waypoint(&mut self, map: &Map, full_idx: usize, new_i: IntersectionID) -> usize {
+    fn move_waypoint(
+        &mut self,
+        map: &RouteSnapperMap,
+        full_idx: usize,
+        new_i: IntersectionID,
+    ) -> usize {
         let old_i = self.full_path[full_idx];
 
         // Edge case when we've placed just one point, then try to drag it
@@ -307,9 +300,7 @@ impl Route {
         // changed, but eh.
         self.full_path.clear();
         for pair in self.waypoints.windows(2) {
-            if let Some((_, intersections)) =
-                map.simple_path_btwn_v2(pair[0], pair[1], PathConstraints::Car)
-            {
+            if let Some((_, intersections)) = map.pathfind(pair[0], pair[1]) {
                 self.full_path.pop();
                 self.full_path.extend(intersections);
             } else {
@@ -326,4 +317,57 @@ fn make_props(key: &str, value: &str) -> serde_json::Map<String, serde_json::Val
     let mut props = serde_json::Map::new();
     props.insert(key.to_string(), value.to_string().into());
     props
+}
+
+// TODO Copied from abstreet-to-atip. We need... a third repo, just for this plugin.
+
+#[derive(Serialize, Deserialize)]
+struct RouteSnapperMap {
+    gps_bounds: GPSBounds,
+    intersections: Vec<Pt2D>,
+    roads: Vec<Road>,
+    road_lookup: HashMap<(IntersectionID, IntersectionID), RoadID>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct Road {
+    i1: IntersectionID,
+    i2: IntersectionID,
+    center_pts: PolyLine,
+    length: Distance,
+}
+
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+struct RoadID(usize);
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+struct IntersectionID(usize);
+
+impl RouteSnapperMap {
+    fn pathfind(
+        &self,
+        i1: IntersectionID,
+        i2: IntersectionID,
+    ) -> Option<(Vec<RoadID>, Vec<IntersectionID>)> {
+        let mut graph: UnGraphMap<IntersectionID, RoadID> = UnGraphMap::new();
+        for (idx, r) in self.roads.iter().enumerate() {
+            graph.add_edge(r.i1, r.i2, RoadID(idx));
+        }
+        let (_, path) = petgraph::algo::astar(
+            &graph,
+            i1,
+            |i| i == i2,
+            |(_, _, r)| self.roads[r.0].length,
+            |_| Distance::ZERO,
+        )?;
+        let roads: Vec<RoadID> = path
+            .windows(2)
+            .map(|pair| *graph.edge_weight(pair[0], pair[1]).unwrap())
+            .collect();
+        Some((roads, path))
+    }
+
+    // TODO Inefficient!
+    fn get_r(&self, pair: &[IntersectionID]) -> &Road {
+        &self.roads[self.road_lookup[&(pair[0], pair[1])].0]
+    }
 }
