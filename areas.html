@@ -179,6 +179,15 @@
           <a href="crossings.html" class="authority-link">Crossings</a>
           <a href="routes.html" class="authority-link">Routes</a>
         </nav>
+        <button
+          type="button"
+          class="link-button"
+          style="margin-top: 6px"
+          onclick="document.getElementById('credits').classList.toggle('hide-modal');"
+        >
+          Credits
+        </button>
+
         <h2>Area Interventions</h2>
         <p>
           Draw the boundaries by clicking on draw button (top right of the map).
@@ -213,5 +222,7 @@
       </div>
       <div id="panel" class="content-container"></div>
     </main>
+
+    <div id="credits"></div>
   </body>
 </html>
