@@ -37,13 +37,7 @@
           },
         ],
       });
-      window.app = new App(
-        "routes",
-        drawControls,
-        updateSidebar,
-        makeForm,
-        saveForm
-      );
+      window.app = new App("routes", drawControls, makeForm, saveForm);
 
       async function setupRouteSnapper() {
         const url = `https://github.com/acteng/atip/releases/download/v0.1/${window.app.authority}.bin`;
@@ -64,11 +58,6 @@
       document.getElementById("load_geojson").onchange = (e) => {
         window.app.loadFromGeojson(e);
       };
-
-      function updateSidebar(app) {
-        document.getElementById("num_routes").innerText =
-          app.drawControls.getAll().features.length;
-      }
 
       // Properties may all be missing
       function makeForm(props) {
@@ -160,10 +149,11 @@
         <h2>Route Interventions</h2>
         <h1 id="authority">Loading...</h1>
         <p>Population: <span id="population"></span></p>
-        <p>Number of routes drawn: <span id="num_routes">0</span></p>
 
         <button type="button" id="export">Export to GeoJSON</button>
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
+
+        <div id="scheme_list"></div>
 
         <div
           class="sidebar-toggle rounded-rect left"
