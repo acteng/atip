@@ -1,18 +1,12 @@
 "use strict";
 
 export class App {
-  constructor(
-    interventionName,
-    drawControls,
-    updateSidebar,
-    makeForm,
-    saveForm
-  ) {
+  constructor(interventionName, drawControls, makeForm, saveForm) {
     this.authority = new URLSearchParams(window.location.search).get(
       "authority"
     );
+    this.interventionName = interventionName;
     this.currentFilename = `${this.authority}_${interventionName}.geojson`;
-    this.updateSidebar = updateSidebar;
 
     setupNavBar(interventionName, this.authority);
 
@@ -44,12 +38,7 @@ export class App {
     // TODO No await? :(
     reader.onload = (e) => {
       this.#loadFromText(e.target.result);
-
-      // Sync to local storage
-      window.localStorage.setItem(
-        this.currentFilename,
-        JSON.stringify(this.drawControls.getAll())
-      );
+      this.#saveToLocalStorage();
     };
     reader.readAsText(e.target.files[0]);
   }
@@ -57,7 +46,14 @@ export class App {
   #loadFromText(text) {
     const geojson = JSON.parse(text);
     this.drawControls.set(geojson);
-    this.updateSidebar(this);
+    this.#updateSidebar();
+  }
+
+  #saveToLocalStorage() {
+    window.localStorage.setItem(
+      this.currentFilename,
+      JSON.stringify(this.drawControls.getAll())
+    );
   }
 
   #setupMap(setCamera) {
@@ -91,6 +87,33 @@ export class App {
         },
       });
 
+      // Use a layer that only ever has zero or one features for hovering. I think https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an easier way to do this, but I can't make it work with the draw plugin.
+      this.map.addSource("hover-polygons", {
+        type: "geojson",
+        data: emptyGeojson(),
+      });
+      this.map.addSource("hover-lines", {
+        type: "geojson",
+        data: emptyGeojson(),
+      });
+      this.map.addLayer({
+        id: "hover-polygons",
+        source: "hover-polygons",
+        type: "fill",
+        paint: {
+          "fill-color": "red",
+        },
+      });
+      this.map.addLayer({
+        id: "hover-lines",
+        source: "hover-lines",
+        type: "line",
+        paint: {
+          "line-color": "red",
+          "line-width": 3,
+        },
+      });
+
       this.map.addControl(this.drawControls);
 
       // Initially load from local storage
@@ -100,40 +123,11 @@ export class App {
       }
 
       this.map.on("draw.selectionchange", (e) => {
-        this.updateSidebar(this);
-        // Sync to local storage
-        window.localStorage.setItem(
-          this.currentFilename,
-          JSON.stringify(this.drawControls.getAll())
-        );
+        this.#updateSidebar();
+        this.#saveToLocalStorage();
 
         if (e.features.length === 1) {
-          const feature = e.features[0];
-
-          const formContents =
-            this.makeForm(feature.properties) +
-            `
-		<button type="button" id="save">Save</button>
-		<button type="button" id="cancel">Cancel</button>
-		<button type="button" id="delete">Delete</button>
-		`;
-          document.getElementById("panel").innerHTML = formContents;
-          app.map.resize();
-
-          document.getElementById("save").onclick = () => {
-            app.saveForm(app, feature.id);
-            document.getElementById("panel").innerHTML = "";
-            app.map.resize();
-          };
-          document.getElementById("cancel").onclick = () => {
-            document.getElementById("panel").innerHTML = "";
-            app.map.resize();
-          };
-          document.getElementById("delete").onclick = () => {
-            this.drawControls.delete(feature.id);
-            document.getElementById("panel").innerHTML = "";
-            app.map.resize();
-          };
+          this.#openForm(e.features[0]);
         }
       });
     });
@@ -143,6 +137,79 @@ export class App {
         `https://api.maptiler.com/maps/${e.target.value}/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL`
       );
     };
+  }
+
+  #openForm(feature) {
+    const formContents =
+      this.makeForm(feature.properties) +
+      `
+      <button type="button" id="save">Save</button>
+      <button type="button" id="cancel">Cancel</button>
+      <button type="button" id="delete">Delete</button>
+		  `;
+    document.getElementById("panel").innerHTML = formContents;
+    this.map.resize();
+
+    document.getElementById("save").onclick = () => {
+      this.saveForm(this, feature.id);
+      document.getElementById("panel").innerHTML = "";
+      this.map.resize();
+      this.#updateSidebar();
+      this.#saveToLocalStorage();
+    };
+    document.getElementById("cancel").onclick = () => {
+      document.getElementById("panel").innerHTML = "";
+      this.map.resize();
+    };
+    document.getElementById("delete").onclick = () => {
+      this.drawControls.delete(feature.id);
+      document.getElementById("panel").innerHTML = "";
+      this.map.resize();
+      this.#updateSidebar();
+      this.#saveToLocalStorage();
+    };
+  }
+
+  #updateSidebar() {
+    const div = document.getElementById("scheme_list");
+    div.innerHTML = "";
+
+    const header = document.createElement("p");
+    header.innerText = `${this.drawControls.getAll().features.length} ${
+      this.interventionName
+    }`;
+    div.appendChild(header);
+
+    var list = document.createElement("ol");
+
+    for (const feature of this.drawControls.getAll().features) {
+      var li = document.createElement("li");
+      const props = feature.properties;
+      const source =
+        feature.geometry.type == "Polygon" ? "hover-polygons" : "hover-lines";
+      li.innerText = props.scheme_name || "Untitled";
+      li.onmouseover = () => {
+        this.map.getSource(source).setData({
+          type: "FeatureCollection",
+          features: [feature],
+        });
+      };
+      li.onmouseout = () => {
+        this.map.getSource(source).setData(emptyGeojson());
+      };
+      li.onclick = () => {
+        // TODO If another form is open, we'll lose changes
+        this.#openForm(feature);
+        this.map.fitBounds(geojsonExtent(feature), {
+          padding: 20,
+          animate: true,
+        });
+      };
+
+      list.appendChild(li);
+    }
+
+    div.appendChild(list);
   }
 }
 
@@ -176,4 +243,12 @@ function setupNavBar(interventionName, authority) {
       a.classList.add("current");
     }
   }
+}
+
+// TODO I've hit bizarre bugs just sending in null or {} to a source. Figure that out / file an issue.
+function emptyGeojson() {
+  return {
+    type: "FeatureCollection",
+    features: [],
+  };
 }

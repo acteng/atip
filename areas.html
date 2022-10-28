@@ -19,13 +19,7 @@
           polygon: true,
         },
       });
-      window.app = new App(
-        "areas",
-        drawControls,
-        updateSidebar,
-        makeForm,
-        saveForm
-      );
+      window.app = new App("areas", drawControls, makeForm, saveForm);
 
       document.getElementById("export").onclick = () => {
         window.app.downloadGeojsonFile();
@@ -33,11 +27,6 @@
       document.getElementById("load_geojson").onchange = (e) => {
         window.app.loadFromGeojson(e);
       };
-
-      function updateSidebar(app) {
-        document.getElementById("num_areas").innerText =
-          app.drawControls.getAll().features.length;
-      }
 
       // Properties may all be missing
       function makeForm(props) {
@@ -198,11 +187,13 @@
         </p>
         <h1 id="authority">Loading...</h1>
         <p>Population: <span id="population"></span></p>
-        <p>Number of areas drawn: <span id="num_areas">0</span></p>
 
         <button type="button" id="export">Export to GeoJSON</button>
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
       </div>
+
+      <div id="scheme_list"></div>
+
       <div
         class="sidebar-toggle rounded-rect"
         onclick="document.getElementById('sidebar').classList.toggle('collapsed'); app.map.resize();"
