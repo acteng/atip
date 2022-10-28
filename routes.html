@@ -46,7 +46,7 @@
       );
 
       async function setupRouteSnapper() {
-        const url = `http://abstreet.s3-website.us-east-2.amazonaws.com/route-snappers/${window.app.authority}.bin`;
+        const url = `https://github.com/acteng/atip/releases/download/v0.1/${window.app.authority}.bin`;
         console.log(`Grabbing ${url}`);
         const resp = await fetch(url);
         const mapBytes = await resp.arrayBuffer();
