@@ -24,6 +24,8 @@ export class App {
     this.saveForm = saveForm;
 
     this.#setupMap(setCamera);
+
+    setupCredits();
   }
 
   downloadGeojsonFile() {
@@ -251,4 +253,21 @@ function emptyGeojson() {
     type: "FeatureCollection",
     features: [],
   };
+}
+
+function setupCredits() {
+  const credits = document.getElementById("credits");
+  credits.innerHTML = `<button type="button" class="link-button" style="float: right;" onclick="document.getElementById('credits').classList.toggle('hide-modal');">X</button>
+  <h1>Credits</h1>
+<p>ATIP is developed by:</p>
+<ul>
+    <li><a href="https://dcarlino.org" target="_blank">Dustin Carlino</a>: lead developer</li>
+    <li><a href="https://robinlovelace.net" target="_blank">Robin Lovelace</a>: project lead</li>
+    <li><a href="https://www.linkedin.com/in/madison-wang-841977bb/" target="_blank">Madison Wang</a>: UX design</li>
+    <li><a href="https://github.com/BudgieInWA" target="_blank">Ben Ritter</a>: CSS consulting</li>
+</ul>
+<p>ATIP relies heavily on <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors, <a href="https://maplibre.org/" target="_blank">MapLibre</a>, <a href="https://georust.org/" target="_blank">GeoRust</a>, and other open source projects.</p>`;
+  credits.classList.add("modal-popup");
+  credits.classList.add("centered-fullscreen");
+  credits.classList.add("hide-modal");
 }

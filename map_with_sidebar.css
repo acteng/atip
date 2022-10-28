@@ -1,11 +1,11 @@
-/* This is for a page with a map, collapsable sidebar, and collapsable bottom form area. */
+/* This is for a page with a map, collapsable sidebar, collapsable bottom form area, and modal popup. */
 
 /* Defaults */
 * {
   box-sizing: border-box;
 }
 body {
-  font: 16px Helvetica Nueu,Arial,Helvetica,sans-serif;
+  font: 16px Helvetica Nueu, Arial, Helvetica, sans-serif;
 }
 
 /* The application layout */
@@ -79,7 +79,6 @@ body > main {
   font-size: 16px;
   padding: 4px 8px;
 }
-
 
 /* Components */
 .content-container {
@@ -163,4 +162,30 @@ fieldset {
   display: inline-block;
   width: 25em;
   margin-right: 2em;
+}
+
+/* Modal popup */
+
+.modal-popup {
+  background: white;
+  padding: 30px;
+  border: 1px solid black;
+}
+
+.centered-fullscreen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hide-modal {
+  visibility: hidden;
+}
+
+.link-button {
+  border: none;
+  padding: 0.5rem;
+  background: #ddd;
+  border-radius: 0.5rem;
 }
