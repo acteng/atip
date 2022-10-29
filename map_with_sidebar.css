@@ -164,6 +164,10 @@ fieldset {
   margin-right: 2em;
 }
 
+textarea {
+  resize: none;
+}
+
 /* Modal popup */
 
 .modal-popup {

@@ -69,12 +69,12 @@
                  }">
                </div>
 
-               <div class="form-row">
-                 <label for="scheme_description">Scheme description:</label>
-                 <input type="textarea"  rows="3" id="scheme_description" value="${
-                   props.scheme_description || ""
-                  }">
-                </div>
+          <div class="form-row">
+            <label for="scheme_description">Scheme description:</label>
+	    <textarea id="scheme_description" rows="3" cols="100">${
+        props.scheme_description || ""
+      }</textarea>
+          </div>
 
                <div class="form-row">
                  <label for="start_date">Proposed construction start:</label>
@@ -112,12 +112,11 @@
       function saveForm(app, id) {
         for (const key of [
           "scheme_name",
-          "scheme_name",
+          "scheme_description",
           "start_date",
           "budget",
           "segregation",
         ]) {
-          // TODO Why can't we do drawControls.get(id) and then just modify it?
           app.drawControls.setFeatureProperty(
             id,
             key,

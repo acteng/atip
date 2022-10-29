@@ -7,7 +7,7 @@ A very early prototype, without explanation. Go play with <https://acteng.github
 Install dependencies as follows, on Linux:
 
 ```bash
-# Install Rust:
+# Install Rust (https://www.rust-lang.org/tools/install)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Install wasm-pack
@@ -30,4 +30,3 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ```
 
 and open your browser at the URL provided to see the results of local development work.
-
