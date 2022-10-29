@@ -70,7 +70,7 @@ body > main {
 #basemaps-wrapper {
   z-index: 1;
   position: absolute;
-  bottom: 80px;
+  top: 100px;
   right: 10px;
   background: rgba(255, 255, 255, 0);
 }
@@ -188,4 +188,16 @@ fieldset {
   padding: 0.5rem;
   background: #ddd;
   border-radius: 0.5rem;
+}
+
+/* Override mapbox-gl-draw */
+
+.mapboxgl-ctrl-group > button {
+  width: 60px;
+  height: 60px;
+}
+
+.mapbox-gl-draw_polygon,
+.mapbox-gl-draw_line {
+  background-size: 50px;
 }
