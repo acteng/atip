@@ -51,109 +51,15 @@
               props.budget || ""
             }" min="0" step="100">
           </div>
-
-          <fieldset>
-            <legend>What will this scheme achieve?</legend>
-            ${checkbox(props, "achieve_a", "Reduce motor traffic in the area")}
-            ${checkbox(
-              props,
-              "achieve_b",
-              "Add to the pedestrian and cycle networks"
-            )}
-            ${checkbox(
-              props,
-              "achieve_c",
-              "Reduce severance around the area's perimeter"
-            )}
-            ${checkbox(props, "achieve_d", "Make the area more liveable")}
-          </fieldset>
-
-          <fieldset>
-            <legend>Porosity</legend>
-            ${dropdown(
-              props,
-              "porosity_pedestrians",
-              "How porous will the area be for <b>pedestrians</b>?",
-              ["fully porous", "semi-porous", "no improvements"]
-            )}
-            ${dropdown(
-              props,
-              "porosity_cyclists",
-              "How porous will the area be for <b>cyclists</b>?",
-              ["fully porous", "semi-porous", "no improvements"]
-            )}
-          </fieldset>
-
-          <fieldset>
-            <legend>Mesh density</legend>
-            ${dropdown(
-              props,
-              "mesh_density",
-              "Mesh density in the wider area (for both walking and cycling networks)",
-              ["250m", "251-800m", "801-1400m", "over 1400m", "no improvement"]
-            )}
-          </fieldset>
-          <fieldset>
-            <legend>Permeability</legend>
-            ${dropdown(
-              props,
-              "permeability_cycling",
-              "Number of quality cycle routes through the area. (Each route will start and end with high-quality crossings into adjacent neighbourhoods or other routes.",
-              ["more than two", "two", "one", "none"]
-            )}
-            ${checkbox(
-              props,
-              "permeability_walking",
-              "Pedestrian routes through the area will be high-quality and served by high-quality crossings"
-            )}
-          </fieldset>
-          <fieldset>
-            <legend>Motorised through-traffic</legend>
-            ${dropdown(
-              props,
-              "motorised_through_traffic",
-              "(Excluding exemptions for emergency vehicles, services and blue badge holders etc.)",
-              [
-                "The scheme will not allow any motorised through traffic in the area. Motor traffic will be able to enter the area for access only.",
-                "The scheme will close most motorised through traffic routes in the area.  There is a good reason why remaining motor traffic through routes will be left in place, and there are plans in place to mitigate any potential issues relating to them.",
-                "The scheme will close some motorised through traffic routes in the area.  There is a good reason why remaining motor traffic through routes will be left in place, and there are plans in place to mitigate any potential issues relating to them.",
-                "The scheme will close some motorised through traffic routes in the area.  There are no plans in place to mitigate any potential issues relating to remaining motorised through traffic routes.",
-                "The scheme will not close any substantial through traffic routes. The measures will have more of an effect on vehicle speeds than vehicle volumes.",
-              ]
-            )}
-          </fieldset>
       `;
       }
 
       function saveForm(app, id) {
-        for (const key of [
-          "scheme_name",
-          "start_date",
-          "budget",
-          "porosity_pedestrians",
-          "porosity_cyclists",
-          "mesh_density",
-          "permeability_cycling",
-          "motorised_through_traffic",
-        ]) {
-          // TODO Why can't we do drawControls.get(id) and then just modify it?
+        for (const key of ["scheme_name", "start_date", "budget"]) {
           app.drawControls.setFeatureProperty(
             id,
             key,
             document.getElementById(key).value
-          );
-        }
-        for (const key of [
-          "achieve_a",
-          "achieve_b",
-          "achieve_c",
-          "achieve_d",
-          "permeability_walking",
-        ]) {
-          app.drawControls.setFeatureProperty(
-            id,
-            key,
-            document.getElementById(key).checked
           );
         }
       }
