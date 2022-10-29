@@ -104,6 +104,7 @@ export class App {
         type: "fill",
         paint: {
           "fill-color": "red",
+          "fill-opacity": 0.5,
         },
       });
       this.map.addLayer({
@@ -112,7 +113,36 @@ export class App {
         type: "line",
         paint: {
           "line-color": "red",
-          "line-width": 3,
+          "line-opacity": 0.5,
+          "line-width": 10,
+        },
+      });
+
+      // And another for the object matching the current form
+      this.map.addSource("editing-polygons", {
+        type: "geojson",
+        data: emptyGeojson(),
+      });
+      this.map.addSource("editing-lines", {
+        type: "geojson",
+        data: emptyGeojson(),
+      });
+      this.map.addLayer({
+        id: "editing-polygons",
+        source: "editing-polygons",
+        type: "line",
+        paint: {
+          "line-color": "red",
+          "line-width": 10,
+        },
+      });
+      this.map.addLayer({
+        id: "editing-lines",
+        source: "editing-lines",
+        type: "line",
+        paint: {
+          "line-color": "red",
+          "line-width": 10,
         },
       });
 
@@ -142,6 +172,9 @@ export class App {
   }
 
   #openForm(feature) {
+    const source =
+      feature.geometry.type == "Polygon" ? "editing-polygons" : "editing-lines";
+
     const formContents =
       this.makeForm(feature.properties) +
       `
@@ -155,21 +188,30 @@ export class App {
     document.getElementById("save").onclick = () => {
       this.saveForm(this, feature.id);
       document.getElementById("panel").innerHTML = "";
+      this.map.getSource(source).setData(emptyGeojson());
       this.map.resize();
       this.#updateSidebar();
       this.#saveToLocalStorage();
     };
     document.getElementById("cancel").onclick = () => {
       document.getElementById("panel").innerHTML = "";
+      this.map.getSource(source).setData(emptyGeojson());
       this.map.resize();
     };
     document.getElementById("delete").onclick = () => {
       this.drawControls.delete(feature.id);
       document.getElementById("panel").innerHTML = "";
+      this.map.getSource(source).setData(emptyGeojson());
       this.map.resize();
       this.#updateSidebar();
       this.#saveToLocalStorage();
     };
+
+    // Highlight the feature opened
+    this.map.getSource(source).setData({
+      type: "FeatureCollection",
+      features: [feature],
+    });
   }
 
   #updateSidebar() {
