@@ -7,9 +7,11 @@ export class RouteSnapper {
     this.map = map;
     this.drawControls = drawControls;
     this.inner = new JsRouteSnapper(mapBytes);
-    console.log("JsRouteSnapper done setting up");
+    console.log("JsRouteSnapper ready, waiting for idle event");
 
-    this.map.on("load", () => {
+    // on(load) is a bad trigger, because downloading the RouteSnapper input can race. Just wait for the map to be usable.
+    this.map.once("idle", () => {
+      console.log("JsRouteSnapper now usable");
       this.map.addSource("route-snapper", {
         type: "geojson",
         data: {
