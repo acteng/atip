@@ -46,8 +46,7 @@
         const resp = await fetch(url);
         const mapBytes = await resp.arrayBuffer();
         window.routeSnapper = new RouteSnapper(
-          window.app.map,
-          drawControls,
+          window.app,
           new Uint8Array(mapBytes)
         );
       }
@@ -158,6 +157,7 @@
 
         <h2>Route Interventions</h2>
         <h1 id="authority">Loading...</h1>
+        <div id="snap-tool">Route snapping tool loading...</div>
 
         <button type="button" id="export">Export to GeoJSON</button>
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>

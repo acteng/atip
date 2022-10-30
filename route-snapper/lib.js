@@ -3,11 +3,13 @@ import init, { JsRouteSnapper } from "./pkg/route_snapper.js";
 await init();
 
 export class RouteSnapper {
-  constructor(map, drawControls, mapBytes) {
-    this.map = map;
-    this.drawControls = drawControls;
+  constructor(app, mapBytes) {
+    this.app = app;
+    this.map = app.map;
+    this.drawControls = app.drawControls;
     this.inner = new JsRouteSnapper(mapBytes);
     console.log("JsRouteSnapper ready, waiting for idle event");
+    this.active = false;
 
     // on(load) is a bad trigger, because downloading the RouteSnapper input can race. Just wait for the map to be usable.
     this.map.once("idle", () => {
@@ -55,46 +57,88 @@ export class RouteSnapper {
       });
 
       this.map.on("mousemove", (e) => {
+        if (!this.active) {
+          return;
+        }
         if (this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat)) {
-          this.#syncToDrawControls();
+          this.#redraw();
         }
       });
 
       this.map.on("click", () => {
+        if (!this.active) {
+          return;
+        }
         this.inner.onClick();
-        this.#syncToDrawControls();
+        this.#redraw();
       });
 
       this.map.on("dragstart", (e) => {
+        if (!this.active) {
+          return;
+        }
         if (this.inner.onDragStart()) {
           this.map.dragPan.disable();
         }
       });
 
       this.map.on("mouseup", (e) => {
+        if (!this.active) {
+          return;
+        }
         if (this.inner.onMouseUp()) {
           this.map.dragPan.enable();
         }
       });
+
+      this.#inactiveControl();
     });
   }
 
-  #syncToDrawControls() {
-    // Render the tool
+  #inactiveControl() {
+    this.active = false;
+
+    this.inner.clearState();
+    this.#redraw();
+
+    const div = document.getElementById("snap-tool");
+    div.innerHTML = "";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.innerText = "Activate route snap tool";
+    btn.onclick = () => {
+      this.#activeControl();
+    };
+    div.appendChild(btn);
+  }
+
+  #activeControl() {
+    this.active = true;
+
+    const div = document.getElementById("snap-tool");
+    div.innerHTML = "";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.innerText = "Finish snapping";
+    btn.onclick = () => {
+      // Update the source-of-truth in drawControls
+      const rawJSON = this.inner.toFinalFeature();
+      if (rawJSON) {
+        const json = JSON.parse(rawJSON);
+        const ids = this.drawControls.add(json);
+        json.id = ids[0];
+        // drawControls assigns an ID. When we open the form, pass in the feature with that ID
+        this.app.openForm(json);
+      }
+
+      this.#inactiveControl();
+    };
+    div.appendChild(btn);
+  }
+
+  #redraw() {
     this.map
       .getSource("route-snapper")
       .setData(JSON.parse(this.inner.renderGeojson()));
-    // Update the source-of-truth in drawControls
-    const rawJSON = this.inner.toFinalFeature();
-    if (rawJSON) {
-      const json = JSON.parse(rawJSON);
-      // This won't have any properties, so if we've filled out the form,
-      // preserve those properties and just overwrite the geometry
-      const existing = this.drawControls.get(json.id);
-      if (existing) {
-        json.properties = existing.properties;
-      }
-      this.drawControls.add(json);
-    }
   }
 }

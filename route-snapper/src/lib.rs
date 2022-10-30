@@ -150,7 +150,7 @@ impl JsRouteSnapper {
         let feature = geojson::Feature {
             bbox: None,
             geometry: Some(pl.to_geojson(Some(&self.map.gps_bounds))),
-            id: Some(geojson::feature::Id::String("snappy-route".to_string())),
+            id: None,
             properties: None,
             foreign_members: None,
         };
@@ -221,6 +221,12 @@ impl JsRouteSnapper {
             return true;
         }
         false
+    }
+
+    #[wasm_bindgen(js_name = clearState)]
+    pub fn clear_state(&mut self) {
+        self.route = Route::new();
+        self.mode = Mode::Neutral;
     }
 }
 

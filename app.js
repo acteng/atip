@@ -156,7 +156,7 @@ export class App {
         this.#saveToLocalStorage();
 
         if (e.features.length === 1) {
-          this.#openForm(e.features[0]);
+          this.openForm(e.features[0]);
         }
       });
     });
@@ -168,7 +168,7 @@ export class App {
     };
   }
 
-  #openForm(feature) {
+  openForm(feature) {
     const source =
       feature.geometry.type == "Polygon" ? "editing-polygons" : "editing-lines";
 
@@ -240,7 +240,7 @@ export class App {
       };
       li.onclick = () => {
         // TODO If another form is open, we'll lose changes
-        this.#openForm(feature);
+        this.openForm(feature);
         this.map.fitBounds(geojsonExtent(feature), {
           padding: 20,
           animate: true,
