@@ -135,12 +135,6 @@
       type="text/css"
     />
     <link rel="stylesheet" href="map_with_sidebar.css" type="text/css" />
-    <style>
-      .mapboxgl-popup {
-        width: 600px;
-        /* TODO Height seems responsive to content, can't make it take lots of the screen */
-      }
-    </style>
   </head>
 
   <body>
@@ -163,7 +157,6 @@
 
         <h2>Route Interventions</h2>
         <h1 id="authority">Loading...</h1>
-        <p>Population: <span id="population"></span></p>
 
         <button type="button" id="export">Export to GeoJSON</button>
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>

@@ -54,9 +54,14 @@
         const json = JSON.parse(body);
         for (const feature of json.features) {
           var option = document.createElement("option");
-          option.value = feature.properties.Name;
+          option.value = feature.properties.name;
           list.appendChild(option);
         }
+
+        // Only show TAs, not LADs, in the map
+        json.features = json.features.filter(
+          (feat) => feat.properties.level == "TA"
+        );
 
         var map = new maplibregl.Map({
           container: "map",
@@ -84,7 +89,7 @@
           });
 
           map.on("click", "boundary", function (e) {
-            window.location.href = `areas.html?authority=${e.features[0].properties.Name}`;
+            window.location.href = `areas.html?authority=${e.features[0].properties.name}`;
           });
         });
       }
