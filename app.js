@@ -62,10 +62,7 @@ export class App {
     this.map.on("load", async () => {
       const boundaryGeojson = await loadBoundary(this.authority);
 
-      // TODO Should we assume the sidebar always has this?
       document.getElementById("authority").innerText = this.authority;
-      document.getElementById("population").innerText =
-        boundaryGeojson.features[0].properties.Population_2020;
 
       if (setCamera) {
         this.map.fitBounds(geojsonExtent(boundaryGeojson), {
@@ -274,7 +271,7 @@ async function loadBoundary(authority) {
   const body = await resp.text();
   const geojson = JSON.parse(body);
   geojson.features = geojson.features.filter(
-    (feature) => feature.properties.Name == authority
+    (feature) => feature.properties.name == authority
   );
   return geojson;
 }
