@@ -33,6 +33,9 @@ export class JsRouteSnapper {
 * @returns {boolean}
 */
   onMouseUp(): boolean;
+/**
+*/
+  clearState(): void;
 }
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -47,6 +50,7 @@ export interface InitOutput {
   readonly jsroutesnapper_onClick: (a: number) => void;
   readonly jsroutesnapper_onDragStart: (a: number) => number;
   readonly jsroutesnapper_onMouseUp: (a: number) => number;
+  readonly jsroutesnapper_clearState: (a: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_free: (a: number, b: number) => void;

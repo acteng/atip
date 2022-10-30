@@ -221,6 +221,11 @@ export class JsRouteSnapper {
         const ret = wasm.jsroutesnapper_onMouseUp(this.ptr);
         return ret !== 0;
     }
+    /**
+    */
+    clearState() {
+        wasm.jsroutesnapper_clearState(this.ptr);
+    }
 }
 
 async function load(module, imports) {

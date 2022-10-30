@@ -9,6 +9,7 @@ export function jsroutesnapper_onMouseMove(a: number, b: number, c: number): num
 export function jsroutesnapper_onClick(a: number): void;
 export function jsroutesnapper_onDragStart(a: number): number;
 export function jsroutesnapper_onMouseUp(a: number): number;
+export function jsroutesnapper_clearState(a: number): void;
 export function __wbindgen_add_to_stack_pointer(a: number): number;
 export function __wbindgen_malloc(a: number): number;
 export function __wbindgen_free(a: number, b: number): void;
