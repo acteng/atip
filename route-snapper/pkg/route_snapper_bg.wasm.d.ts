@@ -5,7 +5,7 @@ export function __wbg_jsroutesnapper_free(a: number): void;
 export function jsroutesnapper_new(a: number, b: number, c: number): void;
 export function jsroutesnapper_renderGeojson(a: number, b: number): void;
 export function jsroutesnapper_toFinalFeature(a: number, b: number): void;
-export function jsroutesnapper_onMouseMove(a: number, b: number, c: number): number;
+export function jsroutesnapper_onMouseMove(a: number, b: number, c: number, d: number): number;
 export function jsroutesnapper_onClick(a: number): void;
 export function jsroutesnapper_onDragStart(a: number): number;
 export function jsroutesnapper_onMouseUp(a: number): number;

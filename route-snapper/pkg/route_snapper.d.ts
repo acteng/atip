@@ -19,9 +19,10 @@ export class JsRouteSnapper {
 /**
 * @param {number} lon
 * @param {number} lat
+* @param {number} circle_radius_meters
 * @returns {boolean}
 */
-  onMouseMove(lon: number, lat: number): boolean;
+  onMouseMove(lon: number, lat: number, circle_radius_meters: number): boolean;
 /**
 */
   onClick(): void;
@@ -46,7 +47,7 @@ export interface InitOutput {
   readonly jsroutesnapper_new: (a: number, b: number, c: number) => void;
   readonly jsroutesnapper_renderGeojson: (a: number, b: number) => void;
   readonly jsroutesnapper_toFinalFeature: (a: number, b: number) => void;
-  readonly jsroutesnapper_onMouseMove: (a: number, b: number, c: number) => number;
+  readonly jsroutesnapper_onMouseMove: (a: number, b: number, c: number, d: number) => number;
   readonly jsroutesnapper_onClick: (a: number) => void;
   readonly jsroutesnapper_onDragStart: (a: number) => number;
   readonly jsroutesnapper_onMouseUp: (a: number) => number;

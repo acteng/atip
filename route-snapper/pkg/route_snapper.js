@@ -196,10 +196,11 @@ export class JsRouteSnapper {
     /**
     * @param {number} lon
     * @param {number} lat
+    * @param {number} circle_radius_meters
     * @returns {boolean}
     */
-    onMouseMove(lon, lat) {
-        const ret = wasm.jsroutesnapper_onMouseMove(this.ptr, lon, lat);
+    onMouseMove(lon, lat, circle_radius_meters) {
+        const ret = wasm.jsroutesnapper_onMouseMove(this.ptr, lon, lat, circle_radius_meters);
         return ret !== 0;
     }
     /**
