@@ -72,60 +72,53 @@ impl JsRouteSnapper {
 
     #[wasm_bindgen(js_name = renderGeojson)]
     pub fn render_geojson(&self) -> String {
-        let mut pairs = Vec::new();
+        let draw_intersection = |i: IntersectionID, label: &str| {
+            (
+                self.map.intersections[i.0].to_geojson(Some(&self.map.gps_bounds)),
+                make_props("type", label),
+            )
+        };
+        let draw_road = |road: &Road, label: &str| {
+            (
+                road.center_pts.to_geojson(Some(&self.map.gps_bounds)),
+                make_props("type", label),
+            )
+        };
 
-        let gps_bounds = Some(&self.map.gps_bounds);
+        let mut result = Vec::new();
 
         // Draw the confirmed route
         for pair in self.route.full_path.windows(2) {
             // TODO Why would it fail?
             if let Some(road) = self.map.get_r(pair) {
-                pairs.push((
-                    road.center_pts.to_geojson(gps_bounds),
-                    make_props("type", "confirmed route"),
-                ));
+                result.push(draw_road(road, "confirmed route"));
             }
         }
         for i in &self.route.full_path {
-            pairs.push((
-                self.map.intersections[i.0].to_geojson(gps_bounds),
-                make_props("type", "confirmed route intersection"),
-            ));
+            result.push(draw_intersection(*i, "confirmed route intersection"));
         }
 
         // Draw the current operation
         if let Mode::Hovering(i) = self.mode {
-            pairs.push((
-                self.map.intersections[i.0].to_geojson(gps_bounds),
-                make_props("type", "hovering intersection"),
-            ));
+            result.push(draw_intersection(i, "hovering intersection"));
             if self.route.waypoints.len() == 1 {
                 if let Some((roads, intersections)) =
                     self.map.pathfind(&self.graph, self.route.waypoints[0], i)
                 {
                     for r in roads {
-                        pairs.push((
-                            self.map.roads[r.0].center_pts.to_geojson(gps_bounds),
-                            make_props("type", "preview route leg"),
-                        ));
+                        result.push(draw_road(&self.map.roads[r.0], "preview route leg"));
                     }
                     for i in intersections {
-                        pairs.push((
-                            self.map.intersections[i.0].to_geojson(gps_bounds),
-                            make_props("type", "preview intersection"),
-                        ));
+                        result.push(draw_intersection(i, "preview intersection"));
                     }
                 }
             }
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            pairs.push((
-                self.map.intersections[at.0].to_geojson(gps_bounds),
-                make_props("type", "drag intersection"),
-            ));
+            result.push(draw_intersection(at, "drag intersection"));
         }
 
-        let obj = geom::geometries_with_properties_to_geojson(pairs);
+        let obj = geom::geometries_with_properties_to_geojson(result);
         serde_json::to_string_pretty(&obj).unwrap()
     }
 
