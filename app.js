@@ -310,3 +310,34 @@ function setupCredits() {
   credits.classList.add("centered-fullscreen");
   credits.classList.add("hide-modal");
 }
+
+export function makeCommonFormFields(props) {
+  return `
+          <div class="form-row">
+            <label for="scheme_name">Scheme name:</label>
+            <input type="text" id="scheme_name" value="${
+              props.scheme_name || ""
+            }">
+          </div>
+
+          <div class="form-row">
+            <label for="scheme_description">Scheme description:</label>
+	    <textarea id="scheme_description" rows="3" cols="100">${
+        props.scheme_description || ""
+      }</textarea>
+          </div>
+
+          <div class="form-row">
+            <label for="year">Main financial year of expenditure on intervention:</label>
+            <input type="number" id="year" value="${
+              props.year || ""
+            }" min="2020" step="1">
+          </div>
+
+          <div class="form-row">
+            <label for="budget">Total budget allocated to intervention (&pound;):</label>
+            <input type="number" id="budget" value="${
+              props.budget || ""
+            }" min="0" step="1000">
+          </div>`;
+}

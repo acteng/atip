@@ -10,7 +10,7 @@
     <script src="deps/geojson-extent.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
     <script type="module">
-      import { App } from "./app.js";
+      import { App, makeCommonFormFields } from "./app.js";
       import { dropdown } from "./forms.js";
       import { RouteSnapper } from "./route-snapper/lib.js";
 
@@ -62,33 +62,7 @@
       // Properties may all be missing
       function makeForm(props) {
         return `
-               <div class="form-row">
-                 <label for="scheme_name">Scheme name:</label>
-                 <input type="text" id="scheme_name" value="${
-                   props.scheme_name || ""
-                 }">
-               </div>
-
-          <div class="form-row">
-            <label for="scheme_description">Scheme description:</label>
-	    <textarea id="scheme_description" rows="3" cols="100">${
-        props.scheme_description || ""
-      }</textarea>
-          </div>
-
-               <div class="form-row">
-                 <label for="start_date">Proposed construction start:</label>
-                 <input type="month" id="start_date" value="${
-                   props.start_date || ""
-                 }">
-               </div>
-
-               <div class="form-row">
-                 <label for="budget">Requested budget (&pound;):</label>
-                 <input type="number" id="budget" value="${
-                   props.budget || ""
-                 }" min="0" step="100">
-               </div>
+		${makeCommonFormFields(props)}
 
            <fieldset>
            <legend>Route type</legend>
@@ -151,7 +125,7 @@
         for (const key of [
           "scheme_name",
           "scheme_description",
-          "start_date",
+          "year",
           "budget",
           "route_type",
           "on_carriageway",
