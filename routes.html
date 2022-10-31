@@ -135,6 +135,16 @@
       type="text/css"
     />
     <link rel="stylesheet" href="map_with_sidebar.css" type="text/css" />
+    <style>
+      .overlay-topright {
+        position: absolute;
+        top: 80px;
+        right: 10px;
+        padding: 10px;
+
+        background-color: white;
+      }
+    </style>
   </head>
 
   <body>
@@ -157,7 +167,6 @@
 
         <h2>Route Interventions</h2>
         <h1 id="authority">Loading...</h1>
-        <div id="snap-tool">Route snapping tool loading...</div>
 
         <button type="button" id="export">Export to GeoJSON</button>
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
@@ -177,12 +186,15 @@
       <div id="map">
         <div id="basemaps-wrapper">
           <select id="basemaps">
-            <option value="streets">Streets</option>
-            <option value="hybrid">Hybrid</option>
+            <option value="streets">Regular map</option>
+            <option value="hybrid">Satellite</option>
           </select>
         </div>
       </div>
       <div id="panel" class="content-container"></div>
+      <div id="snap-tool" class="overlay-topright">
+        Route snapping tool loading...
+      </div>
     </main>
 
     <div id="credits"></div>
