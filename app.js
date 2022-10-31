@@ -228,7 +228,7 @@ export class App {
       const props = feature.properties;
       const source =
         feature.geometry.type == "Polygon" ? "hover-polygons" : "hover-lines";
-      li.innerText = props.scheme_name || "Untitled";
+      li.innerHTML = sidebarEntry(props);
       li.onmouseover = () => {
         this.map.getSource(source).setData({
           type: "FeatureCollection",
@@ -309,6 +309,20 @@ function setupCredits() {
   credits.classList.add("modal-popup");
   credits.classList.add("centered-fullscreen");
   credits.classList.add("hide-modal");
+}
+
+function sidebarEntry(props) {
+  var result = `${props.scheme_name || "Untitled"}`;
+  if (props.budget || props.year) {
+    result += " -";
+  }
+  if (props.budget) {
+    result += ` &pound;${props.budget}`;
+  }
+  if (props.year) {
+    result += ` (${props.year})`;
+  }
+  return result;
 }
 
 export function makeCommonFormFields(props) {
