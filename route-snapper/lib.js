@@ -4,6 +4,8 @@ await init();
 
 export class RouteSnapper {
   constructor(app, mapBytes) {
+    const circleRadiusPixels = 10;
+
     this.app = app;
     this.map = app.map;
     this.drawControls = app.drawControls;
@@ -22,11 +24,12 @@ export class RouteSnapper {
         },
       });
       this.map.addLayer({
-        id: "route-polygons",
-        type: "fill",
+        id: "route-points",
+        type: "circle",
         source: "route-snapper",
         paint: {
-          "fill-color": [
+          "circle-radius": circleRadiusPixels,
+          "circle-color": [
             "match",
             ["get", "type"],
             "confirmed route intersection",
@@ -39,7 +42,7 @@ export class RouteSnapper {
             "black",
           ],
         },
-        filter: ["in", "$type", "Polygon"],
+        filter: ["in", "$type", "Point"],
       });
       this.map.addLayer({
         id: "route-lines",
@@ -60,7 +63,13 @@ export class RouteSnapper {
         if (!this.active) {
           return;
         }
-        if (this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat)) {
+        const nearbyPoint = {x: e.point.x - circleRadiusPixels, y: e.point.y};
+        const circleRadiusMeters = this.map
+          .unproject(e.point)
+          .distanceTo(this.map.unproject(nearbyPoint));
+        if (
+          this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters)
+        ) {
           this.#redraw();
         }
       });

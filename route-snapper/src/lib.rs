@@ -88,9 +88,7 @@ impl JsRouteSnapper {
         }
         for i in &self.route.full_path {
             pairs.push((
-                Circle::new(self.map.intersections[i.0], INTERSECTON_RADIUS)
-                    .to_polygon()
-                    .to_geojson(gps_bounds),
+                self.map.intersections[i.0].to_geojson(gps_bounds),
                 make_props("type", "confirmed route intersection"),
             ));
         }
@@ -98,9 +96,7 @@ impl JsRouteSnapper {
         // Draw the current operation
         if let Mode::Hovering(i) = self.mode {
             pairs.push((
-                Circle::new(self.map.intersections[i.0], INTERSECTON_RADIUS)
-                    .to_polygon()
-                    .to_geojson(gps_bounds),
+                self.map.intersections[i.0].to_geojson(gps_bounds),
                 make_props("type", "hovering intersection"),
             ));
             if self.route.waypoints.len() == 1 {
@@ -115,9 +111,7 @@ impl JsRouteSnapper {
                     }
                     for i in intersections {
                         pairs.push((
-                            Circle::new(self.map.intersections[i.0], INTERSECTON_RADIUS)
-                                .to_polygon()
-                                .to_geojson(gps_bounds),
+                            self.map.intersections[i.0].to_geojson(gps_bounds),
                             make_props("type", "preview intersection"),
                         ));
                     }
@@ -126,9 +120,7 @@ impl JsRouteSnapper {
         }
         if let Mode::Dragging { at, .. } = self.mode {
             pairs.push((
-                Circle::new(self.map.intersections[at.0], INTERSECTON_RADIUS)
-                    .to_polygon()
-                    .to_geojson(gps_bounds),
+                self.map.intersections[at.0].to_geojson(gps_bounds),
                 make_props("type", "drag intersection"),
             ));
         }
@@ -159,18 +151,19 @@ impl JsRouteSnapper {
 
     // True if something has changed
     #[wasm_bindgen(js_name = onMouseMove)]
-    pub fn on_mouse_move(&mut self, lon: f64, lat: f64) -> bool {
+    pub fn on_mouse_move(&mut self, lon: f64, lat: f64, circle_radius_meters: f64) -> bool {
         let pt = LonLat::new(lon, lat).to_pt(&self.map.gps_bounds);
+        let circle_radius = Distance::meters(circle_radius_meters);
 
         match self.mode {
             Mode::Neutral => {
-                if let Some(i) = self.mouseover_i(pt) {
+                if let Some(i) = self.mouseover_i(pt, circle_radius) {
                     self.mode = Mode::Hovering(i);
                     return true;
                 }
             }
             Mode::Hovering(_) => {
-                if let Some(i) = self.mouseover_i(pt) {
+                if let Some(i) = self.mouseover_i(pt, circle_radius) {
                     self.mode = Mode::Hovering(i);
                 } else {
                     self.mode = Mode::Neutral;
@@ -178,7 +171,7 @@ impl JsRouteSnapper {
                 return true;
             }
             Mode::Dragging { idx, at } => {
-                if let Some(i) = self.mouseover_i(pt) {
+                if let Some(i) = self.mouseover_i(pt, circle_radius) {
                     if i != at {
                         let new_idx = self.route.move_waypoint(&self.map, &self.graph, idx, i);
                         self.mode = Mode::Dragging {
@@ -231,13 +224,9 @@ impl JsRouteSnapper {
 }
 
 impl JsRouteSnapper {
-    fn mouseover_i(&self, pt: Pt2D) -> Option<IntersectionID> {
-        // When zoomed really far out, it's harder to click small intersections, so snap more
-        // aggressively. Note this should always be a larger hitbox than how the waypoint circles
-        // are drawn.
-        //let threshold = Distance::meters(30.0) / ctx.canvas.cam_zoom;
-        let threshold = Distance::meters(30.0);
-        let (i, _) = self.snap_to_intersections.closest_pt(pt, threshold)?;
+    fn mouseover_i(&self, pt: Pt2D, circle_radius: Distance) -> Option<IntersectionID> {
+        // TODO I can't figure out how, but the hitbox detection is off.
+        let (i, _) = self.snap_to_intersections.closest_pt(pt, circle_radius)?;
         // After we have a path started, only snap to points on the path to drag them
         if self.route.waypoints.len() > 1
             && !matches!(self.mode, Mode::Dragging { .. })
