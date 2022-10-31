@@ -70,7 +70,7 @@ body > main {
 #basemaps-wrapper {
   z-index: 1;
   position: absolute;
-  top: 150px;
+  bottom: 50px;
   right: 10px;
   background: rgba(255, 255, 255, 0);
 }
@@ -123,6 +123,7 @@ body > main {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 .sidebar-content > nav a {
   margin-right: 1em;
@@ -202,6 +203,7 @@ textarea {
 }
 
 .mapbox-gl-draw_polygon,
+.mapbox-gl-draw_point,
 .mapbox-gl-draw_line {
   background-size: 50px;
 }
