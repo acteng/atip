@@ -21,8 +21,12 @@ pub struct JsRouteSnapper {
 
 #[derive(Clone, PartialEq)]
 struct Route {
+    // These've been explicitly set or dragged
     waypoints: Vec<IntersectionID>,
+    // The full sequence of intersections. Waypoints are a subset
     full_path: Vec<IntersectionID>,
+    // All roads, in order
+    roads: Vec<RoadID>,
 }
 
 #[derive(Clone, PartialEq)]
@@ -78,44 +82,57 @@ impl JsRouteSnapper {
                 make_props("type", label),
             )
         };
-        let draw_road = |road: &Road, label: &str| {
+        let draw_road = |r: RoadID, label: &str| {
             (
-                road.center_pts.to_geojson(Some(&self.map.gps_bounds)),
+                self.map.roads[r.0]
+                    .center_pts
+                    .to_geojson(Some(&self.map.gps_bounds)),
                 make_props("type", label),
             )
         };
 
         let mut result = Vec::new();
+        // Overlapping circles don't work, so override colors in here
+        let mut draw_intersections: HashMap<IntersectionID, &'static str> = HashMap::new();
 
         // Draw the confirmed route
-        for pair in self.route.full_path.windows(2) {
-            // TODO Why would it fail?
-            if let Some(road) = self.map.get_r(pair) {
-                result.push(draw_road(road, "confirmed route"));
-            }
+        for r in &self.route.roads {
+            result.push(draw_road(*r, "confirmed route"));
         }
         for i in &self.route.full_path {
-            result.push(draw_intersection(*i, "confirmed route intersection"));
+            draw_intersections.insert(*i, "confirmed route intersection");
+        }
+        for i in &self.route.waypoints {
+            draw_intersections.insert(*i, "waypoint");
         }
 
         // Draw the current operation
-        if let Mode::Hovering(i) = self.mode {
-            result.push(draw_intersection(i, "hovering intersection"));
+        if let Mode::Hovering(hover) = self.mode {
+            draw_intersections.insert(hover, "hovering intersection");
             if self.route.waypoints.len() == 1 {
                 if let Some((roads, intersections)) =
-                    self.map.pathfind(&self.graph, self.route.waypoints[0], i)
+                    self.map
+                        .pathfind(&self.graph, self.route.waypoints[0], hover)
                 {
                     for r in roads {
-                        result.push(draw_road(&self.map.roads[r.0], "preview route leg"));
+                        result.push(draw_road(r, "preview route leg"));
                     }
+                    // The first/last are waypoints
                     for i in intersections {
-                        result.push(draw_intersection(i, "preview intersection"));
+                        if i == self.route.waypoints[0] || i == hover {
+                            continue;
+                        }
+                        draw_intersections.insert(i, "preview intersection");
                     }
                 }
             }
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            result.push(draw_intersection(at, "drag intersection"));
+            draw_intersections.insert(at, "drag intersection");
+        }
+
+        for (i, label) in draw_intersections {
+            result.push(draw_intersection(i, label));
         }
 
         let obj = geom::geometries_with_properties_to_geojson(result);
@@ -124,14 +141,15 @@ impl JsRouteSnapper {
 
     #[wasm_bindgen(js_name = toFinalFeature)]
     pub fn to_final_feature(&self) -> Option<String> {
-        let mut pts = Vec::new();
-        for pair in self.route.full_path.windows(2) {
-            // TODO Why would it fail?
-            if let Some(road) = self.map.get_r(pair) {
-                pts.extend(road.center_pts.clone().into_points());
-            }
+        if self.route.roads.is_empty() {
+            return None;
         }
-        let pl = PolyLine::deduping_new(pts).ok()?;
+        let mut pts = Vec::new();
+        for r in &self.route.roads {
+            pts.extend(self.map.roads[r.0].center_pts.clone().into_points());
+        }
+        pts.dedup();
+        let pl = PolyLine::unchecked_new(pts);
         let feature = geojson::Feature {
             bbox: None,
             geometry: Some(pl.to_geojson(Some(&self.map.gps_bounds))),
@@ -236,6 +254,7 @@ impl Route {
         Route {
             waypoints: Vec::new(),
             full_path: Vec::new(),
+            roads: Vec::new(),
         }
     }
 
@@ -245,13 +264,12 @@ impl Route {
             assert!(self.full_path.is_empty());
             self.full_path.push(i);
         } else if self.waypoints.len() == 1 && i != self.waypoints[0] {
-            // Route for cars, because we're doing this to transform roads meant for cars. We could
-            // equivalently use Bike in most cases, except for highways where biking is currently
-            // banned. This tool could be used to carve out space and allow that.
-            if let Some((_, intersections)) = map.pathfind(graph, self.waypoints[0], i) {
+            if let Some((roads, intersections)) = map.pathfind(graph, self.waypoints[0], i) {
                 self.waypoints.push(i);
                 assert_eq!(self.full_path.len(), 1);
                 self.full_path = intersections;
+                assert!(self.roads.is_empty());
+                self.roads = roads;
             }
         }
         // If there's already two waypoints, can't add more -- can only drag things.
@@ -298,10 +316,12 @@ impl Route {
         // Recalculate the full path. We could be more efficient and just fix up the part that's
         // changed, but eh.
         self.full_path.clear();
+        self.roads.clear();
         for pair in self.waypoints.windows(2) {
-            if let Some((_, intersections)) = map.pathfind(graph, pair[0], pair[1]) {
+            if let Some((roads, intersections)) = map.pathfind(graph, pair[0], pair[1]) {
                 self.full_path.pop();
                 self.full_path.extend(intersections);
+                self.roads.extend(roads);
             } else {
                 // Moving the waypoint broke the path, just revert.
                 *self = orig;
@@ -360,11 +380,5 @@ impl RouteSnapperMap {
             .map(|pair| *graph.edge_weight(pair[0], pair[1]).unwrap())
             .collect();
         Some((roads, path))
-    }
-
-    // TODO Inefficient!
-    fn get_r(&self, pair: &[IntersectionID]) -> Option<&Road> {
-        let id = self.road_lookup.get(&(pair[0], pair[1]))?;
-        Some(&self.roads[id.0])
     }
 }

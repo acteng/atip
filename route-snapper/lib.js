@@ -32,12 +32,14 @@ export class RouteSnapper {
           "circle-color": [
             "match",
             ["get", "type"],
+            "waypoint",
+            "red",
             "confirmed route intersection",
             "blue",
             "hovering intersection",
             "red",
             "preview intersection",
-            "green",
+            "blue",
             // other
             "black",
           ],
