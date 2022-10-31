@@ -9,9 +9,9 @@
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <script src="deps/geojson-extent.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
-    <script src="forms.js"></script>
     <script type="module">
       import { App } from "./app.js";
+      import { dropdown } from "./forms.js";
       import { RouteSnapper } from "./route-snapper/lib.js";
 
       const drawControls = new MapboxDraw({
@@ -91,20 +91,58 @@
                </div>
 
            <fieldset>
-           <legend>Physical infrastructure</legend>
+           <legend>Route type</legend>
            ${dropdown(
              props,
-             "segregation",
-             "How will this route be segregated from the parallel road?",
+             "route_type",
+             "The main type of active travel infrastructure along the route",
              [
-               "separate trail",
-               "fully segregated",
-               "stepped",
-               "wands/bollards",
-               "shared bus lane",
-               "paint",
+               "Footpath",
+               "Shared use footpath/cycleway",
+               "Cycleway",
+               "Contraflow",
+               "Quietway",
              ]
            )}
+           ${dropdown(
+             props,
+             "on_carriageway",
+             "The main way in which the route relates to roads",
+             [
+               "Parallel to major road(s)",
+               "Parallel to minor road(s)",
+               "Off carriageway on existing route",
+             ]
+           )}
+           ${dropdown(
+             props,
+             "reallocation",
+             "The main source of new space for active travel",
+             [
+               "Reallocation of a complete vehicular lane on the carriageway",
+               "Road diet: vehicular carriageway thinned, creating new space",
+               "Pavement diet: existing pavement space reallocated",
+               "Verge or other unused space reallocated",
+             ]
+           )}
+           ${dropdown(
+             props,
+             "separation",
+             "The main way in which the route is separated from motor traffic",
+             [
+               "Full separation",
+               "Stepped",
+               "Part separation",
+               "Mandatory lane",
+               "Advisory lane",
+               "On carriageway (e.g. through modal filters)",
+             ]
+           )}
+               <div class="form-row">
+                 <label for="width">Average width of the route in metres:</label>
+                 <input type="number" id="width" value="${
+                   props.width || ""
+                 }" min="0.0" step="0.1">
            </fieldset>
            `;
       }
@@ -115,7 +153,11 @@
           "scheme_description",
           "start_date",
           "budget",
-          "segregation",
+          "route_type",
+          "on_carriageway",
+          "reallocation",
+          "separation",
+          "width",
         ]) {
           app.drawControls.setFeatureProperty(
             id,

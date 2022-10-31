@@ -9,9 +9,9 @@
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <script src="deps/geojson-extent.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
-    <script src="forms.js"></script>
     <script type="module">
       import { App } from "./app.js";
+      import { dropdown } from "./forms.js";
 
       const drawControls = new MapboxDraw({
         displayControlsDefault: false,
@@ -47,52 +47,59 @@
       // Properties may all be missing
       function makeForm(props) {
         return `
-          <div class="form-row">
-            <label for="scheme_name">Scheme name:</label>
-            <input type="text" id="scheme_name" value="${
-              props.scheme_name || ""
-            }">
-          </div>
+                <div class="form-row">
+                  <label for="scheme_name">Scheme name:</label>
+                  <input type="text" id="scheme_name" value="${
+                    props.scheme_name || ""
+                  }">
+                </div>
 
-          <div class="form-row">
-            <label for="scheme_description">Scheme description:</label>
-	    <textarea id="scheme_description" rows="3" cols="100">${
-        props.scheme_description || ""
-      }</textarea>
-          </div>
+                <div class="form-row">
+                  <label for="scheme_description">Scheme description:</label>
+      	    <textarea id="scheme_description" rows="3" cols="100">${
+              props.scheme_description || ""
+            }</textarea>
+                </div>
 
-          <div class="form-row">
-            <label for="start_date">Proposed construction start:</label>
-            <input type="month" id="start_date" value="${
-              props.start_date || ""
-            }">
-          </div>
+                <div class="form-row">
+                  <label for="start_date">Proposed construction start:</label>
+                  <input type="month" id="start_date" value="${
+                    props.start_date || ""
+                  }">
+                </div>
 
-          <div class="form-row">
-            <label for="budget">Requested budget (&pound;):</label>
-            <input type="number" id="budget" value="${
-              props.budget || ""
-            }" min="0" step="100">
-          </div>
+                <div class="form-row">
+                  <label for="budget">Requested budget (&pound;):</label>
+                  <input type="number" id="budget" value="${
+                    props.budget || ""
+                  }" min="0" step="100">
+                </div>
 
-      <fieldset>
-      <legend>Crossing info</legend>
-      ${dropdown(props, "geometry", "Crossing geometry", [
-        "crossroad",
-        "right-left dog-leg",
-        "left-right dog-leg",
-      ])}
-      ${dropdown(props, "motor_traffic_flow", "Motor traffic flow", [
-        "<8000 PCUs per day",
-        ">8000 PCUs per day",
-      ])}
-      ${dropdown(props, "crossing_type", "Crossing type", [
-        "parallel crossing",
-        "on road",
-        "signalized",
-      ])}
-      </fieldset>
-      `;
+            <fieldset>
+            <legend>Crossing info</legend>
+            ${dropdown(props, "crossing_type", "Crossing type", [
+              "Zebra",
+              "Pelican signalised",
+              "Puffin signalised",
+              "Toucan signalised",
+              "Pegasus signalised",
+              "School crossing",
+              "Refuge",
+            ])}
+            ${dropdown(
+              props,
+              "motor_traffic_flow",
+              "Motor traffic flow (Passenger Car Units per day)",
+              ["< 3,000", "3,000 - 8,000", "> 8,000"]
+            )}
+            ${dropdown(
+              props,
+              "85th_percentile_speed",
+              "Motor traffic speed (85th percentile)",
+              ["< 20 mph", "20-30 mph", "> 30 mph"]
+            )}
+            </fieldset>
+            `;
       }
 
       function saveForm(app, id) {
@@ -101,11 +108,10 @@
           "scheme_description",
           "start_date",
           "budget",
-          "geometry",
-          "motor_traffic_flow",
           "crossing_type",
+          "motor_traffic_flow",
+          "85th_percentile_speed",
         ]) {
-          // TODO Why can't we do drawControls.get(id) and then just modify it?
           app.drawControls.setFeatureProperty(
             id,
             key,
