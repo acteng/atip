@@ -32,13 +32,9 @@ export class RouteSnapper {
           "circle-color": [
             "match",
             ["get", "type"],
-            "waypoint",
+            "important",
             "red",
-            "confirmed route intersection",
-            "blue",
-            "hovering intersection",
-            "red",
-            "preview intersection",
+            "unimportant",
             "blue",
             // other
             "black",
@@ -65,7 +61,7 @@ export class RouteSnapper {
         if (!this.active) {
           return;
         }
-        const nearbyPoint = {x: e.point.x - circleRadiusPixels, y: e.point.y};
+        const nearbyPoint = { x: e.point.x - circleRadiusPixels, y: e.point.y };
         const circleRadiusMeters = this.map
           .unproject(e.point)
           .distanceTo(this.map.unproject(nearbyPoint));

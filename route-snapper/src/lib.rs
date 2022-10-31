@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use geom::{Circle, Distance, FindClosest, GPSBounds, LonLat, PolyLine, Pt2D};
 use petgraph::graphmap::UnGraphMap;
@@ -77,62 +77,66 @@ impl JsRouteSnapper {
     #[wasm_bindgen(js_name = renderGeojson)]
     pub fn render_geojson(&self) -> String {
         let draw_intersection = |i: IntersectionID, label: &str| {
+            let mut props = serde_json::Map::new();
+            props.insert("type".to_string(), label.to_string().into());
             (
                 self.map.intersections[i.0].to_geojson(Some(&self.map.gps_bounds)),
-                make_props("type", label),
+                props,
             )
         };
-        let draw_road = |r: RoadID, label: &str| {
+        let draw_road = |r: RoadID| {
             (
                 self.map.roads[r.0]
                     .center_pts
                     .to_geojson(Some(&self.map.gps_bounds)),
-                make_props("type", label),
+                serde_json::Map::new(),
             )
         };
 
         let mut result = Vec::new();
+
+        // Use only two colors/styles for intersection points:
+        //
+        // 1) "important": A waypoint, or something being dragged / hovered on
+        // 2) "unimportant": A draggable intersection on the route
+        //
+        // The first always overrides the second
+
         // Overlapping circles don't work, so override colors in here
-        let mut draw_intersections: HashMap<IntersectionID, &'static str> = HashMap::new();
+        let mut important_intersections = HashSet::new();
+        let mut unimportant_intersections = HashSet::new();
 
         // Draw the confirmed route
         for r in &self.route.roads {
-            result.push(draw_road(*r, "confirmed route"));
+            result.push(draw_road(*r));
         }
-        for i in &self.route.full_path {
-            draw_intersections.insert(*i, "confirmed route intersection");
-        }
-        for i in &self.route.waypoints {
-            draw_intersections.insert(*i, "waypoint");
-        }
+        unimportant_intersections.extend(self.route.full_path.clone());
+        important_intersections.extend(self.route.waypoints.clone());
 
         // Draw the current operation
         if let Mode::Hovering(hover) = self.mode {
-            draw_intersections.insert(hover, "hovering intersection");
+            important_intersections.insert(hover);
             if self.route.waypoints.len() == 1 {
                 if let Some((roads, intersections)) =
                     self.map
                         .pathfind(&self.graph, self.route.waypoints[0], hover)
                 {
                     for r in roads {
-                        result.push(draw_road(r, "preview route leg"));
+                        result.push(draw_road(r));
                     }
-                    // The first/last are waypoints
-                    for i in intersections {
-                        if i == self.route.waypoints[0] || i == hover {
-                            continue;
-                        }
-                        draw_intersections.insert(i, "preview intersection");
-                    }
+                    unimportant_intersections.extend(intersections);
                 }
             }
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            draw_intersections.insert(at, "drag intersection");
+            important_intersections.insert(at);
         }
 
-        for (i, label) in draw_intersections {
-            result.push(draw_intersection(i, label));
+        for i in unimportant_intersections.difference(&important_intersections) {
+            result.push(draw_intersection(*i, "unimportant"));
+        }
+        for i in important_intersections {
+            result.push(draw_intersection(i, "important"));
         }
 
         let obj = geom::geometries_with_properties_to_geojson(result);
@@ -330,12 +334,6 @@ impl Route {
         }
         self.idx(new_i).unwrap()
     }
-}
-
-fn make_props(key: &str, value: &str) -> serde_json::Map<String, serde_json::Value> {
-    let mut props = serde_json::Map::new();
-    props.insert(key.to_string(), value.to_string().into());
-    props
 }
 
 // TODO Copied from abstreet-to-atip. We need... a third repo, just for this plugin.
