@@ -1,5 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
+use abstutil::{deserialize_usize, serialize_usize};
 use geom::{Circle, Distance, FindClosest, GPSBounds, LonLat, PolyLine, Pt2D};
 use petgraph::graphmap::UnGraphMap;
 use serde::{Deserialize, Serialize};
@@ -45,8 +46,11 @@ impl JsRouteSnapper {
 
         web_sys::console::log_1(&format!("Got {} bytes, deserializing", map_bytes.len()).into());
 
-        let map: RouteSnapperMap =
+        let mut map: RouteSnapperMap =
             abstutil::from_binary(map_bytes).map_err(|err| JsValue::from_str(&err.to_string()))?;
+        for road in &mut map.roads {
+            road.length = road.center_pts.length();
+        }
 
         web_sys::console::log_1(&"Finalizing JsRouteSnapper".into());
 
@@ -343,7 +347,6 @@ struct RouteSnapperMap {
     gps_bounds: GPSBounds,
     intersections: Vec<Pt2D>,
     roads: Vec<Road>,
-    road_lookup: HashMap<(IntersectionID, IntersectionID), RoadID>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -351,13 +354,26 @@ struct Road {
     i1: IntersectionID,
     i2: IntersectionID,
     center_pts: PolyLine,
+    #[serde(skip_serializing, skip_deserializing)]
     length: Distance,
 }
 
 #[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-struct RoadID(usize);
+pub struct RoadID(
+    #[serde(
+        serialize_with = "serialize_usize",
+        deserialize_with = "deserialize_usize"
+    )]
+    usize,
+);
 #[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
-struct IntersectionID(usize);
+pub struct IntersectionID(
+    #[serde(
+        serialize_with = "serialize_usize",
+        deserialize_with = "deserialize_usize"
+    )]
+    usize,
+);
 
 impl RouteSnapperMap {
     fn pathfind(
