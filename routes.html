@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ATIP Route Intervention</title>
+    <title>ATIP Route Interventions</title>
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
@@ -192,20 +192,23 @@
   <body>
     <aside id="sidebar">
       <div class="sidebar-content content-container">
-        <nav>
+        <nav style="justify-content: flex-start">
           <a href="index.html">Home</a>
+          <button
+            type="button"
+            class="link-button"
+            style="margin-top: 6px"
+            onclick="document.getElementById('credits').classList.toggle('hide-modal');"
+          >
+            Credits
+          </button>
+        </nav>
+        <nav>
           <a href="areas.html" class="authority-link">Areas</a>
           <a href="crossings.html" class="authority-link">Crossings</a>
           <a href="routes.html" class="authority-link">Routes</a>
+          <a href="other.html" class="authority-link">Other</a>
         </nav>
-        <button
-          type="button"
-          class="link-button"
-          style="margin-top: 6px"
-          onclick="document.getElementById('credits').classList.toggle('hide-modal');"
-        >
-          Credits
-        </button>
 
         <h2>Route Interventions</h2>
         <h1 id="authority">Loading...</h1>

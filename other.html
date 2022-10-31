@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ATIP Crossing Interventions</title>
+    <title>ATIP Other Interventions</title>
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
@@ -16,26 +16,12 @@
       const drawControls = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
+          point: true,
           line_string: true,
+          polygon: true,
         },
-        // make the lines thicker
-        styles: [
-          {
-            id: "gl-draw-line",
-            type: "line",
-            filter: ["==", "$type", "LineString"],
-            layout: {
-              "line-cap": "round",
-              "line-join": "round",
-            },
-            paint: {
-              "line-color": "black",
-              "line-width": 5,
-            },
-          },
-        ],
       });
-      window.app = new App("crossings", drawControls, makeForm, saveForm);
+      window.app = new App("other", drawControls, makeForm, saveForm);
 
       document.getElementById("export").onclick = () => {
         window.app.downloadGeojsonFile();
@@ -76,27 +62,21 @@
                 </div>
 
             <fieldset>
-            <legend>Crossing info</legend>
-            ${dropdown(props, "crossing_type", "Crossing type", [
-              "Zebra",
-              "Pelican signalised",
-              "Puffin signalised",
-              "Toucan signalised",
-              "Pegasus signalised",
-              "School crossing",
-              "Refuge",
-            ])}
+            <legend>Intervention info</legend>
             ${dropdown(
               props,
-              "motor_traffic_flow",
-              "Motor traffic flow (Passenger Car Units per day)",
-              ["< 3,000", "3,000 - 8,000", "> 8,000"]
-            )}
-            ${dropdown(
-              props,
-              "85th_percentile_speed",
-              "Motor traffic speed (85th percentile)",
-              ["< 20 mph", "20-30 mph", "> 30 mph"]
+              "type",
+              "Type of street furniture or urban realm intervention",
+              [
+                "Parklet",
+                "Play area",
+                "Secure cycle parking (e.g. hangars)",
+                "Covered open cycle parking",
+                "Uncovered open cycle parking",
+                "Signage",
+                "Sheltered bus stop",
+                "Other",
+              ]
             )}
             </fieldset>
             `;
@@ -108,9 +88,7 @@
           "scheme_description",
           "start_date",
           "budget",
-          "crossing_type",
-          "motor_traffic_flow",
-          "85th_percentile_speed",
+          "type",
         ]) {
           app.drawControls.setFeatureProperty(
             id,
@@ -153,7 +131,7 @@
           <a href="other.html" class="authority-link">Other</a>
         </nav>
 
-        <h2>Crossing Interventions</h2>
+        <h2>Other Interventions</h2>
         <h1 id="authority">Loading...</h1>
 
         <button type="button" id="export">Export to GeoJSON</button>
