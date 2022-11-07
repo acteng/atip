@@ -328,14 +328,14 @@ function sidebarEntry(props) {
 export function makeCommonFormFields(props) {
   return `
           <div class="form-row">
-            <label for="intervention_name">Scheme name:</label>
+            <label for="intervention_name">Intervention name:</label>
             <input type="text" id="intervention_name" value="${
               props.intervention_name || ""
             }">
           </div>
 
           <div class="form-row">
-            <label for="intervention_description">Scheme description:</label>
+            <label for="intervention_description">Intervention description:</label>
 	    <textarea id="intervention_description" rows="3" cols="100">${
         props.intervention_description || ""
       }</textarea>
