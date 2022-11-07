@@ -51,8 +51,8 @@
 
       function saveForm(app, id) {
         for (const key of [
-          "scheme_name",
-          "scheme_description",
+          "intervention_name",
+          "intervention_description",
           "year",
           "budget",
         ]) {
@@ -117,7 +117,7 @@
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
       </div>
 
-      <div id="scheme_list"></div>
+      <div id="intervention_list"></div>
 
       <div
         class="sidebar-toggle rounded-rect"

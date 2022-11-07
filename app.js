@@ -212,7 +212,7 @@ export class App {
   }
 
   #updateSidebar() {
-    const div = document.getElementById("scheme_list");
+    const div = document.getElementById("intervention_list");
     div.innerHTML = "";
 
     const header = document.createElement("p");
@@ -312,7 +312,7 @@ function setupCredits() {
 }
 
 function sidebarEntry(props) {
-  var result = `${props.scheme_name || "Untitled"}`;
+  var result = `${props.intervention_name || "Untitled"}`;
   if (props.budget || props.year) {
     result += " -";
   }
@@ -328,16 +328,16 @@ function sidebarEntry(props) {
 export function makeCommonFormFields(props) {
   return `
           <div class="form-row">
-            <label for="scheme_name">Scheme name:</label>
-            <input type="text" id="scheme_name" value="${
-              props.scheme_name || ""
+            <label for="intervention_name">Scheme name:</label>
+            <input type="text" id="intervention_name" value="${
+              props.intervention_name || ""
             }">
           </div>
 
           <div class="form-row">
-            <label for="scheme_description">Scheme description:</label>
-	    <textarea id="scheme_description" rows="3" cols="100">${
-        props.scheme_description || ""
+            <label for="intervention_description">Scheme description:</label>
+	    <textarea id="intervention_description" rows="3" cols="100">${
+        props.intervention_description || ""
       }</textarea>
           </div>
 
