@@ -1,10 +1,11 @@
 "use strict";
 
 export class App {
+  // makeForm and saveForm are ignored unless detailedFormExperiment is enabled
   constructor(interventionName, drawControls, makeForm, saveForm) {
-    this.authority = new URLSearchParams(window.location.search).get(
-      "authority"
-    );
+    const params = new URLSearchParams(window.location.search);
+    this.authority = params.get("authority");
+    this.detailedFormExperiment = params.has("detailedFormExperiment");
     this.interventionName = interventionName;
     this.currentFilename = `${this.authority}_${interventionName}.geojson`;
 
@@ -172,18 +173,38 @@ export class App {
     const source =
       feature.geometry.type == "Polygon" ? "editing-polygons" : "editing-lines";
 
-    const formContents =
-      this.makeForm(feature.properties) +
-      `
+    var formContents;
+    if (this.detailedFormExperiment) {
+      formContents = this.makeForm(feature.properties);
+    } else {
+      formContents = makeCommonFormFields(feature.properties);
+    }
+    formContents += `
       <button type="button" id="save">Save</button>
       <button type="button" id="cancel">Cancel</button>
       <button type="button" id="delete">Delete</button>
-		  `;
+     `;
     document.getElementById("panel").innerHTML = formContents;
     this.map.resize();
 
     document.getElementById("save").onclick = () => {
-      this.saveForm(this, feature.id);
+      if (this.detailedFormExperiment) {
+        this.saveForm(this, feature.id);
+      } else {
+        for (const key of [
+          "intervention_name",
+          "intervention_description",
+          "year",
+          "budget",
+        ]) {
+          this.drawControls.setFeatureProperty(
+            feature.id,
+            key,
+            document.getElementById(key).value
+          );
+        }
+      }
+
       document.getElementById("panel").innerHTML = "";
       this.map.getSource(source).setData(emptyGeojson());
       this.map.resize();
