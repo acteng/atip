@@ -270,6 +270,9 @@ function getImports() {
     imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
         takeObject(arg0);
     };
+    imports.wbg.__wbg_log_4b5638ad60bdc54a = function(arg0) {
+        console.log(getObject(arg0));
+    };
     imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
         const ret = new Error();
         return addHeapObject(ret);
@@ -287,9 +290,6 @@ function getImports() {
         } finally {
             wasm.__wbindgen_free(arg0, arg1);
         }
-    };
-    imports.wbg.__wbg_log_4b5638ad60bdc54a = function(arg0) {
-        console.log(getObject(arg0));
     };
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
