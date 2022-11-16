@@ -25,7 +25,7 @@ struct Route {
     waypoints: Vec<IntersectionID>,
     // The full sequence of intersections. Waypoints are a subset
     full_path: Vec<IntersectionID>,
-    // All roads, in order
+    // All roads, in order. They lack direction.
     roads: Vec<RoadID>,
 }
 
@@ -153,8 +153,35 @@ impl JsRouteSnapper {
             return None;
         }
         let mut pts = Vec::new();
+        let mut last_i = None;
         for r in &self.route.roads {
-            pts.extend(self.map.road(r).center_pts.clone().into_points());
+            let road = self.map.road(r);
+            let mut add_pts = road.center_pts.clone().into_points();
+            // The road is oriented one way, so maybe reverse these points
+            match last_i {
+                Some(i) => {
+                    if road.i1 == i {
+                        last_i = Some(road.i2);
+                    } else {
+                        add_pts.reverse();
+                        last_i = Some(road.i1);
+                    }
+                }
+                None => {
+                    if let Some(next) = self.route.roads.get(1) {
+                        let next_road = self.map.road(next);
+                        if road.i1 == next_road.i1 || road.i1 == next_road.i2 {
+                            add_pts.reverse();
+                            last_i = Some(road.i1);
+                        } else {
+                            last_i = Some(road.i2);
+                        }
+                    } else {
+                        // Route with only route doesn't matter
+                    }
+                }
+            }
+            pts.extend(add_pts);
         }
         pts.dedup();
         let pl = PolyLine::unchecked_new(pts);
