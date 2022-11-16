@@ -6,9 +6,9 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <script src="deps/maplibre-gl.js"></script>
     <script src="deps/geojson-extent.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
+    <script src="deps/mapbox-gl-draw.js"></script>
     <script type="module">
       import { App } from "./app.js";
 
@@ -21,15 +21,8 @@
         window.app.loadFromGeojson(e);
       };
     </script>
-    <link
-      href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.css"
-      type="text/css"
-    />
+    <link href="deps/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="deps/mapbox-gl-draw.css" type="text/css" />
     <link rel="stylesheet" href="map_with_sidebar.css" type="text/css" />
   </head>
 
