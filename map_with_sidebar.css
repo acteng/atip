@@ -195,6 +195,17 @@ textarea {
   border-radius: 0.5rem;
 }
 
+/* Route snapper overlay */
+
+.overlay-topright {
+  position: absolute;
+  top: 200px;
+  right: 10px;
+  padding: 10px;
+
+  background-color: white;
+}
+
 /* Override mapbox-gl-draw */
 
 .mapboxgl-ctrl-group > button {
