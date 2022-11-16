@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ATIP Area Interventions</title>
+    <title>ATIP Scheme Entry</title>
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
@@ -10,16 +10,9 @@
     <script src="deps/geojson-extent.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.3.0/mapbox-gl-draw.js"></script>
     <script type="module">
-      import { App, makeCommonFormFields } from "./app.js";
-      import { checkboxes, checkbox_ids } from "./forms.js";
+      import { App } from "./app.js";
 
-      const drawControls = new MapboxDraw({
-        displayControlsDefault: false,
-        controls: {
-          polygon: true,
-        },
-      });
-      window.app = new App("areas", drawControls, makeForm, saveForm);
+      window.app = new App();
 
       document.getElementById("export").onclick = () => {
         window.app.downloadGeojsonFile();
@@ -27,50 +20,6 @@
       document.getElementById("load_geojson").onchange = (e) => {
         window.app.loadFromGeojson(e);
       };
-
-      // Properties may all be missing
-      function makeForm(props) {
-        return `
-		${makeCommonFormFields(props)}
-
-<fieldset>
-	    <legend>What will this area include?</legend>
-	    ${checkboxes(props, "area_", [
-        "Modal filters",
-        "Traffic calming",
-        "Car free area (permanent)",
-        "Car free area (during certain times)",
-        "Car parking restrictions",
-        "20 mph zone",
-        "School streets zone",
-        "Other interventions",
-      ])}
-          </fieldset>
-      `;
-      }
-
-      function saveForm(app, id) {
-        for (const key of [
-          "intervention_name",
-          "intervention_description",
-          "year",
-          "budget",
-        ]) {
-          app.drawControls.setFeatureProperty(
-            id,
-            key,
-            document.getElementById(key).value
-          );
-        }
-
-        for (const key of checkbox_ids("area_", 8)) {
-          app.drawControls.setFeatureProperty(
-            id,
-            key,
-            document.getElementById(key).checked
-          );
-        }
-      }
     </script>
     <link
       href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
@@ -98,20 +47,9 @@
             Credits
           </button>
         </nav>
-        <nav>
-          <a href="areas.html" class="authority-link">Areas</a>
-          <a href="crossings.html" class="authority-link">Crossings</a>
-          <a href="routes.html" class="authority-link">Routes</a>
-          <a href="other.html" class="authority-link">Other</a>
-        </nav>
 
-        <h2>Area Interventions</h2>
-        <p>
-          Draw the boundaries by clicking on draw button (top right of the map).
-          Click on the first point of when the boundary is complete and add data
-          fields.
-        </p>
         <h1 id="authority">Loading...</h1>
+        <p>Instructions go here...</p>
 
         <button type="button" id="export">Export to GeoJSON</button>
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
