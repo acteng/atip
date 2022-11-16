@@ -1,15 +1,16 @@
 "use strict";
 
+import { dropdown } from "./forms.js";
+import { RouteSnapper } from "./route-snapper/lib.js";
+
 export class App {
-  // makeForm and saveForm are ignored unless detailedFormExperiment is enabled
-  constructor(interventionName, drawControls, makeForm, saveForm) {
+  constructor() {
     const params = new URLSearchParams(window.location.search);
     this.authority = params.get("authority");
+    // TODO For now, this becomes unused again
     this.detailedFormExperiment = params.has("detailedFormExperiment");
-    this.interventionName = interventionName;
-    this.currentFilename = `${this.authority}_${interventionName}.geojson`;
-
-    setupNavBar(interventionName, this.authority);
+    // TODO Scheme name in here would be good too
+    this.currentFilename = `${this.authority}.geojson`;
 
     // Before creating the map, check if there's a hash, because one will get set below
     const setCamera = !window.location.hash;
@@ -20,9 +21,30 @@ export class App {
         "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
       hash: true,
     });
-    this.drawControls = drawControls;
-    this.makeForm = makeForm;
-    this.saveForm = saveForm;
+    this.drawControls = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+        point: true,
+        polygon: true,
+        line_string: true,
+      },
+      /*styles: [
+          // make the lines thicker
+          {
+            id: "gl-draw-line",
+            type: "line",
+            filter: ["==", "$type", "LineString"],
+            layout: {
+              "line-cap": "round",
+              "line-join": "round",
+            },
+            paint: {
+              "line-color": "black",
+              "line-width": 5,
+            },
+          },
+        ],*/
+    });
 
     this.#setupMap(setCamera);
 
@@ -88,60 +110,90 @@ export class App {
       });
 
       // Use a layer that only ever has zero or one features for hovering. I think https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an easier way to do this, but I can't make it work with the draw plugin.
-      this.map.addSource("hover-polygons", {
-        type: "geojson",
-        data: emptyGeojson(),
-      });
-      this.map.addSource("hover-lines", {
+      this.map.addSource("hover", {
         type: "geojson",
         data: emptyGeojson(),
       });
       this.map.addLayer({
         id: "hover-polygons",
-        source: "hover-polygons",
+        source: "hover",
         type: "fill",
         paint: {
           "fill-color": "red",
           "fill-opacity": 0.5,
         },
+        filter: ["==", "$type", "Polygon"],
       });
       this.map.addLayer({
         id: "hover-lines",
-        source: "hover-lines",
+        source: "hover",
         type: "line",
         paint: {
           "line-color": "red",
           "line-opacity": 0.5,
           "line-width": 10,
         },
+        filter: ["==", "$type", "LineString"],
+      });
+      // TODO This doesn't show up at low zooms and is hard to see generally. Switch to markers?
+      this.map.addLayer({
+        id: "hover-points",
+        source: "hover",
+        type: "circle",
+        paint: {
+          "circle-radius": {
+            base: 1.5,
+            stops: [
+              [12, 2],
+              [22, 180],
+            ],
+          },
+          "circle-color": "red",
+          "circle-opacity": 0.5,
+        },
+        filter: ["==", "$type", "Point"],
       });
 
       // And another for the object matching the current form
-      this.map.addSource("editing-polygons", {
-        type: "geojson",
-        data: emptyGeojson(),
-      });
-      this.map.addSource("editing-lines", {
+      this.map.addSource("editing", {
         type: "geojson",
         data: emptyGeojson(),
       });
       this.map.addLayer({
         id: "editing-polygons",
-        source: "editing-polygons",
+        source: "editing",
         type: "line",
         paint: {
           "line-color": "red",
           "line-width": 10,
         },
+        filter: ["==", "$type", "Polygon"],
       });
       this.map.addLayer({
         id: "editing-lines",
-        source: "editing-lines",
+        source: "editing",
         type: "line",
         paint: {
           "line-color": "red",
           "line-width": 10,
         },
+        filter: ["==", "$type", "LineString"],
+      });
+      this.map.addLayer({
+        id: "editing-points",
+        source: "editing",
+        type: "circle",
+        paint: {
+          "circle-radius": {
+            base: 1.5,
+            stops: [
+              [12, 2],
+              [22, 180],
+            ],
+          },
+          "circle-color": "red",
+        },
+        filter: ["==", "$type", "Point"],
       });
 
       this.map.addControl(this.drawControls);
@@ -160,6 +212,8 @@ export class App {
           this.openForm(e.features[0]);
         }
       });
+
+      this.routeSnapper = await setupRouteSnapper(this);
     });
 
     document.getElementById("basemaps").onchange = (e) => {
@@ -170,15 +224,7 @@ export class App {
   }
 
   openForm(feature) {
-    const source =
-      feature.geometry.type == "Polygon" ? "editing-polygons" : "editing-lines";
-
-    var formContents;
-    if (this.detailedFormExperiment) {
-      formContents = this.makeForm(feature.properties);
-    } else {
-      formContents = makeCommonFormFields(feature.properties);
-    }
+    var formContents = makeCommonFormFields(feature.properties);
     formContents += `
       <button type="button" id="save">Save</button>
       <button type="button" id="cancel">Cancel</button>
@@ -188,45 +234,42 @@ export class App {
     this.map.resize();
 
     document.getElementById("save").onclick = () => {
-      if (this.detailedFormExperiment) {
-        this.saveForm(this, feature.id);
-      } else {
-        for (const key of [
-          "intervention_name",
-          "intervention_description",
-          "year",
-          "budget",
-        ]) {
-          this.drawControls.setFeatureProperty(
-            feature.id,
-            key,
-            document.getElementById(key).value
-          );
-        }
+      for (const key of [
+        "intervention_type",
+        "intervention_name",
+        "intervention_description",
+        "year",
+        "budget",
+      ]) {
+        this.drawControls.setFeatureProperty(
+          feature.id,
+          key,
+          document.getElementById(key).value
+        );
       }
 
       document.getElementById("panel").innerHTML = "";
-      this.map.getSource(source).setData(emptyGeojson());
+      this.map.getSource("editing").setData(emptyGeojson());
       this.map.resize();
       this.#updateSidebar();
       this.#saveToLocalStorage();
     };
     document.getElementById("cancel").onclick = () => {
       document.getElementById("panel").innerHTML = "";
-      this.map.getSource(source).setData(emptyGeojson());
+      this.map.getSource("editing").setData(emptyGeojson());
       this.map.resize();
     };
     document.getElementById("delete").onclick = () => {
       this.drawControls.delete(feature.id);
       document.getElementById("panel").innerHTML = "";
-      this.map.getSource(source).setData(emptyGeojson());
+      this.map.getSource("editing").setData(emptyGeojson());
       this.map.resize();
       this.#updateSidebar();
       this.#saveToLocalStorage();
     };
 
     // Highlight the feature opened
-    this.map.getSource(source).setData({
+    this.map.getSource("editing").setData({
       type: "FeatureCollection",
       features: [feature],
     });
@@ -237,9 +280,9 @@ export class App {
     div.innerHTML = "";
 
     const header = document.createElement("p");
-    header.innerText = `${this.drawControls.getAll().features.length} ${
-      this.interventionName
-    }`;
+    header.innerText = `${
+      this.drawControls.getAll().features.length
+    } interventions`;
     div.appendChild(header);
 
     var list = document.createElement("ol");
@@ -247,17 +290,15 @@ export class App {
     for (const feature of this.drawControls.getAll().features) {
       var li = document.createElement("li");
       const props = feature.properties;
-      const source =
-        feature.geometry.type == "Polygon" ? "hover-polygons" : "hover-lines";
       li.innerHTML = sidebarEntry(props);
       li.onmouseover = () => {
-        this.map.getSource(source).setData({
+        this.map.getSource("hover").setData({
           type: "FeatureCollection",
           features: [feature],
         });
       };
       li.onmouseout = () => {
-        this.map.getSource(source).setData(emptyGeojson());
+        this.map.getSource("hover").setData(emptyGeojson());
       };
       li.onclick = () => {
         // TODO If another form is open, we'll lose changes
@@ -265,6 +306,7 @@ export class App {
         this.map.fitBounds(geojsonExtent(feature), {
           padding: 20,
           animate: true,
+          duration: 500,
         });
       };
 
@@ -295,16 +337,6 @@ async function loadBoundary(authority) {
     (feature) => feature.properties.name == authority
   );
   return geojson;
-}
-
-function setupNavBar(interventionName, authority) {
-  // Very brittle way of adding the authority to the nav links.
-  for (const a of document.getElementsByClassName("authority-link")) {
-    a.href += `?authority=${authority}`;
-    if (a.pathname === location.pathname) {
-      a.classList.add("current");
-    }
-  }
 }
 
 // TODO I've hit bizarre bugs just sending in null or {} to a source. Figure that out / file an issue.
@@ -346,8 +378,15 @@ function sidebarEntry(props) {
   return result;
 }
 
-export function makeCommonFormFields(props) {
+function makeCommonFormFields(props) {
   return `
+           ${dropdown(props, "intervention_type", "Intervention type:", [
+             "area",
+             "route",
+             "crossing",
+             "other",
+           ])}
+
           <div class="form-row">
             <label for="intervention_name">Intervention name:</label>
             <input type="text" id="intervention_name" value="${
@@ -375,4 +414,13 @@ export function makeCommonFormFields(props) {
               props.budget || ""
             }" min="0" step="1000">
           </div>`;
+}
+
+async function setupRouteSnapper(app) {
+  // TODO Slight hack. These files are stored in an S3 bucket, which only has an HTTP interface. When deployed to Github pages over HTTPS, we can't mix HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need CDN invalidations when we update these files. But when serving locally for development, HTTPS is also fine to use.
+  const url = `https://play.abstreet.org/route-snappers/${app.authority}.bin`;
+  console.log(`Grabbing ${url}`);
+  const resp = await fetch(url);
+  const mapBytes = await resp.arrayBuffer();
+  window.routeSnapper = new RouteSnapper(app, new Uint8Array(mapBytes));
 }

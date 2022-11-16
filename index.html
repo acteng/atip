@@ -89,7 +89,7 @@
           });
 
           map.on("click", "boundary", function (e) {
-            window.location.href = `areas.html?authority=${e.features[0].properties.name}`;
+            window.location.href = `scheme.html?authority=${e.features[0].properties.name}`;
           });
         });
       }
@@ -99,7 +99,7 @@
       document.getElementById("start").onclick = () => {
         const authority = document.getElementById("authority").value;
         if (authority) {
-          window.location.href = `areas.html?authority=${authority}`;
+          window.location.href = `scheme.html?authority=${authority}`;
         }
       };
     </script>
