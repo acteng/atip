@@ -218,6 +218,8 @@ export class App {
 
         if (e.features.length === 1) {
           this.openForm(e.features[0]);
+        } else {
+          this.closeForm();
         }
       });
 
@@ -235,6 +237,11 @@ export class App {
     document.getElementById("panel").innerHTML = makeInterventionForm(
       feature.properties
     );
+    // Highlight the feature opened
+    this.map.getSource("editing").setData({
+      type: "FeatureCollection",
+      features: [feature],
+    });
     this.map.resize();
 
     // Autosave
@@ -255,24 +262,20 @@ export class App {
     }
 
     document.getElementById("save").onclick = () => {
-      document.getElementById("panel").innerHTML = "";
-      this.map.getSource("editing").setData(emptyGeojson());
-      this.map.resize();
+      this.closeForm();
     };
     document.getElementById("delete").onclick = () => {
       this.drawControls.delete(feature.id);
-      document.getElementById("panel").innerHTML = "";
-      this.map.getSource("editing").setData(emptyGeojson());
-      this.map.resize();
+      this.closeForm();
       this.#updateSidebar();
       this.#saveToLocalStorage();
     };
+  }
 
-    // Highlight the feature opened
-    this.map.getSource("editing").setData({
-      type: "FeatureCollection",
-      features: [feature],
-    });
+  closeForm() {
+    document.getElementById("panel").innerHTML = "";
+    this.map.getSource("editing").setData(emptyGeojson());
+    this.map.resize();
   }
 
   #updateSidebar() {
