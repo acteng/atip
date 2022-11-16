@@ -109,42 +109,35 @@ export class App {
       });
 
       // Use a layer that only ever has zero or one features for hovering. I think https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an easier way to do this, but I can't make it work with the draw plugin.
-      // TODO One source, then filter in the layers?
-      this.map.addSource("hover-polygons", {
-        type: "geojson",
-        data: emptyGeojson(),
-      });
-      this.map.addSource("hover-lines", {
-        type: "geojson",
-        data: emptyGeojson(),
-      });
-      this.map.addSource("hover-points", {
+      this.map.addSource("hover", {
         type: "geojson",
         data: emptyGeojson(),
       });
       this.map.addLayer({
         id: "hover-polygons",
-        source: "hover-polygons",
+        source: "hover",
         type: "fill",
         paint: {
           "fill-color": "red",
           "fill-opacity": 0.5,
         },
+        filter: ["==", "$type", "Polygon"],
       });
       this.map.addLayer({
         id: "hover-lines",
-        source: "hover-lines",
+        source: "hover",
         type: "line",
         paint: {
           "line-color": "red",
           "line-opacity": 0.5,
           "line-width": 10,
         },
+        filter: ["==", "$type", "LineString"],
       });
       // TODO This doesn't show up at low zooms and is hard to see generally. Switch to markers?
       this.map.addLayer({
         id: "hover-points",
-        source: "hover-points",
+        source: "hover",
         type: "circle",
         paint: {
           "circle-radius": {
@@ -157,42 +150,37 @@ export class App {
           "circle-color": "red",
           "circle-opacity": 0.5,
         },
+        filter: ["==", "$type", "Point"],
       });
 
       // And another for the object matching the current form
-      this.map.addSource("editing-polygons", {
-        type: "geojson",
-        data: emptyGeojson(),
-      });
-      this.map.addSource("editing-lines", {
-        type: "geojson",
-        data: emptyGeojson(),
-      });
-      this.map.addSource("editing-points", {
+      this.map.addSource("editing", {
         type: "geojson",
         data: emptyGeojson(),
       });
       this.map.addLayer({
         id: "editing-polygons",
-        source: "editing-polygons",
+        source: "editing",
         type: "line",
         paint: {
           "line-color": "red",
           "line-width": 10,
         },
+        filter: ["==", "$type", "Polygon"],
       });
       this.map.addLayer({
         id: "editing-lines",
-        source: "editing-lines",
+        source: "editing",
         type: "line",
         paint: {
           "line-color": "red",
           "line-width": 10,
         },
+        filter: ["==", "$type", "LineString"],
       });
       this.map.addLayer({
         id: "editing-points",
-        source: "editing-points",
+        source: "editing",
         type: "circle",
         paint: {
           "circle-radius": {
@@ -204,6 +192,7 @@ export class App {
           },
           "circle-color": "red",
         },
+        filter: ["==", "$type", "Point"],
       });
 
       this.map.addControl(this.drawControls);
@@ -232,12 +221,6 @@ export class App {
   }
 
   openForm(feature) {
-    const source = {
-      Polygon: "editing-polygons",
-      LineString: "editing-lines",
-      Point: "editing-points",
-    }[feature.geometry.type];
-
     var formContents = makeCommonFormFields(feature.properties);
     formContents += `
       <button type="button" id="save">Save</button>
@@ -263,27 +246,27 @@ export class App {
       }
 
       document.getElementById("panel").innerHTML = "";
-      this.map.getSource(source).setData(emptyGeojson());
+      this.map.getSource("editing").setData(emptyGeojson());
       this.map.resize();
       this.#updateSidebar();
       this.#saveToLocalStorage();
     };
     document.getElementById("cancel").onclick = () => {
       document.getElementById("panel").innerHTML = "";
-      this.map.getSource(source).setData(emptyGeojson());
+      this.map.getSource("editing").setData(emptyGeojson());
       this.map.resize();
     };
     document.getElementById("delete").onclick = () => {
       this.drawControls.delete(feature.id);
       document.getElementById("panel").innerHTML = "";
-      this.map.getSource(source).setData(emptyGeojson());
+      this.map.getSource("editing").setData(emptyGeojson());
       this.map.resize();
       this.#updateSidebar();
       this.#saveToLocalStorage();
     };
 
     // Highlight the feature opened
-    this.map.getSource(source).setData({
+    this.map.getSource("editing").setData({
       type: "FeatureCollection",
       features: [feature],
     });
@@ -304,25 +287,15 @@ export class App {
     for (const feature of this.drawControls.getAll().features) {
       var li = document.createElement("li");
       const props = feature.properties;
-      const source = {
-        Polygon: "hover-polygons",
-        LineString: "hover-lines",
-        Point: "hover-points",
-      }[feature.geometry.type];
       li.innerHTML = sidebarEntry(props);
       li.onmouseover = () => {
-        // Clear other hover types
-        for (const s of ["hover-polygons", "hover-lines", "hover-points"]) {
-          this.map.getSource(s).setData(emptyGeojson());
-        }
-
-        this.map.getSource(source).setData({
+        this.map.getSource("hover").setData({
           type: "FeatureCollection",
           features: [feature],
         });
       };
       li.onmouseout = () => {
-        this.map.getSource(source).setData(emptyGeojson());
+        this.map.getSource("hover").setData(emptyGeojson());
       };
       li.onclick = () => {
         // TODO If another form is open, we'll lose changes
