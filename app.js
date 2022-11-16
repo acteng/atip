@@ -53,7 +53,7 @@ export class App {
     setupCredits();
   }
 
-  saveToGeojson() {
+  toGeojson() {
     var geojson = this.drawControls.getAll();
     // This is a FeatureCollection. We can just set more keys on this top-level
     // object, and they count as foreign members per the GeoJSON spec
@@ -62,7 +62,7 @@ export class App {
   }
 
   downloadGeojsonFile() {
-    downloadGeneratedFile(this.currentFilename, this.saveToGeojson());
+    downloadGeneratedFile(this.currentFilename, this.toGeojson());
   }
 
   loadFromGeojson(e) {
@@ -80,11 +80,15 @@ export class App {
     this.drawControls.set(geojson);
     this.#updateSidebar();
 
-    document.getElementById("scheme_name").value = geojson["scheme_name"] || "";
+    const scheme_name = document.getElementById("scheme_name");
+    scheme_name.value = geojson["scheme_name"] || "";
+    scheme_name.oninput = () => {
+      this.#saveToLocalStorage();
+    };
   }
 
   #saveToLocalStorage() {
-    window.localStorage.setItem(this.currentFilename, this.saveToGeojson());
+    window.localStorage.setItem(this.currentFilename, this.toGeojson());
   }
 
   #setupMap(setCamera) {
@@ -228,35 +232,29 @@ export class App {
   }
 
   openForm(feature) {
-    var formContents = makeCommonFormFields(feature.properties);
-    formContents += `
-      <button type="button" id="save">Save</button>
-      <button type="button" id="cancel">Cancel</button>
-      <button type="button" id="delete">Delete</button>
-     `;
-    document.getElementById("panel").innerHTML = formContents;
+    document.getElementById("panel").innerHTML = makeInterventionForm(
+      feature.properties
+    );
     this.map.resize();
 
-    document.getElementById("save").onclick = () => {
-      for (const key of [
-        "intervention_type",
-        "intervention_name",
-        "intervention_description",
-      ]) {
+    // Autosave
+    for (const key of [
+      "intervention_type",
+      "intervention_name",
+      "intervention_description",
+    ]) {
+      document.getElementById(key).oninput = () => {
         this.drawControls.setFeatureProperty(
           feature.id,
           key,
           document.getElementById(key).value
         );
-      }
+        this.#saveToLocalStorage();
+        this.#updateSidebar();
+      };
+    }
 
-      document.getElementById("panel").innerHTML = "";
-      this.map.getSource("editing").setData(emptyGeojson());
-      this.map.resize();
-      this.#updateSidebar();
-      this.#saveToLocalStorage();
-    };
-    document.getElementById("cancel").onclick = () => {
+    document.getElementById("save").onclick = () => {
       document.getElementById("panel").innerHTML = "";
       this.map.getSource("editing").setData(emptyGeojson());
       this.map.resize();
@@ -372,7 +370,7 @@ function sidebarEntry(props) {
   return result;
 }
 
-function makeCommonFormFields(props) {
+function makeInterventionForm(props) {
   return `
            ${dropdown(props, "intervention_type", "Intervention type:", [
              "area",
@@ -393,7 +391,10 @@ function makeCommonFormFields(props) {
 	    <textarea id="intervention_description" rows="3" cols="100">${
         props.intervention_description || ""
       }</textarea>
-          </div>`;
+          </div>
+
+      <button type="button" id="save">Save</button>
+      <button type="button" id="delete">Delete</button>`;
 }
 
 async function setupRouteSnapper(app) {
