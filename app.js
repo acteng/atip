@@ -12,6 +12,8 @@ export class App {
     // TODO Scheme name in here would be good too
     this.currentFilename = `${this.authority}.geojson`;
 
+    document.getElementById("authority").innerText = this.authority;
+
     // Before creating the map, check if there's a hash, because one will get set below
     const setCamera = !window.location.hash;
 
@@ -51,11 +53,16 @@ export class App {
     setupCredits();
   }
 
+  saveToGeojson() {
+    var geojson = this.drawControls.getAll();
+    // This is a FeatureCollection. We can just set more keys on this top-level
+    // object, and they count as foreign members per the GeoJSON spec
+    geojson["scheme_name"] = document.getElementById("scheme_name").value || "";
+    return JSON.stringify(geojson);
+  }
+
   downloadGeojsonFile() {
-    downloadGeneratedFile(
-      this.currentFilename,
-      JSON.stringify(this.drawControls.getAll())
-    );
+    downloadGeneratedFile(this.currentFilename, this.saveToGeojson());
   }
 
   loadFromGeojson(e) {
@@ -72,20 +79,17 @@ export class App {
     const geojson = JSON.parse(text);
     this.drawControls.set(geojson);
     this.#updateSidebar();
+
+    document.getElementById("scheme_name").value = geojson["scheme_name"] || "";
   }
 
   #saveToLocalStorage() {
-    window.localStorage.setItem(
-      this.currentFilename,
-      JSON.stringify(this.drawControls.getAll())
-    );
+    window.localStorage.setItem(this.currentFilename, this.saveToGeojson());
   }
 
   #setupMap(setCamera) {
     this.map.on("load", async () => {
       const boundaryGeojson = await loadBoundary(this.authority);
-
-      document.getElementById("authority").innerText = this.authority;
 
       if (setCamera) {
         this.map.fitBounds(geojsonExtent(boundaryGeojson), {
@@ -238,8 +242,6 @@ export class App {
         "intervention_type",
         "intervention_name",
         "intervention_description",
-        "year",
-        "budget",
       ]) {
         this.drawControls.setFeatureProperty(
           feature.id,
@@ -365,16 +367,8 @@ function setupCredits() {
 }
 
 function sidebarEntry(props) {
+  // TODO Icons
   var result = `${props.intervention_name || "Untitled"}`;
-  if (props.budget || props.year) {
-    result += " -";
-  }
-  if (props.budget) {
-    result += ` &pound;${props.budget}`;
-  }
-  if (props.year) {
-    result += ` (${props.year})`;
-  }
   return result;
 }
 
@@ -399,20 +393,6 @@ function makeCommonFormFields(props) {
 	    <textarea id="intervention_description" rows="3" cols="100">${
         props.intervention_description || ""
       }</textarea>
-          </div>
-
-          <div class="form-row">
-            <label for="year">Main financial year of expenditure on intervention:</label>
-            <input type="number" id="year" value="${
-              props.year || ""
-            }" min="2020" step="1">
-          </div>
-
-          <div class="form-row">
-            <label for="budget">Total budget allocated to intervention (&pound;):</label>
-            <input type="number" id="budget" value="${
-              props.budget || ""
-            }" min="0" step="1000">
           </div>`;
 }
 
