@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-use abstutil::{deserialize_usize, serialize_usize};
 use geom::{Circle, Distance, FindClosest, GPSBounds, LonLat, PolyLine, Pt2D};
 use petgraph::graphmap::UnGraphMap;
 use serde::{Deserialize, Serialize};
@@ -47,7 +46,7 @@ impl JsRouteSnapper {
         web_sys::console::log_1(&format!("Got {} bytes, deserializing", map_bytes.len()).into());
 
         let mut map: RouteSnapperMap =
-            abstutil::from_binary(map_bytes).map_err(|err| JsValue::from_str(&err.to_string()))?;
+            bincode::deserialize(map_bytes).map_err(|err| JsValue::from_str(&err.to_string()))?;
         for road in &mut map.roads {
             road.length = road.center_pts.length();
         }
@@ -56,7 +55,7 @@ impl JsRouteSnapper {
 
         let mut graph: Graph = UnGraphMap::new();
         for (idx, r) in map.roads.iter().enumerate() {
-            graph.add_edge(r.i1, r.i2, RoadID(idx));
+            graph.add_edge(r.i1, r.i2, RoadID(idx as u32));
         }
 
         let mut snap_to_intersections = FindClosest::new(&map.gps_bounds.to_bounds());
@@ -64,7 +63,7 @@ impl JsRouteSnapper {
             // TODO Time to rethink FindClosest. It can't handle a single point, it needs something
             // with a real bbox
             snap_to_intersections.add_polygon(
-                IntersectionID(idx),
+                IntersectionID(idx as u32),
                 &Circle::new(*pt, INTERSECTON_RADIUS).to_polygon(),
             );
         }
@@ -84,13 +83,14 @@ impl JsRouteSnapper {
             let mut props = serde_json::Map::new();
             props.insert("type".to_string(), label.to_string().into());
             (
-                self.map.intersections[i.0].to_geojson(Some(&self.map.gps_bounds)),
+                self.map.intersections[i.0 as usize].to_geojson(Some(&self.map.gps_bounds)),
                 props,
             )
         };
         let draw_road = |r: RoadID| {
             (
-                self.map.roads[r.0]
+                self.map
+                    .road(&r)
                     .center_pts
                     .to_geojson(Some(&self.map.gps_bounds)),
                 serde_json::Map::new(),
@@ -154,7 +154,7 @@ impl JsRouteSnapper {
         }
         let mut pts = Vec::new();
         for r in &self.route.roads {
-            pts.extend(self.map.roads[r.0].center_pts.clone().into_points());
+            pts.extend(self.map.road(r).center_pts.clone().into_points());
         }
         pts.dedup();
         let pl = PolyLine::unchecked_new(pts);
@@ -359,23 +359,15 @@ struct Road {
 }
 
 #[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct RoadID(
-    #[serde(
-        serialize_with = "serialize_usize",
-        deserialize_with = "deserialize_usize"
-    )]
-    usize,
-);
+pub struct RoadID(u32);
 #[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
-pub struct IntersectionID(
-    #[serde(
-        serialize_with = "serialize_usize",
-        deserialize_with = "deserialize_usize"
-    )]
-    usize,
-);
+pub struct IntersectionID(u32);
 
 impl RouteSnapperMap {
+    fn road(&self, id: &RoadID) -> &Road {
+        &self.roads[id.0 as usize]
+    }
+
     fn pathfind(
         &self,
         graph: &Graph,
@@ -386,7 +378,7 @@ impl RouteSnapperMap {
             graph,
             i1,
             |i| i == i2,
-            |(_, _, r)| self.roads[r.0].length,
+            |(_, _, r)| self.road(r).length,
             |_| Distance::ZERO,
         )?;
         let roads: Vec<RoadID> = path
