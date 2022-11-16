@@ -109,11 +109,16 @@ export class App {
       });
 
       // Use a layer that only ever has zero or one features for hovering. I think https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an easier way to do this, but I can't make it work with the draw plugin.
+      // TODO One source, then filter in the layers?
       this.map.addSource("hover-polygons", {
         type: "geojson",
         data: emptyGeojson(),
       });
       this.map.addSource("hover-lines", {
+        type: "geojson",
+        data: emptyGeojson(),
+      });
+      this.map.addSource("hover-points", {
         type: "geojson",
         data: emptyGeojson(),
       });
@@ -136,6 +141,23 @@ export class App {
           "line-width": 10,
         },
       });
+      // TODO This doesn't show up at low zooms and is hard to see generally. Switch to markers?
+      this.map.addLayer({
+        id: "hover-points",
+        source: "hover-points",
+        type: "circle",
+        paint: {
+          "circle-radius": {
+            base: 1.5,
+            stops: [
+              [12, 2],
+              [22, 180],
+            ],
+          },
+          "circle-color": "red",
+          "circle-opacity": 0.5,
+        },
+      });
 
       // And another for the object matching the current form
       this.map.addSource("editing-polygons", {
@@ -143,6 +165,10 @@ export class App {
         data: emptyGeojson(),
       });
       this.map.addSource("editing-lines", {
+        type: "geojson",
+        data: emptyGeojson(),
+      });
+      this.map.addSource("editing-points", {
         type: "geojson",
         data: emptyGeojson(),
       });
@@ -162,6 +188,21 @@ export class App {
         paint: {
           "line-color": "red",
           "line-width": 10,
+        },
+      });
+      this.map.addLayer({
+        id: "editing-points",
+        source: "editing-points",
+        type: "circle",
+        paint: {
+          "circle-radius": {
+            base: 1.5,
+            stops: [
+              [12, 2],
+              [22, 180],
+            ],
+          },
+          "circle-color": "red",
         },
       });
 
@@ -191,8 +232,11 @@ export class App {
   }
 
   openForm(feature) {
-    const source =
-      feature.geometry.type == "Polygon" ? "editing-polygons" : "editing-lines";
+    const source = {
+      Polygon: "editing-polygons",
+      LineString: "editing-lines",
+      Point: "editing-points",
+    }[feature.geometry.type];
 
     var formContents = makeCommonFormFields(feature.properties);
     formContents += `
@@ -260,11 +304,18 @@ export class App {
     for (const feature of this.drawControls.getAll().features) {
       var li = document.createElement("li");
       const props = feature.properties;
-      // TODO Points aren't handled
-      const source =
-        feature.geometry.type == "Polygon" ? "hover-polygons" : "hover-lines";
+      const source = {
+        Polygon: "hover-polygons",
+        LineString: "hover-lines",
+        Point: "hover-points",
+      }[feature.geometry.type];
       li.innerHTML = sidebarEntry(props);
       li.onmouseover = () => {
+        // Clear other hover types
+        for (const s of ["hover-polygons", "hover-lines", "hover-points"]) {
+          this.map.getSource(s).setData(emptyGeojson());
+        }
+
         this.map.getSource(source).setData({
           type: "FeatureCollection",
           features: [feature],
@@ -279,6 +330,7 @@ export class App {
         this.map.fitBounds(geojsonExtent(feature), {
           padding: 20,
           animate: true,
+          duration: 500,
         });
       };
 
