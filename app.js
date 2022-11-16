@@ -1,6 +1,7 @@
 "use strict";
 
 import { dropdown } from "./forms.js";
+import { RouteSnapper } from "./route-snapper/lib.js";
 
 export class App {
   constructor() {
@@ -211,6 +212,8 @@ export class App {
           this.openForm(e.features[0]);
         }
       });
+
+      this.routeSnapper = await setupRouteSnapper(this);
     });
 
     document.getElementById("basemaps").onchange = (e) => {
@@ -277,9 +280,9 @@ export class App {
     div.innerHTML = "";
 
     const header = document.createElement("p");
-    header.innerText = `${this.drawControls.getAll().features.length} ${
-      this.interventionName
-    }`;
+    header.innerText = `${
+      this.drawControls.getAll().features.length
+    } interventions`;
     div.appendChild(header);
 
     var list = document.createElement("ol");
@@ -411,4 +414,13 @@ function makeCommonFormFields(props) {
               props.budget || ""
             }" min="0" step="1000">
           </div>`;
+}
+
+async function setupRouteSnapper(app) {
+  // TODO Slight hack. These files are stored in an S3 bucket, which only has an HTTP interface. When deployed to Github pages over HTTPS, we can't mix HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need CDN invalidations when we update these files. But when serving locally for development, HTTPS is also fine to use.
+  const url = `https://play.abstreet.org/route-snappers/${app.authority}.bin`;
+  console.log(`Grabbing ${url}`);
+  const resp = await fetch(url);
+  const mapBytes = await resp.arrayBuffer();
+  window.routeSnapper = new RouteSnapper(app, new Uint8Array(mapBytes));
 }
