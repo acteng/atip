@@ -1,15 +1,15 @@
 "use strict";
 
+import { dropdown } from "./forms.js";
+
 export class App {
-  // makeForm and saveForm are ignored unless detailedFormExperiment is enabled
-  constructor(interventionName, drawControls, makeForm, saveForm) {
+  constructor() {
     const params = new URLSearchParams(window.location.search);
     this.authority = params.get("authority");
+    // TODO For now, this becomes unused again
     this.detailedFormExperiment = params.has("detailedFormExperiment");
-    this.interventionName = interventionName;
-    this.currentFilename = `${this.authority}_${interventionName}.geojson`;
-
-    setupNavBar(interventionName, this.authority);
+    // TODO Scheme name in here would be good too
+    this.currentFilename = `${this.authority}.geojson`;
 
     // Before creating the map, check if there's a hash, because one will get set below
     const setCamera = !window.location.hash;
@@ -20,9 +20,30 @@ export class App {
         "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
       hash: true,
     });
-    this.drawControls = drawControls;
-    this.makeForm = makeForm;
-    this.saveForm = saveForm;
+    this.drawControls = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+        point: true,
+        polygon: true,
+        line_string: true,
+      },
+      /*styles: [
+          // make the lines thicker
+          {
+            id: "gl-draw-line",
+            type: "line",
+            filter: ["==", "$type", "LineString"],
+            layout: {
+              "line-cap": "round",
+              "line-join": "round",
+            },
+            paint: {
+              "line-color": "black",
+              "line-width": 5,
+            },
+          },
+        ],*/
+    });
 
     this.#setupMap(setCamera);
 
@@ -173,12 +194,7 @@ export class App {
     const source =
       feature.geometry.type == "Polygon" ? "editing-polygons" : "editing-lines";
 
-    var formContents;
-    if (this.detailedFormExperiment) {
-      formContents = this.makeForm(feature.properties);
-    } else {
-      formContents = makeCommonFormFields(feature.properties);
-    }
+    var formContents = makeCommonFormFields(feature.properties);
     formContents += `
       <button type="button" id="save">Save</button>
       <button type="button" id="cancel">Cancel</button>
@@ -188,21 +204,18 @@ export class App {
     this.map.resize();
 
     document.getElementById("save").onclick = () => {
-      if (this.detailedFormExperiment) {
-        this.saveForm(this, feature.id);
-      } else {
-        for (const key of [
-          "intervention_name",
-          "intervention_description",
-          "year",
-          "budget",
-        ]) {
-          this.drawControls.setFeatureProperty(
-            feature.id,
-            key,
-            document.getElementById(key).value
-          );
-        }
+      for (const key of [
+        "intervention_type",
+        "intervention_name",
+        "intervention_description",
+        "year",
+        "budget",
+      ]) {
+        this.drawControls.setFeatureProperty(
+          feature.id,
+          key,
+          document.getElementById(key).value
+        );
       }
 
       document.getElementById("panel").innerHTML = "";
@@ -247,6 +260,7 @@ export class App {
     for (const feature of this.drawControls.getAll().features) {
       var li = document.createElement("li");
       const props = feature.properties;
+      // TODO Points aren't handled
       const source =
         feature.geometry.type == "Polygon" ? "hover-polygons" : "hover-lines";
       li.innerHTML = sidebarEntry(props);
@@ -297,16 +311,6 @@ async function loadBoundary(authority) {
   return geojson;
 }
 
-function setupNavBar(interventionName, authority) {
-  // Very brittle way of adding the authority to the nav links.
-  for (const a of document.getElementsByClassName("authority-link")) {
-    a.href += `?authority=${authority}`;
-    if (a.pathname === location.pathname) {
-      a.classList.add("current");
-    }
-  }
-}
-
 // TODO I've hit bizarre bugs just sending in null or {} to a source. Figure that out / file an issue.
 function emptyGeojson() {
   return {
@@ -346,8 +350,15 @@ function sidebarEntry(props) {
   return result;
 }
 
-export function makeCommonFormFields(props) {
+function makeCommonFormFields(props) {
   return `
+           ${dropdown(props, "intervention_type", "Intervention type:", [
+             "area",
+             "route",
+             "crossing",
+             "other",
+           ])}
+
           <div class="form-row">
             <label for="intervention_name">Intervention name:</label>
             <input type="text" id="intervention_name" value="${
