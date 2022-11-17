@@ -8,7 +8,6 @@ export class RouteSnapper {
 
     this.app = app;
     this.map = app.map;
-    this.drawControls = app.drawControls;
     this.inner = new JsRouteSnapper(mapBytes);
     console.log("JsRouteSnapper ready, waiting for idle event");
     this.active = false;
@@ -132,10 +131,17 @@ export class RouteSnapper {
       const rawJSON = this.inner.toFinalFeature();
       if (rawJSON) {
         const json = JSON.parse(rawJSON);
-        const ids = this.drawControls.add(json);
+        const ids = this.app.drawControls.add(json);
         json.id = ids[0];
         // drawControls assigns an ID. When we open the form, pass in the feature with that ID
         this.app.openForm(json);
+        this.app.updateSidebar();
+        this.app.saveToLocalStorage();
+
+        // Act like we've selected the line-string we just drew
+        this.app.drawControls.changeMode("direct_select", {
+          featureId: json.id,
+        });
       }
 
       this.#inactiveControl();
