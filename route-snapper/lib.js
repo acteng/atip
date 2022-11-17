@@ -8,7 +8,9 @@ export class RouteSnapper {
 
     this.app = app;
     this.map = app.map;
+    console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(mapBytes);
+    console.timeEnd("Deserialize and setup JsRouteSnapper");
     console.log("JsRouteSnapper ready, waiting for idle event");
     this.active = false;
 
