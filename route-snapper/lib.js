@@ -169,7 +169,7 @@ export async function fetchWithProgress(url, progressId) {
     receivedLength += value.length;
 
     const percent = (100.0 * receivedLength) / contentLength;
-    progressBar.style = `background: red; width: ${percent}%`;
+    progressBar.style = `background: linear-gradient(to right, red ${percent}%, transparent 0);`;
   }
 
   let allChunks = new Uint8Array(receivedLength);
