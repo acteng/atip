@@ -404,6 +404,11 @@ async function setupRouteSnapper(app) {
   // TODO Slight hack. These files are stored in an S3 bucket, which only has an HTTP interface. When deployed to Github pages over HTTPS, we can't mix HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need CDN invalidations when we update these files. But when serving locally for development, HTTPS is also fine to use.
   const url = `https://play.abstreet.org/route-snappers/${app.authority}.bin`;
   console.log(`Grabbing ${url}`);
-  const mapBytes = await fetchWithProgress(url, "snap-progress");
-  window.routeSnapper = new RouteSnapper(app, mapBytes);
+  try {
+    const mapBytes = await fetchWithProgress(url, "snap-progress");
+    window.routeSnapper = new RouteSnapper(app, mapBytes);
+  } catch (err) {
+    console.log(`Route snapper broke: ${err}`);
+    document.getElementById("snap-tool").innerHTML = "Failed to load";
+  }
 }
