@@ -15,7 +15,7 @@ jobs:
 
       - name: Build web app
         run: |
-                wasm-pack build --release --target web route-snapper
+                wasm-pack build --release --target no-modules route-snapper
 
                 mkdir -p publish/route-snapper
                 cp -Rv *.html *.geojson *.js *.css deps publish

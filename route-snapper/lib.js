@@ -1,6 +1,10 @@
-import init, { JsRouteSnapper } from "./pkg/route_snapper.js";
-
-await init();
+// Weird workaround to make WASM work in web workers. See
+// https://rustwasm.github.io/wasm-bindgen/examples/wasm-in-web-worker.html
+const { JsRouteSnapper } = wasm_bindgen;
+async function setup() {
+  await wasm_bindgen("./route-snapper/pkg/route_snapper_bg.wasm");
+}
+setup();
 
 export class RouteSnapper {
   constructor(app, mapBytes) {
