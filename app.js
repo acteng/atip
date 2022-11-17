@@ -70,7 +70,7 @@ export class App {
     // TODO No await? :(
     reader.onload = (e) => {
       this.#loadFromText(e.target.result);
-      this.#saveToLocalStorage();
+      this.saveToLocalStorage();
     };
     reader.readAsText(e.target.files[0]);
   }
@@ -78,16 +78,16 @@ export class App {
   #loadFromText(text) {
     const geojson = JSON.parse(text);
     this.drawControls.set(geojson);
-    this.#updateSidebar();
+    this.updateSidebar();
 
     const scheme_name = document.getElementById("scheme_name");
     scheme_name.value = geojson["scheme_name"] || "";
     scheme_name.oninput = () => {
-      this.#saveToLocalStorage();
+      this.saveToLocalStorage();
     };
   }
 
-  #saveToLocalStorage() {
+  saveToLocalStorage() {
     window.localStorage.setItem(this.currentFilename, this.toGeojson());
   }
 
@@ -213,8 +213,8 @@ export class App {
       }
 
       this.map.on("draw.selectionchange", (e) => {
-        this.#updateSidebar();
-        this.#saveToLocalStorage();
+        this.updateSidebar();
+        this.saveToLocalStorage();
 
         if (e.features.length === 1) {
           this.openForm(e.features[0]);
@@ -256,8 +256,8 @@ export class App {
           key,
           document.getElementById(key).value
         );
-        this.#saveToLocalStorage();
-        this.#updateSidebar();
+        this.saveToLocalStorage();
+        this.updateSidebar();
       };
     }
 
@@ -267,8 +267,8 @@ export class App {
     document.getElementById("delete").onclick = () => {
       this.drawControls.delete(feature.id);
       this.closeForm();
-      this.#updateSidebar();
-      this.#saveToLocalStorage();
+      this.updateSidebar();
+      this.saveToLocalStorage();
     };
   }
 
@@ -278,7 +278,7 @@ export class App {
     this.map.resize();
   }
 
-  #updateSidebar() {
+  updateSidebar() {
     const div = document.getElementById("intervention_list");
     div.innerHTML = "";
 
@@ -304,7 +304,6 @@ export class App {
         this.map.getSource("hover").setData(emptyGeojson());
       };
       li.onclick = () => {
-        // TODO If another form is open, we'll lose changes
         this.openForm(feature);
         this.map.fitBounds(geojsonExtent(feature), {
           padding: 20,
