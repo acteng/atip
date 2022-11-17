@@ -1,20 +1,10 @@
-// Weird workaround to make WASM work in web workers. See
-// https://rustwasm.github.io/wasm-bindgen/examples/wasm-in-web-worker.html
-const { JsRouteSnapper } = wasm_bindgen;
-async function setup() {
-  await wasm_bindgen("./route-snapper/pkg/route_snapper_bg.wasm");
-}
-setup();
-
 export class RouteSnapper {
-  constructor(app, mapBytes) {
+  constructor(app, inner) {
     const circleRadiusPixels = 10;
 
     this.app = app;
     this.map = app.map;
-    console.time("Deserialize and setup JsRouteSnapper");
-    this.inner = new JsRouteSnapper(mapBytes);
-    console.timeEnd("Deserialize and setup JsRouteSnapper");
+    this.inner = inner;
     console.log("JsRouteSnapper ready, waiting for idle event");
     this.active = false;
 

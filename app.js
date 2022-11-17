@@ -223,7 +223,7 @@ export class App {
         }
       });
 
-      this.routeSnapper = await setupRouteSnapper(this);
+      await setupRouteSnapper(this);
     });
 
     document.getElementById("basemaps").onchange = (e) => {
@@ -405,7 +405,11 @@ async function setupRouteSnapper(app) {
   console.log(`Grabbing ${url}`);
   try {
     const mapBytes = await fetchWithProgress(url, "snap-progress");
-    window.routeSnapper = new RouteSnapper(app, mapBytes);
+    const worker = new Worker("route-snapper/worker.js");
+    worker.onmessage = (e) => {
+      app.routeSnapper = new RouteSnapper(app, e.data);
+    };
+    worker.postMessage(mapBytes);
   } catch (err) {
     console.log(`Route snapper broke: ${err}`);
     document.getElementById("snap-tool").innerHTML = "Failed to load";
