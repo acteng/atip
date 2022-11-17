@@ -1,7 +1,7 @@
 "use strict";
 
 import { dropdown } from "./forms.js";
-import { RouteSnapper } from "./route-snapper/lib.js";
+import { RouteSnapper, fetchWithProgress } from "./route-snapper/lib.js";
 
 export class App {
   constructor() {
@@ -404,7 +404,6 @@ async function setupRouteSnapper(app) {
   // TODO Slight hack. These files are stored in an S3 bucket, which only has an HTTP interface. When deployed to Github pages over HTTPS, we can't mix HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need CDN invalidations when we update these files. But when serving locally for development, HTTPS is also fine to use.
   const url = `https://play.abstreet.org/route-snappers/${app.authority}.bin`;
   console.log(`Grabbing ${url}`);
-  const resp = await fetch(url);
-  const mapBytes = await resp.arrayBuffer();
-  window.routeSnapper = new RouteSnapper(app, new Uint8Array(mapBytes));
+  const mapBytes = await fetchWithProgress(url, "snap-progress");
+  window.routeSnapper = new RouteSnapper(app, mapBytes);
 }
