@@ -83,7 +83,9 @@ impl JsRouteSnapper {
             let mut props = serde_json::Map::new();
             props.insert("type".to_string(), label.to_string().into());
             (
-                self.map.intersections[i.0 as usize].to_geojson(Some(&self.map.gps_bounds)),
+                self.map
+                    .intersection(i)
+                    .to_geojson(Some(&self.map.gps_bounds)),
                 props,
             )
         };
@@ -394,6 +396,9 @@ impl RouteSnapperMap {
     fn road(&self, id: &RoadID) -> &Road {
         &self.roads[id.0 as usize]
     }
+    fn intersection(&self, id: IntersectionID) -> Pt2D {
+        self.intersections[id.0 as usize]
+    }
 
     fn pathfind(
         &self,
@@ -401,12 +406,14 @@ impl RouteSnapperMap {
         i1: IntersectionID,
         i2: IntersectionID,
     ) -> Option<(Vec<RoadID>, Vec<IntersectionID>)> {
+        let i2_pt = self.intersection(i2);
+
         let (_, path) = petgraph::algo::astar(
             graph,
             i1,
             |i| i == i2,
             |(_, _, r)| self.road(r).length,
-            |_| Distance::ZERO,
+            |i| self.intersection(i).dist_to(i2_pt),
         )?;
         let roads: Vec<RoadID> = path
             .windows(2)
