@@ -19,79 +19,82 @@ const isPolgon = ["==", "$type", "Polygon"];
 const isLine = ["==", "$type", "LineString"];
 const isPoint = ["==", "$type", "Point"];
 
+function drawLine(color, width, opacity = 1.0) {
+  return {
+    type: "line",
+    layout: roundedLine,
+    paint: {
+      "line-color": color,
+      "line-width": width,
+      "line-opacity": opacity,
+    },
+  };
+}
+
+function drawPolygon(color, opacity) {
+  return {
+    type: "fill",
+    paint: {
+      "fill-color": color,
+      "fill-opacity": opacity,
+    },
+  };
+}
+
+function drawCircle(color, radius, opacity = 1.0) {
+  return {
+    type: "circle",
+    paint: {
+      "circle-radius": radius,
+      "circle-color": color,
+      "circle-opacity": opacity,
+    },
+  };
+}
+
 export const mapStyle = [
   // Around the study area
   {
     id: "boundary",
     source: "boundary",
-    type: "line",
-    paint: {
-      "line-color": "black",
-      "line-opacity": 0.5,
-      "line-width": 3,
-    },
+    ...drawLine("black", 3, 0.5),
   },
   {
     id: "hover-polygons",
     source: "hover",
     filter: isPolgon,
-    type: "fill",
-    paint: {
-      "fill-color": hoverColor,
-      "fill-opacity": 0.5,
-    },
+    ...drawPolygon(hoverColor, 0.5),
   },
   {
     id: "hover-lines",
     source: "hover",
     filter: isLine,
-    type: "line",
-    paint: {
-      "line-color": hoverColor,
-      "line-opacity": 1.0,
-      "line-width": lineWidth,
-    },
+    // TODO I'd like to cover up the base layers, but I can't figure out how to z-order on top of drawControls.
+    ...drawLine(hoverColor, 1.5 * lineWidth, 1.0),
   },
   {
     id: "hover-points",
     source: "hover",
     filter: isPoint,
-    type: "circle",
-    paint: {
-      "circle-radius": 1.5 * circleRadius,
-      "circle-color": hoverColor,
-      "circle-opacity": 0.5,
-    },
+    ...drawCircle(hoverColor, 1.5 * circleRadius, 0.5),
   },
   {
     id: "editing-polygons",
     source: "editing",
     filter: isPolgon,
-    type: "line",
-    paint: {
-      "line-color": editingColor,
-      "line-width": lineWidth,
-    },
+    ...drawPolygon(editingColor, 0.5),
   },
   {
     id: "editing-lines",
     source: "editing",
     filter: isLine,
-    type: "line",
-    paint: {
-      "line-color": editingColor,
-      "line-width": lineWidth,
-    },
+    ...drawLine(editingColor, 1.5 * lineWidth),
   },
   {
     id: "editing-points",
     source: "editing",
     filter: isPoint,
-    type: "circle",
-    paint: {
-      "circle-radius": 1.5 * circleRadius,
-      "circle-color": editingColor,
-    },
+    ...drawCircle(editingColor, 1.5 * circleRadius),
   },
 ];
 
@@ -99,39 +102,21 @@ export const drawControlsStyle = defaultStyle.concat([
   {
     id: "base-points",
     filter: ["all", isPoint, ["==", "meta", "feature"]],
-    type: "circle",
-    paint: {
-      "circle-radius": circleRadius,
-      "circle-color": baseColor,
-    },
+    ...drawCircle(baseColor, circleRadius),
   },
   {
     id: "base-line",
     filter: isLine,
-    type: "line",
-    layout: roundedLine,
-    paint: {
-      "line-color": baseColor,
-      "line-width": lineWidth,
-    },
+    ...drawLine(baseColor, lineWidth),
   },
   {
     id: "base-polygon-fill",
     filter: isPolgon,
-    type: "fill",
-    paint: {
-      "fill-color": baseColor,
-      "fill-opacity": 0.1,
-    },
+    ...drawPolygon(baseColor, 0.1),
   },
   {
     id: "base-polygon-outline",
     filter: isPolgon,
-    type: "line",
-    layout: roundedLine,
-    paint: {
-      "line-color": baseColor,
-      "line-width": lineWidth / 2.0,
-    },
+    ...drawLine(baseColor, lineWidth / 2.0),
   },
 ]);
