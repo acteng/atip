@@ -188,13 +188,6 @@ textarea {
   visibility: hidden;
 }
 
-.link-button {
-  border: none;
-  padding: 0.5rem;
-  background: #ddd;
-  border-radius: 0.5rem;
-}
-
 /* Route snapper overlay */
 
 .overlay-topright {
