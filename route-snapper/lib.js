@@ -114,6 +114,7 @@ export class RouteSnapper {
     var btn = document.createElement("button");
     btn.type = "button";
     btn.innerText = "Route tool";
+    btn.style = "cursor: pointer;";
     btn.onclick = () => {
       this.#activeControl();
     };
