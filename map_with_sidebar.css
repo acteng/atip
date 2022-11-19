@@ -25,6 +25,10 @@ body {
   flex-flow: row nowrap;
 }
 
+button {
+  cursor: pointer;
+}
+
 body > aside {
   position: relative; /* for children who want to position:absolute */
 

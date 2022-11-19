@@ -31,22 +31,22 @@
       <div class="sidebar-content content-container">
         <nav style="justify-content: left">
           <button
-          type="button"
-          style="margin-top: 6px; margin-right: 6px; cursor: pointer;"
-          onclick="window.open('/');"
-        >
-          Home
-        </button>
+            type="button"
+            style="margin-top: 6px; margin-right: 6px"
+            onclick="window.open('/');"
+          >
+            Home
+          </button>
           <button
             type="button"
-            style="margin-top: 6px; margin-right: 6px; cursor: pointer;"
+            style="margin-top: 6px; margin-right: 6px"
             onclick="document.getElementById('about').classList.toggle('hide-modal');"
           >
             About
           </button>
           <button
             type="button"
-            style="margin-top: 6px; margin-right: 6px; cursor: pointer;"
+            style="margin-top: 6px; margin-right: 6px"
             onclick="document.getElementById('instructions').classList.toggle('hide-modal');"
           >
             Instructions
@@ -55,9 +55,11 @@
 
         <h1 id="authority">Loading...</h1>
         <label for="scheme_name">Scheme name:</label>
-        <input type="text" id="scheme_name"/>
-        <button type="button" id="export" style="cursor: pointer; margin-top: 6px;">Export to GeoJSON</button>
-        <p>Load from GeoJSON: <input type="file" id="load_geojson" style="cursor: pointer;"/></p>
+        <input type="text" id="scheme_name" />
+        <button type="button" id="export" style="margin-top: 6px">
+          Export to GeoJSON
+        </button>
+        <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
         <div id="intervention_list"></div>
       </div>
 
