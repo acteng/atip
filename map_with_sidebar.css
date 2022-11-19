@@ -5,7 +5,8 @@
   box-sizing: border-box;
 }
 body {
-  font: 16px Helvetica Nueu, Arial, Helvetica, sans-serif;
+  /* font: 16px Helvetica Nueu, Arial, Helvetica, sans-serif; */
+  font: 16px 'Brush Script MT', cursive;
 }
 
 /* The application layout */
@@ -104,7 +105,7 @@ body > main {
   overflow: visible;
   justify-content: center;
   align-items: center;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Brush Script MT', cursive;
   font-size: 1.8rem;
   user-select: none;
 
