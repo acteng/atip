@@ -34,9 +34,9 @@
           <button
             type="button"
             style="margin-top: 6px"
-            onclick="document.getElementById('credits').classList.toggle('hide-modal');"
+            onclick="document.getElementById('about').classList.toggle('hide-modal');"
           >
-            Credits
+            About
           </button>
           <button
             type="button"
@@ -80,7 +80,50 @@
       </div>
     </main>
 
-    <div id="credits"></div>
+    <div id="about" class="modal-popup centered-fullscreen hide-modal">
+      <button
+        type="button"
+        style="float: right"
+        onclick="document.getElementById('about').classList.toggle('hide-modal');"
+      >
+        X
+      </button>
+      <h1>About ATIP</h1>
+      <p>
+        ATIP is an
+        <a href="https://github.com/acteng/atip" target="_blank"
+          >open source project</a
+        >
+        developed by:
+      </p>
+      <ul>
+        <li>
+          <a href="https://dcarlino.org" target="_blank">Dustin Carlino</a>:
+          lead developer
+        </li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/madison-wang-841977bb/"
+            target="_blank"
+            >Madison Wang</a
+          >: UX design
+        </li>
+        <li>
+          <a href="https://github.com/BudgieInWA" target="_blank">Ben Ritter</a
+          >: CSS consulting
+        </li>
+      </ul>
+      <p>
+        ATIP relies heavily on
+        <a href="https://www.openstreetmap.org/about" target="_blank"
+          >OpenStreetMap</a
+        >
+        contributors,
+        <a href="https://maplibre.org/" target="_blank">MapLibre</a>,
+        <a href="https://georust.org/" target="_blank">GeoRust</a>, and other
+        open source projects.
+      </p>
+    </div>
     <div id="instructions" class="modal-popup centered-fullscreen hide-modal">
       <button
         type="button"
