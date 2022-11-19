@@ -30,9 +30,6 @@
     <aside id="sidebar">
       <div class="sidebar-content content-container">
         <nav style="justify-content: evenly-spaced">
-          <!-- <a href="index.html">Home</a> -->
-          <div class="btn">
-
           <button
           type="button"
           style="margin-top: 6px; cursor: pointer;"
@@ -54,15 +51,13 @@
           >
             Instructions
           </button>
-        </div>
         </nav>
 
         <h1 id="authority">Loading...</h1>
         <label for="scheme_name">Scheme name:</label>
         <input type="text" id="scheme_name" />
-        <button type="button" id="export">Export to GeoJSON</button>
-        <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
-
+        <button type="button" id="export" style="cursor: pointer;" onclick="window.open('/');">Export to GeoJSON</button>
+        <p>Load from GeoJSON: <input type="file" id="load_geojson" style="cursor: pointer;"/></p>
         <div id="intervention_list"></div>
       </div>
 
