@@ -105,6 +105,12 @@ export const drawControlsStyle = defaultStyle.concat([
     ...drawCircle(baseColor, circleRadius),
   },
   {
+    id: "draggable-points",
+    filter: ["all", isPoint, ["!=", "meta", "feature"]],
+    // TODO The 1.5 is bulky and ugly, but I can't figure out how to get z-ordering working
+    ...drawCircle("blue", 1.5 * circleRadius),
+  },
+  {
     id: "base-line",
     filter: isLine,
     ...drawLine(baseColor, lineWidth),
