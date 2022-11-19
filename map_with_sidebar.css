@@ -126,28 +126,11 @@ body > main {
 .sidebar-content > nav {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: left;
   margin-bottom: 10px;
 }
-.sidebar-content > nav a {
-  margin-right: 1em;
-  padding: 0.5rem;
-  background: #ddd;
-  border-radius: 0.5rem;
-
-  text-decoration: none;
-}
-.sidebar-content > nav a.current {
-  text-decoration: underline;
-  background-color: #aaa;
-  /* Clicking the current tab just erases state; it's not useful */
-  pointer-events: none;
-}
-.sidebar-content > nav a:hover {
-  background-color: #bbb;
-}
-.sidebar-content > nav a:active {
-  background-color: #999;
+.sidebar-content > nav button {
+  margin-right: 12px;
 }
 
 /* The forms */

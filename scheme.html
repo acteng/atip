@@ -29,24 +29,16 @@
   <body>
     <aside id="sidebar">
       <div class="sidebar-content content-container">
-        <nav style="justify-content: left">
+        <nav>
+          <button type="button" onclick="window.open('/');">Home</button>
           <button
             type="button"
-            style="margin-top: 6px; margin-right: 6px"
-            onclick="window.open('/');"
-          >
-            Home
-          </button>
-          <button
-            type="button"
-            style="margin-top: 6px; margin-right: 6px"
             onclick="document.getElementById('about').classList.toggle('hide-modal');"
           >
             About
           </button>
           <button
             type="button"
-            style="margin-top: 6px; margin-right: 6px"
             onclick="document.getElementById('instructions').classList.toggle('hide-modal');"
           >
             Instructions
