@@ -37,7 +37,6 @@ export class App {
     this.#setupMap(setCamera);
 
     setupCredits();
-    setupInstructions();
   }
 
   toGeojson() {
@@ -273,24 +272,6 @@ function setupCredits() {
   credits.classList.add("modal-popup");
   credits.classList.add("centered-fullscreen");
   credits.classList.add("hide-modal");
-}
-
-function setupInstructions() {
-  const instructions = document.getElementById("instructions");
-  instructions.innerHTML = `<button type="button" style="float: right;" onclick="document.getElementById('instructions').classList.toggle('hide-modal');">X</button>
-  <p>For each intervention:</p>
-  <ol>
-    <li>Click one of the draw icons to the top right of the map (the icons allow you to draw points, lines, polygons or routes)</li>
-    <li>Draw the intervention on the map, clicking the original point or 'Finish snapping' for the Polygon and Route tools respectively</li>
-    <li>Fill in the details that appear (Intervention type, name, description)</li>
-    <li>Click the "Save" button or "Delete" button to save or remove the intervention</li>
-  </ol>
-  <p>Repeat the steps above for each substantial infrastructure intervention in the scheme</p>
-  <p>Click the intervention name or to re-open the edit panel</p>
-  <p>Click the "Export to GeoJSON" button to download the interventions as a GeoJSON file</p>`;
-  instructions.classList.add("modal-popup");
-  instructions.classList.add("centered-fullscreen");
-  instructions.classList.add("hide-modal");
 }
 
 function sidebarEntry(props) {
