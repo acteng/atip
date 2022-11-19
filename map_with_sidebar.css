@@ -25,7 +25,8 @@ body {
   flex-flow: row nowrap;
 }
 
-button, input[type=file] {
+button,
+input[type="file"] {
   cursor: pointer;
 }
 
