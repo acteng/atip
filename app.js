@@ -261,7 +261,7 @@ function emptyGeojson() {
 
 function setupCredits() {
   const credits = document.getElementById("credits");
-  credits.innerHTML = `<button type="button" class="link-button" style="float: right;" onclick="document.getElementById('credits').classList.toggle('hide-modal');">X</button>
+  credits.innerHTML = `<button type="button" style="float: right;" onclick="document.getElementById('credits').classList.toggle('hide-modal');">X</button>
   <h1>Credits</h1>
 <p>ATIP is developed by:</p>
 <ul>
@@ -277,7 +277,7 @@ function setupCredits() {
 
 function setupInstructions() {
   const instructions = document.getElementById("instructions");
-  instructions.innerHTML = `<button type="button" class="link-button" style="float: right;" onclick="document.getElementById('instructions').classList.toggle('hide-modal');">X</button>
+  instructions.innerHTML = `<button type="button" style="float: right;" onclick="document.getElementById('instructions').classList.toggle('hide-modal');">X</button>
   <p>For each intervention:</p>
   <ol>
     <li>Click one of the draw icons to the top right of the map (the icons allow you to draw points, lines, polygons or routes)</li>
