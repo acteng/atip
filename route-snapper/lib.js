@@ -113,7 +113,7 @@ export class RouteSnapper {
     div.innerHTML = "";
     var btn = document.createElement("button");
     btn.type = "button";
-    btn.innerText = "Activate route snap tool";
+    btn.innerText = "Route tool";
     btn.onclick = () => {
       this.#activeControl();
     };
