@@ -2,6 +2,7 @@
 
 import { dropdown } from "./forms.js";
 import { RouteSnapper, fetchWithProgress } from "./route-snapper/lib.js";
+import { mapStyle, drawControlsStyle } from "./style.js";
 
 export class App {
   constructor() {
@@ -30,22 +31,7 @@ export class App {
         polygon: true,
         line_string: true,
       },
-      /*styles: [
-          // make the lines thicker
-          {
-            id: "gl-draw-line",
-            type: "line",
-            filter: ["==", "$type", "LineString"],
-            layout: {
-              "line-cap": "round",
-              "line-join": "round",
-            },
-            paint: {
-              "line-color": "black",
-              "line-width": 5,
-            },
-          },
-        ],*/
+      styles: drawControlsStyle,
     });
 
     this.#setupMap(setCamera);
@@ -106,60 +92,11 @@ export class App {
         type: "geojson",
         data: boundaryGeojson,
       });
-      this.map.addLayer({
-        id: "boundary",
-        type: "line",
-        source: "boundary",
-        layout: {},
-        paint: {
-          "line-color": "black",
-          "line-width": 3,
-        },
-      });
 
       // Use a layer that only ever has zero or one features for hovering. I think https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an easier way to do this, but I can't make it work with the draw plugin.
       this.map.addSource("hover", {
         type: "geojson",
         data: emptyGeojson(),
-      });
-      this.map.addLayer({
-        id: "hover-polygons",
-        source: "hover",
-        type: "fill",
-        paint: {
-          "fill-color": "red",
-          "fill-opacity": 0.5,
-        },
-        filter: ["==", "$type", "Polygon"],
-      });
-      this.map.addLayer({
-        id: "hover-lines",
-        source: "hover",
-        type: "line",
-        paint: {
-          "line-color": "red",
-          "line-opacity": 0.5,
-          "line-width": 10,
-        },
-        filter: ["==", "$type", "LineString"],
-      });
-      // TODO This doesn't show up at low zooms and is hard to see generally. Switch to markers?
-      this.map.addLayer({
-        id: "hover-points",
-        source: "hover",
-        type: "circle",
-        paint: {
-          "circle-radius": {
-            base: 1.5,
-            stops: [
-              [12, 2],
-              [22, 180],
-            ],
-          },
-          "circle-color": "red",
-          "circle-opacity": 0.5,
-        },
-        filter: ["==", "$type", "Point"],
       });
 
       // And another for the object matching the current form
@@ -167,42 +104,10 @@ export class App {
         type: "geojson",
         data: emptyGeojson(),
       });
-      this.map.addLayer({
-        id: "editing-polygons",
-        source: "editing",
-        type: "line",
-        paint: {
-          "line-color": "red",
-          "line-width": 10,
-        },
-        filter: ["==", "$type", "Polygon"],
-      });
-      this.map.addLayer({
-        id: "editing-lines",
-        source: "editing",
-        type: "line",
-        paint: {
-          "line-color": "red",
-          "line-width": 10,
-        },
-        filter: ["==", "$type", "LineString"],
-      });
-      this.map.addLayer({
-        id: "editing-points",
-        source: "editing",
-        type: "circle",
-        paint: {
-          "circle-radius": {
-            base: 1.5,
-            stops: [
-              [12, 2],
-              [22, 180],
-            ],
-          },
-          "circle-color": "red",
-        },
-        filter: ["==", "$type", "Point"],
-      });
+
+      for (const style of mapStyle) {
+        this.map.addLayer(style);
+      }
 
       this.map.addControl(this.drawControls);
 
