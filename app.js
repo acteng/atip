@@ -360,7 +360,6 @@ function setupCredits() {
 <p>ATIP is developed by:</p>
 <ul>
     <li><a href="https://dcarlino.org" target="_blank">Dustin Carlino</a>: lead developer</li>
-    <li><a href="https://robinlovelace.net" target="_blank">Robin Lovelace</a>: project lead</li>
     <li><a href="https://www.linkedin.com/in/madison-wang-841977bb/" target="_blank">Madison Wang</a>: UX design</li>
     <li><a href="https://github.com/BudgieInWA" target="_blank">Ben Ritter</a>: CSS consulting</li>
 </ul>
