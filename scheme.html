@@ -81,6 +81,41 @@
     </main>
 
     <div id="credits"></div>
-    <div id="instructions"></div>
+    <div id="instructions" class="modal-popup centered-fullscreen hide-modal">
+      <button
+        type="button"
+        style="float: right"
+        onclick="document.getElementById('instructions').classList.toggle('hide-modal');"
+      >
+        X
+      </button>
+      <p>For each intervention:</p>
+      <ol>
+        <li>
+          Click one of the draw icons to the top right of the map (the icons
+          allow you to draw points, lines, polygons or routes)
+        </li>
+        <li>
+          Draw the intervention on the map, clicking the original point or
+          'Finish snapping' for the Polygon and Route tools respectively
+        </li>
+        <li>
+          Fill in the details that appear (Intervention type, name, description)
+        </li>
+        <li>
+          Click the "Save" button or "Delete" button to save or remove the
+          intervention
+        </li>
+      </ol>
+      <p>
+        Repeat the steps above for each substantial infrastructure intervention
+        in the scheme
+      </p>
+      <p>Click the intervention name or to re-open the edit panel</p>
+      <p>
+        Click the "Export to GeoJSON" button to download the interventions as a
+        GeoJSON file
+      </p>
+    </div>
   </body>
 </html>
