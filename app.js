@@ -197,6 +197,7 @@ export class App {
       var li = document.createElement("li");
       const props = feature.properties;
       li.innerHTML = sidebarEntry(props);
+      li.style = "cursor: pointer;";
       li.onmouseover = () => {
         this.map.getSource("hover").setData({
           type: "FeatureCollection",
