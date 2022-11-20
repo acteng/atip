@@ -1,6 +1,5 @@
 "use strict";
 
-import { dropdown } from "./forms.js";
 import { RouteSnapper, fetchWithProgress } from "./route-snapper/lib.js";
 import { mapStyle, drawControlsStyle } from "./style.js";
 
@@ -33,8 +32,10 @@ export class App {
       },
       styles: drawControlsStyle,
     });
+    this.currentlyEditing = null;
 
     this.#setupMap(setCamera);
+    this.closeForm();
   }
 
   toGeojson() {
@@ -137,36 +138,49 @@ export class App {
   }
 
   openForm(feature) {
-    document.getElementById("panel").innerHTML = makeInterventionForm(
-      feature.properties
-    );
+    if (this.currentlyEditing) {
+      document
+        .getElementById(this.currentlyEditing)
+        .classList.remove("current-entry");
+    }
+    this.currentlyEditing = `list-entry-${feature.id}`;
+    document
+      .getElementById(this.currentlyEditing)
+      .classList.add("current-entry");
     // Highlight the feature opened
     this.map.getSource("editing").setData({
       type: "FeatureCollection",
       features: [feature],
     });
-    this.map.resize();
 
-    // Autosave
+    document
+      .getElementById("intervention_form")
+      .classList.remove("disabled-form");
+
     for (const key of [
       "intervention_type",
       "intervention_name",
       "intervention_description",
     ]) {
-      document.getElementById(key).oninput = () => {
-        this.drawControls.setFeatureProperty(
-          feature.id,
-          key,
-          document.getElementById(key).value
-        );
+      const elem = document.getElementById(key);
+      // Fill out based on current properties
+      elem.value = feature.properties[key] || "";
+      elem.disabled = false;
+
+      // Autosave
+      elem.oninput = () => {
+        this.drawControls.setFeatureProperty(feature.id, key, elem.value);
         this.saveToLocalStorage();
         this.updateSidebar();
       };
     }
 
+    document.getElementById("save").disabled = false;
     document.getElementById("save").onclick = () => {
       this.closeForm();
+      this.drawControls.changeMode("simple_select");
     };
+    document.getElementById("delete").disabled = false;
     document.getElementById("delete").onclick = () => {
       this.drawControls.delete(feature.id);
       this.closeForm();
@@ -176,9 +190,26 @@ export class App {
   }
 
   closeForm() {
-    document.getElementById("panel").innerHTML = "";
+    document.getElementById("intervention_form").classList.add("disabled-form");
+
+    for (const key of [
+      "intervention_type",
+      "intervention_name",
+      "intervention_description",
+    ]) {
+      const elem = document.getElementById(key);
+      elem.value = "";
+      elem.oninput = null;
+      elem.disabled = true;
+    }
+    document.getElementById("save").disabled = true;
+    document.getElementById("delete").disabled = true;
+
     this.map.getSource("editing").setData(emptyGeojson());
-    this.map.resize();
+    document
+      .getElementById(this.currentlyEditing)
+      .classList.remove("current-entry");
+    this.currentlyEditing = null;
   }
 
   updateSidebar() {
@@ -195,9 +226,13 @@ export class App {
 
     for (const feature of this.drawControls.getAll().features) {
       var li = document.createElement("li");
+      li.id = `list-entry-${feature.id}`;
+      li.className = "list-entry";
+      if (li.id == this.currentlyEditing) {
+        li.classList.add("current-entry");
+      }
       const props = feature.properties;
       li.innerHTML = sidebarEntry(props);
-      li.style = "cursor: pointer;";
       li.onmouseover = () => {
         this.map.getSource("hover").setData({
           type: "FeatureCollection",
@@ -261,33 +296,6 @@ function sidebarEntry(props) {
   // TODO Icons
   var result = `${props.intervention_name || "Untitled"}`;
   return result;
-}
-
-function makeInterventionForm(props) {
-  return `
-           ${dropdown(props, "intervention_type", "Intervention type:", [
-             "area",
-             "route",
-             "crossing",
-             "other",
-           ])}
-
-          <div class="form-row">
-            <label for="intervention_name">Intervention name:</label>
-            <input type="text" id="intervention_name" value="${
-              props.intervention_name || ""
-            }">
-          </div>
-
-          <div class="form-row">
-            <label for="intervention_description">Intervention description:</label>
-	    <textarea id="intervention_description" rows="3" cols="100">${
-        props.intervention_description || ""
-      }</textarea>
-          </div>
-
-      <button type="button" id="save">Save</button>
-      <button type="button" id="delete">Delete</button>`;
 }
 
 async function setupRouteSnapper(app) {

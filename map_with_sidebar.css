@@ -1,4 +1,4 @@
-/* This is for a page with a map, collapsable sidebar, collapsable bottom form area, and modal popup. */
+/* This is for a page with a map, collapsable sidebar, and modal popup. */
 
 /* Defaults */
 * {
@@ -60,15 +60,6 @@ body > main {
   position: relative; /* for children who want to position:absolute */
 
   flex-grow: 1;
-}
-
-#panel {
-  flex-grow: 0;
-  max-height: 50vh;
-  overflow-y: auto;
-}
-#panel:empty {
-  display: none;
 }
 
 /* The map */
@@ -134,23 +125,27 @@ body > main {
   margin-right: 12px;
 }
 
+.list-entry {
+  cursor: pointer;
+}
+
+.current-entry {
+  background: grey;
+}
+
 /* The forms */
 
-fieldset {
-  margin: 0.25em -8px;
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-bottom: 4px;
+#intervention_form {
+  border: 1px solid black;
+  padding: 20px;
+}
+
+.disabled-form {
+  background: rgb(232, 232, 232);
 }
 
 .form-row {
-  margin: 0.25rem 0;
-}
-
-.form-row label {
-  display: inline-block;
-  width: 25em;
-  margin-right: 2em;
+  margin-bottom: 6px;
 }
 
 textarea {
