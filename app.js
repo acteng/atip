@@ -32,6 +32,7 @@ export class App {
       },
       styles: drawControlsStyle,
     });
+    this.currentlyEditing = null;
 
     this.#setupMap(setCamera);
     this.closeForm();
@@ -137,6 +138,21 @@ export class App {
   }
 
   openForm(feature) {
+    if (this.currentlyEditing) {
+      document
+        .getElementById(this.currentlyEditing)
+        .classList.remove("current-entry");
+    }
+    this.currentlyEditing = `list-entry-${feature.id}`;
+    document
+      .getElementById(this.currentlyEditing)
+      .classList.add("current-entry");
+    // Highlight the feature opened
+    this.map.getSource("editing").setData({
+      type: "FeatureCollection",
+      features: [feature],
+    });
+
     document
       .getElementById("intervention_form")
       .classList.remove("disabled-form");
@@ -171,12 +187,6 @@ export class App {
       this.updateSidebar();
       this.saveToLocalStorage();
     };
-
-    // Highlight the feature opened
-    this.map.getSource("editing").setData({
-      type: "FeatureCollection",
-      features: [feature],
-    });
   }
 
   closeForm() {
@@ -196,6 +206,10 @@ export class App {
     document.getElementById("delete").disabled = true;
 
     this.map.getSource("editing").setData(emptyGeojson());
+    document
+      .getElementById(this.currentlyEditing)
+      .classList.remove("current-entry");
+    this.currentlyEditing = null;
   }
 
   updateSidebar() {
@@ -212,9 +226,13 @@ export class App {
 
     for (const feature of this.drawControls.getAll().features) {
       var li = document.createElement("li");
+      li.id = `list-entry-${feature.id}`;
+      li.className = "list-entry";
+      if (li.id == this.currentlyEditing) {
+        li.classList.add("current-entry");
+      }
       const props = feature.properties;
       li.innerHTML = sidebarEntry(props);
-      li.style = "cursor: pointer;";
       li.onmouseover = () => {
         this.map.getSource("hover").setData({
           type: "FeatureCollection",
