@@ -35,7 +35,6 @@ export class App {
     this.currentlyEditing = null;
 
     this.#setupMap(setCamera);
-    this.closeForm();
   }
 
   toGeojson() {

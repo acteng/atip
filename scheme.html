@@ -53,10 +53,10 @@
         </button>
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
         <div id="intervention_list"></div>
-        <div id="intervention_form">
+        <div id="intervention_form" class="disabled-form">
           <div class="form-row">
             <label for="intervention_type">Type:</label>
-            <select id="intervention_type">
+            <select id="intervention_type" disabled>
               <option></option>
               <option value="area">area</option>
               <option value="route">route</option>
@@ -67,7 +67,7 @@
 
           <div class="form-row">
             <label for="intervention_name">Name:</label>
-            <input type="text" id="intervention_name" />
+            <input type="text" id="intervention_name" disabled />
           </div>
 
           <div class="form-row">
@@ -76,11 +76,12 @@
               id="intervention_description"
               rows="3"
               cols="40"
+              disabled
             ></textarea>
           </div>
 
-          <button type="button" id="save">Save</button>
-          <button type="button" id="delete">Delete</button>
+          <button type="button" id="save" disabled>Save</button>
+          <button type="button" id="delete" disabled>Delete</button>
         </div>
       </div>
 
