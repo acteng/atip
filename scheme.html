@@ -53,6 +53,35 @@
         </button>
         <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
         <div id="intervention_list"></div>
+        <div id="intervention_form">
+          <div class="form-row">
+            <label for="intervention_type">Type:</label>
+            <select id="intervention_type">
+              <option></option>
+              <option value="area">area</option>
+              <option value="route">route</option>
+              <option value="crossing">crossing</option>
+              <option value="other">other</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="intervention_name">Name:</label>
+            <input type="text" id="intervention_name" />
+          </div>
+
+          <div class="form-row">
+            <label for="intervention_description">Description:</label>
+            <textarea
+              id="intervention_description"
+              rows="3"
+              cols="40"
+            ></textarea>
+          </div>
+
+          <button type="button" id="save">Save</button>
+          <button type="button" id="delete">Delete</button>
+        </div>
       </div>
 
       <div
@@ -72,7 +101,6 @@
           </select>
         </div>
       </div>
-      <div id="panel" class="content-container"></div>
       <div id="snap-tool" class="overlay-topright">
         <!-- TODO the text should be fixed, and the progress bar float -->
         <div id="snap-progress">Route snapping tool loading...</div>
