@@ -103,11 +103,18 @@ export class App {
         data: emptyGeojson(),
       });
 
+      this.map.addControl(this.drawControls);
+
       for (const style of mapStyle) {
         this.map.addLayer(style);
       }
 
-      this.map.addControl(this.drawControls);
+      // Force some layers to be drawn on top of drawControls. drawControls doesn't seem to add its layers immediately, so the ordering above doesn't matter. This is a brittle hack.
+      this.map.once("idle", () => {
+        for (const style of mapStyle) {
+          this.map.moveLayer(style.id);
+        }
+      });
 
       // Initially load from local storage
       const loadLocal = window.localStorage.getItem(this.currentFilename);

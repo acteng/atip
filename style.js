@@ -6,6 +6,7 @@ import defaultStyle from "./base_style.js";
 const baseColor = "black";
 const hoverColor = "yellow";
 const editingColor = "red";
+const draggablePointColor = "blue";
 
 const circleRadius = 7;
 const lineWidth = 10;
@@ -69,14 +70,13 @@ export const mapStyle = [
     id: "hover-lines",
     source: "hover",
     filter: isLine,
-    // TODO I'd like to cover up the base layers, but I can't figure out how to z-order on top of drawControls.
-    ...drawLine(hoverColor, 1.5 * lineWidth, 1.0),
+    ...drawLine(hoverColor, lineWidth, 0.5),
   },
   {
     id: "hover-points",
     source: "hover",
     filter: isPoint,
-    ...drawCircle(hoverColor, 1.5 * circleRadius, 0.5),
+    ...drawCircle(hoverColor, circleRadius, 0.5),
   },
   {
     id: "editing-polygons",
@@ -88,13 +88,13 @@ export const mapStyle = [
     id: "editing-lines",
     source: "editing",
     filter: isLine,
-    ...drawLine(editingColor, 1.5 * lineWidth),
+    ...drawLine(editingColor, lineWidth, 0.5),
   },
   {
     id: "editing-points",
     source: "editing",
     filter: isPoint,
-    ...drawCircle(editingColor, 1.5 * circleRadius),
+    ...drawCircle(editingColor, circleRadius, 0.5),
   },
 ];
 
@@ -107,8 +107,7 @@ export const drawControlsStyle = defaultStyle.concat([
   {
     id: "draggable-points",
     filter: ["all", isPoint, ["!=", "meta", "feature"]],
-    // TODO The 1.5 is bulky and ugly, but I can't figure out how to get z-ordering working
-    ...drawCircle("blue", 1.5 * circleRadius),
+    ...drawCircle(draggablePointColor, circleRadius),
   },
   {
     id: "base-line",
