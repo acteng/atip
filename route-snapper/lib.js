@@ -135,9 +135,9 @@ export class RouteSnapper {
         const json = JSON.parse(rawJSON);
         const ids = this.app.drawControls.add(json);
         json.id = ids[0];
+        this.app.updateSidebar();
         // drawControls assigns an ID. When we open the form, pass in the feature with that ID
         this.app.openForm(json);
-        this.app.updateSidebar();
         this.app.saveToLocalStorage();
 
         // Act like we've selected the line-string we just drew
