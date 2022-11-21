@@ -13,13 +13,6 @@
       import { App } from "./app.js";
 
       window.app = new App();
-
-      document.getElementById("export").onclick = () => {
-        window.app.downloadGeojsonFile();
-      };
-      document.getElementById("load_geojson").onchange = (e) => {
-        window.app.loadFromGeojson(e);
-      };
     </script>
     <link href="deps/maplibre-gl.css" rel="stylesheet" />
     <link rel="stylesheet" href="deps/mapbox-gl-draw.css" type="text/css" />
@@ -48,6 +41,9 @@
         <h1 id="authority">Loading...</h1>
         <label for="scheme_name">Scheme name:</label>
         <input type="text" id="scheme_name" />
+        <button type="button" id="start-over" style="margin-top: 6px">
+          Start over
+        </button>
         <button type="button" id="export" style="margin-top: 6px">
           Export to GeoJSON
         </button>
