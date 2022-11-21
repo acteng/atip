@@ -9,7 +9,6 @@ export class App {
     this.authority = params.get("authority");
     // TODO For now, this becomes unused again
     this.detailedFormExperiment = params.has("detailedFormExperiment");
-    // TODO Scheme name in here would be good too
     this.currentFilename = `${this.authority}.geojson`;
 
     document.getElementById("authority").innerText = this.authority;
@@ -35,6 +34,31 @@ export class App {
     this.currentlyEditing = null;
 
     this.#setupMap(setCamera);
+
+    document.getElementById("export").onclick = () => {
+      const geojson = this.toGeojson();
+      var filename = this.authority;
+      // Include the scheme name if it's set
+      if (geojson["scheme_name"]) {
+        filename += "_" + geojson["scheme_name"];
+      }
+      filename += ".geojson";
+      downloadGeneratedFile(filename, JSON.stringify(geojson));
+    };
+    document.getElementById("load_geojson").onchange = (e) => {
+      this.#loadFromGeojson(e);
+    };
+    document.getElementById("start-over").onclick = () => {
+      if (
+        confirm(
+          "Do you want to clear the current scheme? (You should save it first!)"
+        )
+      ) {
+        this.drawControls.set(emptyGeojson());
+        this.updateSidebar();
+        document.getElementById("scheme_name").value = "";
+      }
+    };
   }
 
   toGeojson() {
@@ -42,16 +66,14 @@ export class App {
     // This is a FeatureCollection. We can just set more keys on this top-level
     // object, and they count as foreign members per the GeoJSON spec
     geojson["scheme_name"] = document.getElementById("scheme_name").value || "";
-    return JSON.stringify(geojson);
+    geojson["authority"] = this.authority;
+    return geojson;
   }
 
-  downloadGeojsonFile() {
-    downloadGeneratedFile(this.currentFilename, this.toGeojson());
-  }
-
-  loadFromGeojson(e) {
+  #loadFromGeojson(e) {
     const reader = new FileReader();
     // TODO No await? :(
+    // TODO Should we prompt before deleting the current scheme?
     reader.onload = (e) => {
       this.#loadFromText(e.target.result);
       this.saveToLocalStorage();
@@ -72,7 +94,10 @@ export class App {
   }
 
   saveToLocalStorage() {
-    window.localStorage.setItem(this.currentFilename, this.toGeojson());
+    window.localStorage.setItem(
+      this.currentFilename,
+      JSON.stringify(this.toGeojson())
+    );
   }
 
   #setupMap(setCamera) {
