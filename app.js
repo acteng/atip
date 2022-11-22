@@ -247,6 +247,23 @@ export class App {
 
     for (const feature of this.drawControls.getAll().features) {
       const props = feature.properties;
+
+      // Bit of a hack, but force the type of "other" if it hasn't been set. This should really be in response to an object being created, but mapbox-gl-draw's events are weird
+      if (props.intervention_type === undefined) {
+        var type = "other";
+        if (feature.geometry.type == "Polygon") {
+          type = "area";
+        }
+
+        this.drawControls.setFeatureProperty(
+          feature.id,
+          "intervention_type",
+          type
+        );
+        this.saveToLocalStorage();
+        props.intervention_type = type;
+      }
+
       var li = document.createElement("li");
 
       if (feature.id == this.currentlyEditing) {
@@ -289,7 +306,10 @@ export class App {
       } else {
         li.id = `list-entry-${feature.id}`;
         li.className = "list-entry";
-        li.innerHTML = sidebarEntry(props);
+        // TODO Icons?
+        li.innerHTML = `${props.intervention_name || "Untitled"} ${
+          props.intervention_type
+        }`;
 
         li.onmouseover = () => {
           this.map.getSource("hover").setData({
@@ -347,12 +367,6 @@ function emptyGeojson() {
     type: "FeatureCollection",
     features: [],
   };
-}
-
-function sidebarEntry(props) {
-  // TODO Icons
-  var result = `${props.intervention_name || "Untitled"}`;
-  return result;
 }
 
 function makeInterventionForm(props) {
