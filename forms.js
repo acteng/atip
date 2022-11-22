@@ -1,7 +1,7 @@
 "use strict";
 
 export function dropdown(props, key, label, values) {
-  var html = `<div class="form-row">`;
+  var html = `<div>`;
   html += `<label for="${key}">${label}</label>`;
   html += `<select id="${key}">`;
   html += `<option></option>`;
@@ -10,6 +10,17 @@ export function dropdown(props, key, label, values) {
     html += `<option value="${val}" ${selected}>${val}</option>`;
   }
   html += `</select>`;
+  html += `</div>`;
+  return html;
+}
+
+export function radio(props, key, values) {
+  var html = `<div style="display: flex; justify-content: space-between;">`;
+  for (const val of values) {
+    const checked = props[key] == val ? "checked" : "";
+    html += `<input type="radio" id="${val}" name="${key}" ${checked}>`;
+    html += `<label for="${val}">${val}</label>`;
+  }
   html += `</div>`;
   return html;
 }

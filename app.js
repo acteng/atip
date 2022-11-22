@@ -1,6 +1,6 @@
 "use strict";
 
-import { dropdown } from "./forms.js";
+import { radio } from "./forms.js";
 import { RouteSnapper, fetchWithProgress } from "./route-snapper/lib.js";
 import { mapStyle, drawControlsStyle } from "./style.js";
 
@@ -253,16 +253,26 @@ export class App {
         li.innerHTML = makeInterventionForm(props);
         list.appendChild(li);
 
-        for (const key of [
-          "intervention_type",
-          "intervention_name",
-          "intervention_description",
-        ]) {
+        for (const key of ["intervention_name", "intervention_description"]) {
           const elem = document.getElementById(key);
           // Autosave
           // TODO Can we do it on the parent?
           elem.oninput = () => {
             this.drawControls.setFeatureProperty(feature.id, key, elem.value);
+            this.saveToLocalStorage();
+          };
+        }
+
+        const typeRadioButtons = document.querySelectorAll(
+          'input[name="intervention_type"]'
+        );
+        for (const btn of typeRadioButtons) {
+          btn.onchange = () => {
+            this.drawControls.setFeatureProperty(
+              feature.id,
+              "intervention_type",
+              btn.id
+            );
             this.saveToLocalStorage();
           };
         }
@@ -350,7 +360,7 @@ function makeInterventionForm(props) {
           <input type="text" id="intervention_name" value="${
             props.intervention_name || ""
           }">
-          ${dropdown(props, "intervention_type", "Type:", [
+          ${radio(props, "intervention_type", [
             "area",
             "route",
             "crossing",
