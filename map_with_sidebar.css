@@ -131,6 +131,9 @@ body > main {
 .list-entry:hover {
   color: grey;
 }
+.list-entry-hover-on-map {
+  background: grey;
+}
 
 /* The forms */
 
