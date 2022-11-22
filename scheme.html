@@ -40,37 +40,10 @@
         <h1 id="authority">Loading...</h1>
         <label for="scheme_name">Scheme name:</label>
         <input type="text" id="scheme_name" />
-        <p>Add interventions that make up the scheme with the draw tools in the top right of the map and enter details below:</p>
-        <div id="intervention_form" class="disabled-form">
-          <div class="form-row">
-            <label for="intervention_type">Type:</label>
-            <select id="intervention_type" disabled>
-              <option></option>
-              <option value="area">area</option>
-              <option value="route">route</option>
-              <option value="crossing">crossing</option>
-              <option value="other">other</option>
-            </select>
-          </div>
-
-          <div class="form-row">
-            <label for="intervention_name">Name:</label>
-            <input type="text" id="intervention_name" disabled />
-          </div>
-
-          <div class="form-row">
-            <label for="intervention_description">Description:</label>
-            <textarea
-              id="intervention_description"
-              rows="3"
-              cols="40"
-              disabled
-            ></textarea>
-          </div>
-
-          <button type="button" id="save" disabled>Save</button>
-          <button type="button" id="delete" disabled>Delete</button>
-        </div>
+        <p>
+          Add interventions that make up the scheme with the draw tools in the
+          top right of the map and enter details below:
+        </p>
         <div id="intervention_list"></div>
         <button type="button" id="start-over" style="margin-top: 6px">
           Start over

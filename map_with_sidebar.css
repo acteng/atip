@@ -128,24 +128,15 @@ body > main {
 .list-entry {
   cursor: pointer;
 }
-
-.current-entry {
-  background: grey;
+.list-entry:hover {
+  color: grey;
 }
 
 /* The forms */
 
-#intervention_form {
+.intervention-form {
   border: 1px solid black;
-  padding: 20px;
-}
-
-.disabled-form {
-  background: rgb(232, 232, 232);
-}
-
-.form-row {
-  margin-bottom: 6px;
+  padding: 10px;
 }
 
 textarea {
