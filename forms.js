@@ -19,7 +19,8 @@ export function radio(props, key, values) {
   for (const val of values) {
     const checked = props[key] == val ? "checked" : "";
     html += `<input type="radio" id="${val}" name="${key}" ${checked}>`;
-    html += `<label for="${val}">${val}</label>`;
+    const capitalized = val.charAt(0).toUpperCase() + val.slice(1);
+    html += `<label for="${val}">${capitalized}</label>`;
   }
   html += `</div>`;
   return html;
