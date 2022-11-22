@@ -1,5 +1,6 @@
 "use strict";
 
+import { dropdown } from "./forms.js";
 import { RouteSnapper, fetchWithProgress } from "./route-snapper/lib.js";
 import { mapStyle, drawControlsStyle } from "./style.js";
 
@@ -162,78 +163,23 @@ export class App {
   }
 
   openForm(feature) {
-    if (this.currentlyEditing) {
-      document
-        .getElementById(this.currentlyEditing)
-        .classList.remove("current-entry");
-    }
-    this.currentlyEditing = `list-entry-${feature.id}`;
-    document
-      .getElementById(this.currentlyEditing)
-      .classList.add("current-entry");
+    this.currentlyEditing = feature.id;
+    this.updateSidebar();
+
     // Highlight the feature opened
     this.map.getSource("editing").setData({
       type: "FeatureCollection",
       features: [feature],
     });
-
-    document
-      .getElementById("intervention_form")
-      .classList.remove("disabled-form");
-
-    for (const key of [
-      "intervention_type",
-      "intervention_name",
-      "intervention_description",
-    ]) {
-      const elem = document.getElementById(key);
-      // Fill out based on current properties
-      elem.value = feature.properties[key] || "";
-      elem.disabled = false;
-
-      // Autosave
-      elem.oninput = () => {
-        this.drawControls.setFeatureProperty(feature.id, key, elem.value);
-        this.saveToLocalStorage();
-        this.updateSidebar();
-      };
-    }
-
-    document.getElementById("save").disabled = false;
-    document.getElementById("save").onclick = () => {
-      this.closeForm();
-      this.drawControls.changeMode("simple_select");
-    };
-    document.getElementById("delete").disabled = false;
-    document.getElementById("delete").onclick = () => {
-      this.drawControls.delete(feature.id);
-      this.closeForm();
-      this.updateSidebar();
-      this.saveToLocalStorage();
-    };
+    // And undo the hover
+    this.map.getSource("hover").setData(emptyGeojson());
   }
 
   closeForm() {
-    document.getElementById("intervention_form").classList.add("disabled-form");
-
-    for (const key of [
-      "intervention_type",
-      "intervention_name",
-      "intervention_description",
-    ]) {
-      const elem = document.getElementById(key);
-      elem.value = "";
-      elem.oninput = null;
-      elem.disabled = true;
-    }
-    document.getElementById("save").disabled = true;
-    document.getElementById("delete").disabled = true;
+    this.currentlyEditing = null;
+    this.updateSidebar();
 
     this.map.getSource("editing").setData(emptyGeojson());
-    document
-      .getElementById(this.currentlyEditing)
-      .classList.remove("current-entry");
-    this.currentlyEditing = null;
   }
 
   updateSidebar() {
@@ -247,42 +193,69 @@ export class App {
     div.appendChild(header);
 
     var list = document.createElement("ol");
+    // Do this immediately, so we can modify list children below and immediately then getElementById
+    div.appendChild(list);
 
     for (const feature of this.drawControls.getAll().features) {
-      var li = document.createElement("li");
-      li.id = `list-entry-${feature.id}`;
-      li.className = "list-entry";
-      if (li.id == this.currentlyEditing) {
-        li.classList.add("current-entry");
-      }
       const props = feature.properties;
-      li.innerHTML = sidebarEntry(props);
-      li.onmouseover = () => {
-        this.map.getSource("hover").setData({
-          type: "FeatureCollection",
-          features: [feature],
-        });
-      };
-      li.onmouseout = () => {
-        this.map.getSource("hover").setData(emptyGeojson());
-      };
-      li.onclick = () => {
-        this.openForm(feature);
-        this.map.fitBounds(geojsonExtent(feature), {
-          padding: 20,
-          animate: true,
-          duration: 500,
-        });
-        // Act like we've selected the object
-        this.drawControls.changeMode("direct_select", {
-          featureId: feature.id,
-        });
-      };
+      var li = document.createElement("li");
 
-      list.appendChild(li);
+      if (feature.id == this.currentlyEditing) {
+        li.innerHTML = makeInterventionForm(props);
+        list.appendChild(li);
+
+        for (const key of [
+          "intervention_type",
+          "intervention_name",
+          "intervention_description",
+        ]) {
+          const elem = document.getElementById(key);
+          // Autosave
+          // TODO Can we do it on the parent?
+          elem.oninput = () => {
+            this.drawControls.setFeatureProperty(feature.id, key, elem.value);
+            this.saveToLocalStorage();
+          };
+        }
+
+        document.getElementById("save").onclick = () => {
+          this.closeForm();
+          this.drawControls.changeMode("simple_select");
+        };
+        document.getElementById("delete").onclick = () => {
+          this.drawControls.delete(feature.id);
+          this.closeForm();
+          this.saveToLocalStorage();
+        };
+      } else {
+        li.className = "list-entry";
+        li.innerHTML = sidebarEntry(props);
+
+        li.onmouseover = () => {
+          this.map.getSource("hover").setData({
+            type: "FeatureCollection",
+            features: [feature],
+          });
+        };
+        li.onmouseout = () => {
+          this.map.getSource("hover").setData(emptyGeojson());
+        };
+        li.onclick = () => {
+          this.openForm(feature);
+          this.map.fitBounds(geojsonExtent(feature), {
+            padding: 20,
+            animate: true,
+            duration: 500,
+          });
+          // Act like we've selected the object
+          this.drawControls.changeMode("direct_select", {
+            featureId: feature.id,
+          });
+        };
+
+        list.appendChild(li);
+      }
     }
-
-    div.appendChild(list);
   }
 }
 
@@ -320,6 +293,25 @@ function sidebarEntry(props) {
   // TODO Icons
   var result = `${props.intervention_name || "Untitled"}`;
   return result;
+}
+
+function makeInterventionForm(props) {
+  return `<div class="intervention-form"><label for="intervention_name">Name:</label>
+          <input type="text" id="intervention_name" value="${
+            props.intervention_name || ""
+          }">
+          ${dropdown(props, "intervention_type", "Type:", [
+            "area",
+            "route",
+            "crossing",
+            "other",
+          ])}
+          <label for="intervention_description">Description:</label><br/>
+	  <textarea id="intervention_description" rows="3" cols="40">${
+      props.intervention_description || ""
+    }</textarea>
+          <button type="button" id="save">Save</button>
+          <button type="button" id="delete">Delete</button></div>`;
 }
 
 async function setupRouteSnapper(app) {
