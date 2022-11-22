@@ -15,7 +15,7 @@ const roundedLine = {
   "line-join": "round",
 };
 
-const isPolgon = ["==", "$type", "Polygon"];
+const isPolygon = ["==", "$type", "Polygon"];
 const isLine = ["==", "$type", "LineString"];
 const isPoint = ["==", "$type", "Point"];
 
@@ -62,7 +62,7 @@ export const mapStyle = [
   {
     id: "hover-polygons",
     source: "hover",
-    filter: isPolgon,
+    filter: isPolygon,
     ...drawPolygon(hoverColor, 0.5),
   },
   {
@@ -81,7 +81,7 @@ export const mapStyle = [
   {
     id: "editing-polygons",
     source: "editing",
-    filter: isPolgon,
+    filter: isPolygon,
     ...drawPolygon(editingColor, 0.5),
   },
   {
@@ -117,12 +117,12 @@ export const drawControlsStyle = defaultStyle.concat([
   },
   {
     id: "base-polygon-fill",
-    filter: isPolgon,
+    filter: isPolygon,
     ...drawPolygon(baseColor, 0.1),
   },
   {
     id: "base-polygon-outline",
-    filter: isPolgon,
+    filter: isPolygon,
     ...drawLine(baseColor, lineWidth / 2.0),
   },
 ]);
