@@ -146,9 +146,18 @@ export class RouteSnapper {
       if (rawJSON) {
         const json = JSON.parse(rawJSON);
         const ids = this.app.drawControls.add(json);
+
+        // drawControls assigns an ID. When we open the form, pass in the feature with that ID, and some properties pre-filled out
         json.id = ids[0];
+
+        json.properties.intervention_type = "route";
+        this.app.drawControls.setFeatureProperty(
+          json.id,
+          "intervention_type",
+          "route"
+        );
+
         this.app.updateSidebar();
-        // drawControls assigns an ID. When we open the form, pass in the feature with that ID
         this.app.openForm(json);
         this.app.saveToLocalStorage();
 
