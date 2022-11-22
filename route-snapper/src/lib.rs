@@ -251,7 +251,18 @@ impl JsRouteSnapper {
     #[wasm_bindgen(js_name = onClick)]
     pub fn on_click(&mut self) {
         if let Mode::Hovering(i) = self.mode {
-            self.route.add_waypoint(&self.map, &self.graph, i);
+            if let Some(idx) = self.route.waypoints.iter().position(|x| *x == i) {
+                // If we click on an existing waypoint and it's not the first or last, delete it
+                if !self.route.waypoints.is_empty()
+                    && idx != 0
+                    && idx != self.route.waypoints.len() - 1
+                {
+                    self.route.waypoints.remove(idx);
+                    self.route.recalculate_full_path(&self.map, &self.graph);
+                }
+            } else {
+                self.route.add_waypoint(&self.map, &self.graph, i);
+            }
         }
     }
 
