@@ -37,8 +37,18 @@ export class RouteSnapper {
             "red",
             "unimportant",
             "blue",
+            "preview",
+            "blue",
             // other
             "black",
+          ],
+          "circle-opacity": [
+            "match",
+            ["get", "type"],
+            "preview",
+            0.5,
+            // other
+            1.0,
           ],
         },
         filter: ["in", "$type", "Point"],
