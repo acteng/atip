@@ -165,6 +165,36 @@ export class App {
         });
       });
 
+      // Highlight something in the sidebar when we hover on a feature in the map
+      this.previousHoverEntry = null;
+      this.map.on("mousemove", (e) => {
+        var newHoverEntry = null;
+
+        if (this.currentlyEditing === null) {
+          // TODO This whines about a layer missing, and I can't suppress with try/catch
+          const ids = this.drawControls.getFeatureIdsAt(e.point);
+          if (ids.length > 0) {
+            newHoverEntry = ids[0];
+          }
+        }
+
+        if (newHoverEntry != this.previousHoverEntry) {
+          this.previousHoverEntry = newHoverEntry;
+          for (const feature of this.drawControls.getAll().features) {
+            const entry = document.getElementById(`list-entry-${feature.id}`);
+            if (entry === null) {
+              // The form might be open instead of a normal list entry
+              continue;
+            }
+            if (feature.id == this.previousHoverEntry) {
+              entry.classList.add("list-entry-hover-on-map");
+            } else {
+              entry.classList.remove("list-entry-hover-on-map");
+            }
+          }
+        }
+      });
+
       this.routeSnapper = await setupRouteSnapper(this);
     });
 
@@ -241,6 +271,7 @@ export class App {
           this.saveToLocalStorage();
         };
       } else {
+        li.id = `list-entry-${feature.id}`;
         li.className = "list-entry";
         li.innerHTML = sidebarEntry(props);
 
