@@ -124,8 +124,11 @@ export class RouteSnapper {
     const div = document.getElementById("snap-tool");
     div.innerHTML = "";
     var btn = document.createElement("button");
+    btn.classList.add("mapbox-gl-draw_ctrl-draw-btn");
+    btn.classList.add("draw-route-icon");
+    //btn.innerText = "wat";
+    btn.title = "Route tool";
     btn.type = "button";
-    btn.innerText = "Route tool";
     btn.onclick = () => {
       this.#activeControl();
     };
