@@ -155,7 +155,9 @@ export class App {
       });
 
       // When the user modifies an existing mapbox-gl-draw object, keep the "editing" layer in sync.
-      // This doesn't happen in the middle of the drag; there's no event for that
+      // TODO This doesn't happen in the middle of the drag. Consider
+      // responding to draw.render and looking up the currentlyEditing
+      // feature manually.
       this.map.on("draw.update", (e) => {
         this.map.getSource("editing").setData({
           type: "FeatureCollection",
