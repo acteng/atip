@@ -169,7 +169,6 @@ export class App {
       this.previousHoverEntry = null;
       this.map.on("mousemove", (e) => {
         var newHoverEntry = null;
-
         if (this.currentlyEditing === null) {
           // TODO This whines about a layer missing, and I can't suppress with try/catch
           const ids = this.drawControls.getFeatureIdsAt(e.point);
@@ -177,22 +176,10 @@ export class App {
             newHoverEntry = ids[0];
           }
         }
-
-        if (newHoverEntry != this.previousHoverEntry) {
-          this.previousHoverEntry = newHoverEntry;
-          for (const feature of this.drawControls.getAll().features) {
-            const entry = document.getElementById(`list-entry-${feature.id}`);
-            if (entry === null) {
-              // The form might be open instead of a normal list entry
-              continue;
-            }
-            if (feature.id == this.previousHoverEntry) {
-              entry.classList.add("list-entry-hover-on-map");
-            } else {
-              entry.classList.remove("list-entry-hover-on-map");
-            }
-          }
-        }
+        this.#hoveringOnMapFeature(newHoverEntry);
+      });
+      this.map.on("mouseout", () => {
+        this.#hoveringOnMapFeature(null);
       });
 
       this.routeSnapper = await setupRouteSnapper(this);
@@ -203,6 +190,25 @@ export class App {
         `https://api.maptiler.com/maps/${e.target.value}/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL`
       );
     };
+  }
+
+  #hoveringOnMapFeature(newHoverEntry) {
+    if (newHoverEntry == this.previousHoverEntry) {
+      return;
+    }
+    this.previousHoverEntry = newHoverEntry;
+    for (const feature of this.drawControls.getAll().features) {
+      const entry = document.getElementById(`list-entry-${feature.id}`);
+      if (entry === null) {
+        // The form might be open instead of a normal list entry
+        continue;
+      }
+      if (feature.id == this.previousHoverEntry) {
+        entry.classList.add("list-entry-hover-on-map");
+      } else {
+        entry.classList.remove("list-entry-hover-on-map");
+      }
+    }
   }
 
   openForm(feature) {
