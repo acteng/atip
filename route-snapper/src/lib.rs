@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::BTreeMap;
 
 use geom::{Circle, Distance, FindClosest, GPSBounds, LonLat, PolyLine, Pt2D};
 use petgraph::graphmap::UnGraphMap;
@@ -101,48 +101,61 @@ impl JsRouteSnapper {
 
         let mut result = Vec::new();
 
-        // Use only two colors/styles for intersection points:
+        // Overlapping circles don't work, so override colors in here. Use these styles:
         //
         // 1) "important": A waypoint, or something being dragged / hovered on
         // 2) "unimportant": A draggable intersection on the route
-        //
-        // The first always overrides the second
-
-        // Overlapping circles don't work, so override colors in here
-        let mut important_intersections = HashSet::new();
-        let mut unimportant_intersections = HashSet::new();
+        // 3) "preview": An intersection on a route if the user chooses to click and confirm
+        let mut draw_intersections = BTreeMap::new();
 
         // Draw the confirmed route
         for r in &self.route.roads {
             result.push(draw_road(*r));
         }
-        unimportant_intersections.extend(self.route.full_path.clone());
-        important_intersections.extend(self.route.waypoints.clone());
+        for i in self.route.full_path.clone() {
+            draw_intersections.insert(i, "unimportant");
+        }
+        for i in self.route.waypoints.clone() {
+            draw_intersections.insert(i, "important");
+        }
 
         // Draw the current operation
         if let Mode::Hovering(hover) = self.mode {
-            important_intersections.insert(hover);
-            if self.route.waypoints.len() == 1 {
-                if let Some((roads, intersections)) =
-                    self.map
-                        .pathfind(&self.graph, self.route.waypoints[0], hover)
-                {
-                    for r in roads {
-                        result.push(draw_road(r));
+            draw_intersections.insert(hover, "important");
+            if let Some(last) = self.route.waypoints.last() {
+                // If we're trying to drag a point, don't show this preview
+                if !self.route.full_path.contains(&hover) {
+                    if let Some((roads, intersections)) =
+                        self.map.pathfind(&self.graph, *last, hover)
+                    {
+                        for r in roads {
+                            result.push(draw_road(r));
+                        }
+                        for i in intersections {
+                            // Don't overwrite anything existing
+                            draw_intersections.entry(i).or_insert("preview");
+                        }
                     }
-                    unimportant_intersections.extend(intersections);
                 }
             }
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            important_intersections.insert(at);
+            draw_intersections.insert(at, "important");
         }
 
-        for i in unimportant_intersections.difference(&important_intersections) {
-            result.push(draw_intersection(*i, "unimportant"));
-        }
-        for i in important_intersections {
-            result.push(draw_intersection(i, "important"));
+        // Partially overlapping circles cover each other up, so make sure the important ones are
+        // drawn last
+        let mut draw_intersections: Vec<(IntersectionID, &'static str)> =
+            draw_intersections.into_iter().collect();
+        draw_intersections.sort_by_key(|(_, style)| match *style {
+            "important" => 2,
+            "unimportant" => 1,
+            "preview" => 0,
+            _ => unreachable!(),
+        });
+
+        for (i, style) in draw_intersections {
+            result.push(draw_intersection(i, style));
         }
 
         let obj = geom::geometries_with_properties_to_geojson(result);
@@ -275,13 +288,6 @@ impl JsRouteSnapper {
     fn mouseover_i(&self, pt: Pt2D, circle_radius: Distance) -> Option<IntersectionID> {
         // TODO I can't figure out how, but the hitbox detection is off.
         let (i, _) = self.snap_to_intersections.closest_pt(pt, circle_radius)?;
-        // After we have a path started, only snap to points on the path to drag them
-        if self.route.waypoints.len() > 1
-            && !matches!(self.mode, Mode::Dragging { .. })
-            && !self.route.full_path.contains(&i)
-        {
-            return None;
-        }
         Some(i)
     }
 }
@@ -300,16 +306,13 @@ impl Route {
             self.waypoints.push(i);
             assert!(self.full_path.is_empty());
             self.full_path.push(i);
-        } else if self.waypoints.len() == 1 && i != self.waypoints[0] {
-            if let Some((roads, intersections)) = map.pathfind(graph, self.waypoints[0], i) {
-                self.waypoints.push(i);
-                assert_eq!(self.full_path.len(), 1);
-                self.full_path = intersections;
-                assert!(self.roads.is_empty());
-                self.roads = roads;
+        } else {
+            self.waypoints.push(i);
+            let orig = self.clone();
+            if !self.recalculate_full_path(map, graph) {
+                *self = orig;
             }
         }
-        // If there's already two waypoints, can't add more -- can only drag things.
     }
 
     fn idx(&self, i: IntersectionID) -> Option<usize> {
@@ -350,8 +353,20 @@ impl Route {
             }
         }
 
-        // Recalculate the full path. We could be more efficient and just fix up the part that's
-        // changed, but eh.
+        if !self.recalculate_full_path(map, graph) {
+            // Moving the waypoint broke the path, just revert.
+            *self = orig;
+            return full_idx;
+        }
+        self.idx(new_i).unwrap()
+    }
+
+    // It might be possible for callers to recalculate something smaller, but it's not worth the
+    // complexity
+    //
+    // Returns true on success. If false, the Route is in an invalid state and should be rolled
+    // back entirely
+    fn recalculate_full_path(&mut self, map: &RouteSnapperMap, graph: &Graph) -> bool {
         self.full_path.clear();
         self.roads.clear();
         for pair in self.waypoints.windows(2) {
@@ -360,12 +375,10 @@ impl Route {
                 self.full_path.extend(intersections);
                 self.roads.extend(roads);
             } else {
-                // Moving the waypoint broke the path, just revert.
-                *self = orig;
-                return full_idx;
+                return false;
             }
         }
-        self.idx(new_i).unwrap()
+        true
     }
 }
 
