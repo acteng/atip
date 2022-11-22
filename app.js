@@ -307,9 +307,21 @@ export class App {
         li.id = `list-entry-${feature.id}`;
         li.className = "list-entry";
         // TODO Icons?
-        li.innerHTML = `${props.intervention_name || "Untitled"} ${
-          props.intervention_type
-        }`;
+        if (props.intervention_name) {
+          li.innerHTML = props.intervention_name;
+        } else {
+          var noun = props.intervention_type;
+          if (noun == "other") {
+            if (feature.geometry.type == "Point") {
+              noun = "point";
+            } else if (feature.geometry.type == "LineString") {
+              noun = "line";
+            } else {
+              noun = "polygon";
+            }
+          }
+          li.innerHTML = `Untitled ${noun}`;
+        }
 
         li.onmouseover = () => {
           this.map.getSource("hover").setData({
