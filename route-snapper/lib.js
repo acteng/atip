@@ -33,6 +33,8 @@ export class RouteSnapper {
           "circle-color": [
             "match",
             ["get", "type"],
+            "hovered",
+            "yellow",
             "important",
             "red",
             "unimportant",

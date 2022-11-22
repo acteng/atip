@@ -103,9 +103,10 @@ impl JsRouteSnapper {
 
         // Overlapping circles don't work, so override colors in here. Use these styles:
         //
-        // 1) "important": A waypoint, or something being dragged / hovered on
-        // 2) "unimportant": A draggable intersection on the route
-        // 3) "preview": An intersection on a route if the user chooses to click and confirm
+        // 1) "hovered": Something under the cursor
+        // 2) "important": A waypoint, or something being dragged
+        // 3) "unimportant": A draggable intersection on the route
+        // 4) "preview": An intersection on a route if the user chooses to click and confirm
         let mut draw_intersections = BTreeMap::new();
 
         // Draw the confirmed route
@@ -121,7 +122,7 @@ impl JsRouteSnapper {
 
         // Draw the current operation
         if let Mode::Hovering(hover) = self.mode {
-            draw_intersections.insert(hover, "important");
+            draw_intersections.insert(hover, "hovered");
             if let Some(last) = self.route.waypoints.last() {
                 // If we're trying to drag a point, don't show this preview
                 if !self.route.full_path.contains(&hover) {
@@ -140,7 +141,7 @@ impl JsRouteSnapper {
             }
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            draw_intersections.insert(at, "important");
+            draw_intersections.insert(at, "hovered");
         }
 
         // Partially overlapping circles cover each other up, so make sure the important ones are
@@ -148,6 +149,7 @@ impl JsRouteSnapper {
         let mut draw_intersections: Vec<(IntersectionID, &'static str)> =
             draw_intersections.into_iter().collect();
         draw_intersections.sort_by_key(|(_, style)| match *style {
+            "hovered" => 3,
             "important" => 2,
             "unimportant" => 1,
             "preview" => 0,
