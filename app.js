@@ -196,24 +196,31 @@ export class App {
     if (newHoverEntry == this.previousHoverEntry) {
       return;
     }
-    this.previousHoverEntry = newHoverEntry;
-    for (const feature of this.drawControls.getAll().features) {
-      const entry = document.getElementById(`list-entry-${feature.id}`);
-      if (entry === null) {
-        // The form might be open instead of a normal list entry
-        continue;
-      }
-      if (feature.id == this.previousHoverEntry) {
-        entry.classList.add("list-entry-hover-on-map");
-      } else {
-        entry.classList.remove("list-entry-hover-on-map");
-      }
+    if (
+      this.previousHoverEntry &&
+      this.previousHoverEntry != this.currentlyEditing
+    ) {
+      document
+        .getElementById(`accordian-btn-${this.previousHoverEntry}`)
+        .classList.remove("active-accordian");
     }
+
+    if (newHoverEntry) {
+      document
+        .getElementById(`accordian-btn-${newHoverEntry}`)
+        .classList.add("active-accordian");
+    }
+    this.previousHoverEntry = newHoverEntry;
   }
 
   openForm(feature) {
-    this.currentlyEditing = feature.id;
-    this.updateSidebar();
+    const id = feature.id;
+    this.currentlyEditing = id;
+    document
+      .getElementById(`accordian-btn-${id}`)
+      .classList.add("active-accordian");
+    const contents = document.getElementById(`accordian-contents-${id}`);
+    contents.style.maxHeight = contents.scrollHeight + "px";
 
     // Highlight the feature opened
     this.map.getSource("editing").setData({
@@ -225,26 +232,33 @@ export class App {
   }
 
   closeForm() {
+    const id = this.currentlyEditing;
+    if (id) {
+      document
+        .getElementById(`accordian-btn-${id}`)
+        .classList.remove("active-accordian");
+      document.getElementById(`accordian-contents-${id}`).style.maxHeight =
+        null;
+    }
+
     this.currentlyEditing = null;
-    this.updateSidebar();
 
     this.map.getSource("editing").setData(emptyGeojson());
   }
 
   updateSidebar() {
-    const div = document.getElementById("intervention_list");
-    div.innerHTML = "";
+    const container = document.getElementById("intervention_list");
+    container.innerHTML = "";
 
     const header = document.createElement("p");
     header.innerText = `${
       this.drawControls.getAll().features.length
     } interventions`;
-    div.appendChild(header);
+    container.appendChild(header);
 
-    var list = document.createElement("ol");
     // Do this immediately, so we can modify list children below and immediately then getElementById
-    div.appendChild(list);
 
+    var i = 1;
     for (const feature of this.drawControls.getAll().features) {
       const props = feature.properties;
 
@@ -264,75 +278,29 @@ export class App {
         props.intervention_type = type;
       }
 
-      var li = document.createElement("li");
+      // Make the accordian button
+      const btn = document.createElement("button");
+      btn.id = `accordian-btn-${feature.id}`;
+      btn.className = "accordian";
+      // TODO Icons?
+      btn.innerText = `${i}) ${interventionName(feature)}`;
 
-      if (feature.id == this.currentlyEditing) {
-        li.innerHTML = makeInterventionForm(props);
-        list.appendChild(li);
-
-        for (const key of ["intervention_name", "intervention_description"]) {
-          const elem = document.getElementById(key);
-          // Autosave
-          // TODO Can we do it on the parent?
-          elem.oninput = () => {
-            this.drawControls.setFeatureProperty(feature.id, key, elem.value);
-            this.saveToLocalStorage();
-          };
-        }
-
-        const typeRadioButtons = document.querySelectorAll(
-          'input[name="intervention_type"]'
-        );
-        for (const btn of typeRadioButtons) {
-          btn.onchange = () => {
-            this.drawControls.setFeatureProperty(
-              feature.id,
-              "intervention_type",
-              btn.id
-            );
-            this.saveToLocalStorage();
-          };
-        }
-
-        document.getElementById("save").onclick = () => {
+      btn.onmouseover = () => {
+        this.map.getSource("hover").setData({
+          type: "FeatureCollection",
+          features: [feature],
+        });
+      };
+      btn.onmouseout = () => {
+        this.map.getSource("hover").setData(emptyGeojson());
+      };
+      btn.onclick = () => {
+        if (this.currentlyEditing == feature.id) {
           this.closeForm();
-          this.drawControls.changeMode("simple_select");
-        };
-        document.getElementById("delete").onclick = () => {
-          this.drawControls.delete(feature.id);
-          this.closeForm();
-          this.saveToLocalStorage();
-        };
-      } else {
-        li.id = `list-entry-${feature.id}`;
-        li.className = "list-entry";
-        // TODO Icons?
-        if (props.intervention_name) {
-          li.innerHTML = props.intervention_name;
         } else {
-          var noun = props.intervention_type;
-          if (noun == "other") {
-            if (feature.geometry.type == "Point") {
-              noun = "point";
-            } else if (feature.geometry.type == "LineString") {
-              noun = "line";
-            } else {
-              noun = "polygon";
-            }
-          }
-          li.innerHTML = `Untitled ${noun}`;
-        }
+          // Close something else first
+          this.closeForm();
 
-        li.onmouseover = () => {
-          this.map.getSource("hover").setData({
-            type: "FeatureCollection",
-            features: [feature],
-          });
-        };
-        li.onmouseout = () => {
-          this.map.getSource("hover").setData(emptyGeojson());
-        };
-        li.onclick = () => {
           this.openForm(feature);
           this.map.fitBounds(geojsonExtent(feature), {
             padding: 20,
@@ -343,10 +311,49 @@ export class App {
           this.drawControls.changeMode("direct_select", {
             featureId: feature.id,
           });
-        };
+        }
+      };
+      container.appendChild(btn);
 
-        list.appendChild(li);
+      // Make the accordian contents
+      const contents = document.createElement("div");
+      contents.id = `accordian-contents-${feature.id}`;
+      contents.className = "accordian-contents";
+      contents.innerHTML = makeInterventionForm(feature);
+      container.appendChild(contents);
+
+      const id = feature.id;
+      for (const key of ["intervention_name", "intervention_description"]) {
+        const elem = document.getElementById(`${key}-${id}`);
+        // Autosave
+        // TODO Can we do it on the parent?
+        elem.oninput = () => {
+          this.drawControls.setFeatureProperty(id, key, elem.value);
+          this.saveToLocalStorage();
+        };
       }
+
+      const typeRadioButtons = document.querySelectorAll(
+        `input[name="intervention_type-${id}"]`
+      );
+      for (const btn of typeRadioButtons) {
+        btn.onchange = () => {
+          this.drawControls.setFeatureProperty(id, "intervention_type", btn.id);
+          this.saveToLocalStorage();
+        };
+      }
+
+      document.getElementById(`save-${id}`).onclick = () => {
+        this.closeForm();
+        this.drawControls.changeMode("simple_select");
+      };
+      document.getElementById(`delete-${id}`).onclick = () => {
+        this.drawControls.delete(id);
+        this.closeForm();
+        this.saveToLocalStorage();
+      };
+
+      i += 1;
     }
   }
 }
@@ -381,23 +388,25 @@ function emptyGeojson() {
   };
 }
 
-function makeInterventionForm(props) {
-  return `<div class="intervention-form"><label for="intervention_name">Name:</label>
-          <input type="text" id="intervention_name" value="${
-            props.intervention_name || ""
-          }">
-          ${radio(props, "intervention_type", [
+function makeInterventionForm(feature) {
+  const props = feature.properties;
+  const id = feature.id;
+  return `<div class="intervention-form"><label for="intervention_name-${id}">Name:</label>
+          <input type="text" id="intervention_name-${id}" value="${
+    props.intervention_name || ""
+  }">
+          ${radio(props, "intervention_type-" + id, "intervention_type", [
             "area",
             "route",
             "crossing",
             "other",
           ])}
-          <label for="intervention_description">Description:</label><br/>
-	  <textarea id="intervention_description" rows="3" cols="40">${
-      props.intervention_description || ""
-    }</textarea>
-          <button type="button" id="save">Save</button>
-          <button type="button" id="delete">Delete</button></div>`;
+          <label for="intervention_description-${id}">Description:</label><br/>
+	  <textarea id="intervention_description-${id}" rows="3" cols="40">${
+    props.intervention_description || ""
+  }</textarea><br/>
+          <button type="button" id="save-${id}">Save</button>
+          <button type="button" id="delete-${id}">Delete</button></div>`;
 }
 
 async function setupRouteSnapper(app) {
@@ -411,4 +420,21 @@ async function setupRouteSnapper(app) {
     console.log(`Route snapper broke: ${err}`);
     document.getElementById("snap-tool").innerHTML = "Failed to load";
   }
+}
+
+function interventionName(feature) {
+  if (feature.properties.intervention_name) {
+    return feature.properties.intervention_name;
+  }
+  var noun = feature.properties.intervention_type;
+  if (noun == "other") {
+    if (feature.geometry.type == "Point") {
+      noun = "point";
+    } else if (feature.geometry.type == "LineString") {
+      noun = "line";
+    } else {
+      noun = "polygon";
+    }
+  }
+  return `Untitled ${noun}`;
 }

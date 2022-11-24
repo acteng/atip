@@ -1,4 +1,5 @@
 /* This is for a page with a map, collapsable sidebar, and modal popup. */
+/* TODO Split this by these concerns */
 
 /* Defaults */
 * {
@@ -125,16 +126,6 @@ body > main {
   margin-right: 12px;
 }
 
-.list-entry {
-  cursor: pointer;
-}
-.list-entry:hover {
-  color: grey;
-}
-.list-entry-hover-on-map {
-  background: grey;
-}
-
 /* The forms */
 
 .intervention-form {
@@ -197,4 +188,31 @@ textarea {
   height: 50px;
   border: none;
   background-color: white;
+}
+
+/* Accordian */
+
+.accordian {
+    background-color: #eee;
+    color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+    border: none;
+    outline: none;
+  transition: 0.4s;
+}
+
+.active-accordian,
+.accordion:hover {
+  background-color: #ccc;
+}
+
+.accordian-contents {
+    padding: 0 18px;
+    background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
 }
