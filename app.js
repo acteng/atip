@@ -144,11 +144,27 @@ export class App {
       }
 
       this.map.on("draw.selectionchange", (e) => {
-        this.updateSidebar();
-        this.saveToLocalStorage();
-
         if (e.features.length === 1) {
-          this.openForm(e.features[0]);
+          const feature = e.features[0];
+
+          // Bit of a hack, but force the type of "other" if it hasn't been set. This should really be in response to an object being created, but mapbox-gl-draw's events are weird
+          if (feature.properties.intervention_type === undefined) {
+            var type = "other";
+            if (feature.geometry.type == "Polygon") {
+              type = "area";
+            }
+
+            this.drawControls.setFeatureProperty(
+              feature.id,
+              "intervention_type",
+              type
+            );
+            feature.properties.intervention_type = type;
+          }
+
+          this.saveToLocalStorage();
+          this.updateSidebar();
+          this.openForm(feature);
         } else {
           this.closeForm();
         }
@@ -256,27 +272,9 @@ export class App {
     } interventions`;
     container.appendChild(header);
 
-    // Do this immediately, so we can modify list children below and immediately then getElementById
-
     var i = 1;
     for (const feature of this.drawControls.getAll().features) {
       const props = feature.properties;
-
-      // Bit of a hack, but force the type of "other" if it hasn't been set. This should really be in response to an object being created, but mapbox-gl-draw's events are weird
-      if (props.intervention_type === undefined) {
-        var type = "other";
-        if (feature.geometry.type == "Polygon") {
-          type = "area";
-        }
-
-        this.drawControls.setFeatureProperty(
-          feature.id,
-          "intervention_type",
-          type
-        );
-        this.saveToLocalStorage();
-        props.intervention_type = type;
-      }
 
       // Make the accordian button
       const btn = document.createElement("button");
