@@ -14,11 +14,11 @@ export function dropdown(props, key, label, values) {
   return html;
 }
 
-export function radio(props, key, values) {
+export function radio(props, id, key, values) {
   var html = `<div style="display: flex; justify-content: space-between;">`;
   for (const val of values) {
     const checked = props[key] == val ? "checked" : "";
-    html += `<input type="radio" id="${val}" name="${key}" ${checked}>`;
+    html += `<input type="radio" id="${val}" name="${id}" ${checked}>`;
     const capitalized = val.charAt(0).toUpperCase() + val.slice(1);
     html += `<label for="${val}">${capitalized}</label>`;
   }
