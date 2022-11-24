@@ -196,24 +196,30 @@ export class App {
     if (newHoverEntry == this.previousHoverEntry) {
       return;
     }
-    this.previousHoverEntry = newHoverEntry;
-    for (const feature of this.drawControls.getAll().features) {
-      const entry = document.getElementById(`list-entry-${feature.id}`);
-      if (entry === null) {
-        // The form might be open instead of a normal list entry
-        continue;
-      }
-      if (feature.id == this.previousHoverEntry) {
-        entry.classList.add("list-entry-hover-on-map");
-      } else {
-        entry.classList.remove("list-entry-hover-on-map");
-      }
+    if (
+      this.previousHoverEntry &&
+      this.previousHoverEntry != this.currentlyEditing
+    ) {
+      document
+        .getElementById(`accordian-btn-${this.previousHoverEntry}`)
+        .classList.remove("active-accordian");
     }
+
+    if (newHoverEntry) {
+      document
+        .getElementById(`accordian-btn-${newHoverEntry}`)
+        .classList.add("active-accordian");
+    }
+    this.previousHoverEntry = newHoverEntry;
   }
 
   openForm(feature) {
-    this.currentlyEditing = feature.id;
-    this.updateSidebar();
+    const id = feature.id;
+    this.currentlyEditing = id;
+    document
+      .getElementById(`accordian-btn-${id}`)
+      .classList.add("active-accordian");
+    document.getElementById(`accordian-contents-${id}`).style.display = "block";
 
     // Highlight the feature opened
     this.map.getSource("editing").setData({
@@ -225,8 +231,16 @@ export class App {
   }
 
   closeForm() {
+    const id = this.currentlyEditing;
+    if (id) {
+      document
+        .getElementById(`accordian-btn-${id}`)
+        .classList.remove("active-accordian");
+      document.getElementById(`accordian-contents-${id}`).style.display =
+        "none";
+    }
+
     this.currentlyEditing = null;
-    this.updateSidebar();
 
     this.map.getSource("editing").setData(emptyGeojson());
   }
@@ -280,23 +294,32 @@ export class App {
         this.map.getSource("hover").setData(emptyGeojson());
       };
       btn.onclick = () => {
-        this.openForm(feature);
-        this.map.fitBounds(geojsonExtent(feature), {
-          padding: 20,
-          animate: true,
-          duration: 500,
-        });
-        // Act like we've selected the object
-        this.drawControls.changeMode("direct_select", {
-          featureId: feature.id,
-        });
+        if (this.currentlyEditing == feature.id) {
+          this.closeForm();
+        } else {
+          // Close something else first
+          this.closeForm();
+
+          this.openForm(feature);
+          this.map.fitBounds(geojsonExtent(feature), {
+            padding: 20,
+            animate: true,
+            duration: 500,
+          });
+          // Act like we've selected the object
+          this.drawControls.changeMode("direct_select", {
+            featureId: feature.id,
+          });
+        }
       };
       container.appendChild(btn);
 
       // Make the accordian contents
       const contents = document.createElement("div");
+      contents.id = `accordian-contents-${feature.id}`;
       contents.className = "accordian-contents";
-      //feature.id == this.currentlyEditing
+      // TODO This is in the CSS class, but gets ignored?
+      contents.style.display = "none";
       contents.innerHTML = makeInterventionForm(feature);
       container.appendChild(contents);
 
