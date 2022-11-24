@@ -219,7 +219,8 @@ export class App {
     document
       .getElementById(`accordian-btn-${id}`)
       .classList.add("active-accordian");
-    document.getElementById(`accordian-contents-${id}`).style.display = "block";
+    const contents = document.getElementById(`accordian-contents-${id}`);
+    contents.style.maxHeight = contents.scrollHeight + "px";
 
     // Highlight the feature opened
     this.map.getSource("editing").setData({
@@ -236,8 +237,8 @@ export class App {
       document
         .getElementById(`accordian-btn-${id}`)
         .classList.remove("active-accordian");
-      document.getElementById(`accordian-contents-${id}`).style.display =
-        "none";
+      document.getElementById(`accordian-contents-${id}`).style.maxHeight =
+        null;
     }
 
     this.currentlyEditing = null;
@@ -318,8 +319,6 @@ export class App {
       const contents = document.createElement("div");
       contents.id = `accordian-contents-${feature.id}`;
       contents.className = "accordian-contents";
-      // TODO This is in the CSS class, but gets ignored?
-      contents.style.display = "none";
       contents.innerHTML = makeInterventionForm(feature);
       container.appendChild(contents);
 
