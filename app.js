@@ -352,6 +352,7 @@ export class App {
       document.getElementById(`delete-${id}`).onclick = () => {
         this.drawControls.delete(id);
         this.closeForm();
+        this.updateSidebar();
         this.saveToLocalStorage();
       };
 
