@@ -307,10 +307,12 @@ export class App {
             animate: true,
             duration: 500,
           });
-          // Act like we've selected the object
-          this.drawControls.changeMode("direct_select", {
-            featureId: feature.id,
-          });
+          // Act like we've selected the object. (This is irrelevant for points.)
+          if (feature.geometry.type != "Point") {
+            this.drawControls.changeMode("direct_select", {
+              featureId: feature.id,
+            });
+          }
         }
       };
       container.appendChild(btn);
