@@ -330,6 +330,12 @@ export class App {
         elem.oninput = () => {
           this.drawControls.setFeatureProperty(id, key, elem.value);
           this.saveToLocalStorage();
+
+          if (key == "intervention_name") {
+            // setFeatureProperty doesn't modify this copy of the feature, so fake things
+            feature.properties.intervention_name = elem.value;
+            btn.innerText = `${i}) ${interventionName(feature)}`;
+          }
         };
       }
 
