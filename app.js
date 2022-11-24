@@ -49,19 +49,6 @@ export class App {
     document.getElementById("load_geojson").onchange = (e) => {
       this.#loadFromGeojson(e);
     };
-    document.getElementById("start-over").onclick = () => {
-      if (
-        confirm(
-          "Do you want to clear the current scheme? (You should save it first!)"
-        )
-      ) {
-        this.drawControls.set(emptyGeojson());
-        this.updateSidebar();
-        document.getElementById("scheme_name").value = "";
-        this.map.getSource("hover").setData(emptyGeojson());
-        this.map.getSource("editing").setData(emptyGeojson());
-      }
-    };
   }
 
   toGeojson() {
@@ -266,10 +253,30 @@ export class App {
     const container = document.getElementById("intervention_list");
     container.innerHTML = "";
 
-    const header = document.createElement("p");
-    header.innerText = `${
+    const header = document.createElement("div");
+    const label = document.createElement("span");
+    label.innerText = `${
       this.drawControls.getAll().features.length
     } interventions`;
+    header.appendChild(label);
+    const clearBtn = document.createElement("button");
+    clearBtn.className = "underlined-button";
+    clearBtn.innerText = "Clear";
+    clearBtn.onclick = () => {
+      if (
+        confirm(
+          "Do you want to clear the current scheme? (You should save it first!)"
+        )
+      ) {
+        this.drawControls.set(emptyGeojson());
+        this.updateSidebar();
+        document.getElementById("scheme_name").value = "";
+        this.map.getSource("hover").setData(emptyGeojson());
+        this.map.getSource("editing").setData(emptyGeojson());
+      }
+    };
+    clearBtn.style = "float: right;";
+    header.appendChild(clearBtn);
     container.appendChild(header);
 
     var i = 1;
@@ -398,7 +405,7 @@ function emptyGeojson() {
 function makeInterventionForm(feature) {
   const props = feature.properties;
   const id = feature.id;
-  return `<div class="intervention-form"><label for="intervention_name-${id}">Name:</label>
+  return `<label for="intervention_name-${id}">Name</label><br/>
           <input type="text" id="intervention_name-${id}" value="${
     props.intervention_name || ""
   }">
@@ -408,12 +415,14 @@ function makeInterventionForm(feature) {
             "crossing",
             "other",
           ])}
-          <label for="intervention_description-${id}">Description:</label><br/>
+          <label for="intervention_description-${id}">Description</label><br/>
 	  <textarea id="intervention_description-${id}" rows="3" cols="40">${
     props.intervention_description || ""
   }</textarea><br/>
-          <button type="button" id="save-${id}">Save</button>
-          <button type="button" id="delete-${id}">Delete</button></div>`;
+  <div>
+          <button type="button" id="delete-${id}">Delete</button>
+          <button type="button" id="save-${id}" style="float: right;">Save</button>
+  </div>`;
 }
 
 async function setupRouteSnapper(app) {
