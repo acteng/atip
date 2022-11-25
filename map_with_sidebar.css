@@ -67,7 +67,7 @@ body > main {
 #basemaps-wrapper {
   z-index: 1;
   position: absolute;
-  bottom: 50px;
+  bottom: 230px;
   right: 10px;
   background: rgba(255, 255, 255, 0);
 }
