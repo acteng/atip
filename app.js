@@ -309,11 +309,16 @@ export class App {
           this.closeForm();
 
           this.openForm(feature);
-          this.map.fitBounds(geojsonExtent(feature), {
-            padding: 20,
-            animate: true,
-            duration: 500,
-          });
+          // Points are weird
+          if (feature.geometry.type == "Point") {
+            this.map.flyTo({ center: feature.geometry.coordinates });
+          } else {
+            this.map.fitBounds(geojsonExtent(feature), {
+              padding: 200,
+              animate: true,
+              duration: 500,
+            });
+          }
           // Act like we've selected the object. (This is irrelevant for points.)
           if (feature.geometry.type != "Point") {
             this.drawControls.changeMode("direct_select", {
