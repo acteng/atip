@@ -1,0 +1,14 @@
+button,
+input[type="file"] {
+  cursor: pointer;
+}
+
+textarea {
+  resize: none;
+}
+
+.underlined-button {
+  text-decoration: underline;
+  border: none;
+  background: none;
+}
