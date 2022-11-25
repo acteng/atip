@@ -123,6 +123,8 @@ export class App {
       }
 
       this.map.addControl(this.drawControls);
+      this.map.addControl(new maplibregl.ScaleControl());
+      this.map.addControl(new maplibregl.NavigationControl(), "bottom-right");
 
       // Initially load from local storage
       const loadLocal = window.localStorage.getItem(this.currentFilename);
