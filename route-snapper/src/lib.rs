@@ -23,7 +23,7 @@ pub struct JsRouteSnapper {
 
 // TODO It's impossible for a waypoint to be an Edge, but the code might be simpler if this and
 // PathEntry are merged
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Copy, PartialEq)]
 enum Waypoint {
     Snapped(NodeID),
     Free(Pt2D),
@@ -36,13 +36,39 @@ enum DrawCircle {
     Free(HashablePt2D),
 }
 
-#[derive(Clone, PartialEq)]
+impl Waypoint {
+    fn to_path_entry(self) -> PathEntry {
+        match self {
+            Waypoint::Snapped(x) => PathEntry::SnappedPoint(x),
+            Waypoint::Free(x) => PathEntry::FreePoint(x),
+        }
+    }
+
+    fn to_draw_circle(self) -> DrawCircle {
+        match self {
+            Waypoint::Snapped(x) => DrawCircle::Snapped(x),
+            Waypoint::Free(x) => DrawCircle::Free(x.to_hashable()),
+        }
+    }
+}
+
+#[derive(Clone, Copy, PartialEq)]
 enum PathEntry {
     SnappedPoint(NodeID),
     FreePoint(Pt2D),
     Edge(DirectedEdge),
     // Note we don't need to represent a straight line between snapped or free points here. As we
     // build up the line-string, they'll happen anyway.
+}
+
+impl PathEntry {
+    fn to_waypt(self) -> Option<Waypoint> {
+        match self {
+            PathEntry::SnappedPoint(x) => Some(Waypoint::Snapped(x)),
+            PathEntry::FreePoint(x) => Some(Waypoint::Free(x)),
+            PathEntry::Edge(_) => None,
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -65,9 +91,8 @@ struct DirectedEdge(EdgeID, Direction);
 enum Mode {
     Neutral,
     Hovering(NodeID),
-    // idx into waypoints
-    // TODO We'll need to be able to drag free points too
-    Dragging { idx: usize, at: NodeID },
+    // idx is into full_path
+    Dragging { idx: usize, at: Waypoint },
     Freehand(Pt2D),
 }
 
@@ -151,13 +176,7 @@ impl JsRouteSnapper {
             }
         }
         for waypt in &self.route.waypoints {
-            draw_circles.insert(
-                match *waypt {
-                    Waypoint::Snapped(x) => DrawCircle::Snapped(x),
-                    Waypoint::Free(x) => DrawCircle::Free(x.to_hashable()),
-                },
-                "important",
-            );
+            draw_circles.insert(waypt.to_draw_circle(), "important");
         }
 
         // Draw the current operation
@@ -195,7 +214,7 @@ impl JsRouteSnapper {
             }
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            draw_circles.insert(DrawCircle::Snapped(at), "hovered");
+            draw_circles.insert(at.to_draw_circle(), "hovered");
         }
         if let Mode::Freehand(pt) = self.mode {
             draw_circles.insert(DrawCircle::Free(pt.to_hashable()), "hovered");
@@ -271,12 +290,20 @@ impl JsRouteSnapper {
                 return true;
             }
             Mode::Dragging { idx, at } => {
-                if let Some(node) = self.mouseover_node(pt, circle_radius) {
-                    if node != at {
-                        let new_idx = self.route.move_waypoint(&self.map, &self.graph, idx, node);
+                let new_waypt = match at {
+                    Waypoint::Snapped(_) => self
+                        .mouseover_node(pt, circle_radius)
+                        .map(Waypoint::Snapped),
+                    Waypoint::Free(_) => Some(Waypoint::Free(pt)),
+                };
+                if let Some(new_waypt) = new_waypt {
+                    if new_waypt != at {
+                        let new_idx =
+                            self.route
+                                .move_waypoint(&self.map, &self.graph, idx, new_waypt);
                         self.mode = Mode::Dragging {
                             idx: new_idx,
-                            at: node,
+                            at: new_waypt,
                         };
                         return true;
                     }
@@ -321,7 +348,10 @@ impl JsRouteSnapper {
     pub fn on_drag_start(&mut self) -> bool {
         if let Mode::Hovering(i) = self.mode {
             if let Some(idx) = self.route.idx(i) {
-                self.mode = Mode::Dragging { idx, at: i };
+                self.mode = Mode::Dragging {
+                    idx,
+                    at: Waypoint::Snapped(i),
+                };
                 return true;
             }
         }
@@ -332,7 +362,10 @@ impl JsRouteSnapper {
     #[wasm_bindgen(js_name = onMouseUp)]
     pub fn on_mouse_up(&mut self) -> bool {
         if let Mode::Dragging { at, .. } = self.mode {
-            self.mode = Mode::Hovering(at);
+            self.mode = match at {
+                Waypoint::Snapped(node) => Mode::Hovering(node),
+                Waypoint::Free(_) => Mode::Neutral,
+            };
             return true;
         }
         false
@@ -414,30 +447,33 @@ impl Route {
         map: &RouteSnapperMap,
         graph: &Graph,
         full_idx: usize,
-        new_node: NodeID,
+        new_waypt: Waypoint,
     ) -> usize {
-        full_idx
-        /*let old_waypt = self.full_path[full_idx];
+        let old_waypt = self.full_path[full_idx].to_waypt().unwrap();
 
         // Edge case when we've placed just one point, then try to drag it
         if self.waypoints.len() == 1 {
-            assert_eq!(self.waypoints[0], old_node);
-            self.waypoints = vec![new_node];
-            self.full_path = vec![new_node];
+            assert!(self.waypoints[0] == old_waypt);
+            self.waypoints = vec![new_waypt];
+            self.full_path.clear();
             return 0;
         }
 
         let orig = self.clone();
 
         // Move an existing waypoint?
-        if let Some(way_idx) = self.waypoints.iter().position(|x| *x == old_node) {
-            self.waypoints[way_idx] = new_node;
+        if let Some(way_idx) = self.waypoints.iter().position(|x| *x == old_waypt) {
+            self.waypoints[way_idx] = new_waypt;
         } else {
-            // Find the next waypoint after this node
-            for node in &self.full_path[full_idx..] {
-                if let Some(way_idx) = self.waypoints.iter().position(|x| x == node) {
+            // Find the next waypoint after this one
+            for entry in &self.full_path[full_idx..] {
+                if let Some(way_idx) = self
+                    .waypoints
+                    .iter()
+                    .position(|x| x.to_path_entry() == *entry)
+                {
                     // Insert a new waypoint before this
-                    self.waypoints.insert(way_idx, new_node);
+                    self.waypoints.insert(way_idx, new_waypt);
                     break;
                 }
             }
@@ -448,7 +484,10 @@ impl Route {
             *self = orig;
             return full_idx;
         }
-        self.idx(new_node).unwrap()*/
+        self.full_path
+            .iter()
+            .position(|x| x.to_waypt() == Some(new_waypt))
+            .unwrap()
     }
 
     // It might be possible for callers to recalculate something smaller, but it's not worth the
