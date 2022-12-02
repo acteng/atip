@@ -1,13 +1,13 @@
 use std::collections::BTreeMap;
 
 use geom::{Circle, Distance, FindClosest, GPSBounds, LonLat, PolyLine, Pt2D};
-use petgraph::graphmap::UnGraphMap;
+use petgraph::graphmap::DiGraphMap;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 const NODE_RADIUS: Distance = Distance::const_meters(10.0);
 
-type Graph = UnGraphMap<NodeID, EdgeID>;
+type Graph = DiGraphMap<NodeID, DirectedEdge>;
 
 #[wasm_bindgen]
 pub struct JsRouteSnapper {
@@ -25,9 +25,16 @@ struct Route {
     waypoints: Vec<NodeID>,
     // The full sequence of nodes. Waypoints are a subset
     full_path: Vec<NodeID>,
-    // All edges, in order. They lack direction.
-    edges: Vec<EdgeID>,
+    // All edges, in order and pointing the correct direction
+    edges: Vec<DirectedEdge>,
 }
+
+type Direction = bool;
+const FORWARDS: Direction = true;
+const BACKWARDS: Direction = false;
+
+#[derive(Clone, Copy)]
+struct DirectedEdge(EdgeID, Direction);
 
 #[derive(Clone, PartialEq)]
 enum Mode {
@@ -53,9 +60,11 @@ impl JsRouteSnapper {
 
         web_sys::console::log_1(&"Finalizing JsRouteSnapper".into());
 
-        let mut graph: Graph = UnGraphMap::new();
-        for (idx, r) in map.edges.iter().enumerate() {
-            graph.add_edge(r.node1, r.node2, EdgeID(idx as u32));
+        let mut graph: Graph = DiGraphMap::new();
+        for (idx, e) in map.edges.iter().enumerate() {
+            let id = EdgeID(idx as u32);
+            graph.add_edge(e.node1, e.node2, DirectedEdge(id, FORWARDS));
+            graph.add_edge(e.node2, e.node1, DirectedEdge(id, BACKWARDS));
         }
 
         let mut snap_to_nodes = FindClosest::new(&map.gps_bounds.to_bounds());
@@ -87,10 +96,11 @@ impl JsRouteSnapper {
                 props,
             )
         };
+        // We're drawing individual linestrings for each edge; we don't care about direction
         let draw_edge = |e: EdgeID| {
             (
                 self.map
-                    .edge(&e)
+                    .edge(e)
                     .geometry
                     .to_geojson(Some(&self.map.gps_bounds)),
                 serde_json::Map::new(),
@@ -108,8 +118,8 @@ impl JsRouteSnapper {
         let mut draw_nodes = BTreeMap::new();
 
         // Draw the confirmed route
-        for e in &self.route.edges {
-            result.push(draw_edge(*e));
+        for dir_edge in &self.route.edges {
+            result.push(draw_edge(dir_edge.0));
         }
         for i in self.route.full_path.clone() {
             draw_nodes.insert(i, "unimportant");
@@ -126,7 +136,7 @@ impl JsRouteSnapper {
                 if !self.route.full_path.contains(&hover) {
                     if let Some((edges, nodes)) = self.map.pathfind(&self.graph, *last, hover) {
                         for e in edges {
-                            result.push(draw_edge(e));
+                            result.push(draw_edge(e.0));
                         }
                         for i in nodes {
                             // Don't overwrite anything existing
@@ -165,33 +175,10 @@ impl JsRouteSnapper {
             return None;
         }
         let mut pts = Vec::new();
-        let mut last_node = None;
-        for r in &self.route.edges {
-            let edge = self.map.edge(r);
-            let mut add_pts = edge.geometry.clone().into_points();
-            // The edge is oriented one way, so maybe reverse these points
-            match last_node {
-                Some(node) => {
-                    if edge.node1 == node {
-                        last_node = Some(edge.node2);
-                    } else {
-                        add_pts.reverse();
-                        last_node = Some(edge.node1);
-                    }
-                }
-                None => {
-                    if let Some(next) = self.route.edges.get(1) {
-                        let next_edge = self.map.edge(next);
-                        if edge.node1 == next_edge.node1 || edge.node1 == next_edge.node2 {
-                            add_pts.reverse();
-                            last_node = Some(edge.node1);
-                        } else {
-                            last_node = Some(edge.node2);
-                        }
-                    } else {
-                        // Route with only one node doesn't matter
-                    }
-                }
+        for dir_edge in &self.route.edges {
+            let mut add_pts = self.map.edge(dir_edge.0).geometry.clone().into_points();
+            if dir_edge.1 == BACKWARDS {
+                add_pts.reverse();
             }
             pts.extend(add_pts);
         }
@@ -414,7 +401,7 @@ pub struct EdgeID(u32);
 pub struct NodeID(u32);
 
 impl RouteSnapperMap {
-    fn edge(&self, id: &EdgeID) -> &Edge {
+    fn edge(&self, id: EdgeID) -> &Edge {
         &self.edges[id.0 as usize]
     }
     fn node(&self, id: NodeID) -> Pt2D {
@@ -426,17 +413,17 @@ impl RouteSnapperMap {
         graph: &Graph,
         node1: NodeID,
         node2: NodeID,
-    ) -> Option<(Vec<EdgeID>, Vec<NodeID>)> {
+    ) -> Option<(Vec<DirectedEdge>, Vec<NodeID>)> {
         let node2_pt = self.node(node2);
 
         let (_, path) = petgraph::algo::astar(
             graph,
             node1,
             |i| i == node2,
-            |(_, _, e)| self.edge(e).length,
+            |(_, _, dir_edge)| self.edge(dir_edge.0).length,
             |i| self.node(i).dist_to(node2_pt),
         )?;
-        let edges: Vec<EdgeID> = path
+        let edges: Vec<DirectedEdge> = path
             .windows(2)
             .map(|pair| *graph.edge_weight(pair[0], pair[1]).unwrap())
             .collect();
