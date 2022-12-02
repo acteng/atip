@@ -13,7 +13,6 @@ export class RouteSnapper {
     console.timeEnd("Deserialize and setup JsRouteSnapper");
     console.log("JsRouteSnapper ready, waiting for idle event");
     this.active = false;
-    this.snapMode = true;
 
     // on(load) is a bad trigger, because downloading the RouteSnapper input can race. Just wait for the map to be usable.
     this.map.once("idle", () => {
@@ -35,7 +34,7 @@ export class RouteSnapper {
             "match",
             ["get", "type"],
             "hovered",
-            "yellow",
+            "green",
             "important",
             "red",
             "unimportant",
@@ -80,13 +79,13 @@ export class RouteSnapper {
           .unproject(e.point)
           .distanceTo(this.map.unproject(nearbyPoint));
         if (
-          this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters, this.snapMode)
+          this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters)
         ) {
           this.#redraw();
         }
       });
 
-      this.map.on("click", () => {
+      this.map.on("click", (e) => {
         if (!this.active) {
           return;
         }
@@ -119,6 +118,27 @@ export class RouteSnapper {
         if (e.key == "Enter") {
           e.preventDefault();
           this.#finishSnapping();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (!this.active) {
+          return;
+        }
+        if (e.key == "Shift") {
+          e.preventDefault();
+          this.inner.setSnapMode(false);
+          this.#redraw();
+        }
+      });
+      document.addEventListener("keyup", (e) => {
+        if (!this.active) {
+          return;
+        }
+        if (e.key == "Shift") {
+          e.preventDefault();
+          this.inner.setSnapMode(true);
+          this.#redraw();
         }
       });
 
