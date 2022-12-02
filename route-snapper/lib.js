@@ -111,6 +111,16 @@ export class RouteSnapper {
         }
       });
 
+      document.addEventListener("keypress", (e) => {
+        if (!this.active) {
+          return;
+        }
+        if (e.key == "Enter") {
+          e.preventDefault();
+          this.#finishSnapping();
+        }
+      });
+
       this.#inactiveControl();
     });
   }
@@ -144,35 +154,38 @@ export class RouteSnapper {
     btn.type = "button";
     btn.innerText = "Finish snapping";
     btn.onclick = () => {
-      // Update the source-of-truth in drawControls
-      const rawJSON = this.inner.toFinalFeature();
-      if (rawJSON) {
-        const json = JSON.parse(rawJSON);
-        const ids = this.app.drawControls.add(json);
-
-        // drawControls assigns an ID. When we open the form, pass in the feature with that ID, and some properties pre-filled out
-        json.id = ids[0];
-
-        json.properties.intervention_type = "route";
-        this.app.drawControls.setFeatureProperty(
-          json.id,
-          "intervention_type",
-          "route"
-        );
-
-        this.app.updateSidebar();
-        this.app.openForm(json);
-        this.app.saveToLocalStorage();
-
-        // Act like we've selected the line-string we just drew
-        this.app.drawControls.changeMode("direct_select", {
-          featureId: json.id,
-        });
-      }
-
-      this.#inactiveControl();
+      this.#finishSnapping();
     };
     div.appendChild(btn);
+  }
+
+  #finishSnapping() {
+    // Update the source-of-truth in drawControls
+    const rawJSON = this.inner.toFinalFeature();
+    if (rawJSON) {
+      const json = JSON.parse(rawJSON);
+      const ids = this.app.drawControls.add(json);
+
+      // drawControls assigns an ID. When we open the form, pass in the feature with that ID, and some properties pre-filled out
+      json.id = ids[0];
+
+      json.properties.intervention_type = "route";
+      this.app.drawControls.setFeatureProperty(
+        json.id,
+        "intervention_type",
+        "route"
+      );
+
+      this.app.updateSidebar();
+      this.app.openForm(json);
+      this.app.saveToLocalStorage();
+
+      // Act like we've selected the line-string we just drew
+      this.app.drawControls.changeMode("direct_select", {
+        featureId: json.id,
+      });
+    }
+    this.#inactiveControl();
   }
 
   #redraw() {
