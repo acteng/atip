@@ -160,21 +160,6 @@ export class JsRouteSnapper {
         }
     }
     /**
-    * @returns {string}
-    */
-    renderGeojson() {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.jsroutesnapper_renderGeojson(retptr, this.ptr);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            return getStringFromWasm0(r0, r1);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-            wasm.__wbindgen_free(r0, r1);
-        }
-    }
-    /**
     * @returns {string | undefined}
     */
     toFinalFeature() {
@@ -192,6 +177,27 @@ export class JsRouteSnapper {
         } finally {
             wasm.__wbindgen_add_to_stack_pointer(16);
         }
+    }
+    /**
+    * @returns {string}
+    */
+    renderGeojson() {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.jsroutesnapper_renderGeojson(retptr, this.ptr);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            return getStringFromWasm0(r0, r1);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+            wasm.__wbindgen_free(r0, r1);
+        }
+    }
+    /**
+    * @param {boolean} snap_mode
+    */
+    setSnapMode(snap_mode) {
+        wasm.jsroutesnapper_setSnapMode(this.ptr, snap_mode);
     }
     /**
     * @param {number} lon

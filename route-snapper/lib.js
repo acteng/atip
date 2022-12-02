@@ -34,7 +34,7 @@ export class RouteSnapper {
             "match",
             ["get", "type"],
             "hovered",
-            "yellow",
+            "green",
             "important",
             "red",
             "unimportant",
@@ -118,6 +118,27 @@ export class RouteSnapper {
         if (e.key == "Enter") {
           e.preventDefault();
           this.#finishSnapping();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (!this.active) {
+          return;
+        }
+        if (e.key == "Shift") {
+          e.preventDefault();
+          this.inner.setSnapMode(false);
+          this.#redraw();
+        }
+      });
+      document.addEventListener("keyup", (e) => {
+        if (!this.active) {
+          return;
+        }
+        if (e.key == "Shift") {
+          e.preventDefault();
+          this.inner.setSnapMode(true);
+          this.#redraw();
         }
       });
 
