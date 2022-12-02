@@ -13,6 +13,7 @@ export class RouteSnapper {
     console.timeEnd("Deserialize and setup JsRouteSnapper");
     console.log("JsRouteSnapper ready, waiting for idle event");
     this.active = false;
+    this.snapMode = true;
 
     // on(load) is a bad trigger, because downloading the RouteSnapper input can race. Just wait for the map to be usable.
     this.map.once("idle", () => {
@@ -79,7 +80,7 @@ export class RouteSnapper {
           .unproject(e.point)
           .distanceTo(this.map.unproject(nearbyPoint));
         if (
-          this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters)
+          this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters, this.snapMode)
         ) {
           this.#redraw();
         }
