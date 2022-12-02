@@ -85,7 +85,7 @@ export class RouteSnapper {
         }
       });
 
-      this.map.on("click", (e) => {
+      this.map.on("click", () => {
         if (!this.active) {
           return;
         }
