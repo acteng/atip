@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use geom::{Circle, Distance, FindClosest, GPSBounds, LonLat, PolyLine, Pt2D};
+use geom::{Circle, Distance, FindClosest, GPSBounds, HashablePt2D, LonLat, PolyLine, Pt2D};
 use petgraph::graphmap::DiGraphMap;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -17,12 +17,23 @@ pub struct JsRouteSnapper {
     snap_to_nodes: FindClosest<NodeID>,
     route: Route,
     mode: Mode,
+    // Is the shift key not held?
+    snap_mode: bool,
 }
 
+// TODO It's impossible for a waypoint to be an Edge, but the code might be simpler if this and
+// PathEntry are merged
 #[derive(Clone, PartialEq)]
 enum Waypoint {
     Snapped(NodeID),
     Free(Pt2D),
+}
+
+// TODO A hack for draw_circles. If Pt2D can implement Ord, this could go away
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+enum DrawCircle {
+    Snapped(NodeID),
+    Free(HashablePt2D),
 }
 
 #[derive(Clone, PartialEq)]
@@ -57,6 +68,7 @@ enum Mode {
     // idx into waypoints
     // TODO We'll need to be able to drag free points too
     Dragging { idx: usize, at: NodeID },
+    Freehand(Pt2D),
 }
 
 #[wasm_bindgen]
@@ -99,6 +111,7 @@ impl JsRouteSnapper {
             snap_to_nodes,
             route: Route::new(),
             mode: Mode::Neutral,
+            snap_mode: true,
         })
     }
 
@@ -119,39 +132,37 @@ impl JsRouteSnapper {
     pub fn render_geojson(&self) -> String {
         let mut result = Vec::new();
 
-        let mut draw_free_points = Vec::new();
         // Overlapping circles don't work, so override colors in here. Use these styles:
         //
         // 1) "hovered": Something under the cursor
         // 2) "important": A waypoint, or something being dragged
         // 3) "unimportant": A draggable node on the route
         // 4) "preview": A node on a route if the user chooses to click and confirm
-        let mut draw_nodes = BTreeMap::new();
+        let mut draw_circles = BTreeMap::new();
 
         // Draw the confirmed route
         if let Some(geometry) = self.entire_line_string() {
             result.push((geometry, serde_json::Map::new()));
         }
         for entry in &self.route.full_path {
-            match entry {
-                PathEntry::SnappedPoint(node) => {
-                    draw_nodes.insert(*node, "unimportant");
-                }
-                PathEntry::FreePoint(pt) => {
-                    draw_free_points.push(*pt);
-                }
-                PathEntry::Edge(_) => {}
+            // Every free point is a waypoint, so just handle it below
+            if let PathEntry::SnappedPoint(node) = entry {
+                draw_circles.insert(DrawCircle::Snapped(*node), "unimportant");
             }
         }
         for waypt in &self.route.waypoints {
-            if let Waypoint::Snapped(node) = waypt {
-                draw_nodes.insert(*node, "important");
-            }
+            draw_circles.insert(
+                match *waypt {
+                    Waypoint::Snapped(x) => DrawCircle::Snapped(x),
+                    Waypoint::Free(x) => DrawCircle::Free(x.to_hashable()),
+                },
+                "important",
+            );
         }
 
         // Draw the current operation
         if let Mode::Hovering(hover) = self.mode {
-            draw_nodes.insert(hover, "hovered");
+            draw_circles.insert(DrawCircle::Snapped(hover), "hovered");
             if let Some(Waypoint::Snapped(last)) = self.route.waypoints.last() {
                 // If we're trying to drag a point, don't show this preview
                 if !self
@@ -164,7 +175,9 @@ impl JsRouteSnapper {
                             match entry {
                                 PathEntry::SnappedPoint(node) => {
                                     // Don't overwrite anything existing
-                                    draw_nodes.entry(node).or_insert("preview");
+                                    draw_circles
+                                        .entry(DrawCircle::Snapped(node))
+                                        .or_insert("preview");
                                 }
                                 PathEntry::FreePoint(_) => unreachable!(),
                                 PathEntry::Edge(dir_edge) => {
@@ -180,16 +193,30 @@ impl JsRouteSnapper {
                     }
                 }
             }
-            // TODO Preview freehand thing
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            draw_nodes.insert(at, "hovered");
+            draw_circles.insert(DrawCircle::Snapped(at), "hovered");
+        }
+        if let Mode::Freehand(pt) = self.mode {
+            draw_circles.insert(DrawCircle::Free(pt.to_hashable()), "hovered");
+
+            if let Some(last) = self.route.waypoints.last() {
+                let last_pt = match *last {
+                    Waypoint::Snapped(node) => self.map.node(node),
+                    Waypoint::Free(pt) => pt,
+                };
+                let pl = PolyLine::unchecked_new(vec![last_pt, pt]);
+                result.push((
+                    pl.to_geojson(Some(&self.map.gps_bounds)),
+                    serde_json::Map::new(),
+                ));
+            }
         }
 
         // Partially overlapping circles cover each other up, so make sure the important ones are
         // drawn last
-        let mut draw_nodes: Vec<(NodeID, &'static str)> = draw_nodes.into_iter().collect();
-        draw_nodes.sort_by_key(|(_, style)| match *style {
+        let mut draw_circles: Vec<(DrawCircle, &'static str)> = draw_circles.into_iter().collect();
+        draw_circles.sort_by_key(|(_, style)| match *style {
             "hovered" => 3,
             "important" => 2,
             "unimportant" => 1,
@@ -197,52 +224,53 @@ impl JsRouteSnapper {
             _ => unreachable!(),
         });
 
-        for (n, label) in draw_nodes {
+        for (pt, label) in draw_circles {
+            let pt = match pt {
+                DrawCircle::Snapped(n) => self.map.node(n),
+                DrawCircle::Free(pt) => pt.to_pt2d(),
+            };
             let mut props = serde_json::Map::new();
             props.insert("type".to_string(), label.to_string().into());
-            result.push((
-                self.map.node(n).to_geojson(Some(&self.map.gps_bounds)),
-                props,
-            ));
+            result.push((pt.to_geojson(Some(&self.map.gps_bounds)), props));
         }
 
         let obj = geom::geometries_with_properties_to_geojson(result);
         serde_json::to_string_pretty(&obj).unwrap()
     }
 
+    #[wasm_bindgen(js_name = setSnapMode)]
+    pub fn set_snap_mode(&mut self, snap_mode: bool) {
+        self.snap_mode = snap_mode;
+    }
+
     // True if something has changed
     #[wasm_bindgen(js_name = onMouseMove)]
-    pub fn on_mouse_move(
-        &mut self,
-        lon: f64,
-        lat: f64,
-        circle_radius_meters: f64,
-        snap_mode: bool,
-    ) -> bool {
+    pub fn on_mouse_move(&mut self, lon: f64, lat: f64, circle_radius_meters: f64) -> bool {
         let pt = LonLat::new(lon, lat).to_pt(&self.map.gps_bounds);
         let circle_radius = Distance::meters(circle_radius_meters);
 
+        if !self.snap_mode {
+            self.mode = Mode::Freehand(pt);
+            return true;
+        }
+
         match self.mode {
-            Mode::Neutral => {
-                if snap_mode {
-                    if let Some(node) = self.mouseover_node(pt, circle_radius) {
-                        self.mode = Mode::Hovering(node);
-                        return true;
-                    }
-                }
-            }
-            Mode::Hovering(_) => {
-                if snap_mode {
-                    if let Some(node) = self.mouseover_node(pt, circle_radius) {
-                        self.mode = Mode::Hovering(node);
-                    } else {
-                        self.mode = Mode::Neutral;
-                    }
+            // If we were just in freehand mode and we released the key, go back to snapping
+            Mode::Neutral | Mode::Freehand(_) => {
+                if let Some(node) = self.mouseover_node(pt, circle_radius) {
+                    self.mode = Mode::Hovering(node);
                     return true;
                 }
             }
+            Mode::Hovering(_) => {
+                if let Some(node) = self.mouseover_node(pt, circle_radius) {
+                    self.mode = Mode::Hovering(node);
+                } else {
+                    self.mode = Mode::Neutral;
+                }
+                return true;
+            }
             Mode::Dragging { idx, at } => {
-                // TODO Assuming snap mode
                 if let Some(node) = self.mouseover_node(pt, circle_radius) {
                     if node != at {
                         let new_idx = self.route.move_waypoint(&self.map, &self.graph, idx, node);
@@ -261,6 +289,11 @@ impl JsRouteSnapper {
 
     #[wasm_bindgen(js_name = onClick)]
     pub fn on_click(&mut self) {
+        if let Mode::Freehand(pt) = self.mode {
+            self.route
+                .add_waypoint(&self.map, &self.graph, Waypoint::Free(pt));
+        }
+
         if let Mode::Hovering(i) = self.mode {
             if let Some(idx) = self
                 .route
@@ -339,6 +372,9 @@ impl JsRouteSnapper {
         }
 
         pts.dedup();
+        if pts.len() < 2 {
+            return None;
+        }
         let pl = PolyLine::unchecked_new(pts);
         Some(pl.to_geojson(Some(&self.map.gps_bounds)))
     }
