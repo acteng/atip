@@ -157,7 +157,6 @@ export class RouteSnapper {
     var btn = document.createElement("button");
     btn.classList.add("mapbox-gl-draw_ctrl-draw-btn");
     btn.classList.add("draw-route-icon");
-    //btn.innerText = "wat";
     btn.title = "Route tool";
     btn.type = "button";
     btn.onclick = () => {
@@ -178,6 +177,14 @@ export class RouteSnapper {
       this.#finishSnapping();
     };
     div.appendChild(btn);
+
+    const instructions = document.createElement("ul");
+    instructions.innerHTML =
+      `<li>Press <b>Enter</b> to finish snapping</li>` +
+      `<li>Click near an intersection to start or continue the route</li>` +
+      `<li>Hold <b>Shift</b> to draw a point anywhere</li>` +
+      `<li>Click and drag any point to move it</li>`;
+    div.appendChild(instructions);
   }
 
   #finishSnapping() {
