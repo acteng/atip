@@ -26,7 +26,6 @@ export class App {
       controls: {
         point: true,
         polygon: true,
-        line_string: true,
       },
       styles: drawControlsStyle,
     });
