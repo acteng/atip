@@ -90,7 +90,7 @@ struct DirectedEdge(EdgeID, Direction);
 #[derive(Clone, PartialEq)]
 enum Mode {
     Neutral,
-    Hovering(NodeID),
+    Hovering(Waypoint),
     // idx is into full_path
     Dragging { idx: usize, at: Waypoint },
     Freehand(Pt2D),
@@ -181,15 +181,18 @@ impl JsRouteSnapper {
 
         // Draw the current operation
         if let Mode::Hovering(hover) = self.mode {
-            draw_circles.insert(DrawCircle::Snapped(hover), "hovered");
-            if let Some(Waypoint::Snapped(last)) = self.route.waypoints.last() {
+            draw_circles.insert(hover.to_draw_circle(), "hovered");
+
+            if let (Some(Waypoint::Snapped(last)), Waypoint::Snapped(current)) =
+                (self.route.waypoints.last(), hover)
+            {
                 // If we're trying to drag a point, don't show this preview
                 if !self
                     .route
                     .full_path
-                    .contains(&PathEntry::SnappedPoint(hover))
+                    .contains(&PathEntry::SnappedPoint(current))
                 {
-                    if let Some(entries) = self.map.pathfind(&self.graph, *last, hover) {
+                    if let Some(entries) = self.map.pathfind(&self.graph, *last, current) {
                         for entry in entries {
                             match entry {
                                 PathEntry::SnappedPoint(node) => {
@@ -276,14 +279,14 @@ impl JsRouteSnapper {
         match self.mode {
             // If we were just in freehand mode and we released the key, go back to snapping
             Mode::Neutral | Mode::Freehand(_) => {
-                if let Some(node) = self.mouseover_node(pt, circle_radius) {
-                    self.mode = Mode::Hovering(node);
+                if let Some(waypt) = self.mouseover_something(pt, circle_radius) {
+                    self.mode = Mode::Hovering(waypt);
                     return true;
                 }
             }
             Mode::Hovering(_) => {
-                if let Some(node) = self.mouseover_node(pt, circle_radius) {
-                    self.mode = Mode::Hovering(node);
+                if let Some(waypt) = self.mouseover_something(pt, circle_radius) {
+                    self.mode = Mode::Hovering(waypt);
                 } else {
                     self.mode = Mode::Neutral;
                 }
@@ -321,13 +324,8 @@ impl JsRouteSnapper {
                 .add_waypoint(&self.map, &self.graph, Waypoint::Free(pt));
         }
 
-        if let Mode::Hovering(i) = self.mode {
-            if let Some(idx) = self
-                .route
-                .waypoints
-                .iter()
-                .position(|x| *x == Waypoint::Snapped(i))
-            {
+        if let Mode::Hovering(hover) = self.mode {
+            if let Some(idx) = self.route.waypoints.iter().position(|x| *x == hover) {
                 // If we click on an existing waypoint and it's not the first or last, delete it
                 if !self.route.waypoints.is_empty()
                     && idx != 0
@@ -337,8 +335,7 @@ impl JsRouteSnapper {
                     self.route.recalculate_full_path(&self.map, &self.graph);
                 }
             } else {
-                self.route
-                    .add_waypoint(&self.map, &self.graph, Waypoint::Snapped(i));
+                self.route.add_waypoint(&self.map, &self.graph, hover);
             }
         }
     }
@@ -346,12 +343,14 @@ impl JsRouteSnapper {
     // True if we should hijack the drag controls
     #[wasm_bindgen(js_name = onDragStart)]
     pub fn on_drag_start(&mut self) -> bool {
-        if let Mode::Hovering(i) = self.mode {
-            if let Some(idx) = self.route.idx(i) {
-                self.mode = Mode::Dragging {
-                    idx,
-                    at: Waypoint::Snapped(i),
-                };
+        if let Mode::Hovering(at) = self.mode {
+            if let Some(idx) = self
+                .route
+                .full_path
+                .iter()
+                .position(|x| *x == at.to_path_entry())
+            {
+                self.mode = Mode::Dragging { idx, at };
                 return true;
             }
         }
@@ -362,10 +361,7 @@ impl JsRouteSnapper {
     #[wasm_bindgen(js_name = onMouseUp)]
     pub fn on_mouse_up(&mut self) -> bool {
         if let Mode::Dragging { at, .. } = self.mode {
-            self.mode = match at {
-                Waypoint::Snapped(node) => Mode::Hovering(node),
-                Waypoint::Free(_) => Mode::Neutral,
-            };
+            self.mode = Mode::Hovering(at);
             return true;
         }
         false
@@ -379,8 +375,21 @@ impl JsRouteSnapper {
 }
 
 impl JsRouteSnapper {
+    // Snaps first to free-drawn points, then nodes
+    fn mouseover_something(&self, pt: Pt2D, circle_radius: Distance) -> Option<Waypoint> {
+        for waypt in &self.route.waypoints {
+            if let Waypoint::Free(x) = waypt {
+                if x.dist_to(pt) < circle_radius {
+                    return Some(*waypt);
+                }
+            }
+        }
+
+        let node = self.mouseover_node(pt, circle_radius)?;
+        Some(Waypoint::Snapped(node))
+    }
     fn mouseover_node(&self, pt: Pt2D, circle_radius: Distance) -> Option<NodeID> {
-        // TODO I can't figure out how, but the hitbox detection is off.
+        // TODO I can't figure out how, but the hitbox detection is sometimes off.
         let (node, _) = self.snap_to_nodes.closest_pt(pt, circle_radius)?;
         Some(node)
     }
@@ -433,12 +442,6 @@ impl Route {
                 *self = orig;
             }
         }
-    }
-
-    fn idx(&self, i: NodeID) -> Option<usize> {
-        self.full_path
-            .iter()
-            .position(|x| *x == PathEntry::SnappedPoint(i))
     }
 
     // Returns the new full_path index
