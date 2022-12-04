@@ -271,6 +271,7 @@ export class App {
         )
       ) {
         this.drawControls.set(emptyGeojson());
+        this.saveToLocalStorage();
         this.updateSidebar();
         document.getElementById("scheme_name").value = "";
         this.map.getSource("hover").setData(emptyGeojson());
