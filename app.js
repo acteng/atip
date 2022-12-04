@@ -8,8 +8,6 @@ export class App {
   constructor() {
     const params = new URLSearchParams(window.location.search);
     this.authority = params.get("authority");
-    // TODO For now, this becomes unused again
-    this.detailedFormExperiment = params.has("detailedFormExperiment");
     this.currentFilename = `${this.authority}.geojson`;
 
     document.getElementById("authority").innerText = this.authority;
@@ -195,6 +193,15 @@ export class App {
         `https://api.maptiler.com/maps/${e.target.value}/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL`
       );
     };
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key == "Delete" && this.currentlyEditing != null) {
+        this.drawControls.delete(this.currentlyEditing);
+        this.closeForm();
+        this.updateSidebar();
+        this.saveToLocalStorage();
+      }
+    });
   }
 
   #hoveringOnMapFeature(newHoverEntry) {
