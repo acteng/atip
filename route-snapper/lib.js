@@ -186,10 +186,11 @@ export class RouteSnapper {
 
     const instructions = document.createElement("ul");
     instructions.innerHTML =
-      `<li>Press <b>Enter</b> to finish snapping</li>` +
-      `<li>Click near an intersection to start or continue the route</li>` +
+      `<li>Click points on the transport network to create snapped routes</li>` +
       `<li>Hold <b>Shift</b> to draw a point anywhere</li>` +
-      `<li>Click and drag any point to move it</li>`;
+      `<li>Click and drag any point to move it</li>` +
+      `<li>Press <b>Enter</b> to finish snapping</li>`;
+
     div.appendChild(instructions);
   }
 
