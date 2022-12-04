@@ -271,7 +271,7 @@ impl JsRouteSnapper {
         let pt = LonLat::new(lon, lat).to_pt(&self.map.gps_bounds);
         let circle_radius = Distance::meters(circle_radius_meters);
 
-        if !self.snap_mode {
+        if !self.snap_mode && !matches!(self.mode, Mode::Dragging { .. }) {
             self.mode = Mode::Freehand(pt);
             return true;
         }
