@@ -37,21 +37,27 @@ export class RouteSnapper {
             "green",
             "important",
             "red",
-            "unimportant",
-            "blue",
-            "preview",
-            "blue",
             // other
             "black",
           ],
+          // Draw unimportant (draggable, but not waypoints) circles with no fill, but an outline
           "circle-opacity": [
             "match",
             ["get", "type"],
-            "preview",
-            0.5,
+            "unimportant",
+            0.0,
             // other
             1.0,
           ],
+          "circle-stroke-width": [
+            "match",
+            ["get", "type"],
+            "unimportant",
+            2.0,
+            // other
+            0.0,
+          ],
+          "circle-stroke-color": "black",
         },
         filter: ["in", "$type", "Point"],
       });
@@ -64,7 +70,7 @@ export class RouteSnapper {
           "line-join": "round",
         },
         paint: {
-          "line-color": "#000",
+          "line-color": "black",
           "line-width": 2.5,
         },
         filter: ["in", "$type", "LineString"],

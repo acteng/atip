@@ -162,7 +162,6 @@ impl JsRouteSnapper {
         // 1) "hovered": Something under the cursor
         // 2) "important": A waypoint, or something being dragged
         // 3) "unimportant": A draggable node on the route
-        // 4) "preview": A node on a route if the user chooses to click and confirm
         let mut draw_circles = BTreeMap::new();
 
         // Draw the confirmed route
@@ -194,22 +193,13 @@ impl JsRouteSnapper {
                 {
                     if let Some(entries) = self.map.pathfind(&self.graph, *last, current) {
                         for entry in entries {
-                            match entry {
-                                PathEntry::SnappedPoint(node) => {
-                                    // Don't overwrite anything existing
-                                    draw_circles
-                                        .entry(DrawCircle::Snapped(node))
-                                        .or_insert("preview");
-                                }
-                                PathEntry::FreePoint(_) => unreachable!(),
-                                PathEntry::Edge(dir_edge) => {
-                                    let pl =
-                                        PolyLine::unchecked_new(self.map.edge_geometry(dir_edge));
-                                    result.push((
-                                        pl.to_geojson(Some(&self.map.gps_bounds)),
-                                        serde_json::Map::new(),
-                                    ));
-                                }
+                            // Just preview the lines, not the circles
+                            if let PathEntry::Edge(dir_edge) = entry {
+                                let pl = PolyLine::unchecked_new(self.map.edge_geometry(dir_edge));
+                                result.push((
+                                    pl.to_geojson(Some(&self.map.gps_bounds)),
+                                    serde_json::Map::new(),
+                                ));
                             }
                         }
                     }
@@ -242,7 +232,6 @@ impl JsRouteSnapper {
             "hovered" => 3,
             "important" => 2,
             "unimportant" => 1,
-            "preview" => 0,
             _ => unreachable!(),
         });
 
