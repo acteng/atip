@@ -29,25 +29,11 @@ enum Waypoint {
     Free(Pt2D),
 }
 
-// TODO A hack for draw_circles. If Pt2D can implement Ord, this could go away
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
-enum DrawCircle {
-    Snapped(NodeID),
-    Free(HashablePt2D),
-}
-
 impl Waypoint {
     fn to_path_entry(self) -> PathEntry {
         match self {
             Waypoint::Snapped(x) => PathEntry::SnappedPoint(x),
             Waypoint::Free(x) => PathEntry::FreePoint(x),
-        }
-    }
-
-    fn to_draw_circle(self) -> DrawCircle {
-        match self {
-            Waypoint::Snapped(x) => DrawCircle::Snapped(x),
-            Waypoint::Free(x) => DrawCircle::Free(x.to_hashable()),
         }
     }
 }
@@ -171,16 +157,16 @@ impl JsRouteSnapper {
         for entry in &self.route.full_path {
             // Every free point is a waypoint, so just handle it below
             if let PathEntry::SnappedPoint(node) = entry {
-                draw_circles.insert(DrawCircle::Snapped(*node), "unimportant");
+                draw_circles.insert(self.map.node(*node).to_hashable(), "unimportant");
             }
         }
         for waypt in &self.route.waypoints {
-            draw_circles.insert(waypt.to_draw_circle(), "important");
+            draw_circles.insert(self.to_pt(*waypt), "important");
         }
 
         // Draw the current operation
         if let Mode::Hovering(hover) = self.mode {
-            draw_circles.insert(hover.to_draw_circle(), "hovered");
+            draw_circles.insert(self.to_pt(hover), "hovered");
 
             if let (Some(Waypoint::Snapped(last)), Waypoint::Snapped(current)) =
                 (self.route.waypoints.last(), hover)
@@ -207,10 +193,10 @@ impl JsRouteSnapper {
             }
         }
         if let Mode::Dragging { at, .. } = self.mode {
-            draw_circles.insert(at.to_draw_circle(), "hovered");
+            draw_circles.insert(self.to_pt(at), "hovered");
         }
         if let Mode::Freehand(pt) = self.mode {
-            draw_circles.insert(DrawCircle::Free(pt.to_hashable()), "hovered");
+            draw_circles.insert(pt.to_hashable(), "hovered");
 
             if let Some(last) = self.route.waypoints.last() {
                 let last_pt = match *last {
@@ -227,7 +213,8 @@ impl JsRouteSnapper {
 
         // Partially overlapping circles cover each other up, so make sure the important ones are
         // drawn last
-        let mut draw_circles: Vec<(DrawCircle, &'static str)> = draw_circles.into_iter().collect();
+        let mut draw_circles: Vec<(HashablePt2D, &'static str)> =
+            draw_circles.into_iter().collect();
         draw_circles.sort_by_key(|(_, style)| match *style {
             "hovered" => 3,
             "important" => 2,
@@ -236,13 +223,9 @@ impl JsRouteSnapper {
         });
 
         for (pt, label) in draw_circles {
-            let pt = match pt {
-                DrawCircle::Snapped(n) => self.map.node(n),
-                DrawCircle::Free(pt) => pt.to_pt2d(),
-            };
             let mut props = serde_json::Map::new();
             props.insert("type".to_string(), label.to_string().into());
-            result.push((pt.to_geojson(Some(&self.map.gps_bounds)), props));
+            result.push((pt.to_pt2d().to_geojson(Some(&self.map.gps_bounds)), props));
         }
 
         let obj = geom::geometries_with_properties_to_geojson(result);
@@ -408,6 +391,14 @@ impl JsRouteSnapper {
         }
         let pl = PolyLine::unchecked_new(pts);
         Some(pl.to_geojson(Some(&self.map.gps_bounds)))
+    }
+
+    fn to_pt(&self, waypt: Waypoint) -> HashablePt2D {
+        match waypt {
+            Waypoint::Snapped(node) => self.map.node(node),
+            Waypoint::Free(pt) => pt,
+        }
+        .to_hashable()
     }
 }
 
