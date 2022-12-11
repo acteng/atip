@@ -101,3 +101,7 @@ body > main {
 .sidebar-content > nav button {
   margin-right: 12px;
 }
+
+.align-right {
+  float: right;
+}

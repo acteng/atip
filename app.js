@@ -284,7 +284,7 @@ export class App {
         this.map.getSource("editing").setData(emptyGeojson());
       }
     };
-    clearBtn.style = "float: right;";
+    clearBtn.className = "align-right";
     header.appendChild(clearBtn);
     container.appendChild(header);
 
@@ -435,7 +435,7 @@ function makeInterventionForm(feature) {
   }</textarea><br/>
   <div>
           <button type="button" id="delete-${id}">Delete</button>
-          <button type="button" id="save-${id}" style="float: right;">Save</button>
+          <button type="button" id="save-${id}" class="align-right">Save</button>
   </div>`;
 }
 
