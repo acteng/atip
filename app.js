@@ -62,8 +62,13 @@ export class App {
     // TODO No await? :(
     // TODO Should we prompt before deleting the current scheme?
     reader.onload = (e) => {
-      this.#loadFromText(e.target.result);
-      this.saveToLocalStorage();
+      try {
+        this.#loadFromText(e.target.result);
+        this.saveToLocalStorage();
+      } catch (err) {
+        console.log(`Couldn't load from a file: ${err}`);
+        window.alert(`Couldn't load scheme from a file: ${err}`);
+      }
     };
     reader.readAsText(e.target.files[0]);
   }
