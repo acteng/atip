@@ -346,8 +346,9 @@ export class App {
       const contents = document.createElement("div");
       contents.id = `accordian-contents-${feature.id}`;
       contents.className = "accordian-contents";
-      contents.innerHTML = makeInterventionForm(feature);
       container.appendChild(contents);
+
+      makeInterventionForm(contents, feature);
 
       const id = feature.id;
       for (const key of ["intervention_name", "intervention_description"]) {
@@ -422,17 +423,15 @@ function emptyGeojson() {
   };
 }
 
-function makeInterventionForm(feature) {
+function makeInterventionForm(element, feature) {
   const props = feature.properties;
   const id = feature.id;
-  return `
+  element.innerHTML = `
   <br/>
 
   <div>
     <label for="intervention_name-${id}">Name</label><br/>
-    <input type="text" id="intervention_name-${id}" size="30" value="${
-    props.intervention_name || ""
-  }">
+    <input type="text" id="intervention_name-${id}" size="30">
   </div>
 
   <br/>
@@ -448,9 +447,7 @@ function makeInterventionForm(feature) {
 
   <div>
     <label for="intervention_description-${id}">Description</label><br/>
-	  <textarea id="intervention_description-${id}" rows="3" cols="40">${
-    props.intervention_description || ""
-  }</textarea>
+	  <textarea id="intervention_description-${id}" rows="3" cols="40"></textarea>
   </div>
 
   <br/>
@@ -462,6 +459,17 @@ function makeInterventionForm(feature) {
 
   <br/>
   `;
+
+  // Set the two string properties like this, to avoid having to escape strings.
+  // (We assume the element is already part of the DOM, so getElementById works)
+  if (props.intervention_name) {
+    document.getElementById(`intervention_name-${id}`).value =
+      props.intervention_name;
+  }
+  if (props.intervention_description) {
+    document.getElementById(`intervention_description-${id}`).innerText =
+      props.intervention_description;
+  }
 }
 
 async function setupRouteSnapper(app) {
