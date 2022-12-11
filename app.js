@@ -287,6 +287,7 @@ export class App {
     clearBtn.className = "align-right";
     header.appendChild(clearBtn);
     container.appendChild(header);
+    container.appendChild(document.createElement("br"));
 
     var i = 1;
     for (const feature of this.drawControls.getAll().features) {
