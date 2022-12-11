@@ -44,13 +44,10 @@
           </button>
         </nav>
         <h1 id="authority">Loading...</h1>
-        <label for="scheme_name">Scheme name:</label>
-        <input type="text" id="scheme_name" />
-        <p>
-          Add interventions that make up the scheme with the draw tools in the
-          top right of the map and enter details below:
-        </p>
-        <div id="intervention_list"></div>
+        <div>
+          <label for="scheme_name">Scheme name:</label>
+          <input type="text" id="scheme_name" />
+        </div>
         <br />
         <div>
           <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
@@ -72,6 +69,11 @@
             Export to GeoJSON
           </button>
         </div>
+        <p>
+          Add interventions that make up the scheme with the draw tools in the
+          top right of the map and enter details below:
+        </p>
+        <div id="intervention_list"></div>
       </div>
 
       <div
