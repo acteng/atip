@@ -51,9 +51,27 @@
           top right of the map and enter details below:
         </p>
         <div id="intervention_list"></div>
-        <br/>
-        <button type="button" id="export">Export to GeoJSON</button>
-        <p>Load from GeoJSON: <input type="file" id="load_geojson" /></p>
+        <br />
+        <div>
+          <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
+          <input
+            type="file"
+            name="load_geojson"
+            id="load_geojson"
+            class="upload-file"
+          />
+          <label for="load_geojson"
+            ><button
+              type="button"
+              onclick="document.getElementById('load_geojson').click();"
+            >
+              Load from GeoJSON
+            </button></label
+          >
+          <button type="button" id="export" class="align-right">
+            Export to GeoJSON
+          </button>
+        </div>
       </div>
 
       <div

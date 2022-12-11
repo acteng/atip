@@ -12,3 +12,13 @@ textarea {
   border: none;
   background: none;
 }
+
+/* Make the input type=file effectively invisible, but still let browser accessibility stuff work */
+.upload-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
