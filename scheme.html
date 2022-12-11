@@ -27,7 +27,9 @@
     <aside id="sidebar">
       <div class="sidebar-content content-container">
         <nav>
-          <button type="button" onclick="window.open('index.html');">Home</button>
+          <button type="button" onclick="window.open('index.html');">
+            Home
+          </button>
           <button
             type="button"
             onclick="document.getElementById('instructions').classList.add('hide-modal'); document.getElementById('about').classList.toggle('hide-modal');"
@@ -79,7 +81,7 @@
     <div id="about" class="modal-popup centered-fullscreen hide-modal">
       <button
         type="button"
-        style="float: right"
+        class="align-right"
         onclick="document.getElementById('about').classList.toggle('hide-modal');"
       >
         X
@@ -123,7 +125,7 @@
     <div id="instructions" class="modal-popup centered-fullscreen hide-modal">
       <button
         type="button"
-        style="float: right"
+        class="align-right"
         onclick="document.getElementById('instructions').classList.toggle('hide-modal');"
       >
         X
