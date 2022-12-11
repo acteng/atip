@@ -178,7 +178,7 @@ export class RouteSnapper {
     div.innerHTML = "";
     var btn = document.createElement("button");
     btn.type = "button";
-    btn.innerText = "Finish snapping";
+    btn.innerText = "Finish route";
     btn.onclick = () => {
       this.#finishSnapping();
     };
@@ -186,10 +186,11 @@ export class RouteSnapper {
 
     const instructions = document.createElement("ul");
     instructions.innerHTML =
-      `<li>Click points on the transport network to create snapped routes</li>` +
+      `<li><b>Click</b> green points on the transport network</br>to create snapped routes</li>` +
       `<li>Hold <b>Shift</b> to draw a point anywhere</li>` +
-      `<li>Click and drag any point to move it</li>` +
-      `<li>Press <b>Enter</b> to finish snapping</li>`;
+      `<li><b>Click and drag</b> any point to move it</li>` +
+      `<li><b>Click</b> a red waypoint to delete it</li>` +
+      `<li>Press <b>Enter</b> to finish route</li>`;
 
     div.appendChild(instructions);
   }
