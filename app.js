@@ -274,7 +274,7 @@ export class App {
     header.appendChild(label);
     const clearBtn = document.createElement("button");
     clearBtn.className = "underlined-button";
-    clearBtn.innerText = "Clear";
+    clearBtn.innerText = "Clear all";
     clearBtn.onclick = () => {
       if (
         confirm(
@@ -425,24 +425,43 @@ function emptyGeojson() {
 function makeInterventionForm(feature) {
   const props = feature.properties;
   const id = feature.id;
-  return `<label for="intervention_name-${id}">Name</label><br/>
-          <input type="text" id="intervention_name-${id}" value="${
+  return `
+  <br/>
+
+  <div>
+    <label for="intervention_name-${id}">Name</label><br/>
+    <input type="text" id="intervention_name-${id}" size="30" value="${
     props.intervention_name || ""
   }">
-          ${radio(props, "intervention_type-" + id, "intervention_type", [
-            "area",
-            "route",
-            "crossing",
-            "other",
-          ])}
-          <label for="intervention_description-${id}">Description</label><br/>
+  </div>
+
+  <br/>
+
+  ${radio(props, "intervention_type-" + id, "intervention_type", [
+    "area",
+    "route",
+    "crossing",
+    "other",
+  ])}
+
+  <br/>
+
+  <div>
+    <label for="intervention_description-${id}">Description</label><br/>
 	  <textarea id="intervention_description-${id}" rows="3" cols="40">${
     props.intervention_description || ""
-  }</textarea><br/>
+  }</textarea>
+  </div>
+
+  <br/>
+
   <div>
-          <button type="button" id="delete-${id}">Delete</button>
-          <button type="button" id="save-${id}" class="align-right">Save</button>
-  </div>`;
+    <button type="button" id="delete-${id}">Delete</button>
+    <button type="button" id="save-${id}" class="align-right">Save</button>
+  </div>
+
+  <br/>
+  `;
 }
 
 async function setupRouteSnapper(app) {
