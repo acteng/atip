@@ -472,7 +472,7 @@ async function setupRouteSnapper(app) {
     const mapBytes = await fetchWithProgress(url, "snap-progress");
     window.routeSnapper = new RouteSnapper(app, mapBytes);
   } catch (err) {
-    console.log(`Route snapper broke: ${err}`);
+    console.log(`Route tool broke: ${err}`);
     document.getElementById("snap-tool").innerHTML = "Failed to load";
   }
 }
