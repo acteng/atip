@@ -192,12 +192,6 @@ export class App {
       this.routeSnapper = await setupRouteSnapper(this);
     });
 
-    document.getElementById("basemaps").onchange = (e) => {
-      this.map.setStyle(
-        `https://api.maptiler.com/maps/${e.target.value}/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL`
-      );
-    };
-
     document.addEventListener("keydown", (e) => {
       if (e.key == "Delete" && this.currentlyEditing != null) {
         this.drawControls.delete(this.currentlyEditing);
@@ -237,6 +231,8 @@ export class App {
       .classList.add("active-accordian");
     const contents = document.getElementById(`accordian-contents-${id}`);
     contents.style.maxHeight = contents.scrollHeight + "px";
+
+    // TODO Scroll the left sidebar to show the bottom of the form, if needed
 
     // Highlight the feature opened
     this.map.getSource("editing").setData({
