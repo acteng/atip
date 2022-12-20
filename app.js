@@ -1,7 +1,7 @@
 "use strict";
 
 import { radio } from "./forms.js";
-import { RouteSnapper, fetchWithProgress } from "./route-snapper/lib.js";
+import { RouteSnapper, fetchWithProgress } from "./route-snapper/route-snapper-js/lib.js";
 import { mapStyle, drawControlsStyle } from "./style.js";
 
 export class App {

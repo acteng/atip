@@ -1,9 +1,10 @@
 use std::collections::BTreeMap;
 
-use geom::{Circle, Distance, FindClosest, GPSBounds, HashablePt2D, LonLat, PolyLine, Pt2D};
+use geom::{Circle, Distance, FindClosest, HashablePt2D, LonLat, PolyLine, Pt2D};
 use petgraph::graphmap::DiGraphMap;
-use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
+
+use route_snapper_graph::{EdgeID, NodeID, RouteSnapperMap};
 
 const NODE_RADIUS: Distance = Distance::const_meters(10.0);
 
@@ -177,11 +178,12 @@ impl JsRouteSnapper {
                     .full_path
                     .contains(&PathEntry::SnappedPoint(current))
                 {
-                    if let Some(entries) = self.map.pathfind(&self.graph, *last, current) {
+                    if let Some(entries) = pathfind(&self.map, &self.graph, *last, current) {
                         for entry in entries {
                             // Just preview the lines, not the circles
                             if let PathEntry::Edge(dir_edge) = entry {
-                                let pl = PolyLine::unchecked_new(self.map.edge_geometry(dir_edge));
+                                let pl =
+                                    PolyLine::unchecked_new(edge_geometry(&self.map, dir_edge));
                                 result.push((
                                     pl.to_geojson(Some(&self.map.gps_bounds)),
                                     serde_json::Map::new(),
@@ -380,7 +382,7 @@ impl JsRouteSnapper {
                     pts.push(*pt);
                 }
                 PathEntry::Edge(dir_edge) => {
-                    pts.extend(self.map.edge_geometry(*dir_edge));
+                    pts.extend(edge_geometry(&self.map, *dir_edge));
                 }
             }
         }
@@ -486,7 +488,7 @@ impl Route {
             }
 
             if let [Waypoint::Snapped(node1), Waypoint::Snapped(node2)] = pair {
-                if let Some(entries) = map.pathfind(graph, *node1, *node2) {
+                if let Some(entries) = pathfind(map, graph, *node1, *node2) {
                     self.full_path.extend(entries);
                 } else {
                     return false;
@@ -500,66 +502,40 @@ impl Route {
     }
 }
 
-// TODO Copied from abstreet-to-atip. We need... a third repo, just for this plugin.
-
-#[derive(Serialize, Deserialize)]
-struct RouteSnapperMap {
-    gps_bounds: GPSBounds,
-    nodes: Vec<Pt2D>,
-    edges: Vec<Edge>,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Edge {
+// Returns a sequence of (SnappedPoint, Edge, SnappedPoint, Edge..., SnappedPoint)
+fn pathfind(
+    map: &RouteSnapperMap,
+    graph: &Graph,
     node1: NodeID,
     node2: NodeID,
-    geometry: PolyLine,
-    #[serde(skip_serializing, skip_deserializing)]
-    length: Distance,
+) -> Option<Vec<PathEntry>> {
+    let node2_pt = map.node(node2);
+
+    let (_, path) = petgraph::algo::astar(
+        graph,
+        node1,
+        |i| i == node2,
+        |(_, _, dir_edge)| map.edge(dir_edge.0).length,
+        |i| map.node(i).dist_to(node2_pt),
+    )?;
+
+    let mut entries = Vec::new();
+    for pair in path.windows(2) {
+        entries.push(PathEntry::SnappedPoint(pair[0]));
+        entries.push(PathEntry::Edge(
+            *graph.edge_weight(pair[0], pair[1]).unwrap(),
+        ));
+    }
+    entries.push(PathEntry::SnappedPoint(*path.last().unwrap()));
+    assert!(entries[0] == PathEntry::SnappedPoint(node1));
+    assert!(*entries.last().unwrap() == PathEntry::SnappedPoint(node2));
+    Some(entries)
 }
 
-#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct EdgeID(u32);
-#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
-pub struct NodeID(u32);
-
-impl RouteSnapperMap {
-    fn edge(&self, id: EdgeID) -> &Edge {
-        &self.edges[id.0 as usize]
+fn edge_geometry(map: &RouteSnapperMap, dir_edge: DirectedEdge) -> Vec<Pt2D> {
+    let mut pts = map.edge(dir_edge.0).geometry.clone().into_points();
+    if dir_edge.1 == BACKWARDS {
+        pts.reverse();
     }
-    fn edge_geometry(&self, dir_edge: DirectedEdge) -> Vec<Pt2D> {
-        let mut pts = self.edge(dir_edge.0).geometry.clone().into_points();
-        if dir_edge.1 == BACKWARDS {
-            pts.reverse();
-        }
-        pts
-    }
-    fn node(&self, id: NodeID) -> Pt2D {
-        self.nodes[id.0 as usize]
-    }
-
-    // Returns a sequence of (SnappedPoint, Edge, SnappedPoint, Edge..., SnappedPoint)
-    fn pathfind(&self, graph: &Graph, node1: NodeID, node2: NodeID) -> Option<Vec<PathEntry>> {
-        let node2_pt = self.node(node2);
-
-        let (_, path) = petgraph::algo::astar(
-            graph,
-            node1,
-            |i| i == node2,
-            |(_, _, dir_edge)| self.edge(dir_edge.0).length,
-            |i| self.node(i).dist_to(node2_pt),
-        )?;
-
-        let mut entries = Vec::new();
-        for pair in path.windows(2) {
-            entries.push(PathEntry::SnappedPoint(pair[0]));
-            entries.push(PathEntry::Edge(
-                *graph.edge_weight(pair[0], pair[1]).unwrap(),
-            ));
-        }
-        entries.push(PathEntry::SnappedPoint(*path.last().unwrap()));
-        assert!(entries[0] == PathEntry::SnappedPoint(node1));
-        assert!(*entries.last().unwrap() == PathEntry::SnappedPoint(node2));
-        Some(entries)
-    }
+    pts
 }
