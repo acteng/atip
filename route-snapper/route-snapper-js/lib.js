@@ -1,4 +1,4 @@
-import init, { JsRouteSnapper } from "./pkg/route_snapper.js";
+import init, { JsRouteSnapper } from "./pkg/route_snapper_js.js";
 
 await init();
 
