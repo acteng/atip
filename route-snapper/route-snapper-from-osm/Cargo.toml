@@ -1,8 +1,0 @@
-[package]
-name = "route-snapper-from-osm"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-osm2streets = { git = "https://github.com/a-b-street/osm2streets" }
-route-snapper-graph = { path = "../route-snapper-graph" }
