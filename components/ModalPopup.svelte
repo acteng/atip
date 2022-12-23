@@ -2,7 +2,6 @@
   export let title;
   export let hidden = true;
 
-  // TODO Bug bug bug! This doesn't let us plumb data "back up"
   function showOrHide() {
     hidden = !hidden;
   }

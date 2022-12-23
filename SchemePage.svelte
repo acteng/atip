@@ -20,7 +20,7 @@
   <button type="button" on:click={toggleAbout}>About</button>
   <button type="button" on:click={toggleInstructions}>Instructions</button>
 </nav>
-<About hidden={hideAbout} />
-<Instructions hidden={hideInstructions} />
+<About bind:hidden={hideAbout} />
+<Instructions bind:hidden={hideInstructions} />
 
 <style></style>

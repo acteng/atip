@@ -4,7 +4,7 @@
   export let hidden;
 </script>
 
-<ModalPopup title="Instructions" {hidden}>
+<ModalPopup title="Instructions" bind:hidden>
   <p>For each intervention:</p>
   <ol>
     <li>
