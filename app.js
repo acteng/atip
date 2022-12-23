@@ -1,9 +1,15 @@
 "use strict";
 
-import { radio } from "./forms.js";
-import { RouteSnapper, fetchWithProgress } from "./route-snapper/route-snapper-js/lib.js";
-import { mapStyle, drawControlsStyle } from "./style.js";
 import geojsonExtent from "@mapbox/geojson-extent";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+
+import { radio } from "./forms.js";
+import {
+  RouteSnapper,
+  fetchWithProgress,
+} from "./route-snapper/route-snapper-js/lib.js";
+import { mapStyle, drawControlsStyle } from "./style.js";
 
 export class App {
   constructor() {
