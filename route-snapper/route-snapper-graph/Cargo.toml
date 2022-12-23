@@ -9,5 +9,5 @@ osm2streets = ["dep:osm2streets"]
 
 [dependencies]
 geom = { git = "https://github.com/a-b-street/abstreet" }
-osm2streets = { git = "https://github.com/a-b-street/osm2streets", optional = true }
+osm2streets = { git = "https://github.com/a-b-street/osm2streets", rev = "66494d34aaa78415957d605d97cda47ea203055e", optional = true }
 serde = "1.0.123"
