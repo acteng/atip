@@ -4,7 +4,7 @@
   export let hidden;
 </script>
 
-<ModalPopup title="About ATIP" {hidden}>
+<ModalPopup title="About ATIP" bind:hidden>
   <p>
     ATIP v1 is an
     <a href="https://github.com/acteng/atip" target="_blank"
