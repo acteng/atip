@@ -1,8 +1,13 @@
 "use strict";
 
+import maplibregl from 'maplibre-gl';
+import "maplibre-gl/dist/maplibre-gl.css";
 import geojsonExtent from "@mapbox/geojson-extent";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+
+// Do this after mapbox-gl-draw.css to override some stuff
+import "./css/map_controls.css";
 
 import { radio } from "./forms.js";
 import {
