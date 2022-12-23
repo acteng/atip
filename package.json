@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "fmt": "prettier --write *.html *.js *.svelte css/*"
+    "fmt": "prettier --write *.html *.js *.svelte components/* css/*"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
