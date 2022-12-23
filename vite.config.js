@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
-import topLevelAwait from "vite-plugin-top-level-await";
 import wasmPack from "vite-plugin-wasm-pack";
 
 export default defineConfig({
@@ -13,12 +12,5 @@ export default defineConfig({
     },
   },
   base: "/atip/",
-  plugins: [
-    wasmPack([], ["route-snapper"]),
-    // Remove when https://caniuse.com/?search=top%20level%20await is more green
-    topLevelAwait({
-      promiseExportName: "__tla",
-      promiseImportName: (i) => `__tla_${i}`,
-    }),
-  ],
+  plugins: [wasmPack([], ["route-snapper"])],
 });
