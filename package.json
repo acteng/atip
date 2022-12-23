@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "vite": "^4.0.0"
+  },
+  "dependencies": {
+    "@mapbox/geojson-extent": "^1.0.1"
   }
 }
