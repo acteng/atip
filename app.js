@@ -3,6 +3,7 @@
 import { radio } from "./forms.js";
 import { RouteSnapper, fetchWithProgress } from "./route-snapper/route-snapper-js/lib.js";
 import { mapStyle, drawControlsStyle } from "./style.js";
+import geojsonExtent from "@mapbox/geojson-extent";
 
 export class App {
   constructor() {

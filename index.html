@@ -7,7 +7,6 @@
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
     <script src="deps/maplibre-gl.js"></script>
-    <script src="deps/geojson-extent.js"></script>
     <link href="deps/maplibre-gl.css" rel="stylesheet" />
     <style>
       body {
@@ -42,7 +41,9 @@
     </div>
     <div id="map"></div>
 
-    <script>
+    <script type="module">
+      import geojsonExtent from "@mapbox/geojson-extent";
+
       async function loadAuthorities() {
         const list = document.getElementById("authorities-list");
 
