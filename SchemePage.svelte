@@ -1,7 +1,10 @@
 <script>
-  let foo = "bar";
+  import About from "./components/About.svelte";
+  import Instructions from "./components/Instructions.svelte";
 </script>
 
-<p>{foo}</p>
+<p>Heya</p>
+<About />
+<Instructions />
 
 <style></style>
