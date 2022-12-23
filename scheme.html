@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ATIP v1 Scheme Entry</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    
+    
+    
+    
+    
+    <script type="module" crossorigin src="/atip/assets/nested-edc3ca55.js"></script>
+    <link rel="modulepreload" crossorigin href="/atip/assets/authorities-f5046e46.js">
+    <link rel="stylesheet" href="/atip/assets/authorities-fe227fe9.css">
+    <link rel="stylesheet" href="/atip/assets/scheme-bb4f7d0e.css">
+  </head>
+
+  <body>
+    <aside id="sidebar">
+      <div class="sidebar-content content-container">
+        <nav>
+          <button type="button" onclick="window.open('index.html');">
+            Home
+          </button>
+          <button
+            type="button"
+            onclick="document.getElementById('instructions').classList.add('hide-modal'); document.getElementById('about').classList.toggle('hide-modal');"
+          >
+            About
+          </button>
+          <button
+            type="button"
+            onclick="document.getElementById('about').classList.add('hide-modal'); document.getElementById('instructions').classList.toggle('hide-modal');"
+          >
+            Instructions
+          </button>
+        </nav>
+        <h1 id="authority">Loading...</h1>
+        <div>
+          <label for="scheme_name">Scheme name:</label>
+          <input type="text" id="scheme_name" />
+        </div>
+        <br />
+        <div>
+          <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
+          <input
+            type="file"
+            name="load_geojson"
+            id="load_geojson"
+            class="upload-file"
+          />
+          <label for="load_geojson"
+            ><button
+              type="button"
+              onclick="document.getElementById('load_geojson').click();"
+            >
+              Load from GeoJSON
+            </button></label
+          >
+          <button type="button" id="export" class="align-right">
+            Export to GeoJSON
+          </button>
+        </div>
+        <p>
+          Add interventions that make up the scheme with the draw tools in the
+          top right of the map and enter details below:
+        </p>
+        <div id="intervention_list"></div>
+      </div>
+
+      <div
+        class="sidebar-toggle rounded-rect"
+        onclick="document.getElementById('sidebar').classList.toggle('collapsed'); app.map.resize();"
+      >
+        &rarr;
+      </div>
+    </aside>
+
+    <main>
+      <div id="map"></div>
+      <div id="snap-tool" class="overlay-topright">
+        <!-- TODO the text should be fixed, and the progress bar float -->
+        <div id="snap-progress">Route tool loading...</div>
+      </div>
+    </main>
+
+    <div id="about" class="modal-popup centered-fullscreen hide-modal">
+      <button
+        type="button"
+        class="align-right"
+        onclick="document.getElementById('about').classList.toggle('hide-modal');"
+      >
+        X
+      </button>
+      <h1>About ATIP</h1>
+      <p>
+        ATIP v1 is an
+        <a href="https://github.com/acteng/atip" target="_blank"
+          >open source project</a
+        >
+        developed by:
+      </p>
+      <ul>
+        <li>
+          <a href="https://dcarlino.org" target="_blank">Dustin Carlino</a>:
+          lead developer
+        </li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/madison-wang-841977bb/"
+            target="_blank"
+            >Madison Wang</a
+          >: UX design
+        </li>
+        <li>
+          <a href="https://github.com/BudgieInWA" target="_blank">Ben Ritter</a
+          >: CSS consulting
+        </li>
+      </ul>
+      <p>
+        ATIP builds on
+        <a href="https://www.openstreetmap.org/about" target="_blank"
+          >OpenStreetMap</a
+        >
+        contributors,
+        <a href="https://maplibre.org/" target="_blank">MapLibre</a>,
+        <a href="https://georust.org/" target="_blank">GeoRust</a>, and other
+        open source projects.
+      </p>
+    </div>
+    <div id="instructions" class="modal-popup centered-fullscreen hide-modal">
+      <button
+        type="button"
+        class="align-right"
+        onclick="document.getElementById('instructions').classList.toggle('hide-modal');"
+      >
+        X
+      </button>
+      <p>For each intervention:</p>
+      <ol>
+        <li>
+          Click one of the draw icons to the top right of the map (the icons
+          allow you to draw points, lines, polygons or routes)
+        </li>
+        <li>
+          Draw the intervention on the map, clicking the original point or
+          'Finish snapping' for the Polygon and Route tools respectively
+        </li>
+        <li>
+          Fill in the details that appear (Intervention type, name, description)
+        </li>
+        <li>
+          Click the "Save" button or "Delete" button to save or remove the
+          intervention
+        </li>
+      </ol>
+      <p>
+        Repeat the steps above for each substantial infrastructure intervention
+        in the scheme.
+      </p>
+      <p>
+        To make further edits to attribute data, or to delete an intervention,
+        click on its name in the left hand panel or its geometry in the map.
+      </p>
+      <p>
+        Click the "Export to GeoJSON" button to download the dataset
+        representing the scheme, which can be made up of one or more
+        intervention, as a GeoJSON file. After saving the file, you can delete
+        the interventions, change the scheme name, and start a new set of
+        interventions representing a new scheme.
+      </p>
+      <p>
+        To load a GeoJSON file that you have already saved from the tool, click
+        the "Load from GeoJSON" button and select the file.
+      </p>
+      <p>
+        Note: the <strong>Route tool</strong> works by calculating routes
+        between start and end points using the existing transport network
+        according to OpenStreetMap. Use it by clicking on the location where you
+        would like the route to start and then clicking on the location where
+        you would like the route to end on the map. The route will be calculated
+        and drawn on the map. After you click "Finish snapping" you can edit the
+        route by dragging individual points. This can be useful for representing
+        links that are not part of the existing transport network, such as a new
+        bridge or path. However,
+        <strong>you cannot add or remove points</strong> with the Route tool. If
+        the planned route intervention you would like to sketch as part of a
+        scheme contains one or more new links (for example containing new
+        bridges or paths between cul-de-sacs), you may want to use the Line tool
+        instead.
+      </p>
+    </div>
+  </body>
+</html>
