@@ -1,6 +1,6 @@
 "use strict";
 
-import maplibregl from 'maplibre-gl';
+import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import geojsonExtent from "@mapbox/geojson-extent";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
