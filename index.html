@@ -6,8 +6,6 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <script src="deps/maplibre-gl.js"></script>
-    <link href="deps/maplibre-gl.css" rel="stylesheet" />
     <style>
       body {
         margin: 0;
@@ -42,6 +40,8 @@
     <div id="map"></div>
 
     <script type="module">
+      import maplibregl from 'maplibre-gl';
+      import "maplibre-gl/dist/maplibre-gl.css";
       import geojsonExtent from "@mapbox/geojson-extent";
 
       async function loadAuthorities() {

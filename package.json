@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@mapbox/geojson-extent": "^1.0.1",
-    "@mapbox/mapbox-gl-draw": "^1.3.0"
+    "@mapbox/mapbox-gl-draw": "^1.3.0",
+    "maplibre-gl": "^2.4.0"
   }
 }
