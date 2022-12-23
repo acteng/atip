@@ -1,8 +1,10 @@
 <script>
   import ModalPopup from "./ModalPopup.svelte";
+
+  export let hidden;
 </script>
 
-<ModalPopup title="Instructions">
+<ModalPopup title="Instructions" {hidden}>
   <p>For each intervention:</p>
   <ol>
     <li>
