@@ -12,6 +12,7 @@ import "./css/map_controls.css";
 
 import { radio } from "./forms.js";
 import { mapStyle, drawControlsStyle } from "./style.js";
+import authoritiesUrl from "./authorities.geojson?url";
 
 export class App {
   constructor() {
@@ -411,7 +412,7 @@ function downloadGeneratedFile(filename, textInput) {
 }
 
 async function loadBoundary(authority) {
-  const resp = await fetch("authorities.geojson");
+  const resp = await fetch(authoritiesUrl);
   const body = await resp.text();
   const geojson = JSON.parse(body);
   geojson.features = geojson.features.filter(

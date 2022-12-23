@@ -44,10 +44,12 @@
       import "maplibre-gl/dist/maplibre-gl.css";
       import geojsonExtent from "@mapbox/geojson-extent";
 
+      import authoritiesUrl from "./authorities.geojson?url";
+
       async function loadAuthorities() {
         const list = document.getElementById("authorities-list");
 
-        const resp = await fetch("authorities.geojson");
+        const resp = await fetch(authoritiesUrl);
         const body = await resp.text();
         const json = JSON.parse(body);
         for (const feature of json.features) {
