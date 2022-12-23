@@ -5,15 +5,12 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import geojsonExtent from "@mapbox/geojson-extent";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import { RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
 // Do this after mapbox-gl-draw.css to override some stuff
 import "./css/map_controls.css";
 
 import { radio } from "./forms.js";
-import {
-  RouteSnapper,
-  fetchWithProgress,
-} from "./route-snapper/route-snapper-js/lib.js";
 import { mapStyle, drawControlsStyle } from "./style.js";
 
 export class App {
@@ -485,12 +482,36 @@ async function setupRouteSnapper(app) {
   const url = `https://play.abstreet.org/route-snappers/${app.authority}.bin`;
   console.log(`Grabbing ${url}`);
   try {
-    const mapBytes = await fetchWithProgress(url, "snap-progress");
-    window.routeSnapper = new RouteSnapper(app, mapBytes);
+    const graphBytes = await fetchWithProgress(url, "snap-progress");
+    window.routeSnapper = new RouteSnapper(
+      app.map,
+      graphBytes,
+      document.getElementById("snap-tool")
+    );
   } catch (err) {
     console.log(`Route tool broke: ${err}`);
     document.getElementById("snap-tool").innerHTML = "Failed to load";
   }
+
+  document.getElementById("snap-tool").addEventListener("new-route", (e) => {
+    const json = e.detail;
+    const ids = app.drawControls.add(json);
+
+    // drawControls assigns an ID. When we open the form, pass in the feature with that ID, and some properties pre-filled out
+    json.id = ids[0];
+
+    json.properties.intervention_type = "route";
+    app.drawControls.setFeatureProperty(json.id, "intervention_type", "route");
+
+    app.updateSidebar();
+    app.openForm(json);
+    app.saveToLocalStorage();
+
+    // Act like we've selected the line-string we just drew
+    app.drawControls.changeMode("direct_select", {
+      featureId: json.id,
+    });
+  });
 }
 
 function interventionName(feature) {

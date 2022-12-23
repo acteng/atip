@@ -10,11 +10,14 @@
     "fmt": "prettier --write *.html *.js css/*"
   },
   "devDependencies": {
-    "vite": "^4.0.0"
+    "vite": "^4.0.0",
+    "vite-plugin-top-level-await": "^1.2.2",
+    "vite-plugin-wasm-pack": "0.1.11"
   },
   "dependencies": {
     "@mapbox/geojson-extent": "^1.0.1",
     "@mapbox/mapbox-gl-draw": "^1.3.0",
-    "maplibre-gl": "^2.4.0"
+    "maplibre-gl": "^2.4.0",
+    "route-snapper": "^0.1.0"
   }
 }
