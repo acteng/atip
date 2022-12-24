@@ -1,6 +1,7 @@
 <script>
   import About from "./components/About.svelte";
   import Instructions from "./components/Instructions.svelte";
+  import Map from "./components/Map.svelte";
 
   let hideAbout = true;
   let hideInstructions = true;
@@ -22,5 +23,6 @@
 </nav>
 <About bind:hidden={hideAbout} />
 <Instructions bind:hidden={hideInstructions} />
+<Map />
 
 <style></style>
