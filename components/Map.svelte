@@ -15,6 +15,11 @@
     });
     map.addControl(new ScaleControl());
     map.addControl(new NavigationControl(), "bottom-right");
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      map.resize();
+    });
+    resizeObserver.observe(mapContainer);
   });
 
   onDestroy(() => {
