@@ -3,7 +3,6 @@
 
   function toggleSidebar() {
     showSidebar = !showSidebar;
-    // TODO Resize the map... aka plumb the event down?
   }
 </script>
 
@@ -35,8 +34,6 @@
     min-height: 100%;
     max-height: 100%;
     overflow-y: auto;
-
-    background: red;
   }
 
   aside.collapsed {
