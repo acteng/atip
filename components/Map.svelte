@@ -28,6 +28,7 @@
   .map {
     position: relative;
     flex-grow: 1;
-    min-height: 100px;
+    /* TODO: Hack, can't figure out why height broken */
+    min-height: 100vh;
   }
 </style>
