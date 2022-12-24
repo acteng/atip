@@ -28,8 +28,6 @@
   .map {
     position: relative;
     flex-grow: 1;
-    /* TODO why needed? */
-    min-width: 100px;
     min-height: 100px;
   }
 </style>

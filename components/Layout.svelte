@@ -21,26 +21,6 @@
 </main>
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
-
-  :global(body) {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    overflow: hidden;
-
-    /* Two columns, the sidebar on the left, and the main content on the right. */
-    display: flex;
-    flex-flow: row nowrap;
-  }
-
   aside {
     position: relative; /* for children who want to position:absolute */
 
@@ -52,6 +32,7 @@
   .sidebar-content {
     width: 25em; /* Keep the size constant, so the main panel overlaps it when it collapses. */
 
+    min-height: 100%;
     max-height: 100%;
     overflow-y: auto;
 
