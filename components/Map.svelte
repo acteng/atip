@@ -22,11 +22,14 @@
   });
 </script>
 
-<div class="map" id="map" bind:this={mapContainer} />
+<div class="map" bind:this={mapContainer} />
 
 <style>
   .map {
-    width: 100%;
-    height: 400px;
+    position: relative;
+    flex-grow: 1;
+    /* TODO why needed? */
+    min-width: 100px;
+    min-height: 100px;
   }
 </style>
