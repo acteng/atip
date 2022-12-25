@@ -19,7 +19,7 @@ const isPolygon = ["==", "$type", "Polygon"];
 const isLine = ["==", "$type", "LineString"];
 const isPoint = ["==", "$type", "Point"];
 
-function drawLine(color, width, opacity = 1.0) {
+export function drawLine(color, width, opacity = 1.0) {
   return {
     type: "line",
     layout: roundedLine,
@@ -31,7 +31,7 @@ function drawLine(color, width, opacity = 1.0) {
   };
 }
 
-function drawPolygon(color, opacity) {
+export function drawPolygon(color, opacity) {
   return {
     type: "fill",
     paint: {
@@ -41,7 +41,7 @@ function drawPolygon(color, opacity) {
   };
 }
 
-function drawCircle(color, radius, opacity = 1.0) {
+export function drawCircle(color, radius, opacity = 1.0) {
   return {
     type: "circle",
     paint: {
