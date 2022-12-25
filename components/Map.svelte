@@ -5,9 +5,12 @@
 
   let map;
   let mapContainer;
+  let loaded = false;
+  // Before creating the map, check if there's a hash, because one will get set below
+  let setCamera = !window.location.hash;
 
   // TODO Supposed to use a phantom type, not a string, as the key
-  setContext("map", { getMap: () => map });
+  setContext("map", { getMap: () => map, setCamera: setCamera });
 
   onMount(() => {
     map = new Map({
@@ -18,6 +21,10 @@
     });
     map.addControl(new ScaleControl());
     map.addControl(new NavigationControl(), "bottom-right");
+
+    map.on("load", () => {
+      loaded = true;
+    });
 
     const resizeObserver = new ResizeObserver((entries) => {
       map.resize();
@@ -31,7 +38,7 @@
 </script>
 
 <div class="map" bind:this={mapContainer}>
-  {#if map}
+  {#if loaded}
     <slot />
   {/if}
 </div>

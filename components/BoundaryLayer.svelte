@@ -5,10 +5,8 @@
   import { onMount, getContext } from "svelte";
 
   export let authorityName;
-  // TODO This bit
-  export let setCamera;
 
-  const { getMap } = getContext("map");
+  const { getMap, setCamera } = getContext("map");
 
   onMount(async () => {
     const boundaryGeojson = await loadBoundary(authorityName);

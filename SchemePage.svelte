@@ -8,6 +8,9 @@
   let hideAbout = true;
   let hideInstructions = true;
 
+  const params = new URLSearchParams(window.location.search);
+  let authorityName = params.get("authority");
+
   function toggleAbout() {
     hideAbout = !hideAbout;
     hideInstructions = true;
@@ -25,11 +28,11 @@
     <button type="button" on:click={toggleInstructions}>Instructions</button>
   </div>
   <div slot="sidebar">
-    <p>Heya</p>
+    <h1>{authorityName}</h1>
   </div>
   <div slot="main">
     <Map>
-      <BoundaryLayer authorityName="Telford and Wrekin" />
+      <BoundaryLayer {authorityName} />
     </Map>
   </div>
 </Layout>
