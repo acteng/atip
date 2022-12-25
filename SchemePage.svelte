@@ -3,6 +3,7 @@
   import Instructions from "./components/Instructions.svelte";
   import Map from "./components/Map.svelte";
   import Layout from "./components/Layout.svelte";
+  import BoundaryLayer from "./components/BoundaryLayer.svelte";
 
   let hideAbout = true;
   let hideInstructions = true;
@@ -19,6 +20,7 @@
 
 <Layout>
   <div slot="nav">
+    <button type="button" onclick="window.open('index.html');"> Home</button>
     <button type="button" on:click={toggleAbout}>About</button>
     <button type="button" on:click={toggleInstructions}>Instructions</button>
   </div>
@@ -26,7 +28,9 @@
     <p>Heya</p>
   </div>
   <div slot="main">
-    <Map />
+    <Map>
+      <BoundaryLayer authorityName="Telford and Wrekin" />
+    </Map>
   </div>
 </Layout>
 

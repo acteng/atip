@@ -1,10 +1,13 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
+  import { onMount, onDestroy, setContext } from "svelte";
   import { Map, NavigationControl, ScaleControl } from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
 
   let map;
   let mapContainer;
+
+  // TODO Supposed to use a phantom type, not a string, as the key
+  setContext("map", { getMap: () => map });
 
   onMount(() => {
     map = new Map({
@@ -27,7 +30,11 @@
   });
 </script>
 
-<div class="map" bind:this={mapContainer} />
+<div class="map" bind:this={mapContainer}>
+  {#if map}
+    <slot />
+  {/if}
+</div>
 
 <style>
   .map {
