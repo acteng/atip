@@ -11,6 +11,8 @@
 
   const params = new URLSearchParams(window.location.search);
   let authorityName = params.get("authority");
+  // TODO Slight hack. These files are stored in an S3 bucket, which only has an HTTP interface. When deployed to Githu
+  let snapperUrl = `https://play.abstreet.org/route-snappers/${authorityName}.bin`;
 
   function toggleAbout() {
     hideAbout = !hideAbout;
@@ -34,7 +36,7 @@
   <div slot="main">
     <Map>
       <BoundaryLayer {authorityName} />
-      <DrawControls />
+      <DrawControls url={snapperUrl} />
     </Map>
   </div>
 </Layout>
