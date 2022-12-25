@@ -4,6 +4,7 @@
   import Map from "./components/Map.svelte";
   import Layout from "./components/Layout.svelte";
   import BoundaryLayer from "./components/BoundaryLayer.svelte";
+  import DrawControls from "./components/DrawControls.svelte";
 
   let hideAbout = true;
   let hideInstructions = true;
@@ -33,6 +34,7 @@
   <div slot="main">
     <Map>
       <BoundaryLayer {authorityName} />
+      <DrawControls />
     </Map>
   </div>
 </Layout>
