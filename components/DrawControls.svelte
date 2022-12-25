@@ -6,7 +6,7 @@
 
   import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
   // Do this second to override some stuff
-  // TODO Embed it here instead
+  // TODO Use inline style, but still override above
   import "../css/map_controls.css";
 
   const { getMap } = getContext("map");
@@ -67,3 +67,16 @@
   <!-- TODO the text should be fixed, and the progress bar float -->
   <div bind:this={snapProgress} id="TODO">Route tool loading...</div>
 </div>
+
+<style>
+  .overlay-topright {
+    position: absolute;
+    top: 130px;
+    right: 10px;
+    padding: 10px;
+
+    background-color: white;
+  }
+
+  /* TODO Bring in the rest from the .css */
+</style>
