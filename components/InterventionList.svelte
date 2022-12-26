@@ -1,4 +1,5 @@
 <script>
+  import Accordian from "./Accordian.svelte";
   import { gjScheme, emptyGeojson } from "../stores.js";
 
   function clearAll() {
@@ -10,6 +11,23 @@
       gjScheme.set(emptyGeojson());
       // TODO Draw controls need to get set.
     }
+  }
+
+  function interventionName(feature) {
+    if (feature.properties.intervention_name) {
+      return feature.properties.intervention_name;
+    }
+    var noun = feature.properties.intervention_type;
+    if (noun == "other") {
+      if (feature.geometry.type == "Point") {
+        noun = "point";
+      } else if (feature.geometry.type == "LineString") {
+        noun = "line";
+      } else {
+        noun = "polygon";
+      }
+    }
+    return `Untitled ${noun}`;
   }
 </script>
 
@@ -23,5 +41,8 @@
 </div>
 
 {#each $gjScheme.features as feature, i}
-  <div>{i}) {feature.id}</div>
+  <Accordian title="{i}) {interventionName(feature)}">
+    <p>Placeholder contents</p>
+    <pre>{JSON.stringify(feature)}</pre>
+  </Accordian>
 {/each}
