@@ -1,18 +1,7 @@
 <script>
   import Accordian from "./Accordian.svelte";
   import Form from "./Form.svelte";
-  import { gjScheme, emptyGeojson } from "../stores.js";
-
-  function clearAll() {
-    if (
-      confirm(
-        "Do you want to clear the current scheme? (You should save it first!)"
-      )
-    ) {
-      gjScheme.set(emptyGeojson());
-      // TODO Draw controls need to get set.
-    }
-  }
+  import { gjScheme } from "../stores.js";
 
   function interventionName(feature) {
     if (feature.properties.intervention_name) {
@@ -31,17 +20,6 @@
     return `Untitled ${noun}`;
   }
 </script>
-
-<div>
-  <span>{$gjScheme.features.length} interventions</span>
-  <button
-    type="button"
-    on:click={clearAll}
-    disabled={$gjScheme.features.length == 0}>Clear all</button
-  >
-</div>
-
-<br />
 
 {#each $gjScheme.features as feature, i}
   <Accordian title="{i}) {interventionName(feature)}">
