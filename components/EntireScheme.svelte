@@ -53,6 +53,15 @@
 </script>
 
 <div>
+  <label>
+    Scheme name:
+    <input type="text" bind:value={$gjScheme.scheme_name} />
+  </label>
+</div>
+
+<br />
+
+<div>
   <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
   <label>
     <input type="file" id="load_geojson" on:change={loadFile} />
@@ -67,6 +76,8 @@
     Export to GeoJSON
   </button>
 </div>
+
+<br />
 
 <div>
   <span>{$gjScheme.features.length} interventions</span>
