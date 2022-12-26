@@ -10,6 +10,7 @@
   import "../css/map_controls.css";
 
   const { getMap } = getContext("map");
+  import { gjScheme } from "../stores.js";
 
   export let url;
 
@@ -32,6 +33,23 @@
     map.addControl(drawControls);
 
     routeSnapper = await setupRouteSnapper(map);
+
+    // When we draw a new feature, add it to the store
+    map.on("draw.selectionchange", (e) => {
+      if (e.features.length == 1) {
+        const feature = e.features[0];
+        gjScheme.update((gj) => {
+          gj.features.push(feature);
+          return gj;
+        });
+      }
+    });
+
+    // When the store changes, update the drawn objects
+    // TODO Form changes will trigger this unnecessarily. Maybe split out geometry and properties?
+    gjScheme.subscribe((gj) => {
+      drawControls.set(gj);
+    });
   });
 
   async function setupRouteSnapper(map) {

@@ -5,6 +5,7 @@
   import Layout from "./components/Layout.svelte";
   import BoundaryLayer from "./components/BoundaryLayer.svelte";
   import DrawControls from "./components/DrawControls.svelte";
+  import InterventionList from "./components/InterventionList.svelte";
 
   let hideAbout = true;
   let hideInstructions = true;
@@ -32,6 +33,7 @@
   </div>
   <div slot="sidebar">
     <h1>{authorityName}</h1>
+    <InterventionList />
   </div>
   <div slot="main">
     <Map>
