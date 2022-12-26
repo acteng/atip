@@ -1,5 +1,6 @@
 <script>
   import Accordian from "./Accordian.svelte";
+  import Form from "./Form.svelte";
   import { gjScheme, emptyGeojson } from "../stores.js";
 
   function clearAll() {
@@ -40,9 +41,10 @@
   >
 </div>
 
+<br />
+
 {#each $gjScheme.features as feature, i}
   <Accordian title="{i}) {interventionName(feature)}">
-    <p>Placeholder contents</p>
-    <pre>{JSON.stringify(feature)}</pre>
+    <Form {feature} />
   </Accordian>
 {/each}
