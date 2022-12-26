@@ -3,6 +3,15 @@
 
   export let authorityName;
 
+  // Set up local storage sync
+  let loadLocal = window.localStorage.getItem(authorityName);
+  if (loadLocal) {
+    gjScheme.set(JSON.parse(loadLocal));
+  }
+  gjScheme.subscribe((gj) =>
+    window.localStorage.setItem(authorityName, JSON.stringify(gj))
+  );
+
   function clearAll() {
     if (
       confirm(
