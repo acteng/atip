@@ -38,6 +38,18 @@
     map.on("draw.selectionchange", (e) => {
       if (e.features.length == 1) {
         const feature = e.features[0];
+
+        // Bit of a hack, but force the type of "other" if it hasn't been set.
+        // This should really be in response to an object being created, but
+        // mapbox-gl-draw's events are weird
+        if (feature.properties.intervention_type === undefined) {
+          if (feature.geometry.type == "Polygon") {
+            feature.properties.intervention_type = "area";
+          } else {
+            feature.properties.intervention_type = "other";
+          }
+        }
+
         gjScheme.update((gj) => {
           gj.features.push(feature);
           return gj;
@@ -57,7 +69,6 @@
 
     console.log(`Grabbing ${url}`);
     try {
-      console.log(`sup ${snapProgress}. ${snapProgress.id}`);
       // TODO Change fetchWithProgress API to take an element, so we don't need IDs.
       const graphBytes = await fetchWithProgress(url, snapProgress.id);
       let routeSnapper = new RouteSnapper(map, graphBytes, snapTool);
