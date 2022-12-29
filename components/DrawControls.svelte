@@ -35,26 +35,21 @@
     routeSnapper = await setupRouteSnapper(map);
 
     // When we draw a new feature, add it to the store
-    map.on("draw.selectionchange", (e) => {
-      if (e.features.length == 1) {
-        const feature = e.features[0];
+    map.on("draw.create", (e) => {
+      // Assume there's exactly 1 feature
+      const feature = e.features[0];
 
-        // Bit of a hack, but force the type of "other" if it hasn't been set.
-        // This should really be in response to an object being created, but
-        // mapbox-gl-draw's events are weird
-        if (feature.properties.intervention_type === undefined) {
-          if (feature.geometry.type == "Polygon") {
-            feature.properties.intervention_type = "area";
-          } else {
-            feature.properties.intervention_type = "other";
-          }
-        }
-
-        gjScheme.update((gj) => {
-          gj.features.push(feature);
-          return gj;
-        });
+      // Seed one property
+      if (feature.geometry.type == "Polygon") {
+        feature.properties.intervention_type = "area";
+      } else {
+        feature.properties.intervention_type = "other";
       }
+
+      gjScheme.update((gj) => {
+        gj.features.push(feature);
+        return gj;
+      });
     });
 
     // When the store changes, update the drawn objects
@@ -78,15 +73,21 @@
     }
 
     snapTool.addEventListener("new-route", (e) => {
-      const json = e.detail;
-      const ids = drawControls.add(json);
+      const feature = e.detail;
 
-      // drawControls assigns an ID. When we open the form, pass in the feature with that ID, and some properties pre-fil
-      json.id = ids[0];
+      // TODO This is convoluted. We add to drawControls just to assign an ID,
+      // then update gjScheme, which will go reset drawControls again.
+      const ids = drawControls.add(feature);
+      feature.id = ids[0];
+      feature.properties.intervention_type = "route";
+      gjScheme.update((gj) => {
+        gj.features.push(feature);
+        return gj;
+      });
 
       // Act like we've selected the line-string we just drew
       drawControls.changeMode("direct_select", {
-        featureId: json.id,
+        featureId: feature.id,
       });
     });
   }
