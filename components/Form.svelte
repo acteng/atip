@@ -1,4 +1,6 @@
 <script>
+  import { gjScheme } from "../stores.js";
+
   export let id;
   export let name;
   export let intervention_type;
@@ -6,6 +8,13 @@
 
   function capitalize(x) {
     return x.charAt(0).toUpperCase() + x.slice(1);
+  }
+
+  function remove() {
+    gjScheme.update((gj) => {
+      gj.features = gj.features.filter((f) => f.id != id);
+      return gj;
+    });
   }
 </script>
 
@@ -42,7 +51,7 @@
 <br />
 
 <div>
-  <button type="button">Delete</button>
+  <button type="button" on:click={remove}>Delete</button>
   <button type="button" style="float: right;">Save</button>
 </div>
 

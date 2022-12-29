@@ -22,7 +22,7 @@
 </script>
 
 {#each $gjScheme.features as feature, i}
-  <Accordian title="{i}) {interventionName(feature)}">
+  <Accordian title="{i + 1}) {interventionName(feature)}">
     <Form
       id={feature.id}
       bind:name={feature.properties.name}
