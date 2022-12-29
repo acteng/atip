@@ -1,5 +1,8 @@
 <script>
-  export let feature;
+  export let id;
+  export let name;
+  export let intervention_type;
+  export let description;
 
   function capitalize(x) {
     return x.charAt(0).toUpperCase() + x.slice(1);
@@ -10,7 +13,7 @@
 
 <label>
   Name<br />
-  <input type="text" size="30" value={feature.properties.name} />
+  <input type="text" size="30" bind:value={name} />
 </label>
 
 <br />
@@ -20,8 +23,8 @@
     <label>
       <input
         type="radio"
-        bind:group={feature.properties.intervention_type}
-        name="type"
+        bind:group={intervention_type}
+        name="type_{id}"
         {value}
       />
       {capitalize(value)}
@@ -33,7 +36,7 @@
 
 <label>
   Description<br />
-  <textarea rows="3" cols="40">{feature.properties.Description}</textarea>
+  <textarea rows="3" cols="40" bind:value={description} />
 </label>
 
 <br />
