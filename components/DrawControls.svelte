@@ -52,6 +52,18 @@
       });
     });
 
+    map.on("draw.update", (e) => {
+      // Assume there's exactly 1 feature
+      const feature = e.features[0];
+
+      gjScheme.update((gj) => {
+        const update = gj.features.find((f) => f.id == feature.id);
+        // Only geometry updates happen, not properties
+        update.geometry = feature.geometry;
+        return gj;
+      });
+    });
+
     // When the store changes, update the drawn objects
     // TODO Form changes will trigger this unnecessarily. Maybe split out geometry and properties?
     gjScheme.subscribe((gj) => {
