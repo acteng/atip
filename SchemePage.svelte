@@ -35,6 +35,7 @@
   <div slot="sidebar">
     <h1>{authorityName}</h1>
     <EntireScheme {authorityName} />
+    <br />
     <InterventionList />
   </div>
   <div slot="main">

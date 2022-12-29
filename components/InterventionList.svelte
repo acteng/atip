@@ -4,8 +4,8 @@
   import { gjScheme } from "../stores.js";
 
   function interventionName(feature) {
-    if (feature.properties.intervention_name) {
-      return feature.properties.intervention_name;
+    if (feature.properties.name) {
+      return feature.properties.name;
     }
     var noun = feature.properties.intervention_type;
     if (noun == "other") {
@@ -23,6 +23,11 @@
 
 {#each $gjScheme.features as feature, i}
   <Accordian title="{i}) {interventionName(feature)}">
-    <Form {feature} />
+    <Form
+      id={feature.id}
+      bind:name={feature.properties.name}
+      bind:intervention_type={feature.properties.intervention_type}
+      bind:description={feature.properties.description}
+    />
   </Accordian>
 {/each}

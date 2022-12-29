@@ -30,7 +30,7 @@
       filename += "_" + geojson["scheme_name"];
     }
     filename += ".geojson";
-    downloadGeneratedFile(filename, JSON.stringify(geojson));
+    downloadGeneratedFile(filename, JSON.stringify(geojson, null, "  "));
   }
 
   function downloadGeneratedFile(filename, textInput) {
