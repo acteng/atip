@@ -15,7 +15,11 @@
 
   const params = new URLSearchParams(window.location.search);
   let authorityName = params.get("authority");
-  // TODO Slight hack. These files are stored in an S3 bucket, which only has an HTTP interface. When deployed to Githu
+  // TODO Slight hack. These files are stored in an S3 bucket, which only has
+  // an HTTP interface. When deployed to Github pages over HTTPS, we can't mix
+  // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
+  // CDN invalidations when we update these files. But when serving locally for
+  // development, HTTPS is also fine to use.
   let snapperUrl = `https://play.abstreet.org/route-snappers/${authorityName}.bin`;
 
   function toggleAbout() {
