@@ -15,6 +15,29 @@ export function emptyGeojson() {
   };
 }
 
+// TODO This is a bit of a hack; it muddies up the GeoJSON we save. But for the
+// accordion to work, we have to bind something simple like this.
+export function setCurrentlyEditing(id) {
+  gjScheme.update((gj) => {
+    for (let f of gj.features) {
+      if (f.id == id) {
+        f.properties.editing = true;
+      } else {
+        delete f.properties.editing;
+      }
+    }
+    return gj;
+  });
+}
+export function clearCurrentlyEditing() {
+  gjScheme.update((gj) => {
+    gj.features.forEach((f) => {
+      delete f.properties.editing;
+    });
+    return gj;
+  });
+}
+
 /* Thinking through the flow of state...
  *
  * 1) new object drawn

@@ -29,6 +29,7 @@
 <Accordion>
   {#each $gjScheme.features as feature, i}
     <AccordionItem
+      bind:open={feature.properties.editing}
       on:mouseenter={currentSidebarHover.set(feature.id)}
       on:mouseleave={reset}
     >

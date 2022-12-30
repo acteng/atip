@@ -10,7 +10,12 @@
   import "../css/map_controls.css";
 
   const { getMap } = getContext("map");
-  import { gjScheme, currentMapHover } from "../stores.js";
+  import {
+    gjScheme,
+    currentMapHover,
+    setCurrentlyEditing,
+    clearCurrentlyEditing,
+  } from "../stores.js";
 
   export let url;
 
@@ -62,6 +67,14 @@
         update.geometry = feature.geometry;
         return gj;
       });
+    });
+
+    map.on("draw.selectionchange", (e) => {
+      if (e.features.length == 1) {
+        setCurrentlyEditing(e.features[0].id);
+      } else if (e.features.length == 0) {
+        clearCurrentlyEditing();
+      }
     });
 
     // When the store changes, update the drawn objects
