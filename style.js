@@ -1,15 +1,6 @@
 // https://github.com/mapbox/mapbox-gl-draw/blob/main/docs/EXAMPLES.md as
 // reference
 
-import defaultStyle from "./base_style.js";
-
-const baseColor = "black";
-const hoverColor = "yellow";
-const editingColor = "red";
-
-const circleRadius = 7;
-const lineWidth = 10;
-
 const roundedLine = {
   "line-cap": "round",
   "line-join": "round",
@@ -51,32 +42,3 @@ export function drawCircle(color, radius, opacity = 1.0) {
     },
   };
 }
-
-export const drawControlsStyle = defaultStyle.concat([
-  {
-    id: "base-points",
-    filter: ["all", isPoint, ["==", "meta", "feature"]],
-    ...drawCircle(baseColor, circleRadius),
-  },
-  {
-    id: "draggable-points",
-    filter: ["all", isPoint, ["!=", "meta", "feature"]],
-    // TODO The 1.5 is bulky and ugly, but I can't figure out how to get z-ordering working
-    ...drawCircle("blue", 1.5 * circleRadius),
-  },
-  {
-    id: "base-line",
-    filter: isLine,
-    ...drawLine(baseColor, lineWidth),
-  },
-  {
-    id: "base-polygon-fill",
-    filter: isPolygon,
-    ...drawPolygon(baseColor, 0.1),
-  },
-  {
-    id: "base-polygon-outline",
-    filter: isPolygon,
-    ...drawLine(baseColor, lineWidth / 2.0),
-  },
-]);
