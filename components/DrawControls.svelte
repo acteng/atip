@@ -123,13 +123,10 @@
     // Highlight something in the sidebar when we hover on a feature in the map
     map.on("mousemove", (e) => {
       var newHoverEntry = null;
-      // TODO Skip if we're editing something
-      if (true) {
-        // TODO This whines about a layer missing, and I can't suppress with try/catch
-        const ids = drawControls.getFeatureIdsAt(e.point);
-        if (ids.length > 0) {
-          newHoverEntry = ids[0];
-        }
+      // TODO This whines about a layer missing, and I can't suppress with try/catch
+      const ids = drawControls.getFeatureIdsAt(e.point);
+      if (ids.length > 0) {
+        newHoverEntry = ids[0];
       }
       currentMapHover.set(newHoverEntry);
     });
