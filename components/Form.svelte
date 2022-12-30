@@ -45,7 +45,7 @@
 
 <label>
   Description<br />
-  <textarea rows="3" cols="40" bind:value={description} />
+  <textarea rows="3" cols="30" bind:value={description} />
 </label>
 
 <br />

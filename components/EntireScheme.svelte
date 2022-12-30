@@ -17,6 +17,11 @@
     window.localStorage.setItem(authorityName, JSON.stringify(gj))
   );
 
+  gjScheme.update((gj) => {
+    gj.authority = authorityName;
+    return gj;
+  });
+
   function clearAll() {
     if (
       confirm(
