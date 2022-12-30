@@ -15,9 +15,9 @@ const roundedLine = {
   "line-join": "round",
 };
 
-const isPolygon = ["==", "$type", "Polygon"];
-const isLine = ["==", "$type", "LineString"];
-const isPoint = ["==", "$type", "Point"];
+export const isPolygon = ["==", "$type", "Polygon"];
+export const isLine = ["==", "$type", "LineString"];
+export const isPoint = ["==", "$type", "Point"];
 
 export function drawLine(color, width, opacity = 1.0) {
   return {

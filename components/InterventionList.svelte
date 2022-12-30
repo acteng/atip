@@ -1,7 +1,7 @@
 <script>
   import Accordian from "./Accordian.svelte";
   import Form from "./Form.svelte";
-  import { gjScheme } from "../stores.js";
+  import { gjScheme, currentHover } from "../stores.js";
 
   function interventionName(feature) {
     if (feature.properties.name) {
@@ -19,10 +19,23 @@
     }
     return `Untitled ${noun}`;
   }
+
+  function onmouseover(id) {
+    return () => {
+      currentHover.set(id);
+    };
+  }
+  let onmouseout = () => {
+    currentHover.set(null);
+  };
 </script>
 
 {#each $gjScheme.features as feature, i}
-  <Accordian title="{i + 1}) {interventionName(feature)}">
+  <Accordian
+    title="{i + 1}) {interventionName(feature)}"
+    onmouseover={onmouseover(feature.id)}
+    {onmouseout}
+  >
     <Form
       id={feature.id}
       bind:name={feature.properties.name}

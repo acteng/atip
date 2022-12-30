@@ -1,5 +1,7 @@
 <script>
   export let title;
+  export let onmouseover = () => {};
+  export let onmouseout = () => {};
   let hidden = true;
 
   let button;
@@ -28,8 +30,13 @@
   }
 </script>
 
-<button type="button" class="accordian" bind:this={button} on:click={toggle}
-  >{title}</button
+<button
+  type="button"
+  class="accordian"
+  bind:this={button}
+  on:click={toggle}
+  on:mouseover={onmouseover}
+  on:mouseout={onmouseout}>{title}</button
 >
 <div class="accordian-contents" bind:this={contents}>
   <slot />
