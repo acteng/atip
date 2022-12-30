@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
 
 export const gjScheme = writable(emptyGeojson());
 export const currentSidebarHover = writable(null);
@@ -14,6 +14,16 @@ export function emptyGeojson() {
     features: [],
   };
 }
+
+// The ID of whatever's being edited
+export const currentlyEditing = derived(gjScheme, ($gj) => {
+  let f = $gj.features.find((f) => f.properties.editing);
+  if (f) {
+    return f.id;
+  } else {
+    return null;
+  }
+});
 
 // TODO This is a bit of a hack; it muddies up the GeoJSON we save. But for the
 // accordion to work, we have to bind something simple like this.

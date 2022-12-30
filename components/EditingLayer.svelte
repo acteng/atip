@@ -1,6 +1,5 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import { derived } from "svelte/store";
   import geojsonExtent from "@mapbox/geojson-extent";
   import {
     drawLine,
@@ -11,7 +10,7 @@
     drawPolygon,
   } from "../style.js";
   import { emptyGeojson } from "../stores.js";
-  import { gjScheme } from "../stores.js";
+  import { gjScheme, currentlyEditing } from "../stores.js";
 
   const { getMap } = getContext("map");
 
@@ -19,15 +18,6 @@
   let color = "red";
   let lineWidth = 10;
   let circleRadius = 7;
-
-  const currentlyEditing = derived(gjScheme, ($gj) => {
-    let f = $gj.features.find((f) => f.properties.editing);
-    if (f) {
-      return f.id;
-    } else {
-      return null;
-    }
-  });
 
   onMount(() => {
     const map = getMap();
