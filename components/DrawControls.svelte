@@ -1,5 +1,6 @@
 <script>
   import MapboxDraw from "@mapbox/mapbox-gl-draw";
+  import { derived } from "svelte/store";
   import { drawControlsStyle } from "../style.js";
   import { onMount, getContext } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
@@ -23,6 +24,16 @@
   let snapProgress;
   let drawControls;
   let routeSnapper;
+
+  // TODO Refactor?
+  const currentlyEditing = derived(gjScheme, ($gj) => {
+    let f = $gj.features.find((f) => f.properties.editing);
+    if (f) {
+      return f.id;
+    } else {
+      return null;
+    }
+  });
 
   onMount(async () => {
     const map = getMap();
@@ -98,6 +109,18 @@
     });
     map.on("mouseout", () => {
       currentMapHover.set(null);
+    });
+
+    currentlyEditing.subscribe((id) => {
+      if (id) {
+        let feature = $gjScheme.features.find((f) => f.id == id);
+        // Act like we've selected the object. (This is irrelevant for points.)
+        if (feature.geometry.type != "Point") {
+          drawControls.changeMode("direct_select", {
+            featureId: feature.id,
+          });
+        }
+      }
     });
   });
 

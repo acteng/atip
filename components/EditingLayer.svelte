@@ -1,5 +1,7 @@
 <script>
   import { onMount, getContext } from "svelte";
+  import { derived } from "svelte/store";
+  import geojsonExtent from "@mapbox/geojson-extent";
   import {
     drawLine,
     isPolygon,
@@ -17,6 +19,15 @@
   let color = "red";
   let lineWidth = 10;
   let circleRadius = 7;
+
+  const currentlyEditing = derived(gjScheme, ($gj) => {
+    let f = $gj.features.find((f) => f.properties.editing);
+    if (f) {
+      return f.id;
+    } else {
+      return null;
+    }
+  });
 
   onMount(() => {
     const map = getMap();
@@ -51,6 +62,28 @@
         .setData(
           gj.features.find((f) => f.properties.editing) || emptyGeojson()
         );
+    });
+
+    // Warp to what's being edited
+    // TODO This is a bit annoying when clicking on the map. Can we limit to just the sidebar?
+    currentlyEditing.subscribe((id) => {
+      if (id) {
+        // currentlyEditing only changes when the ID changes, not
+        // properties/geometry, so that this behavior isn't triggered
+        // constantly
+        let feature = $gjScheme.features.find((f) => f.id == id);
+
+        // Points are weird
+        if (feature.geometry.type == "Point") {
+          map.flyTo({ center: feature.geometry.coordinates });
+        } else {
+          map.fitBounds(geojsonExtent(feature), {
+            padding: 200,
+            animate: true,
+            duration: 500,
+          });
+        }
+      }
     });
   });
 </script>
