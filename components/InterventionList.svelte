@@ -1,5 +1,5 @@
 <script>
-  import Accordian from "./Accordian.svelte";
+  import { Accordion, AccordionItem } from "carbon-components-svelte";
   import Form from "./Form.svelte";
   import { gjScheme, currentSidebarHover, currentMapHover } from "../stores.js";
 
@@ -20,28 +20,31 @@
     return `Untitled ${noun}`;
   }
 
-  function onmouseover(id) {
-    return () => {
-      currentSidebarHover.set(id);
-    };
-  }
-  let onmouseout = () => {
+  // TODO Not sure why we can't inline this one below
+  function reset() {
     currentSidebarHover.set(null);
-  };
+  }
 </script>
 
-{#each $gjScheme.features as feature, i}
-  <Accordian
-    title="{i + 1}) {interventionName(feature)}"
-    onmouseover={onmouseover(feature.id)}
-    {onmouseout}
-    show_active={feature.id == $currentMapHover}
-  >
-    <Form
-      id={feature.id}
-      bind:name={feature.properties.name}
-      bind:intervention_type={feature.properties.intervention_type}
-      bind:description={feature.properties.description}
-    />
-  </Accordian>
-{/each}
+<Accordion>
+  {#each $gjScheme.features as feature, i}
+    <AccordionItem
+      on:mouseenter={currentSidebarHover.set(feature.id)}
+      on:mouseleave={reset}
+    >
+      <svelte:fragment slot="title">
+        {#if feature.id == $currentMapHover}
+          <strong>{i + 1}) {interventionName(feature)}</strong>
+        {:else}
+          {i + 1}) {interventionName(feature)}
+        {/if}
+      </svelte:fragment>
+      <Form
+        id={feature.id}
+        bind:name={feature.properties.name}
+        bind:intervention_type={feature.properties.intervention_type}
+        bind:description={feature.properties.description}
+      />
+    </AccordionItem>
+  {/each}
+</Accordion>
