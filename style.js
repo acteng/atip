@@ -52,52 +52,6 @@ export function drawCircle(color, radius, opacity = 1.0) {
   };
 }
 
-export const mapStyle = [
-  // Around the study area
-  {
-    id: "boundary",
-    source: "boundary",
-    ...drawLine("black", 3, 0.5),
-  },
-  {
-    id: "hover-polygons",
-    source: "hover",
-    filter: isPolygon,
-    ...drawPolygon(hoverColor, 0.5),
-  },
-  {
-    id: "hover-lines",
-    source: "hover",
-    filter: isLine,
-    // TODO I'd like to cover up the base layers, but I can't figure out how to z-order on top of drawControls.
-    ...drawLine(hoverColor, 1.5 * lineWidth, 1.0),
-  },
-  {
-    id: "hover-points",
-    source: "hover",
-    filter: isPoint,
-    ...drawCircle(hoverColor, 1.5 * circleRadius, 0.5),
-  },
-  {
-    id: "editing-polygons",
-    source: "editing",
-    filter: isPolygon,
-    ...drawPolygon(editingColor, 0.5),
-  },
-  {
-    id: "editing-lines",
-    source: "editing",
-    filter: isLine,
-    ...drawLine(editingColor, 1.5 * lineWidth),
-  },
-  {
-    id: "editing-points",
-    source: "editing",
-    filter: isPoint,
-    ...drawCircle(editingColor, 1.5 * circleRadius),
-  },
-];
-
 export const drawControlsStyle = defaultStyle.concat([
   {
     id: "base-points",
