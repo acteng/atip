@@ -9,8 +9,8 @@
   import EntireScheme from "./components/EntireScheme.svelte";
   import HoverLayer from "./components/HoverLayer.svelte";
 
-  let hideAbout = true;
-  let hideInstructions = true;
+  let showAbout = false;
+  let showInstructions = false;
 
   const params = new URLSearchParams(window.location.search);
   let authorityName = params.get("authority");
@@ -18,12 +18,12 @@
   let snapperUrl = `https://play.abstreet.org/route-snappers/${authorityName}.bin`;
 
   function toggleAbout() {
-    hideAbout = !hideAbout;
-    hideInstructions = true;
+    showAbout = !showAbout;
+    showInstructions = false;
   }
   function toggleInstructions() {
-    hideAbout = true;
-    hideInstructions = !hideInstructions;
+    showInstructions = !showInstructions;
+    showAbout = false;
   }
 </script>
 
@@ -48,5 +48,5 @@
   </div>
 </Layout>
 
-<About bind:hidden={hideAbout} />
-<Instructions bind:hidden={hideInstructions} />
+<About bind:open={showAbout} />
+<Instructions bind:open={showInstructions} />

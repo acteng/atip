@@ -1,10 +1,10 @@
 <script>
-  import ModalPopup from "./ModalPopup.svelte";
+  import { Modal } from "carbon-components-svelte";
 
-  export let hidden;
+  export let open;
 </script>
 
-<ModalPopup title="About ATIP" bind:hidden>
+<Modal passiveModal modalHeading="About ATIP" bind:open>
   <p>
     ATIP v1 is an
     <a href="https://github.com/acteng/atip" target="_blank"
@@ -38,4 +38,4 @@
     <a href="https://georust.org/" target="_blank">GeoRust</a>, and other open
     source projects.
   </p>
-</ModalPopup>
+</Modal>
