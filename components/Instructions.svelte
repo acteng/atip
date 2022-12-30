@@ -1,10 +1,10 @@
 <script>
-  import ModalPopup from "./ModalPopup.svelte";
+  import { Modal } from "carbon-components-svelte";
 
-  export let hidden;
+  export let open;
 </script>
 
-<ModalPopup title="Instructions" bind:hidden>
+<Modal passiveModal modalHeading="Instructions" bind:open>
   <p>For each intervention:</p>
   <ol>
     <li>
@@ -56,4 +56,4 @@
     one or more new links (for example containing new bridges or paths between cul-de-sacs),
     you may want to use the Line tool instead.
   </p>
-</ModalPopup>
+</Modal>

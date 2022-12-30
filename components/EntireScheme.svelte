@@ -1,5 +1,6 @@
 <script>
   import { gjScheme, emptyGeojson } from "../stores.js";
+  import "carbon-components-svelte/css/white.css";
 
   export let authorityName;
 
