@@ -2,6 +2,7 @@
   export let title;
   export let onmouseover = () => {};
   export let onmouseout = () => {};
+  export let show_active = false;
   let hidden = true;
 
   let button;
@@ -32,7 +33,7 @@
 
 <button
   type="button"
-  class="accordian"
+  class="accordian {show_active ? 'active-accordian' : ''}"
   bind:this={button}
   on:click={toggle}
   on:mouseover={onmouseover}
