@@ -1,6 +1,13 @@
 <script>
   import MapboxDraw from "@mapbox/mapbox-gl-draw";
-  import { drawControlsStyle } from "../style.js";
+  import {
+    isPoint,
+    drawCircle,
+    isLine,
+    drawLine,
+    isPolygon,
+    drawPolygon,
+  } from "../style.js";
   import { onMount, getContext } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
@@ -14,6 +21,38 @@
     clearCurrentlyEditing,
     currentlyEditing,
   } from "../stores.js";
+
+  const color = "black";
+  const circleRadius = 7;
+  const lineWidth = 10;
+  const styles = [
+    {
+      id: "base-points",
+      filter: ["all", isPoint, ["==", "meta", "feature"]],
+      ...drawCircle(color, circleRadius),
+    },
+    {
+      id: "draggable-points",
+      filter: ["all", isPoint, ["!=", "meta", "feature"]],
+      // TODO The 1.5 is bulky and ugly, but I can't figure out how to get z-ordering working
+      ...drawCircle("blue", 1.5 * circleRadius),
+    },
+    {
+      id: "base-line",
+      filter: isLine,
+      ...drawLine(color, lineWidth),
+    },
+    {
+      id: "base-polygon-fill",
+      filter: isPolygon,
+      ...drawPolygon(color, 0.1),
+    },
+    {
+      id: "base-polygon-outline",
+      filter: isPolygon,
+      ...drawLine(color, lineWidth / 2.0),
+    },
+  ];
 
   export let url;
 
@@ -31,7 +70,7 @@
         point: true,
         polygon: true,
       },
-      styles: drawControlsStyle,
+      styles: styles,
     });
     map.addControl(drawControls);
 
