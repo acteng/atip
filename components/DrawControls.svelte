@@ -1,6 +1,5 @@
 <script>
   import MapboxDraw from "@mapbox/mapbox-gl-draw";
-  import { derived } from "svelte/store";
   import { drawControlsStyle } from "../style.js";
   import { onMount, getContext } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
@@ -16,6 +15,7 @@
     currentMapHover,
     setCurrentlyEditing,
     clearCurrentlyEditing,
+    currentlyEditing,
   } from "../stores.js";
 
   export let url;
@@ -24,16 +24,6 @@
   let snapProgress;
   let drawControls;
   let routeSnapper;
-
-  // TODO Refactor?
-  const currentlyEditing = derived(gjScheme, ($gj) => {
-    let f = $gj.features.find((f) => f.properties.editing);
-    if (f) {
-      return f.id;
-    } else {
-      return null;
-    }
-  });
 
   onMount(async () => {
     const map = getMap();
