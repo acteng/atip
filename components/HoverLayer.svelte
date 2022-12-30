@@ -1,5 +1,6 @@
 <script>
   import { onMount, getContext } from "svelte";
+  import { derived } from "svelte/store";
   import {
     drawLine,
     isPolygon,
@@ -12,6 +13,11 @@
   import { gjScheme, currentSidebarHover } from "../stores.js";
 
   const { getMap } = getContext("map");
+
+  // TODO Does this need to be a store?
+  const dontHover = derived(gjScheme, ($gj) =>
+    $gj.features.some((f) => f.properties.editing)
+  );
 
   let source = "hover";
   let hoverColor = "yellow";
@@ -50,8 +56,15 @@
       ...drawCircle(hoverColor, 1.5 * circleRadius, 0.5),
     });
 
+    // Don't show hover whenever we're editing something
+    dontHover.subscribe((x) => {
+      if (x) {
+        currentSidebarHover.set(null);
+      }
+    });
+
     currentSidebarHover.subscribe((id) => {
-      if (id) {
+      if (id && !$dontHover) {
         map
           .getSource(source)
           .setData($gjScheme.features.find((f) => f.id == id));

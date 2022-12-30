@@ -1,5 +1,5 @@
 <script>
-  import { gjScheme } from "../stores.js";
+  import { gjScheme, clearCurrentlyEditing } from "../stores.js";
 
   export let id;
   export let name;
@@ -52,7 +52,9 @@
 
 <div>
   <button type="button" on:click={remove}>Delete</button>
-  <button type="button" style="float: right;">Save</button>
+  <button type="button" on:click={clearCurrentlyEditing} style="float: right;"
+    >Save</button
+  >
 </div>
 
 <br />

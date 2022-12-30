@@ -8,6 +8,7 @@
   import InterventionList from "./components/InterventionList.svelte";
   import EntireScheme from "./components/EntireScheme.svelte";
   import HoverLayer from "./components/HoverLayer.svelte";
+  import EditingLayer from "./components/EditingLayer.svelte";
 
   let showAbout = false;
   let showInstructions = false;
@@ -44,6 +45,7 @@
       <BoundaryLayer {authorityName} />
       <DrawControls url={snapperUrl} />
       <HoverLayer />
+      <EditingLayer />
     </Map>
   </div>
 </Layout>
