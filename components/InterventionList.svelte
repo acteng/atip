@@ -24,12 +24,22 @@
   function reset() {
     currentSidebarHover.set(null);
   }
+
+  function closeOtherForms(id) {
+    for (let f of $gjScheme.features) {
+      if (f.properties.editing && f.id != id) {
+        delete f.properties.editing;
+        return;
+      }
+    }
+  }
 </script>
 
 <Accordion>
   {#each $gjScheme.features as feature, i}
     <AccordionItem
       bind:open={feature.properties.editing}
+      on:click={closeOtherForms(feature.id)}
       on:mouseenter={currentSidebarHover.set(feature.id)}
       on:mouseleave={reset}
     >
