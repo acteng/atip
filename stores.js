@@ -1,7 +1,8 @@
 import { writable } from "svelte/store";
 
 export const gjScheme = writable(emptyGeojson());
-export const currentHover = writable(null);
+export const currentSidebarHover = writable(null);
+export const currentMapHover = writable(null);
 
 // TODO Should we store a map from ID to feature?
 // TODO DrawControls will partly own state. Do we have to listen for every geometry change?

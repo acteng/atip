@@ -9,7 +9,7 @@
     drawPolygon,
   } from "../style.js";
   import { emptyGeojson } from "../stores.js";
-  import { gjScheme, currentHover } from "../stores.js";
+  import { gjScheme, currentSidebarHover } from "../stores.js";
 
   const { getMap } = getContext("map");
 
@@ -50,7 +50,7 @@
       ...drawCircle(hoverColor, 1.5 * circleRadius, 0.5),
     });
 
-    currentHover.subscribe((id) => {
+    currentSidebarHover.subscribe((id) => {
       if (id) {
         map
           .getSource(source)

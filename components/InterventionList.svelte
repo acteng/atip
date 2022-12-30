@@ -1,7 +1,7 @@
 <script>
   import Accordian from "./Accordian.svelte";
   import Form from "./Form.svelte";
-  import { gjScheme, currentHover } from "../stores.js";
+  import { gjScheme, currentSidebarHover, currentMapHover } from "../stores.js";
 
   function interventionName(feature) {
     if (feature.properties.name) {
@@ -22,11 +22,11 @@
 
   function onmouseover(id) {
     return () => {
-      currentHover.set(id);
+      currentSidebarHover.set(id);
     };
   }
   let onmouseout = () => {
-    currentHover.set(null);
+    currentSidebarHover.set(null);
   };
 </script>
 
@@ -35,6 +35,7 @@
     title="{i + 1}) {interventionName(feature)}"
     onmouseover={onmouseover(feature.id)}
     {onmouseout}
+    show_active={feature.id == $currentMapHover}
   >
     <Form
       id={feature.id}
