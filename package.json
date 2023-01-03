@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "fmt": "prettier --write *.html *.js *.svelte components/*",
-    "lint": "npx eslint *.svelte *.js components/"
+    "lint": "npx eslint . --ignore-pattern=vite.config.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
@@ -21,7 +21,6 @@
     "@mapbox/geojson-extent": "^1.0.1",
     "@mapbox/mapbox-gl-draw": "^1.3.0",
     "carbon-components-svelte": "^0.70.13",
-    "carbon-icons-svelte": "^11.4.0",
     "maplibre-gl": "^2.4.0",
     "route-snapper": "^0.1.0",
     "svelte": "^3.54.0"

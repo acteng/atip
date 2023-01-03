@@ -59,7 +59,6 @@
   let snapTool;
   let snapProgress;
   let drawControls;
-  let routeSnapper;
 
   onMount(async () => {
     const map = getMap();
@@ -74,7 +73,7 @@
     });
     map.addControl(drawControls);
 
-    routeSnapper = await setupRouteSnapper(map);
+    await setupRouteSnapper(map);
 
     // When we draw a new feature, add it to the store
     map.on("draw.create", (e) => {
@@ -154,7 +153,7 @@
     try {
       // TODO Change fetchWithProgress API to take an element, so we don't need IDs.
       const graphBytes = await fetchWithProgress(url, snapProgress.id);
-      let routeSnapper = new RouteSnapper(map, graphBytes, snapTool);
+      new RouteSnapper(map, graphBytes, snapTool);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
       snapTool.innerHTML = "Failed to load";
