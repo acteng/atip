@@ -59,6 +59,7 @@
   let snapTool;
   let snapProgress;
   let drawControls;
+  let routeSnapper;
 
   onMount(async () => {
     const map = getMap();
@@ -69,6 +70,12 @@
         point: true,
         polygon: true,
       },
+      modes: Object.assign(
+        {
+          static: StaticMode,
+        },
+        MapboxDraw.modes
+      ),
       styles: styles,
     });
     map.addControl(drawControls);
@@ -106,7 +113,10 @@
     });
 
     map.on("draw.selectionchange", (e) => {
-      if (e.features.length == 1) {
+      if (
+        e.features.length == 1 &&
+        (!routeSnapper || !routeSnapper.isActive())
+      ) {
         setCurrentlyEditing(e.features[0].id);
       } else if (e.features.length == 0) {
         clearCurrentlyEditing();
@@ -122,12 +132,14 @@
     // Highlight something in the sidebar when we hover on a feature in the map
     map.on("mousemove", (e) => {
       var newHoverEntry = null;
-      // TODO This whines about a layer missing, and I can't suppress with try/catch
-      const ids = drawControls.getFeatureIdsAt(e.point);
-      if (ids.length > 0) {
-        newHoverEntry = ids[0];
+      if (routeSnapper && !routeSnapper.isActive()) {
+        // TODO This whines about a layer missing, and I can't suppress with try/catch
+        const ids = drawControls.getFeatureIdsAt(e.point);
+        if (ids.length > 0) {
+          newHoverEntry = ids[0];
+        }
+        currentMapHover.set(newHoverEntry);
       }
-      currentMapHover.set(newHoverEntry);
     });
     map.on("mouseout", () => {
       currentMapHover.set(null);
@@ -151,13 +163,20 @@
 
     console.log(`Grabbing ${url}`);
     try {
-      // TODO Change fetchWithProgress API to take an element, so we don't need IDs.
-      const graphBytes = await fetchWithProgress(url, snapProgress.id);
-      new RouteSnapper(map, graphBytes, snapTool);
+      const graphBytes = await fetchWithProgress(url, snapProgress);
+      routeSnapper = new RouteSnapper(map, graphBytes, snapTool);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
       snapTool.innerHTML = "Failed to load";
     }
+
+    snapTool.addEventListener("activate", () => {
+      // Disable interactions with other drawn objects
+      drawControls.changeMode("static");
+    });
+    snapTool.addEventListener("no-new-route", () => {
+      drawControls.changeMode("simple_select");
+    });
 
     snapTool.addEventListener("new-route", (e) => {
       const feature = e.detail;
@@ -178,11 +197,22 @@
       });
     });
   }
+
+  // Depending on https://github.com/mapbox/mapbox-gl-draw-static-mode/ isn't
+  // useful for something so small
+  let StaticMode = {};
+  StaticMode.onSetup = function () {
+    this.setActionableState();
+    return {};
+  };
+  StaticMode.toDisplayFeatures = function (state, geojson, display) {
+    display(geojson);
+  };
 </script>
 
 <div class="overlay-topright" bind:this={snapTool}>
   <!-- TODO the text should be fixed, and the progress bar float -->
-  <div bind:this={snapProgress} id="TODO">Route tool loading...</div>
+  <div bind:this={snapProgress}>Route tool loading...</div>
 </div>
 
 <style>
