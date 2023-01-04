@@ -13,8 +13,8 @@
       console.log(`Failed to load from local storage: ${err}`);
     }
   }
-  gjScheme.subscribe((gj) =>
-    window.localStorage.setItem(authorityName, JSON.stringify(gj))
+  gjScheme.subscribe(() =>
+    window.localStorage.setItem(authorityName, JSON.stringify(geojsonToSave()))
   );
 
   gjScheme.update((gj) => {
@@ -32,8 +32,17 @@
     }
   }
 
+  // Remove the editing property hack
+  function geojsonToSave() {
+    const copy = JSON.parse(JSON.stringify($gjScheme));
+    for (let feature of copy.features) {
+      delete feature.properties.editing;
+    }
+    return copy;
+  }
+
   function exportToGeojson() {
-    const geojson = $gjScheme;
+    let geojson = geojsonToSave();
     var filename = authorityName;
     // Include the scheme name if it's set
     if (geojson["scheme_name"]) {
