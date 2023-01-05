@@ -219,19 +219,34 @@
   };
 </script>
 
-<div class="overlay-topright" bind:this={snapTool}>
+<div class="header">Add intervention</div>
+<div class="route-container" bind:this={snapTool}>
   <!-- TODO the text should be fixed, and the progress bar float -->
   <div bind:this={snapProgress}>Route tool loading...</div>
 </div>
 
 <style>
-  .overlay-topright {
+  .header {
     position: absolute;
-    top: 130px;
+    top: 10px;
     right: 10px;
     padding: 10px;
-
     background-color: white;
+    font-size: 1.5em;
+  }
+
+  :global(.mapboxgl-ctrl-top-right) {
+    margin-top: 50px;
+    margin-right: 20px;
+  }
+
+  .route-container {
+    position: absolute;
+    top: 200px;
+    right: 10px;
+    padding: 10px;
+    background-color: white;
+    font-size: 1.2em;
   }
 
   :global(.mapboxgl-ctrl-group > button) {
@@ -239,21 +254,7 @@
     height: 60px;
   }
 
-  :global(
-      .mapbox-gl-draw_polygon,
-      .mapbox-gl-draw_point,
-      .mapbox-gl-draw_line
-    ) {
+  :global(.mapbox-gl-draw_polygon, .mapbox-gl-draw_point) {
     background-size: 50px;
-  }
-
-  /* TODO Can't get this to match the other buttons */
-  :global(.draw-route-icon) {
-    /* From https://fonts.google.com/icons?selected=Material+Icons+Sharp and using https://yoksel.github.io/url-encoder/ */
-    background-image: url('data:image/svg+xml;utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="%23000000"%3E%3Cg%3E%3Crect fill="none" height="24" width="24"/%3E%3C/g%3E%3Cg%3E%3Cg%3E%3Cpath d="M19,15.18V7c0-2.21-1.79-4-4-4s-4,1.79-4,4v10c0,1.1-0.9,2-2,2s-2-0.9-2-2V8.82C8.16,8.4,9,7.3,9,6c0-1.66-1.34-3-3-3 S3,4.34,3,6c0,1.3,0.84,2.4,2,2.82V17c0,2.21,1.79,4,4,4s4-1.79,4-4V7c0-1.1,0.9-2,2-2s2,0.9,2,2v8.18c-1.16,0.41-2,1.51-2,2.82 c0,1.66,1.34,3,3,3s3-1.34,3-3C21,16.7,20.16,15.6,19,15.18z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
-    width: 50px;
-    height: 50px;
-    border: none;
-    background-color: white;
   }
 </style>
