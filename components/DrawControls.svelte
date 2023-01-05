@@ -80,6 +80,8 @@
     });
     map.addControl(drawControls);
 
+    addControls();
+
     await setupRouteSnapper(map);
 
     // When we draw a new feature, add it to the store
@@ -207,6 +209,22 @@
     });
   }
 
+  function addControls() {
+    // TODO This is a total hack, but not sure how else to insert new stuff into the mapbox controls.
+    let container = document.getElementsByClassName("mapboxgl-ctrl-group mapboxgl-ctrl")[0];
+
+    let header = document.createElement("h4");
+    header.className = "header";
+    header.textContent = "Add intervention";
+    container.prepend(header);
+
+    snapTool = document.createElement("div");
+    snapProgress = document.createElement("div");
+    snapProgress.textContent = "Route tool loading...";
+    snapTool.append(snapProgress);
+    container.append(snapTool);
+  }
+
   // Depending on https://github.com/mapbox/mapbox-gl-draw-static-mode/ isn't
   // useful for something so small
   let StaticMode = {};
@@ -219,30 +237,29 @@
   };
 </script>
 
-<div class="overlay-topright" bind:this={snapTool}>
-  <!-- TODO the text should be fixed, and the progress bar float -->
-  <div bind:this={snapProgress}>Route tool loading...</div>
-</div>
-
 <style>
-  .overlay-topright {
-    position: absolute;
-    top: 130px;
-    right: 10px;
+  :global(.header) {
     padding: 10px;
-
-    background-color: white;
   }
 
-  :global(.mapboxgl-ctrl-group > button) {
+  :global(.mapboxgl-ctrl-group button) {
     width: 60px;
     height: 60px;
+    margin: auto;
+  }
+
+  /* A very convoluted way to select just the route tool button */
+  :global(.mapboxgl-ctrl-top-right button:not(.mapbox-gl-draw_ctrl-draw-btn)) {
+    border-style: 2px black solid;
+  }
+  :global(.mapboxgl-ctrl-top-right ul) {
+    padding: 4px;
+    font-size: 1.4em;
   }
 
   :global(
       .mapbox-gl-draw_polygon,
-      .mapbox-gl-draw_point,
-      .mapbox-gl-draw_line
+      .mapbox-gl-draw_point
     ) {
     background-size: 50px;
   }
