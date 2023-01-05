@@ -20,7 +20,7 @@
   // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
   // CDN invalidations when we update these files. But when serving locally for
   // development, HTTPS is also fine to use.
-  let snapperUrl = `https://play.abstreet.org/route-snappers/${authorityName}.bin`;
+  let snapperUrl = `https://atip.uk/route-snappers/${authorityName}.bin`;
 
   function toggleAbout() {
     showAbout = !showAbout;
