@@ -161,10 +161,7 @@
   onDestroy(() => {
     const map = getMap();
     map.removeControl(drawControls);
-    // TODO RouteSnapper should have a teardown() method or something
-    map.removeLayer("route-points");
-    map.removeLayer("route-lines");
-    map.removeSource("route-snapper");
+    routeSnapper.tearDown();
   });
 
   async function setupRouteSnapper(map) {
