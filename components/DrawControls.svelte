@@ -8,7 +8,7 @@
     isPolygon,
     drawPolygon,
   } from "../style.js";
-  import { onMount, getContext } from "svelte";
+  import { onMount, onDestroy, getContext } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
   import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
@@ -156,6 +156,15 @@
         }
       }
     });
+  });
+
+  onDestroy(() => {
+    const map = getMap();
+    map.removeControl(drawControls);
+    // TODO RouteSnapper should have a teardown() method or something
+    map.removeLayer("route-points");
+    map.removeLayer("route-lines");
+    map.removeSource("route-snapper");
   });
 
   async function setupRouteSnapper(map) {
