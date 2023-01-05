@@ -12,6 +12,5 @@ export default defineConfig({
       },
     },
   },
-  base: "/atip/",
   plugins: [svelte(), wasmPack([], ["route-snapper"])],
 });

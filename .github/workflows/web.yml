@@ -18,7 +18,7 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build --if-present
+      - run: npm run build --if-present -- --base=/atip/
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
