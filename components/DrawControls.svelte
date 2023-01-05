@@ -80,6 +80,8 @@
     });
     map.addControl(drawControls);
 
+    addControls();
+
     await setupRouteSnapper(map);
 
     // When we draw a new feature, add it to the store
@@ -207,6 +209,18 @@
     });
   }
 
+  function addControls() {
+    // TODO This is a total hack, but not sure how else to insert new stuff into the mapbox controls.
+    let container = document.getElementsByClassName(
+      "mapboxgl-ctrl-group mapboxgl-ctrl"
+    )[0];
+
+    let header = document.createElement("h4");
+    header.className = "header";
+    header.textContent = "Add intervention";
+    container.prepend(header);
+  }
+
   // Depending on https://github.com/mapbox/mapbox-gl-draw-static-mode/ isn't
   // useful for something so small
   let StaticMode = {};
@@ -225,13 +239,24 @@
 </div>
 
 <style>
+  :global(.header) {
+    padding: 10px;
+  }
+
   .overlay-topright {
     position: absolute;
-    top: 130px;
+    top: 180px;
     right: 10px;
     padding: 10px;
 
     background-color: white;
+  }
+  /* Fight with Carbon styles a bit */
+  :global(.overlay-topright ul) {
+    font-size: 1.2em;
+  }
+  :global(.overlay-topright button) {
+    font-size: 1.5em;
   }
 
   :global(.mapboxgl-ctrl-group > button) {
@@ -239,11 +264,7 @@
     height: 60px;
   }
 
-  :global(
-      .mapbox-gl-draw_polygon,
-      .mapbox-gl-draw_point,
-      .mapbox-gl-draw_line
-    ) {
+  :global(.mapbox-gl-draw_polygon, .mapbox-gl-draw_point) {
     background-size: 50px;
   }
 
