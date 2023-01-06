@@ -1,46 +1,64 @@
 <script>
-  import { Modal } from "carbon-components-svelte";
+  import { Modal, OrderedList, ListItem } from "carbon-components-svelte";
 
   export let open;
 </script>
 
 <Modal passiveModal modalHeading="Instructions" bind:open>
   <p>For each intervention:</p>
-  <ol>
-    <li>
+
+  <br />
+
+  <OrderedList>
+    <ListItem>
       Click one of the draw icons to the top right of the map (the icons allow
       you to draw points, lines, polygons or routes)
-    </li>
-    <li>
+    </ListItem>
+    <ListItem>
       Draw the intervention on the map, clicking the original point or 'Finish
       snapping' for the Polygon and Route tools respectively
-    </li>
-    <li>
+    </ListItem>
+    <ListItem>
       Fill in the details that appear (Intervention type, name, description)
-    </li>
-    <li>
+    </ListItem>
+    <ListItem>
       Click the "Save" button or "Delete" button to save or remove the
       intervention
-    </li>
-  </ol>
+    </ListItem>
+  </OrderedList>
+
+  <br />
+
   <p>
     Repeat the steps above for each substantial infrastructure intervention in
     the scheme.
   </p>
+
+  <br />
+
   <p>
     To make further edits to attribute data, or to delete an intervention, click
     on its name in the left hand panel or its geometry in the map.
   </p>
+
+  <br />
+
   <p>
     Click the "Export to GeoJSON" button to download the dataset representing
     the scheme, which can be made up of one or more intervention, as a GeoJSON
     file. After saving the file, you can delete the interventions, change the
     scheme name, and start a new set of interventions representing a new scheme.
   </p>
+
+  <br />
+
   <p>
     To load a GeoJSON file that you have already saved from the tool, click the
     "Load from GeoJSON" button and select the file.
   </p>
+
+  <br />
+
   <p>
     Note: the <strong>Route tool</strong> works by calculating routes between
     start and end points using the existing transport network according to
