@@ -1,4 +1,6 @@
 <script>
+  import "carbon-components-svelte/css/white.css";
+
   import About from "./components/About.svelte";
   import Instructions from "./components/Instructions.svelte";
   import Map from "./components/Map.svelte";
