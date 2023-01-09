@@ -1,107 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>ATIP v1</title>
+    <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 50%;
-      }
-
-      .left {
-        margin: 10px;
-      }
-    </style>
+    <title>Active Travel Intervention Platform v1</title>
   </head>
   <body>
-    <div class="left">
-      <h1>Welcome to ATIP v1</h1>
-      <p>Select Transport Authority:</p>
-      <input list="authorities-list" id="authority" /><button
-        type="button"
-        id="start"
-        style="margin-left: 6px"
-      >
-        Start
-      </button>
-      <datalist id="authorities-list"></datalist>
-    </div>
-    <div id="map"></div>
-
+    <div id="app"></div>
     <script type="module">
-      import maplibregl from "maplibre-gl";
-      import "maplibre-gl/dist/maplibre-gl.css";
-      import geojsonExtent from "@mapbox/geojson-extent";
+      import ChooseArea from "./ChooseArea.svelte";
 
-      import authoritiesUrl from "./authorities.geojson?url";
-
-      async function loadAuthorities() {
-        const list = document.getElementById("authorities-list");
-
-        const resp = await fetch(authoritiesUrl);
-        const body = await resp.text();
-        const json = JSON.parse(body);
-        for (const feature of json.features) {
-          var option = document.createElement("option");
-          option.value = feature.properties.name;
-          list.appendChild(option);
-        }
-
-        // Only show TAs, not LADs, in the map
-        json.features = json.features.filter(
-          (feat) => feat.properties.level == "TA"
-        );
-
-        var map = new maplibregl.Map({
-          container: "map",
-          style:
-            "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
-        });
-        map.on("load", async function () {
-          map.fitBounds(geojsonExtent(json), {
-            padding: 20,
-            animate: false,
-          });
-
-          map.addSource("boundary", {
-            type: "geojson",
-            data: json,
-          });
-          map.addLayer({
-            id: "boundary",
-            type: "fill",
-            source: "boundary",
-            paint: {
-              "fill-color": "rgba(200, 100, 240, 0.4)",
-              "fill-outline-color": "rgba(200, 100, 240, 1)",
-            },
-          });
-
-          map.on("click", "boundary", function (e) {
-            window.location.href = `scheme.html?authority=${e.features[0].properties.name}`;
-          });
-        });
-      }
-
-      loadAuthorities();
-
-      document.getElementById("start").onclick = () => {
-        const authority = document.getElementById("authority").value;
-        if (authority) {
-          window.location.href = `scheme.html?authority=${authority}`;
-        }
-      };
+      new ChooseArea({
+        target: document.getElementById("app"),
+      });
     </script>
   </body>
 </html>
