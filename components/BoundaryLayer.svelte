@@ -1,7 +1,8 @@
 <script>
   import authoritiesUrl from "../authorities.geojson?url";
   import geojsonExtent from "@mapbox/geojson-extent";
-  import { drawLine } from "../style.js";
+  import mask from "@turf/mask";
+  import { drawPolygon } from "../style.js";
   import { onMount, getContext } from "svelte";
 
   export let authorityName;
@@ -22,12 +23,12 @@
 
     map.addSource("boundary", {
       type: "geojson",
-      data: boundaryGeojson,
+      data: mask(boundaryGeojson),
     });
     map.addLayer({
       id: "boundary",
       source: "boundary",
-      ...drawLine("black", 3, 0.5),
+      ...drawPolygon("black", 0.5),
     });
   });
 
