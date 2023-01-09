@@ -9,7 +9,11 @@
   export let open;
 </script>
 
-<Modal passiveModal modalHeading="About ATIP" bind:open>
+<Modal
+  passiveModal
+  modalHeading="About the Active Travel Intervention Platform"
+  bind:open
+>
   <p>
     ATIP v1 is an
     <Link href="https://github.com/acteng/atip" target="_blank"

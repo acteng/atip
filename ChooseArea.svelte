@@ -2,8 +2,12 @@
   import maplibregl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
   import geojsonExtent from "@mapbox/geojson-extent";
+  import About from "./components/About.svelte";
+  import "carbon-components-svelte/css/white.css";
 
   import authoritiesUrl from "./authorities.geojson?url";
+
+  let showAbout = false;
 
   let inputList;
   let dataList;
@@ -93,12 +97,19 @@
 
 <div class="left">
   <h1>Welcome to ATIP v1</h1>
-  <p>Select Transport Authority:</p>
+  <button type="button" on:click={() => (showAbout = !showAbout)}>About</button>
+  <br />
+  <br />
+  <br />
+
+  <p>Select Transport Authority or Local Authority District:</p>
   <input list="authorities-list" bind:this={inputList} />
   <datalist id="authorities-list" bind:this={dataList} />
   <button type="button" on:click={start}>Start</button>
+  <p>Or pick a Transport Authority on the map</p>
 </div>
 <div id="map" />
+<About bind:open={showAbout} />
 
 <style>
   :global(body) {
