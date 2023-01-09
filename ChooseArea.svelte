@@ -9,46 +9,74 @@
   let dataList;
 
   async function loadAuthorities() {
+    let source = "boundary";
+    let layer = "boundary-layer";
+
     const resp = await fetch(authoritiesUrl);
     const body = await resp.text();
     const json = JSON.parse(body);
-    for (const feature of json.features) {
+    for (let feature of json.features) {
       let option = document.createElement("option");
       option.value = feature.properties.name;
       dataList.appendChild(option);
     }
 
     // Only show TAs, not LADs, in the map
-    json.features = json.features.filter(
-      (feat) => feat.properties.level == "TA"
-    );
+    json.features = json.features.filter((f) => f.properties.level == "TA");
 
     let map = new maplibregl.Map({
       container: "map",
       style:
         "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
     });
-    map.on("load", async function () {
+
+    let hoverId = null;
+    function unhover() {
+      if (hoverId !== null) {
+        map.setFeatureState({ source: source, id: hoverId }, { hover: false });
+      }
+    }
+
+    map.on("load", function () {
       map.fitBounds(geojsonExtent(json), {
         padding: 20,
         animate: false,
       });
 
-      map.addSource("boundary", {
+      map.addSource(source, {
         type: "geojson",
         data: json,
+        generateId: true,
       });
       map.addLayer({
-        id: "boundary",
+        id: layer,
+        source: source,
         type: "fill",
-        source: "boundary",
         paint: {
-          "fill-color": "rgba(200, 100, 240, 0.4)",
-          "fill-outline-color": "rgba(200, 100, 240, 1)",
+          "fill-color": "rgb(200, 100, 240)",
+          "fill-outline-color": "rgb(200, 100, 240)",
+          "fill-opacity": [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            0.8,
+            0.4,
+          ],
         },
       });
 
-      map.on("click", "boundary", function (e) {
+      map.on("mousemove", layer, (e) => {
+        if (e.features.length > 0) {
+          unhover();
+          hoverId = e.features[0].id;
+          map.setFeatureState({ source: source, id: hoverId }, { hover: true });
+        }
+      });
+      map.on("mouseleave", layer, () => {
+        unhover();
+        hoverId = null;
+      });
+
+      map.on("click", layer, function (e) {
         window.location.href = `scheme.html?authority=${e.features[0].properties.name}`;
       });
     });
