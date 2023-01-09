@@ -1,47 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>ATIP v1</title>
+    <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 50%;
-      }
-
-      .left {
-        margin: 10px;
-      }
-    </style>
-    <script type="module" crossorigin src="/atip/assets/main-63a36225.js"></script>
-    <link rel="modulepreload" crossorigin href="/atip/assets/authorities-0797988d.js">
-    <link rel="stylesheet" href="/atip/assets/authorities-fe227fe9.css">
+    <title>Active Travel Intervention Platform v1</title>
+    <script type="module" crossorigin src="/atip/assets/main-ceeb0235.js"></script>
+    <link rel="modulepreload" crossorigin href="/atip/assets/authorities-dc873587.js">
+    <link rel="stylesheet" href="/atip/assets/authorities-64e912ef.css">
+    <link rel="stylesheet" href="/atip/assets/index-c8335b83.css">
   </head>
   <body>
-    <div class="left">
-      <h1>Welcome to ATIP v1</h1>
-      <p>Select Transport Authority:</p>
-      <input list="authorities-list" id="authority" /><button
-        type="button"
-        id="start"
-        style="margin-left: 6px"
-      >
-        Start
-      </button>
-      <datalist id="authorities-list"></datalist>
-    </div>
-    <div id="map"></div>
-
+    <div id="app"></div>
     
   </body>
 </html>
