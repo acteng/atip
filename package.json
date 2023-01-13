@@ -7,13 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "fmt": "prettier --write *.html *.js *.svelte components/*",
+    "fmt": "npx prettier --write *.html *.js *.svelte components/*",
     "lint": "npx eslint . --ignore-pattern=vite.config.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
     "eslint": "^8.31.0",
     "eslint-plugin-svelte": "^2.14.1",
+    "prettier": "2.8.2",
+    "prettier-plugin-svelte": "^2.9.0",
     "vite": "^4.0.0",
     "vite-plugin-wasm-pack": "0.1.11"
   },
