@@ -18,6 +18,8 @@
 
   gjScheme.update((gj) => {
     gj.authority = authorityName;
+    // we could probably be more sophisticated here and set version more centrally
+    gj.origin = "atip-v1"
     return gj;
   });
 
