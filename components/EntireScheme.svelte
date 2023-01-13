@@ -73,9 +73,8 @@
       try {
         let result = JSON.parse(e.target.result);
 
-        // test if origin field is set
-        // if not then file is not from atip
-        if (result["origin"]) {
+        // check for origin or authority foreign member to confirm atip generated
+        if (result["origin"] || result.hasOwnProperty("authority")) {
           gjScheme.set(result);
         } else {
           console.log(
