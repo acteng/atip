@@ -77,15 +77,11 @@
         if (result["origin"] || result.hasOwnProperty("authority")) {
           gjScheme.set(result);
         } else {
-          console.log(
-            `Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`
-          );
           window.alert(
             `Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`
           );
         }
       } catch (err) {
-        console.log(`Couldn't load from a file: ${err}`);
         window.alert(`Couldn't load scheme from a file: ${err}`);
       }
     };
