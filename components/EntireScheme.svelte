@@ -19,7 +19,7 @@
   gjScheme.update((gj) => {
     gj.authority = authorityName;
     // we could probably be more sophisticated here and set version more centrally
-    gj.origin = "atip-v1"
+    gj.origin = "atip-v1";
     return gj;
   });
 
@@ -71,16 +71,19 @@
     // TODO Should we prompt before deleting the current scheme?
     reader.onload = (e) => {
       try {
-
         let result = JSON.parse(e.target.result);
 
         // test if origin field is set
         // if not then file is not from atip
-        if(result['origin']) {
+        if (result["origin"]) {
           gjScheme.set(result);
         } else {
-          console.log(`Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`);
-          window.alert(`Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`);
+          console.log(
+            `Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`
+          );
+          window.alert(
+            `Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`
+          );
         }
       } catch (err) {
         console.log(`Couldn't load from a file: ${err}`);
