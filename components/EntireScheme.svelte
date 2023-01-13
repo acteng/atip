@@ -71,7 +71,17 @@
     // TODO Should we prompt before deleting the current scheme?
     reader.onload = (e) => {
       try {
-        gjScheme.set(JSON.parse(e.target.result));
+
+        let result = JSON.parse(e.target.result);
+
+        // test if origin field is set
+        // if not then file is not from atip
+        if(result['origin']) {
+          gjScheme.set(result);
+        } else {
+          console.log(`Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`);
+          window.alert(`Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`);
+        }
       } catch (err) {
         console.log(`Couldn't load from a file: ${err}`);
         window.alert(`Couldn't load scheme from a file: ${err}`);
