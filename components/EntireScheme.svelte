@@ -65,6 +65,20 @@
     document.body.removeChild(element);
   }
 
+  function checkOrigin(geojson) {
+    if (geojson.hasOwnProperty("origin")) {
+      let origin = geojson.origin;
+      return origin.startsWith("atip-");
+    } else if (
+      geojson.hasOwnProperty("authority") &&
+      !geojson.hasOwnProperty("origin")
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function loadFile(e) {
     const reader = new FileReader();
     // TODO No await? :(
@@ -74,10 +88,7 @@
         let result = JSON.parse(e.target.result);
 
         // check for origin or authority foreign member to confirm atip generated
-        if (
-          result.hasOwnProperty("origin") ||
-          result.hasOwnProperty("authority")
-        ) {
+        if (checkOrigin(result)) {
           gjScheme.set(result);
         } else {
           window.alert(
