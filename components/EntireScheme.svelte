@@ -74,7 +74,10 @@
         let result = JSON.parse(e.target.result);
 
         // check for origin or authority foreign member to confirm atip generated
-        if (result["origin"] || result.hasOwnProperty("authority")) {
+        if (
+          result.hasOwnProperty("origin") ||
+          result.hasOwnProperty("authority")
+        ) {
           gjScheme.set(result);
         } else {
           window.alert(
