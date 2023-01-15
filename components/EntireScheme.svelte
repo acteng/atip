@@ -72,7 +72,6 @@
     } else {
       return geojson.hasOwnProperty("authority");
     }
-    }
   }
 
   function loadFile(e) {
