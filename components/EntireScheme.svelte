@@ -18,6 +18,8 @@
 
   gjScheme.update((gj) => {
     gj.authority = authorityName;
+    // we could probably be more sophisticated here and set version more centrally
+    gj.origin = "atip-v1";
     return gj;
   });
 
@@ -63,15 +65,32 @@
     document.body.removeChild(element);
   }
 
+  function checkOrigin(geojson) {
+    if (geojson.hasOwnProperty("origin")) {
+      let origin = geojson.origin;
+      return origin.startsWith("atip-");
+    } else {
+      return geojson.hasOwnProperty("authority");
+    }
+  }
+
   function loadFile(e) {
     const reader = new FileReader();
     // TODO No await? :(
     // TODO Should we prompt before deleting the current scheme?
     reader.onload = (e) => {
       try {
-        gjScheme.set(JSON.parse(e.target.result));
+        let result = JSON.parse(e.target.result);
+
+        // check for origin or authority foreign member to confirm atip generated
+        if (checkOrigin(result)) {
+          gjScheme.set(result);
+        } else {
+          window.alert(
+            `Non-ATIP based geojson uploaded. Please try again with an ATIP generated file.`
+          );
+        }
       } catch (err) {
-        console.log(`Couldn't load from a file: ${err}`);
         window.alert(`Couldn't load scheme from a file: ${err}`);
       }
     };
