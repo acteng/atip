@@ -69,13 +69,9 @@
     if (geojson.hasOwnProperty("origin")) {
       let origin = geojson.origin;
       return origin.startsWith("atip-");
-    } else if (
-      geojson.hasOwnProperty("authority") &&
-      !geojson.hasOwnProperty("origin")
-    ) {
-      return true;
     } else {
-      return false;
+      return geojson.hasOwnProperty("authority");
+    }
     }
   }
 
