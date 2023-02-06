@@ -7,6 +7,9 @@ aws s3 sync dist s3://atip.uk/
 # Could do this for cleanup. Be careful, do manually
 # aws s3 sync --dry --delete dist/assets s3://atip.uk/assets/
 
+# Remove the --dry part manaually
+aws s3 sync --dry s3://atip.uk/route-snappers-dev s3://atip.uk/route-snapper
+
 # If ever basePath or something else gets cached in a weird way, just delete
 # node_modules/ entirely. vite cache has some problems.
 

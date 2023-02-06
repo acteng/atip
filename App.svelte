@@ -15,6 +15,10 @@
   let showAbout = false;
   let showInstructions = false;
 
+  // TODO This is a hacky way of detecting environment. 'npm run dev' and
+  // Github should be false, and only Cloudfront should be true.
+  let prod = window.location.hostname.includes("atip.uk");
+
   const params = new URLSearchParams(window.location.search);
   let authorityName = params.get("authority");
   // TODO Slight hack. These files are stored in an S3 bucket, which only has
@@ -22,7 +26,10 @@
   // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
   // CDN invalidations when we update these files. But when serving locally for
   // development, HTTPS is also fine to use.
-  let snapperUrl = `https://atip.uk/route-snappers/${authorityName}.bin`;
+  var snapperUrl = `https://atip.uk/route-snappers/${authorityName}.bin`;
+  if (!prod) {
+    snapperUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
+  }
 
   function toggleAbout() {
     showAbout = !showAbout;
