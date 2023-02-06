@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@mapbox/geojson-extent": "^1.0.1",
-    "@mapbox/mapbox-gl-draw": "^1.3.0",
+    "@mapbox/mapbox-gl-draw": "^1.4.0",
     "@turf/mask": "^6.5.0",
     "carbon-components-svelte": "^0.70.13",
     "maplibre-gl": "^2.4.0",
