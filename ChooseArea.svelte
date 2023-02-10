@@ -11,6 +11,7 @@
 
   let inputList;
   let dataList;
+  let warning = false;
 
   async function loadAuthorities() {
     let source = "boundary";
@@ -89,12 +90,21 @@
   loadAuthorities();
 
   function start() {
-    let auth_names = Array.from(dataList.childNodes.values()).map(
-      (x) => x.value
-    );
-    console.log();
-    if (auth_names.includes(inputList.value)) {
+    if (inputIsValid()) {
       window.location.href = `scheme.html?authority=${inputList.value}`;
+    } else {
+      warning = true;
+    }
+  }
+
+  function inputIsValid() {
+    if (!dataList) {
+      return false;
+    } else {
+      let auth_names = Array.from(dataList.childNodes.values()).map(
+        (x) => x.value
+      );
+      return auth_names.includes(inputList.value);
     }
   }
 </script>
@@ -111,6 +121,11 @@
   <datalist id="authorities-list" bind:this={dataList} />
   <button type="button" on:click={start}>Start</button>
   <p>Or pick a Transport Authority on the map</p>
+  {#if warning}
+    <p style="color: red;">
+      Warning! Invalid input, please use an entry from the suggested list.
+    </p>
+  {/if}
 </div>
 <div id="map" />
 <About bind:open={showAbout} />
