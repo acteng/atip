@@ -89,9 +89,9 @@
   loadAuthorities();
 
   function start() {
-    let auth_names = Array.from(dataList.childNodes.values()).map(function (x) {
-      return x.value;
-    });
+    let auth_names = Array.from(dataList.childNodes.values()).map(
+      (x) => x.value
+    );
     console.log();
     if (auth_names.includes(inputList.value)) {
       window.location.href = `scheme.html?authority=${inputList.value}`;
