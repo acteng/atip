@@ -9,8 +9,11 @@
 
   let showAbout = false;
 
-  let inputList;
+  let inputValue;
   let dataList;
+  let authoritySet = new Set();
+
+  $: validEntry = authoritySet.has(inputValue);
 
   async function loadAuthorities() {
     let source = "boundary";
@@ -23,6 +26,7 @@
       let option = document.createElement("option");
       option.value = feature.properties.name;
       dataList.appendChild(option);
+      authoritySet.add(feature.properties.name);
     }
 
     // Only show TAs, not LADs, in the map
@@ -89,9 +93,7 @@
   loadAuthorities();
 
   function start() {
-    if (inputList.value) {
-      window.location.href = `scheme.html?authority=${inputList.value}`;
-    }
+    window.location.href = `scheme.html?authority=${inputValue}`;
   }
 </script>
 
@@ -103,9 +105,16 @@
   <br />
 
   <p>Select Transport Authority or Local Authority District:</p>
-  <input list="authorities-list" bind:this={inputList} />
-  <datalist id="authorities-list" bind:this={dataList} />
-  <button type="button" on:click={start}>Start</button>
+  <div>
+    <input list="authorities-list" bind:value={inputValue} />
+    <datalist id="authorities-list" bind:this={dataList} />
+    <button type="button" on:click={start} disabled={!validEntry}>Start</button>
+    {#if !validEntry}
+      <span style="color: red;">
+        Warning! Invalid input, please use an entry from the suggested list.
+      </span>
+    {/if}
+  </div>
   <p>Or pick a Transport Authority on the map</p>
 </div>
 <div id="map" />
