@@ -29,7 +29,12 @@
         "Do you want to clear the current scheme? (You should save it first!)"
       )
     ) {
-      gjScheme.set(emptyGeojson());
+      gjScheme.update((gj) => {
+        // Leave origin, authority, and other foreign members alone
+        delete gj.scheme_name;
+        gj.features = [];
+        return gj;
+      });
     }
   }
 
