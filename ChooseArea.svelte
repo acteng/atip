@@ -109,11 +109,6 @@
     <input list="authorities-list" bind:value={inputValue} />
     <datalist id="authorities-list" bind:this={dataList} />
     <button type="button" on:click={start} disabled={!validEntry}>Start</button>
-    {#if !validEntry}
-      <span style="color: red;">
-        Warning! Invalid input, please use an entry from the suggested list.
-      </span>
-    {/if}
   </div>
   <p>Or pick a Transport Authority on the map</p>
 </div>
