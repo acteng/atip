@@ -16,13 +16,6 @@
     window.localStorage.setItem(authorityName, JSON.stringify(geojsonToSave()))
   );
 
-  gjScheme.update((gj) => {
-    gj.authority = authorityName;
-    // we could probably be more sophisticated here and set version more centrally
-    gj.origin = "atip-v1";
-    return gj;
-  });
-
   function clearAll() {
     if (
       confirm(
@@ -50,6 +43,9 @@
   function exportToGeojson() {
     let geojson = geojsonToSave();
     var filename = authorityName;
+    geojson.authority = authorityName;
+    // we could probably be more sophisticated here and set version more centrally
+    geojson.origin = "atip-v1";
     // Include the scheme name if it's set
     if (geojson["scheme_name"]) {
       filename += "_" + geojson["scheme_name"];
