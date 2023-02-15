@@ -75,7 +75,10 @@
       let origin = geojson.origin;
       return origin.startsWith("atip-");
     } else {
-      return geojson.hasOwnProperty("authority");
+      return (
+        geojson.hasOwnProperty("authority") ||
+        geojson.hasOwnProperty("scheme_name")
+      );
     }
   }
 
