@@ -106,7 +106,11 @@
 
   <p>Select Transport Authority or Local Authority District:</p>
   <div>
-    <input list="authorities-list" bind:value={inputValue} />
+    <input
+      data-testid="transport-authority"
+      list="authorities-list"
+      bind:value={inputValue}
+    />
     <datalist id="authorities-list" bind:this={dataList} />
     <button type="button" on:click={start} disabled={!validEntry}>Start</button>
   </div>
