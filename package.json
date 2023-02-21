@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "fmt": "npx prettier --write *.html *.js *.svelte components/*",
+    "fmt": "npx prettier --write *.html *.js *.svelte components/* tests/*",
     "lint": "npx eslint . --ignore-pattern=vite.config.js",
     "test": "vite build && vitest"
   },
