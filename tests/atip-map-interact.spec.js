@@ -2,7 +2,6 @@ import { afterAll, beforeAll, describe, test } from "vitest";
 import { preview } from "vite";
 import { chromium } from "playwright";
 import { expect } from "@playwright/test";
-import { getRandomIntInclusive } from './test-utils';
 
 // unstable in Windows, TODO: investigate
 describe.runIf(process.platform !== "win32")("basic", async () => {
@@ -11,7 +10,7 @@ describe.runIf(process.platform !== "win32")("basic", async () => {
   let page;
 
   beforeAll(async () => {
-    server = await preview({ preview: { port: getRandomIntInclusive(4000, 5000) } });
+    server = await preview({ preview: { port: 0 } });
     browser = await chromium.launch();
     page = await browser.newPage();
   });
