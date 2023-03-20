@@ -1,4 +1,5 @@
 <script>
+  import length from "@turf/length";
   import { gjScheme, emptyGeojson } from "../stores.js";
 
   export let authorityName;
@@ -7,7 +8,7 @@
   let loadLocal = window.localStorage.getItem(authorityName);
   if (loadLocal) {
     try {
-      gjScheme.set(JSON.parse(loadLocal));
+      gjScheme.set(backfill(JSON.parse(loadLocal)));
     } catch (err) {
       console.log(`Failed to load from local storage: ${err}`);
     }
@@ -72,12 +73,24 @@
     // TODO Should we prompt before deleting the current scheme?
     reader.onload = (e) => {
       try {
-        gjScheme.set(JSON.parse(e.target.result));
+        gjScheme.set(backfill(JSON.parse(e.target.result)));
       } catch (err) {
         window.alert(`Couldn't load scheme from a file: ${err}`);
       }
     };
     reader.readAsText(e.target.files[0]);
+  }
+
+  function backfill(json) {
+    // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
+    for (let f of json.features) {
+      if (f.geometry.type == "LineString" && !f.properties.length_meters) {
+        f.properties.length_meters =
+          length(f.geometry, { units: "kilometers" }) * 1000.0;
+      }
+    }
+
+    return json;
   }
 </script>
 
