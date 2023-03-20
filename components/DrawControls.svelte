@@ -8,18 +8,18 @@
     isPolygon,
     drawPolygon,
   } from "../style.js";
-  import { onMount, onDestroy, getContext } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
   import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
-  const { getMap } = getContext("map");
   import {
     gjScheme,
     currentMapHover,
     setCurrentlyEditing,
     clearCurrentlyEditing,
     currentlyEditing,
+    map,
   } from "../stores.js";
 
   const color = "black";
@@ -62,8 +62,6 @@
   let routeSnapper;
 
   onMount(async () => {
-    const map = getMap();
-
     drawControls = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
@@ -78,12 +76,12 @@
       ),
       styles: styles,
     });
-    map.addControl(drawControls);
+    $map.addControl(drawControls);
 
-    await setupRouteSnapper(map);
+    await setupRouteSnapper($map);
 
     // When we draw a new feature, add it to the store
-    map.on("draw.create", (e) => {
+    $map.on("draw.create", (e) => {
       // Assume there's exactly 1 feature
       const feature = e.features[0];
 
@@ -100,7 +98,7 @@
       });
     });
 
-    map.on("draw.update", (e) => {
+    $map.on("draw.update", (e) => {
       // Assume there's exactly 1 feature
       const feature = e.features[0];
 
@@ -112,7 +110,7 @@
       });
     });
 
-    map.on("draw.selectionchange", (e) => {
+    $map.on("draw.selectionchange", (e) => {
       if (
         e.features.length == 1 &&
         (!routeSnapper || !routeSnapper.isActive())
@@ -130,7 +128,7 @@
     });
 
     // Highlight something in the sidebar when we hover on a feature in the map
-    map.on("mousemove", (e) => {
+    $map.on("mousemove", (e) => {
       var newHoverEntry = null;
       if (routeSnapper && !routeSnapper.isActive()) {
         // TODO This whines about a layer missing, and I can't suppress with try/catch
@@ -141,7 +139,7 @@
         currentMapHover.set(newHoverEntry);
       }
     });
-    map.on("mouseout", () => {
+    $map.on("mouseout", () => {
       currentMapHover.set(null);
     });
 
@@ -159,8 +157,7 @@
   });
 
   onDestroy(() => {
-    const map = getMap();
-    map.removeControl(drawControls);
+    $map.removeControl(drawControls);
     routeSnapper.tearDown();
   });
 

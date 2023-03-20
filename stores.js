@@ -1,5 +1,8 @@
 import { writable, derived } from "svelte/store";
 
+// A global singleton, containing a loaded map
+export const map = writable(null);
+
 export const gjScheme = writable(emptyGeojson());
 export const currentSidebarHover = writable(null);
 export const currentMapHover = writable(null);

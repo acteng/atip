@@ -4,28 +4,27 @@
   import mask from "@turf/mask";
   import { drawPolygon } from "../style.js";
   import { onMount, getContext } from "svelte";
+  import { map } from "../stores.js";
 
   export let authorityName;
 
-  const { getMap, setCamera } = getContext("map");
+  const setCamera = getContext("setCamera");
 
   onMount(async () => {
     const boundaryGeojson = await loadBoundary(authorityName);
 
-    const map = getMap();
-
     if (setCamera) {
-      map.fitBounds(geojsonExtent(boundaryGeojson), {
+      $map.fitBounds(geojsonExtent(boundaryGeojson), {
         padding: 20,
         animate: false,
       });
     }
 
-    map.addSource("boundary", {
+    $map.addSource("boundary", {
       type: "geojson",
       data: mask(boundaryGeojson),
     });
-    map.addLayer({
+    $map.addLayer({
       id: "boundary",
       source: "boundary",
       ...drawPolygon("black", 0.5),
