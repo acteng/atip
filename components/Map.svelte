@@ -2,15 +2,15 @@
   import { onMount, onDestroy, setContext } from "svelte";
   import { Map, NavigationControl, ScaleControl } from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
+  import { map as mapStore } from "../stores.js";
 
   let map;
   let mapContainer;
   let loaded = false;
-  // Before creating the map, check if there's a hash, because one will get set below
-  let setCamera = !window.location.hash;
 
+  // Before creating the map, check if there's a hash, because one will get set below
   // TODO Supposed to use a phantom type, not a string, as the key
-  setContext("map", { getMap: () => map, setCamera: setCamera });
+  setContext("setCamera", !window.location.hash);
 
   onMount(() => {
     map = new Map({
@@ -24,6 +24,7 @@
 
     map.on("load", () => {
       loaded = true;
+      mapStore.set(map);
     });
 
     const resizeObserver = new ResizeObserver(() => {

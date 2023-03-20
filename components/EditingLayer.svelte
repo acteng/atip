@@ -1,5 +1,5 @@
 <script>
-  import { onMount, getContext } from "svelte";
+  import { onMount } from "svelte";
   import geojsonExtent from "@mapbox/geojson-extent";
   import {
     drawLine,
@@ -10,9 +10,7 @@
     drawPolygon,
   } from "../style.js";
   import { emptyGeojson } from "../stores.js";
-  import { gjScheme, currentlyEditing } from "../stores.js";
-
-  const { getMap } = getContext("map");
+  import { gjScheme, currentlyEditing, map } from "../stores.js";
 
   let source = "editing";
   let color = "red";
@@ -20,26 +18,24 @@
   let circleRadius = 7;
 
   onMount(() => {
-    const map = getMap();
-
-    map.addSource(source, {
+    $map.addSource(source, {
       type: "geojson",
       data: emptyGeojson(),
     });
 
-    map.addLayer({
+    $map.addLayer({
       id: "editing-polygons",
       source: source,
       filter: isPolygon,
       ...drawPolygon(color, 0.5),
     });
-    map.addLayer({
+    $map.addLayer({
       id: "editing-lines",
       source: source,
       filter: isLine,
       ...drawLine(color, 1.5 * lineWidth),
     });
-    map.addLayer({
+    $map.addLayer({
       id: "editing-points",
       source: source,
       filter: isPoint,
@@ -47,7 +43,7 @@
     });
 
     gjScheme.subscribe((gj) => {
-      map
+      $map
         .getSource(source)
         .setData(
           gj.features.find((f) => f.properties.editing) || emptyGeojson()
@@ -65,9 +61,9 @@
 
         // Points are weird
         if (feature.geometry.type == "Point") {
-          map.flyTo({ center: feature.geometry.coordinates });
+          $map.flyTo({ center: feature.geometry.coordinates });
         } else {
-          map.fitBounds(geojsonExtent(feature), {
+          $map.fitBounds(geojsonExtent(feature), {
             padding: 200,
             animate: true,
             duration: 500,

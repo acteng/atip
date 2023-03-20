@@ -1,5 +1,5 @@
 <script>
-  import { onMount, getContext } from "svelte";
+  import { onMount } from "svelte";
   import { derived } from "svelte/store";
   import {
     drawLine,
@@ -10,9 +10,7 @@
     drawPolygon,
   } from "../style.js";
   import { emptyGeojson } from "../stores.js";
-  import { gjScheme, currentSidebarHover } from "../stores.js";
-
-  const { getMap } = getContext("map");
+  import { gjScheme, currentSidebarHover, map } from "../stores.js";
 
   // TODO Does this need to be a store?
   const dontHover = derived(gjScheme, ($gj) =>
@@ -25,31 +23,29 @@
   let circleRadius = 7;
 
   onMount(() => {
-    const map = getMap();
-
     // Use a layer that only ever has zero or one features for hovering. I
     // think https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should
     // be an easier way to do this, but I can't make it work with the draw
     // plugin.
-    map.addSource(source, {
+    $map.addSource(source, {
       type: "geojson",
       data: emptyGeojson(),
     });
 
-    map.addLayer({
+    $map.addLayer({
       id: "hover-polygons",
       source: source,
       filter: isPolygon,
       ...drawPolygon(hoverColor, 0.5),
     });
-    map.addLayer({
+    $map.addLayer({
       id: "hover-lines",
       source: source,
       filter: isLine,
       // TODO I'd like to cover up the base layers, but I can't figure out how to z-order on top of drawControls.
       ...drawLine(hoverColor, 1.5 * lineWidth, 1.0),
     });
-    map.addLayer({
+    $map.addLayer({
       id: "hover-points",
       source: source,
       filter: isPoint,
@@ -65,11 +61,11 @@
 
     currentSidebarHover.subscribe((id) => {
       if (id && !$dontHover) {
-        map
+        $map
           .getSource(source)
           .setData($gjScheme.features.find((f) => f.id == id));
       } else {
-        map.getSource(source).setData(emptyGeojson());
+        $map.getSource(source).setData(emptyGeojson());
       }
     });
   });
