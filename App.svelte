@@ -1,6 +1,9 @@
 <script>
   import "carbon-components-svelte/css/white.css";
 
+  import { onMount } from "svelte";
+  import authoritiesUrl from "./authorities.geojson?url";
+
   import About from "./components/About.svelte";
   import Instructions from "./components/Instructions.svelte";
   import Map from "./components/Map.svelte";
@@ -11,6 +14,7 @@
   import EntireScheme from "./components/EntireScheme.svelte";
   import HoverLayer from "./components/HoverLayer.svelte";
   import EditingLayer from "./components/EditingLayer.svelte";
+  import ZoomOutMap from "./components/ZoomOutMap.svelte";
 
   let showAbout = false;
   let showInstructions = false;
@@ -39,6 +43,21 @@
     showInstructions = !showInstructions;
     showAbout = false;
   }
+
+  let boundaryGeojson;
+  onMount(async () => {
+    boundaryGeojson = await loadAuthorityBoundary();
+  });
+
+  async function loadAuthorityBoundary() {
+    const resp = await fetch(authoritiesUrl);
+    const body = await resp.text();
+    const geojson = JSON.parse(body);
+    geojson.features = geojson.features.filter(
+      (feature) => feature.properties.name == authorityName
+    );
+    return geojson;
+  }
 </script>
 
 <Layout>
@@ -48,14 +67,14 @@
     <button type="button" on:click={toggleInstructions}>Instructions</button>
   </div>
   <div slot="sidebar">
-    <h1>{authorityName}</h1>
+    <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
     <EntireScheme {authorityName} />
     <br />
     <InterventionList />
   </div>
   <div slot="main">
     <Map>
-      <BoundaryLayer {authorityName} />
+      <BoundaryLayer {boundaryGeojson} />
       <DrawControls url={snapperUrl} />
       <HoverLayer />
       <EditingLayer />
