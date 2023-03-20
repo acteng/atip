@@ -17,3 +17,9 @@
 <button type="button" title="Zoom to show entire boundary" on:click={recenter}>
   <img src={icon} alt="Zoom to show entire boundary" />
 </button>
+
+<style>
+  button {
+    margin: 2px;
+  }
+</style>
