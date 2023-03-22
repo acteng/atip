@@ -22,7 +22,7 @@
 
   function prettyPrintMeters(x) {
     if (x < 1000.0) {
-      return x.round() + " m";
+      return Math.round(x) + " m";
     }
     return (x / 1000.0).toFixed(1) + "km";
   }
