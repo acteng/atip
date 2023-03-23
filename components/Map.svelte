@@ -20,7 +20,10 @@
       hash: true,
     });
     map.addControl(new ScaleControl());
-    map.addControl(new NavigationControl(), "bottom-right");
+    map.addControl(
+      new NavigationControl({ visualizePitch: true }),
+      "bottom-right"
+    );
 
     map.on("load", () => {
       loaded = true;
