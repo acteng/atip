@@ -15,6 +15,7 @@
   import HoverLayer from "./components/HoverLayer.svelte";
   import EditingLayer from "./components/EditingLayer.svelte";
   import ZoomOutMap from "./components/ZoomOutMap.svelte";
+  import BaselayerSwitcher from "./components/BaselayerSwitcher.svelte";
 
   let showAbout = false;
   let showInstructions = false;
@@ -25,6 +26,8 @@
 
   const params = new URLSearchParams(window.location.search);
   let authorityName = params.get("authority");
+  let style = params.get("style") || "streets";
+
   // TODO Slight hack. These files are stored in an S3 bucket, which only has
   // an HTTP interface. When deployed to Github pages over HTTPS, we can't mix
   // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
@@ -73,11 +76,12 @@
     <InterventionList />
   </div>
   <div slot="main">
-    <Map>
+    <Map {style}>
       <BoundaryLayer {boundaryGeojson} />
       <DrawControls url={snapperUrl} />
       <HoverLayer />
       <EditingLayer />
+      <BaselayerSwitcher {style} />
     </Map>
   </div>
 </Layout>

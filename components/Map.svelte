@@ -4,6 +4,8 @@
   import "maplibre-gl/dist/maplibre-gl.css";
   import { map as mapStore } from "../stores.js";
 
+  export let style;
+
   let map;
   let mapContainer;
   let loaded = false;
@@ -15,8 +17,7 @@
   onMount(() => {
     map = new Map({
       container: mapContainer,
-      style:
-        "https://api.maptiler.com/maps/streets/style.json?key=MZEJTanw3WpxRvt7qDfo",
+      style: `https://api.maptiler.com/maps/${style}/style.json?key=MZEJTanw3WpxRvt7qDfo`,
       hash: true,
     });
     map.addControl(new ScaleControl());
