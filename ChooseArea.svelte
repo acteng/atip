@@ -35,7 +35,7 @@
     let map = new maplibregl.Map({
       container: "map",
       style:
-        "https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
+        "https://api.maptiler.com/maps/streets/style.json?key=MZEJTanw3WpxRvt7qDfo",
     });
 
     let hoverId = null;
