@@ -9,11 +9,11 @@
     drawCircle,
     drawPolygon,
   } from "../style.js";
+  import { colors } from "../colors.js";
   import { emptyGeojson } from "../stores.js";
   import { gjScheme, currentlyEditing, map } from "../stores.js";
 
   let source = "editing";
-  let color = "red";
   let lineWidth = 10;
   let circleRadius = 7;
 
@@ -23,23 +23,14 @@
       data: emptyGeojson(),
     });
 
-    $map.addLayer({
-      id: "editing-polygons",
-      source: source,
-      filter: isPolygon,
-      ...drawPolygon(color, 0.5),
-    });
-    $map.addLayer({
-      id: "editing-lines",
-      source: source,
-      filter: isLine,
-      ...drawLine(color, 1.5 * lineWidth),
-    });
+    // Don't symbolize polygons or linestrings being edited. They'll have
+    // draggable points rendered, making it clear anyway.
     $map.addLayer({
       id: "editing-points",
-      source: source,
+      source,
       filter: isPoint,
-      ...drawCircle(color, 1.5 * circleRadius),
+      // Use the same style as hovering; it's clear enough what the user is doing
+      ...drawCircle(colors.hovering, 1.5 * circleRadius),
     });
 
     gjScheme.subscribe((gj) => {
