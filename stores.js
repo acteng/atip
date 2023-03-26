@@ -7,6 +7,8 @@ export const gjScheme = writable(emptyGeojson());
 export const currentSidebarHover = writable(null);
 export const currentMapHover = writable(null);
 
+export const openFromSidebar = writable(null);
+
 // TODO Should we store a map from ID to feature?
 // TODO DrawControls will partly own state. Do we have to listen for every geometry change?
 // TODO Should we attempt to keep properties in DrawControls or not?
