@@ -6,6 +6,7 @@
     currentSidebarHover,
     currentMapHover,
     currentlyEditing,
+    openFromSidebar,
   } from "../stores.js";
 
   function interventionName(feature) {
@@ -30,7 +31,14 @@
     currentSidebarHover.set(null);
   }
 
-  function closeOtherForms(id) {
+  function startEditing(id) {
+    // Always set this to null first, to force subscribers to see the update.
+    // It's possible to open something from the sidebar, close it (by clicking
+    // on the map or using the sidebar), then reopen the same thing.
+    openFromSidebar.set(null);
+    openFromSidebar.set(id);
+
+    // Remove the editing property from everything else, so that the Accordion is hidden
     for (let f of $gjScheme.features) {
       if (f.properties.editing && f.id != id) {
         delete f.properties.editing;
@@ -63,7 +71,7 @@
   {#each $gjScheme.features as feature, i}
     <AccordionItem
       bind:open={feature.properties.editing}
-      on:click={closeOtherForms(feature.id)}
+      on:click={startEditing(feature.id)}
       on:mouseenter={currentSidebarHover.set(feature.id)}
       on:mouseleave={reset}
     >

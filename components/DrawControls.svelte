@@ -18,7 +18,7 @@
     currentMapHover,
     setCurrentlyEditing,
     clearCurrentlyEditing,
-    currentlyEditing,
+    openFromSidebar,
     map,
   } from "../stores.js";
 
@@ -143,7 +143,7 @@
       currentMapHover.set(null);
     });
 
-    currentlyEditing.subscribe((id) => {
+    openFromSidebar.subscribe((id) => {
       if (id) {
         let feature = $gjScheme.features.find((f) => f.id == id);
         // Act like we've selected the object. (This is irrelevant for points.)

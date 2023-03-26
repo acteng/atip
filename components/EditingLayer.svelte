@@ -10,7 +10,7 @@
     drawPolygon,
   } from "../style.js";
   import { emptyGeojson } from "../stores.js";
-  import { gjScheme, currentlyEditing, map } from "../stores.js";
+  import { gjScheme, openFromSidebar, map } from "../stores.js";
 
   let source = "editing";
   let color = "red";
@@ -50,16 +50,13 @@
         );
     });
 
-    // Warp to what's being edited
-    // TODO This is a bit annoying when clicking on the map. Can we limit to just the sidebar?
-    currentlyEditing.subscribe((id) => {
+    // When the user starts editing something from the sidebar, warp to what's
+    // being edited. (Don't do this when clicking the object on the map.)
+    openFromSidebar.subscribe((id) => {
       if (id) {
-        // currentlyEditing only changes when the ID changes, not
-        // properties/geometry, so that this behavior isn't triggered
-        // constantly
         let feature = $gjScheme.features.find((f) => f.id == id);
 
-        // Points are weird
+        // Extent of points is defined in a weird way, special-case it
         if (feature.geometry.type == "Point") {
           $map.flyTo({ center: feature.geometry.coordinates });
         } else {
