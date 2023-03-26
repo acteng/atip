@@ -9,6 +9,7 @@
     drawCircle,
     drawPolygon,
   } from "../style.js";
+  import { colors } from "../colors.js";
   import { emptyGeojson } from "../stores.js";
   import { gjScheme, currentSidebarHover, map } from "../stores.js";
 
@@ -18,7 +19,6 @@
   );
 
   let source = "hover";
-  let hoverColor = "yellow";
   let lineWidth = 10;
   let circleRadius = 7;
 
@@ -36,20 +36,24 @@
       id: "hover-polygons",
       source: source,
       filter: isPolygon,
-      ...drawPolygon(hoverColor, 0.5),
+      // Outline around the polygons
+      // TODO Because this is underneath the draw controls, half the outline is
+      // covered by the 50% opaque color
+      ...drawLine(colors.hovering, lineWidth, 1.0),
     });
     $map.addLayer({
       id: "hover-lines",
       source: source,
       filter: isLine,
-      // TODO I'd like to cover up the base layers, but I can't figure out how to z-order on top of drawControls.
-      ...drawLine(hoverColor, 1.5 * lineWidth, 1.0),
+      // By "accident", this layer is underneath the draw controls. Draw a
+      // thick line underneath, making it look like an outline.
+      ...drawLine(colors.hovering, 1.5 * lineWidth, 1.0),
     });
     $map.addLayer({
       id: "hover-points",
       source: source,
       filter: isPoint,
-      ...drawCircle(hoverColor, 1.5 * circleRadius, 0.5),
+      ...drawCircle(colors.hovering, 1.5 * circleRadius, 1.0),
     });
 
     // Don't show hover whenever we're editing something

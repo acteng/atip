@@ -8,6 +8,7 @@
     isPolygon,
     drawPolygon,
   } from "../style.js";
+  import { colors } from "../colors.js";
   import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
@@ -22,35 +23,51 @@
     map,
   } from "../stores.js";
 
-  const color = "black";
   const circleRadius = 7;
   const lineWidth = 10;
+  const polygonOpacity = 0.5;
+  // TODO The fallback black should never be used in practice, but it seems to
+  // be for polygons being drawn
+  const colorByInterventionType = [
+    "match",
+    ["get", "user_intervention_type"],
+    "area",
+    colors.area,
+    "route",
+    colors.route,
+    "crossing",
+    colors.crossing,
+    "other",
+    colors.other,
+    "black",
+  ];
   const styles = [
     {
-      id: "base-points",
+      id: "interventions-points",
       filter: ["all", isPoint, ["==", "meta", "feature"]],
-      ...drawCircle(color, circleRadius),
+      ...drawCircle(colorByInterventionType, circleRadius),
+      // TODO Outline?
+    },
+    {
+      id: "interventions-lines",
+      filter: ["all", isLine, ["==", "meta", "feature"]],
+      ...drawLine(colorByInterventionType, lineWidth),
+    },
+    {
+      id: "interventions-polygons",
+      filter: ["all", isPolygon, ["==", "meta", "feature"]],
+      ...drawPolygon(colorByInterventionType, polygonOpacity),
+      // TODO Outline too?
     },
     {
       id: "draggable-points",
       filter: ["all", isPoint, ["!=", "meta", "feature"]],
-      // TODO The 1.5 is bulky and ugly, but I can't figure out how to get z-ordering working
-      ...drawCircle("blue", 1.5 * circleRadius),
+      ...drawCircle(colors.draggablePoint, circleRadius),
     },
     {
-      id: "base-line",
-      filter: isLine,
-      ...drawLine(color, lineWidth),
-    },
-    {
-      id: "base-polygon-fill",
-      filter: isPolygon,
-      ...drawPolygon(color, 0.1),
-    },
-    {
-      id: "base-polygon-outline",
-      filter: isPolygon,
-      ...drawLine(color, lineWidth / 2.0),
+      id: "polygon-outline-while-editing",
+      filter: ["all", isLine, ["!=", "meta", "feature"]],
+      ...drawLine(colors.draggablePoint, lineWidth),
     },
   ];
 
@@ -64,6 +81,7 @@
   onMount(async () => {
     drawControls = new MapboxDraw({
       displayControlsDefault: false,
+      userProperties: true,
       controls: {
         point: true,
         polygon: true,
@@ -74,7 +92,7 @@
         },
         MapboxDraw.modes
       ),
-      styles: styles,
+      styles,
     });
     $map.addControl(drawControls);
 
@@ -124,7 +142,10 @@
     // When the store changes, update the drawn objects
     // TODO Form changes will trigger this unnecessarily. Maybe split out geometry and properties?
     gjScheme.subscribe((gj) => {
-      drawControls.set(gj);
+      // TODO The subscription doesn't seem to be torn down when this component gets unmounted
+      if (drawControls) {
+        drawControls.set(gj);
+      }
     });
 
     // Highlight something in the sidebar when we hover on a feature in the map
