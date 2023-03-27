@@ -8,7 +8,7 @@
     isLine,
     drawCircle,
     drawPolygon,
-  } from "../style.js";
+  } from "../maplibre_helpers.js";
   import { colors } from "../colors.js";
   import { emptyGeojson } from "../stores.js";
   import { gjScheme, currentSidebarHover, map } from "../stores.js";

@@ -7,7 +7,7 @@
     drawLine,
     isPolygon,
     drawPolygon,
-  } from "../style.js";
+  } from "../maplibre_helpers.js";
   import { colors } from "../colors.js";
   import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
