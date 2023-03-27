@@ -1,7 +1,7 @@
 <script>
   import geojsonExtent from "@mapbox/geojson-extent";
   import mask from "@turf/mask";
-  import { drawPolygon } from "../style.js";
+  import { drawPolygon } from "../maplibre_helpers.js";
   import { onMount, getContext } from "svelte";
   import { map } from "../stores.js";
 

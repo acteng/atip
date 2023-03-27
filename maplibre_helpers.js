@@ -1,5 +1,4 @@
-// https://github.com/mapbox/mapbox-gl-draw/blob/main/docs/EXAMPLES.md as
-// reference
+// Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
 
 const roundedLine = {
   "line-cap": "round",
