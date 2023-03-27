@@ -1,0 +1,49 @@
+{
+  "properties": {
+    "separation": {
+      "title": "Separation from carriageway",
+      "description": "The main way in which the route is separated from motor traffic",
+      "type": "string",
+      "enum": [
+        "Not on road network",
+        "Full separation",
+        "Stepped",
+        "Part separation",
+        "Mandatory lane",
+        "Advisory lane",
+        "Part of carriageway (e.g. through modal filters)",
+        "Multiple Separation types",
+        "Other"
+      ]
+    },
+    "route_type": {
+      "title": "Route type",
+      "description": "Main type of active travel infrastructure along the route",
+      "type": "string",
+      "enum": [
+        "Footpath",
+        "Shared use footpath/cycleway",
+        "Cycleway",
+        "Contraflow"
+      ],
+      "default": "Footpath"
+    },
+    "reallocation": {
+      "title": "Main way space reallocated on route",
+      "description": "The main source of new space for active travel",
+      "type": "string",
+      "enum": [
+        "Reallocation of a complete vehicular lane on the carriageway",
+        "Road diet: vehicular carriageway thinned, creating new space",
+        "Pavement diet: existing pavement space reallocated",
+        "Verge or other unused space reallocated"
+      ]
+    },
+    "width": {
+      "title": "Width (m)",
+      "description": "Average width of the route in metres",
+      "type": "number",
+      "default": "2.5"
+    }
+  }
+}

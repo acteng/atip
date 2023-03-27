@@ -82,12 +82,14 @@
   }
 
   function backfill(json) {
-    // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
     for (let f of json.features) {
+      // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
       if (f.geometry.type == "LineString" && !f.properties.length_meters) {
         f.properties.length_meters =
           length(f.geometry, { units: "kilometers" }) * 1000.0;
       }
+      // Start empty details
+      f.properties.details ||= {};
     }
 
     return json;

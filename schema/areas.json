@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "area_type": {
+      "title": "Area type",
+      "description": "The main type of intervention in the area",
+      "type": "string",
+      "enum": [
+        "Modal filters",
+        "Traffic calming",
+        "Car free area (permanent)",
+        "Car free area (during certain times)",
+        "Car parking restrictions",
+        "20 mph zone",
+        "School streets zone",
+        "Business improvement district",
+        "Other area intervention"
+      ]
+    }
+  }
+}

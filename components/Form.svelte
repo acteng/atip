@@ -1,21 +1,33 @@
 <script>
   import {
+    Dropdown,
+    Modal,
     RadioButtonGroup,
     RadioButton,
     TextArea,
     TextInput,
+    NumberInput,
   } from "carbon-components-svelte";
-  import {
-    gjScheme,
-    clearCurrentlyEditing,
-    currentlyEditing,
-  } from "../stores.js";
+  import { gjScheme, clearCurrentlyEditing, currentlyEditing } from "../stores.js";
+  import areaSchema from "../schema/areas.json";
+  import crossingSchema from "../schema/crossings.json";
+  import otherSchema from "../schema/other.json";
+  import routeSchema from "../schema/routes.json";
 
   export let id;
   export let name;
   export let intervention_type;
   export let description;
   export let length_meters;
+  export let details;
+
+  let openModalForm = false;
+  let schema = {
+    area: areaSchema,
+    route: routeSchema,
+    crossing: crossingSchema,
+    other: otherSchema,
+  }[intervention_type];
 
   let bottomOfForm;
 
@@ -65,9 +77,39 @@
   <br />
 {/if}
 
-<div bind:this={bottomOfForm}>
+<div bind:this={bottomOfForm} style="display: flex; justify-content: space-between">
   <button type="button" on:click={remove}>Delete</button>
-  <button type="button" on:click={clearCurrentlyEditing} style="float: right;"
-    >Save</button
+  <button type="button" on:click={() => (openModalForm = true)}
+    >Edit details</button
   >
+  <button type="button" on:click={clearCurrentlyEditing}>Save</button>
 </div>
+
+<Modal
+  passiveModal
+  hasScrollingContent
+  modalHeading={`Edit ${intervention_type} details`}
+  bind:open={openModalForm}
+>
+  {#each Object.entries(schema.properties) as [key, value]}
+    {#if value.enum}
+      <Dropdown
+        titleText={value.description || value.title}
+        items={value.enum.map((v) => ({ id: v, text: v }))}
+        bind:selectedId={details[key]}
+      />
+      <br />
+    {/if}
+  {/each}
+
+  {#if intervention_type == "route"}
+    <NumberInput
+      step={0.1}
+      label={routeSchema.properties.width.description}
+      bind:value={details.width}
+    />
+  {/if}
+
+  <!-- TODO Hack for the Modal -->
+  <div style="height: 500px" />
+</Modal>

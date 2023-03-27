@@ -87,6 +87,7 @@
         bind:name={feature.properties.name}
         bind:intervention_type={feature.properties.intervention_type}
         bind:description={feature.properties.description}
+        bind:details={feature.properties.details}
         length_meters={feature.properties.length_meters}
       />
     </AccordionItem>

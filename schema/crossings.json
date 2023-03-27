@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "crossing_type": {
+      "title": "Crossing type",
+      "description": "The main type of active travel infrastructure along the route",
+      "type": "string",
+      "enum": [
+        "Grade separated",
+        "Signalised",
+        "Priority",
+        "Uncontrolled"
+      ]
+    },
+    "crossing_motor_traffic_flow": {
+      "title": "Motor traffic flow (PCU)",
+      "type": "string",
+      "enum": [
+        "> 8,000",
+        "3,000-8,000",
+        "< 3,000"
+      ]
+    },
+    "crossing_85th_percentile_speed": {
+      "title": "Motor traffic speed (85th percentile)",
+      "type": "string",
+      "enum": [
+        "> 30 mph",
+        "20-30 mph",
+        "< 20 mph"
+      ]
+    }
+  }
+}

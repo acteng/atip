@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "intervention_type_other": {
+      "title": "Intervention type (other)",
+      "description": "The main type of intervention",
+      "type": "string",
+      "enum": [
+        "Signage",
+        "Public transport stop",
+        "Dropped curb for wheeled access",
+        "Access ramp alongside or instead of steps",
+        "Other"
+      ]
+    }
+   }
+}

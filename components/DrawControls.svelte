@@ -110,6 +110,7 @@
       } else {
         feature.properties.intervention_type = "other";
       }
+      feature.properties.details = {};
 
       gjScheme.update((gj) => {
         gj.features.push(feature);
