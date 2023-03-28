@@ -7,6 +7,8 @@ export const gjScheme = writable(emptyGeojson());
 export const currentSidebarHover = writable(null);
 export const currentMapHover = writable(null);
 
+// These act as event dispatchers, but are easier to plumb around. They will
+// either have a feature ID or null.
 export const openFromSidebar = writable(null);
 
 // TODO Should we store a map from ID to feature?
