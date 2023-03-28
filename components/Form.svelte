@@ -5,13 +5,28 @@
     TextArea,
     TextInput,
   } from "carbon-components-svelte";
-  import { gjScheme, clearCurrentlyEditing } from "../stores.js";
+  import {
+    gjScheme,
+    clearCurrentlyEditing,
+    currentlyEditing,
+  } from "../stores.js";
 
   export let id;
   export let name;
   export let intervention_type;
   export let description;
   export let length_meters;
+
+  let bottomOfForm;
+
+  currentlyEditing.subscribe((openedId) => {
+    if (id == openedId) {
+      // Wait 1ms before doing this, because it appears the accordion doesn't
+      // expand instantly. This is flaky when clicking the accordion instead of
+      // the map.
+      setTimeout(() => bottomOfForm?.scrollIntoView({ behavior: "smooth" }), 1);
+    }
+  });
 
   function remove() {
     gjScheme.update((gj) => {
@@ -50,7 +65,7 @@
   <br />
 {/if}
 
-<div>
+<div bind:this={bottomOfForm}>
   <button type="button" on:click={remove}>Delete</button>
   <button type="button" on:click={clearCurrentlyEditing} style="float: right;"
     >Save</button
