@@ -17,6 +17,7 @@
   import ZoomOutMap from "./components/ZoomOutMap.svelte";
   import BaselayerSwitcher from "./components/BaselayerSwitcher.svelte";
   import Legend from "./components/Legend.svelte";
+  import Tooltip from "./components/Tooltip.svelte";
 
   let showAbout = false;
   let showInstructions = false;
@@ -84,6 +85,7 @@
       <EditingLayer />
       <BaselayerSwitcher {style} />
       <Legend />
+      <Tooltip />
     </Map>
   </div>
 </Layout>

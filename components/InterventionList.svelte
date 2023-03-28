@@ -8,23 +8,7 @@
     currentlyEditing,
     openFromSidebar,
   } from "../stores.js";
-
-  function interventionName(feature) {
-    if (feature.properties.name) {
-      return feature.properties.name;
-    }
-    var noun = feature.properties.intervention_type;
-    if (noun == "other") {
-      if (feature.geometry.type == "Point") {
-        noun = "point";
-      } else if (feature.geometry.type == "LineString") {
-        noun = "line";
-      } else {
-        noun = "polygon";
-      }
-    }
-    return `Untitled ${noun}`;
-  }
+  import { interventionName } from "../interventions.js";
 
   // TODO Not sure why we can't inline this one below
   function reset() {

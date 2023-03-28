@@ -6,6 +6,7 @@
     TextInput,
   } from "carbon-components-svelte";
   import { gjScheme, clearCurrentlyEditing } from "../stores.js";
+  import { prettyPrintMeters } from "../interventions.js";
 
   export let id;
   export let name;
@@ -18,13 +19,6 @@
       gj.features = gj.features.filter((f) => f.id != id);
       return gj;
     });
-  }
-
-  function prettyPrintMeters(x) {
-    if (x < 1000.0) {
-      return Math.round(x) + " m";
-    }
-    return (x / 1000.0).toFixed(1) + "km";
   }
 </script>
 

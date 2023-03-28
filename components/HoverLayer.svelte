@@ -11,8 +11,12 @@
     overwriteLayer,
   } from "../maplibre_helpers.js";
   import { colors } from "../colors.js";
-  import { emptyGeojson } from "../stores.js";
-  import { gjScheme, currentSidebarHover, map } from "../stores.js";
+  import {
+    emptyGeojson,
+    gjScheme,
+    currentSidebarHover,
+    map,
+  } from "../stores.js";
 
   // TODO Does this need to be a store?
   const dontHover = derived(gjScheme, ($gj) =>
