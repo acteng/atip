@@ -16,7 +16,7 @@
 
   import {
     gjScheme,
-    currentMapHover,
+    currentHover,
     setCurrentlyEditing,
     clearCurrentlyEditing,
     openFromSidebar,
@@ -157,11 +157,11 @@
         if (ids.length > 0) {
           newHoverEntry = ids[0];
         }
-        currentMapHover.set(newHoverEntry);
+        currentHover.set(newHoverEntry);
       }
     });
     $map.on("mouseout", () => {
-      currentMapHover.set(null);
+      currentHover.set(null);
     });
 
     openFromSidebar.subscribe((id) => {

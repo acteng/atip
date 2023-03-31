@@ -12,7 +12,7 @@
   } from "../maplibre_helpers.js";
   import { colors } from "../colors.js";
   import { emptyGeojson } from "../stores.js";
-  import { gjScheme, currentSidebarHover, map } from "../stores.js";
+  import { gjScheme, currentHover, map } from "../stores.js";
 
   // TODO Does this need to be a store?
   const dontHover = derived(gjScheme, ($gj) =>
@@ -50,7 +50,7 @@
   });
   overwriteLayer($map, {
     id: "hover-points",
-    source: source,
+    source,
     filter: isPoint,
     ...drawCircle(colors.hovering, 1.5 * circleRadius, 1.0),
   });
@@ -58,11 +58,11 @@
   // Don't show hover whenever we're editing something
   dontHover.subscribe((x) => {
     if (x) {
-      currentSidebarHover.set(null);
+      currentHover.set(null);
     }
   });
 
-  currentSidebarHover.subscribe((id) => {
+  currentHover.subscribe((id) => {
     if (id && !$dontHover) {
       $map
         .getSource(source)
