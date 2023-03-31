@@ -4,8 +4,8 @@ import { writable, derived } from "svelte/store";
 export const map = writable(null);
 
 export const gjScheme = writable(emptyGeojson());
-export const currentSidebarHover = writable(null);
-export const currentMapHover = writable(null);
+// The optional ID of a feature currently hovered from the sidebar or map.
+export const currentHover = writable(null);
 
 // These act as event dispatchers, but are easier to plumb around. They will
 // either have a feature ID or null.

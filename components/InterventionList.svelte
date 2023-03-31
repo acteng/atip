@@ -3,8 +3,7 @@
   import Form from "./Form.svelte";
   import {
     gjScheme,
-    currentSidebarHover,
-    currentMapHover,
+    currentHover,
     currentlyEditing,
     openFromSidebar,
   } from "../stores.js";
@@ -28,7 +27,7 @@
 
   // TODO Not sure why we can't inline this one below
   function reset() {
-    currentSidebarHover.set(null);
+    currentHover.set(null);
   }
 
   function startEditing(id) {
@@ -72,11 +71,11 @@
     <AccordionItem
       bind:open={feature.properties.editing}
       on:click={startEditing(feature.id)}
-      on:mouseenter={currentSidebarHover.set(feature.id)}
+      on:mouseenter={currentHover.set(feature.id)}
       on:mouseleave={reset}
     >
       <svelte:fragment slot="title">
-        {#if feature.id == $currentMapHover}
+        {#if feature.id == $currentHover}
           <strong>{i + 1}) {interventionName(feature)}</strong>
         {:else}
           {i + 1}) {interventionName(feature)}
