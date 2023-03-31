@@ -21,6 +21,7 @@
     clearCurrentlyEditing,
     openFromSidebar,
     map,
+    currentlyEditing,
   } from "../stores.js";
 
   const circleRadius = 7;
@@ -150,18 +151,22 @@
 
     // Highlight something in the sidebar when we hover on a feature in the map
     $map.on("mousemove", (e) => {
-      var newHoverEntry = null;
-      if (routeSnapper && !routeSnapper.isActive()) {
-        // TODO This whines about a layer missing, and I can't suppress with try/catch
-        const ids = drawControls.getFeatureIdsAt(e.point);
-        if (ids.length > 0) {
-          newHoverEntry = ids[0];
+      if ($currentlyEditing == null) {
+        var newHoverEntry = null;
+        if (routeSnapper && !routeSnapper.isActive()) {
+          // TODO This whines about a layer missing, and I can't suppress with try/catch
+          const ids = drawControls.getFeatureIdsAt(e.point);
+          if (ids.length > 0) {
+            newHoverEntry = ids[0];
+          }
+          currentHover.set(newHoverEntry);
         }
-        currentHover.set(newHoverEntry);
       }
     });
     $map.on("mouseout", () => {
-      currentHover.set(null);
+      if ($currentlyEditing == null) {
+        currentHover.set(null);
+      }
     });
 
     openFromSidebar.subscribe((id) => {

@@ -25,9 +25,10 @@
     return `Untitled ${noun}`;
   }
 
-  // TODO Not sure why we can't inline this one below
-  function reset() {
-    currentHover.set(null);
+  function sidebarHover(id) {
+    if ($currentlyEditing == null) {
+      currentHover.set(id);
+    }
   }
 
   function startEditing(id) {
@@ -71,8 +72,8 @@
     <AccordionItem
       bind:open={feature.properties.editing}
       on:click={startEditing(feature.id)}
-      on:mouseenter={currentHover.set(feature.id)}
-      on:mouseleave={reset}
+      on:mouseenter={sidebarHover(feature.id)}
+      on:mouseleave={sidebarHover(null)}
     >
       <svelte:fragment slot="title">
         {#if feature.id == $currentHover}
