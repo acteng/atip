@@ -4,7 +4,8 @@ import { writable, derived } from "svelte/store";
 export const map = writable(null);
 
 export const gjScheme = writable(emptyGeojson());
-// The optional ID of a feature currently hovered from the sidebar or map.
+// The optional ID of a feature currently hovered from the sidebar or map. When
+// an intervention is open and being edited, hovering is fixed to it.
 export const currentHover = writable(null);
 
 // These act as event dispatchers, but are easier to plumb around. They will
@@ -45,6 +46,8 @@ export function setCurrentlyEditing(id) {
     }
     return gj;
   });
+  // While we're editing, hover is pinned to this
+  currentHover.set(id);
 }
 export function clearCurrentlyEditing() {
   gjScheme.update((gj) => {
@@ -53,6 +56,7 @@ export function clearCurrentlyEditing() {
     });
     return gj;
   });
+  currentHover.set(null);
 }
 
 /* Thinking through the flow of state...

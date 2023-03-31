@@ -14,11 +14,6 @@
   import { emptyGeojson } from "../stores.js";
   import { gjScheme, currentHover, map } from "../stores.js";
 
-  // TODO Does this need to be a store?
-  const dontHover = derived(gjScheme, ($gj) =>
-    $gj.features.some((f) => f.properties.editing)
-  );
-
   let source = "hover";
   let lineWidth = 10;
   let circleRadius = 7;
@@ -55,15 +50,8 @@
     ...drawCircle(colors.hovering, 1.5 * circleRadius, 1.0),
   });
 
-  // Don't show hover whenever we're editing something
-  dontHover.subscribe((x) => {
-    if (x) {
-      currentHover.set(null);
-    }
-  });
-
   currentHover.subscribe((id) => {
-    if (id && !$dontHover) {
+    if (id) {
       $map
         .getSource(source)
         .setData($gjScheme.features.find((f) => f.id == id));
