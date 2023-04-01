@@ -10,7 +10,6 @@
   } from "../../maplibre_helpers.js";
   import { colors } from "../../colors.js";
   import { onMount, onDestroy } from "svelte";
-  import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
   import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
@@ -31,14 +30,7 @@
     },
   ];
 
-  export let url;
-
-  let snapTool;
-  let snapProgress;
-  let drawControls;
-  let routeSnapper;
-
-  onMount(async () => {
+  onMount(() => {
     drawControls = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
@@ -53,8 +45,6 @@
       ),
     });
     $map.addControl(drawControls);
-
-    await setupRouteSnapper($map);
 
     // When we draw a new feature, add it to the store
     $map.on("draw.create", (e) => {
@@ -110,48 +100,7 @@
 
   onDestroy(() => {
     $map.removeControl(drawControls);
-    routeSnapper.tearDown();
   });
-
-  async function setupRouteSnapper(map) {
-    await init();
-
-    console.log(`Grabbing ${url}`);
-    try {
-      const graphBytes = await fetchWithProgress(url, snapProgress);
-      routeSnapper = new RouteSnapper(map, graphBytes, snapTool);
-    } catch (err) {
-      console.log(`Route tool broke: ${err}`);
-      snapTool.innerHTML = "Failed to load";
-    }
-
-    snapTool.addEventListener("activate", () => {
-      // Disable interactions with other drawn objects
-      drawControls.changeMode("static");
-    });
-    snapTool.addEventListener("no-new-route", () => {
-      drawControls.changeMode("simple_select");
-    });
-
-    snapTool.addEventListener("new-route", (e) => {
-      const feature = e.detail;
-
-      // TODO This is convoluted. We add to drawControls just to assign an ID,
-      // then update gjScheme, which will go reset drawControls again.
-      const ids = drawControls.add(feature);
-      feature.id = ids[0];
-      feature.properties.intervention_type = "route";
-      gjScheme.update((gj) => {
-        gj.features.push(feature);
-        return gj;
-      });
-
-      // Act like we've selected the line-string we just drew
-      drawControls.changeMode("direct_select", {
-        featureId: feature.id,
-      });
-    });
-  }
 
   // Depending on https://github.com/mapbox/mapbox-gl-draw-static-mode/ isn't
   // useful for something so small
@@ -166,10 +115,6 @@
 </script>
 
 <div class="header">Add intervention</div>
-<div class="route-container" bind:this={snapTool}>
-  <!-- TODO the text should be fixed, and the progress bar float -->
-  <div bind:this={snapProgress}>Route tool loading...</div>
-</div>
 
 <style>
   .header {
@@ -184,15 +129,6 @@
   :global(.mapboxgl-ctrl-top-right) {
     margin-top: 50px;
     margin-right: 20px;
-  }
-
-  .route-container {
-    position: absolute;
-    top: 200px;
-    right: 10px;
-    padding: 10px;
-    background-color: white;
-    font-size: 1.2em;
   }
 
   :global(.mapboxgl-ctrl-group > button) {

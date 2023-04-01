@@ -1,5 +1,8 @@
 <script>
   import SelectMode from "./SelectMode.svelte";
+  import RouteMode from "./RouteMode.svelte";
+
+  export let routeUrl;
 
   let mode = "select";
 
@@ -16,9 +19,6 @@
   function newAreaMode() {
     mode = "area";
   }
-  function newRouteMode() {
-    mode = "route";
-  }
 </script>
 
 <div class="toolbox">
@@ -26,6 +26,7 @@
     <button type="button" on:click={selectMode} disabled={mode == "select"}
       >Select</button
     >
+    <SelectMode {mode} />
   </div>
   <div>
     <button type="button" on:click={editMode} disabled={mode == "edit"}
@@ -43,13 +44,9 @@
     >
   </div>
   <div>
-    <button type="button" on:click={newRouteMode} disabled={mode == "route"}
-      >New route</button
-    >
+    <RouteMode bind:mode url={routeUrl} />
   </div>
 </div>
-
-<SelectMode {mode} />
 
 <style>
   .toolbox {

@@ -15,7 +15,6 @@
   import BaselayerSwitcher from "./components/BaselayerSwitcher.svelte";
   import Legend from "./components/Legend.svelte";
 
-  import DrawControls from "./components/draw/DrawControls.svelte";
   import InterventionLayer from "./components/draw/InterventionLayer.svelte";
   import HoverLayer from "./components/draw/HoverLayer.svelte";
   import EditingLayer from "./components/draw/EditingLayer.svelte";
@@ -37,9 +36,9 @@
   // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
   // CDN invalidations when we update these files. But when serving locally for
   // development, HTTPS is also fine to use.
-  var snapperUrl = `https://atip.uk/route-snappers/${authorityName}.bin`;
+  var routeUrl = `https://atip.uk/route-snappers/${authorityName}.bin`;
   if (!prod) {
-    snapperUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
+    routeUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
   }
 
   function toggleAbout() {
@@ -82,11 +81,10 @@
   <div slot="main">
     <Map {style}>
       <BoundaryLayer {boundaryGeojson} />
-      <!--<DrawControls url={snapperUrl} />-->
       <InterventionLayer />
       <HoverLayer />
       <EditingLayer />
-      <Toolbox />
+      <Toolbox {routeUrl} />
       <BaselayerSwitcher {style} />
       <Legend />
     </Map>
