@@ -7,7 +7,7 @@
   } from "carbon-components-svelte";
   import {
     gjScheme,
-    clearCurrentlyEditing,
+    setCurrentlyEditing,
     currentlyEditing,
   } from "../stores.js";
 
@@ -33,6 +33,7 @@
       gj.features = gj.features.filter((f) => f.id != id);
       return gj;
     });
+    setCurrentlyEditing(null);
   }
 
   function prettyPrintMeters(x) {
@@ -67,7 +68,9 @@
 
 <div bind:this={bottomOfForm}>
   <button type="button" on:click={remove}>Delete</button>
-  <button type="button" on:click={clearCurrentlyEditing} style="float: right;"
-    >Save</button
+  <button
+    type="button"
+    on:click={() => setCurrentlyEditing(null)}
+    style="float: right;">Save</button
   >
 </div>

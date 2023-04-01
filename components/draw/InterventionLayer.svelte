@@ -15,6 +15,7 @@
     map,
     currentHover,
     currentlyEditing,
+    setCurrentlyEditing,
   } from "../../stores.js";
 
   let source = "interventions";
@@ -67,6 +68,8 @@
     // TODO Outline too?
   });
 
+  // TODO Move all of this to a SelectMode or something
+
   // Calculate hover
   $map.on("mousemove", (e) => {
     // TODO Disable unless we're in select mode
@@ -89,6 +92,23 @@
   $map.on("mouseout", () => {
     if ($currentlyEditing == null) {
       currentHover.set(null);
+    }
+  });
+
+  // Handle clicking the hovered feature
+  $map.on("click", (e) => {
+    // TODO Disable unless we're in select mode
+    let results = $map.queryRenderedFeatures(e.point, {
+      layers: [
+        "interventions-points",
+        "interventions-lines",
+        "interventions-polygons",
+      ],
+    });
+    if (results.length > 0) {
+      setCurrentlyEditing(results[0].id);
+    } else {
+      setCurrentlyEditing(null);
     }
   });
 </script>
