@@ -19,6 +19,7 @@
   import InterventionLayer from "./components/draw/InterventionLayer.svelte";
   import HoverLayer from "./components/draw/HoverLayer.svelte";
   import EditingLayer from "./components/draw/EditingLayer.svelte";
+  import Toolbox from "./components/draw/Toolbox.svelte";
 
   let showAbout = false;
   let showInstructions = false;
@@ -85,6 +86,7 @@
       <InterventionLayer />
       <HoverLayer />
       <EditingLayer />
+      <Toolbox />
       <BaselayerSwitcher {style} />
       <Legend />
     </Map>
