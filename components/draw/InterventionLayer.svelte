@@ -32,7 +32,7 @@
   const circleRadius = 7;
   const lineWidth = 10;
   const polygonOpacity = 0.5;
-  // The fallback black should never be used in practice
+  // The fallback white should never be used in practice
   const colorByInterventionType = [
     "match",
     ["get", "intervention_type"],
@@ -44,7 +44,7 @@
     colors.crossing,
     "other",
     colors.other,
-    "black",
+    "white",
   ];
 
   overwriteLayer($map, {
