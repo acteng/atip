@@ -1,5 +1,4 @@
 <script>
-  import { derived } from "svelte/store";
   import {
     drawLine,
     isPolygon,
