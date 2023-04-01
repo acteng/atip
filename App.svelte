@@ -9,14 +9,15 @@
   import Map from "./components/Map.svelte";
   import Layout from "./components/Layout.svelte";
   import BoundaryLayer from "./components/BoundaryLayer.svelte";
-  import DrawControls from "./components/DrawControls.svelte";
   import InterventionList from "./components/InterventionList.svelte";
   import EntireScheme from "./components/EntireScheme.svelte";
-  import HoverLayer from "./components/HoverLayer.svelte";
-  import EditingLayer from "./components/EditingLayer.svelte";
   import ZoomOutMap from "./components/ZoomOutMap.svelte";
   import BaselayerSwitcher from "./components/BaselayerSwitcher.svelte";
   import Legend from "./components/Legend.svelte";
+
+  import DrawControls from "./components/draw/DrawControls.svelte";
+  import HoverLayer from "./components/draw/HoverLayer.svelte";
+  import EditingLayer from "./components/draw/EditingLayer.svelte";
 
   let showAbout = false;
   let showInstructions = false;

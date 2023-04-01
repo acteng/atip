@@ -9,10 +9,9 @@
     drawPolygon,
     overwriteSource,
     overwriteLayer,
-  } from "../maplibre_helpers.js";
-  import { colors } from "../colors.js";
-  import { emptyGeojson } from "../stores.js";
-  import { gjScheme, currentHover, map } from "../stores.js";
+  } from "../../maplibre_helpers.js";
+  import { colors } from "../../colors.js";
+  import { emptyGeojson, gjScheme, currentHover, map } from "../../stores.js";
 
   let source = "hover";
   let lineWidth = 10;
@@ -28,7 +27,7 @@
 
   overwriteLayer($map, {
     id: "hover-polygons",
-    source: source,
+    source,
     filter: isPolygon,
     // Outline around the polygons
     // TODO Because this is underneath the draw controls, half the outline is
@@ -37,7 +36,7 @@
   });
   overwriteLayer($map, {
     id: "hover-lines",
-    source: source,
+    source,
     filter: isLine,
     // By "accident", this layer is underneath the draw controls. Draw a
     // thick line underneath, making it look like an outline.

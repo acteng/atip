@@ -9,10 +9,14 @@
     drawPolygon,
     overwriteSource,
     overwriteLayer,
-  } from "../maplibre_helpers.js";
-  import { colors } from "../colors.js";
-  import { emptyGeojson } from "../stores.js";
-  import { gjScheme, openFromSidebar, map } from "../stores.js";
+  } from "../../maplibre_helpers.js";
+  import { colors } from "../../colors.js";
+  import {
+    emptyGeojson,
+    gjScheme,
+    openFromSidebar,
+    map,
+  } from "../../stores.js";
 
   let source = "editing";
   let lineWidth = 10;

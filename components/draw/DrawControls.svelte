@@ -7,8 +7,8 @@
     drawLine,
     isPolygon,
     drawPolygon,
-  } from "../maplibre_helpers.js";
-  import { colors } from "../colors.js";
+  } from "../../maplibre_helpers.js";
+  import { colors } from "../../colors.js";
   import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
@@ -22,7 +22,7 @@
     openFromSidebar,
     map,
     currentlyEditing,
-  } from "../stores.js";
+  } from "../../stores.js";
 
   const circleRadius = 7;
   const lineWidth = 10;
