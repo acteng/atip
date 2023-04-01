@@ -26,40 +26,7 @@
 
   const circleRadius = 7;
   const lineWidth = 10;
-  const polygonOpacity = 0.5;
-  // TODO The fallback black should never be used in practice, but it seems to
-  // be for polygons being drawn
-  const colorByInterventionType = [
-    "match",
-    ["get", "user_intervention_type"],
-    "area",
-    colors.area,
-    "route",
-    colors.route,
-    "crossing",
-    colors.crossing,
-    "other",
-    colors.other,
-    "black",
-  ];
   const styles = [
-    {
-      id: "interventions-points",
-      filter: ["all", isPoint, ["==", "meta", "feature"]],
-      ...drawCircle(colorByInterventionType, circleRadius),
-      // TODO Outline?
-    },
-    {
-      id: "interventions-lines",
-      filter: ["all", isLine, ["==", "meta", "feature"]],
-      ...drawLine(colorByInterventionType, lineWidth),
-    },
-    {
-      id: "interventions-polygons",
-      filter: ["all", isPolygon, ["==", "meta", "feature"]],
-      ...drawPolygon(colorByInterventionType, polygonOpacity),
-      // TODO Outline too?
-    },
     {
       id: "draggable-points",
       filter: ["all", isPoint, ["!=", "meta", "feature"]],
@@ -82,7 +49,6 @@
   onMount(async () => {
     drawControls = new MapboxDraw({
       displayControlsDefault: false,
-      userProperties: true,
       controls: {
         point: true,
         polygon: true,
@@ -93,7 +59,6 @@
         },
         MapboxDraw.modes
       ),
-      styles,
     });
     $map.addControl(drawControls);
 

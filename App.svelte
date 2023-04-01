@@ -16,6 +16,7 @@
   import Legend from "./components/Legend.svelte";
 
   import DrawControls from "./components/draw/DrawControls.svelte";
+  import InterventionLayer from "./components/draw/InterventionLayer.svelte";
   import HoverLayer from "./components/draw/HoverLayer.svelte";
   import EditingLayer from "./components/draw/EditingLayer.svelte";
 
@@ -80,7 +81,8 @@
   <div slot="main">
     <Map {style}>
       <BoundaryLayer {boundaryGeojson} />
-      <DrawControls url={snapperUrl} />
+      <!--<DrawControls url={snapperUrl} />-->
+      <InterventionLayer />
       <HoverLayer />
       <EditingLayer />
       <BaselayerSwitcher {style} />
