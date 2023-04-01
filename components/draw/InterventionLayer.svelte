@@ -10,7 +10,12 @@
     overwriteLayer,
   } from "../../maplibre_helpers.js";
   import { colors } from "../../colors.js";
-  import { gjScheme, map } from "../../stores.js";
+  import {
+    gjScheme,
+    map,
+    currentHover,
+    currentlyEditing,
+  } from "../../stores.js";
 
   let source = "interventions";
 
@@ -60,5 +65,30 @@
     filter: isPolygon,
     ...drawPolygon(colorByInterventionType, polygonOpacity),
     // TODO Outline too?
+  });
+
+  // Calculate hover
+  $map.on("mousemove", (e) => {
+    // TODO Disable unless we're in select mode
+    if ($currentlyEditing == null) {
+      let results = $map.queryRenderedFeatures(e.point, {
+        layers: [
+          "interventions-points",
+          "interventions-lines",
+          "interventions-polygons",
+        ],
+      });
+      // TODO ? syntax
+      var newHoverId = null;
+      if (results.length > 0) {
+        newHoverId = results[0].id;
+      }
+      currentHover.set(newHoverId);
+    }
+  });
+  $map.on("mouseout", () => {
+    if ($currentlyEditing == null) {
+      currentHover.set(null);
+    }
   });
 </script>

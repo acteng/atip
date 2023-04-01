@@ -49,7 +49,7 @@
   });
 
   currentHover.subscribe((id) => {
-    if (id) {
+    if (id != null) {
       $map
         .getSource(source)
         .setData($gjScheme.features.find((f) => f.id == id));

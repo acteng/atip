@@ -16,7 +16,6 @@
 
   import {
     gjScheme,
-    currentHover,
     setCurrentlyEditing,
     clearCurrentlyEditing,
     openFromSidebar,
@@ -111,26 +110,6 @@
       // TODO The subscription doesn't seem to be torn down when this component gets unmounted
       if (drawControls) {
         drawControls.set(gj);
-      }
-    });
-
-    // Highlight something in the sidebar when we hover on a feature in the map
-    $map.on("mousemove", (e) => {
-      if ($currentlyEditing == null) {
-        var newHoverEntry = null;
-        if (routeSnapper && !routeSnapper.isActive()) {
-          // TODO This whines about a layer missing, and I can't suppress with try/catch
-          const ids = drawControls.getFeatureIdsAt(e.point);
-          if (ids.length > 0) {
-            newHoverEntry = ids[0];
-          }
-          currentHover.set(newHoverEntry);
-        }
-      }
-    });
-    $map.on("mouseout", () => {
-      if ($currentlyEditing == null) {
-        currentHover.set(null);
       }
     });
 
