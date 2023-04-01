@@ -1,59 +1,55 @@
 <script>
-  let state = {
-    mode: "select",
-  };
+  import SelectMode from "./SelectMode.svelte";
+
+  let mode = "select";
 
   function selectMode() {
-    state.mode = "select";
+    mode = "select";
   }
   function editMode() {
-    state.mode = "edit";
+    mode = "edit";
   }
   // TODO For these 3, disable sidebar interactions
   function newPointMode() {
-    state.mode = "point";
+    mode = "point";
   }
   function newAreaMode() {
-    state.mode = "area";
+    mode = "area";
   }
   function newRouteMode() {
-    state.mode = "route";
+    mode = "route";
   }
 </script>
 
 <div class="toolbox">
   <div>
-    <button
-      type="button"
-      on:click={selectMode}
-      disabled={state.mode == "select"}>Select</button
+    <button type="button" on:click={selectMode} disabled={mode == "select"}
+      >Select</button
     >
   </div>
   <div>
-    <button type="button" on:click={editMode} disabled={state.mode == "edit"}
+    <button type="button" on:click={editMode} disabled={mode == "edit"}
       >Edit</button
     >
   </div>
   <div>
-    <button
-      type="button"
-      on:click={newPointMode}
-      disabled={state.mode == "point"}>New point</button
+    <button type="button" on:click={newPointMode} disabled={mode == "point"}
+      >New point</button
     >
   </div>
   <div>
-    <button type="button" on:click={newAreaMode} disabled={state.mode == "area"}
+    <button type="button" on:click={newAreaMode} disabled={mode == "area"}
       >New area</button
     >
   </div>
   <div>
-    <button
-      type="button"
-      on:click={newRouteMode}
-      disabled={state.mode == "route"}>New route</button
+    <button type="button" on:click={newRouteMode} disabled={mode == "route"}
+      >New route</button
     >
   </div>
 </div>
+
+<SelectMode {mode} />
 
 <style>
   .toolbox {
