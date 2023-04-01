@@ -14,14 +14,7 @@
 
   import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
-  import {
-    gjScheme,
-    setCurrentlyEditing,
-    clearCurrentlyEditing,
-    openFromSidebar,
-    map,
-    currentlyEditing,
-  } from "../../stores.js";
+  import { gjScheme, openFromSidebar, map } from "../../stores.js";
 
   const circleRadius = 7;
   const lineWidth = 10;
@@ -91,17 +84,6 @@
         update.geometry = feature.geometry;
         return gj;
       });
-    });
-
-    $map.on("draw.selectionchange", (e) => {
-      if (
-        e.features.length == 1 &&
-        (!routeSnapper || !routeSnapper.isActive())
-      ) {
-        setCurrentlyEditing(e.features[0].id);
-      } else if (e.features.length == 0) {
-        clearCurrentlyEditing();
-      }
     });
 
     // When the store changes, update the drawn objects
