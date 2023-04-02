@@ -41,23 +41,25 @@
     "white",
   ];
 
+  const hideWhileEditing = ["!=", "hide_while_editing", true];
+
   overwriteLayer($map, {
     id: "interventions-points",
     source,
-    filter: isPoint,
+    filter: ["all", isPoint, hideWhileEditing],
     ...drawCircle(colorByInterventionType, circleRadius),
     // TODO Outline?
   });
   overwriteLayer($map, {
     id: "interventions-lines",
     source,
-    filter: isLine,
+    filter: ["all", isLine, hideWhileEditing],
     ...drawLine(colorByInterventionType, lineWidth),
   });
   overwriteLayer($map, {
     id: "interventions-polygons",
     source,
-    filter: isPolygon,
+    filter: ["all", isPolygon, hideWhileEditing],
     ...drawPolygon(colorByInterventionType, polygonOpacity),
     // TODO Outline too?
   });

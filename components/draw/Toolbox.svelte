@@ -1,9 +1,13 @@
 <script>
   import SelectMode from "./SelectMode.svelte";
+  import EditMode from "./EditMode.svelte";
   import RouteMode from "./RouteMode.svelte";
   import PointOrPolygonMode from "./PointOrPolygonMode.svelte";
 
   export let routeUrl;
+  // Plumbed up from RouteMode, so we can pass it down to EditMode
+  let routeSnapper;
+  let snapTool;
 
   let mode = "select";
 
@@ -33,6 +37,9 @@
     <button type="button" on:click={editMode} disabled={mode == "edit"}
       >Edit</button
     >
+    {#if routeSnapper && snapTool}
+      <EditMode bind:mode {routeSnapper} {snapTool} />
+    {/if}
   </div>
   <div>
     <button type="button" on:click={newPointMode} disabled={mode == "point"}
@@ -47,7 +54,7 @@
     <PointOrPolygonMode bind:mode type="polygon" />
   </div>
   <div>
-    <RouteMode bind:mode url={routeUrl} />
+    <RouteMode bind:mode url={routeUrl} bind:routeSnapper bind:snapTool />
   </div>
 </div>
 
