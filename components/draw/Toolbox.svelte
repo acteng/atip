@@ -1,7 +1,7 @@
 <script>
   import SelectMode from "./SelectMode.svelte";
   import RouteMode from "./RouteMode.svelte";
-  import PointMode from "./PointMode.svelte";
+  import PointOrPolygonMode from "./PointOrPolygonMode.svelte";
 
   export let routeUrl;
 
@@ -17,8 +17,8 @@
   function newPointMode() {
     mode = "point";
   }
-  function newAreaMode() {
-    mode = "area";
+  function newPolygonMode() {
+    mode = "polygon";
   }
 </script>
 
@@ -38,12 +38,13 @@
     <button type="button" on:click={newPointMode} disabled={mode == "point"}
       >New point</button
     >
-    <PointMode bind:mode />
+    <PointOrPolygonMode bind:mode type="point" />
   </div>
   <div>
-    <button type="button" on:click={newAreaMode} disabled={mode == "area"}
-      >New area</button
+    <button type="button" on:click={newPolygonMode} disabled={mode == "polygon"}
+      >New polygon</button
     >
+    <PointOrPolygonMode bind:mode type="polygon" />
   </div>
   <div>
     <RouteMode bind:mode url={routeUrl} />
