@@ -50,3 +50,15 @@ export function setCurrentlyEditing(id) {
   // While we're editing, hover is pinned to this
   currentHover.set(id);
 }
+
+export function newFeatureId(gj) {
+  let ids = new Set();
+  for (let f of gj.features) {
+    ids.add(f.id);
+  }
+  let id = ids.size;
+  while (ids.has(id)) {
+    id++;
+  }
+  return id;
+}

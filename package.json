@@ -30,7 +30,6 @@
     "carbon-components-svelte": "^0.70.13",
     "maplibre-gl": "^2.4.0",
     "route-snapper": "^0.1.0",
-    "svelte": "^3.54.0",
-    "uuid": "^9.0.0"
+    "svelte": "^3.54.0"
   }
 }
