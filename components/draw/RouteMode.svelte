@@ -7,9 +7,9 @@
   export let mode;
   export let url;
 
-  let snapTool;
+  export let snapTool;
   let snapProgress;
-  let routeSnapper;
+  export let routeSnapper;
 
   onMount(async () => {
     await init();
@@ -23,24 +23,31 @@
       snapTool.innerHTML = "Failed to load";
     }
 
+    // All of these events can happen from select mode, or from edit mode
     snapTool.addEventListener("activate", () => {
-      mode = "route";
+      if (mode == "select") {
+        mode = "route";
+      }
     });
     snapTool.addEventListener("no-new-route", () => {
-      mode = "select";
+      if (mode == "route") {
+        mode = "select";
+      }
     });
 
     snapTool.addEventListener("new-route", (e) => {
-      const feature = e.detail;
-      gjScheme.update((gj) => {
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "route";
-        gj.features.push(feature);
-        return gj;
-      });
+      if (mode == "route") {
+        const feature = e.detail;
+        gjScheme.update((gj) => {
+          feature.id = newFeatureId(gj);
+          feature.properties.intervention_type = "route";
+          gj.features.push(feature);
+          return gj;
+        });
 
-      // TODO Act like we've selected the line-string we just drew
-      mode = "select";
+        // TODO Act like we've selected the line-string we just drew
+        mode = "select";
+      }
     });
   });
 
