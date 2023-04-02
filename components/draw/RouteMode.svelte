@@ -45,7 +45,7 @@
   });
 
   onDestroy(() => {
-    routeSnapper.tearDown();
+    routeSnapper?.tearDown();
   });
 </script>
 

@@ -1,6 +1,7 @@
 <script>
   import SelectMode from "./SelectMode.svelte";
   import RouteMode from "./RouteMode.svelte";
+  import PointMode from "./PointMode.svelte";
 
   export let routeUrl;
 
@@ -12,7 +13,7 @@
   function editMode() {
     mode = "edit";
   }
-  // TODO For these 3, disable sidebar interactions
+  // TODO For these and route, disable sidebar interactions
   function newPointMode() {
     mode = "point";
   }
@@ -37,6 +38,7 @@
     <button type="button" on:click={newPointMode} disabled={mode == "point"}
       >New point</button
     >
+    <PointMode bind:mode />
   </div>
   <div>
     <button type="button" on:click={newAreaMode} disabled={mode == "area"}
