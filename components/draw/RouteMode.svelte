@@ -1,9 +1,8 @@
 <script>
-  import { v4 as uuidv4 } from "uuid";
   import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
-  import { gjScheme, map } from "../../stores.js";
+  import { gjScheme, map, newFeatureId } from "../../stores.js";
 
   export let mode;
   export let url;
@@ -33,9 +32,9 @@
 
     snapTool.addEventListener("new-route", (e) => {
       const feature = e.detail;
-      feature.id = uuidv4();
-      feature.properties.intervention_type = "route";
       gjScheme.update((gj) => {
+        feature.id = newFeatureId(gj);
+        feature.properties.intervention_type = "route";
         gj.features.push(feature);
         return gj;
       });
