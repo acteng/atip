@@ -216,6 +216,7 @@
       const ids = drawControls.add(feature);
       feature.id = ids[0];
       feature.properties.intervention_type = "route";
+      feature.properties.details = {};
       gjScheme.update((gj) => {
         gj.features.push(feature);
         return gj;

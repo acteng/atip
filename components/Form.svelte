@@ -8,7 +8,11 @@
     TextInput,
     NumberInput,
   } from "carbon-components-svelte";
-  import { gjScheme, clearCurrentlyEditing, currentlyEditing } from "../stores.js";
+  import {
+    gjScheme,
+    clearCurrentlyEditing,
+    currentlyEditing,
+  } from "../stores.js";
   import areaSchema from "../schema/areas.json";
   import crossingSchema from "../schema/crossings.json";
   import otherSchema from "../schema/other.json";
@@ -77,7 +81,10 @@
   <br />
 {/if}
 
-<div bind:this={bottomOfForm} style="display: flex; justify-content: space-between">
+<div
+  bind:this={bottomOfForm}
+  style="display: flex; justify-content: space-between"
+>
   <button type="button" on:click={remove}>Delete</button>
   <button type="button" on:click={() => (openModalForm = true)}
     >Edit details</button
