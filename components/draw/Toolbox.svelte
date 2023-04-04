@@ -132,11 +132,12 @@
     background-color: white;
     border: solid 2px black;
     font-size: 1.5em;
+    max-width: 250px;
   }
 
   button {
     background-color: #4caf50;
-    border: none;
+    border: solid 2px #4caf50;
     color: white;
     padding: 15px 32px;
     text-align: center;
