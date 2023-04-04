@@ -9,12 +9,10 @@
     overwriteSource,
     overwriteLayer,
   } from "../../maplibre_helpers.js";
-  import { colors } from "../../colors.js";
+  import { colors, lineWidth, circleRadius } from "../../colors.js";
   import { emptyGeojson, gjScheme, currentHover, map } from "../../stores.js";
 
   let source = "hover";
-  let lineWidth = 10;
-  let circleRadius = 7;
 
   // Use a layer that only ever has zero or one features for hovering. I think
   // https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an
@@ -24,29 +22,36 @@
     data: emptyGeojson(),
   });
 
+  // Draw polygon outlines on top of interventions-polygons
   overwriteLayer($map, {
     id: "hover-polygons",
     source,
     filter: isPolygon,
     // Outline around the polygons
-    // TODO Because this is underneath the draw controls, half the outline is
-    // covered by the 50% opaque color
-    ...drawLine(colors.hovering, lineWidth, 1.0),
+    ...drawLine(colors.hovering, 0.5 * lineWidth, 1.0),
   });
-  overwriteLayer($map, {
-    id: "hover-lines",
-    source,
-    filter: isLine,
-    // By "accident", this layer is underneath the draw controls. Draw a
-    // thick line underneath, making it look like an outline.
-    ...drawLine(colors.hovering, 1.5 * lineWidth, 1.0),
-  });
-  overwriteLayer($map, {
-    id: "hover-points",
-    source,
-    filter: isPoint,
-    ...drawCircle(colors.hovering, 1.5 * circleRadius, 1.0),
-  });
+  // Draw underneath lines, so the thick line looks like an outline
+  overwriteLayer(
+    $map,
+    {
+      id: "hover-lines",
+      source,
+      filter: isLine,
+      ...drawLine(colors.hovering, 1.5 * lineWidth, 1.0),
+    },
+    "interventions-lines"
+  );
+  // Draw underneath points, so it looks like an outline
+  overwriteLayer(
+    $map,
+    {
+      id: "hover-points",
+      source,
+      filter: isPoint,
+      ...drawCircle(colors.hovering, 1.5 * circleRadius, 1.0),
+    },
+    "interventions-points"
+  );
 
   currentHover.subscribe((id) => {
     if (id != null) {

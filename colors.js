@@ -5,6 +5,10 @@ export const colors = {
   crossing: "#4daf4a",
   other: "#984ea3",
 
-  draggablePoint: "black",
   hovering: "black",
 };
+
+// For points
+export const circleRadius = 10;
+// For line-strings
+export const lineWidth = 10;

@@ -64,9 +64,15 @@ export function overwriteSource(map, id, source) {
   map.addSource(id, source);
 }
 
-export function overwriteLayer(map, layer) {
+export function overwriteLayer(map, layer, beforeId = null) {
   if (map.getLayer(layer.id)) {
     map.removeLayer(layer.id);
   }
-  map.addLayer(layer);
+  // If we want this layer to appear below another, and the other layer doesn't
+  // exist yet, we don't need to do anything; it'll naturally be ordered
+  // beneath.
+  if (beforeId && !map.getLayer(beforeId)) {
+    beforeId = null;
+  }
+  map.addLayer(layer, beforeId);
 }
