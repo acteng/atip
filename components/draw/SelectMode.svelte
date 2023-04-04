@@ -7,6 +7,13 @@
   } from "../../stores.js";
 
   export let mode;
+  export let drawControls;
+
+  $: {
+    if (mode == "select") {
+      drawControls.changeMode("static");
+    }
+  }
 
   // Calculate hover
   $map.on("mousemove", (e) => {

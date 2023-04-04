@@ -6,10 +6,17 @@
 
   export let mode;
   export let url;
+  export let drawControls;
 
   export let snapTool;
   let snapProgress;
   export let routeSnapper;
+
+  $: {
+    if (mode == "route") {
+      drawControls.changeMode("static");
+    }
+  }
 
   onMount(async () => {
     await init();
