@@ -89,7 +89,7 @@
         on:click={attributeMode}
         disabled={mode == "edit-attribute"}>Edit attributes</button
       >
-      <AttributeMode {mode} {drawControls} />
+      <AttributeMode {mode} {drawControls} {routeSnapper} />
     </div>
     <div>
       <button
@@ -105,7 +105,12 @@
       <button type="button" on:click={newPointMode} disabled={mode == "point"}
         >New point</button
       >
-      <PointOrPolygonMode bind:mode {drawControls} type="point" />
+      <PointOrPolygonMode
+        bind:mode
+        {drawControls}
+        {routeSnapper}
+        type="point"
+      />
     </div>
     <div>
       <button
@@ -113,7 +118,12 @@
         on:click={newPolygonMode}
         disabled={mode == "polygon"}>New polygon</button
       >
-      <PointOrPolygonMode bind:mode {drawControls} type="polygon" />
+      <PointOrPolygonMode
+        bind:mode
+        {drawControls}
+        {routeSnapper}
+        type="polygon"
+      />
     </div>
     <div>
       <RouteMode
