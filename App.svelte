@@ -17,7 +17,6 @@
 
   import InterventionLayer from "./components/draw/InterventionLayer.svelte";
   import HoverLayer from "./components/draw/HoverLayer.svelte";
-  import EditingLayer from "./components/draw/EditingLayer.svelte";
   import Toolbox from "./components/draw/Toolbox.svelte";
 
   let showAbout = false;
@@ -83,7 +82,6 @@
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer />
       <HoverLayer />
-      <EditingLayer />
       <Toolbox {routeUrl} />
       <BaselayerSwitcher {style} />
       <Legend />
