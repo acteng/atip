@@ -9,7 +9,7 @@
     overwriteSource,
     overwriteLayer,
   } from "../../maplibre_helpers.js";
-  import { colors } from "../../colors.js";
+  import { colors, circleRadius, lineWidth } from "../../colors.js";
   import { gjScheme, map } from "../../stores.js";
 
   let source = "interventions";
@@ -23,9 +23,6 @@
     $map.getSource(source).setData($gjScheme);
   }
 
-  const circleRadius = 7;
-  const lineWidth = 10;
-  const polygonOpacity = 0.5;
   // The fallback white should never be used in practice
   const colorByInterventionType = [
     "match",
@@ -56,11 +53,15 @@
     filter: ["all", isLine, hideWhileEditing],
     ...drawLine(colorByInterventionType, lineWidth),
   });
-  overwriteLayer($map, {
-    id: "interventions-polygons",
-    source,
-    filter: ["all", isPolygon, hideWhileEditing],
-    ...drawPolygon(colorByInterventionType, polygonOpacity),
-    // TODO Outline too?
-  });
+  overwriteLayer(
+    $map,
+    {
+      id: "interventions-polygons",
+      source,
+      filter: ["all", isPolygon, hideWhileEditing],
+      ...drawPolygon(colorByInterventionType, 0.5),
+      // TODO Outline too?
+    },
+    "hover-polygons"
+  );
 </script>
