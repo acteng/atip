@@ -10,14 +10,14 @@
   export let drawControls;
 
   $: {
-    if (mode == "select") {
+    if (mode == "edit-attribute") {
       drawControls.changeMode("static");
     }
   }
 
   // Calculate hover
   $map.on("mousemove", (e) => {
-    if (mode == "select" && $currentlyEditing == null) {
+    if (mode == "edit-attribute" && $currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -34,14 +34,14 @@
     }
   });
   $map.on("mouseout", () => {
-    if (mode == "select" && $currentlyEditing == null) {
+    if (mode == "edit-attribute" && $currentlyEditing == null) {
       currentHover.set(null);
     }
   });
 
   // Handle clicking the hovered feature
   $map.on("click", (e) => {
-    if (mode == "select") {
+    if (mode == "edit-attribute") {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -57,3 +57,7 @@
     }
   });
 </script>
+
+{#if mode == "edit-attribute"}
+  <p>Click an intervention to fill out its attributes</p>
+{/if}

@@ -3,13 +3,13 @@
   import { onMount, onDestroy } from "svelte";
   import { map } from "../../stores.js";
 
-  import SelectMode from "./SelectMode.svelte";
-  import EditMode from "./EditMode.svelte";
+  import AttributeMode from "./AttributeMode.svelte";
+  import GeometryMode from "./GeometryMode.svelte";
   import RouteMode from "./RouteMode.svelte";
   import PointOrPolygonMode from "./PointOrPolygonMode.svelte";
 
   export let routeUrl;
-  // Plumbed up from RouteMode, so we can pass it down to EditMode
+  // Plumbed up from RouteMode, so we can pass it down to GeometryMode
   let routeSnapper;
   let snapTool;
 
@@ -19,7 +19,7 @@
   // changeMode with brittle ordering.
   let drawControls;
 
-  let mode = "select";
+  let mode = "edit-attribute";
 
   onMount(() => {
     // Depending on https://github.com/mapbox/mapbox-gl-draw-static-mode/ isn't
@@ -66,11 +66,11 @@
     }
   });
 
-  function selectMode() {
-    mode = "select";
+  function attributeMode() {
+    mode = "edit-attribute";
   }
-  function editMode() {
-    mode = "edit";
+  function geometryMode() {
+    mode = "edit-geometry";
   }
   // TODO For these and route, disable sidebar interactions
   function newPointMode() {
@@ -84,17 +84,21 @@
 {#if drawControls}
   <div class="toolbox">
     <div>
-      <button type="button" on:click={selectMode} disabled={mode == "select"}
-        >Select</button
+      <button
+        type="button"
+        on:click={attributeMode}
+        disabled={mode == "edit-attribute"}>Edit attributes</button
       >
-      <SelectMode {mode} {drawControls} />
+      <AttributeMode {mode} {drawControls} />
     </div>
     <div>
-      <button type="button" on:click={editMode} disabled={mode == "edit"}
-        >Edit</button
+      <button
+        type="button"
+        on:click={geometryMode}
+        disabled={mode == "edit-geometry"}>Edit geometry</button
       >
       {#if routeSnapper && snapTool}
-        <EditMode bind:mode {routeSnapper} {snapTool} {drawControls} />
+        <GeometryMode bind:mode {routeSnapper} {snapTool} {drawControls} />
       {/if}
     </div>
     <div>

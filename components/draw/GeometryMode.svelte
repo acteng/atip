@@ -7,7 +7,7 @@
   export let drawControls;
 
   $: {
-    if (mode == "edit") {
+    if (mode == "edit-geometry") {
       drawControls.changeMode("static");
     }
   }
@@ -17,7 +17,7 @@
 
   // Calculate hover
   $map.on("mousemove", (e) => {
-    if (mode == "edit" && currentlyEditing == null) {
+    if (mode == "edit-geometry" && currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -34,14 +34,14 @@
     }
   });
   $map.on("mouseout", () => {
-    if (mode == "edit" && currentlyEditing == null) {
+    if (mode == "edit-geometry" && currentlyEditing == null) {
       currentHover.set(null);
     }
   });
 
   // Handle clicking the hovered feature
   $map.on("click", (e) => {
-    if (mode == "edit" && currentlyEditing == null) {
+    if (mode == "edit-geometry" && currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -56,7 +56,7 @@
   });
 
   snapTool.addEventListener("new-route", (e) => {
-    if (mode == "edit") {
+    if (mode == "edit-geometry") {
       const editedRoute = e.detail;
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing);
@@ -72,12 +72,12 @@
       currentlyEditing = null;
 
       // TODO Act like we've selected the line-string we just edited?
-      mode = "select";
+      mode = "edit-attribute";
     }
   });
 
   $map.on("draw.update", (e) => {
-    if (mode == "edit") {
+    if (mode == "edit-geometry") {
       // Assume there's exactly 1 feature
       const feature = e.features[0];
 
@@ -92,7 +92,7 @@
   });
 
   $map.on("draw.selectionchange", (e) => {
-    if (mode == "edit" && e.features.length == 0) {
+    if (mode == "edit-geometry" && e.features.length == 0) {
       drawControls.changeMode("static");
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing);
@@ -101,7 +101,7 @@
       });
 
       currentlyEditing = null;
-      mode = "select";
+      mode = "edit-attribute";
       // TODO Select what we just edited?
     }
   });
@@ -153,3 +153,7 @@
     }
   }
 </script>
+
+{#if mode == "edit-geometry"}
+  <p>Click an intervention to edit its geometry</p>
+{/if}
