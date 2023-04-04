@@ -10,10 +10,13 @@
   // "point" or "polygon"
   export let type;
   export let drawControls;
+  // Maybe null at first
+  export let routeSnapper;
 
   $: {
     if (mode == type) {
       drawControls.changeMode(`draw_${type}`);
+      routeSnapper?.stop();
     }
   }
 
