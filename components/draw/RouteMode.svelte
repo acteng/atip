@@ -2,7 +2,12 @@
   import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
-  import { gjScheme, map, newFeatureId } from "../../stores.js";
+  import {
+    gjScheme,
+    map,
+    newFeatureId,
+    setCurrentlyEditing,
+  } from "../../stores.js";
 
   export let mode;
   export let url;
@@ -52,8 +57,8 @@
           return gj;
         });
 
-        // TODO Act like we've selected the line-string we just drew
         mode = "edit-attribute";
+        setCurrentlyEditing(feature.id);
       }
     });
   });

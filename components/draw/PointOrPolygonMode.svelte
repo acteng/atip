@@ -1,5 +1,10 @@
 <script>
-  import { map, gjScheme, newFeatureId } from "../../stores.js";
+  import {
+    map,
+    gjScheme,
+    newFeatureId,
+    setCurrentlyEditing,
+  } from "../../stores.js";
 
   export let mode;
   // "point" or "polygon"
@@ -29,8 +34,9 @@
       // Clear mapbox-gl-draw state
       drawControls.deleteAll();
 
-      // TODO setCurrentlyEditing to this new thing
       mode = "edit-attribute";
+      // TODO Seems to work for polygons, but not points?
+      setCurrentlyEditing(feature.id);
     }
   });
 </script>
