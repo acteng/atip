@@ -69,10 +69,8 @@
         return gj;
       });
 
+      // Stay in this mode
       currentlyEditing = null;
-
-      // TODO Act like we've selected the line-string we just edited?
-      mode = "edit-attribute";
     }
   });
 
@@ -87,7 +85,7 @@
         return gj;
       });
 
-      // Stay in this state
+      // Stay in this mode
     }
   });
 
@@ -100,9 +98,8 @@
         return gj;
       });
 
+      // Stay in this mode
       currentlyEditing = null;
-      mode = "edit-attribute";
-      // TODO Select what we just edited?
     }
   });
 

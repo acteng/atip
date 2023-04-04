@@ -3,18 +3,16 @@ import { writable, derived } from "svelte/store";
 // A global singleton, containing a loaded map
 export const map = writable(null);
 
+// TODO Should we instead store a map from ID to feature?
 export const gjScheme = writable(emptyGeojson());
+
 // The optional ID of a feature currently hovered from the sidebar or map. When
 // an intervention is open and being edited, hovering is fixed to it.
 export const currentHover = writable(null);
 
-// These act as event dispatchers, but are easier to plumb around. They will
-// either have a feature ID or null.
+// This acts as an event dispatcher, but is easier to plumb around. It either
+// has a feature ID or null.
 export const openFromSidebar = writable(null);
-
-// TODO Should we store a map from ID to feature?
-// TODO DrawControls will partly own state. Do we have to listen for every geometry change?
-// TODO Should we attempt to keep properties in DrawControls or not?
 
 export function emptyGeojson() {
   return {
@@ -23,7 +21,7 @@ export function emptyGeojson() {
   };
 }
 
-// The ID of whatever's being edited
+// The ID of whatever object's attributes are being edited
 export const currentlyEditing = derived(gjScheme, ($gj) => {
   let f = $gj.features.find((f) => f.properties.editing);
   if (f) {
