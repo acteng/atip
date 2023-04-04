@@ -4,6 +4,13 @@
   export let mode;
   export let routeSnapper;
   export let snapTool;
+  export let drawControls;
+
+  $: {
+    if (mode == "edit") {
+      drawControls.changeMode("static");
+    }
+  }
 
   // This is different than the stores.js one!
   let currentlyEditing = null;
