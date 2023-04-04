@@ -30,7 +30,7 @@
       drawControls.deleteAll();
 
       // TODO setCurrentlyEditing to this new thing
-      mode = "select";
+      mode = "edit-attribute";
     }
   });
 </script>

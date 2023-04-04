@@ -30,15 +30,15 @@
       snapTool.innerHTML = "Failed to load";
     }
 
-    // All of these events can happen from select mode, or from edit mode
+    // All of these events can happen from edit attribute or edit geometry mode
     snapTool.addEventListener("activate", () => {
-      if (mode == "select") {
+      if (mode == "edit-attribute") {
         mode = "route";
       }
     });
     snapTool.addEventListener("no-new-route", () => {
       if (mode == "route") {
-        mode = "select";
+        mode = "edit-attribute";
       }
     });
 
@@ -53,7 +53,7 @@
         });
 
         // TODO Act like we've selected the line-string we just drew
-        mode = "select";
+        mode = "edit-attribute";
       }
     });
   });
