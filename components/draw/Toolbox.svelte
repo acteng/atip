@@ -14,12 +14,35 @@
   let snapTool;
 
   // Create and manage this here, then pass down to modes as needed.
-  // Every mode is responsible for changing the mode to the appropriate thing
-  // upon entry. No "onDestroy" equivalent; otherwise multiple components
-  // changeMode with brittle ordering.
   let drawControls;
 
   let mode = "edit-attribute";
+  let attributeMode;
+  let geometryMode;
+  let routeMode;
+  let pointMode;
+  let polygonMode;
+
+  // This must be used; don't manually change mode
+  function changeMode(newMode) {
+    let modes = {
+      "edit-attribute": attributeMode,
+      "edit-geometry": geometryMode,
+      route: routeMode,
+      point: pointMode,
+      polygon: polygonMode,
+    };
+
+    if (mode == newMode) {
+      console.log(`Mode is already ${mode}, not changing`);
+      return;
+    }
+    console.log(`Stopping old mode ${mode}`);
+    modes[mode].stop();
+    mode = newMode;
+    console.log(`Starting new mode ${mode}`);
+    modes[mode].start();
+  }
 
   onMount(() => {
     // Depending on https://github.com/mapbox/mapbox-gl-draw-static-mode/ isn't
@@ -64,20 +87,6 @@
       drawControls = null;
     }
   });
-
-  function attributeMode() {
-    mode = "edit-attribute";
-  }
-  function geometryMode() {
-    mode = "edit-geometry";
-  }
-  // TODO For these and route, disable sidebar interactions
-  function newPointMode() {
-    mode = "point";
-  }
-  function newPolygonMode() {
-    mode = "polygon";
-  }
 </script>
 
 {#if drawControls}
@@ -85,52 +94,63 @@
     <div>
       <button
         type="button"
-        on:click={attributeMode}
+        on:click={() => changeMode("edit-attribute")}
         disabled={mode == "edit-attribute"}>Edit attributes</button
       >
-      <AttributeMode {mode} {drawControls} {routeSnapper} />
+      <AttributeMode bind:this={attributeMode} {mode} />
     </div>
     <div>
       <button
         type="button"
-        on:click={geometryMode}
+        on:click={() => changeMode("edit-geometry")}
         disabled={mode == "edit-geometry"}>Edit geometry</button
       >
       {#if routeSnapper && snapTool}
-        <GeometryMode bind:mode {routeSnapper} {snapTool} {drawControls} />
+        <GeometryMode
+          bind:this={geometryMode}
+          {mode}
+          {routeSnapper}
+          {snapTool}
+          {drawControls}
+        />
       {/if}
     </div>
     <div>
-      <button type="button" on:click={newPointMode} disabled={mode == "point"}
-        >New point</button
+      <button
+        type="button"
+        on:click={() => changeMode("point")}
+        disabled={mode == "point"}>New point</button
       >
       <PointOrPolygonMode
-        bind:mode
+        bind:this={pointMode}
+        thisMode="point"
+        {mode}
+        {changeMode}
         {drawControls}
-        {routeSnapper}
-        type="point"
       />
     </div>
     <div>
       <button
         type="button"
-        on:click={newPolygonMode}
+        on:click={() => changeMode("polygon")}
         disabled={mode == "polygon"}>New polygon</button
       >
       <PointOrPolygonMode
-        bind:mode
+        bind:this={polygonMode}
+        thisMode="polygon"
+        {mode}
+        {changeMode}
         {drawControls}
-        {routeSnapper}
-        type="polygon"
       />
     </div>
     <div>
       <RouteMode
-        bind:mode
+        bind:this={routeMode}
+        {mode}
+        {changeMode}
         url={routeUrl}
         bind:routeSnapper
         bind:snapTool
-        {drawControls}
       />
     </div>
   </div>

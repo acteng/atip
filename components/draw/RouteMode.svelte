@@ -9,18 +9,21 @@
     setCurrentlyEditing,
   } from "../../stores.js";
 
+  const thisMode = "route";
+
   export let mode;
+  export let changeMode;
   export let url;
-  export let drawControls;
 
   export let snapTool;
   let snapProgress;
   export let routeSnapper;
 
-  $: {
-    if (mode == "route") {
-      drawControls.changeMode("static");
-    }
+  // These're for drawing a new route, NOT for editing an existing.
+  // GeometryMode manages the latter.
+  export function start() {}
+  export function stop() {
+    routeSnapper?.stop();
   }
 
   onMount(async () => {
@@ -35,20 +38,17 @@
       snapTool.innerHTML = "Failed to load";
     }
 
-    // All of these events can happen from edit attribute or edit geometry mode
     snapTool.addEventListener("activate", () => {
       if (mode == "edit-attribute") {
-        mode = "route";
+        changeMode(thisMode);
       }
     });
     snapTool.addEventListener("no-new-route", () => {
-      if (mode == "route") {
-        mode = "edit-attribute";
-      }
+      changeMode("edit-attribute");
     });
 
     snapTool.addEventListener("new-route", (e) => {
-      if (mode == "route") {
+      if (mode == thisMode) {
         const feature = e.detail;
         gjScheme.update((gj) => {
           feature.id = newFeatureId(gj);
@@ -57,7 +57,7 @@
           return gj;
         });
 
-        mode = "edit-attribute";
+        changeMode("edit-attribute");
         setCurrentlyEditing(feature.id);
       }
     });

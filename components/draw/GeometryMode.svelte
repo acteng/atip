@@ -1,15 +1,31 @@
 <script>
   import { map, gjScheme, currentHover } from "../../stores.js";
 
+  const thisMode = "edit-geometry";
+
   export let mode;
   export let routeSnapper;
   export let snapTool;
   export let drawControls;
 
-  $: {
-    if (mode == "edit-geometry") {
+  export function start() {}
+  export function stop() {
+    if (currentlyEditing) {
+      // We could've been editing anything; just handle all possibilities
       drawControls.changeMode("static");
+      drawControls.deleteAll();
+
+      routeSnapper.stop();
+
+      gjScheme.update((gj) => {
+        let feature = gj.features.find((f) => f.id == currentlyEditing);
+        delete feature.properties.hide_while_editing;
+        return gj;
+      });
     }
+
+    currentlyEditing = null;
+    currentHover.set(null);
   }
 
   // This is different than the stores.js one!
@@ -17,7 +33,7 @@
 
   // Calculate hover
   $map.on("mousemove", (e) => {
-    if (mode == "edit-geometry" && currentlyEditing == null) {
+    if (mode == thisMode && currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -34,14 +50,14 @@
     }
   });
   $map.on("mouseout", () => {
-    if (mode == "edit-geometry" && currentlyEditing == null) {
+    if (mode == thisMode && currentlyEditing == null) {
       currentHover.set(null);
     }
   });
 
   // Handle clicking the hovered feature
   $map.on("click", (e) => {
-    if (mode == "edit-geometry" && currentlyEditing == null) {
+    if (mode == thisMode && currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -56,7 +72,7 @@
   });
 
   snapTool.addEventListener("new-route", (e) => {
-    if (mode == "edit-geometry") {
+    if (mode == thisMode) {
       const editedRoute = e.detail;
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing);
@@ -73,9 +89,24 @@
       currentlyEditing = null;
     }
   });
+  // TODO I think this is impossible. But we should actually let people
+  // explicitly cancel here.
+  snapTool.addEventListener("no-new-route", () => {
+    if (mode == thisMode) {
+      // Don't modify the thing we were just editing
+      gjScheme.update((gj) => {
+        let feature = gj.features.find((f) => f.id == currentlyEditing);
+        delete feature.properties.hide_while_editing;
+        return gj;
+      });
+
+      // Stay in this mode
+      currentlyEditing = null;
+    }
+  });
 
   $map.on("draw.update", (e) => {
-    if (mode == "edit-geometry") {
+    if (mode == thisMode) {
       // Assume there's exactly 1 feature
       const feature = e.features[0];
 
@@ -90,8 +121,12 @@
   });
 
   $map.on("draw.selectionchange", (e) => {
-    if (mode == "edit-geometry" && e.features.length == 0) {
+    if (mode == thisMode && e.features.length == 0) {
       drawControls.changeMode("static");
+      drawControls.deleteAll();
+      // TODO drawControls continues to render a faint blue outline around
+      // polygons, even though we told it to forget about everything. Sigh.
+
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing);
         delete feature.properties.hide_while_editing;
@@ -131,6 +166,6 @@
   }
 </script>
 
-{#if mode == "edit-geometry"}
+{#if mode == thisMode}
   <p>Click an intervention to edit its geometry</p>
 {/if}
