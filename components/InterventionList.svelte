@@ -39,10 +39,10 @@
     openFromSidebar.set(id);
 
     // Remove the editing property from everything else, so that the Accordion is hidden
+    // TODO I'm not sure I trust this. Replace Accordion and reconsider this.
     for (let f of $gjScheme.features) {
       if (f.properties.editing && f.id != id) {
         delete f.properties.editing;
-        return;
       }
     }
   }

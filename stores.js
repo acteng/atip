@@ -1,4 +1,4 @@
-import { writable, derived } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 
 // A global singleton, containing a loaded map
 export const map = writable(null);
@@ -35,6 +35,11 @@ export const currentlyEditing = derived(gjScheme, ($gj) => {
 // accordion to work, we have to bind something simple like this.
 // id may be null, meaning we're not editing anything
 export function setCurrentlyEditing(id) {
+  // Don't cause spurious updates
+  if (get(currentlyEditing) == id) {
+    return;
+  }
+
   gjScheme.update((gj) => {
     for (let f of gj.features) {
       if (f.id == id) {
