@@ -49,10 +49,9 @@
     $map.addControl(drawControls);
     drawControls.changeMode("static");
 
-    // mapbox-gl-draw inserts a button to control modes; destroy it
-    let elements = document.getElementsByClassName(
-      "mapboxgl-ctrl-group mapboxgl-ctrl"
-    );
+    // mapbox-gl-draw inserts a button to control modes; destroy it. Note this
+    // is a brittle way to identify the controls to remove.
+    let elements = document.getElementsByClassName("maplibregl-ctrl-top-right");
     // We're modifying the HTMLCollection while we iterate over it, so be careful
     while (elements.length > 0) {
       elements[0].remove();
