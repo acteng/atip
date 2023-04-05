@@ -83,22 +83,16 @@
   }
 
   function backfill(json) {
-    let idCounter = 0;
+    let idCounter = 1;
     for (let f of json.features) {
       // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
       if (f.geometry.type == "LineString" && !f.properties.length_meters) {
         f.properties.length_meters =
           length(f.geometry, { units: "kilometers" }) * 1000.0;
       }
-      // TODO Hack around https://github.com/mapbox/mapbox-gl-js/issues/2716.
-      // Feature IDs need to be numeric. Force all string IDs to be their index
-      // in the FeatureCollection, but note that isn't an invariant. As we
-      // delete or create new features, any unique number is valid.
-      if (!Number.isInteger(f.id)) {
-        // TODO This could conflict with a previous ID
-        f.id = idCounter;
-      }
-      idCounter++;
+
+      // Always overwrite IDs, and follow what newFeatureId requires.
+      f.id = idCounter++;
     }
 
     return json;
