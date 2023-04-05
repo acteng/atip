@@ -49,12 +49,23 @@ export function setCurrentlyEditing(id) {
   currentHover.set(id);
 }
 
+// All feature IDs must:
+//
+// - be unique
+// - be numeric; parts of maplibre can't handle string IDs
+//   (https://github.com/mapbox/mapbox-gl-js/issues/2716)
+// - not be 0; mapbox-gl-draw treats this as a missing ID
+//
+// Although this implementation may appear to ID features in order (1, 2, 3,
+// etc), this is NOT an invariant. Do not assume this; it will not be true as
+// soon as a user deletes or reorders an intervention.
 export function newFeatureId(gj) {
   let ids = new Set();
   for (let f of gj.features) {
     ids.add(f.id);
   }
-  let id = ids.size;
+  // Always start with ID 1
+  let id = ids.size + 1;
   while (ids.has(id)) {
     id++;
   }
