@@ -17,10 +17,7 @@
   $: {
     if (mode == "edit-attribute") {
       drawControls.changeMode("static");
-      // TODO The stop() implementation should be robust to the source not being ready yet
-      if (routeSnapper?.isActive()) {
-        routeSnapper?.stop();
-      }
+      routeSnapper?.stop();
     }
   }
 

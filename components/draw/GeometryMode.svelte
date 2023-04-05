@@ -117,26 +117,6 @@
     currentlyEditing = id;
 
     if (feature.geometry.type == "LineString") {
-      // TODO Oops, we need to fix upstream. If they're missing, we can at
-      // least attempt the endpoints.
-      if (!feature.properties.waypoints) {
-        feature.properties.waypoints = [
-          {
-            lon: feature.geometry.coordinates[0][0],
-            lat: feature.geometry.coordinates[0][1],
-            snapped: true,
-          },
-          {
-            lon: feature.geometry.coordinates[
-              feature.geometry.coordinates.length - 1
-            ][0],
-            lat: feature.geometry.coordinates[
-              feature.geometry.coordinates.length - 1
-            ][1],
-            snapped: true,
-          },
-        ];
-      }
       routeSnapper.editExisting(feature);
     } else if (feature.geometry.type == "Polygon") {
       // The feature already has an ID set, so no need to check what add() returns
