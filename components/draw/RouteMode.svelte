@@ -39,7 +39,9 @@
     }
 
     snapTool.addEventListener("activate", () => {
-      if (mode == "edit-attribute") {
+      // We can start the route tool from any mode. Enter new route mode UNLESS
+      // we're already in GeometryMode.
+      if (mode != "edit-geometry") {
         changeMode(thisMode);
       }
     });
