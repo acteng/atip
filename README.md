@@ -18,6 +18,16 @@ You'll need
 `npm install` once. Use `npm run dev` to work locally. To auto-format code,
 `npm run fmt`.
 
+### Monkey-patching dependencies
+
+If you need to temporarily modify an NPM dependency (like say `route-snapper`), you can:
+
+1.  Manually modify something in `node_modules/`
+2.  `rm -rf node_modules/.vite; npm run dev`
+3.  The change should take effect. If not, Ctrl+Shift+R in browser to force a refresh
+
+To clean up afterwards, delete `node_modules` and `npm i` again.
+
 ## Tests
 
 Run all tests: `npm run test`
