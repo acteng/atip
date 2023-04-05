@@ -9,21 +9,19 @@
     openFromSidebar,
   } from "../../stores.js";
 
-  export let mode;
-  export let drawControls;
-  // Maybe null at first
-  export let routeSnapper;
+  const thisMode = "edit-attribute";
 
-  $: {
-    if (mode == "edit-attribute") {
-      drawControls.changeMode("static");
-      routeSnapper?.stop();
-    }
+  // TODO Just tell us if we're the current mode or not, actually...
+  export let mode;
+
+  export function start() {}
+  export function stop() {
+    setCurrentlyEditing(null);
   }
 
   // Calculate hover
   $map.on("mousemove", (e) => {
-    if (mode == "edit-attribute" && $currentlyEditing == null) {
+    if (mode == thisMode && $currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -40,14 +38,14 @@
     }
   });
   $map.on("mouseout", () => {
-    if (mode == "edit-attribute" && $currentlyEditing == null) {
+    if (mode == thisMode && $currentlyEditing == null) {
       currentHover.set(null);
     }
   });
 
   // Handle clicking the hovered feature
   $map.on("click", (e) => {
-    if (mode == "edit-attribute") {
+    if (mode == thisMode) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -66,7 +64,7 @@
   // When the user starts editing something from the sidebar, warp to what's
   // being edited. (Don't do this when clicking the object on the map.)
   openFromSidebar.subscribe((id) => {
-    if (mode == "edit-attribute" && id) {
+    if (mode == thisMode && id) {
       let feature = $gjScheme.features.find((f) => f.id == id);
 
       // Extent of points is defined in a weird way, special-case it
@@ -83,6 +81,6 @@
   });
 </script>
 
-{#if mode == "edit-attribute"}
+{#if mode == thisMode}
   <p>Click an intervention to fill out its attributes</p>
 {/if}

@@ -13,9 +13,16 @@
       console.log(`Failed to load from local storage: ${err}`);
     }
   }
-  gjScheme.subscribe(() =>
-    window.localStorage.setItem(authorityName, JSON.stringify(geojsonToSave()))
-  );
+
+  $: {
+    if ($gjScheme) {
+      console.log(`GJ changed, saving to local storage`);
+      window.localStorage.setItem(
+        authorityName,
+        JSON.stringify(geojsonToSave())
+      );
+    }
+  }
 
   function clearAll() {
     if (
