@@ -7,6 +7,7 @@
   import GeometryMode from "./GeometryMode.svelte";
   import RouteMode from "./RouteMode.svelte";
   import PointOrPolygonMode from "./PointOrPolygonMode.svelte";
+  import PointMode from "./PointMode.svelte";
 
   export let routeUrl;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
@@ -59,6 +60,7 @@
     drawControls = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
+        // TODO Remove soon
         point: true,
         polygon: true,
       },
@@ -121,13 +123,7 @@
         on:click={() => changeMode("point")}
         disabled={mode == "point"}>New point</button
       >
-      <PointOrPolygonMode
-        bind:this={pointMode}
-        thisMode="point"
-        {mode}
-        {changeMode}
-        {drawControls}
-      />
+      <PointMode bind:this={pointMode} {mode} {changeMode} />
     </div>
     <div>
       <button
