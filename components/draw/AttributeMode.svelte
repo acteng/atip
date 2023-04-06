@@ -13,6 +13,7 @@
 
   // TODO Just tell us if we're the current mode or not, actually...
   export let mode;
+  export let changeMode;
 
   export function start() {}
   export function stop() {
@@ -61,10 +62,10 @@
     }
   });
 
-  // When the user starts editing something from the sidebar, warp to what's
-  // being edited. (Don't do this when clicking the object on the map.)
   openFromSidebar.subscribe((id) => {
-    if (mode == thisMode && id) {
+    if (id) {
+      // When the user starts editing something from the sidebar, warp to what's
+      // being edited. (Don't do this when clicking the object on the map.)
       let feature = $gjScheme.features.find((f) => f.id == id);
 
       // Extent of points is defined in a weird way, special-case it
@@ -77,6 +78,10 @@
           duration: 500,
         });
       }
+
+      // Interrupt any other mode and switch to this one. No need to
+      // setCurrentlyEditing -- the caller already sets the editing property.
+      changeMode(thisMode);
     }
   });
 </script>
