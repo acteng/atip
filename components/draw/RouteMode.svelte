@@ -44,12 +44,10 @@
       snapTool.innerHTML = "Failed to load";
     }
 
+    // This event only happens when we click the "New route" button. So no
+    // matter what mode we're in, switch into this mode.
     snapTool.addEventListener("activate", () => {
-      // We can start the route tool from any mode. Enter new route mode UNLESS
-      // we're already in GeometryMode.
-      if (mode != "edit-geometry") {
-        changeMode(thisMode);
-      }
+      changeMode(thisMode);
     });
     snapTool.addEventListener("no-new-route", () => {
       if (mode == thisMode) {
