@@ -109,6 +109,7 @@
         <GeometryMode
           bind:this={geometryMode}
           {mode}
+          {changeMode}
           {routeSnapper}
           {snapTool}
           {drawControls}

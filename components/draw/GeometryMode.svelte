@@ -4,6 +4,7 @@
   const thisMode = "edit-geometry";
 
   export let mode;
+  export let changeMode;
   export let routeSnapper;
   export let snapTool;
   export let drawControls;
@@ -89,8 +90,6 @@
       currentlyEditing = null;
     }
   });
-  // TODO I think this is impossible. But we should actually let people
-  // explicitly cancel here.
   snapTool.addEventListener("no-new-route", () => {
     if (mode == thisMode) {
       // Don't modify the thing we were just editing
@@ -102,6 +101,18 @@
 
       // Stay in this mode
       currentlyEditing = null;
+    }
+  });
+
+  snapTool.addEventListener("activate", () => {
+    if (mode == thisMode) {
+      // This event will happen when we call editExisting; ignore it. But if
+      // we're currently editing something else, then actually change into
+      // route mode.
+      let feature = $gjScheme.features.find((f) => f.id == currentlyEditing);
+      if (feature.geometry.type != "LineString") {
+        changeMode("route");
+      }
     }
   });
 

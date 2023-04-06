@@ -21,7 +21,13 @@
 
   // These're for drawing a new route, NOT for editing an existing.
   // GeometryMode manages the latter.
-  export function start() {}
+  export function start() {
+    // When we enter this mode by clicking the button from edit-geometry, we
+    // call routeSnapper.stop(). Re-activate it if so.
+    if (!routeSnapper.isActive()) {
+      routeSnapper.start();
+    }
+  }
   export function stop() {
     routeSnapper?.stop();
   }
@@ -46,7 +52,9 @@
       }
     });
     snapTool.addEventListener("no-new-route", () => {
-      changeMode("edit-attribute");
+      if (mode == thisMode) {
+        changeMode("edit-attribute");
+      }
     });
 
     snapTool.addEventListener("new-route", (e) => {
