@@ -32,6 +32,7 @@
   }
 
   function startEditing(id) {
+    console.log(`Clicked ${id} from the sidebar; going to edit-attribute`);
     // Always set this to null first, to force subscribers to see the update.
     // It's possible to open something from the sidebar, close it (by clicking
     // on the map or using the sidebar), then reopen the same thing.
@@ -39,12 +40,15 @@
     openFromSidebar.set(id);
 
     // Remove the editing property from everything else, so that the Accordion is hidden
-    // TODO I'm not sure I trust this. Replace Accordion and reconsider this.
+    // TODO setCurrentlyEditing would be nicer to call here, but because the
+    // editing property is bound, the Accordion messes up. We have to do this.
     for (let f of $gjScheme.features) {
       if (f.properties.editing && f.id != id) {
         delete f.properties.editing;
       }
     }
+    // Mimic what setCurrentlyEditing would do
+    currentHover.set(id);
   }
 
   function onKeydown(e) {
@@ -68,7 +72,7 @@
 <svelte:window on:keydown={onKeydown} />
 
 <Accordion>
-  {#each $gjScheme.features as feature, i}
+  {#each $gjScheme.features as feature, i (feature.id)}
     <AccordionItem
       bind:open={feature.properties.editing}
       on:click={startEditing(feature.id)}

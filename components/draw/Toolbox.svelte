@@ -97,7 +97,7 @@
         on:click={() => changeMode("edit-attribute")}
         disabled={mode == "edit-attribute"}>Edit attributes</button
       >
-      <AttributeMode bind:this={attributeMode} {mode} />
+      <AttributeMode bind:this={attributeMode} {mode} {changeMode} />
     </div>
     <div>
       <button
