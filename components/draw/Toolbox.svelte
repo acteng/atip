@@ -2,6 +2,7 @@
   import MapboxDraw from "@mapbox/mapbox-gl-draw";
   import { onMount, onDestroy } from "svelte";
   import { map } from "../../stores.js";
+  import { PointTool } from "./point_tool.js";
 
   import AttributeMode from "./AttributeMode.svelte";
   import GeometryMode from "./GeometryMode.svelte";
@@ -16,6 +17,7 @@
 
   // Create and manage this here, then pass down to modes as needed.
   let drawControls;
+  let pointTool;
 
   let mode = "edit-attribute";
   let attributeMode;
@@ -81,6 +83,8 @@
     while (elements.length > 0) {
       elements[0].remove();
     }
+
+    pointTool = new PointTool($map);
   });
 
   onDestroy(() => {
@@ -114,6 +118,7 @@
           {routeSnapper}
           {snapTool}
           {drawControls}
+          {pointTool}
         />
       {/if}
     </div>
@@ -123,7 +128,7 @@
         on:click={() => changeMode("point")}
         disabled={mode == "point"}>New point</button
       >
-      <PointMode bind:this={pointMode} {mode} {changeMode} />
+      <PointMode bind:this={pointMode} {mode} {changeMode} {pointTool} />
     </div>
     <div>
       <button

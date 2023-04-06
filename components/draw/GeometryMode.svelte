@@ -7,6 +7,7 @@
   export let routeSnapper;
   export let snapTool;
   export let drawControls;
+  export let pointTool;
 
   export function start() {}
   export function stop() {
@@ -16,6 +17,8 @@
       drawControls.deleteAll();
 
       routeSnapper.stop();
+
+      pointTool.stop();
 
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing);
@@ -138,6 +141,20 @@
     }
   });
 
+  pointTool.addEventListener((feature) => {
+    if (mode == thisMode) {
+      gjScheme.update((gj) => {
+        let updateFeature = gj.features.find((f) => f.id == currentlyEditing);
+        updateFeature.geometry = feature.geometry;
+        delete updateFeature.properties.hide_while_editing;
+        return gj;
+      });
+
+      // Stay in this mode
+      currentlyEditing = null;
+    }
+  });
+
   function startEditing(id) {
     currentHover.set(null);
 
@@ -158,10 +175,9 @@
       drawControls.add(feature);
       drawControls.changeMode("direct_select", { featureId: currentlyEditing });
     } else if (feature.geometry.type == "Point") {
-      drawControls.add(feature);
-      // We can't direct_select a point
-      // TODO The UX is awkward. Override the style and make the point much larger?
-      drawControls.changeMode("simple_select");
+      // No need to pass in the existing feature.geometry; it's the same as
+      // where the cursor is anyway
+      pointTool.start();
     }
   }
 </script>
