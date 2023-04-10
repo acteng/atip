@@ -28,7 +28,9 @@
     currentHover.set(null);
   }
 
-  // This is different than the stores.js one!
+  // stores.js defines a "currently editing" derived store, referring to
+  // editing attributes. This is local state to track what ID we're currently
+  // editing for geometry. The two are unrelated; we should rename things.
   let currentlyEditing = null;
 
   // Calculate hover
