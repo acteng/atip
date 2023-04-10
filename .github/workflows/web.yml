@@ -2,7 +2,7 @@ name: Deploy web
 
 on:
   push:
-    branches: [main, draw_v3]
+    branches: [main]
 
 jobs:
   build:
@@ -19,20 +19,6 @@ jobs:
       - run: npm ci
 
       - run: npm run build --if-present -- --base=/atip/
-
-      - name: Checkout experimental branch
-        uses: actions/checkout@v2
-        with:
-          ref: draw_v3
-          path: draw_v3
-          clean: false
-
-      - name: Build experimental version of web app
-        run: |
-          cd draw_v3
-          npm ci
-          npm run build --if-present -- --base=/atip/draw_v3/
-          mv dist ../dist/draw_v3
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
