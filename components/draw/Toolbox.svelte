@@ -3,12 +3,13 @@
   import { onMount, onDestroy } from "svelte";
   import { map } from "../../stores.js";
   import { PointTool } from "./point_tool.js";
+  import { PolygonTool } from "./polygon_tool.js";
 
   import AttributeMode from "./AttributeMode.svelte";
   import GeometryMode from "./GeometryMode.svelte";
   import RouteMode from "./RouteMode.svelte";
-  import PointOrPolygonMode from "./PointOrPolygonMode.svelte";
   import PointMode from "./PointMode.svelte";
+  import PolygonMode from "./PolygonMode.svelte";
 
   export let routeUrl;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
@@ -18,6 +19,7 @@
   // Create and manage this here, then pass down to modes as needed.
   let drawControls;
   let pointTool;
+  let polygonTool;
 
   let mode = "edit-attribute";
   let attributeMode;
@@ -85,6 +87,7 @@
     }
 
     pointTool = new PointTool($map);
+    polygonTool = new PolygonTool($map);
   });
 
   onDestroy(() => {
@@ -92,6 +95,7 @@
       $map.removeControl(drawControls);
       drawControls = null;
     }
+    // TODO Teardown pointTool and polygonTool
   });
 </script>
 
@@ -136,13 +140,7 @@
         on:click={() => changeMode("polygon")}
         disabled={mode == "polygon"}>New polygon</button
       >
-      <PointOrPolygonMode
-        bind:this={polygonMode}
-        thisMode="polygon"
-        {mode}
-        {changeMode}
-        {drawControls}
-      />
+      <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
     </div>
     <div>
       <RouteMode
