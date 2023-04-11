@@ -64,6 +64,10 @@ export function setCurrentlyEditing(id) {
 // Although this implementation may appear to ID features in order (1, 2, 3,
 // etc), this is NOT an invariant. Do not assume this; it will not be true as
 // soon as a user deletes or reorders an intervention.
+//
+// NOTE! If you call this twice in a row in a `gjScheme.update` transaction
+// without adding one of the new features, then this'll return the same ID
+// twice!
 export function newFeatureId(gj) {
   let ids = new Set();
   for (let f of gj.features) {
