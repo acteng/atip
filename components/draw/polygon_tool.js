@@ -114,7 +114,11 @@ export class PolygonTool {
     this.active = true;
   }
 
-  // TODO startExisting, take geometry
+  editExisting(feature) {
+    this.active = true;
+    this.points = feature.geometry.coordinates[0];
+    this.points.pop();
+  }
 
   stop() {
     this.points = [];

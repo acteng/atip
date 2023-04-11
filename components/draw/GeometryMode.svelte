@@ -8,6 +8,7 @@
   export let snapTool;
   export let drawControls;
   export let pointTool;
+  export let polygonTool;
 
   export function start() {}
   export function stop() {
@@ -19,6 +20,7 @@
       routeSnapper.stop();
 
       pointTool.stop();
+      polygonTool.stop();
 
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing);
@@ -141,19 +143,21 @@
     }
   });
 
-  pointTool.addEventListener((feature) => {
-    if (mode == thisMode) {
-      gjScheme.update((gj) => {
-        let updateFeature = gj.features.find((f) => f.id == currentlyEditing);
-        updateFeature.geometry = feature.geometry;
-        delete updateFeature.properties.hide_while_editing;
-        return gj;
-      });
+  for (let tool of [pointTool, polygonTool]) {
+    tool.addEventListener((feature) => {
+      if (mode == thisMode) {
+        gjScheme.update((gj) => {
+          let updateFeature = gj.features.find((f) => f.id == currentlyEditing);
+          updateFeature.geometry = feature.geometry;
+          delete updateFeature.properties.hide_while_editing;
+          return gj;
+        });
 
-      // Stay in this mode
-      currentlyEditing = null;
-    }
-  });
+        // Stay in this mode
+        currentlyEditing = null;
+      }
+    });
+  }
 
   function startEditing(id) {
     currentHover.set(null);
@@ -171,9 +175,7 @@
     if (feature.geometry.type == "LineString") {
       routeSnapper.editExisting(feature);
     } else if (feature.geometry.type == "Polygon") {
-      // The feature already has an ID set, so no need to check what add() returns
-      drawControls.add(feature);
-      drawControls.changeMode("direct_select", { featureId: currentlyEditing });
+      polygonTool.editExisting(feature);
     } else if (feature.geometry.type == "Point") {
       // No need to pass in the existing feature.geometry; it's the same as
       // where the cursor is anyway
