@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@mapbox/geojson-extent": "^1.0.1",
-    "@mapbox/mapbox-gl-draw": "^1.4.0",
     "@turf/boolean-point-in-polygon": "^6.5.0",
     "@turf/length": "^6.5.0",
     "@turf/mask": "^6.5.0",

@@ -1,6 +1,4 @@
 <script>
-  import MapboxDraw from "@mapbox/mapbox-gl-draw";
-  import { onMount, onDestroy } from "svelte";
   import { map } from "../../stores.js";
   import { PointTool } from "./point_tool.js";
   import { PolygonTool } from "./polygon_tool.js";
@@ -16,10 +14,10 @@
   let routeSnapper;
   let snapTool;
 
-  // Create and manage this here, then pass down to modes as needed.
-  let drawControls;
-  let pointTool;
-  let polygonTool;
+  // Create and manage these here, then pass down to modes as needed.
+  // TODO Teardown too
+  let pointTool = new PointTool($map);
+  let polygonTool = new PolygonTool($map);
 
   let mode = "edit-attribute";
   let attributeMode;
@@ -48,113 +46,61 @@
     console.log(`Starting new mode ${mode}`);
     modes[mode].start();
   }
-
-  onMount(() => {
-    // Depending on https://github.com/mapbox/mapbox-gl-draw-static-mode/ isn't
-    // useful for something so small
-    let StaticMode = {};
-    StaticMode.onSetup = function () {
-      this.setActionableState();
-      return {};
-    };
-    StaticMode.toDisplayFeatures = function (state, geojson, display) {
-      display(geojson);
-    };
-
-    drawControls = new MapboxDraw({
-      displayControlsDefault: false,
-      controls: {
-        // TODO Remove soon
-        point: true,
-        polygon: true,
-      },
-      modes: Object.assign(
-        {
-          static: StaticMode,
-        },
-        MapboxDraw.modes
-      ),
-    });
-    $map.addControl(drawControls);
-    drawControls.changeMode("static");
-
-    // mapbox-gl-draw inserts a button to control modes; destroy it. Note this
-    // is a brittle way to identify the controls to remove.
-    let elements = document.getElementsByClassName("maplibregl-ctrl-top-right");
-    // We're modifying the HTMLCollection while we iterate over it, so be careful
-    while (elements.length > 0) {
-      elements[0].remove();
-    }
-
-    pointTool = new PointTool($map);
-    polygonTool = new PolygonTool($map);
-  });
-
-  onDestroy(() => {
-    if (drawControls) {
-      $map.removeControl(drawControls);
-      drawControls = null;
-    }
-    // TODO Teardown pointTool and polygonTool
-  });
 </script>
 
-{#if drawControls}
-  <div class="toolbox">
-    <div>
-      <button
-        type="button"
-        on:click={() => changeMode("edit-attribute")}
-        disabled={mode == "edit-attribute"}>Edit attributes</button
-      >
-      <AttributeMode bind:this={attributeMode} {mode} {changeMode} />
-    </div>
-    <div>
-      <button
-        type="button"
-        on:click={() => changeMode("edit-geometry")}
-        disabled={mode == "edit-geometry"}>Edit geometry</button
-      >
-      {#if routeSnapper && snapTool}
-        <GeometryMode
-          bind:this={geometryMode}
-          {mode}
-          {routeSnapper}
-          {snapTool}
-          {drawControls}
-          {pointTool}
-          {polygonTool}
-        />
-      {/if}
-    </div>
-    <div>
-      <button
-        type="button"
-        on:click={() => changeMode("point")}
-        disabled={mode == "point"}>New point</button
-      >
-      <PointMode bind:this={pointMode} {mode} {changeMode} {pointTool} />
-    </div>
-    <div>
-      <button
-        type="button"
-        on:click={() => changeMode("polygon")}
-        disabled={mode == "polygon"}>New polygon</button
-      >
-      <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
-    </div>
-    <div>
-      <RouteMode
-        bind:this={routeMode}
-        {mode}
-        {changeMode}
-        url={routeUrl}
-        bind:routeSnapper
-        bind:snapTool
-      />
-    </div>
+<div class="toolbox">
+  <div>
+    <button
+      type="button"
+      on:click={() => changeMode("edit-attribute")}
+      disabled={mode == "edit-attribute"}>Edit attributes</button
+    >
+    <AttributeMode bind:this={attributeMode} {mode} {changeMode} />
   </div>
-{/if}
+  <div>
+    <button
+      type="button"
+      on:click={() => changeMode("edit-geometry")}
+      disabled={mode == "edit-geometry"}>Edit geometry</button
+    >
+    {#if routeSnapper && snapTool}
+      <GeometryMode
+        bind:this={geometryMode}
+        {mode}
+        {routeSnapper}
+        {snapTool}
+        {pointTool}
+        {polygonTool}
+      />
+    {/if}
+  </div>
+  <div>
+    <button
+      type="button"
+      on:click={() => changeMode("point")}
+      disabled={mode == "point"}>New point</button
+    >
+    <PointMode bind:this={pointMode} {mode} {changeMode} {pointTool} />
+  </div>
+  <div>
+    <button
+      type="button"
+      on:click={() => changeMode("polygon")}
+      disabled={mode == "polygon"}>New polygon</button
+    >
+    <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
+  </div>
+  <div>
+    <RouteMode
+      bind:this={routeMode}
+      {mode}
+      {changeMode}
+      url={routeUrl}
+      bind:routeSnapper
+      bind:snapTool
+    />
+  </div>
+</div>
 
 <style>
   .toolbox {
