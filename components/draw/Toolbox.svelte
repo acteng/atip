@@ -9,6 +9,7 @@
   import RouteMode from "./RouteMode.svelte";
   import PointMode from "./PointMode.svelte";
   import PolygonMode from "./PolygonMode.svelte";
+  import SplitRouteMode from "./SplitRouteMode.svelte";
 
   export let routeUrl;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
@@ -26,6 +27,7 @@
   let routeMode;
   let pointMode;
   let polygonMode;
+  let splitRouteMode;
 
   // This must be used; don't manually change mode
   function changeMode(newMode) {
@@ -35,6 +37,7 @@
       route: routeMode,
       point: pointMode,
       polygon: polygonMode,
+      "split-route": splitRouteMode,
     };
 
     if (mode == newMode) {
@@ -105,6 +108,14 @@
       bind:routeSnapper
       bind:snapTool
     />
+  </div>
+  <div>
+    <button
+      type="button"
+      on:click={() => changeMode("split-route")}
+      disabled={mode == "split-route"}>Split route</button
+    >
+    <SplitRouteMode bind:this={splitRouteMode} {mode} {changeMode} />
   </div>
 </div>
 
