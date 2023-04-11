@@ -12,6 +12,10 @@
   import { colors, circleRadius, lineWidth } from "../../colors.js";
   import { gjScheme, map } from "../../stores.js";
 
+  // TODO Document here the z-ordering between all the layers defined
+  // everywhere. Or maybe even pass a list to overwriteLayer and have it figure
+  // things out!
+
   let source = "interventions";
 
   overwriteSource($map, source, {
@@ -73,12 +77,19 @@
     // TODO Outline?
   });
 
-  overwriteLayer($map, {
-    id: "interventions-lines",
-    source,
-    filter: ["all", isLine, hideWhileEditing],
-    ...drawLine(colorByInterventionType, lineWidth),
-  });
+  // Draw underneath the route tool
+  // TODO Also want this to be beneath route-points, but we can only specify one
+  // TODO Also draw beneath draw-split-route
+  overwriteLayer(
+    $map,
+    {
+      id: "interventions-lines",
+      source,
+      filter: ["all", isLine, hideWhileEditing],
+      ...drawLine(colorByInterventionType, lineWidth),
+    },
+    "route-lines"
+  );
   // Draw endpoints to emphasize where two LineStrings meet
   overwriteLayer($map, {
     id: "interventions-lines-endpoints",
