@@ -20,7 +20,31 @@
   });
   // Keep the final data synced to what's drawn here
   $: {
-    $map.getSource(source).setData($gjScheme);
+    let copy = JSON.parse(JSON.stringify($gjScheme));
+    // Add points for the ends of every LineString
+    let endpoints = [];
+    for (let f of copy.features) {
+      if (f.geometry.type == "LineString") {
+        for (let pt of [
+          f.geometry.coordinates[0],
+          f.geometry.coordinates[f.geometry.coordinates.length - 1],
+        ]) {
+          endpoints.push({
+            type: "Feature",
+            properties: {
+              endpoint: true,
+            },
+            geometry: {
+              type: "Point",
+              coordinates: pt,
+            },
+          });
+        }
+      }
+    }
+    copy.features = copy.features.concat(endpoints);
+
+    $map.getSource(source).setData(copy);
   }
 
   // The fallback white should never be used in practice
@@ -39,20 +63,36 @@
   ];
 
   const hideWhileEditing = ["!=", "hide_while_editing", true];
+  const notEndpoint = ["!=", "endpoint", true];
 
   overwriteLayer($map, {
     id: "interventions-points",
     source,
-    filter: ["all", isPoint, hideWhileEditing],
+    filter: ["all", isPoint, hideWhileEditing, notEndpoint],
     ...drawCircle(colorByInterventionType, circleRadius),
     // TODO Outline?
   });
+
   overwriteLayer($map, {
     id: "interventions-lines",
     source,
     filter: ["all", isLine, hideWhileEditing],
     ...drawLine(colorByInterventionType, lineWidth),
   });
+  // Draw endpoints to emphasize where two LineStrings meet
+  overwriteLayer($map, {
+    id: "interventions-lines-endpoints",
+    source,
+    filter: ["==", "endpoint", true],
+    type: "circle",
+    paint: {
+      "circle-radius": 0.5 * lineWidth,
+      "circle-opacity": 0.0,
+      "circle-stroke-color": colors.lineEndpointColor,
+      "circle-stroke-width": 2.0,
+    },
+  });
+
   overwriteLayer(
     $map,
     {
