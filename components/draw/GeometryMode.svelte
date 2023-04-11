@@ -6,7 +6,6 @@
   export let mode;
   export let routeSnapper;
   export let snapTool;
-  export let drawControls;
   export let pointTool;
   export let polygonTool;
 
@@ -14,11 +13,7 @@
   export function stop() {
     if (currentlyEditing) {
       // We could've been editing anything; just handle all possibilities
-      drawControls.changeMode("static");
-      drawControls.deleteAll();
-
       routeSnapper.stop();
-
       pointTool.stop();
       polygonTool.stop();
 
@@ -110,39 +105,7 @@
     }
   });
 
-  $map.on("draw.update", (e) => {
-    if (mode == thisMode) {
-      // Assume there's exactly 1 feature
-      const feature = e.features[0];
-
-      gjScheme.update((gj) => {
-        let updateFeature = gj.features.find((f) => f.id == currentlyEditing);
-        updateFeature.geometry = feature.geometry;
-        return gj;
-      });
-
-      // Stay in this mode
-    }
-  });
-
-  $map.on("draw.selectionchange", (e) => {
-    if (mode == thisMode && e.features.length == 0) {
-      drawControls.changeMode("static");
-      drawControls.deleteAll();
-      // TODO drawControls continues to render a faint blue outline around
-      // polygons, even though we told it to forget about everything. Sigh.
-
-      gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing);
-        delete feature.properties.hide_while_editing;
-        return gj;
-      });
-
-      // Stay in this mode
-      currentlyEditing = null;
-    }
-  });
-
+  // TODO Also have cancel buttons for these tools
   for (let tool of [pointTool, polygonTool]) {
     tool.addEventListener((feature) => {
       if (mode == thisMode) {
