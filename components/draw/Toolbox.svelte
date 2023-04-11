@@ -123,6 +123,7 @@
           {snapTool}
           {drawControls}
           {pointTool}
+          {polygonTool}
         />
       {/if}
     </div>
