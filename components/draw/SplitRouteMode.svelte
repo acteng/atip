@@ -1,6 +1,9 @@
 <script>
   import nearestPointOnLine from "@turf/nearest-point-on-line";
+  import { point } from "@turf/helpers";
+  import length from "@turf/length";
   import lineSplit from "@turf/line-split";
+  import lineSlice from "@turf/line-slice";
   import { gjScheme, map, emptyGeojson, newFeatureId } from "../../stores.js";
   import {
     overwriteSource,
@@ -80,11 +83,13 @@
           piece2.id = newFeatureId(gj);
 
           // The properties get lost. Copy everything to both
-          piece1.properties = gj.features[snappedIndex].properties;
+          piece1.properties = JSON.parse(
+            JSON.stringify(gj.features[snappedIndex].properties)
+          );
           // "Deep clone"
           piece2.properties = JSON.parse(JSON.stringify(piece1.properties));
 
-          // TODO Need to fix length_meters and waypoints!
+          fixRouteProperties(gj.features[snappedIndex], piece1, piece2, cursor);
 
           // Replace the one LineString we snapped to with the two new pieces
           gj.features.splice(snappedIndex, 1, piece1, piece2);
@@ -135,6 +140,63 @@
         coordinates: pt,
       },
     };
+  }
+
+  // TODO Move this function to route-snapper, and remove some turf dependencies.
+  // The implementation there would likely be Rust, to avoid depending on turf in the NPM package...
+  function fixRouteProperties(original, piece1, piece2, splitPt) {
+    // Fix length
+    piece1.properties.length_meters =
+      length(piece1.geometry, { units: "kilometers" }) * 1000.0;
+    piece2.properties.length_meters =
+      length(piece2.geometry, { units: "kilometers" }) * 1000.0;
+
+    piece1.properties.waypoints = [];
+    piece2.properties.waypoints = [];
+
+    let splitDist = distanceAlongLine(original, splitPt);
+    let firstPiece = true;
+    for (let waypt of original.properties.waypoints) {
+      let wayptDist = distanceAlongLine(
+        original,
+        point([waypt.lon, waypt.lat])
+      );
+      if (firstPiece) {
+        if (wayptDist < splitDist) {
+          piece1.properties.waypoints.push(waypt);
+        } else {
+          // We found where the split occurs. Fix piece1
+          piece1.properties.waypoints.push({
+            lon: splitPt.geometry.coordinates[0],
+            lat: splitPt.geometry.coordinates[1],
+            // TODO Problem: even if we're sandwiched between two snapped
+            // waypoints, what if we split in the middle of a road, far from an
+            // intersection?
+            snapped: true,
+          });
+
+          // Fix piece2
+          firstPiece = false;
+          piece2.properties.waypoints.push({
+            lon: splitPt.geometry.coordinates[0],
+            lat: splitPt.geometry.coordinates[1],
+            snapped: true,
+          });
+          piece2.properties.waypoints.push(waypt);
+        }
+      } else {
+        piece2.properties.waypoints.push(waypt);
+      }
+    }
+  }
+
+  // Returns the distance of a point along a line-string from the start, in
+  // meters. The point should be roughly on the line.
+  function distanceAlongLine(lineFeature, pointFeature) {
+    // TODO Is there a cheaper way to do this?
+    let start = lineFeature.geometry.coordinates[0];
+    let sliced = lineSlice(start, pointFeature, lineFeature);
+    return length(sliced.geometry, { units: "kilometers" }) * 1000.0;
   }
 </script>
 

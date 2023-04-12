@@ -25,7 +25,9 @@
   "dependencies": {
     "@mapbox/geojson-extent": "^1.0.1",
     "@turf/boolean-point-in-polygon": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
     "@turf/length": "^6.5.0",
+    "@turf/line-slice": "^6.5.0",
     "@turf/line-split": "^6.5.0",
     "@turf/mask": "^6.5.0",
     "@turf/nearest-point-on-line": "^6.5.0",
