@@ -10,7 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Install node
         uses: actions/setup-node@v2
@@ -26,15 +28,13 @@ jobs:
 
       - name: Build all other branches
         run: |
-          for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/); do
-            if [ "$branch" != "main" ] && [ "$branch" != "gh-pages" ]; then
-              echo "Building $branch"
-              git checkout $branch
-              if npm ci && npm run build --if-present -- --base=/atip/$branch; then
-                mv dist deployme/$branch
-              else
-                echo "Building $branch broke; skipping"
-              fi
+          for branch in $(git branch -r | grep -vE "origin/(main|gh-pages)" | sed 's/origin\///'); do
+            echo "Building $branch"
+            git checkout $branch
+            if npm ci && npm run build --if-present -- --base=/atip/$branch; then
+              mv dist deployme/$branch
+            else
+              echo "Building $branch broke; skipping"
             fi
           done
 
