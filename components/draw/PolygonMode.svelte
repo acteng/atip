@@ -36,7 +36,7 @@
 
 {#if mode == thisMode}
   <p>
-    Click the map to add a vertex. Click the last vertex or press <strong
+    Click the map to add a vertex, or click a vertex to delete it. Press <strong
       >Enter</strong
     > to finish. Drag a vertex or the polygon to move.
   </p>
