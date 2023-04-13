@@ -35,6 +35,8 @@ jobs:
               else
                 echo "Building $branch broke; skipping"
               fi
+            fi
+          done
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
