@@ -26,10 +26,15 @@ export class PolygonTool {
     this.cursor = null;
     this.hoverPolyon = false;
     this.hoverPoint = null;
+    // TODO This is lots of state. Consider
+    // https://maplibre.org/maplibre-gl-js-docs/example/drag-a-point/ or port
+    // widgetry's World
+    this.dragging = false;
+    this.dragFrom = null;
 
     // Set up interactions
     map.on("mousemove", (e) => {
-      if (this.active) {
+      if (this.active && !this.dragging) {
         this.cursor = null;
         this.hoverPolyon = false;
         this.hoverPoint = null;
@@ -54,6 +59,20 @@ export class PolygonTool {
         }
 
         this.#redraw();
+      } else if (this.active && this.dragging) {
+        if (this.hoverPolyon) {
+          // Move entire polygon
+          let dx = this.dragFrom[0] - e.lngLat.lng;
+          let dy = this.dragFrom[1] - e.lngLat.lat;
+          for (let pt of this.points) {
+            pt[0] -= dx;
+            pt[1] -= dy;
+          }
+        } else {
+          this.points[this.hoverPoint] = e.lngLat.toArray();
+        }
+        this.dragFrom = e.lngLat.toArray();
+        this.#redraw();
       }
     });
 
@@ -70,15 +89,33 @@ export class PolygonTool {
         candidates.sort((a, b) => a[1] - b[1]);
 
         if (candidates.length > 0) {
-          this.points.splice(
-            candidates[0][0],
-            0,
-            this.cursor.geometry.coordinates
-          );
+          let idx = candidates[0][0];
+          this.points.splice(idx, 0, this.cursor.geometry.coordinates);
+          this.hoverPoint = idx;
         } else {
           this.points.push(this.cursor.geometry.coordinates);
+          this.hoverPoint = this.points.length - 1;
         }
         this.#redraw();
+      }
+    });
+
+    map.on("mousedown", (e) => {
+      if (
+        this.active &&
+        !this.dragging &&
+        (this.hoverPolyon || this.hoverPoint != null)
+      ) {
+        e.preventDefault();
+        this.cursor = null;
+        this.dragging = true;
+        this.dragFrom = e.lngLat.toArray();
+      }
+    });
+    map.on("mouseup", (e) => {
+      if (this.active && this.dragging) {
+        this.dragging = false;
+        this.dragFrom = null;
       }
     });
 
@@ -167,6 +204,8 @@ export class PolygonTool {
     this.active = false;
     this.hoverPolyon = false;
     this.hoverPoint = null;
+    this.dragging = false;
+    this.dragFrom = null;
     this.#redraw();
   }
 
