@@ -19,13 +19,13 @@ jobs:
           cache: 'npm'
 
       - name: Build main branch
-      - run: |
+        run: |
           npm ci
           npm run build --if-present -- --base=/atip/
           mv dist deployme
 
       - name: Build all other branches
-      - run: |
+        run: |
           for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/); do
             if [ "$branch" != "main" ] && [ "$branch" != "gh-pages" ]; then
               echo "Building $branch"
