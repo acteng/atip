@@ -35,30 +35,7 @@ export class PolygonTool {
     // Set up interactions
     map.on("mousemove", (e) => {
       if (this.active && !this.dragging) {
-        this.cursor = null;
-        this.hoverPolyon = false;
-        this.hoverPoint = null;
-
-        // Order of the layers matters!
-        for (let f of map.queryRenderedFeatures(e.point, {
-          layers: ["edit-polygon-fill", "edit-polygon-vertices"],
-        })) {
-          if (f.geometry.type == "Polygon") {
-            this.hoverPolyon = true;
-            break;
-          } else if (f.geometry.type == "Point") {
-            // Ignore the cursor
-            if (f.properties.hasOwnProperty("idx")) {
-              this.hoverPoint = f.properties.idx;
-              break;
-            }
-          }
-        }
-        if (!this.hoverPolyon && this.hoverPoint == null) {
-          this.cursor = pointFeature(e.lngLat.toArray());
-        }
-
-        this.#redraw();
+        this.#recalculateHovering(e);
       } else if (this.active && this.dragging) {
         if (this.hoverPolyon) {
           // Move entire polygon
@@ -97,6 +74,13 @@ export class PolygonTool {
           this.hoverPoint = this.points.length - 1;
         }
         this.#redraw();
+      } else if (this.active && this.hoverPoint != null) {
+        this.points.splice(this.hoverPoint, 1);
+        this.hoverPoint = null;
+        this.#redraw();
+        // TODO Doesn't seem to work; you still have to move the mouse to hover
+        // on the polygon
+        this.#recalculateHovering(e);
       }
     });
 
@@ -196,6 +180,7 @@ export class PolygonTool {
     this.points = feature.geometry.coordinates[0];
     this.points.pop();
     this.#redraw();
+    // TODO #recalculateHovering, but we need to know where the mouse is
   }
 
   stop() {
@@ -231,6 +216,33 @@ export class PolygonTool {
     }
 
     this.map.getSource(this.source).setData(gj);
+  }
+
+  #recalculateHovering(e) {
+    this.cursor = null;
+    this.hoverPolyon = false;
+    this.hoverPoint = null;
+
+    // Order of the layers matters!
+    for (let f of this.map.queryRenderedFeatures(e.point, {
+      layers: ["edit-polygon-fill", "edit-polygon-vertices"],
+    })) {
+      if (f.geometry.type == "Polygon") {
+        this.hoverPolyon = true;
+        break;
+      } else if (f.geometry.type == "Point") {
+        // Ignore the cursor
+        if (f.properties.hasOwnProperty("idx")) {
+          this.hoverPoint = f.properties.idx;
+          break;
+        }
+      }
+    }
+    if (!this.hoverPolyon && this.hoverPoint == null) {
+      this.cursor = pointFeature(e.lngLat.toArray());
+    }
+
+    this.#redraw();
   }
 
   // TODO Force the proper winding order that geojson requires
