@@ -2,7 +2,9 @@ name: Deploy web
 
 on:
   push:
-    branches: [main]
+    branches:
+      - '**'
+      - '!gh-pages'
 
 jobs:
   build:
@@ -16,12 +18,26 @@ jobs:
           node-version: 18.x
           cache: 'npm'
 
-      - run: npm ci
+      - name: Build main branch
+      - run: |
+          npm ci
+          npm run build --if-present -- --base=/atip/
+          mv dist deployme
 
-      - run: npm run build --if-present -- --base=/atip/
+      - name: Build all other branches
+      - run: |
+          for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/); do
+            if [ "$branch" != "main" ] && [ "$branch" != "gh-pages" ]; then
+              echo "Building $branch"
+              git checkout $branch
+              if npm ci && npm run build --if-present -- --base=/atip/$branch; then
+                mv dist deployme/$branch
+              else
+                echo "Building $branch broke; skipping"
+              fi
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/
+          publish_dir: ./deployme/
