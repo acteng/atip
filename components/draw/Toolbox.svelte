@@ -117,7 +117,7 @@
     background-color: white;
     border: solid 2px black;
     font-size: 1.5em;
-    max-width: 250px;
+    width: 250px;
   }
 
   button {
