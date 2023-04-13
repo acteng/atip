@@ -54,8 +54,10 @@ export class PointTool {
     this.eventListeners.push(callback);
   }
 
-  teardown() {
-    // TODO Clean up source, layer, event listeners
+  tearDown() {
+    // TODO Clean up event listeners
+    this.map.removeLayer("edit-point-mode");
+    this.map.removeSource(this.source);
   }
 
   // Note there's no way to "edit an existing point." Just call this for a new

@@ -1,4 +1,5 @@
 <script>
+  import { onDestroy } from "svelte";
   import { map } from "../../stores.js";
   import { PointTool } from "./point_tool.js";
   import { PolygonTool } from "./polygon_tool.js";
@@ -46,6 +47,11 @@
     console.log(`Starting new mode ${mode}`);
     modes[mode].start();
   }
+
+  onDestroy(() => {
+    pointTool?.tearDown();
+    polygonTool?.tearDown();
+  });
 </script>
 
 <div class="toolbox">

@@ -1,3 +1,4 @@
+import nearestPointOnLine from "@turf/nearest-point-on-line";
 import { emptyGeojson } from "../../stores.js";
 import {
   overwriteSource,
@@ -20,24 +21,35 @@ export class PolygonTool {
     // not on a DOM element?
     this.eventListeners = [];
 
+    // This doesn't repeat the first point at the end; it's not closed
     this.points = [];
     this.cursor = null;
     this.hoverPolyon = false;
+    this.hoverPoint = null;
 
     // Set up interactions
     map.on("mousemove", (e) => {
       if (this.active) {
-        // TODO Maybe doing this ourselves will be more clear; do skip the cursor, for example
-        let results = map.queryRenderedFeatures(e.point, {
-          layers: ["edit-polygon-fill"],
-        });
-        if (results.length == 1) {
-          console.log(`hovering`);
-          this.hoverPolyon = true;
-          this.cursor = null;
-        } else {
-          console.log(`not hovering. ${results.length}`);
-          this.hoverPolyon = false;
+        this.cursor = null;
+        this.hoverPolyon = false;
+        this.hoverPoint = null;
+
+        // Order of the layers matters!
+        for (let f of map.queryRenderedFeatures(e.point, {
+          layers: ["edit-polygon-fill", "edit-polygon-vertices"],
+        })) {
+          if (f.geometry.type == "Polygon") {
+            this.hoverPolyon = true;
+            break;
+          } else if (f.geometry.type == "Point") {
+            // Ignore the cursor
+            if (f.properties.hasOwnProperty("idx")) {
+              this.hoverPoint = f.properties.idx;
+              break;
+            }
+          }
+        }
+        if (!this.hoverPolyon && this.hoverPoint == null) {
           this.cursor = pointFeature(e.lngLat.toArray());
         }
 
@@ -47,7 +59,25 @@ export class PolygonTool {
 
     map.on("click", (e) => {
       if (this.active && this.cursor) {
-        this.points.push(this.cursor.geometry.coordinates);
+        // Insert the new point in the "middle" of the closest line segment
+        let candidates = [];
+        pointsToLineSegments(this.points).forEach((line, idx) => {
+          candidates.push([
+            idx + 1,
+            nearestPointOnLine(line, this.cursor).properties.dist,
+          ]);
+        });
+        candidates.sort((a, b) => a[1] - b[1]);
+
+        if (candidates.length > 0) {
+          this.points.splice(
+            candidates[0][0],
+            0,
+            this.cursor.geometry.coordinates
+          );
+        } else {
+          this.points.push(this.cursor.geometry.coordinates);
+        }
         this.#redraw();
       }
     });
@@ -74,12 +104,8 @@ export class PolygonTool {
       type: "geojson",
       data: emptyGeojson(),
     });
-    overwriteLayer(map, {
-      id: "edit-polygon-vertices",
-      source: this.source,
-      filter: isPoint,
-      ...drawCircle(colors.hovering, circleRadius, 1.0),
-    });
+
+    // Order matters here!
     overwriteLayer(map, {
       id: "edit-polygon-fill",
       source: this.source,
@@ -98,7 +124,17 @@ export class PolygonTool {
       // TODO Dashed
       ...drawLine("black", 8, 0.5),
     });
-    // TODO Hover stuff
+    overwriteLayer(map, {
+      id: "edit-polygon-vertices",
+      source: this.source,
+      filter: isPoint,
+      ...drawCircle(colors.hovering, circleRadius, [
+        "case",
+        ["boolean", ["get", "hover"], "false"],
+        1.0,
+        0.5,
+      ]),
+    });
   }
 
   // Called with a Feature
@@ -106,8 +142,12 @@ export class PolygonTool {
     this.eventListeners.push(callback);
   }
 
-  teardown() {
-    // TODO Clean up source, layer, event listeners
+  tearDown() {
+    // TODO Clean up event listeners
+    this.map.removeLayer("edit-polygon-vertices");
+    this.map.removeLayer("edit-polygon-fill");
+    this.map.removeLayer("edit-polygon-lines");
+    this.map.removeSource(this.source);
   }
 
   startNew() {
@@ -118,38 +158,39 @@ export class PolygonTool {
     this.active = true;
     this.points = feature.geometry.coordinates[0];
     this.points.pop();
+    this.#redraw();
   }
 
   stop() {
     this.points = [];
     this.cursor = null;
     this.active = false;
+    this.hoverPolyon = false;
+    this.hoverPoint = null;
     this.#redraw();
   }
 
   #redraw() {
     let gj = emptyGeojson();
-    for (let pt of this.points) {
-      gj.features.push(pointFeature(pt));
-    }
+
+    this.points.forEach((pt, idx) => {
+      let f = pointFeature(pt);
+      f.properties.hover = this.hoverPoint == idx;
+      f.properties.idx = idx;
+      gj.features.push(f);
+    });
     if (this.cursor) {
       gj.features.push(this.cursor);
     }
-    // Lines between confirmed points
-    for (let i = 0; i < this.points.length - 1; i++) {
-      gj.features.push({
-        type: "Feature",
-        geometry: {
-          type: "LineString",
-          coordinates: [this.points[i], this.points[i + 1]],
-        },
-      });
-    }
+
+    gj.features = gj.features.concat(pointsToLineSegments(this.points));
+
     let polygon = this.#polygonFeature();
     if (polygon) {
       polygon.properties.hover = this.hoverPolyon;
       gj.features.push(polygon);
     }
+
     this.map.getSource(this.source).setData(gj);
   }
 
@@ -175,9 +216,34 @@ export class PolygonTool {
 function pointFeature(pt) {
   return {
     type: "Feature",
+    properties: {},
     geometry: {
       type: "Point",
       coordinates: pt,
     },
   };
+}
+
+// Includes the line connecting the last to the first point
+function pointsToLineSegments(points) {
+  let lines = [];
+  for (let i = 0; i < points.length - 1; i++) {
+    lines.push({
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: [points[i], points[i + 1]],
+      },
+    });
+  }
+  if (points.length >= 3) {
+    lines.push({
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: [points[points.length - 1], points[0]],
+      },
+    });
+  }
+  return lines;
 }
