@@ -71,7 +71,10 @@
       return;
     }
 
-    if (snappedIndex != null) {
+    if (snappedIndex == null) {
+      // We clicked the map, stop the tool
+      changeMode("edit-attribute");
+    } else {
       let result = lineSplit($gjScheme.features[snappedIndex], cursor);
       if (result.features.length == 2) {
         let piece1 = result.features[0];
@@ -97,9 +100,10 @@
           return gj;
         });
       }
+
+      // Stay in this mode, but reset state
+      stop();
     }
-    // TODO Edit one of the pieces?
-    changeMode("edit-attribute");
   });
 
   // Rendering
