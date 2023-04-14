@@ -59,7 +59,7 @@ export function setCurrentlyEditing(id) {
 // - be unique
 // - be numeric; parts of maplibre can't handle string IDs
 //   (https://github.com/mapbox/mapbox-gl-js/issues/2716)
-// - not be 0; mapbox-gl-draw treats this as a missing ID
+// - not be 0; some libraries treat this as a missing ID
 //
 // Although this implementation may appear to ID features in order (1, 2, 3,
 // etc), this is NOT an invariant. Do not assume this; it will not be true as
