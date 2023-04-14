@@ -1,10 +1,5 @@
 <script>
-  import {
-    map,
-    gjScheme,
-    newFeatureId,
-    setCurrentlyEditing,
-  } from "../../stores.js";
+  import { gjScheme, newFeatureId, setCurrentlyEditing } from "../../stores.js";
 
   const thisMode = "polygon";
 

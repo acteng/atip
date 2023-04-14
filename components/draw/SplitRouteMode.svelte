@@ -66,7 +66,7 @@
     }
   });
 
-  $map.on("click", (e) => {
+  $map.on("click", () => {
     if (mode != thisMode) {
       return;
     }

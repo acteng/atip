@@ -1,5 +1,4 @@
 import { readFile } from "fs/promises";
-import { preview } from "vite";
 import { test, expect } from "@playwright/test";
 
 test("loading a file with length displays the length", async ({ page }) => {

@@ -1,4 +1,3 @@
-import { preview } from "vite";
 import { test, expect } from "@playwright/test";
 
 test("front page has welcome text", async ({ page }) => {

@@ -1,6 +1,6 @@
 <script>
   import length from "@turf/length";
-  import { gjScheme, emptyGeojson } from "../stores.js";
+  import { gjScheme } from "../stores.js";
 
   export let authorityName;
 

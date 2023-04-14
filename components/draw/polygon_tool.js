@@ -96,7 +96,7 @@ export class PolygonTool {
         this.dragFrom = e.lngLat.toArray();
       }
     });
-    map.on("mouseup", (e) => {
+    map.on("mouseup", () => {
       if (this.active && this.dragging) {
         this.dragging = false;
         this.dragFrom = null;
@@ -232,7 +232,7 @@ export class PolygonTool {
         break;
       } else if (f.geometry.type == "Point") {
         // Ignore the cursor
-        if (f.properties.hasOwnProperty("idx")) {
+        if (Object.hasOwn(f.properties, "idx")) {
           this.hoverPoint = f.properties.idx;
           break;
         }

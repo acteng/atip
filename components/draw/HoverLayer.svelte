@@ -5,7 +5,6 @@
     isPoint,
     isLine,
     drawCircle,
-    drawPolygon,
     overwriteSource,
     overwriteLayer,
   } from "../../maplibre_helpers.js";

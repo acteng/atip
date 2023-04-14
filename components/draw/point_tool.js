@@ -26,7 +26,7 @@ export class PointTool {
       }
     });
 
-    map.on("click", (e) => {
+    map.on("click", () => {
       // TODO is it possible cursor is null?
       if (this.active && this.cursor) {
         for (let cb of this.eventListeners) {
