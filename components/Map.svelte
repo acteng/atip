@@ -20,7 +20,7 @@
       style: `https://api.maptiler.com/maps/${style}/style.json?key=MZEJTanw3WpxRvt7qDfo`,
       hash: true,
     });
-    map.addControl(new ScaleControl());
+    map.addControl(new ScaleControl({}));
     map.addControl(
       new NavigationControl({ visualizePitch: true }),
       "bottom-right"
