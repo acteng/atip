@@ -18,7 +18,7 @@ The stack:
 You'll need
 [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). Run
 `npm install` once. Use `npm run dev` to work locally. To auto-format code,
-`npm run fmt`.
+`npm run fmt`. To see TypeScript errors, `npm run check`.
 
 ### Monkey-patching dependencies
 
