@@ -16,5 +16,5 @@
     "isolatedModules": true,
     "types": ["vite/client"]
   },
-  "include": ["*.js", "*.ts", "*.svelte", "components/**/*.js", "components/**/*.ts", "components/**/*.svelte", "tests/*"]
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "tests/**/*"]
 }

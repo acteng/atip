@@ -2,22 +2,22 @@
   import "carbon-components-svelte/css/white.css";
 
   import { onMount } from "svelte";
-  import authoritiesUrl from "./authorities.geojson?url";
+  import authoritiesUrl from "../assets/authorities.geojson?url";
 
-  import About from "./components/About.svelte";
-  import Instructions from "./components/Instructions.svelte";
-  import Map from "./components/Map.svelte";
-  import Layout from "./components/Layout.svelte";
-  import BoundaryLayer from "./components/BoundaryLayer.svelte";
-  import InterventionList from "./components/InterventionList.svelte";
-  import EntireScheme from "./components/EntireScheme.svelte";
-  import ZoomOutMap from "./components/ZoomOutMap.svelte";
-  import BaselayerSwitcher from "./components/BaselayerSwitcher.svelte";
-  import Legend from "./components/Legend.svelte";
+  import About from "./lib/About.svelte";
+  import Instructions from "./lib/Instructions.svelte";
+  import Map from "./lib/Map.svelte";
+  import Layout from "./lib/Layout.svelte";
+  import BoundaryLayer from "./lib/BoundaryLayer.svelte";
+  import InterventionList from "./lib/InterventionList.svelte";
+  import EntireScheme from "./lib/EntireScheme.svelte";
+  import ZoomOutMap from "./lib/ZoomOutMap.svelte";
+  import BaselayerSwitcher from "./lib/BaselayerSwitcher.svelte";
+  import Legend from "./lib/Legend.svelte";
 
-  import InterventionLayer from "./components/draw/InterventionLayer.svelte";
-  import HoverLayer from "./components/draw/HoverLayer.svelte";
-  import Toolbox from "./components/draw/Toolbox.svelte";
+  import InterventionLayer from "./lib/draw/InterventionLayer.svelte";
+  import HoverLayer from "./lib/draw/HoverLayer.svelte";
+  import Toolbox from "./lib/draw/Toolbox.svelte";
 
   let showAbout = false;
   let showInstructions = false;
