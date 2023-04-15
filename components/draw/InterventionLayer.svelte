@@ -8,7 +8,7 @@
     drawPolygon,
     overwriteSource,
     overwriteLayer,
-  } from "../../maplibre_helpers.js";
+  } from "../../maplibre_helpers";
   import { colors, circleRadius, lineWidth } from "../../colors.js";
   import { gjScheme, map } from "../../stores.js";
 

@@ -9,7 +9,7 @@ import {
   isPoint,
   isPolygon,
   isLine,
-} from "../../maplibre_helpers.js";
+} from "../../maplibre_helpers";
 import { colors, circleRadius } from "../../colors.js";
 
 export class PolygonTool {

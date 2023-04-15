@@ -9,7 +9,7 @@
     overwriteSource,
     overwriteLayer,
     drawCircle,
-  } from "../../maplibre_helpers.js";
+  } from "../../maplibre_helpers";
 
   const thisMode = "split-route";
 
