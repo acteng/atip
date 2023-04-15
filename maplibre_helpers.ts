@@ -1,4 +1,5 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
+import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 
 const roundedLine = {
   "line-cap": "round",
@@ -31,7 +32,11 @@ export function drawPolygon(color, opacity) {
   };
 }
 
-export function drawCircle(color, radius, opacity = 1.0) {
+export function drawCircle(
+  color,
+  radius,
+  opacity: DataDrivenPropertyValueSpecification<number> = 1.0
+) {
   return {
     type: "circle",
     paint: {

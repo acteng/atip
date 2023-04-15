@@ -5,7 +5,7 @@
     drawPolygon,
     overwriteSource,
     overwriteLayer,
-  } from "../maplibre_helpers.js";
+  } from "../maplibre_helpers";
   import { getContext } from "svelte";
   import { map } from "../stores.js";
 
