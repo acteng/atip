@@ -13,7 +13,11 @@
     </nav>
     <slot name="sidebar" />
   </div>
-  <div class="sidebar-toggle rounded-rect" on:click={toggleSidebar}>&rarr;</div>
+  <button
+    type="button"
+    class="sidebar-toggle rounded-rect"
+    on:click={toggleSidebar}>&rarr;</button
+  >
 </aside>
 <main>
   <slot name="main" />
@@ -54,6 +58,7 @@
 
   .rounded-rect {
     background: white;
+    border: none;
     border-radius: 10px;
     box-shadow: 0 0 50px -25px black;
   }

@@ -17,7 +17,9 @@ test("loading a file with length displays the length", async ({ page }) => {
 // property. Upload a file with that missing, and make sure it's backfilled.
 test("loading a file without length displays the length", async ({ page }) => {
   // Remove the property from the test data first
-  let json = JSON.parse(await readFile("tests/data/route.json"));
+  let json = JSON.parse(
+    await readFile("tests/data/route.json", { encoding: "utf8" })
+  );
   await expect(Math.round(json.features[0].properties.length_meters)).toBe(
     8520
   );
