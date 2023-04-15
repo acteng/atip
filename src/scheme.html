@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>ATIP v1 Scheme Entry</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      /* TODO: Hack. This should belong to Layout, but the app div breaks flexbox */
+      .overall-layout {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        overflow: hidden;
+
+        /* Two columns, the sidebar on the left, and the main content on the right. */
+        display: flex;
+        flex-flow: row nowrap;
+      }
+    </style>
+    <script type="module" crossorigin src="/atip/src/assets/nested-935716d3.js"></script>
+    <link rel="modulepreload" crossorigin href="/atip/src/assets/authorities-a0e177bc.js">
+    <link rel="stylesheet" href="/atip/src/assets/authorities-64e912ef.css">
+    <link rel="stylesheet" href="/atip/src/assets/scheme-a5ef92f2.css">
+  </head>
+  <body>
+    <div id="app" class="overall-layout"></div>
+    
+  </body>
+</html>
