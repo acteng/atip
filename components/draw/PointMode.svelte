@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { gjScheme, newFeatureId, setCurrentlyEditing } from "../../stores.js";
 
   const thisMode = "point";

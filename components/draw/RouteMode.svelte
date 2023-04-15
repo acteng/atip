@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
