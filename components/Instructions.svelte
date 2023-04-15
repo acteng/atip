@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Modal, OrderedList, ListItem } from "carbon-components-svelte";
 
   export let open;

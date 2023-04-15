@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import geojsonExtent from "@mapbox/geojson-extent";
   import mask from "@turf/mask";
   import {

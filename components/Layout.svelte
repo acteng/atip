@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   let showSidebar = true;
 
   function toggleSidebar() {

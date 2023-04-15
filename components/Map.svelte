@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy, setContext } from "svelte";
   import { Map, NavigationControl, ScaleControl } from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";

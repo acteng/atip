@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { colors } from "../colors.js";
 </script>
 

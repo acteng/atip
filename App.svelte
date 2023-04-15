@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import "carbon-components-svelte/css/white.css";
 
   import { onMount } from "svelte";
@@ -67,7 +67,7 @@
 
 <Layout>
   <div slot="nav">
-    <button type="button" onclick={() => window.open("index.html")}>
+    <button type="button" on:click={() => window.open("index.html")}>
       Home</button
     >
     <button type="button" on:click={toggleAbout}>About</button>

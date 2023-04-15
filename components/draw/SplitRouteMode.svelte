@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
@@ -219,7 +219,7 @@
     // TODO Is there a cheaper way to do this?
     let start = lineFeature.geometry.coordinates[0];
     let sliced = lineSlice(start, pointFeature, lineFeature);
-    return length(sliced.geometry, { units: "kilometers" }) * 1000.0;
+    return length(sliced, { units: "kilometers" }) * 1000.0;
   }
 </script>
 
