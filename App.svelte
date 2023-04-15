@@ -67,7 +67,9 @@
 
 <Layout>
   <div slot="nav">
-    <button type="button" onclick="window.open('index.html');"> Home</button>
+    <button type="button" onclick={() => window.open("index.html")}>
+      Home</button
+    >
     <button type="button" on:click={toggleAbout}>About</button>
     <button type="button" on:click={toggleInstructions}>Instructions</button>
   </div>

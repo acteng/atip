@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import length from "@turf/length";
   import { gjScheme } from "../stores.js";
 
@@ -81,7 +81,7 @@
     // TODO Should we prompt before deleting the current scheme?
     reader.onload = (e) => {
       try {
-        gjScheme.set(backfill(JSON.parse(e.target.result)));
+        gjScheme.set(backfill(JSON.parse(e.target.result as string)));
       } catch (err) {
         window.alert(`Couldn't load scheme from a file: ${err}`);
       }
@@ -121,7 +121,7 @@
     <input type="file" id="load_geojson" on:change={loadFile} />
     <button
       type="button"
-      onclick="document.getElementById('load_geojson').click();"
+      on:click={() => document.getElementById("load_geojson").click()}
     >
       Load from GeoJSON
     </button>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { map, gjScheme, currentHover } from "../../stores.js";
 
   const thisMode = "edit-geometry";
@@ -135,11 +135,11 @@
 
     currentlyEditing = id;
 
-    if (feature.geometry.type == "LineString") {
+    if (feature!.geometry.type == "LineString") {
       routeSnapper.editExisting(feature);
-    } else if (feature.geometry.type == "Polygon") {
+    } else if (feature!.geometry.type == "Polygon") {
       polygonTool.editExisting(feature);
-    } else if (feature.geometry.type == "Point") {
+    } else if (feature!.geometry.type == "Point") {
       // No need to pass in the existing feature.geometry; it's the same as
       // where the cursor is anyway
       pointTool.start();

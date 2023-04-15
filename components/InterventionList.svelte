@@ -75,9 +75,9 @@
   {#each $gjScheme.features as feature, i (feature.id)}
     <AccordionItem
       bind:open={feature.properties.editing}
-      on:click={startEditing(feature.id)}
-      on:mouseenter={sidebarHover(feature.id)}
-      on:mouseleave={sidebarHover(null)}
+      on:click={() => startEditing(feature.id)}
+      on:mouseenter={() => sidebarHover(feature.id)}
+      on:mouseleave={() => sidebarHover(null)}
     >
       <svelte:fragment slot="title">
         {#if feature.id == $currentHover}
