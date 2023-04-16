@@ -2,7 +2,7 @@
   import { onDestroy } from "svelte";
   import { map } from "../../stores.js";
   import { PointTool } from "./point_tool.js";
-  import { PolygonTool } from "./polygon_tool.js";
+  import { PolygonTool } from "./polygon_tool";
 
   import AttributeMode from "./AttributeMode.svelte";
   import GeometryMode from "./GeometryMode.svelte";
