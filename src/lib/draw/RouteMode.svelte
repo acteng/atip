@@ -11,12 +11,12 @@
 
   const thisMode = "route";
 
-  export let mode;
-  export let changeMode;
-  export let url;
+  export let mode: string;
+  export let changeMode: (string) => void;
+  export let url: string;
 
   export let snapTool;
-  let snapProgress;
+  let snapProgress: HTMLDivElement;
   export let routeSnapper;
 
   // These're for drawing a new route, NOT for editing an existing.

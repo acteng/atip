@@ -1,8 +1,8 @@
 <script lang="ts">
   import length from "@turf/length";
-  import { gjScheme } from "../stores";
+  import { gjScheme, type Scheme } from "../stores";
 
-  export let authorityName;
+  export let authorityName: string;
 
   // Set up local storage sync
   let loadLocal = window.localStorage.getItem(authorityName);
@@ -40,7 +40,7 @@
   }
 
   // Remove the editing and hide_while_editing property hacks
-  function geojsonToSave() {
+  function geojsonToSave(): Scheme {
     const copy = JSON.parse(JSON.stringify($gjScheme));
     for (let feature of copy.features) {
       delete feature.properties.editing;
@@ -63,7 +63,7 @@
     downloadGeneratedFile(filename, JSON.stringify(geojson, null, "  "));
   }
 
-  function downloadGeneratedFile(filename, textInput) {
+  function downloadGeneratedFile(filename: string, textInput: string) {
     var element = document.createElement("a");
     element.setAttribute(
       "href",
@@ -89,13 +89,13 @@
     reader.readAsText(e.target.files[0]);
   }
 
-  function backfill(json) {
+  function backfill(json: Scheme) {
     let idCounter = 1;
     for (let f of json.features) {
       // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
       if (f.geometry.type == "LineString" && !f.properties.length_meters) {
         f.properties.length_meters =
-          length(f.geometry, { units: "kilometers" }) * 1000.0;
+          length(f, { units: "kilometers" }) * 1000.0;
       }
 
       // Always overwrite IDs, and follow what newFeatureId requires.

@@ -3,8 +3,8 @@
 
   const thisMode = "point";
 
-  export let mode;
-  export let changeMode;
+  export let mode: string;
+  export let changeMode: (string) => void;
   export let pointTool;
 
   export function start() {
