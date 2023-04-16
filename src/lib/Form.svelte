@@ -7,13 +7,13 @@
   } from "carbon-components-svelte";
   import { gjScheme, setCurrentlyEditing, currentlyEditing } from "../stores";
 
-  export let id;
-  export let name;
-  export let intervention_type;
-  export let description;
-  export let length_meters;
+  export let id: number;
+  export let name: string;
+  export let intervention_type: "area" | "route" | "crossing" | "other";
+  export let description: string;
+  export let length_meters: number;
 
-  let bottomOfForm;
+  let bottomOfForm: HTMLDivElement;
 
   currentlyEditing.subscribe((openedId) => {
     if (id == openedId) {
@@ -32,7 +32,7 @@
     setCurrentlyEditing(null);
   }
 
-  function prettyPrintMeters(x) {
+  function prettyPrintMeters(x: number): string {
     if (x < 1000.0) {
       return Math.round(x) + " m";
     }

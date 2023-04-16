@@ -14,8 +14,9 @@ import type { Map } from "maplibre-gl";
 export const map: Writable<Map> = writable(null);
 
 // This describes the full structure of the GeoJSON we manage. It's mostly a
-// FeatureCollection with some foreign members. TODO Get really specific about
-// the Feature properties
+// FeatureCollection with some foreign members.
+// TODO Get really specific about the Feature properties
+// TODO And insist id must be number
 export interface Scheme extends FeatureCollection {
   scheme_name?: string;
   authority?: string;

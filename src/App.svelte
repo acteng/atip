@@ -1,6 +1,7 @@
 <script lang="ts">
   import "carbon-components-svelte/css/white.css";
 
+  import type { FeatureCollection, Polygon } from "geojson";
   import { onMount } from "svelte";
   import authoritiesUrl from "../assets/authorities.geojson?url";
 
@@ -27,8 +28,8 @@
   let prod = window.location.hostname.includes("atip.uk");
 
   const params = new URLSearchParams(window.location.search);
-  let authorityName = params.get("authority");
-  let style = params.get("style") || "streets";
+  let authorityName: string = params.get("authority");
+  let style: string = params.get("style") || "streets";
 
   // TODO Slight hack. These files are stored in an S3 bucket, which only has
   // an HTTP interface. When deployed to Github pages over HTTPS, we can't mix
@@ -49,12 +50,12 @@
     showAbout = false;
   }
 
-  let boundaryGeojson;
+  let boundaryGeojson: FeatureCollection<Polygon>;
   onMount(async () => {
     boundaryGeojson = await loadAuthorityBoundary();
   });
 
-  async function loadAuthorityBoundary() {
+  async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
     const resp = await fetch(authoritiesUrl);
     const body = await resp.text();
     const geojson = JSON.parse(body);
