@@ -5,7 +5,7 @@ import {
   type Writable,
   type Readable,
 } from "svelte/store";
-import type { FeatureCollection } from "geojson";
+import type { Point, LineString, Polygon } from "geojson";
 import { emptyGeojson } from "./maplibre_helpers";
 import type { Map } from "maplibre-gl";
 
@@ -13,14 +13,51 @@ import type { Map } from "maplibre-gl";
 // TODO | null. When we enable strictNullChecks, this'll become a problem
 export const map: Writable<Map> = writable(null);
 
-// This describes the full structure of the GeoJSON we manage. It's mostly a
-// FeatureCollection with some foreign members.
-// TODO Get really specific about the Feature properties
-// TODO And insist id must be number
-export interface Scheme extends FeatureCollection {
+// This describes the full structure of the GeoJSON we manage. We constrain the
+// default GeoJSON types and specify feature properties.
+export interface Scheme {
+  type: "FeatureCollection";
+  features: OurFeatureUnion[];
+  // Foreign members
   scheme_name?: string;
   authority?: string;
   origin?: string;
+}
+
+// TODO Can we use a wildcard type, like OurFeature<? extends OurGeometry>
+export type OurFeatureUnion =
+  | OurFeature<Point>
+  | OurFeature<LineString>
+  | OurFeature<Polygon>;
+
+export type OurGeometry = Point | LineString | Polygon;
+
+export interface OurFeature<G extends OurGeometry> {
+  type: "Feature";
+  // Must be defined, and always > 0
+  id: number;
+  geometry: G;
+  properties: InterventionProps;
+}
+
+export interface InterventionProps {
+  intervention_type: "area" | "route" | "crossing" | "other";
+  name: string;
+  description: string;
+
+  // For LineStrings only
+  length_meters?: number;
+  waypoints?: Waypoint[];
+
+  // Temporary state, not meant to be serialized
+  editing?: boolean;
+  hide_while_editing?: boolean;
+}
+
+export interface Waypoint {
+  lon: number;
+  lat: number;
+  snapped: boolean;
 }
 
 // TODO Should we instead store a map from ID to feature?
