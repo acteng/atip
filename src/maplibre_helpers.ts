@@ -1,4 +1,5 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
+import type { FeatureCollection } from "geojson";
 import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 
 const roundedLine = {
@@ -80,4 +81,11 @@ export function overwriteLayer(map, layer, beforeId = null) {
     beforeId = null;
   }
   map.addLayer(layer, beforeId);
+}
+
+export function emptyGeojson(): FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: [],
+  };
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { map } from "../../stores.js";
-  import { PointTool } from "./point_tool.js";
+  import { PointTool } from "./point_tool";
   import { PolygonTool } from "./polygon_tool";
 
   import AttributeMode from "./AttributeMode.svelte";

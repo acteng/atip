@@ -7,9 +7,10 @@
     drawCircle,
     overwriteSource,
     overwriteLayer,
+    emptyGeojson,
   } from "../../maplibre_helpers";
   import { colors, lineWidth, circleRadius } from "../../colors.js";
-  import { emptyGeojson, gjScheme, currentHover, map } from "../../stores.js";
+  import { gjScheme, currentHover, map } from "../../stores.js";
 
   let source = "hover";
 

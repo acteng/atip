@@ -1,8 +1,8 @@
 import type { Feature, Point, Position, Polygon, LineString } from "geojson";
 import type { Map, MapLayerMouseEvent, GeoJSONSource } from "maplibre-gl";
 import nearestPointOnLine from "@turf/nearest-point-on-line";
-import { emptyGeojson } from "../../stores.js";
 import {
+  emptyGeojson,
   overwriteSource,
   overwriteLayer,
   drawCircle,
@@ -171,7 +171,6 @@ export class PolygonTool {
     });
   }
 
-  // Called with a Feature
   addEventListener(callback: (f: Feature<Polygon>) => void) {
     this.eventListeners.push(callback);
   }
