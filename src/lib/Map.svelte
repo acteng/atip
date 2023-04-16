@@ -2,7 +2,7 @@
   import { onMount, onDestroy, setContext } from "svelte";
   import { Map, NavigationControl, ScaleControl } from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { map as mapStore } from "../stores.js";
+  import { map as mapStore } from "../stores";
 
   export let style;
 

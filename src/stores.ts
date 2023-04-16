@@ -1,8 +1,10 @@
-import { writable, derived, get } from "svelte/store";
+import { writable, derived, get, type Writable } from "svelte/store";
 import { emptyGeojson } from "./maplibre_helpers";
+import type { Map } from "maplibre-gl";
 
 // A global singleton, containing a loaded map
-export const map = writable(null);
+// TODO | null? This is a flat out lie
+export const map: Writable<Map> = writable(null);
 
 // TODO Should we instead store a map from ID to feature?
 export const gjScheme = writable(emptyGeojson());

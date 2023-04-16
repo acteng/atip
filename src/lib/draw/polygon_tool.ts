@@ -12,7 +12,7 @@ import {
   isPolygon,
   isLine,
 } from "../../maplibre_helpers";
-import { colors, circleRadius } from "../../colors.js";
+import { colors, circleRadius } from "../../colors";
 
 const source = "edit-polygon-mode";
 

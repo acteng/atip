@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { GeoJSONSource } from "maplibre-gl";
   import {
     drawLine,
     isPolygon,
@@ -9,8 +10,8 @@
     overwriteLayer,
     emptyGeojson,
   } from "../../maplibre_helpers";
-  import { colors, lineWidth, circleRadius } from "../../colors.js";
-  import { gjScheme, currentHover, map } from "../../stores.js";
+  import { colors, lineWidth, circleRadius } from "../../colors";
+  import { gjScheme, currentHover, map } from "../../stores";
 
   let source = "hover";
 
@@ -55,11 +56,11 @@
 
   currentHover.subscribe((id) => {
     if (id != null) {
-      $map
-        .getSource(source)
-        .setData($gjScheme.features.find((f) => f.id == id));
+      ($map.getSource(source) as GeoJSONSource).setData(
+        $gjScheme.features.find((f) => f.id == id)
+      );
     } else {
-      $map.getSource(source).setData(emptyGeojson());
+      ($map.getSource(source) as GeoJSONSource).setData(emptyGeojson());
     }
   });
 </script>

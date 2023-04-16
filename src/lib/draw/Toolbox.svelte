@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import { map } from "../../stores.js";
+  import { map } from "../../stores";
   import { PointTool } from "./point_tool";
   import { PolygonTool } from "./polygon_tool";
 

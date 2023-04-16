@@ -7,7 +7,7 @@
     currentlyEditing,
     setCurrentlyEditing,
     openFromSidebar,
-  } from "../../stores.js";
+  } from "../../stores";
 
   const thisMode = "edit-attribute";
 
@@ -70,7 +70,9 @@
 
       // Extent of points is defined in a weird way, special-case it
       if (feature.geometry.type == "Point") {
-        $map.flyTo({ center: feature.geometry.coordinates });
+        $map.flyTo({
+          center: feature.geometry.coordinates as [number, number],
+        });
       } else {
         $map.fitBounds(geojsonExtent(feature), {
           padding: 200,

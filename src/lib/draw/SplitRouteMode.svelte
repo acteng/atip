@@ -1,11 +1,12 @@
 <script lang="ts">
+  import type { GeoJSONSource } from "maplibre-gl";
   import type { Feature, LineString } from "geojson";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
   import lineSplit from "@turf/line-split";
   import lineSlice from "@turf/line-slice";
-  import { gjScheme, map, newFeatureId } from "../../stores.js";
+  import { gjScheme, map, newFeatureId } from "../../stores";
   import {
     emptyGeojson,
     overwriteSource,
@@ -40,7 +41,10 @@
     cursor = cursorFeature(e.lngLat.toArray(), false);
     snappedIndex = null;
 
-    const nearbyPoint = { x: e.point.x - snapDistancePixels, y: e.point.y };
+    const nearbyPoint: [number, number] = [
+      e.point.x - snapDistancePixels,
+      e.point.y,
+    ];
     const thresholdKm =
       $map.unproject(e.point).distanceTo($map.unproject(nearbyPoint)) / 1000.0;
 
@@ -135,7 +139,7 @@
     if (cursor) {
       gj.features.push(cursor);
     }
-    $map.getSource(source).setData(gj);
+    ($map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
   function cursorFeature(pt, snapped) {
