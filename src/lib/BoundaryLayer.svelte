@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { FeatureCollection, Polygon } from "geojson";
   import geojsonExtent from "@mapbox/geojson-extent";
   import mask from "@turf/mask";
   import {
@@ -9,7 +10,7 @@
   import { getContext } from "svelte";
   import { map } from "../stores";
 
-  export let boundaryGeojson;
+  export let boundaryGeojson: FeatureCollection<Polygon>;
 
   const setCamera = getContext("setCamera");
 

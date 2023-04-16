@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Feature } from "geojson";
   import { Accordion, AccordionItem } from "carbon-components-svelte";
   import Form from "./Form.svelte";
   import {
@@ -8,7 +9,7 @@
     openFromSidebar,
   } from "../stores";
 
-  function interventionName(feature) {
+  function interventionName(feature: Feature): string {
     if (feature.properties.name) {
       return feature.properties.name;
     }
@@ -25,13 +26,13 @@
     return `Untitled ${noun}`;
   }
 
-  function sidebarHover(id) {
+  function sidebarHover(id: number | null) {
     if ($currentlyEditing == null) {
       currentHover.set(id);
     }
   }
 
-  function startEditing(id) {
+  function startEditing(id: number) {
     console.log(`Clicked ${id} from the sidebar; going to edit-attribute`);
     // Always set this to null first, to force subscribers to see the update.
     // It's possible to open something from the sidebar, close it (by clicking
@@ -51,10 +52,10 @@
     currentHover.set(id);
   }
 
-  function onKeydown(e) {
+  function onKeydown(e: KeyboardEvent) {
     const id = $currentlyEditing;
     if (e.key == "Delete") {
-      const tag = e.originalTarget.tagName;
+      const tag = (e.target as HTMLElement).tagName;
       // Let the delete key work in forms
       if (tag != "CANVAS" && tag != "BODY") {
         return;

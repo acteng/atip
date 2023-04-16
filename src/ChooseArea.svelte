@@ -9,9 +9,9 @@
 
   let showAbout = false;
 
-  let inputValue;
+  let inputValue: string;
   let dataList;
-  let authoritySet = new Set();
+  let authoritySet: Set<string> = new Set();
 
   $: validEntry = authoritySet.has(inputValue);
 

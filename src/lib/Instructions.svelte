@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Modal, OrderedList, ListItem } from "carbon-components-svelte";
 
-  export let open;
+  export let open: boolean;
 </script>
 
 <Modal passiveModal modalHeading="Instructions" bind:open>

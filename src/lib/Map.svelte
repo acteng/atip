@@ -4,10 +4,10 @@
   import "maplibre-gl/dist/maplibre-gl.css";
   import { map as mapStore } from "../stores";
 
-  export let style;
+  export let style: string;
 
-  let map;
-  let mapContainer;
+  let map: Map;
+  let mapContainer: HTMLDivElement;
   let loaded = false;
 
   // Before creating the map, check if there's a hash, because one will get set below
