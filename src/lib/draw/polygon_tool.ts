@@ -1,3 +1,5 @@
+import type { Feature, Point, Position, Polygon, LineString } from "geojson";
+import type { Map, MapLayerMouseEvent, GeoJSONSource } from "maplibre-gl";
 import nearestPointOnLine from "@turf/nearest-point-on-line";
 import { emptyGeojson } from "../../stores.js";
 import {
@@ -12,8 +14,20 @@ import {
 } from "../../maplibre_helpers";
 import { colors, circleRadius } from "../../colors.js";
 
+const source = "edit-polygon-mode";
+
 export class PolygonTool {
-  constructor(map) {
+  map: Map;
+  active: boolean;
+  eventListeners: ((f: Feature<Polygon>) => void)[];
+  points: Position[];
+  cursor: Feature<Point> | null;
+  hoverPolyon: boolean;
+  hoverPoint: number | null;
+  dragging: boolean;
+  dragFrom: Position | null;
+
+  constructor(map: Map) {
     this.map = map;
     this.active = false;
     // TODO Can we use
@@ -120,8 +134,7 @@ export class PolygonTool {
     });
 
     // Render
-    this.source = "edit-polygon-mode";
-    overwriteSource(map, this.source, {
+    overwriteSource(map, source, {
       type: "geojson",
       data: emptyGeojson(),
     });
@@ -129,7 +142,7 @@ export class PolygonTool {
     // Order matters here!
     overwriteLayer(map, {
       id: "edit-polygon-fill",
-      source: this.source,
+      source,
       filter: isPolygon,
       ...drawPolygon("red", [
         "case",
@@ -140,14 +153,14 @@ export class PolygonTool {
     });
     overwriteLayer(map, {
       id: "edit-polygon-lines",
-      source: this.source,
+      source,
       filter: isLine,
       // TODO Dashed
       ...drawLine("black", 8, 0.5),
     });
     overwriteLayer(map, {
       id: "edit-polygon-vertices",
-      source: this.source,
+      source,
       filter: isPoint,
       ...drawCircle(colors.hovering, circleRadius, [
         "case",
@@ -159,7 +172,7 @@ export class PolygonTool {
   }
 
   // Called with a Feature
-  addEventListener(callback) {
+  addEventListener(callback: (f: Feature<Polygon>) => void) {
     this.eventListeners.push(callback);
   }
 
@@ -168,14 +181,14 @@ export class PolygonTool {
     this.map.removeLayer("edit-polygon-vertices");
     this.map.removeLayer("edit-polygon-fill");
     this.map.removeLayer("edit-polygon-lines");
-    this.map.removeSource(this.source);
+    this.map.removeSource(source);
   }
 
   startNew() {
     this.active = true;
   }
 
-  editExisting(feature) {
+  editExisting(feature: Feature<Polygon>) {
     this.active = true;
     this.points = feature.geometry.coordinates[0];
     this.points.pop();
@@ -215,10 +228,10 @@ export class PolygonTool {
       gj.features.push(polygon);
     }
 
-    this.map.getSource(this.source).setData(gj);
+    (this.map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
-  #recalculateHovering(e) {
+  #recalculateHovering(e: MapLayerMouseEvent) {
     this.cursor = null;
     this.hoverPolyon = false;
     this.hoverPoint = null;
@@ -246,7 +259,7 @@ export class PolygonTool {
   }
 
   // TODO Force the proper winding order that geojson requires
-  #polygonFeature() {
+  #polygonFeature(): Feature<Polygon> | null {
     if (this.points.length < 3) {
       return null;
     }
@@ -264,7 +277,7 @@ export class PolygonTool {
   }
 }
 
-function pointFeature(pt) {
+function pointFeature(pt: Position): Feature<Point> {
   return {
     type: "Feature",
     properties: {},
@@ -276,7 +289,7 @@ function pointFeature(pt) {
 }
 
 // Includes the line connecting the last to the first point
-function pointsToLineSegments(points) {
+function pointsToLineSegments(points: Position[]): Feature<LineString>[] {
   let lines = [];
   for (let i = 0; i < points.length - 1; i++) {
     lines.push({
