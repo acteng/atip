@@ -11,7 +11,7 @@
   import PolygonMode from "./PolygonMode.svelte";
   import SplitRouteMode from "./SplitRouteMode.svelte";
 
-  export let routeUrl;
+  export let routeUrl: string;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
   let routeSnapper;
   let snapTool;
@@ -30,7 +30,7 @@
   let splitRouteMode;
 
   // This must be used; don't manually change mode
-  function changeMode(newMode) {
+  function changeMode(newMode: string) {
     let modes = {
       "edit-attribute": attributeMode,
       "edit-geometry": geometryMode,

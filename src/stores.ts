@@ -18,6 +18,8 @@ export const map: Writable<Map> = writable(null);
 // the Feature properties
 export interface Scheme extends FeatureCollection {
   scheme_name?: string;
+  authority?: string;
+  origin?: string;
 }
 
 // TODO Should we instead store a map from ID to feature?

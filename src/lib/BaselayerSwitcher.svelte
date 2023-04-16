@@ -1,5 +1,7 @@
 <script lang="ts">
-  export let style;
+  // TODO Be specific about "streets" | "hybrid", but then we need actual error
+  // handling when we parse it from URL params
+  export let style: string;
 
   function changeStyle() {
     let params = new URLSearchParams(window.location.search);

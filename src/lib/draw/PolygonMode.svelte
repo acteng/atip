@@ -3,8 +3,8 @@
 
   const thisMode = "polygon";
 
-  export let mode;
-  export let changeMode;
+  export let mode: string;
+  export let changeMode: (string) => void;
   export let polygonTool;
 
   export function start() {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GeoJSONSource } from "maplibre-gl";
-  import type { Feature, LineString } from "geojson";
+  import type { Feature, LineString, Point } from "geojson";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
@@ -19,8 +19,8 @@
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;
 
-  export let mode;
-  export let changeMode;
+  export let mode: string;
+  export let changeMode: (string) => void;
 
   export function start() {}
   export function stop() {
@@ -28,10 +28,9 @@
     snappedIndex = null;
   }
 
-  // An optional Feature<Point>
-  let cursor = null;
+  let cursor: Feature<Point> | null = null;
   // Index into gjScheme of what we're snapped to
-  let snappedIndex = null;
+  let snappedIndex: number | null = null;
 
   $map.on("mousemove", (e) => {
     if (mode != thisMode) {
@@ -101,7 +100,12 @@
           // "Deep clone"
           piece2.properties = JSON.parse(JSON.stringify(piece1.properties));
 
-          fixRouteProperties(gj.features[snappedIndex], piece1, piece2, cursor);
+          fixRouteProperties(
+            gj.features[snappedIndex] as Feature<LineString>,
+            piece1,
+            piece2,
+            cursor
+          );
 
           // Replace the one LineString we snapped to with the two new pieces
           gj.features.splice(snappedIndex, 1, piece1, piece2);
@@ -142,7 +146,7 @@
     ($map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
-  function cursorFeature(pt, snapped) {
+  function cursorFeature(pt: number[], snapped: boolean): Feature<Point> {
     return {
       type: "Feature",
       properties: {
@@ -157,12 +161,17 @@
 
   // TODO Move this function to route-snapper, and remove some turf dependencies.
   // The implementation there would likely be Rust, to avoid depending on turf in the NPM package...
-  function fixRouteProperties(original, piece1, piece2, splitPt) {
+  function fixRouteProperties(
+    original: Feature<LineString>,
+    piece1: Feature<LineString>,
+    piece2: Feature<LineString>,
+    splitPt: Feature<Point>
+  ) {
     // Fix length
     piece1.properties.length_meters =
-      length(piece1.geometry, { units: "kilometers" }) * 1000.0;
+      length(piece1, { units: "kilometers" }) * 1000.0;
     piece2.properties.length_meters =
-      length(piece2.geometry, { units: "kilometers" }) * 1000.0;
+      length(piece2, { units: "kilometers" }) * 1000.0;
 
     piece1.properties.waypoints = [];
     piece2.properties.waypoints = [];
@@ -224,10 +233,10 @@
 
   // Returns the distance of a point along a line-string from the start, in
   // meters. The point should be roughly on the line.
-  function distanceAlongLine(lineFeature, pointFeature) {
+  function distanceAlongLine(line: Feature<LineString>, point: Feature<Point>) {
     // TODO Is there a cheaper way to do this?
-    let start = lineFeature.geometry.coordinates[0];
-    let sliced = lineSlice(start, pointFeature, lineFeature);
+    let start = line.geometry.coordinates[0];
+    let sliced = lineSlice(start, point, line);
     return length(sliced, { units: "kilometers" }) * 1000.0;
   }
 </script>

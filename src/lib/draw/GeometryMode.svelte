@@ -3,7 +3,7 @@
 
   const thisMode = "edit-geometry";
 
-  export let mode;
+  export let mode: string;
   export let routeSnapper;
   export let snapTool;
   export let pointTool;
@@ -31,7 +31,7 @@
   // stores defines a "currently editing" derived store, referring to
   // editing attributes. This is local state to track what ID we're currently
   // editing for geometry. The two are unrelated; we should rename things.
-  let currentlyEditing = null;
+  let currentlyEditing: number | null = null;
 
   // Calculate hover
   $map.on("mousemove", (e) => {
@@ -68,7 +68,7 @@
         ],
       });
       if (results.length > 0) {
-        startEditing(results[0].id);
+        startEditing(results[0].id as number);
       }
     }
   });
@@ -122,7 +122,7 @@
     });
   }
 
-  function startEditing(id) {
+  function startEditing(id: number) {
     currentHover.set(null);
 
     let feature;
