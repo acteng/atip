@@ -55,7 +55,7 @@
         ],
       });
       if (results.length > 0) {
-        setCurrentlyEditing(results[0].id);
+        setCurrentlyEditing(results[0].id as number);
       } else {
         setCurrentlyEditing(null);
       }
