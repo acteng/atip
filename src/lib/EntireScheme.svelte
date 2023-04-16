@@ -1,6 +1,7 @@
 <script lang="ts">
   import length from "@turf/length";
-  import { gjScheme, type Scheme } from "../stores";
+  import { gjScheme } from "../stores";
+  import type { Scheme } from "../types";
 
   export let authorityName: string;
 

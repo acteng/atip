@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { GeoJSONSource } from "maplibre-gl";
+  // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point } from "geojson";
+  import type { Feature as OurFeature } from "../../types";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
@@ -108,7 +110,12 @@
           );
 
           // Replace the one LineString we snapped to with the two new pieces
-          gj.features.splice(snappedIndex, 1, piece1, piece2);
+          gj.features.splice(
+            snappedIndex,
+            1,
+            piece1 as OurFeature<LineString>,
+            piece2 as OurFeature<LineString>
+          );
 
           return gj;
         });
