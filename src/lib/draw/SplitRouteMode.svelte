@@ -1,11 +1,13 @@
 <script lang="ts">
+  import type { Feature, LineString } from "geojson";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
   import lineSplit from "@turf/line-split";
   import lineSlice from "@turf/line-slice";
-  import { gjScheme, map, emptyGeojson, newFeatureId } from "../../stores.js";
+  import { gjScheme, map, newFeatureId } from "../../stores.js";
   import {
+    emptyGeojson,
     overwriteSource,
     overwriteLayer,
     drawCircle,
@@ -75,7 +77,10 @@
       // We clicked the map, stop the tool
       changeMode("edit-attribute");
     } else {
-      let result = lineSplit($gjScheme.features[snappedIndex], cursor);
+      let result = lineSplit(
+        $gjScheme.features[snappedIndex] as Feature<LineString>,
+        cursor
+      );
       if (result.features.length == 2) {
         let piece1 = result.features[0];
         let piece2 = result.features[1];

@@ -1,4 +1,5 @@
 import { writable, derived, get } from "svelte/store";
+import { emptyGeojson } from "./maplibre_helpers";
 
 // A global singleton, containing a loaded map
 export const map = writable(null);
@@ -13,13 +14,6 @@ export const currentHover = writable(null);
 // This acts as an event dispatcher, but is easier to plumb around. It either
 // has a feature ID or null.
 export const openFromSidebar = writable(null);
-
-export function emptyGeojson() {
-  return {
-    type: "FeatureCollection",
-    features: [],
-  };
-}
 
 // The ID of whatever object's attributes are being edited
 export const currentlyEditing = derived(gjScheme, ($gj) => {
