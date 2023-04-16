@@ -1,6 +1,6 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
-import type { FeatureCollection } from "geojson";
 import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
+import type { FeatureCollection } from "geojson";
 
 const roundedLine = {
   "line-cap": "round",

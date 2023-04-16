@@ -262,17 +262,17 @@ export class PolygonTool {
     if (this.points.length < 3) {
       return null;
     }
-    let f = {
+    // Deep clone here, or face the wrath of crazy bugs later!
+    let coordinates = [JSON.parse(JSON.stringify(this.points))];
+    coordinates[0].push(JSON.parse(JSON.stringify(coordinates[0][0])));
+    return {
       type: "Feature",
       geometry: {
         type: "Polygon",
-        // Deep clone here, or face the wrath of crazy bugs later!
-        coordinates: [JSON.parse(JSON.stringify(this.points))],
+        coordinates,
       },
       properties: {},
     };
-    f.geometry.coordinates[0].push(f.geometry.coordinates[0][0]);
-    return f;
   }
 }
 

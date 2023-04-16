@@ -10,6 +10,7 @@ import { colors, circleRadius } from "../../colors";
 
 const source = "edit-point-mode";
 
+// Note this uses the geojson Feature, not our specialization in types.ts
 export class PointTool {
   map: Map;
   active: boolean;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Feature } from "geojson";
+  import type { FeatureUnion } from "../types";
   import { Accordion, AccordionItem } from "carbon-components-svelte";
   import Form from "./Form.svelte";
   import {
@@ -9,11 +9,11 @@
     openFromSidebar,
   } from "../stores";
 
-  function interventionName(feature: Feature): string {
+  function interventionName(feature: FeatureUnion): string {
     if (feature.properties.name) {
       return feature.properties.name;
     }
-    var noun = feature.properties.intervention_type;
+    var noun: string = feature.properties.intervention_type;
     if (noun == "other") {
       if (feature.geometry.type == "Point") {
         noun = "point";
