@@ -6,7 +6,7 @@
     currentHover,
     currentlyEditing,
     openFromSidebar,
-  } from "../stores.js";
+  } from "../stores";
 
   function interventionName(feature) {
     if (feature.properties.name) {

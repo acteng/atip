@@ -1,6 +1,6 @@
 <script lang="ts">
   import geojsonExtent from "@mapbox/geojson-extent";
-  import { map } from "../stores.js";
+  import { map } from "../stores";
   import icon from "../../assets/zoom_out_map.svg";
 
   export let boundaryGeojson;

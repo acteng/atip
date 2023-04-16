@@ -7,7 +7,7 @@
     map,
     newFeatureId,
     setCurrentlyEditing,
-  } from "../../stores.js";
+  } from "../../stores";
 
   const thisMode = "route";
 

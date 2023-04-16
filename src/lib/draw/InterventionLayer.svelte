@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { GeoJSONSource } from "maplibre-gl";
   import {
     drawLine,
     isPolygon,
@@ -9,8 +10,8 @@
     overwriteSource,
     overwriteLayer,
   } from "../../maplibre_helpers";
-  import { colors, circleRadius, lineWidth } from "../../colors.js";
-  import { gjScheme, map } from "../../stores.js";
+  import { colors, circleRadius, lineWidth } from "../../colors";
+  import { gjScheme, map } from "../../stores";
 
   // TODO Document here the z-ordering between all the layers defined
   // everywhere. Or maybe even pass a list to overwriteLayer and have it figure
@@ -48,7 +49,7 @@
     }
     copy.features = copy.features.concat(endpoints);
 
-    $map.getSource(source).setData(copy);
+    ($map.getSource(source) as GeoJSONSource).setData(copy);
   }
 
   // The fallback white should never be used in practice

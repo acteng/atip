@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { colors } from "../colors.js";
+  import { colors } from "../colors";
 </script>
 
 <div>

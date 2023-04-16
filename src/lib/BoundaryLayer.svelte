@@ -7,7 +7,7 @@
     overwriteLayer,
   } from "../maplibre_helpers";
   import { getContext } from "svelte";
-  import { map } from "../stores.js";
+  import { map } from "../stores";
 
   export let boundaryGeojson;
 

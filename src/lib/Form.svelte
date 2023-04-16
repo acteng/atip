@@ -5,11 +5,7 @@
     TextArea,
     TextInput,
   } from "carbon-components-svelte";
-  import {
-    gjScheme,
-    setCurrentlyEditing,
-    currentlyEditing,
-  } from "../stores.js";
+  import { gjScheme, setCurrentlyEditing, currentlyEditing } from "../stores";
 
   export let id;
   export let name;

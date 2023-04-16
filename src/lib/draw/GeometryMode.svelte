@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { map, gjScheme, currentHover } from "../../stores.js";
+  import { map, gjScheme, currentHover } from "../../stores";
 
   const thisMode = "edit-geometry";
 
@@ -28,7 +28,7 @@
     currentHover.set(null);
   }
 
-  // stores.js defines a "currently editing" derived store, referring to
+  // stores defines a "currently editing" derived store, referring to
   // editing attributes. This is local state to track what ID we're currently
   // editing for geometry. The two are unrelated; we should rename things.
   let currentlyEditing = null;
