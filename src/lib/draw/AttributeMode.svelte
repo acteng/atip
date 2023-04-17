@@ -3,10 +3,9 @@
   import {
     map,
     gjScheme,
-    currentHover,
-    currentlyEditing,
-    setCurrentlyEditing,
+    mapHover,
     openFromSidebar,
+    formOpen,
   } from "../../stores";
 
   const thisMode = "edit-attribute";
@@ -17,12 +16,12 @@
 
   export function start() {}
   export function stop() {
-    setCurrentlyEditing(null);
+    formOpen.set(null);
   }
 
   // Calculate hover
   $map.on("mousemove", (e) => {
-    if (mode == thisMode && $currentlyEditing == null) {
+    if (mode == thisMode) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -35,12 +34,12 @@
       if (results.length > 0) {
         newHoverId = results[0].id;
       }
-      currentHover.set(newHoverId);
+      mapHover.set(newHoverId);
     }
   });
   $map.on("mouseout", () => {
-    if (mode == thisMode && $currentlyEditing == null) {
-      currentHover.set(null);
+    if (mode == thisMode) {
+      mapHover.set(null);
     }
   });
 
@@ -55,9 +54,9 @@
         ],
       });
       if (results.length > 0) {
-        setCurrentlyEditing(results[0].id as number);
+        formOpen.set(results[0].id as number);
       } else {
-        setCurrentlyEditing(null);
+        formOpen.set(null);
       }
     }
   });
@@ -82,7 +81,7 @@
       }
 
       // Interrupt any other mode and switch to this one. No need to
-      // setCurrentlyEditing -- the caller already sets the editing property.
+      // touch formOpen.
       changeMode(thisMode);
     }
   });

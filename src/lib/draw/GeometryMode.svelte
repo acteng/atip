@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { map, gjScheme, currentHover } from "../../stores";
+  import { map, gjScheme, mapHover } from "../../stores";
 
   const thisMode = "edit-geometry";
 
@@ -25,12 +25,10 @@
     }
 
     currentlyEditing = null;
-    currentHover.set(null);
+    mapHover.set(null);
   }
 
-  // stores defines a "currently editing" derived store, referring to
-  // editing attributes. This is local state to track what ID we're currently
-  // editing for geometry. The two are unrelated; we should rename things.
+  // An optional ID of what we're currently editing in this mode
   let currentlyEditing: number | null = null;
 
   // Calculate hover
@@ -48,12 +46,12 @@
       if (results.length > 0) {
         newHoverId = results[0].id;
       }
-      currentHover.set(newHoverId);
+      mapHover.set(newHoverId);
     }
   });
   $map.on("mouseout", () => {
     if (mode == thisMode && currentlyEditing == null) {
-      currentHover.set(null);
+      mapHover.set(null);
     }
   });
 
@@ -123,7 +121,7 @@
   }
 
   function startEditing(id: number) {
-    currentHover.set(null);
+    mapHover.set(null);
 
     let feature;
     gjScheme.update((gj) => {

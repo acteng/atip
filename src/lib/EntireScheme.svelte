@@ -40,11 +40,10 @@
     }
   }
 
-  // Remove the editing and hide_while_editing property hacks
+  // Remove the hide_while_editing property hack
   function geojsonToSave(): Scheme {
     const copy = JSON.parse(JSON.stringify($gjScheme));
     for (let feature of copy.features) {
-      delete feature.properties.editing;
       delete feature.properties.hide_while_editing;
     }
     return copy;

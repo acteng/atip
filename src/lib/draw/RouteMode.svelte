@@ -2,12 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
 
-  import {
-    gjScheme,
-    map,
-    newFeatureId,
-    setCurrentlyEditing,
-  } from "../../stores";
+  import { gjScheme, map, newFeatureId, formOpen } from "../../stores";
 
   const thisMode = "route";
 
@@ -66,7 +61,7 @@
         });
 
         changeMode("edit-attribute");
-        setCurrentlyEditing(feature.id);
+        formOpen.set(feature.id);
       }
     });
   });

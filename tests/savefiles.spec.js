@@ -7,9 +7,7 @@ test("loading a file with length displays the length", async ({ page }) => {
   // This will not work: page.getByRole('button', { name: 'Load from GeoJSON' })
   await page.locator("#load_geojson").setInputFiles("tests/data/route.json");
 
-  await page
-    .getByRole("button", { name: "Expand/Collapse 1) Untitled route" })
-    .click();
+  await page.getByRole("button", { name: "1) Untitled route" }).click();
   await expect(page.getByText("Length: 8.5km")).toBeVisible();
 });
 
@@ -33,8 +31,6 @@ test("loading a file without length displays the length", async ({ page }) => {
     buffer: Buffer.from(uploadFile),
   });
 
-  await page
-    .getByRole("button", { name: "Expand/Collapse 1) Untitled route" })
-    .click();
+  await page.getByRole("button", { name: "1) Untitled route" }).click();
   await expect(page.getByText("Length: 8.5km")).toBeVisible();
 });
