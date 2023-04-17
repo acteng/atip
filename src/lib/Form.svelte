@@ -5,32 +5,13 @@
     TextArea,
     TextInput,
   } from "carbon-components-svelte";
-  import { gjScheme, setCurrentlyEditing, currentlyEditing } from "../stores";
+  import { gjScheme, deleteIntervention, formOpen } from "../stores";
 
   export let id: number;
   export let name: string;
   export let intervention_type: "area" | "route" | "crossing" | "other";
   export let description: string;
   export let length_meters: number;
-
-  let bottomOfForm: HTMLDivElement;
-
-  currentlyEditing.subscribe((openedId) => {
-    if (id == openedId) {
-      // Wait 1ms before doing this, because it appears the accordion doesn't
-      // expand instantly. This is flaky when clicking the accordion instead of
-      // the map.
-      setTimeout(() => bottomOfForm?.scrollIntoView({ behavior: "smooth" }), 1);
-    }
-  });
-
-  function remove() {
-    gjScheme.update((gj) => {
-      gj.features = gj.features.filter((f) => f.id != id);
-      return gj;
-    });
-    setCurrentlyEditing(null);
-  }
 
   function prettyPrintMeters(x: number): string {
     if (x < 1000.0) {
@@ -62,11 +43,11 @@
   <br />
 {/if}
 
-<div bind:this={bottomOfForm}>
-  <button type="button" on:click={remove}>Delete</button>
+<div>
+  <button type="button" on:click={() => deleteIntervention(id)}>Delete</button>
   <button
     type="button"
-    on:click={() => setCurrentlyEditing(null)}
+    on:click={() => formOpen.set(null)}
     style="float: right;">Save</button
   >
 </div>

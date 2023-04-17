@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { gjScheme, newFeatureId, setCurrentlyEditing } from "../../stores";
+  import { gjScheme, newFeatureId, formOpen } from "../../stores";
 
   const thisMode = "polygon";
 
@@ -24,7 +24,7 @@
       });
 
       changeMode("edit-attribute");
-      setCurrentlyEditing(feature.id);
+      formOpen.set(feature.id);
     }
   });
 </script>

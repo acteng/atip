@@ -1,10 +1,4 @@
-import {
-  writable,
-  derived,
-  get,
-  type Writable,
-  type Readable,
-} from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 import { emptyGeojson } from "./maplibre_helpers";
 import type { Map } from "maplibre-gl";
 import type { Scheme } from "./types";
@@ -14,53 +8,18 @@ import type { Scheme } from "./types";
 export const map: Writable<Map> = writable(null);
 
 // TODO Should we instead store a map from ID to feature?
-// TODO Plus the foreign members we add in
 export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);
 
-// The optional ID of a feature currently hovered from the sidebar or map. When
-// an intervention is open and being edited, hovering is fixed to it.
+// The optional ID of a feature whose form is open on the sidebar.
 // TODO Can we make a type for feature ID?
-export const currentHover: Writable<number | null> = writable(null);
+export const formOpen: Writable<number | null> = writable(null);
 
-// This acts as an event dispatcher, but is easier to plumb around. It either
-// has a feature ID or null.
+// The optional ID of a feature currently hovered from the map or sidebar.
+export const mapHover: Writable<number | null> = writable(null);
+export const sidebarHover: Writable<number | null> = writable(null);
+
+// These act as event dispatchers, but are easier to plumb around.
 export const openFromSidebar: Writable<number | null> = writable(null);
-
-// The ID of whatever object's attributes are being edited
-export const currentlyEditing: Readable<number | null> = derived(
-  gjScheme,
-  ($gj) => {
-    let f = $gj.features.find((f) => f.properties.editing);
-    if (f) {
-      return f.id;
-    } else {
-      return null;
-    }
-  }
-);
-
-// TODO This is a bit of a hack; it muddies up the GeoJSON we save. But for the
-// accordion to work, we have to bind something simple like this.
-// id may be null, meaning we're not editing anything
-export function setCurrentlyEditing(id: number | null) {
-  // Don't cause spurious updates
-  if (get(currentlyEditing) == id) {
-    return;
-  }
-
-  gjScheme.update((gj) => {
-    for (let f of gj.features) {
-      if (f.id == id) {
-        f.properties.editing = true;
-      } else {
-        delete f.properties.editing;
-      }
-    }
-    return gj;
-  });
-  // While we're editing, hover is pinned to this
-  currentHover.set(id);
-}
 
 // All feature IDs must:
 //
@@ -87,4 +46,14 @@ export function newFeatureId(gj: Scheme): number {
     id++;
   }
   return id;
+}
+
+export function deleteIntervention(id: number) {
+  gjScheme.update((gj) => {
+    gj.features = gj.features.filter((f) => f.id != id);
+    return gj;
+  });
+  formOpen.set(null);
+  mapHover.set(null);
+  sidebarHover.set(null);
 }

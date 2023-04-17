@@ -1,13 +1,8 @@
 <script lang="ts">
   import type { FeatureUnion } from "../types";
-  import { Accordion, AccordionItem } from "carbon-components-svelte";
   import Form from "./Form.svelte";
-  import {
-    gjScheme,
-    currentHover,
-    currentlyEditing,
-    openFromSidebar,
-  } from "../stores";
+  import AccordionItem from "./AccordionItem.svelte";
+  import { gjScheme, formOpen, deleteIntervention } from "../stores";
 
   function interventionName(feature: FeatureUnion): string {
     if (feature.properties.name) {
@@ -26,74 +21,36 @@
     return `Untitled ${noun}`;
   }
 
-  function sidebarHover(id: number | null) {
-    if ($currentlyEditing == null) {
-      currentHover.set(id);
-    }
-  }
-
-  function startEditing(id: number) {
-    console.log(`Clicked ${id} from the sidebar; going to edit-attribute`);
-    // Always set this to null first, to force subscribers to see the update.
-    // It's possible to open something from the sidebar, close it (by clicking
-    // on the map or using the sidebar), then reopen the same thing.
-    openFromSidebar.set(null);
-    openFromSidebar.set(id);
-
-    // Remove the editing property from everything else, so that the Accordion is hidden
-    // TODO setCurrentlyEditing would be nicer to call here, but because the
-    // editing property is bound, the Accordion messes up. We have to do this.
-    for (let f of $gjScheme.features) {
-      if (f.properties.editing && f.id != id) {
-        delete f.properties.editing;
-      }
-    }
-    // Mimic what setCurrentlyEditing would do
-    currentHover.set(id);
-  }
-
   function onKeydown(e: KeyboardEvent) {
-    const id = $currentlyEditing;
     if (e.key == "Delete") {
       const tag = (e.target as HTMLElement).tagName;
       // Let the delete key work in forms
-      if (tag != "CANVAS" && tag != "BODY") {
+      if (tag == "INPUT" || tag == "TEXTAREA") {
         return;
       }
       e.preventDefault();
 
-      gjScheme.update((gj) => {
-        gj.features = gj.features.filter((f) => f.id != id);
-        return gj;
-      });
+      const id = $formOpen;
+      if (id) {
+        deleteIntervention(id);
+      }
     }
   }
 </script>
 
 <svelte:window on:keydown={onKeydown} />
 
-<Accordion>
-  {#each $gjScheme.features as feature, i (feature.id)}
-    <AccordionItem
-      bind:open={feature.properties.editing}
-      on:click={() => startEditing(feature.id)}
-      on:mouseenter={() => sidebarHover(feature.id)}
-      on:mouseleave={() => sidebarHover(null)}
-    >
-      <svelte:fragment slot="title">
-        {#if feature.id == $currentHover}
-          <strong>{i + 1}) {interventionName(feature)}</strong>
-        {:else}
-          {i + 1}) {interventionName(feature)}
-        {/if}
-      </svelte:fragment>
-      <Form
-        id={feature.id}
-        bind:name={feature.properties.name}
-        bind:intervention_type={feature.properties.intervention_type}
-        bind:description={feature.properties.description}
-        length_meters={feature.properties.length_meters}
-      />
-    </AccordionItem>
-  {/each}
-</Accordion>
+{#each $gjScheme.features as feature, i (feature.id)}
+  <AccordionItem
+    id={feature.id}
+    label={i + 1 + ") " + interventionName(feature)}
+  >
+    <Form
+      id={feature.id}
+      bind:name={feature.properties.name}
+      bind:intervention_type={feature.properties.intervention_type}
+      bind:description={feature.properties.description}
+      length_meters={feature.properties.length_meters}
+    />
+  </AccordionItem>
+{/each}

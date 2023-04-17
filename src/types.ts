@@ -38,7 +38,6 @@ export interface InterventionProps {
   waypoints?: Waypoint[];
 
   // Temporary state, not meant to be serialized
-  editing?: boolean;
   hide_while_editing?: boolean;
 }
 

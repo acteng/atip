@@ -11,7 +11,13 @@
     emptyGeojson,
   } from "../../maplibre_helpers";
   import { colors, lineWidth, circleRadius } from "../../colors";
-  import { gjScheme, currentHover, map } from "../../stores";
+  import {
+    gjScheme,
+    formOpen,
+    mapHover,
+    sidebarHover,
+    map,
+  } from "../../stores";
 
   let source = "hover";
 
@@ -54,7 +60,9 @@
     "interventions-points"
   );
 
-  currentHover.subscribe((id) => {
+  // When a form is open, ignore regular map and sidebar interactions
+  $: {
+    let id = $formOpen || $mapHover || $sidebarHover;
     if (id != null) {
       ($map.getSource(source) as GeoJSONSource).setData(
         $gjScheme.features.find((f) => f.id == id)
@@ -62,5 +70,5 @@
     } else {
       ($map.getSource(source) as GeoJSONSource).setData(emptyGeojson());
     }
-  });
+  }
 </script>
