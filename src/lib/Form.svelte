@@ -1,10 +1,4 @@
 <script lang="ts">
-  import {
-    RadioButtonGroup,
-    RadioButton,
-    TextArea,
-    TextInput,
-  } from "carbon-components-svelte";
   import { gjScheme, deleteIntervention, formOpen } from "../stores";
 
   export let id: number;
@@ -21,20 +15,36 @@
   }
 </script>
 
-<TextInput labelText="Name" bind:value={name} />
+<label
+  >Name
+  <input type="text" bind:value={name} />
+</label>
 
 <br />
 
-<RadioButtonGroup bind:selected={intervention_type}>
-  <RadioButton labelText="Area" value="area" />
-  <RadioButton labelText="Route" value="route" />
-  <RadioButton labelText="Crossing" value="crossing" />
-  <RadioButton labelText="Other" value="other" />
-</RadioButtonGroup>
+<label>
+  <input type="radio" bind:group={intervention_type} value="area" />
+  Area
+</label>
+<label>
+  <input type="radio" bind:group={intervention_type} value="route" />
+  Route
+</label>
+<label>
+  <input type="radio" bind:group={intervention_type} value="crossing" />
+  Crossing
+</label>
+<label>
+  <input type="radio" bind:group={intervention_type} value="other" />
+  Other
+</label>
 
 <br />
 
-<TextArea labelText="Description" bind:value={description} />
+<label>
+  Description
+  <textarea bind:value={description} />
+</label>
 
 <br />
 
@@ -51,3 +61,9 @@
     style="float: right;">Save</button
   >
 </div>
+
+<style>
+  textarea {
+    resize: none;
+  }
+</style>
