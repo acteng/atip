@@ -10,7 +10,6 @@ The stack:
 
 - [Vite](https://vitejs.dev) as the build tool
 - [Svelte](https://svelte.dev) as the UI framework
-- [Carbon](https://github.com/carbon-design-system/carbon-components-svelte) as the component library
 - [MapLibre GL](https://maplibre.org) as the map
 - [route-snapper](https://github.com/dabreegster/route_snapper/) to draw routes
   snapped to existing roads

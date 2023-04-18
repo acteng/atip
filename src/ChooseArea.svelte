@@ -3,7 +3,6 @@
   import "maplibre-gl/dist/maplibre-gl.css";
   import geojsonExtent from "@mapbox/geojson-extent";
   import About from "./lib/About.svelte";
-  import "carbon-components-svelte/css/white.css";
 
   import authoritiesUrl from "../assets/authorities.geojson?url";
 
