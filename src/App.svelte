@@ -1,6 +1,4 @@
 <script lang="ts">
-  import "carbon-components-svelte/css/white.css";
-
   import type { FeatureCollection, Polygon } from "geojson";
   import { onMount } from "svelte";
   import authoritiesUrl from "../assets/authorities.geojson?url";
