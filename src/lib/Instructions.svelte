@@ -7,8 +7,6 @@
 <Modal title="Instructions" bind:open>
   <p>For each intervention:</p>
 
-  <br />
-
   <ol>
     <li>
       Click one of the draw icons to the top right of the map (the icons allow
@@ -27,21 +25,15 @@
     </li>
   </ol>
 
-  <br />
-
   <p>
     Repeat the steps above for each substantial infrastructure intervention in
     the scheme.
   </p>
 
-  <br />
-
   <p>
     To make further edits to attribute data, or to delete an intervention, click
     on its name in the left hand panel or its geometry in the map.
   </p>
-
-  <br />
 
   <p>
     Click the "Export to GeoJSON" button to download the dataset representing
@@ -50,14 +42,10 @@
     scheme name, and start a new set of interventions representing a new scheme.
   </p>
 
-  <br />
-
   <p>
     To load a GeoJSON file that you have already saved from the tool, click the
     "Load from GeoJSON" button and select the file.
   </p>
-
-  <br />
 
   <p>
     Note: the <strong>Route tool</strong> works by calculating routes between

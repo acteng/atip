@@ -16,7 +16,7 @@
     class="content centered-fullscreen"
     on:click|stopPropagation={() => null}
   >
-    <div style="display: flex">
+    <div style="display: flex; justify-content: space-between;">
       <h1>{title}</h1>
       <button on:click={() => (open = false)}>X</button>
     </div>

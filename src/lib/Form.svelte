@@ -16,10 +16,11 @@
 </script>
 
 <label
-  >Name
-  <input type="text" bind:value={name} />
+  >Name:<br />
+  <input type="text" bind:value={name} style="width: 100%" />
 </label>
 
+<br />
 <br />
 
 <label>
@@ -40,26 +41,26 @@
 </label>
 
 <br />
+<br />
 
 <label>
-  Description
-  <textarea bind:value={description} />
+  Description:<br />
+  <textarea bind:value={description} style="width: 100%" rows="5" />
 </label>
 
 <br />
+<br />
 
 {#if length_meters}
-  <p>Length: {prettyPrintMeters(length_meters)}</p>
+  Length: {prettyPrintMeters(length_meters)}
+
+  <br />
   <br />
 {/if}
 
-<div>
+<div style="display: flex; justify-content: space-between">
   <button type="button" on:click={() => deleteIntervention(id)}>Delete</button>
-  <button
-    type="button"
-    on:click={() => formOpen.set(null)}
-    style="float: right;">Save</button
-  >
+  <button type="button" on:click={() => formOpen.set(null)}>Save</button>
 </div>
 
 <style>
