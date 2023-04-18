@@ -1,70 +1,60 @@
 <script lang="ts">
-  import {
-    Modal,
-    Link,
-    UnorderedList,
-    ListItem,
-  } from "carbon-components-svelte";
+  import Modal from "./Modal.svelte";
+  import ExternalLink from "./ExternalLink.svelte";
 
   export let open: boolean;
 </script>
 
-<Modal
-  passiveModal
-  modalHeading="About the Active Travel Intervention Platform"
-  bind:open
->
+<Modal title="About the Active Travel Intervention Platform" bind:open>
   <p>
     ATIP v1 is an
-    <Link href="https://github.com/acteng/atip" target="_blank"
-      >open source project</Link
+    <ExternalLink href="https://github.com/acteng/atip"
+      >open source project</ExternalLink
     >
     developed by:
   </p>
 
   <br />
 
-  <UnorderedList>
-    <ListItem>
-      <Link
+  <ul>
+    <li>
+      <ExternalLink
         href="https://www.turing.ac.uk/people/researchers/dustin-carlino"
-        target="_blank">Dustin Carlino</Link
+        >Dustin Carlino</ExternalLink
       >: lead developer, from The Alan Turing Institute
-    </ListItem>
-    <ListItem>
-      <Link
-        href="https://www.linkedin.com/in/madison-wang-841977bb/"
-        target="_blank">Madison Wang</Link
+    </li>
+    <li>
+      <ExternalLink href="https://www.linkedin.com/in/madison-wang-841977bb/"
+        >Madison Wang</ExternalLink
       >: UX design
-    </ListItem>
-    <ListItem>
-      <Link href="https://github.com/BudgieInWA" target="_blank"
-        >Ben Ritter</Link
+    </li>
+    <li>
+      <ExternalLink href="https://github.com/BudgieInWA"
+        >Ben Ritter</ExternalLink
       >: CSS consulting
-    </ListItem>
-  </UnorderedList>
+    </li>
+  </ul>
 
   <br />
 
   <p>
     ATIP builds on
-    <Link href="https://www.openstreetmap.org/about" target="_blank"
-      >OpenStreetMap</Link
+    <ExternalLink href="https://www.openstreetmap.org/about"
+      >OpenStreetMap</ExternalLink
     >
     contributors,
-    <Link href="https://maplibre.org/" target="_blank">MapLibre</Link>,
-    <Link href="https://georust.org/" target="_blank">GeoRust</Link>, and other
+    <ExternalLink href="https://maplibre.org/">MapLibre</ExternalLink>,
+    <ExternalLink href="https://georust.org/">GeoRust</ExternalLink>, and other
     open source projects.
   </p>
 
   <br />
 
   <p>
-    We want your feedback about ATIP! Please <Link
+    We want your feedback about ATIP! Please <ExternalLink
       href="https://github.com/acteng/atip/issues/new"
-      target="_blank">start an issue on Github</Link
-    > or email <Link href="mailto: dcarlino@turing.ac.uk"
-      >dcarlino@turing.ac.uk</Link
-    >.
+      >start an issue on Github</ExternalLink
+    >
+    or email <a href="mailto: dcarlino@turing.ac.uk">dcarlino@turing.ac.uk</a>.
   </p>
 </Modal>

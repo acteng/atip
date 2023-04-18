@@ -1,31 +1,31 @@
 <script lang="ts">
-  import { Modal, OrderedList, ListItem } from "carbon-components-svelte";
+  import Modal from "./Modal.svelte";
 
   export let open: boolean;
 </script>
 
-<Modal passiveModal modalHeading="Instructions" bind:open>
+<Modal title="Instructions" bind:open>
   <p>For each intervention:</p>
 
   <br />
 
-  <OrderedList>
-    <ListItem>
+  <ol>
+    <li>
       Click one of the draw icons to the top right of the map (the icons allow
       you to draw points, lines, polygons or routes)
-    </ListItem>
-    <ListItem>
+    </li>
+    <li>
       Draw the intervention on the map, clicking the original point or 'Finish
       snapping' for the Polygon and Route tools respectively
-    </ListItem>
-    <ListItem>
+    </li>
+    <li>
       Fill in the details that appear (Intervention type, name, description)
-    </ListItem>
-    <ListItem>
+    </li>
+    <li>
       Click the "Save" button or "Delete" button to save or remove the
       intervention
-    </ListItem>
-  </OrderedList>
+    </li>
+  </ol>
 
   <br />
 
