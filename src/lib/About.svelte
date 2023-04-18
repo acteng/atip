@@ -14,8 +14,6 @@
     developed by:
   </p>
 
-  <br />
-
   <ul>
     <li>
       <ExternalLink
@@ -35,8 +33,6 @@
     </li>
   </ul>
 
-  <br />
-
   <p>
     ATIP builds on
     <ExternalLink href="https://www.openstreetmap.org/about"
@@ -47,8 +43,6 @@
     <ExternalLink href="https://georust.org/">GeoRust</ExternalLink>, and other
     open source projects.
   </p>
-
-  <br />
 
   <p>
     We want your feedback about ATIP! Please <ExternalLink

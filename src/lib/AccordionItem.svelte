@@ -63,6 +63,7 @@
     bind:this={contents}
     transition:slide={{ duration: 100 }}
     on:introend={() => scroll()}
+    style="border: solid 1px black; padding: 10px"
   >
     <slot />
   </div>
@@ -73,11 +74,12 @@
     border: none;
     background: none;
     display: block;
-    font-size: 25px;
+    font-size: 20px;
     cursor: pointer;
     margin: 0;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
+    text-align: left;
   }
 
   button:hover,
