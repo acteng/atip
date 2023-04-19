@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Mode } from "./types";
   import { bbox } from "../../maplibre_helpers";
   import {
     map,
@@ -12,7 +13,7 @@
 
   // TODO Just tell us if we're the current mode or not, actually...
   export let mode: string;
-  export let changeMode: (m: string) => void;
+  export let changeMode: (m: Mode) => void;
 
   export function start() {}
   export function stop() {

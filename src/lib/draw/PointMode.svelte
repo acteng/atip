@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Mode } from "./types";
   import type { Point } from "geojson";
   import type { Feature } from "../../types";
   import type { PointTool } from "./point_tool";
@@ -7,7 +8,7 @@
   const thisMode = "point";
 
   export let mode: string;
-  export let changeMode: (m: string) => void;
+  export let changeMode: (m: Mode) => void;
   export let pointTool: PointTool;
 
   export function start() {

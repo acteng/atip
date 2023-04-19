@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Mode } from "./types";
   import type { Polygon } from "geojson";
   import type { Feature } from "../../types";
   import type { PolygonTool } from "./polygon_tool";
@@ -7,7 +8,7 @@
   const thisMode = "polygon";
 
   export let mode: string;
-  export let changeMode: (m: string) => void;
+  export let changeMode: (m: Mode) => void;
   export let polygonTool: PolygonTool;
 
   export function start() {
