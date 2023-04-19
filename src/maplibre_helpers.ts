@@ -1,6 +1,7 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
 import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
-import type { FeatureCollection } from "geojson";
+import type { GeoJSON, FeatureCollection } from "geojson";
+import turfBbox from "@turf/bbox";
 
 const roundedLine = {
   "line-cap": "round",
@@ -88,4 +89,9 @@ export function emptyGeojson(): FeatureCollection {
     type: "FeatureCollection",
     features: [],
   };
+}
+
+// Suitable for passing to map.fitBounds. Work around https://github.com/Turfjs/turf/issues/1807.
+export function bbox(gj: GeoJSON): [number, number, number, number] {
+  return turfBbox(gj) as [number, number, number, number];
 }

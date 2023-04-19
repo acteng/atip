@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
-  import geojsonExtent from "@mapbox/geojson-extent";
+  import { bbox } from "../maplibre_helpers";
   import { map } from "../stores";
   import icon from "../../assets/zoom_out_map.svg";
 
   export let boundaryGeojson: GeoJSON;
 
   function recenter() {
-    $map.fitBounds(geojsonExtent(boundaryGeojson), {
+    $map.fitBounds(bbox(boundaryGeojson), {
       padding: 20,
       animate: true,
       duration: 500,

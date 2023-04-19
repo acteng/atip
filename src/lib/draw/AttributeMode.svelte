@@ -1,5 +1,5 @@
 <script lang="ts">
-  import geojsonExtent from "@mapbox/geojson-extent";
+  import { bbox } from "../../maplibre_helpers";
   import {
     map,
     gjScheme,
@@ -67,15 +67,15 @@
       // being edited. (Don't do this when clicking the object on the map.)
       let feature = $gjScheme.features.find((f) => f.id == id);
 
-      // Extent of points is defined in a weird way, special-case it
+      // Padding around a point looks odd; special case it by keeping the current zoom
       if (feature.geometry.type == "Point") {
         $map.flyTo({
           center: feature.geometry.coordinates as [number, number],
+          duration: 500,
         });
       } else {
-        $map.fitBounds(geojsonExtent(feature), {
+        $map.fitBounds(bbox(feature), {
           padding: 200,
-          animate: true,
           duration: 500,
         });
       }
