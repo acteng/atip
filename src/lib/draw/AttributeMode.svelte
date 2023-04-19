@@ -30,12 +30,7 @@
           "interventions-polygons",
         ],
       });
-      // TODO ? syntax
-      var newHoverId = null;
-      if (results.length > 0) {
-        newHoverId = results[0].id;
-      }
-      mapHover.set(newHoverId);
+      mapHover.set((results[0]?.id as number) || null);
     }
   });
   $map.on("mouseout", () => {
