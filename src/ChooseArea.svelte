@@ -1,7 +1,7 @@
 <script lang="ts">
   import maplibregl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import geojsonExtent from "@mapbox/geojson-extent";
+  import { bbox } from "./maplibre_helpers";
   import About from "./lib/About.svelte";
 
   import authoritiesUrl from "../assets/authorities.geojson?url";
@@ -45,7 +45,7 @@
     }
 
     map.on("load", function () {
-      map.fitBounds(geojsonExtent(json), {
+      map.fitBounds(bbox(json), {
         padding: 20,
         animate: false,
       });
