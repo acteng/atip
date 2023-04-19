@@ -1,13 +1,16 @@
 <script lang="ts">
+  import type { PointTool } from "./point_tool";
+  import type { PolygonTool } from "./polygon_tool";
+  import type { RouteSnapper } from "route-snapper/lib.js";
   import { map, gjScheme, mapHover } from "../../stores";
 
   const thisMode = "edit-geometry";
 
   export let mode: string;
-  export let routeSnapper;
-  export let snapTool;
-  export let pointTool;
-  export let polygonTool;
+  export let routeSnapper: RouteSnapper;
+  export let snapTool: HTMLDivElement;
+  export let pointTool: PointTool;
+  export let polygonTool: PolygonTool;
 
   export function start() {}
   export function stop() {
@@ -71,7 +74,8 @@
     }
   });
 
-  snapTool.addEventListener("new-route", (e) => {
+  // TODO Real route-snapper types
+  snapTool.addEventListener("new-route", (e: any) => {
     if (mode == thisMode) {
       const editedRoute = e.detail;
       gjScheme.update((gj) => {

@@ -3,6 +3,7 @@
   import { map } from "../../stores";
   import { PointTool } from "./point_tool";
   import { PolygonTool } from "./polygon_tool";
+  import type { RouteSnapper } from "route-snapper/lib.js";
 
   import AttributeMode from "./AttributeMode.svelte";
   import GeometryMode from "./GeometryMode.svelte";
@@ -13,8 +14,8 @@
 
   export let routeUrl: string;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
-  let routeSnapper;
-  let snapTool;
+  let routeSnapper: RouteSnapper;
+  let snapTool: HTMLDivElement;
 
   // Create and manage these here, then pass down to modes as needed.
   // TODO Teardown too

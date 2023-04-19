@@ -70,7 +70,7 @@ export class PolygonTool {
     map.on("click", (e) => {
       if (this.active && this.cursor) {
         // Insert the new point in the "middle" of the closest line segment
-        let candidates = [];
+        let candidates: [number, number][] = [];
         pointsToLineSegments(this.points).forEach((line, idx) => {
           candidates.push([
             idx + 1,
