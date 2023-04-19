@@ -2,7 +2,7 @@
   import type { Mode } from "./types";
   import type { GeoJSONSource } from "maplibre-gl";
   // Note we don't use our specialization of Feature here
-  import type { Feature, LineString, Point } from "geojson";
+  import type { Feature, LineString, Point, Position } from "geojson";
   import type { Feature as OurFeature } from "../../types";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
@@ -51,13 +51,16 @@
       $map.unproject(e.point).distanceTo($map.unproject(nearbyPoint)) / 1000.0;
 
     // Are we snapped to anything?
-    let candidates = [];
+    let candidates: [number, Position, number][] = [];
     for (let [index, f] of $gjScheme.features.entries()) {
       if (f.geometry.type == "LineString") {
         let snapped = nearestPointOnLine(f.geometry, cursor, {
           units: "kilometers",
         });
-        if (snapped.properties.dist <= thresholdKm) {
+        if (
+          snapped.properties.dist != undefined &&
+          snapped.properties.dist <= thresholdKm
+        ) {
           candidates.push([
             index,
             snapped.geometry.coordinates,
@@ -83,9 +86,10 @@
       // We clicked the map, stop the tool
       changeMode("edit-attribute");
     } else {
+      // TODO Can we avoid using ! everywhere here?
       let result = lineSplit(
-        $gjScheme.features[snappedIndex] as Feature<LineString>,
-        cursor
+        $gjScheme.features[snappedIndex!] as Feature<LineString>,
+        cursor!
       );
       if (result.features.length == 2) {
         let piece1 = result.features[0];
@@ -93,26 +97,26 @@
 
         gjScheme.update((gj) => {
           // Keep the old ID for one, assign a new ID to the other
-          piece1.id = gj.features[snappedIndex].id;
+          piece1.id = gj.features[snappedIndex!].id;
           piece2.id = newFeatureId(gj);
 
           // The properties get lost. Copy everything to both
           piece1.properties = JSON.parse(
-            JSON.stringify(gj.features[snappedIndex].properties)
+            JSON.stringify(gj.features[snappedIndex!].properties)
           );
           // "Deep clone"
           piece2.properties = JSON.parse(JSON.stringify(piece1.properties));
 
           fixRouteProperties(
-            gj.features[snappedIndex] as Feature<LineString>,
-            piece1,
-            piece2,
-            cursor
+            gj.features[snappedIndex!] as OurFeature<LineString>,
+            piece1 as OurFeature<LineString>,
+            piece2 as OurFeature<LineString>,
+            cursor!
           );
 
           // Replace the one LineString we snapped to with the two new pieces
           gj.features.splice(
-            snappedIndex,
+            snappedIndex!,
             1,
             piece1 as OurFeature<LineString>,
             piece2 as OurFeature<LineString>
@@ -170,9 +174,9 @@
   // TODO Move this function to route-snapper, and remove some turf dependencies.
   // The implementation there would likely be Rust, to avoid depending on turf in the NPM package...
   function fixRouteProperties(
-    original: Feature<LineString>,
-    piece1: Feature<LineString>,
-    piece2: Feature<LineString>,
+    original: OurFeature<LineString>,
+    piece1: OurFeature<LineString>,
+    piece2: OurFeature<LineString>,
     splitPt: Feature<Point>
   ) {
     // Fix length
@@ -188,7 +192,7 @@
     let firstPiece = true;
     // TODO Can we iterate over an array's contents and get the index at the same time?
     let i = 0;
-    for (let waypt of original.properties.waypoints) {
+    for (let waypt of original.properties.waypoints!) {
       let wayptDist = distanceAlongLine(
         original,
         point([waypt.lon, waypt.lat])
@@ -216,7 +220,7 @@
           // Note i > 0; splitDist can't be before the first waypoint (distance 0)
           // TODO Edge case: somebody manages to exactly click a waypoint
           let snapped =
-            waypt.snapped && original.properties.waypoints[i - 1].snapped;
+            waypt.snapped && original.properties.waypoints![i - 1].snapped;
 
           piece1.properties.waypoints.push({
             lon: splitPt.geometry.coordinates[0],
