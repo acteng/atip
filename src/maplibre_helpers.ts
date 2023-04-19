@@ -12,7 +12,11 @@ export const isPolygon = ["==", "$type", "Polygon"];
 export const isLine = ["==", "$type", "LineString"];
 export const isPoint = ["==", "$type", "Point"];
 
-export function drawLine(color, width, opacity = 1.0) {
+export function drawLine(
+  color: DataDrivenPropertyValueSpecification<string>,
+  width: DataDrivenPropertyValueSpecification<number>,
+  opacity: DataDrivenPropertyValueSpecification<number> = 1.0
+) {
   return {
     type: "line",
     layout: roundedLine,
@@ -24,7 +28,10 @@ export function drawLine(color, width, opacity = 1.0) {
   };
 }
 
-export function drawPolygon(color, opacity) {
+export function drawPolygon(
+  color: DataDrivenPropertyValueSpecification<string>,
+  opacity: DataDrivenPropertyValueSpecification<number>
+) {
   return {
     type: "fill",
     paint: {
@@ -35,8 +42,8 @@ export function drawPolygon(color, opacity) {
 }
 
 export function drawCircle(
-  color,
-  radius,
+  color: DataDrivenPropertyValueSpecification<string>,
+  radius: DataDrivenPropertyValueSpecification<number>,
   opacity: DataDrivenPropertyValueSpecification<number> = 1.0
 ) {
   return {
@@ -71,7 +78,7 @@ export function overwriteSource(map, id, source) {
   map.addSource(id, source);
 }
 
-export function overwriteLayer(map, layer, beforeId = null) {
+export function overwriteLayer(map, layer, beforeId: string | null = null) {
   if (map.getLayer(layer.id)) {
     map.removeLayer(layer.id);
   }

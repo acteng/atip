@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { GeoJSONSource } from "maplibre-gl";
+  import type {
+    GeoJSONSource,
+    DataDrivenPropertyValueSpecification,
+  } from "maplibre-gl";
   import {
     drawLine,
     isPolygon,
@@ -53,19 +56,20 @@
   }
 
   // The fallback white should never be used in practice
-  const colorByInterventionType = [
-    "match",
-    ["get", "intervention_type"],
-    "area",
-    colors.area,
-    "route",
-    colors.route,
-    "crossing",
-    colors.crossing,
-    "other",
-    colors.other,
-    "white",
-  ];
+  const colorByInterventionType: DataDrivenPropertyValueSpecification<string> =
+    [
+      "match",
+      ["get", "intervention_type"],
+      "area",
+      colors.area,
+      "route",
+      colors.route,
+      "crossing",
+      colors.crossing,
+      "other",
+      colors.other,
+      "white",
+    ];
 
   const hideWhileEditing = ["!=", "hide_while_editing", true];
   const notEndpoint = ["!=", "endpoint", true];

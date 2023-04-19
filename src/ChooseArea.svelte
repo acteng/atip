@@ -9,7 +9,7 @@
   let showAbout = false;
 
   let inputValue: string;
-  let dataList;
+  let dataList: HTMLDataListElement;
   let authoritySet: Set<string> = new Set();
 
   $: validEntry = authoritySet.has(inputValue);
@@ -40,7 +40,7 @@
     let hoverId = null;
     function unhover() {
       if (hoverId !== null) {
-        map.setFeatureState({ source: source, id: hoverId }, { hover: false });
+        map.setFeatureState({ source, id: hoverId }, { hover: false });
       }
     }
 

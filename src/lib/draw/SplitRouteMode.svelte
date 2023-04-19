@@ -22,7 +22,7 @@
   const snapDistancePixels = 30;
 
   export let mode: string;
-  export let changeMode: (string) => void;
+  export let changeMode: (m: string) => void;
 
   export function start() {}
   export function stop() {

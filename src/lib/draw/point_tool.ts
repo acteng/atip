@@ -1,5 +1,5 @@
-import type { Feature, Point } from "geojson";
-import type { Map, GeoJSONSource } from "maplibre-gl";
+import type { Feature, Point, Position } from "geojson";
+import type { Map, GeoJSONSource, MapMouseEvent } from "maplibre-gl";
 import {
   emptyGeojson,
   overwriteSource,
@@ -17,7 +17,7 @@ export class PointTool {
   eventListeners: ((f: Feature<Point>) => void)[];
   cursor: Feature<Point> | null;
 
-  constructor(map) {
+  constructor(map: Map) {
     this.map = map;
     this.active = false;
     // TODO Can we use
@@ -27,7 +27,7 @@ export class PointTool {
     this.cursor = null;
 
     // Set up interactions
-    map.on("mousemove", (e) => {
+    map.on("mousemove", (e: MapMouseEvent) => {
       if (this.active) {
         this.cursor = pointFeature(e.lngLat.toArray());
         this.#redraw();
@@ -89,7 +89,7 @@ export class PointTool {
   }
 }
 
-function pointFeature(pt): Feature<Point> {
+function pointFeature(pt: Position): Feature<Point> {
   return {
     type: "Feature",
     properties: {},

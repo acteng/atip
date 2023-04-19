@@ -7,12 +7,12 @@
   const thisMode = "route";
 
   export let mode: string;
-  export let changeMode: (string) => void;
+  export let changeMode: (m: string) => void;
   export let url: string;
 
-  export let snapTool;
+  export let snapTool: HTMLDivElement;
   let snapProgress: HTMLDivElement;
-  export let routeSnapper;
+  export let routeSnapper: RouteSnapper;
 
   // These're for drawing a new route, NOT for editing an existing.
   // GeometryMode manages the latter.
@@ -50,7 +50,8 @@
       }
     });
 
-    snapTool.addEventListener("new-route", (e) => {
+    // TODO Disable type checking here, until route-snapper exposes proper types
+    snapTool.addEventListener("new-route", (e: any) => {
       if (mode == thisMode) {
         const feature = e.detail;
         gjScheme.update((gj) => {
