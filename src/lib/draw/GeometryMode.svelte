@@ -23,8 +23,8 @@
       polygonTool.stop();
 
       gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing);
-        delete feature!.properties.hide_while_editing;
+        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+        delete feature.properties.hide_while_editing;
         return gj;
       });
     }
