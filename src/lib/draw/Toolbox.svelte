@@ -4,6 +4,7 @@
   import { PointTool } from "./point_tool";
   import { PolygonTool } from "./polygon_tool";
   import type { RouteSnapper } from "route-snapper/lib.js";
+  import type { Mode } from "./types";
 
   import AttributeMode from "./AttributeMode.svelte";
   import GeometryMode from "./GeometryMode.svelte";
@@ -22,16 +23,16 @@
   let pointTool = new PointTool($map);
   let polygonTool = new PolygonTool($map);
 
-  let mode = "edit-attribute";
-  let attributeMode;
-  let geometryMode;
-  let routeMode;
-  let pointMode;
-  let polygonMode;
-  let splitRouteMode;
+  let mode: Mode = "edit-attribute";
+  let attributeMode: AttributeMode;
+  let geometryMode: GeometryMode;
+  let routeMode: RouteMode;
+  let pointMode: PointMode;
+  let polygonMode: PolygonMode;
+  let splitRouteMode: SplitRouteMode;
 
   // This must be used; don't manually change mode
-  function changeMode(newMode: string) {
+  function changeMode(newMode: Mode) {
     let modes = {
       "edit-attribute": attributeMode,
       "edit-geometry": geometryMode,

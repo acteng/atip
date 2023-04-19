@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Mode } from "./types";
   import type { GeoJSONSource } from "maplibre-gl";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point } from "geojson";
@@ -22,7 +23,7 @@
   const snapDistancePixels = 30;
 
   export let mode: string;
-  export let changeMode: (m: string) => void;
+  export let changeMode: (m: Mode) => void;
 
   export function start() {}
   export function stop() {

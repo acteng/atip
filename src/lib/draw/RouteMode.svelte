@@ -1,13 +1,13 @@
 <script lang="ts">
+  import type { Mode } from "./types";
   import { onMount, onDestroy } from "svelte";
   import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
-
   import { gjScheme, map, newFeatureId, formOpen } from "../../stores";
 
   const thisMode = "route";
 
   export let mode: string;
-  export let changeMode: (m: string) => void;
+  export let changeMode: (m: Mode) => void;
   export let url: string;
 
   export let snapTool: HTMLDivElement;
