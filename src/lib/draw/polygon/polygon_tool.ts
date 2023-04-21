@@ -1,11 +1,4 @@
-import type {
-  Feature,
-  Geometry,
-  Point,
-  Position,
-  Polygon,
-  LineString,
-} from "geojson";
+import type { Feature, Point, Position, Polygon, LineString } from "geojson";
 import type { Map, MapLayerMouseEvent, GeoJSONSource } from "maplibre-gl";
 import nearestPointOnLine from "@turf/nearest-point-on-line";
 import {
@@ -18,15 +11,11 @@ import {
   isPoint,
   isPolygon,
   isLine,
+  type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
 
 const source = "edit-polygon-mode";
-
-// Properties are guaranteed to exist
-type FeatureWithProps<G extends Geometry> = Feature<G> & {
-  properties: { [name: string]: any };
-};
 
 export class PolygonTool {
   map: Map;
