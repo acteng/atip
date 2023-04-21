@@ -5,6 +5,9 @@
   import type { RouteTool } from "./route_tool";
   import { map, gjScheme, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
+  import PointControls from "./PointControls.svelte";
+  import PolygonControls from "./PolygonControls.svelte";
+  import RouteControls from "./RouteControls.svelte";
 
   const thisMode = "edit-geometry";
 
@@ -12,6 +15,10 @@
   export let pointTool: PointTool;
   export let polygonTool: PolygonTool;
   export let routeTool: RouteTool;
+
+  // An optional ID of what we're currently editing in this mode
+  let currentlyEditing: number | null = null;
+  let currentlyEditingControls: "point" | "polygon" | "route" | null = null;
 
   export function start() {}
   export function stop() {
@@ -29,11 +36,9 @@
     }
 
     currentlyEditing = null;
+    currentlyEditingControls = null;
     mapHover.set(null);
   }
-
-  // An optional ID of what we're currently editing in this mode
-  let currentlyEditing: number | null = null;
 
   // Calculate hover
   $map.on("mousemove", (e) => {
@@ -85,6 +90,7 @@
 
       // Stay in this mode
       currentlyEditing = null;
+      currentlyEditingControls = null;
     }
   });
   routeTool.addEventListenerFailure(() => {
@@ -98,6 +104,7 @@
 
       // Stay in this mode
       currentlyEditing = null;
+      currentlyEditingControls = null;
     }
   });
 
@@ -116,6 +123,7 @@
 
         // Stay in this mode
         currentlyEditing = null;
+        currentlyEditingControls = null;
       }
     });
   }
@@ -136,16 +144,27 @@
 
     if (feature.geometry.type == "LineString") {
       routeTool.editExisting(feature as Feature<LineString>);
+      currentlyEditingControls = "route";
     } else if (feature.geometry.type == "Polygon") {
       polygonTool.editExisting(feature as Feature<Polygon>);
+      currentlyEditingControls = "polygon";
     } else if (feature.geometry.type == "Point") {
       // No need to pass in the existing feature.geometry; it's the same as
       // where the cursor is anyway
       pointTool.start();
+      currentlyEditingControls = "point";
     }
   }
 </script>
 
 {#if mode == thisMode}
-  <p>Click an intervention to edit its geometry</p>
+  {#if currentlyEditingControls == "point"}
+    <PointControls editingExisting={true} />
+  {:else if currentlyEditingControls == "polygon"}
+    <PolygonControls />
+  {:else if currentlyEditingControls == "route"}
+    <RouteControls {routeTool} />
+  {:else}
+    <p>Click an intervention to edit its geometry</p>
+  {/if}
 {/if}

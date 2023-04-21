@@ -4,6 +4,7 @@
   import type { Feature } from "../../types";
   import type { PolygonTool } from "./polygon_tool";
   import { gjScheme, newFeatureId, formOpen } from "../../stores";
+  import PolygonControls from "./PolygonControls.svelte";
 
   const thisMode = "polygon";
 
@@ -34,9 +35,5 @@
 </script>
 
 {#if mode == thisMode}
-  <p>
-    Click the map to add a vertex, or click a vertex to delete it. Press <strong
-      >Enter</strong
-    > to finish. Drag a vertex or the polygon to move.
-  </p>
+  <PolygonControls />
 {/if}
