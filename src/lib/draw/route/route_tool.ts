@@ -1,6 +1,6 @@
 import { JsRouteSnapper } from "route-snapper";
 import type { Map, GeoJSONSource } from "maplibre-gl";
-import type { Feature, LineString } from "geojson";
+import type { Feature, LineString, Geometry } from "geojson";
 import {
   emptyGeojson,
   isPoint,
@@ -13,6 +13,11 @@ import {
 
 const source = "route-snapper";
 
+// Properties are guaranteed to exist
+type FeatureWithProps<G extends Geometry> = Feature<G> & {
+  properties: { [name: string]: any };
+};
+
 const circleRadiusPixels = 10;
 const snapDistancePixels = 30;
 
@@ -20,7 +25,7 @@ export class RouteTool {
   map: Map;
   inner: JsRouteSnapper;
   active: boolean;
-  eventListenersSuccess: ((f: Feature<LineString>) => void)[];
+  eventListenersSuccess: ((f: FeatureWithProps<LineString>) => void)[];
   eventListenersFailure: (() => void)[];
 
   constructor(map: Map, graphBytes: Uint8Array) {
@@ -171,7 +176,7 @@ export class RouteTool {
   // properties returned originally. If waypoints are missing (maybe because
   // the route was produced by a different tool, or an older version of this
   // tool), the edited line-string may differ from the input.
-  editExisting(feature: Feature<LineString>) {
+  editExisting(feature: FeatureWithProps<LineString>) {
     if (this.active) {
       window.alert("Bug: editExisting called when tool is already active");
     }
@@ -212,7 +217,7 @@ export class RouteTool {
     // TODO Remove the event listeners on document and map
   }
 
-  addEventListenerSuccess(callback: (f: Feature<LineString>) => void) {
+  addEventListenerSuccess(callback: (f: FeatureWithProps<LineString>) => void) {
     this.eventListenersSuccess.push(callback);
   }
   addEventListenerFailure(callback: () => void) {
@@ -228,7 +233,7 @@ export class RouteTool {
     let rawJSON = this.inner.toFinalFeature();
     if (rawJSON) {
       for (let cb of this.eventListenersSuccess) {
-        cb(JSON.parse(rawJSON) as Feature<LineString>);
+        cb(JSON.parse(rawJSON) as FeatureWithProps<LineString>);
       }
     } else {
       for (let cb of this.eventListenersFailure) {
@@ -244,7 +249,7 @@ export class RouteTool {
     this.finish();
   }
 
-  setConfig(config) {
+  setConfig(config: { avoid_doubling_back: boolean }) {
     this.inner.setConfig(config);
     this.#redraw();
   }
