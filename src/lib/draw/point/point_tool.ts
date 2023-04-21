@@ -8,6 +8,7 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
+import { EventManager } from "../events";
 
 const source = "edit-point-mode";
 
@@ -17,6 +18,8 @@ export class PointTool {
   active: boolean;
   eventListeners: ((f: FeatureWithProps<Point>) => void)[];
   cursor: FeatureWithProps<Point> | null;
+
+  events: EventManager;
 
   constructor(map: Map) {
     this.map = map;
@@ -28,22 +31,9 @@ export class PointTool {
     this.cursor = null;
 
     // Set up interactions
-    map.on("mousemove", (e: MapMouseEvent) => {
-      if (this.active) {
-        this.cursor = pointFeature(e.lngLat.toArray());
-        this.#redraw();
-      }
-    });
-
-    map.on("click", () => {
-      // TODO is it possible cursor is null?
-      if (this.active && this.cursor) {
-        for (let cb of this.eventListeners) {
-          cb(this.cursor);
-        }
-        this.stop();
-      }
-    });
+    this.events = new EventManager(this, map);
+    this.events.mapHandler("click", this.onClick);
+    this.events.mapHandler("mousemove", this.onMouseMove);
 
     // Render
     overwriteSource(map, source, {
@@ -57,14 +47,31 @@ export class PointTool {
     });
   }
 
+  private onMouseMove(e: MapMouseEvent) {
+    if (this.active) {
+      this.cursor = pointFeature(e.lngLat.toArray());
+      this.#redraw();
+    }
+  }
+
+  private onClick() {
+    // TODO is it possible cursor is null?
+    if (this.active && this.cursor) {
+      for (let cb of this.eventListeners) {
+        cb(this.cursor);
+      }
+      this.stop();
+    }
+  }
+
   addEventListener(callback: (f: FeatureWithProps<Point>) => void) {
     this.eventListeners.push(callback);
   }
 
   tearDown() {
-    // TODO Clean up event listeners
     this.map.removeLayer("edit-point-mode");
     this.map.removeSource(source);
+    this.events.tearDown();
   }
 
   // Note there's no way to "edit an existing point." Just call this for a new
