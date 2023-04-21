@@ -26,7 +26,8 @@
   let prod = window.location.hostname.includes("atip.uk");
 
   const params = new URLSearchParams(window.location.search);
-  let authorityName: string = params.get("authority");
+  // TODO Add validation and some kind of error page
+  let authorityName: string = params.get("authority")!;
   let style: string = params.get("style") || "streets";
 
   // TODO Slight hack. These files are stored in an S3 bucket, which only has
@@ -56,9 +57,9 @@
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
     const resp = await fetch(authoritiesUrl);
     const body = await resp.text();
-    const geojson = JSON.parse(body);
+    const geojson: FeatureCollection<Polygon> = JSON.parse(body);
     geojson.features = geojson.features.filter(
-      (feature) => feature.properties.name == authorityName
+      (feature) => feature.properties?.name == authorityName
     );
     return geojson;
   }

@@ -65,7 +65,7 @@
     let id = $formOpen || $mapHover || $sidebarHover;
     if (id != null) {
       ($map.getSource(source) as GeoJSONSource).setData(
-        $gjScheme.features.find((f) => f.id == id)
+        $gjScheme.features.find((f) => f.id == id)!
       );
     } else {
       ($map.getSource(source) as GeoJSONSource).setData(emptyGeojson());

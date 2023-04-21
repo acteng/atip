@@ -5,7 +5,7 @@
   export let name: string;
   export let intervention_type: "area" | "route" | "crossing" | "other";
   export let description: string;
-  export let length_meters: number;
+  export let length_meters: number | undefined;
 
   function prettyPrintMeters(x: number): string {
     if (x < 1000.0) {

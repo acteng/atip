@@ -1,4 +1,11 @@
-import type { Feature, Point, Position, Polygon, LineString } from "geojson";
+import type {
+  Feature,
+  Geometry,
+  Point,
+  Position,
+  Polygon,
+  LineString,
+} from "geojson";
 import type { Map, MapLayerMouseEvent, GeoJSONSource } from "maplibre-gl";
 import nearestPointOnLine from "@turf/nearest-point-on-line";
 import {
@@ -16,15 +23,19 @@ import { colors, circleRadius } from "../../colors";
 
 const source = "edit-polygon-mode";
 
+// Properties are guaranteed to exist
+type FeatureWithProps<G extends Geometry> = Feature<G> & {
+  properties: { [name: string]: any };
+};
+
 export class PolygonTool {
   map: Map;
   active: boolean;
-  eventListeners: ((f: Feature<Polygon>) => void)[];
+  eventListeners: ((f: FeatureWithProps<Polygon>) => void)[];
   points: Position[];
   cursor: Feature<Point> | null;
-  hoverPolyon: boolean;
-  hoverPoint: number | null;
-  dragging: boolean;
+  // The number is an index into points
+  hover: "polygon" | number | null;
   dragFrom: Position | null;
 
   constructor(map: Map) {
@@ -38,20 +49,18 @@ export class PolygonTool {
     // This doesn't repeat the first point at the end; it's not closed
     this.points = [];
     this.cursor = null;
-    this.hoverPolyon = false;
-    this.hoverPoint = null;
     // TODO This is lots of state. Consider
     // https://maplibre.org/maplibre-gl-js-docs/example/drag-a-point/ or port
     // widgetry's World
-    this.dragging = false;
+    this.hover = null;
     this.dragFrom = null;
 
     // Set up interactions
     map.on("mousemove", (e) => {
-      if (this.active && !this.dragging) {
+      if (this.active && !this.dragFrom) {
         this.#recalculateHovering(e);
-      } else if (this.active && this.dragging) {
-        if (this.hoverPolyon) {
+      } else if (this.active && this.dragFrom) {
+        if (this.hover == "polygon") {
           // Move entire polygon
           let dx = this.dragFrom[0] - e.lngLat.lng;
           let dy = this.dragFrom[1] - e.lngLat.lat;
@@ -60,7 +69,7 @@ export class PolygonTool {
             pt[1] -= dy;
           }
         } else {
-          this.points[this.hoverPoint] = e.lngLat.toArray();
+          this.points[this.hover as number] = e.lngLat.toArray();
         }
         this.dragFrom = e.lngLat.toArray();
         this.#redraw();
@@ -74,7 +83,7 @@ export class PolygonTool {
         pointsToLineSegments(this.points).forEach((line, idx) => {
           candidates.push([
             idx + 1,
-            nearestPointOnLine(line, this.cursor).properties.dist,
+            nearestPointOnLine(line, this.cursor!).properties.dist!,
           ]);
         });
         candidates.sort((a, b) => a[1] - b[1]);
@@ -82,15 +91,15 @@ export class PolygonTool {
         if (candidates.length > 0) {
           let idx = candidates[0][0];
           this.points.splice(idx, 0, this.cursor.geometry.coordinates);
-          this.hoverPoint = idx;
+          this.hover = idx;
         } else {
           this.points.push(this.cursor.geometry.coordinates);
-          this.hoverPoint = this.points.length - 1;
+          this.hover = this.points.length - 1;
         }
         this.#redraw();
-      } else if (this.active && this.hoverPoint != null) {
-        this.points.splice(this.hoverPoint, 1);
-        this.hoverPoint = null;
+      } else if (this.active && typeof this.hover === "number") {
+        this.points.splice(this.hover, 1);
+        this.hover = null;
         this.#redraw();
         // TODO Doesn't seem to work; you still have to move the mouse to hover
         // on the polygon
@@ -99,20 +108,14 @@ export class PolygonTool {
     });
 
     map.on("mousedown", (e) => {
-      if (
-        this.active &&
-        !this.dragging &&
-        (this.hoverPolyon || this.hoverPoint != null)
-      ) {
+      if (this.active && !this.dragFrom && this.hover != null) {
         e.preventDefault();
         this.cursor = null;
-        this.dragging = true;
         this.dragFrom = e.lngLat.toArray();
       }
     });
     map.on("mouseup", () => {
-      if (this.active && this.dragging) {
-        this.dragging = false;
+      if (this.active && this.dragFrom) {
         this.dragFrom = null;
       }
     });
@@ -171,7 +174,7 @@ export class PolygonTool {
     });
   }
 
-  addEventListener(callback: (f: Feature<Polygon>) => void) {
+  addEventListener(callback: (f: FeatureWithProps<Polygon>) => void) {
     this.eventListeners.push(callback);
   }
 
@@ -199,9 +202,7 @@ export class PolygonTool {
     this.points = [];
     this.cursor = null;
     this.active = false;
-    this.hoverPolyon = false;
-    this.hoverPoint = null;
-    this.dragging = false;
+    this.hover = null;
     this.dragFrom = null;
     this.#redraw();
   }
@@ -211,8 +212,8 @@ export class PolygonTool {
 
     this.points.forEach((pt, idx) => {
       let f = pointFeature(pt);
-      f.properties.hover = this.hoverPoint == idx;
-      f.properties.idx = idx;
+      f.properties!.hover = this.hover == idx;
+      f.properties!.idx = idx;
       gj.features.push(f);
     });
     if (this.cursor) {
@@ -223,7 +224,7 @@ export class PolygonTool {
 
     let polygon = this.#polygonFeature();
     if (polygon) {
-      polygon.properties.hover = this.hoverPolyon;
+      polygon.properties!.hover = this.hover == "polygon";
       gj.features.push(polygon);
     }
 
@@ -232,25 +233,24 @@ export class PolygonTool {
 
   #recalculateHovering(e: MapLayerMouseEvent) {
     this.cursor = null;
-    this.hoverPolyon = false;
-    this.hoverPoint = null;
+    this.hover = null;
 
     // Order of the layers matters!
     for (let f of this.map.queryRenderedFeatures(e.point, {
       layers: ["edit-polygon-fill", "edit-polygon-vertices"],
     })) {
       if (f.geometry.type == "Polygon") {
-        this.hoverPolyon = true;
+        this.hover = "polygon";
         break;
       } else if (f.geometry.type == "Point") {
         // Ignore the cursor
         if (Object.hasOwn(f.properties, "idx")) {
-          this.hoverPoint = f.properties.idx;
+          this.hover = f.properties.idx;
           break;
         }
       }
     }
-    if (!this.hoverPolyon && this.hoverPoint == null) {
+    if (this.hover == null) {
       this.cursor = pointFeature(e.lngLat.toArray());
     }
 
@@ -258,7 +258,7 @@ export class PolygonTool {
   }
 
   // TODO Force the proper winding order that geojson requires
-  #polygonFeature(): Feature<Polygon> | null {
+  #polygonFeature(): FeatureWithProps<Polygon> | null {
     if (this.points.length < 3) {
       return null;
     }
@@ -297,6 +297,7 @@ function pointsToLineSegments(points: Position[]): Feature<LineString>[] {
         type: "LineString",
         coordinates: [points[i], points[i + 1]],
       },
+      properties: {},
     });
   }
   if (points.length >= 3) {
@@ -306,7 +307,9 @@ function pointsToLineSegments(points: Position[]): Feature<LineString>[] {
         type: "LineString",
         coordinates: [points[points.length - 1], points[0]],
       },
+      properties: {},
     });
   }
-  return lines;
+  // TODO TS is failing here
+  return lines as Feature<LineString>[];
 }
