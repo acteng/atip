@@ -2,25 +2,24 @@
   import type { LineString, Polygon } from "geojson";
   import type { PointTool } from "./point_tool";
   import type { PolygonTool } from "./polygon_tool";
-  import type { RouteSnapper } from "route-snapper/lib.js";
+  import type { RouteTool } from "./route_tool";
   import { map, gjScheme, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
 
   const thisMode = "edit-geometry";
 
   export let mode: string;
-  export let routeSnapper: RouteSnapper;
-  export let snapTool: HTMLDivElement;
   export let pointTool: PointTool;
   export let polygonTool: PolygonTool;
+  export let routeTool: RouteTool;
 
   export function start() {}
   export function stop() {
     if (currentlyEditing) {
       // We could've been editing anything; just handle all possibilities
-      routeSnapper.stop();
       pointTool.stop();
       polygonTool.stop();
+      routeTool.stop();
 
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
@@ -71,10 +70,8 @@
     }
   });
 
-  // TODO Real route-snapper types
-  snapTool.addEventListener("new-route", (e: any) => {
+  routeTool.addEventListenerSuccess((editedRoute) => {
     if (mode == thisMode) {
-      const editedRoute = e.detail;
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
         // Keep the ID and any properties. Just copy over stuff from routeSnapper.
@@ -90,7 +87,7 @@
       currentlyEditing = null;
     }
   });
-  snapTool.addEventListener("no-new-route", () => {
+  routeTool.addEventListenerFailure(() => {
     if (mode == thisMode) {
       // Don't modify the thing we were just editing
       gjScheme.update((gj) => {
@@ -138,7 +135,7 @@
     currentlyEditing = id;
 
     if (feature.geometry.type == "LineString") {
-      routeSnapper.editExisting(feature as Feature<LineString>);
+      routeTool.editExisting(feature as Feature<LineString>);
     } else if (feature.geometry.type == "Polygon") {
       polygonTool.editExisting(feature as Feature<Polygon>);
     } else if (feature.geometry.type == "Point") {

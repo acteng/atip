@@ -1,8 +1,11 @@
 <script lang="ts">
   import type { Mode } from "./types";
   import { onMount, onDestroy } from "svelte";
-  import { init, RouteSnapper, fetchWithProgress } from "route-snapper/lib.js";
+  import { init, fetchWithProgress } from "route-snapper/lib.js";
+  import { RouteTool } from "./route_tool";
   import { gjScheme, map, newFeatureId, formOpen } from "../../stores";
+  import type { Feature } from "../../types";
+  import type { LineString } from "geojson";
 
   const thisMode = "route";
 
@@ -10,21 +13,20 @@
   export let changeMode: (m: Mode) => void;
   export let url: string;
 
-  export let snapTool: HTMLDivElement;
-  let snapProgress: HTMLDivElement;
-  export let routeSnapper: RouteSnapper;
+  let progress: HTMLDivElement;
+  export let routeTool: RouteTool;
 
   // These're for drawing a new route, NOT for editing an existing.
   // GeometryMode manages the latter.
   export function start() {
     // When we enter this mode by clicking the button from edit-geometry, we
-    // call routeSnapper.stop(). Re-activate it if so.
-    if (!routeSnapper.isActive()) {
-      routeSnapper.start();
+    // call routeTool.stop(). Re-activate it if so.
+    if (!routeTool.isActive()) {
+      routeTool.start();
     }
   }
   export function stop() {
-    routeSnapper?.stop();
+    routeTool?.stop();
   }
 
   onMount(async () => {
@@ -32,47 +34,41 @@
 
     console.log(`Grabbing ${url}`);
     try {
-      const graphBytes = await fetchWithProgress(url, snapProgress);
-      routeSnapper = new RouteSnapper($map, graphBytes, snapTool);
+      const graphBytes = await fetchWithProgress(url, progress);
+      routeTool = new RouteTool($map, graphBytes);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
-      snapTool.innerHTML = "Failed to load";
+      progress.innerHTML = "Failed to load";
     }
 
-    // This event only happens when we click the "New route" button. So no
-    // matter what mode we're in, switch into this mode.
-    snapTool.addEventListener("activate", () => {
-      changeMode(thisMode);
-    });
-    snapTool.addEventListener("no-new-route", () => {
+    routeTool.addEventListenerFailure(() => {
       if (mode == thisMode) {
         changeMode("edit-attribute");
       }
     });
-
-    // TODO Disable type checking here, until route-snapper exposes proper types
-    snapTool.addEventListener("new-route", (e: any) => {
+    routeTool.addEventListenerSuccess((feature) => {
       if (mode == thisMode) {
-        const feature = e.detail;
         gjScheme.update((gj) => {
           feature.id = newFeatureId(gj);
           feature.properties.intervention_type = "route";
-          gj.features.push(feature);
+          gj.features.push(feature as Feature<LineString>);
           return gj;
         });
 
         changeMode("edit-attribute");
-        formOpen.set(feature.id);
+        formOpen.set(feature.id as number);
       }
     });
   });
 
   onDestroy(() => {
-    routeSnapper?.tearDown();
+    routeTool?.tearDown();
   });
 </script>
 
-<div bind:this={snapTool}>
+{#if !routeTool}
   <!-- TODO the text should be fixed, and the progress bar float -->
-  <div bind:this={snapProgress}>Route tool loading...</div>
-</div>
+  <div bind:this={progress}>Route tool loading...</div>
+{:else if mode == thisMode}
+  <p>Controls go here</p>
+{/if}

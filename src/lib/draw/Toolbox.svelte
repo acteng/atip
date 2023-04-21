@@ -3,7 +3,7 @@
   import { map } from "../../stores";
   import { PointTool } from "./point_tool";
   import { PolygonTool } from "./polygon_tool";
-  import type { RouteSnapper } from "route-snapper/lib.js";
+  import { RouteTool } from "./route_tool";
   import type { Mode } from "./types";
 
   import AttributeMode from "./AttributeMode.svelte";
@@ -15,8 +15,8 @@
 
   export let routeUrl: string;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
-  let routeSnapper: RouteSnapper;
-  let snapTool: HTMLDivElement;
+  // TODO Reconsider
+  let routeTool: RouteTool;
 
   // Create and manage these here, then pass down to modes as needed.
   // TODO Teardown too
@@ -74,14 +74,13 @@
       on:click={() => changeMode("edit-geometry")}
       disabled={mode == "edit-geometry"}>Edit geometry</button
     >
-    {#if routeSnapper && snapTool}
+    {#if routeTool}
       <GeometryMode
         bind:this={geometryMode}
         {mode}
-        {routeSnapper}
-        {snapTool}
         {pointTool}
         {polygonTool}
+        {routeTool}
       />
     {/if}
   </div>
@@ -102,13 +101,17 @@
     <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
   </div>
   <div>
+    <button
+      type="button"
+      on:click={() => changeMode("route")}
+      disabled={mode == "route"}>New route</button
+    >
     <RouteMode
       bind:this={routeMode}
       {mode}
       {changeMode}
       url={routeUrl}
-      bind:routeSnapper
-      bind:snapTool
+      bind:routeTool
     />
   </div>
   <div>
