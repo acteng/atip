@@ -1,5 +1,10 @@
 import type { Feature, Point, Position, Polygon, LineString } from "geojson";
-import type { Map, MapLayerMouseEvent, GeoJSONSource } from "maplibre-gl";
+import type {
+  Map,
+  MapLayerMouseEvent,
+  GeoJSONSource,
+  MapMouseEvent,
+} from "maplibre-gl";
 import nearestPointOnLine from "@turf/nearest-point-on-line";
 import {
   emptyGeojson,
@@ -14,6 +19,7 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
+import { EventManager } from "../events";
 
 const source = "edit-polygon-mode";
 
@@ -26,6 +32,8 @@ export class PolygonTool {
   // The number is an index into points
   hover: "polygon" | number | null;
   dragFrom: Position | null;
+
+  events: EventManager;
 
   constructor(map: Map) {
     this.map = map;
@@ -45,85 +53,12 @@ export class PolygonTool {
     this.dragFrom = null;
 
     // Set up interactions
-    map.on("mousemove", (e) => {
-      if (this.active && !this.dragFrom) {
-        this.#recalculateHovering(e);
-      } else if (this.active && this.dragFrom) {
-        if (this.hover == "polygon") {
-          // Move entire polygon
-          let dx = this.dragFrom[0] - e.lngLat.lng;
-          let dy = this.dragFrom[1] - e.lngLat.lat;
-          for (let pt of this.points) {
-            pt[0] -= dx;
-            pt[1] -= dy;
-          }
-        } else {
-          this.points[this.hover as number] = e.lngLat.toArray();
-        }
-        this.dragFrom = e.lngLat.toArray();
-        this.#redraw();
-      }
-    });
-
-    map.on("click", (e) => {
-      if (this.active && this.cursor) {
-        // Insert the new point in the "middle" of the closest line segment
-        let candidates: [number, number][] = [];
-        pointsToLineSegments(this.points).forEach((line, idx) => {
-          candidates.push([
-            idx + 1,
-            nearestPointOnLine(line, this.cursor!).properties.dist!,
-          ]);
-        });
-        candidates.sort((a, b) => a[1] - b[1]);
-
-        if (candidates.length > 0) {
-          let idx = candidates[0][0];
-          this.points.splice(idx, 0, this.cursor.geometry.coordinates);
-          this.hover = idx;
-        } else {
-          this.points.push(this.cursor.geometry.coordinates);
-          this.hover = this.points.length - 1;
-        }
-        this.#redraw();
-      } else if (this.active && typeof this.hover === "number") {
-        this.points.splice(this.hover, 1);
-        this.hover = null;
-        this.#redraw();
-        // TODO Doesn't seem to work; you still have to move the mouse to hover
-        // on the polygon
-        this.#recalculateHovering(e);
-      }
-    });
-
-    map.on("mousedown", (e) => {
-      if (this.active && !this.dragFrom && this.hover != null) {
-        e.preventDefault();
-        this.cursor = null;
-        this.dragFrom = e.lngLat.toArray();
-      }
-    });
-    map.on("mouseup", () => {
-      if (this.active && this.dragFrom) {
-        this.dragFrom = null;
-      }
-    });
-
-    document.addEventListener("keypress", (e) => {
-      if (!this.active) {
-        return;
-      }
-      if (e.key == "Enter") {
-        e.preventDefault();
-        let polygon = this.#polygonFeature();
-        if (polygon) {
-          for (let cb of this.eventListeners) {
-            cb(polygon);
-          }
-        }
-        this.stop();
-      }
-    });
+    this.events = new EventManager(this, map);
+    this.events.mapHandler("mousemove", this.onMouseMove);
+    this.events.mapHandler("click", this.onClick);
+    this.events.mapHandler("mousedown", this.onMouseDown);
+    this.events.mapHandler("mouseup", this.onMouseUp);
+    this.events.documentHandler("keypress", this.onKeypress);
 
     // Render
     overwriteSource(map, source, {
@@ -163,16 +98,97 @@ export class PolygonTool {
     });
   }
 
+  private onMouseMove(e: MapMouseEvent) {
+    if (this.active && !this.dragFrom) {
+      this.#recalculateHovering(e);
+    } else if (this.active && this.dragFrom) {
+      if (this.hover == "polygon") {
+        // Move entire polygon
+        let dx = this.dragFrom[0] - e.lngLat.lng;
+        let dy = this.dragFrom[1] - e.lngLat.lat;
+        for (let pt of this.points) {
+          pt[0] -= dx;
+          pt[1] -= dy;
+        }
+      } else {
+        this.points[this.hover as number] = e.lngLat.toArray();
+      }
+      this.dragFrom = e.lngLat.toArray();
+      this.#redraw();
+    }
+  }
+
+  private onClick(e: MapMouseEvent) {
+    if (this.active && this.cursor) {
+      // Insert the new point in the "middle" of the closest line segment
+      let candidates: [number, number][] = [];
+      pointsToLineSegments(this.points).forEach((line, idx) => {
+        candidates.push([
+          idx + 1,
+          nearestPointOnLine(line, this.cursor!).properties.dist!,
+        ]);
+      });
+      candidates.sort((a, b) => a[1] - b[1]);
+
+      if (candidates.length > 0) {
+        let idx = candidates[0][0];
+        this.points.splice(idx, 0, this.cursor.geometry.coordinates);
+        this.hover = idx;
+      } else {
+        this.points.push(this.cursor.geometry.coordinates);
+        this.hover = this.points.length - 1;
+      }
+      this.#redraw();
+    } else if (this.active && typeof this.hover === "number") {
+      this.points.splice(this.hover, 1);
+      this.hover = null;
+      this.#redraw();
+      // TODO Doesn't seem to work; you still have to move the mouse to hover
+      // on the polygon
+      this.#recalculateHovering(e);
+    }
+  }
+
+  private onMouseDown(e: MapMouseEvent) {
+    if (this.active && !this.dragFrom && this.hover != null) {
+      e.preventDefault();
+      this.cursor = null;
+      this.dragFrom = e.lngLat.toArray();
+    }
+  }
+
+  private onMouseUp() {
+    if (this.active && this.dragFrom) {
+      this.dragFrom = null;
+    }
+  }
+
+  private onKeypress(e: KeyboardEvent) {
+    if (!this.active) {
+      return;
+    }
+    if (e.key == "Enter") {
+      e.preventDefault();
+      let polygon = this.#polygonFeature();
+      if (polygon) {
+        for (let cb of this.eventListeners) {
+          cb(polygon);
+        }
+      }
+      this.stop();
+    }
+  }
+
   addEventListener(callback: (f: FeatureWithProps<Polygon>) => void) {
     this.eventListeners.push(callback);
   }
 
   tearDown() {
-    // TODO Clean up event listeners
     this.map.removeLayer("edit-polygon-vertices");
     this.map.removeLayer("edit-polygon-fill");
     this.map.removeLayer("edit-polygon-lines");
     this.map.removeSource(source);
+    this.events.tearDown();
   }
 
   startNew() {

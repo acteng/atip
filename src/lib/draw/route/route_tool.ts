@@ -1,5 +1,5 @@
 import { JsRouteSnapper } from "route-snapper";
-import type { Map, GeoJSONSource } from "maplibre-gl";
+import type { Map, GeoJSONSource, MapMouseEvent } from "maplibre-gl";
 import type { LineString } from "geojson";
 import {
   emptyGeojson,
@@ -11,6 +11,7 @@ import {
   drawLine,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
+import { EventManager } from "../events";
 
 const source = "route-snapper";
 
@@ -23,6 +24,8 @@ export class RouteTool {
   active: boolean;
   eventListenersSuccess: ((f: FeatureWithProps<LineString>) => void)[];
   eventListenersFailure: (() => void)[];
+
+  events: EventManager;
 
   constructor(map: Map, graphBytes: Uint8Array) {
     this.map = map;
@@ -71,80 +74,90 @@ export class RouteTool {
     });
 
     // Set up interactions
-    map.on("mousemove", (e) => {
-      if (!this.active) {
-        return;
-      }
-      const nearbyPoint: [number, number] = [
-        e.point.x - snapDistancePixels,
-        e.point.y,
-      ];
-      const circleRadiusMeters = this.map
-        .unproject(e.point)
-        .distanceTo(this.map.unproject(nearbyPoint));
-      if (
-        this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters)
-      ) {
-        this.#redraw();
-      }
-    });
+    this.events = new EventManager(this, map);
+    this.events.mapHandler("mousemove", this.onMouseMove);
+    this.events.mapHandler("click", this.onClick);
+    this.events.mapHandler("dragstart", this.onDragStart);
+    this.events.mapHandler("mouseup", this.onMouseUp);
+    this.events.documentHandler("keypress", this.onKeyPress);
+    this.events.documentHandler("keydown", this.onKeyDown);
+    this.events.documentHandler("keyup", this.onKeyUp);
+  }
 
-    map.on("click", () => {
-      if (!this.active) {
-        return;
-      }
-      this.inner.onClick();
+  private onMouseMove(e: MapMouseEvent) {
+    if (!this.active) {
+      return;
+    }
+    const nearbyPoint: [number, number] = [
+      e.point.x - snapDistancePixels,
+      e.point.y,
+    ];
+    const circleRadiusMeters = this.map
+      .unproject(e.point)
+      .distanceTo(this.map.unproject(nearbyPoint));
+    if (
+      this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters)
+    ) {
       this.#redraw();
-    });
+    }
+  }
 
-    map.on("dragstart", (e) => {
-      if (!this.active) {
-        return;
-      }
-      if (this.inner.onDragStart()) {
-        this.map.dragPan.disable();
-      }
-    });
+  private onClick() {
+    if (!this.active) {
+      return;
+    }
+    this.inner.onClick();
+    this.#redraw();
+  }
 
-    map.on("mouseup", (e) => {
-      if (!this.active) {
-        return;
-      }
-      if (this.inner.onMouseUp()) {
-        this.map.dragPan.enable();
-      }
-    });
+  private onDragStart() {
+    if (!this.active) {
+      return;
+    }
+    if (this.inner.onDragStart()) {
+      this.map.dragPan.disable();
+    }
+  }
 
-    document.addEventListener("keypress", (e) => {
-      if (!this.active) {
-        return;
-      }
-      if (e.key == "Enter") {
-        e.preventDefault();
-        this.finish();
-      }
-    });
+  private onMouseUp() {
+    if (!this.active) {
+      return;
+    }
+    if (this.inner.onMouseUp()) {
+      this.map.dragPan.enable();
+    }
+  }
 
-    document.addEventListener("keydown", (e) => {
-      if (!this.active) {
-        return;
-      }
-      if (e.key == "Shift") {
-        e.preventDefault();
-        this.inner.setSnapMode(false);
-        this.#redraw();
-      }
-    });
-    document.addEventListener("keyup", (e) => {
-      if (!this.active) {
-        return;
-      }
-      if (e.key == "Shift") {
-        e.preventDefault();
-        this.inner.setSnapMode(true);
-        this.#redraw();
-      }
-    });
+  private onKeyPress(e: KeyboardEvent) {
+    if (!this.active) {
+      return;
+    }
+    if (e.key == "Enter") {
+      e.preventDefault();
+      this.finish();
+    }
+  }
+
+  private onKeyDown(e: KeyboardEvent) {
+    if (!this.active) {
+      return;
+    }
+    if (e.key == "Shift") {
+      e.preventDefault();
+      this.inner.setSnapMode(false);
+      this.#redraw();
+    }
+  }
+
+  private onKeyUp(e: KeyboardEvent) {
+    if (!this.active) {
+      return;
+    }
+    if (e.key == "Shift") {
+      e.preventDefault();
+      this.inner.setSnapMode(true);
+      this.#redraw();
+    }
   }
 
   // Activate the tool with blank state.
@@ -210,7 +223,7 @@ export class RouteTool {
     this.map.removeLayer("route-points");
     this.map.removeLayer("route-lines");
     this.map.removeSource("route-snapper");
-    // TODO Remove the event listeners on document and map
+    this.events.tearDown();
   }
 
   addEventListenerSuccess(callback: (f: FeatureWithProps<LineString>) => void) {
