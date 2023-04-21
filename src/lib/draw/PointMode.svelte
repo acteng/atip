@@ -4,6 +4,7 @@
   import type { Feature } from "../../types";
   import type { PointTool } from "./point_tool";
   import { gjScheme, newFeatureId, formOpen } from "../../stores";
+  import PointControls from "./PointControls.svelte";
 
   const thisMode = "point";
 
@@ -34,5 +35,5 @@
 </script>
 
 {#if mode == thisMode}
-  <p>Click to add a new point</p>
+  <PointControls editingExisting={false} />
 {/if}

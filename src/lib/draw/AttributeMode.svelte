@@ -84,5 +84,9 @@
 </script>
 
 {#if mode == thisMode}
-  <p>Click an intervention to fill out its attributes</p>
+  {#if $formOpen}
+    <p>Edit attributes to the left, or click another intervention</p>
+  {:else}
+    <p>Click an intervention to fill out its attributes</p>
+  {/if}
 {/if}
