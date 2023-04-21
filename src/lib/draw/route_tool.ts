@@ -120,7 +120,7 @@ export class RouteTool {
       }
       if (e.key == "Enter") {
         e.preventDefault();
-        this.#finishSnapping();
+        this.finish();
       }
     });
 
@@ -129,7 +129,6 @@ export class RouteTool {
         return;
       }
       if (e.key == "Shift") {
-        console.log("freehand");
         e.preventDefault();
         this.inner.setSnapMode(false);
         this.#redraw();
@@ -140,7 +139,6 @@ export class RouteTool {
         return;
       }
       if (e.key == "Shift") {
-        console.log("snap mode");
         e.preventDefault();
         this.inner.setSnapMode(true);
         this.#redraw();
@@ -159,8 +157,6 @@ export class RouteTool {
     this.active = true;
     // Otherwise, shift+click breaks
     this.map["boxZoom"].disable();
-
-    // TODO Need to expose controls to finish, cancel, toggle doubling back, instructions, etc
   }
 
   // Deactivate the tool, clearing all state. No events are fired for addEventListenerFailure.
@@ -227,7 +223,8 @@ export class RouteTool {
     return this.active;
   }
 
-  #finishSnapping() {
+  // Either a success or failure event will happen, depending on current state
+  finish() {
     let rawJSON = this.inner.toFinalFeature();
     if (rawJSON) {
       for (let cb of this.eventListenersSuccess) {
@@ -239,6 +236,17 @@ export class RouteTool {
       }
     }
     this.stop();
+  }
+
+  // This stops the control and fires a failure event
+  cancel() {
+    this.inner.clearState();
+    this.finish();
+  }
+
+  setConfig(config) {
+    this.inner.setConfig(config);
+    this.#redraw();
   }
 
   #redraw() {

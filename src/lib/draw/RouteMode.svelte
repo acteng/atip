@@ -6,6 +6,7 @@
   import { gjScheme, map, newFeatureId, formOpen } from "../../stores";
   import type { Feature } from "../../types";
   import type { LineString } from "geojson";
+  import RouteControls from "./RouteControls.svelte";
 
   const thisMode = "route";
 
@@ -70,5 +71,5 @@
   <!-- TODO the text should be fixed, and the progress bar float -->
   <div bind:this={progress}>Route tool loading...</div>
 {:else if mode == thisMode}
-  <p>Controls go here</p>
+  <RouteControls {routeTool} />
 {/if}
