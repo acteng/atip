@@ -4,7 +4,7 @@ import type {
   DataDrivenPropertyValueSpecification,
   SourceSpecification,
 } from "maplibre-gl";
-import type { GeoJSON, FeatureCollection } from "geojson";
+import type { GeoJSON, FeatureCollection, Feature, Geometry } from "geojson";
 import turfBbox from "@turf/bbox";
 
 const roundedLine = {
@@ -114,3 +114,8 @@ export function emptyGeojson(): FeatureCollection {
 export function bbox(gj: GeoJSON): [number, number, number, number] {
   return turfBbox(gj) as [number, number, number, number];
 }
+
+// Properties are guaranteed to exist
+export type FeatureWithProps<G extends Geometry> = Feature<G> & {
+  properties: { [name: string]: any };
+};

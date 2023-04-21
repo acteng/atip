@@ -1,6 +1,6 @@
 import { JsRouteSnapper } from "route-snapper";
 import type { Map, GeoJSONSource } from "maplibre-gl";
-import type { Feature, LineString, Geometry } from "geojson";
+import type { LineString } from "geojson";
 import {
   emptyGeojson,
   isPoint,
@@ -9,14 +9,10 @@ import {
   overwriteLayer,
   drawCircle,
   drawLine,
+  type FeatureWithProps,
 } from "../../../maplibre_helpers";
 
 const source = "route-snapper";
-
-// Properties are guaranteed to exist
-type FeatureWithProps<G extends Geometry> = Feature<G> & {
-  properties: { [name: string]: any };
-};
 
 const circleRadiusPixels = 10;
 const snapDistancePixels = 30;

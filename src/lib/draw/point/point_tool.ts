@@ -1,21 +1,17 @@
-import type { Feature, Geometry, Point, Position } from "geojson";
+import type { Point, Position } from "geojson";
 import type { Map, GeoJSONSource, MapMouseEvent } from "maplibre-gl";
 import {
   emptyGeojson,
   overwriteSource,
   overwriteLayer,
   drawCircle,
+  type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
 
 const source = "edit-point-mode";
 
-// Properties are guaranteed to exist
-type FeatureWithProps<G extends Geometry> = Feature<G> & {
-  properties: { [name: string]: any };
-};
-
-// Note this uses the geojson Feature, not our specialization in types.ts
+// Note this uses the geojson FeatureWithProps, not our specialization in types.ts
 export class PointTool {
   map: Map;
   active: boolean;
