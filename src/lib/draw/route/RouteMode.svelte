@@ -41,6 +41,7 @@
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
       progress.innerHTML = "Failed to load";
+      return;
     }
 
     routeTool.addEventListenerFailure(() => {
