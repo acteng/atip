@@ -86,7 +86,7 @@
         window.alert(`Couldn't load scheme from a file: ${err}`);
       }
     };
-    let files = (<HTMLInputElement>e.target).files!;
+    let files = (e.target as HTMLInputElement).files!;
     reader.readAsText(files[0]);
   }
 
