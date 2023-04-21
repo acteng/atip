@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { FeatureCollection } from "geojson";
   import maplibregl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
   import { bbox } from "./maplibre_helpers";
@@ -20,16 +21,16 @@
 
     const resp = await fetch(authoritiesUrl);
     const body = await resp.text();
-    const json = JSON.parse(body);
+    const json: FeatureCollection = JSON.parse(body);
     for (let feature of json.features) {
       let option = document.createElement("option");
-      option.value = feature.properties.name;
+      option.value = feature.properties!.name;
       dataList.appendChild(option);
-      authoritySet.add(feature.properties.name);
+      authoritySet.add(feature.properties!.name);
     }
 
     // Only show TAs, not LADs, in the map
-    json.features = json.features.filter((f) => f.properties.level == "TA");
+    json.features = json.features.filter((f) => f.properties!.level == "TA");
 
     let map = new maplibregl.Map({
       container: "map",
@@ -37,7 +38,7 @@
         "https://api.maptiler.com/maps/streets/style.json?key=MZEJTanw3WpxRvt7qDfo",
     });
 
-    let hoverId = null;
+    let hoverId: number | null = null;
     function unhover() {
       if (hoverId !== null) {
         map.setFeatureState({ source, id: hoverId }, { hover: false });
@@ -72,9 +73,9 @@
       });
 
       map.on("mousemove", layer, (e) => {
-        if (e.features.length > 0) {
+        if (e.features!.length > 0) {
           unhover();
-          hoverId = e.features[0].id;
+          hoverId = e.features![0].id as number;
           map.setFeatureState({ source: source, id: hoverId }, { hover: true });
         }
       });
@@ -84,7 +85,8 @@
       });
 
       map.on("click", layer, function (e) {
-        window.location.href = `scheme.html?authority=${e.features[0].properties.name}`;
+        let name = e.features![0].properties!.name;
+        window.location.href = `scheme.html?authority=${name}`;
       });
     });
   }

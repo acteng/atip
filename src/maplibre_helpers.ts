@@ -1,5 +1,9 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
-import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
+import type {
+  Map,
+  DataDrivenPropertyValueSpecification,
+  SourceSpecification,
+} from "maplibre-gl";
 import type { GeoJSON, FeatureCollection } from "geojson";
 import turfBbox from "@turf/bbox";
 
@@ -60,12 +64,16 @@ export function drawCircle(
 // layer. This complicates Vite's hot-reload feature, unless every component
 // correctly tears down all sources and layers. These methods workaround that
 // lifetime management hassle by overwriting if necessary.
-export function overwriteSource(map, id, source) {
+export function overwriteSource(
+  map: Map,
+  id: string,
+  source: SourceSpecification
+) {
   if (map.getSource(id)) {
     // First remove all layers using this source
     let layers = [];
     for (let layer of map.getStyle().layers) {
-      if (layer.source == id) {
+      if ("source" in layer && layer.source == id) {
         layers.push(layer.id);
       }
     }
@@ -78,7 +86,11 @@ export function overwriteSource(map, id, source) {
   map.addSource(id, source);
 }
 
-export function overwriteLayer(map, layer, beforeId: string | null = null) {
+export function overwriteLayer(
+  map: Map,
+  layer,
+  beforeId: string | undefined = undefined
+) {
   if (map.getLayer(layer.id)) {
     map.removeLayer(layer.id);
   }
@@ -86,7 +98,7 @@ export function overwriteLayer(map, layer, beforeId: string | null = null) {
   // exist yet, we don't need to do anything; it'll naturally be ordered
   // beneath.
   if (beforeId && !map.getLayer(beforeId)) {
-    beforeId = null;
+    beforeId = undefined;
   }
   map.addLayer(layer, beforeId);
 }

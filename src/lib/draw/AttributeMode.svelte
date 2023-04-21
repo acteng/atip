@@ -61,7 +61,7 @@
     if (id) {
       // When the user starts editing something from the sidebar, warp to what's
       // being edited. (Don't do this when clicking the object on the map.)
-      let feature = $gjScheme.features.find((f) => f.id == id);
+      let feature = $gjScheme.features.find((f) => f.id == id)!;
 
       // Padding around a point looks odd; special case it by keeping the current zoom
       if (feature.geometry.type == "Point") {

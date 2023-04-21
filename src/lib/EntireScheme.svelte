@@ -75,18 +75,19 @@
     document.body.removeChild(element);
   }
 
-  function loadFile(e) {
+  function loadFile(e: Event) {
     const reader = new FileReader();
     // TODO No await? :(
     // TODO Should we prompt before deleting the current scheme?
     reader.onload = (e) => {
       try {
-        gjScheme.set(backfill(JSON.parse(e.target.result as string)));
+        gjScheme.set(backfill(JSON.parse(e.target!.result as string)));
       } catch (err) {
         window.alert(`Couldn't load scheme from a file: ${err}`);
       }
     };
-    reader.readAsText(e.target.files[0]);
+    let files = (<HTMLInputElement>e.target).files!;
+    reader.readAsText(files[0]);
   }
 
   function backfill(json: Scheme) {
@@ -104,6 +105,10 @@
 
     return json;
   }
+
+  function loadGeojson() {
+    document.getElementById("load_geojson")!.click();
+  }
 </script>
 
 <div>
@@ -119,12 +124,7 @@
   <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
   <label>
     <input type="file" id="load_geojson" on:change={loadFile} />
-    <button
-      type="button"
-      on:click={() => document.getElementById("load_geojson").click()}
-    >
-      Load from GeoJSON
-    </button>
+    <button type="button" on:click={loadGeojson}> Load from GeoJSON </button>
   </label>
   <button type="button" class="align-right" on:click={exportToGeojson}>
     Export to GeoJSON
