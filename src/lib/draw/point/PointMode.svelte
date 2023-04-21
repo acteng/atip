@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Mode } from "./types";
+  import type { Mode } from "../types";
   import type { Point } from "geojson";
-  import type { Feature } from "../../types";
+  import type { Feature } from "../../../types";
   import type { PointTool } from "./point_tool";
-  import { gjScheme, newFeatureId, formOpen } from "../../stores";
+  import { gjScheme, newFeatureId, formOpen } from "../../../stores";
   import PointControls from "./PointControls.svelte";
 
   const thisMode = "point";

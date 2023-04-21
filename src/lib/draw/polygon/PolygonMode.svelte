@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Mode } from "./types";
+  import type { Mode } from "../types";
   import type { Polygon } from "geojson";
-  import type { Feature } from "../../types";
+  import type { Feature } from "../../../types";
   import type { PolygonTool } from "./polygon_tool";
-  import { gjScheme, newFeatureId, formOpen } from "../../stores";
+  import { gjScheme, newFeatureId, formOpen } from "../../../stores";
   import PolygonControls from "./PolygonControls.svelte";
 
   const thisMode = "polygon";
