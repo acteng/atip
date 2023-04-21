@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { LineString, Polygon } from "geojson";
-  import type { PointTool } from "./point_tool";
-  import type { PolygonTool } from "./polygon_tool";
-  import type { RouteTool } from "./route_tool";
+  import type { PointTool } from "./point/point_tool";
+  import type { PolygonTool } from "./polygon/polygon_tool";
+  import type { RouteTool } from "./route/route_tool";
   import { map, gjScheme, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
-  import PointControls from "./PointControls.svelte";
-  import PolygonControls from "./PolygonControls.svelte";
-  import RouteControls from "./RouteControls.svelte";
+  import PointControls from "./point/PointControls.svelte";
+  import PolygonControls from "./polygon/PolygonControls.svelte";
+  import RouteControls from "./route/RouteControls.svelte";
 
   const thisMode = "edit-geometry";
 

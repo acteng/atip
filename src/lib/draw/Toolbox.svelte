@@ -1,17 +1,17 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { map } from "../../stores";
-  import { PointTool } from "./point_tool";
-  import { PolygonTool } from "./polygon_tool";
-  import { RouteTool } from "./route_tool";
+  import { PointTool } from "./point/point_tool";
+  import { PolygonTool } from "./polygon/polygon_tool";
+  import { RouteTool } from "./route/route_tool";
   import type { Mode } from "./types";
 
   import AttributeMode from "./AttributeMode.svelte";
   import GeometryMode from "./GeometryMode.svelte";
-  import RouteMode from "./RouteMode.svelte";
-  import PointMode from "./PointMode.svelte";
-  import PolygonMode from "./PolygonMode.svelte";
-  import SplitRouteMode from "./SplitRouteMode.svelte";
+  import RouteMode from "./route/RouteMode.svelte";
+  import PointMode from "./point/PointMode.svelte";
+  import PolygonMode from "./polygon/PolygonMode.svelte";
+  import SplitRouteMode from "./route/SplitRouteMode.svelte";
 
   export let routeUrl: string;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode

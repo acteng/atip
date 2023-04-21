@@ -5,8 +5,8 @@ import {
   overwriteSource,
   overwriteLayer,
   drawCircle,
-} from "../../maplibre_helpers";
-import { colors, circleRadius } from "../../colors";
+} from "../../../maplibre_helpers";
+import { colors, circleRadius } from "../../../colors";
 
 const source = "edit-point-mode";
 

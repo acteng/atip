@@ -9,7 +9,7 @@ import {
   overwriteLayer,
   drawCircle,
   drawLine,
-} from "../../maplibre_helpers";
+} from "../../../maplibre_helpers";
 
 const source = "route-snapper";
 

@@ -1,21 +1,21 @@
 <script lang="ts">
-  import type { Mode } from "./types";
+  import type { Mode } from "../types";
   import type { GeoJSONSource } from "maplibre-gl";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
-  import type { Feature as OurFeature } from "../../types";
+  import type { Feature as OurFeature } from "../../../types";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
   import lineSplit from "@turf/line-split";
   import lineSlice from "@turf/line-slice";
-  import { gjScheme, map, newFeatureId } from "../../stores";
+  import { gjScheme, map, newFeatureId } from "../../../stores";
   import {
     emptyGeojson,
     overwriteSource,
     overwriteLayer,
     drawCircle,
-  } from "../../maplibre_helpers";
+  } from "../../../maplibre_helpers";
 
   const thisMode = "split-route";
 
