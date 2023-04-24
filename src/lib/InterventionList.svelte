@@ -1,8 +1,11 @@
 <script lang="ts">
   import type { FeatureUnion } from "../types";
   import Form from "./Form.svelte";
+  import PlanningForm from "./PlanningForm.svelte";
   import AccordionItem from "./AccordionItem.svelte";
   import { gjScheme, formOpen, deleteIntervention } from "../stores";
+
+  export let planningMode: boolean;
 
   function interventionName(feature: FeatureUnion): string {
     if (feature.properties.name) {
@@ -45,12 +48,16 @@
     id={feature.id}
     label={i + 1 + ") " + interventionName(feature)}
   >
-    <Form
-      id={feature.id}
-      bind:name={feature.properties.name}
-      bind:intervention_type={feature.properties.intervention_type}
-      bind:description={feature.properties.description}
-      length_meters={feature.properties.length_meters}
-    />
+    {#if planningMode}
+      <PlanningForm id={feature.id} bind:allProperties={feature.properties} />
+    {:else}
+      <Form
+        id={feature.id}
+        bind:name={feature.properties.name}
+        bind:intervention_type={feature.properties.intervention_type}
+        bind:description={feature.properties.description}
+        length_meters={feature.properties.length_meters}
+      />
+    {/if}
   </AccordionItem>
 {/each}

@@ -4,9 +4,15 @@
   import type { Scheme } from "../types";
 
   export let authorityName: string;
+  export let planningMode: boolean;
+
+  let baseFilename = authorityName;
+  if (planningMode) {
+    baseFilename += "_planning";
+  }
 
   // Set up local storage sync
-  let loadLocal = window.localStorage.getItem(authorityName);
+  let loadLocal = window.localStorage.getItem(baseFilename);
   if (loadLocal) {
     try {
       gjScheme.set(backfill(JSON.parse(loadLocal)));
@@ -19,7 +25,7 @@
     if ($gjScheme) {
       console.log(`GJ changed, saving to local storage`);
       window.localStorage.setItem(
-        authorityName,
+        baseFilename,
         JSON.stringify(geojsonToSave())
       );
     }
@@ -51,7 +57,7 @@
 
   function exportToGeojson() {
     let geojson = geojsonToSave();
-    var filename = authorityName;
+    var filename = baseFilename;
     geojson.authority = authorityName;
     // we could probably be more sophisticated here and set version more centrally
     geojson.origin = "atip-v1";

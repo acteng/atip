@@ -37,8 +37,27 @@ export interface InterventionProps {
   length_meters?: number;
   waypoints?: Waypoint[];
 
+  // TODO Hack. If these're filled out, ignore the schema above.
+  planning?: PlanningProps;
+
   // Temporary state, not meant to be serialized
   hide_while_editing?: boolean;
+}
+
+export interface PlanningProps {
+  name: string;
+  notes: string;
+  reference_type: "preapp" | "outline" | "reserved matters" | "local plan";
+  size: number;
+  size_units: "number of units" | "floorspace" | "area";
+  triage: "No Comment" | "Standing Advice" | "Toolkit Assessment";
+  recommendation:
+    | "No Comment"
+    | "No Objection"
+    | "Standing Advice"
+    | "Deferral"
+    | "Approve subject to conditions and/or obligations"
+    | "Refusal";
 }
 
 export interface Waypoint {
