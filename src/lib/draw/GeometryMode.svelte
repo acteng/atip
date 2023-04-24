@@ -177,7 +177,7 @@
   {#if currentlyEditingControls == "point"}
     <PointControls {pointTool} editingExisting={true} />
   {:else if currentlyEditingControls == "polygon"}
-    <PolygonControls />
+    <PolygonControls {polygonTool} />
   {:else if currentlyEditingControls == "route"}
     <RouteControls {routeTool} />
   {:else}

@@ -26,7 +26,8 @@ const source = "edit-polygon-mode";
 export class PolygonTool {
   map: Map;
   active: boolean;
-  eventListeners: ((f: FeatureWithProps<Polygon>) => void)[];
+  eventListenersSuccess: ((f: FeatureWithProps<Polygon>) => void)[];
+  eventListenersFailure: (() => void)[];
   points: Position[];
   cursor: Feature<Point> | null;
   // The number is an index into points
@@ -38,10 +39,8 @@ export class PolygonTool {
   constructor(map: Map) {
     this.map = map;
     this.active = false;
-    // TODO Can we use
-    // https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events
-    // not on a DOM element?
-    this.eventListeners = [];
+    this.eventListenersSuccess = [];
+    this.eventListenersFailure = [];
 
     // This doesn't repeat the first point at the end; it's not closed
     this.points = [];
@@ -96,6 +95,29 @@ export class PolygonTool {
         0.5,
       ]),
     });
+  }
+
+  // Either a success or failure event will happen, depending on current state
+  finish() {
+    let polygon = this.polygonFeature();
+    if (polygon) {
+      for (let cb of this.eventListenersSuccess) {
+        cb(polygon);
+      }
+    } else {
+      for (let cb of this.eventListenersFailure) {
+        cb();
+      }
+    }
+    this.stop();
+  }
+
+  // This stops the tool and fires a failure event
+  cancel() {
+    for (let cb of this.eventListenersFailure) {
+      cb();
+    }
+    this.stop();
   }
 
   private onMouseMove(e: MapMouseEvent) {
@@ -169,18 +191,15 @@ export class PolygonTool {
     }
     if (e.key == "Enter") {
       e.preventDefault();
-      let polygon = this.polygonFeature();
-      if (polygon) {
-        for (let cb of this.eventListeners) {
-          cb(polygon);
-        }
-      }
-      this.stop();
+      this.finish();
     }
   }
 
-  addEventListener(callback: (f: FeatureWithProps<Polygon>) => void) {
-    this.eventListeners.push(callback);
+  addEventListenerSuccess(callback: (f: FeatureWithProps<Polygon>) => void) {
+    this.eventListenersSuccess.push(callback);
+  }
+  addEventListenerFailure(callback: () => void) {
+    this.eventListenersFailure.push(callback);
   }
 
   tearDown() {
@@ -197,7 +216,7 @@ export class PolygonTool {
 
   editExisting(feature: Feature<Polygon>) {
     this.active = true;
-    this.points = feature.geometry.coordinates[0];
+    this.points = JSON.parse(JSON.stringify(feature.geometry.coordinates[0]));
     this.points.pop();
     this.redraw();
     // TODO recalculateHovering, but we need to know where the mouse is

@@ -19,7 +19,7 @@
     polygonTool.stop();
   }
 
-  polygonTool.addEventListener((feature) => {
+  polygonTool.addEventListenerSuccess((feature) => {
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);
@@ -32,8 +32,13 @@
       formOpen.set(feature.id as number);
     }
   });
+  polygonTool.addEventListenerFailure(() => {
+    if (mode == thisMode) {
+      changeMode("edit-attribute");
+    }
+  });
 </script>
 
 {#if mode == thisMode}
-  <PolygonControls />
+  <PolygonControls {polygonTool} />
 {/if}
