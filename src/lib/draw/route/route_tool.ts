@@ -98,7 +98,7 @@ export class RouteTool {
     if (
       this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters)
     ) {
-      this.#redraw();
+      this.redraw();
     }
   }
 
@@ -107,7 +107,7 @@ export class RouteTool {
       return;
     }
     this.inner.onClick();
-    this.#redraw();
+    this.redraw();
   }
 
   private onDragStart() {
@@ -145,7 +145,7 @@ export class RouteTool {
     if (e.key == "Shift") {
       e.preventDefault();
       this.inner.setSnapMode(false);
-      this.#redraw();
+      this.redraw();
     }
   }
 
@@ -156,7 +156,7 @@ export class RouteTool {
     if (e.key == "Shift") {
       e.preventDefault();
       this.inner.setSnapMode(true);
-      this.#redraw();
+      this.redraw();
     }
   }
 
@@ -177,7 +177,7 @@ export class RouteTool {
   stop() {
     this.active = false;
     this.inner.clearState();
-    this.#redraw();
+    this.redraw();
     this.map["boxZoom"].enable();
   }
 
@@ -213,7 +213,7 @@ export class RouteTool {
 
     this.start();
     this.inner.editExisting(feature.properties.waypoints);
-    this.#redraw();
+    this.redraw();
   }
 
   // Destroy resources attached to the map. Warning, this doesn't yet handle
@@ -260,10 +260,10 @@ export class RouteTool {
 
   setConfig(config: { avoid_doubling_back: boolean }) {
     this.inner.setConfig(config);
-    this.#redraw();
+    this.redraw();
   }
 
-  #redraw() {
+  private redraw() {
     (this.map.getSource(source) as GeoJSONSource).setData(
       JSON.parse(this.inner.renderGeojson())
     );

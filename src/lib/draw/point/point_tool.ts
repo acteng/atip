@@ -50,7 +50,7 @@ export class PointTool {
   private onMouseMove(e: MapMouseEvent) {
     if (this.active) {
       this.cursor = pointFeature(e.lngLat.toArray());
-      this.#redraw();
+      this.redraw();
     }
   }
 
@@ -85,10 +85,10 @@ export class PointTool {
   stop() {
     this.cursor = null;
     this.active = false;
-    this.#redraw();
+    this.redraw();
   }
 
-  #redraw() {
+  private redraw() {
     let gj = emptyGeojson();
     if (this.cursor) {
       gj.features.push(this.cursor);

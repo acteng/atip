@@ -100,7 +100,7 @@ export class PolygonTool {
 
   private onMouseMove(e: MapMouseEvent) {
     if (this.active && !this.dragFrom) {
-      this.#recalculateHovering(e);
+      this.recalculateHovering(e);
     } else if (this.active && this.dragFrom) {
       if (this.hover == "polygon") {
         // Move entire polygon
@@ -114,7 +114,7 @@ export class PolygonTool {
         this.points[this.hover as number] = e.lngLat.toArray();
       }
       this.dragFrom = e.lngLat.toArray();
-      this.#redraw();
+      this.redraw();
     }
   }
 
@@ -138,14 +138,14 @@ export class PolygonTool {
         this.points.push(this.cursor.geometry.coordinates);
         this.hover = this.points.length - 1;
       }
-      this.#redraw();
+      this.redraw();
     } else if (this.active && typeof this.hover === "number") {
       this.points.splice(this.hover, 1);
       this.hover = null;
-      this.#redraw();
+      this.redraw();
       // TODO Doesn't seem to work; you still have to move the mouse to hover
       // on the polygon
-      this.#recalculateHovering(e);
+      this.recalculateHovering(e);
     }
   }
 
@@ -169,7 +169,7 @@ export class PolygonTool {
     }
     if (e.key == "Enter") {
       e.preventDefault();
-      let polygon = this.#polygonFeature();
+      let polygon = this.polygonFeature();
       if (polygon) {
         for (let cb of this.eventListeners) {
           cb(polygon);
@@ -199,8 +199,8 @@ export class PolygonTool {
     this.active = true;
     this.points = feature.geometry.coordinates[0];
     this.points.pop();
-    this.#redraw();
-    // TODO #recalculateHovering, but we need to know where the mouse is
+    this.redraw();
+    // TODO recalculateHovering, but we need to know where the mouse is
   }
 
   stop() {
@@ -209,10 +209,10 @@ export class PolygonTool {
     this.active = false;
     this.hover = null;
     this.dragFrom = null;
-    this.#redraw();
+    this.redraw();
   }
 
-  #redraw() {
+  private redraw() {
     let gj = emptyGeojson();
 
     this.points.forEach((pt, idx) => {
@@ -227,7 +227,7 @@ export class PolygonTool {
 
     gj.features = gj.features.concat(pointsToLineSegments(this.points));
 
-    let polygon = this.#polygonFeature();
+    let polygon = this.polygonFeature();
     if (polygon) {
       polygon.properties!.hover = this.hover == "polygon";
       gj.features.push(polygon);
@@ -236,7 +236,7 @@ export class PolygonTool {
     (this.map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
-  #recalculateHovering(e: MapLayerMouseEvent) {
+  private recalculateHovering(e: MapLayerMouseEvent) {
     this.cursor = null;
     this.hover = null;
 
@@ -259,11 +259,11 @@ export class PolygonTool {
       this.cursor = pointFeature(e.lngLat.toArray());
     }
 
-    this.#redraw();
+    this.redraw();
   }
 
   // TODO Force the proper winding order that geojson requires
-  #polygonFeature(): FeatureWithProps<Polygon> | null {
+  polygonFeature(): FeatureWithProps<Polygon> | null {
     if (this.points.length < 3) {
       return null;
     }
