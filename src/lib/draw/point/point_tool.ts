@@ -16,7 +16,8 @@ const source = "edit-point-mode";
 export class PointTool {
   map: Map;
   active: boolean;
-  eventListeners: ((f: FeatureWithProps<Point>) => void)[];
+  eventListenersSuccess: ((f: FeatureWithProps<Point>) => void)[];
+  eventListenersFailure: (() => void)[];
   cursor: FeatureWithProps<Point> | null;
 
   events: EventManager;
@@ -24,10 +25,8 @@ export class PointTool {
   constructor(map: Map) {
     this.map = map;
     this.active = false;
-    // TODO Can we use
-    // https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events
-    // not on a DOM element?
-    this.eventListeners = [];
+    this.eventListenersSuccess = [];
+    this.eventListenersFailure = [];
     this.cursor = null;
 
     // Set up interactions
@@ -47,6 +46,14 @@ export class PointTool {
     });
   }
 
+  // This stops the tool and fires a failure event
+  cancel() {
+    for (let cb of this.eventListenersFailure) {
+      cb();
+    }
+    this.stop();
+  }
+
   private onMouseMove(e: MapMouseEvent) {
     if (this.active) {
       this.cursor = pointFeature(e.lngLat.toArray());
@@ -57,15 +64,18 @@ export class PointTool {
   private onClick() {
     // TODO is it possible cursor is null?
     if (this.active && this.cursor) {
-      for (let cb of this.eventListeners) {
+      for (let cb of this.eventListenersSuccess) {
         cb(this.cursor);
       }
       this.stop();
     }
   }
 
-  addEventListener(callback: (f: FeatureWithProps<Point>) => void) {
-    this.eventListeners.push(callback);
+  addEventListenerSuccess(callback: (f: FeatureWithProps<Point>) => void) {
+    this.eventListenersSuccess.push(callback);
+  }
+  addEventListenerFailure(callback: () => void) {
+    this.eventListenersFailure.push(callback);
   }
 
   tearDown() {

@@ -216,8 +216,7 @@ export class RouteTool {
     this.redraw();
   }
 
-  // Destroy resources attached to the map. Warning, this doesn't yet handle
-  // event listeners!
+  // Destroy resources attached to the map.
   tearDown() {
     // TODO Will these throw if they're not there?
     this.map.removeLayer("route-points");
@@ -252,7 +251,7 @@ export class RouteTool {
     this.stop();
   }
 
-  // This stops the control and fires a failure event
+  // This stops the tool and fires a failure event
   cancel() {
     this.inner.clearState();
     this.finish();
