@@ -54,6 +54,7 @@
     $map.off("click", onClick);
   });
 
+  // Handle successful edits
   routeTool.addEventListenerSuccess((editedRoute) => {
     if (mode == thisMode) {
       gjScheme.update((gj) => {
@@ -72,24 +73,8 @@
       currentlyEditingControls = null;
     }
   });
-  routeTool.addEventListenerFailure(() => {
-    if (mode == thisMode) {
-      // Don't modify the thing we were just editing
-      gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-        delete feature.properties.hide_while_editing;
-        return gj;
-      });
-
-      // Stay in this mode
-      currentlyEditing = null;
-      currentlyEditingControls = null;
-    }
-  });
-
-  // TODO Also have cancel buttons for these tools
   for (let tool of [pointTool, polygonTool]) {
-    tool.addEventListener((feature) => {
+    tool.addEventListenerSuccess((feature) => {
       if (mode == thisMode) {
         gjScheme.update((gj) => {
           let updateFeature = gj.features.find(
@@ -97,6 +82,24 @@
           )!;
           updateFeature.geometry = feature.geometry;
           delete updateFeature.properties.hide_while_editing;
+          return gj;
+        });
+
+        // Stay in this mode
+        currentlyEditing = null;
+        currentlyEditingControls = null;
+      }
+    });
+  }
+
+  // Handle failures
+  for (let tool of [pointTool, polygonTool, routeTool]) {
+    tool.addEventListenerFailure(() => {
+      if (mode == thisMode) {
+        // Don't modify the thing we were just editing
+        gjScheme.update((gj) => {
+          let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+          delete feature.properties.hide_while_editing;
           return gj;
         });
 
@@ -172,7 +175,7 @@
 
 {#if mode == thisMode}
   {#if currentlyEditingControls == "point"}
-    <PointControls editingExisting={true} />
+    <PointControls {pointTool} editingExisting={true} />
   {:else if currentlyEditingControls == "polygon"}
     <PolygonControls />
   {:else if currentlyEditingControls == "route"}

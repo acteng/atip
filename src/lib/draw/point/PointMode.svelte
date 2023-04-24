@@ -19,7 +19,7 @@
     pointTool.stop();
   }
 
-  pointTool.addEventListener((feature) => {
+  pointTool.addEventListenerSuccess((feature) => {
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);
@@ -32,8 +32,13 @@
       formOpen.set(feature.id as number);
     }
   });
+  pointTool.addEventListenerFailure(() => {
+    if (mode == thisMode) {
+      changeMode("edit-attribute");
+    }
+  });
 </script>
 
 {#if mode == thisMode}
-  <PointControls editingExisting={false} />
+  <PointControls {pointTool} editingExisting={false} />
 {/if}
