@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onDestroy } from "svelte";
+  import { type MapMouseEvent } from "maplibre-gl";
   import type { Mode } from "./types";
   import { bbox } from "../../maplibre_helpers";
   import {
@@ -21,43 +23,19 @@
   }
 
   // Calculate hover
-  $map.on("mousemove", (e) => {
-    if (mode == thisMode) {
-      let results = $map.queryRenderedFeatures(e.point, {
-        layers: [
-          "interventions-points",
-          "interventions-lines",
-          "interventions-polygons",
-        ],
-      });
-      mapHover.set((results[0]?.id as number) || null);
-    }
-  });
-  $map.on("mouseout", () => {
-    if (mode == thisMode) {
-      mapHover.set(null);
-    }
-  });
-
+  $map.on("mousemove", onMouseMove);
+  $map.on("mouseout", onMouseOut);
   // Handle clicking the hovered feature
-  $map.on("click", (e) => {
-    if (mode == thisMode) {
-      let results = $map.queryRenderedFeatures(e.point, {
-        layers: [
-          "interventions-points",
-          "interventions-lines",
-          "interventions-polygons",
-        ],
-      });
-      if (results.length > 0) {
-        formOpen.set(results[0].id as number);
-      } else {
-        formOpen.set(null);
-      }
-    }
+  $map.on("click", onClick);
+
+  onDestroy(() => {
+    $map.off("mousemove", onMouseMove);
+    $map.off("mouseout", onMouseOut);
+    $map.off("click", onClick);
   });
 
-  openFromSidebar.subscribe((id) => {
+  $: {
+    let id = $openFromSidebar;
     if (id) {
       // When the user starts editing something from the sidebar, warp to what's
       // being edited. (Don't do this when clicking the object on the map.)
@@ -80,7 +58,43 @@
       // touch formOpen.
       changeMode(thisMode);
     }
-  });
+  }
+
+  function onMouseMove(e: MapMouseEvent) {
+    if (mode == thisMode) {
+      let results = $map.queryRenderedFeatures(e.point, {
+        layers: [
+          "interventions-points",
+          "interventions-lines",
+          "interventions-polygons",
+        ],
+      });
+      mapHover.set((results[0]?.id as number) || null);
+    }
+  }
+
+  function onMouseOut() {
+    if (mode == thisMode) {
+      mapHover.set(null);
+    }
+  }
+
+  function onClick(e: MapMouseEvent) {
+    if (mode == thisMode) {
+      let results = $map.queryRenderedFeatures(e.point, {
+        layers: [
+          "interventions-points",
+          "interventions-lines",
+          "interventions-polygons",
+        ],
+      });
+      if (results.length > 0) {
+        formOpen.set(results[0].id as number);
+      } else {
+        formOpen.set(null);
+      }
+    }
+  }
 </script>
 
 {#if mode == thisMode}

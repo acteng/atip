@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { onDestroy } from "svelte";
   import type { Mode } from "../types";
-  import type { GeoJSONSource } from "maplibre-gl";
+  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
   import type { Feature as OurFeature } from "../../../types";
@@ -35,7 +36,42 @@
   // Index into gjScheme of what we're snapped to
   let snappedIndex: number | null = null;
 
-  $map.on("mousemove", (e) => {
+  $map.on("mousemove", onMouseMove);
+  $map.on("click", onClick);
+
+  onDestroy(() => {
+    $map.off("mousemove", onMouseMove);
+    $map.off("click", onClick);
+  });
+
+  // Rendering
+  let source = "split-route";
+  overwriteSource($map, source, {
+    type: "geojson",
+    data: emptyGeojson(),
+  });
+  // TODO Scissors icon?
+  // TODO Z-ordering wrong?
+  overwriteLayer($map, {
+    id: "draw-split-route",
+    source,
+    ...drawCircle("black", circleRadiusPixels, [
+      "case",
+      ["==", ["get", "snapped"], true],
+      1.0,
+      0.5,
+    ]),
+  });
+
+  $: {
+    let gj = emptyGeojson();
+    if (cursor) {
+      gj.features.push(cursor);
+    }
+    ($map.getSource(source) as GeoJSONSource).setData(gj);
+  }
+
+  function onMouseMove(e: MapMouseEvent) {
     if (mode != thisMode) {
       return;
     }
@@ -75,9 +111,9 @@
       cursor = cursorFeature(candidates[0][1], true);
       snappedIndex = candidates[0][0];
     }
-  });
+  }
 
-  $map.on("click", () => {
+  function onClick() {
     if (mode != thisMode) {
       return;
     }
@@ -129,33 +165,6 @@
       // Stay in this mode, but reset state
       stop();
     }
-  });
-
-  // Rendering
-  let source = "split-route";
-  overwriteSource($map, source, {
-    type: "geojson",
-    data: emptyGeojson(),
-  });
-  // TODO Scissors icon?
-  // TODO Z-ordering wrong?
-  overwriteLayer($map, {
-    id: "draw-split-route",
-    source,
-    ...drawCircle("black", circleRadiusPixels, [
-      "case",
-      ["==", ["get", "snapped"], true],
-      1.0,
-      0.5,
-    ]),
-  });
-
-  $: {
-    let gj = emptyGeojson();
-    if (cursor) {
-      gj.features.push(cursor);
-    }
-    ($map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
   function cursorFeature(pt: number[], snapped: boolean): Feature<Point> {

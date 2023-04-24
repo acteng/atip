@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy } from "svelte";
   import type { LineString, Polygon } from "geojson";
   import type { PointTool } from "./point/point_tool";
   import type { PolygonTool } from "./polygon/polygon_tool";
@@ -41,38 +42,15 @@
   }
 
   // Calculate hover
-  $map.on("mousemove", (e) => {
-    if (mode == thisMode && currentlyEditing == null) {
-      let results = $map.queryRenderedFeatures(e.point, {
-        layers: [
-          "interventions-points",
-          "interventions-lines",
-          "interventions-polygons",
-        ],
-      });
-      mapHover.set((results[0]?.id as number) || null);
-    }
-  });
-  $map.on("mouseout", () => {
-    if (mode == thisMode && currentlyEditing == null) {
-      mapHover.set(null);
-    }
-  });
-
+  $map.on("mousemove", onMouseMove);
+  $map.on("mouseout", onMouseOut);
   // Handle clicking the hovered feature
-  $map.on("click", (e) => {
-    if (mode == thisMode && currentlyEditing == null) {
-      let results = $map.queryRenderedFeatures(e.point, {
-        layers: [
-          "interventions-points",
-          "interventions-lines",
-          "interventions-polygons",
-        ],
-      });
-      if (results.length > 0) {
-        startEditing(results[0].id as number);
-      }
-    }
+  $map.on("click", onClick);
+
+  onDestroy(() => {
+    $map.off("mousemove", onMouseMove);
+    $map.off("mouseout", onMouseOut);
+    $map.off("click", onClick);
   });
 
   routeTool.addEventListenerSuccess((editedRoute) => {
@@ -126,6 +104,40 @@
         currentlyEditingControls = null;
       }
     });
+  }
+
+  function onMouseMove(e: MapMouseEvent) {
+    if (mode == thisMode && currentlyEditing == null) {
+      let results = $map.queryRenderedFeatures(e.point, {
+        layers: [
+          "interventions-points",
+          "interventions-lines",
+          "interventions-polygons",
+        ],
+      });
+      mapHover.set((results[0]?.id as number) || null);
+    }
+  }
+
+  function onMouseOut() {
+    if (mode == thisMode && currentlyEditing == null) {
+      mapHover.set(null);
+    }
+  }
+
+  function onClick(e: MapMouseEvent) {
+    if (mode == thisMode && currentlyEditing == null) {
+      let results = $map.queryRenderedFeatures(e.point, {
+        layers: [
+          "interventions-points",
+          "interventions-lines",
+          "interventions-polygons",
+        ],
+      });
+      if (results.length > 0) {
+        startEditing(results[0].id as number);
+      }
+    }
   }
 
   function startEditing(id: number) {
