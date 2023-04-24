@@ -90,9 +90,18 @@
     reader.readAsText(files[0]);
   }
 
+  // TODO This should eventually guarantee the output is a valid Scheme. Only
+  // some fixes are applied now.
   function backfill(json: Scheme) {
     let idCounter = 1;
     for (let f of json.features) {
+      // Fix input from other tools where properties may be null
+      f.properties ||= {
+        name: "",
+        description: "",
+        intervention_type: "other",
+      };
+
       // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
       if (f.geometry.type == "LineString" && !f.properties.length_meters) {
         f.properties.length_meters =

@@ -34,3 +34,25 @@ test("loading a file without length displays the length", async ({ page }) => {
   await page.getByRole("button", { name: "1) Untitled route" }).click();
   await expect(page.getByText("Length: 8.5km")).toBeVisible();
 });
+
+// Handle unusual GeoJSON inputs produced by other tools
+test("loading a file with null properties displays the length", async ({
+  page,
+}) => {
+  // Remove the property from the test data first
+  let json = JSON.parse(
+    await readFile("tests/data/route.json", { encoding: "utf8" })
+  );
+  json.features[0].properties = null;
+  let uploadFile = JSON.stringify(json);
+
+  await page.goto("/scheme.html?authority=North Somerset");
+  await page.locator("#load_geojson").setInputFiles({
+    name: "route.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(uploadFile),
+  });
+
+  // We don't attempt to classify intervention_type for non-ATIP inputs
+  await page.getByRole("button", { name: "1) Untitled line" }).click();
+});
