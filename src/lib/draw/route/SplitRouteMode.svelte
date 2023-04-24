@@ -260,8 +260,21 @@
     let sliced = lineSlice(start, point, line);
     return length(sliced, { units: "kilometers" }) * 1000.0;
   }
+
+  // The escape key isn't registered at all for keypress, so use keydown
+  function onKeyDown(e: KeyboardEvent) {
+    if (mode == thisMode && e.key == "Escape") {
+      changeMode("edit-attribute");
+      e.preventDefault();
+    }
+  }
 </script>
 
 {#if mode == thisMode}
-  <p>Click near a route to split it, or click on the map to cancel</p>
+  <ul>
+    <li><b>Click</b> near a route to split it</li>
+    <li><b>Click</b> on the map or press <b>Escape</b> to cancel</li>
+  </ul>
 {/if}
+
+<svelte:window on:keydown={onKeyDown} />

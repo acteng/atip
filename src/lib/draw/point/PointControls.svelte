@@ -1,5 +1,6 @@
 <script lang="ts">
   import { PointTool } from "./point_tool";
+  import KeyHandler from "../KeyHandler.svelte";
 
   export let pointTool: PointTool;
   export let editingExisting: boolean;
@@ -10,5 +11,7 @@
 {:else}
   <p>Click to add a new point</p>
 {/if}
+<p>Press <b>Escape</b> to cancel</p>
 
 <button type="button" on:click={() => pointTool.cancel()}>Cancel</button>
+<KeyHandler tool={pointTool} />
