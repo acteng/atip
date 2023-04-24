@@ -1,0 +1,116 @@
+<script lang="ts">
+  import { gjScheme, deleteIntervention, formOpen } from "../stores";
+  import type { InterventionProps, PlanningProps } from "../types";
+
+  export let id: number;
+  export let allProperties: InterventionProps;
+
+  // TODO Should we start with these defaults, or make everything optional?
+  allProperties.planning ||= {
+    name: "",
+    notes: "",
+    reference_type: "preapp",
+    size: 0,
+    size_units: "number of units",
+    triage: "No Comment",
+    recommendation: "No Comment",
+  };
+  let props: PlanningProps = allProperties.planning!;
+
+  const referenceTypes = [
+    "preapp",
+    "outline",
+    "reserved matters",
+    "local plan",
+  ];
+  const sizeUnits = [
+    "number of units",
+    "floorspace (Gross Floor Area)",
+    "area (Hectare)",
+  ];
+  const triages = ["No Comment", "Standing Advice", "Toolkit Assessment"];
+  const recommendations = [
+    "No Comment",
+    "No Objection",
+    "Standing Advice",
+    "Deferral",
+    "Approve subject to conditions and/or obligations",
+    "Refusal",
+  ];
+</script>
+
+<label
+  >Name:<br />
+  <input type="text" bind:value={props.name} style="width: 100%" />
+</label>
+
+<br />
+<br />
+
+<label>
+  Reference type:
+  <select bind:value={props.reference_type}>
+    {#each referenceTypes as x}
+      <option value={x}>{x}</option>
+    {/each}
+  </select>
+</label>
+
+<br />
+<br />
+
+<label>
+  Notes:<br />
+  <textarea bind:value={props.notes} style="width: 100%" rows="5" />
+</label>
+
+<br />
+<br />
+
+<label>
+  Size:
+  <input type="number" bind:value={props.size} min="0" max="1000" />
+  <select bind:value={props.size_units}>
+    {#each sizeUnits as x}
+      <option value={x}>{x}</option>
+    {/each}
+  </select>
+</label>
+
+<br />
+<br />
+
+<label>
+  ATE Triage:
+  <select bind:value={props.triage}>
+    {#each triages as x}
+      <option value={x}>{x}</option>
+    {/each}
+  </select>
+</label>
+
+<br />
+<br />
+
+<label>
+  ATE Recommendation:
+  <select bind:value={props.recommendation}>
+    {#each recommendations as x}
+      <option value={x}>{x}</option>
+    {/each}
+  </select>
+</label>
+
+<br />
+<br />
+
+<div style="display: flex; justify-content: space-between">
+  <button type="button" on:click={() => deleteIntervention(id)}>Delete</button>
+  <button type="button" on:click={() => formOpen.set(null)}>Save</button>
+</div>
+
+<style>
+  textarea {
+    resize: none;
+  }
+</style>

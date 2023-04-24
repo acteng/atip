@@ -29,6 +29,7 @@
   // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
   let style: string = params.get("style") || "streets";
+  let planningMode = params.has("planning");
 
   // TODO Slight hack. These files are stored in an S3 bucket, which only has
   // an HTTP interface. When deployed to Github pages over HTTPS, we can't mix
@@ -75,16 +76,16 @@
   </div>
   <div slot="sidebar">
     <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
-    <EntireScheme {authorityName} />
+    <EntireScheme {authorityName} {planningMode} />
     <br />
-    <InterventionList />
+    <InterventionList {planningMode} />
   </div>
   <div slot="main">
     <Map {style}>
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer />
       <HoverLayer />
-      <Toolbox {routeUrl} />
+      <Toolbox {routeUrl} {planningMode} />
       <BaselayerSwitcher {style} />
       <Legend />
     </Map>

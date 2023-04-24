@@ -14,6 +14,7 @@
   import SplitRouteMode from "./route/SplitRouteMode.svelte";
 
   export let routeUrl: string;
+  export let planningMode: boolean;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
   // TODO Reconsider
   let routeTool: RouteTool;
@@ -85,11 +86,13 @@
     {/if}
   </div>
   <div>
-    <button
-      type="button"
-      on:click={() => changeMode("point")}
-      disabled={mode == "point"}>New point</button
-    >
+    {#if !planningMode}
+      <button
+        type="button"
+        on:click={() => changeMode("point")}
+        disabled={mode == "point"}>New point</button
+      >
+    {/if}
     <PointMode bind:this={pointMode} {mode} {changeMode} {pointTool} />
   </div>
   <div>
@@ -101,11 +104,13 @@
     <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
   </div>
   <div>
-    <button
-      type="button"
-      on:click={() => changeMode("route")}
-      disabled={mode == "route"}>New route</button
-    >
+    {#if !planningMode}
+      <button
+        type="button"
+        on:click={() => changeMode("route")}
+        disabled={mode == "route"}>New route</button
+      >
+    {/if}
     <RouteMode
       bind:this={routeMode}
       {mode}
@@ -115,11 +120,13 @@
     />
   </div>
   <div>
-    <button
-      type="button"
-      on:click={() => changeMode("split-route")}
-      disabled={mode == "split-route"}>Split route</button
-    >
+    {#if !planningMode}
+      <button
+        type="button"
+        on:click={() => changeMode("split-route")}
+        disabled={mode == "split-route"}>Split route</button
+      >
+    {/if}
     <SplitRouteMode bind:this={splitRouteMode} {mode} {changeMode} />
   </div>
 </div>
