@@ -16,6 +16,8 @@
   import { colors, circleRadius, lineWidth } from "../../colors";
   import { gjScheme, map } from "../../stores";
 
+  export let planningMode: boolean;
+
   // TODO Document here the z-ordering between all the layers defined
   // everywhere. Or maybe even pass a list to overwriteLayer and have it figure
   // things out!
@@ -70,6 +72,20 @@
       colors.other,
       "white",
     ];
+  // For planning mode
+  const colorByReferenceType: DataDrivenPropertyValueSpecification<string> = [
+    "match",
+    ["get", "reference_type", ["get", "planning"]],
+    "preapp",
+    colors.preapp,
+    "outline",
+    colors.outline,
+    "reserved matters",
+    colors["reserved matters"],
+    "local plan",
+    colors["local plan"],
+    "white",
+  ];
 
   const hideWhileEditing = ["!=", "hide_while_editing", true];
   const notEndpoint = ["!=", "endpoint", true];
@@ -115,7 +131,10 @@
       id: "interventions-polygons",
       source,
       filter: ["all", isPolygon, hideWhileEditing],
-      ...drawPolygon(colorByInterventionType, 0.5),
+      ...drawPolygon(
+        planningMode ? colorByReferenceType : colorByInterventionType,
+        0.5
+      ),
       // TODO Outline too?
     },
     "hover-polygons"
