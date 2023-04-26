@@ -83,11 +83,11 @@
   <div slot="main">
     <Map {style}>
       <BoundaryLayer {boundaryGeojson} />
-      <InterventionLayer />
+      <InterventionLayer {planningMode} />
       <HoverLayer />
       <Toolbox {routeUrl} {planningMode} />
       <BaselayerSwitcher {style} />
-      <Legend />
+      <Legend {planningMode} />
     </Map>
   </div>
 </Layout>

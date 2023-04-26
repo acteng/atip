@@ -5,6 +5,12 @@ export const colors = {
   crossing: "#4daf4a",
   other: "#984ea3",
 
+  // Same as the colors above, but for planning mode
+  preapp: "#e41a1c",
+  outline: "#377eb8",
+  "reserved matters": "#4daf4a",
+  "local plan": "#984ea3",
+
   hovering: "black",
   lineEndpointColor: "black",
 };
