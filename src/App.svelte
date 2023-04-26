@@ -31,6 +31,8 @@
   let style: string = params.get("style") || "streets";
   let planningMode = params.has("planning");
 
+  let mode: "design" | "planning" = planningMode ? "planning" : "design";
+
   // TODO Slight hack. These files are stored in an S3 bucket, which only has
   // an HTTP interface. When deployed to Github pages over HTTPS, we can't mix
   // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
@@ -64,15 +66,38 @@
     );
     return geojson;
   }
+
+  function changeMode() {
+    let params = new URLSearchParams(window.location.search);
+    if (mode == "design") {
+      params.delete("planning");
+    } else {
+      params.set("planning", "");
+    }
+    let href = `${window.location.pathname}?${params.toString()}${
+      window.location.hash
+    }`;
+    window.location.href = href;
+  }
 </script>
 
 <Layout>
   <div slot="nav">
-    <button type="button" on:click={() => window.open("index.html")}>
-      Home</button
-    >
-    <button type="button" on:click={toggleAbout}>About</button>
-    <button type="button" on:click={toggleInstructions}>Instructions</button>
+    <div>
+      <button type="button" on:click={() => window.open("index.html")}>
+        Home</button
+      >
+      <button type="button" on:click={toggleAbout}>About</button>
+      <button type="button" on:click={toggleInstructions}>Instructions</button>
+    </div>
+    <br />
+    <label>
+      ATIP mode:
+      <select bind:value={mode} on:change={changeMode}>
+        <option value="design">Design</option>
+        <option value="planning">Planning</option>
+      </select>
+    </label>
   </div>
   <div slot="sidebar">
     <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
