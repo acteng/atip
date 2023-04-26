@@ -9,7 +9,7 @@
 
   function interventionName(feature: FeatureUnion): string {
     if (planningMode) {
-      return feature.properties.planning.name || "Untitled polygon";
+      return feature.properties.planning?.name || "Untitled polygon";
     }
 
     if (feature.properties.name) {
