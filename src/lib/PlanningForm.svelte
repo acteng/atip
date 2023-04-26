@@ -3,10 +3,10 @@
   import type { InterventionProps, PlanningProps } from "../types";
 
   export let id: number;
-  export let allProperties: InterventionProps;
+  export let props: InterventionProps;
 
   // TODO Should we start with these defaults, or make everything optional?
-  allProperties.planning ||= {
+  props.planning ||= {
     name: "",
     notes: "",
     reference_type: "preapp",
@@ -15,7 +15,6 @@
     triage: "No Comment",
     recommendation: "No Comment",
   };
-  let props: PlanningProps = allProperties.planning!;
 
   const referenceTypes = [
     "preapp",
@@ -41,7 +40,7 @@
 
 <label
   >Name:<br />
-  <input type="text" bind:value={props.name} style="width: 100%" />
+  <input type="text" bind:value={props.planning.name} style="width: 100%" />
 </label>
 
 <br />
@@ -49,7 +48,7 @@
 
 <label>
   Reference type:
-  <select bind:value={props.reference_type}>
+  <select bind:value={props.planning.reference_type}>
     {#each referenceTypes as x}
       <option value={x}>{x}</option>
     {/each}
@@ -61,7 +60,7 @@
 
 <label>
   Notes:<br />
-  <textarea bind:value={props.notes} style="width: 100%" rows="5" />
+  <textarea bind:value={props.planning.notes} style="width: 100%" rows="5" />
 </label>
 
 <br />
@@ -69,8 +68,8 @@
 
 <label>
   Size:
-  <input type="number" bind:value={props.size} min="0" max="1000" />
-  <select bind:value={props.size_units}>
+  <input type="number" bind:value={props.planning.size} min="0" max="1000" />
+  <select bind:value={props.planning.size_units}>
     {#each sizeUnits as x}
       <option value={x}>{x}</option>
     {/each}
@@ -82,7 +81,7 @@
 
 <label>
   ATE Triage:
-  <select bind:value={props.triage}>
+  <select bind:value={props.planning.triage}>
     {#each triages as x}
       <option value={x}>{x}</option>
     {/each}
@@ -94,7 +93,7 @@
 
 <label>
   ATE Recommendation:
-  <select bind:value={props.recommendation}>
+  <select bind:value={props.planning.recommendation}>
     {#each recommendations as x}
       <option value={x}>{x}</option>
     {/each}

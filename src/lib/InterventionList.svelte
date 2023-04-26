@@ -8,6 +8,10 @@
   export let planningMode: boolean;
 
   function interventionName(feature: FeatureUnion): string {
+    if (planningMode) {
+      return feature.properties.planning.name || "Untitled polygon";
+    }
+
     if (feature.properties.name) {
       return feature.properties.name;
     }
@@ -49,7 +53,7 @@
     label={i + 1 + ") " + interventionName(feature)}
   >
     {#if planningMode}
-      <PlanningForm id={feature.id} bind:allProperties={feature.properties} />
+      <PlanningForm id={feature.id} bind:props={feature.properties} />
     {:else}
       <Form
         id={feature.id}
