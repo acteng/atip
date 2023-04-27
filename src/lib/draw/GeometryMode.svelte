@@ -9,6 +9,7 @@
   import type { Feature, FeatureUnion } from "../../types";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
+  import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
 
   const thisMode = "edit-geometry";
@@ -20,7 +21,12 @@
 
   // An optional ID of what we're currently editing in this mode
   let currentlyEditing: number | null = null;
-  let currentlyEditingControls: "point" | "polygon" | "route" | null = null;
+  let currentlyEditingControls:
+    | "point"
+    | "free-polygon"
+    | "snap-polygon"
+    | "route"
+    | null = null;
 
   export function start() {}
   export function stop() {
@@ -65,6 +71,23 @@
         feature.properties.waypoints = editedRoute.properties.waypoints;
         delete feature.properties.hide_while_editing;
         feature.geometry = editedRoute.geometry;
+        return gj;
+      });
+
+      // Stay in this mode
+      currentlyEditing = null;
+      currentlyEditingControls = null;
+    }
+  });
+  routeTool.addEventListenerSuccessArea((editedArea) => {
+    if (mode == thisMode) {
+      gjScheme.update((gj) => {
+        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+        // Keep the ID and any properties. Just copy over stuff from routeSnapper.
+        // TODO We're depending on implementation details here and knowing what to copy...
+        feature.properties.waypoints = editedArea.properties.waypoints;
+        delete feature.properties.hide_while_editing;
+        feature.geometry = editedArea.geometry;
         return gj;
       });
 
@@ -162,8 +185,13 @@
       routeTool.editExistingRoute(feature as Feature<LineString>);
       currentlyEditingControls = "route";
     } else if (feature.geometry.type == "Polygon") {
-      polygonTool.editExisting(feature as Feature<Polygon>);
-      currentlyEditingControls = "polygon";
+      if (feature.properties.waypoints) {
+        routeTool.editExistingArea(feature as Feature<Polygon>);
+        currentlyEditingControls = "snap-polygon";
+      } else {
+        polygonTool.editExisting(feature as Feature<Polygon>);
+        currentlyEditingControls = "free-polygon";
+      }
     } else if (feature.geometry.type == "Point") {
       // No need to pass in the existing feature.geometry; it's the same as
       // where the cursor is anyway
@@ -176,8 +204,10 @@
 {#if mode == thisMode}
   {#if currentlyEditingControls == "point"}
     <PointControls {pointTool} editingExisting={true} />
-  {:else if currentlyEditingControls == "polygon"}
+  {:else if currentlyEditingControls == "free-polygon"}
     <PolygonControls {polygonTool} />
+  {:else if currentlyEditingControls == "snap-polygon"}
+    <SnapPolygonControls {routeTool} />
   {:else if currentlyEditingControls == "route"}
     <RouteControls {routeTool} />
   {:else}
