@@ -24,7 +24,7 @@
     // When we enter this mode by clicking the button from edit-geometry, we
     // call routeTool.stop(). Re-activate it if so.
     if (!routeTool.isActive()) {
-      routeTool.start();
+      routeTool.startRoute();
     }
   }
   export function stop() {
@@ -49,7 +49,7 @@
         changeMode("edit-attribute");
       }
     });
-    routeTool.addEventListenerSuccess((feature) => {
+    routeTool.addEventListenerSuccessRoute((feature) => {
       if (mode == thisMode) {
         gjScheme.update((gj) => {
           feature.id = newFeatureId(gj);

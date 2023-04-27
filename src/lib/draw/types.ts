@@ -3,5 +3,6 @@ export type Mode =
   | "edit-geometry"
   | "route"
   | "point"
-  | "polygon"
+  | "free-polygon"
+  | "snap-polygon"
   | "split-route";

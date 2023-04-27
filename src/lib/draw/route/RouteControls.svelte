@@ -6,7 +6,7 @@
 
   // TODO Save this in the route
   let avoidDoublingBack = false;
-  $: routeTool.setConfig({
+  $: routeTool.setRouteConfig({
     avoid_doubling_back: avoidDoublingBack,
   });
 

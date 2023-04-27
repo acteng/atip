@@ -6,7 +6,7 @@
   import { gjScheme, newFeatureId, formOpen } from "../../../stores";
   import PolygonControls from "./PolygonControls.svelte";
 
-  const thisMode = "polygon";
+  const thisMode = "free-polygon";
 
   export let mode: string;
   export let changeMode: (m: Mode) => void;
