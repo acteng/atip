@@ -55,7 +55,7 @@
   });
 
   // Handle successful edits
-  routeTool.addEventListenerSuccess((editedRoute) => {
+  routeTool.addEventListenerSuccessRoute((editedRoute) => {
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
@@ -159,7 +159,7 @@
     currentlyEditing = id;
 
     if (feature.geometry.type == "LineString") {
-      routeTool.editExisting(feature as Feature<LineString>);
+      routeTool.editExistingRoute(feature as Feature<LineString>);
       currentlyEditingControls = "route";
     } else if (feature.geometry.type == "Polygon") {
       polygonTool.editExisting(feature as Feature<Polygon>);

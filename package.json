@@ -34,7 +34,7 @@
     "@turf/nearest-point-on-line": "^6.5.0",
     "@types/geojson": "^7946.0.10",
     "maplibre-gl": "^2.4.0",
-    "route-snapper": "^0.1.12",
+    "route-snapper": "^0.1.13",
     "svelte": "^3.54.0"
   }
 }

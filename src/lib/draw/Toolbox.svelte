@@ -98,8 +98,8 @@
   <div>
     <button
       type="button"
-      on:click={() => changeMode("polygon")}
-      disabled={mode == "polygon"}>New polygon</button
+      on:click={() => changeMode("free-polygon")}
+      disabled={mode == "free-polygon"}>New polygon</button
     >
     <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
   </div>

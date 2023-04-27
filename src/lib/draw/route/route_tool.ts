@@ -1,14 +1,16 @@
 import { JsRouteSnapper } from "route-snapper";
 import type { Map, GeoJSONSource, MapMouseEvent } from "maplibre-gl";
-import type { LineString } from "geojson";
+import type { Feature, LineString, Polygon } from "geojson";
 import {
   emptyGeojson,
   isPoint,
   isLine,
+  isPolygon,
   overwriteSource,
   overwriteLayer,
   drawCircle,
   drawLine,
+  drawPolygon,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { EventManager } from "../events";
@@ -22,7 +24,8 @@ export class RouteTool {
   map: Map;
   inner: JsRouteSnapper;
   active: boolean;
-  eventListenersSuccess: ((f: FeatureWithProps<LineString>) => void)[];
+  eventListenersSuccessRoute: ((f: FeatureWithProps<LineString>) => void)[];
+  eventListenersSuccessArea: ((f: FeatureWithProps<Polygon>) => void)[];
   eventListenersFailure: (() => void)[];
 
   events: EventManager;
@@ -33,7 +36,8 @@ export class RouteTool {
     this.inner = new JsRouteSnapper(graphBytes);
     console.timeEnd("Deserialize and setup JsRouteSnapper");
     this.active = false;
-    this.eventListenersSuccess = [];
+    this.eventListenersSuccessRoute = [];
+    this.eventListenersSuccessArea = [];
     this.eventListenersFailure = [];
 
     // Rendering
@@ -71,6 +75,12 @@ export class RouteTool {
       source,
       filter: isLine,
       ...drawLine("black", 2.5),
+    });
+    overwriteLayer(map, {
+      id: "route-polygons",
+      source,
+      filter: isPolygon,
+      ...drawPolygon("black", 0.5),
     });
 
     // Set up interactions
@@ -161,13 +171,27 @@ export class RouteTool {
   }
 
   // Activate the tool with blank state.
-  start() {
+  startRoute() {
     // If we were already active, don't do anything
     // TODO Or... error? Why'd this happen?
     if (this.active) {
       return;
     }
 
+    this.active = true;
+    // Otherwise, shift+click breaks
+    this.map["boxZoom"].disable();
+  }
+
+  // Activate the tool with blank state.
+  startArea() {
+    // If we were already active, don't do anything
+    // TODO Or... error? Why'd this happen?
+    if (this.active) {
+      return;
+    }
+
+    this.inner.setConfig({ avoid_doubling_back: true, area_mode: true });
     this.active = true;
     // Otherwise, shift+click breaks
     this.map["boxZoom"].disable();
@@ -185,9 +209,9 @@ export class RouteTool {
   // properties returned originally. If waypoints are missing (maybe because
   // the route was produced by a different tool, or an older version of this
   // tool), the edited line-string may differ from the input.
-  editExisting(feature: FeatureWithProps<LineString>) {
+  editExistingRoute(feature: FeatureWithProps<LineString>) {
     if (this.active) {
-      window.alert("Bug: editExisting called when tool is already active");
+      window.alert("Bug: editExistingRoute called when tool is already active");
     }
 
     if (!feature.properties.waypoints) {
@@ -211,7 +235,24 @@ export class RouteTool {
       ];
     }
 
-    this.start();
+    this.startRoute();
+    this.inner.editExisting(feature.properties.waypoints);
+    this.redraw();
+  }
+
+  // This only handles features previously returned by this tool.
+  editExistingArea(feature: FeatureWithProps<Polygon>) {
+    if (this.active) {
+      window.alert("Bug: editExistingArea called when tool is already active");
+    }
+
+    if (!feature.properties.waypoints) {
+      window.alert(
+        "Bug: editExistingArea called for a polygon not produced by the route-snapper"
+      );
+    }
+
+    this.startArea();
     this.inner.editExisting(feature.properties.waypoints);
     this.redraw();
   }
@@ -221,12 +262,20 @@ export class RouteTool {
     // TODO Will these throw if they're not there?
     this.map.removeLayer("route-points");
     this.map.removeLayer("route-lines");
+    this.map.removeLayer("route-polygons");
     this.map.removeSource("route-snapper");
     this.events.tearDown();
   }
 
-  addEventListenerSuccess(callback: (f: FeatureWithProps<LineString>) => void) {
-    this.eventListenersSuccess.push(callback);
+  addEventListenerSuccessRoute(
+    callback: (f: FeatureWithProps<LineString>) => void
+  ) {
+    this.eventListenersSuccessRoute.push(callback);
+  }
+  addEventListenerSuccessArea(
+    callback: (f: FeatureWithProps<Polygon>) => void
+  ) {
+    this.eventListenersSuccessArea.push(callback);
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
@@ -240,8 +289,18 @@ export class RouteTool {
   finish() {
     let rawJSON = this.inner.toFinalFeature();
     if (rawJSON) {
-      for (let cb of this.eventListenersSuccess) {
-        cb(JSON.parse(rawJSON) as FeatureWithProps<LineString>);
+      // Parse once just to check geometry type. But keep parsing the string
+      // for each callback, to copy and make sure different callbacks
+      // don't have the same reference
+      let f = JSON.parse(rawJSON) as Feature;
+      if (f.geometry.type == "LineString") {
+        for (let cb of this.eventListenersSuccessRoute) {
+          cb(JSON.parse(rawJSON) as FeatureWithProps<LineString>);
+        }
+      } else {
+        for (let cb of this.eventListenersSuccessArea) {
+          cb(JSON.parse(rawJSON) as FeatureWithProps<Polygon>);
+        }
       }
     } else {
       for (let cb of this.eventListenersFailure) {
@@ -257,8 +316,8 @@ export class RouteTool {
     this.finish();
   }
 
-  setConfig(config: { avoid_doubling_back: boolean }) {
-    this.inner.setConfig(config);
+  setRouteConfig(config: { avoid_doubling_back: boolean }) {
+    this.inner.setConfig({ ...config, area_mode: false });
     this.redraw();
   }
 
