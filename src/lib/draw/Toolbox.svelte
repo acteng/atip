@@ -11,6 +11,7 @@
   import RouteMode from "./route/RouteMode.svelte";
   import PointMode from "./point/PointMode.svelte";
   import PolygonMode from "./polygon/PolygonMode.svelte";
+  import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
   import SplitRouteMode from "./route/SplitRouteMode.svelte";
 
   export let routeUrl: string;
@@ -30,6 +31,7 @@
   let routeMode: RouteMode;
   let pointMode: PointMode;
   let polygonMode: PolygonMode;
+  let snapPolygonMode: SnapPolygonMode;
   let splitRouteMode: SplitRouteMode;
 
   // This must be used; don't manually change mode
@@ -39,7 +41,8 @@
       "edit-geometry": geometryMode,
       route: routeMode,
       point: pointMode,
-      polygon: polygonMode,
+      "free-polygon": polygonMode,
+      "snap-polygon": snapPolygonMode,
       "split-route": splitRouteMode,
     };
 
@@ -99,9 +102,24 @@
     <button
       type="button"
       on:click={() => changeMode("free-polygon")}
-      disabled={mode == "free-polygon"}>New polygon</button
+      disabled={mode == "free-polygon"}>New polygon (freehand)</button
     >
     <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
+  </div>
+  <div>
+    <button
+      type="button"
+      on:click={() => changeMode("snap-polygon")}
+      disabled={mode == "snap-polygon"}>New polygon (snapped)</button
+    >
+    {#if routeTool}
+      <SnapPolygonMode
+        bind:this={snapPolygonMode}
+        {mode}
+        {changeMode}
+        {routeTool}
+      />
+    {/if}
   </div>
   <div>
     {#if !planningMode}
