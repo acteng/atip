@@ -17,11 +17,10 @@
   export let routeUrl: string;
   export let planningMode: boolean;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
-  // TODO Reconsider
+  // TODO Create this here too?
   let routeTool: RouteTool;
 
   // Create and manage these here, then pass down to modes as needed.
-  // TODO Teardown too
   let pointTool = new PointTool($map);
   let polygonTool = new PolygonTool($map);
 
@@ -60,6 +59,7 @@
   onDestroy(() => {
     pointTool?.tearDown();
     polygonTool?.tearDown();
+    routeTool?.tearDown();
   });
 </script>
 

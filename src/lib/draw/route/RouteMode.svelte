@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Mode } from "../types";
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
   import init from "route-snapper";
   import { fetchWithProgress } from "route-snapper/lib.js";
   import { RouteTool } from "./route_tool";
@@ -62,10 +62,6 @@
         formOpen.set(feature.id as number);
       }
     });
-  });
-
-  onDestroy(() => {
-    routeTool?.tearDown();
   });
 </script>
 
