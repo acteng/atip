@@ -2,6 +2,7 @@
   import type { FeatureCollection, Polygon } from "geojson";
   import { onMount } from "svelte";
   import authoritiesUrl from "../assets/authorities.geojson?url";
+  import type { Schema } from "./types";
 
   import About from "./lib/About.svelte";
   import Instructions from "./lib/Instructions.svelte";
@@ -29,9 +30,7 @@
   // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
   let style: string = params.get("style") || "streets";
-  let planningMode = params.has("planning");
-
-  let mode: "design" | "planning" = planningMode ? "planning" : "design";
+  let schema: Schema = (params.get("schema") as Schema) || "v1";
 
   // TODO Slight hack. These files are stored in an S3 bucket, which only has
   // an HTTP interface. When deployed to Github pages over HTTPS, we can't mix
@@ -67,13 +66,9 @@
     return geojson;
   }
 
-  function changeMode() {
+  function changeSchema() {
     let params = new URLSearchParams(window.location.search);
-    if (mode == "design") {
-      params.delete("planning");
-    } else {
-      params.set("planning", "");
-    }
+    params.set("schema", schema);
     let href = `${window.location.pathname}?${params.toString()}${
       window.location.hash
     }`;
@@ -92,27 +87,28 @@
     </div>
     <br />
     <label>
-      ATIP mode:
-      <select bind:value={mode} on:change={changeMode}>
-        <option value="design">Design</option>
+      ATIP schema:
+      <select bind:value={schema} on:change={changeSchema}>
+        <option value="v1">Design (v1)</option>
+        <option value="v2">Design (v2)</option>
         <option value="planning">Planning</option>
       </select>
     </label>
   </div>
   <div slot="sidebar">
     <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
-    <EntireScheme {authorityName} {planningMode} />
+    <EntireScheme {authorityName} {schema} />
     <br />
-    <InterventionList {planningMode} />
+    <InterventionList {schema} />
   </div>
   <div slot="main">
     <Map {style}>
       <BoundaryLayer {boundaryGeojson} />
-      <InterventionLayer {planningMode} />
+      <InterventionLayer {schema} />
       <HoverLayer />
-      <Toolbox {routeUrl} {planningMode} />
+      <Toolbox {routeUrl} {schema} />
       <BaselayerSwitcher {style} />
-      <Legend {planningMode} />
+      <Legend {schema} />
     </Map>
   </div>
 </Layout>

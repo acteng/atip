@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { map } from "../../stores";
+  import type { Schema } from "../../types";
   import { PointTool } from "./point/point_tool";
   import { PolygonTool } from "./polygon/polygon_tool";
   import { RouteTool } from "./route/route_tool";
@@ -15,7 +16,7 @@
   import SplitRouteMode from "./route/SplitRouteMode.svelte";
 
   export let routeUrl: string;
-  export let planningMode: boolean;
+  export let schema: Schema;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
   // TODO Create this here too?
   let routeTool: RouteTool;
@@ -89,7 +90,7 @@
     {/if}
   </div>
   <div>
-    {#if !planningMode}
+    {#if schema != "planning"}
       <button
         type="button"
         on:click={() => changeMode("point")}
@@ -122,7 +123,7 @@
     {/if}
   </div>
   <div>
-    {#if !planningMode}
+    {#if schema != "planning"}
       <button
         type="button"
         on:click={() => changeMode("route")}
@@ -138,7 +139,7 @@
     />
   </div>
   <div>
-    {#if !planningMode}
+    {#if schema != "planning"}
       <button
         type="button"
         on:click={() => changeMode("split-route")}

@@ -1,14 +1,15 @@
 <script lang="ts">
-  import type { FeatureUnion } from "../types";
-  import Form from "./Form.svelte";
+  import type { FeatureUnion, Schema } from "../types";
+  import FormV1 from "./FormV1.svelte";
+  import FormV2 from "./FormV2.svelte";
   import PlanningForm from "./PlanningForm.svelte";
   import AccordionItem from "./AccordionItem.svelte";
   import { gjScheme, formOpen, deleteIntervention } from "../stores";
 
-  export let planningMode: boolean;
+  export let schema: Schema;
 
   function interventionName(feature: FeatureUnion): string {
-    if (planningMode) {
+    if (schema == "planning") {
       return feature.properties.planning?.name || "Untitled polygon";
     }
 
@@ -52,16 +53,26 @@
     id={feature.id}
     label={i + 1 + ") " + interventionName(feature)}
   >
-    {#if planningMode}
-      <PlanningForm id={feature.id} bind:props={feature.properties} />
-    {:else}
-      <Form
-        id={feature.id}
+    {#if schema == "v1"}
+      <FormV1
         bind:name={feature.properties.name}
         bind:intervention_type={feature.properties.intervention_type}
         bind:description={feature.properties.description}
         length_meters={feature.properties.length_meters}
       />
+    {:else if schema == "v2"}
+      <FormV2 bind:props={feature.properties} />
+    {:else if schema == "planning"}
+      <PlanningForm bind:props={feature.properties} />
     {/if}
+
+    <br />
+    <br />
+    <div style="display: flex; justify-content: space-between">
+      <button type="button" on:click={() => deleteIntervention(feature.id)}
+        >Delete</button
+      >
+      <button type="button" on:click={() => formOpen.set(null)}>Save</button>
+    </div>
   </AccordionItem>
 {/each}

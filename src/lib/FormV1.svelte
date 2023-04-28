@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { gjScheme, deleteIntervention, formOpen } from "../stores";
-
-  export let id: number;
   export let name: string;
   export let intervention_type: "area" | "route" | "crossing" | "other";
   export let description: string;
@@ -48,20 +45,9 @@
   <textarea bind:value={description} style="width: 100%" rows="5" />
 </label>
 
-<br />
-<br />
-
 {#if length_meters}
   Length: {prettyPrintMeters(length_meters)}
-
-  <br />
-  <br />
 {/if}
-
-<div style="display: flex; justify-content: space-between">
-  <button type="button" on:click={() => deleteIntervention(id)}>Delete</button>
-  <button type="button" on:click={() => formOpen.set(null)}>Save</button>
-</div>
 
 <style>
   textarea {

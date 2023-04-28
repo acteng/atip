@@ -15,8 +15,9 @@
   } from "../../maplibre_helpers";
   import { colors, circleRadius, lineWidth } from "../../colors";
   import { gjScheme, map } from "../../stores";
+  import type { Schema } from "../../types";
 
-  export let planningMode: boolean;
+  export let schema: Schema;
 
   // TODO Document here the z-ordering between all the layers defined
   // everywhere. Or maybe even pass a list to overwriteLayer and have it figure
@@ -132,7 +133,7 @@
       source,
       filter: ["all", isPolygon, hideWhileEditing],
       ...drawPolygon(
-        planningMode ? colorByReferenceType : colorByInterventionType,
+        schema == "planning" ? colorByReferenceType : colorByInterventionType,
         0.5
       ),
       // TODO Outline too?

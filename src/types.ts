@@ -1,5 +1,7 @@
 import type { Point, LineString, Polygon } from "geojson";
 
+export type Schema = "v1" | "v2" | "planning";
+
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
 export interface Scheme {
@@ -29,6 +31,7 @@ export interface Feature<G extends Geometry> {
 }
 
 export interface InterventionProps {
+  // These 3 fields are v1 schema
   intervention_type: "area" | "route" | "crossing" | "other";
   name: string;
   description: string;
@@ -39,11 +42,13 @@ export interface InterventionProps {
 
   // TODO Hack. If these're filled out, ignore the schema above.
   planning?: PlanningProps;
+  v2?: V2Props;
 
   // Temporary state, not meant to be serialized
   hide_while_editing?: boolean;
 }
 
+// planning schema
 export interface PlanningProps {
   name: string;
   notes: string;
@@ -58,6 +63,11 @@ export interface PlanningProps {
     | "Deferral"
     | "Approve subject to conditions and/or obligations"
     | "Refusal";
+}
+
+// v2 schema
+export interface V2Props {
+  name: string;
 }
 
 export interface Waypoint {
