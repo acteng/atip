@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { gjScheme, deleteIntervention, formOpen } from "../stores";
-  import type { InterventionProps, PlanningProps } from "../types";
+  import type { InterventionProps } from "../types";
 
-  export let id: number;
   export let props: InterventionProps;
 
   // TODO Should we start with these defaults, or make everything optional?
@@ -99,14 +97,6 @@
     {/each}
   </select>
 </label>
-
-<br />
-<br />
-
-<div style="display: flex; justify-content: space-between">
-  <button type="button" on:click={() => deleteIntervention(id)}>Delete</button>
-  <button type="button" on:click={() => formOpen.set(null)}>Save</button>
-</div>
 
 <style>
   textarea {

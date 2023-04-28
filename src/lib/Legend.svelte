@@ -1,13 +1,14 @@
 <script lang="ts">
   import { colors } from "../colors";
+  import type { Schema, Scheme } from "../types";
 
-  export let planningMode: boolean;
+  export let schema: Schema;
 </script>
 
 <div>
   <h1>Interventions</h1>
   <ul>
-    {#if planningMode}
+    {#if schema == "planning"}
       <li><span style:background={colors.preapp} />Preapp</li>
       <li><span style:background={colors.outline} />Outline</li>
       <li>

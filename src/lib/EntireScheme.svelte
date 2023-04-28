@@ -1,14 +1,14 @@
 <script lang="ts">
   import length from "@turf/length";
   import { gjScheme } from "../stores";
-  import type { Scheme } from "../types";
+  import type { Scheme, Schema } from "../types";
 
   export let authorityName: string;
-  export let planningMode: boolean;
+  export let schema: Schema;
 
   let baseFilename = authorityName;
-  if (planningMode) {
-    baseFilename += "_planning";
+  if (schema != "v1") {
+    baseFilename += `_${schema}`;
   }
 
   // Set up local storage sync
