@@ -2,7 +2,7 @@
   "name": "Route",
   "members": [
     {
-      "name": "name",
+      "name": "Intervention name",
       "type": "one-liner"
     },
     {
