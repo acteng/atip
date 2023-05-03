@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { InterventionProps } from "../types";
+  import type { InterventionProps } from "../../types";
 
   export let props: InterventionProps;
 

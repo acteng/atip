@@ -1,4 +1,5 @@
 import type { Point, LineString, Polygon } from "geojson";
+import type { Route } from "./schemas/v2_route";
 
 export type Schema = "v1" | "v2" | "planning";
 
@@ -42,7 +43,7 @@ export interface InterventionProps {
 
   // TODO Hack. If these're filled out, ignore the schema above.
   planning?: PlanningProps;
-  v2?: V2Props;
+  v2?: Route;
 
   // Temporary state, not meant to be serialized
   hide_while_editing?: boolean;
@@ -63,11 +64,6 @@ export interface PlanningProps {
     | "Deferral"
     | "Approve subject to conditions and/or obligations"
     | "Refusal";
-}
-
-// v2 schema
-export interface V2Props {
-  name: string;
 }
 
 export interface Waypoint {
