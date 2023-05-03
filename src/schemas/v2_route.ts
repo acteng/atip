@@ -22,7 +22,7 @@ export type RouteType = OnRoad | OffRoad;
 export type OffRoad = "ThroughPark" | "CanalTowpath";
 
 export interface OnRoad {
-  Type?: Type;
+  OnRoadType?: OnRoadType;
   SourceOfSpace?: SourceOfSpace;
 }
 
@@ -32,7 +32,7 @@ export type SourceOfSpace =
   | "PavementDiet"
   | "ReallocateVerge";
 
-export type Type =
+export type OnRoadType =
   | "FullSeparation"
   | "Stepped"
   | "PartSeparation"

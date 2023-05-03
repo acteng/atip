@@ -12,7 +12,7 @@
           "name": "OnRoad",
           "members": [
             {
-              "name": "Type",
+              "name": "OnRoadType",
               "oneOf": [
                 "FullSeparation",
                 "Stepped",

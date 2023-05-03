@@ -12,6 +12,9 @@
     if (schema == "planning") {
       return feature.properties.planning?.name || "Untitled polygon";
     }
+    if (schema == "v2" && feature.properties.v2?.name) {
+      return feature.properties.v2.name;
+    }
 
     if (feature.properties.name) {
       return feature.properties.name;
