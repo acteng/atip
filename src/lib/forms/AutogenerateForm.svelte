@@ -1,6 +1,13 @@
 <script lang="ts">
   import { slide } from "svelte/transition";
-  import { type Field, isStruct, isEnum, isNumber, isOneLiner } from "./types";
+  import {
+    type Field,
+    isStruct,
+    isEnum,
+    isNumber,
+    isOneLiner,
+    isTextbox,
+  } from "./types";
 
   // This component creates a form to collect the property described by spec, and put the result in value
   export let spec: Field;
@@ -11,7 +18,7 @@
   if (isStruct(spec)) {
     value ||= {};
     for (let member of spec.members) {
-      if (isOneLiner(member)) {
+      if (isOneLiner(member) || isTextbox(member)) {
         value[member.name] ||= "";
       } else {
         value[member.name] ||= {};
@@ -19,7 +26,7 @@
     }
   } else if (isEnum(spec)) {
     value ||= {};
-    oneOfCase = Object.keys(value)[0] || "";
+    oneOfCase = typeof value == "string" ? value : Object.keys(value)[0] || "";
   }
 
   function stringOneOf() {
@@ -74,11 +81,17 @@
   <input type="number" bind:value />
 {:else if isOneLiner(spec)}
   <input type="text" bind:value style="width: 100%" />
+{:else if isTextbox(spec)}
+  <textarea bind:value style="width: 100%" rows="5" />
 {/if}
 
 <style>
   div {
     border: solid 1px black;
     padding: 10px;
+  }
+
+  textarea {
+    resize: none;
   }
 </style>

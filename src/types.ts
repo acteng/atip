@@ -1,5 +1,6 @@
 import type { Point, LineString, Polygon } from "geojson";
 import type { Route } from "./schemas/v2_route";
+import type { Planning } from "./schemas/planning";
 
 export type Schema = "v1" | "v2" | "planning";
 
@@ -42,28 +43,11 @@ export interface InterventionProps {
   waypoints?: Waypoint[];
 
   // TODO Hack. If these're filled out, ignore the schema above.
-  planning?: PlanningProps;
+  planning?: Planning;
   v2?: Route;
 
   // Temporary state, not meant to be serialized
   hide_while_editing?: boolean;
-}
-
-// planning schema
-export interface PlanningProps {
-  name: string;
-  notes: string;
-  reference_type: "preapp" | "outline" | "reserved matters" | "local plan";
-  size: number;
-  size_units: "number of units" | "floorspace" | "area";
-  triage: "No Comment" | "Standing Advice" | "Toolkit Assessment";
-  recommendation:
-    | "No Comment"
-    | "No Objection"
-    | "Standing Advice"
-    | "Deferral"
-    | "Approve subject to conditions and/or obligations"
-    | "Refusal";
 }
 
 export interface Waypoint {

@@ -1,7 +1,12 @@
 // These types describe ATIP's bespoke JSON format for defining schemas.
 
 // A Field is one property collected by form about an intervention
-export type Field = Struct | Enum | NumberInput | OneLineTextInput;
+export type Field =
+  | Struct
+  | Enum
+  | NumberInput
+  | OneLineTextInput
+  | TextboxInput;
 
 // A Struct has multiple sub-fields
 export interface Struct {
@@ -29,6 +34,12 @@ export interface OneLineTextInput {
   type: "one-liner";
 }
 
+// TextboxInput specifies a text property that should appear as a multi-line text box
+export interface TextboxInput {
+  name: string;
+  type: "textbox";
+}
+
 export function isStruct(x: Field): x is Struct {
   return "members" in x;
 }
@@ -40,4 +51,7 @@ export function isNumber(x: Field): x is NumberInput {
 }
 export function isOneLiner(x: Field): x is OneLineTextInput {
   return "type" in x && x.type == "one-liner";
+}
+export function isTextbox(x: Field): x is TextboxInput {
+  return "type" in x && x.type == "textbox";
 }

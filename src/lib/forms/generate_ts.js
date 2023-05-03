@@ -29,10 +29,12 @@ function generate(field) {
       if ("type" in member) {
         if (member.type == "number") {
           console.log(`  ${member.name}?: number;`);
-        } else if (member.type == "one-liner") {
+        } else if (member.type == "one-liner" || member.type == "textbox") {
           console.log(`  ${member.name}?: string;`);
         }
       } else {
+        // TODO If it's an enum with all string cases, do we want another
+        // explicitly named type or not?
         queue.push(member);
         console.log(`  ${member.name}?: ${member.name};`);
       }

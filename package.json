@@ -10,7 +10,7 @@
     "fmt": "npx prettier --write *.html tests/* src/*",
     "test": "npx playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "generate-schema-ts": "npx node src/lib/forms/generate_ts.js src/schemas/v2_route.json > src/schemas/v2_route.ts"
+    "generate-schema-ts": "npx node src/lib/forms/generate_ts.js src/schemas/v2_route.json > src/schemas/v2_route.ts && npx node src/lib/forms/generate_ts.js src/schemas/planning.json > src/schemas/planning.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.31.2",
