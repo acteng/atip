@@ -2,12 +2,12 @@
   import { slide } from "svelte/transition";
   import type { Field } from "./types";
 
+  // This component creates a form to collect the property described by spec, and put the result in value
   export let spec: Field;
   export let value;
 
-  // Blank out stuff if needed
+  // Blank out initial values if needed
   let oneOfCase = "";
-
   if (typeof spec == "string") {
   } else if ("members" in spec) {
     value ||= {};
@@ -36,7 +36,7 @@
   <h1>Error: Field component instantiated for plain string, why? {spec}</h1>
 {:else if "members" in spec}
   {#each spec.members as x}
-    <div style="border: solid 1px black; padding: 10px">
+    <div>
       <h3>{x.name}</h3>
       <svelte:self spec={x} bind:value={value[x.name]} />
     </div>
@@ -65,10 +65,7 @@
       </label>
 
       {#if oneOfCase == x.name && typeof value == "object"}
-        <div
-          style="border: solid 1px black; padding: 10px"
-          transition:slide={{ duration: 500 }}
-        >
+        <div transition:slide={{ duration: 500 }}>
           <svelte:self spec={x} bind:value={value[x.name]} />
         </div>
       {/if}
@@ -79,3 +76,10 @@
 {:else if spec.type == "one-liner"}
   <input type="text" bind:value style="width: 100%" />
 {/if}
+
+<style>
+  div {
+    border: solid 1px black;
+    padding: 10px;
+  }
+</style>

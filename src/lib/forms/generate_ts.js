@@ -1,16 +1,22 @@
 import { argv } from "node:process";
 import * as fs from "fs";
 
+// This script transforms a schema expressed in JSON into TypeScript types
+
 let schema = JSON.parse(fs.readFileSync(argv[2], { encoding: "utf8" }));
+// Queue contains all of the types to generate
 let queue = [schema];
 let seen = new Set();
 
+console.log(`// This file is auto-generated; do not manually edit\n`);
 while (queue.length > 0) {
   generate(queue.pop());
 }
 
 function generate(field) {
   if (seen.has(field.name)) {
+    // We could also generate more detailed type names based on the nesting,
+    // but this seems confusing
     throw new Error(`The schema uses ${field.name} as a type name twice`);
   }
   seen.add(field.name);

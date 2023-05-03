@@ -1,3 +1,5 @@
+// This file is auto-generated; do not manually edit
+
 export interface Route {
   name?: string;
   RouteType?: RouteType;
