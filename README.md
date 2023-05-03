@@ -67,3 +67,9 @@ Interactions on the map are split into distinct and exclusive modes. `Toolbox.sv
 Be very careful with [reactive statements](https://svelte.dev/tutorial/reactive-statements) and modifying `mode` directly. Instead, use `changeMode`, which will call the previous mode's `stop()` and the new's `start()`. The modes share some underlying stateful (and not Svelte-friendly) objects (`point_tool`, `polygon_tool`, and `route-snapper`), and managing these objects and listening to events can get tricky, especially in the middle of switching modes. See [this article](https://blog.thoughtspile.tech/2023/04/22/svelte-state/) to understand Svelte reactive statements better.
 
 TODO: Draw the finite state machine for modes
+
+### Schemas
+
+It's helpful to think of ATIP as a somewhat generic data entry system. Per object ("intervention") drawn on the map, the app has a form to collect properties about the object. Multiple schemas are supported -- v1, v2, and planning are some examples.
+
+At the time of writing, v1 and planning are manually implemented in the form of TypeScript types and a Svelte component for the form. v2 is auto-generated from `src/schemas/v2_route.json`. There's a generic Svelte component that can auto-generate a form from this schema, and `npm run generate-schema-ts` auto-generates the TypeScript types. `v2_route.json` is written in a bespoke format; see code for more details.
