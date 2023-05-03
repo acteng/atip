@@ -28,3 +28,16 @@ export interface OneLineTextInput {
   name: string;
   type: "one-liner";
 }
+
+export function isStruct(x: Field): x is Struct {
+  return "members" in x;
+}
+export function isEnum(x: Field): x is Enum {
+  return "oneOf" in x;
+}
+export function isNumber(x: Field): x is NumberInput {
+  return "type" in x && x.type == "number";
+}
+export function isOneLiner(x: Field): x is OneLineTextInput {
+  return "type" in x && x.type == "one-liner";
+}

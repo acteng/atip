@@ -1,6 +1,6 @@
 <script lang="ts">
   import { slide } from "svelte/transition";
-  import type { Field } from "./types";
+  import { type Field, isStruct, isEnum, isNumber, isOneLiner } from "./types";
 
   // This component creates a form to collect the property described by spec, and put the result in value
   export let spec: Field;
@@ -8,17 +8,16 @@
 
   // Blank out initial values if needed
   let oneOfCase = "";
-  if (typeof spec == "string") {
-  } else if ("members" in spec) {
+  if (isStruct(spec)) {
     value ||= {};
     for (let member of spec.members) {
-      if ("type" in member && member.type == "one-liner") {
+      if (isOneLiner(member)) {
         value[member.name] ||= "";
       } else {
         value[member.name] ||= {};
       }
     }
-  } else if ("oneOf" in spec) {
+  } else if (isEnum(spec)) {
     value ||= {};
     oneOfCase = Object.keys(value)[0] || "";
   }
@@ -34,14 +33,14 @@
 
 {#if typeof spec == "string"}
   <h1>Error: Field component instantiated for plain string, why? {spec}</h1>
-{:else if "members" in spec}
+{:else if isStruct(spec)}
   {#each spec.members as x}
     <div>
       <h3>{x.name}</h3>
       <svelte:self spec={x} bind:value={value[x.name]} />
     </div>
   {/each}
-{:else if "oneOf" in spec}
+{:else if isEnum(spec)}
   {#each spec.oneOf as x}
     {#if typeof x == "string"}
       <label>
@@ -71,9 +70,9 @@
       {/if}
     {/if}
   {/each}
-{:else if spec.type == "number"}
+{:else if isNumber(spec)}
   <input type="number" bind:value />
-{:else if spec.type == "one-liner"}
+{:else if isOneLiner(spec)}
   <input type="text" bind:value style="width: 100%" />
 {/if}
 

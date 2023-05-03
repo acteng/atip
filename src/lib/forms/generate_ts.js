@@ -21,6 +21,7 @@ function generate(field) {
   }
   seen.add(field.name);
 
+  // TODO Use isStruct and co, after this script is TS and not JS
   if ("members" in field) {
     // Struct
     console.log(`export interface ${field.name} {`);
