@@ -6,7 +6,8 @@ export type Field =
   | Enum
   | NumberInput
   | OneLineTextInput
-  | TextboxInput;
+  | TextboxInput
+  | CheckboxInput;
 
 // A Struct has multiple sub-fields
 export interface Struct {
@@ -40,6 +41,12 @@ export interface TextboxInput {
   type: "textbox";
 }
 
+// CheckboxInput specifies a boolean property
+export interface CheckboxInput {
+  name: string;
+  type: "checkbox";
+}
+
 export function isStruct(x: Field): x is Struct {
   return "members" in x;
 }
@@ -54,4 +61,7 @@ export function isOneLiner(x: Field): x is OneLineTextInput {
 }
 export function isTextbox(x: Field): x is TextboxInput {
   return "type" in x && x.type == "textbox";
+}
+export function isCheckbox(x: Field): x is CheckboxInput {
+  return "type" in x && x.type == "checkbox";
 }

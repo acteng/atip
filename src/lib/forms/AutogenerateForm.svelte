@@ -7,6 +7,7 @@
     isNumber,
     isOneLiner,
     isTextbox,
+    isCheckbox,
   } from "./types";
 
   // This component creates a form to collect the property described by spec, and put the result in value
@@ -20,6 +21,8 @@
     for (let member of spec.members) {
       if (isOneLiner(member) || isTextbox(member)) {
         value[member.name] ||= "";
+      } else if (isCheckbox) {
+        value[member.name] ||= false;
       } else {
         value[member.name] ||= {};
       }
@@ -83,6 +86,8 @@
   <input type="text" bind:value style="width: 100%" />
 {:else if isTextbox(spec)}
   <textarea bind:value style="width: 100%" rows="5" />
+{:else if isCheckbox(spec)}
+  <input type="checkbox" bind:checked={value} />
 {/if}
 
 <style>

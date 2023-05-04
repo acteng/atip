@@ -12,8 +12,12 @@
     if (schema == "planning") {
       return feature.properties.planning?.name || "Untitled polygon";
     }
-    if (schema == "v2" && feature.properties.v2?.name) {
-      return feature.properties.v2.name;
+    if (schema == "v2") {
+      return (
+        feature.properties.v2?.Route?.name ||
+        feature.properties.v2?.Crossing?.name ||
+        "Untitled intervention"
+      );
     }
 
     if (feature.properties.name) {

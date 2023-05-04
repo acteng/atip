@@ -31,6 +31,10 @@ function generate(field) {
           console.log(`  ${member.name}?: number;`);
         } else if (member.type == "one-liner" || member.type == "textbox") {
           console.log(`  ${member.name}?: string;`);
+        } else if (member.type == "checkbox") {
+          console.log(`  ${member.name}?: boolean;`);
+        } else {
+          throw new Error(`Unknown field type ${member.type}`);
         }
       } else {
         // TODO If it's an enum with all string cases, do we want another
