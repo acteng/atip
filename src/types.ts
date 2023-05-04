@@ -1,8 +1,9 @@
 import type { Point, LineString, Polygon } from "geojson";
 import type { Intervention } from "./schemas/v2";
 import type { Planning } from "./schemas/planning";
+import type { CriticalIssue } from "./schemas/criticals";
 
-export type Schema = "v1" | "v2" | "planning";
+export type Schema = "v1" | "v2" | "planning" | "criticals";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
@@ -45,6 +46,7 @@ export interface InterventionProps {
   // TODO Hack. If these're filled out, ignore the schema above.
   planning?: Planning;
   v2?: Intervention;
+  criticals?: CriticalIssue;
 
   // Temporary state, not meant to be serialized
   hide_while_editing?: boolean;

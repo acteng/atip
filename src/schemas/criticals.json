@@ -1,0 +1,78 @@
+{
+  "name": "CriticalIssue",
+  "members": [
+    {
+      "name": "Type",
+      "oneOf": [
+        {
+          "value": "Conflict with motor traffic at side roads / priority junctions",
+          "description": ">2500vpd cut across main cycling or walking streams"
+        },
+        {
+          "value": "Conflict with motor traffic at signal controlled junctions and roundabouts",
+          "description": ">2500vpd cut across main cycling or walking streams"
+        },
+        {
+          "value": "Collision alongside or from behind",
+          "description": "Cyclists are not protected in traffic lanes between 3.25 and 3.9m wide."
+        },
+        {
+          "value": "Trip hazard",
+          "description": "There are level differences of greater than 20mm with no colour contrast to help identify them."
+        },
+        {
+          "value": "Conflict with kerbside activity (parking, loading, risk of 'dooring') ",
+          "description": "Cycle facility next to parking/loading with no buffer."
+        },
+        {
+          "value": "Kerbside activity or risk of crossing conflict",
+          "description": "On busy roads (>8000vpd) formal crossings are more than 400m apart. On quieter roads (<8000vpd), desire lines are blocked by parking and loading."
+        },
+        {
+          "value": "Standard of crossing facility",
+          "description": "On busy roads (>8000vpd), there are uncontrolled crossings of two or more lanes with no gaps in traffic. At signal junctions there are arms with no green man for pedestrians."
+        },
+        {
+          "value": "Speed of traffic (where cyclists are not separated or pedestrians crossing uncontrolled)",
+          "description": "85th percentile > 37mph (60kph)"
+        },
+        {
+          "value": "Total volume of traffic (where cyclists are not separated or pedestrians cross uncontrolled)",
+          "description": ">10000 vpd. >5% of traffic is HGVs."
+        },
+        {
+          "value": "Required crossing speed (risk of pedestrians coming into conflict with traffic)",
+          "description": "Pedestrians must cross at a speed of over 1.2m/s to get across the crossing in time."
+        },
+        {
+          "value": "Clear walking spaces free of obstructions and furniture, reducing risk of pedestrians walking in the carriageway.",
+          "description": "<1.5m clear footway width. Or, 1.5m-2m clear footway width and pedestrian comfort is poor (PCL of D-E)."
+        },
+        {
+          "value": "Effective width next to tram line on a straight run",
+          "description": "<2.4m from tramline edge to kerb."
+        },
+        {
+          "value": "Crossing angle (between cyclist desire line and tram tracks)",
+          "description": "Crossing angle less than 60 degrees."
+        },
+        {
+          "value": "Defects: non cycle friendly ironworks, raised/ sunken covers/gullies",
+          "description": "Major defects"
+        },
+        {
+          "value": "Defects: non flush tables, misleading tactile information, cracked paving, slip-risks present from covers, steep slopes",
+          "description": "Major defects"
+        }
+      ]
+    },
+    {
+      "name": "comment",
+      "type": "textbox"
+    },
+    {
+      "name": "photographed",
+      "type": "checkbox"
+    }
+  ]
+}
