@@ -13,17 +13,22 @@
           "oneOf": [
             {
               "name": "OnRoad",
+              "description": "Directly on or parallel to the carriageway",
               "members": [
                 {
                   "name": "OnRoadType",
                   "oneOf": [
                     "FullSeparation",
-                    "Stepped",
+                    {
+                      "value": "Stepped",
+                      "description": "Raised above the road, but below the footway. Only appropriate on roads with speeds under 30 mph."
+                    },
                     "PartSeparation",
                     "MandatoryLane",
                     "AdvisoryLane",
                     {
                       "name": "NoSeparation",
+                      "description": "If there's no physical separation between the road, why not? Justify why separation is unnecessary.",
                       "oneOf": ["TrafficCalming", "ModalFilters", "LowSpeed"]
                     }
                   ]
@@ -92,6 +97,7 @@
                 },
                 {
                   "name": "MaxTimeWaitingForGreen",
+                  "description": "After activating the signal, what is the maximum time somebody will wait before getting a green light? (seconds)",
                   "type": "number"
                 },
                 {

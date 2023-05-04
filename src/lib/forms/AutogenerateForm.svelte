@@ -4,6 +4,8 @@
     type Field,
     isStruct,
     isEnum,
+    isBarewordEnumCase,
+    isSimpleEnumCase,
     isNumber,
     isOneLiner,
     isTextbox,
@@ -29,7 +31,13 @@
     }
   } else if (isEnum(spec)) {
     value ||= {};
-    oneOfCase = typeof value == "string" ? value : Object.keys(value)[0] || "";
+    if (isBarewordEnumCase(value)) {
+      oneOfCase = value;
+    } else if (isSimpleEnumCase(value)) {
+      oneOfCase = value.value;
+    } else {
+      oneOfCase = Object.keys(value)[0] || "";
+    }
   }
 
   function stringOneOf() {
@@ -41,9 +49,11 @@
   }
 </script>
 
-{#if typeof spec == "string"}
-  <h1>Error: Field component instantiated for plain string, why? {spec}</h1>
-{:else if isStruct(spec)}
+{#if spec.description}
+  <p>{spec.description}</p>
+{/if}
+
+{#if isStruct(spec)}
   {#each spec.members as x}
     <div>
       <h3>{x.name}</h3>
@@ -52,7 +62,7 @@
   {/each}
 {:else if isEnum(spec)}
   {#each spec.oneOf as x}
-    {#if typeof x == "string"}
+    {#if isBarewordEnumCase(x)}
       <label>
         <input
           type="radio"
@@ -60,7 +70,23 @@
           on:change={stringOneOf}
           value={x}
         />
-        {x}<br />
+        {x}
+        <br />
+      </label>
+    {:else if isSimpleEnumCase(x)}
+      <label>
+        <input
+          type="radio"
+          bind:group={oneOfCase}
+          on:change={stringOneOf}
+          value={x.value}
+        />
+        {x.value}
+        {#if x.description}
+          <p>({x.description})</p>
+        {:else}
+          <br />
+        {/if}
       </label>
     {:else}
       <label>
@@ -94,6 +120,10 @@
   div {
     border: solid 1px black;
     padding: 10px;
+  }
+
+  p {
+    font-style: italic;
   }
 
   textarea {
