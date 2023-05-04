@@ -89,9 +89,9 @@
     <label>
       ATIP schema:
       <select bind:value={schema} on:change={changeSchema}>
-        <option value="v1">Design (v1)</option>
-        <option value="v2">Design (v2)</option>
-        <option value="planning">Planning</option>
+        <option value="v1">v1</option>
+        <option value="v2">v2</option>
+        <option value="planning">Housing developments</option>
       </select>
     </label>
   </div>
