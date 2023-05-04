@@ -21,7 +21,7 @@
     for (let member of spec.members) {
       if (isOneLiner(member) || isTextbox(member)) {
         value[member.name] ||= "";
-      } else if (isCheckbox) {
+      } else if (isCheckbox(member)) {
         value[member.name] ||= false;
       } else {
         value[member.name] ||= {};
