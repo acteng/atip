@@ -5,6 +5,8 @@ import {
   type Field,
   isStruct,
   isEnum,
+  isBarewordEnumCase,
+  isSimpleEnumCase,
   isOneLiner,
   isTextbox,
   isNumber,
@@ -53,8 +55,10 @@ function generate(field: Field) {
   } else if (isEnum(field)) {
     let cases = [];
     for (let x of field.oneOf) {
-      if (typeof x == "string") {
+      if (isBarewordEnumCase(x)) {
         cases.push(`"${x}"`);
+      } else if (isSimpleEnumCase(x)) {
+        cases.push(`"${x.value}"`);
       } else {
         cases.push(x.name);
         queue.push(x);
