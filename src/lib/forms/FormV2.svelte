@@ -1,5 +1,5 @@
 <script lang="ts">
-  import schemaJson from "../../schemas/v2_route.json";
+  import schemaJson from "../../schemas/v2.json";
   import AutogenerateForm from "./AutogenerateForm.svelte";
   import type { Field } from "./types";
   import type { InterventionProps } from "../../types";

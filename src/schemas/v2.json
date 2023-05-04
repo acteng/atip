@@ -1,0 +1,139 @@
+{
+  "name": "Intervention",
+  "oneOf": [
+    {
+      "name": "Route",
+      "members": [
+        {
+          "name": "name",
+          "type": "one-liner"
+        },
+        {
+          "name": "RouteType",
+          "oneOf": [
+            {
+              "name": "OnRoad",
+              "members": [
+                {
+                  "name": "OnRoadType",
+                  "oneOf": [
+                    "FullSeparation",
+                    "Stepped",
+                    "PartSeparation",
+                    "MandatoryLane",
+                    "AdvisoryLane",
+                    {
+                      "name": "NoSeparation",
+                      "oneOf": ["TrafficCalming", "ModalFilters", "LowSpeed"]
+                    }
+                  ]
+                },
+                {
+                  "name": "SourceOfSpace",
+                  "oneOf": [
+                    "ReallocateEntireLane",
+                    "RoadDiet",
+                    "PavementDiet",
+                    "ReallocateVerge"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "OffRoad",
+              "oneOf": ["ThroughPark", "CanalTowpath"]
+            }
+          ]
+        },
+        {
+          "name": "Users",
+          "oneOf": [
+            "Footpath",
+            "Cyclepath",
+            "SharedUseNoSeparation",
+            {
+              "name": "SharedUseWithSeparation",
+              "members": [
+                {
+                  "name": "width_footpath",
+                  "type": "number"
+                },
+                {
+                  "name": "width_cyclepath",
+                  "type": "number"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Crossing",
+      "members": [
+        {
+          "name": "name",
+          "type": "one-liner"
+        },
+        {
+          "name": "CrossingType",
+          "oneOf": [
+            "Zebra",
+            {
+              "name": "Signalised",
+              "members": [
+                {
+                  "name": "SignalisedCrossingType",
+                  "oneOf": ["Puffin", "Toucan", "Pegasus"]
+                },
+                {
+                  "name": "CrossingActivation",
+                  "oneOf": ["PressButton", "InductionLoop", "FixedTimer"]
+                },
+                {
+                  "name": "MaxTimeWaitingForGreen",
+                  "type": "number"
+                },
+                {
+                  "name": "GreenDuration",
+                  "type": "number"
+                }
+              ]
+            },
+            "SchoolCrossing",
+            "Refuge",
+            {
+              "name": "GradeSeparated",
+              "members": [
+                {
+                  "name": "GradeSeparatedType",
+                  "oneOf": ["Bridge", "Tunnel"]
+                },
+                {
+                  "name": "AccessRamp",
+                  "type": "checkbox"
+                },
+                {
+                  "name": "Steps",
+                  "type": "checkbox"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "MatchesDesireLine",
+          "type": "checkbox"
+        },
+        {
+          "name": "MotorTrafficFlow",
+          "oneOf": ["> 8000", "3000 - 8000", "< 3000"]
+        },
+        {
+          "name": "MotorTrafficSpeed",
+          "oneOf": ["> 30 mph", "20 - 30 mph", "< 20 mph"]
+        }
+      ]
+    }
+  ]
+}
