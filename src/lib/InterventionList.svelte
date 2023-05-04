@@ -3,6 +3,7 @@
   import FormV1 from "./forms/FormV1.svelte";
   import FormV2 from "./forms/FormV2.svelte";
   import PlanningForm from "./forms/PlanningForm.svelte";
+  import CriticalsForm from "./forms/CriticalsForm.svelte";
   import AccordionItem from "./AccordionItem.svelte";
   import { gjScheme, formOpen, deleteIntervention } from "../stores";
 
@@ -71,6 +72,8 @@
       <FormV2 bind:props={feature.properties} />
     {:else if schema == "planning"}
       <PlanningForm bind:props={feature.properties} />
+    {:else if schema == "criticals"}
+      <CriticalsForm bind:props={feature.properties} />
     {/if}
 
     <br />

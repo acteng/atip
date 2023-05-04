@@ -10,7 +10,7 @@
     "fmt": "npx prettier --write *.html tests/* src/*",
     "test": "npx playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "generate-schema-ts": "npx ts-node --project tsconfig_tsnode.json --esm src/lib/forms/generate_ts.ts src/schemas/v2.json > src/schemas/v2.ts && npx ts-node --project tsconfig_tsnode.json --esm src/lib/forms/generate_ts.ts src/schemas/planning.json > src/schemas/planning.ts"
+    "generate-schema-ts": "for x in v2 planning criticals; do npx ts-node --project tsconfig_tsnode.json --esm src/lib/forms/generate_ts.ts src/schemas/$x.json > src/schemas/$x.ts; done"
   },
   "devDependencies": {
     "@playwright/test": "1.31.2",

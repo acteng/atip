@@ -92,6 +92,7 @@
         <option value="v1">v1</option>
         <option value="v2">v2</option>
         <option value="planning">Housing developments</option>
+        <option value="criticals">Critical issues</option>
       </select>
     </label>
   </div>
