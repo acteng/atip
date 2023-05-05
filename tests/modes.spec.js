@@ -2,9 +2,6 @@ import { readFile } from "fs/promises";
 import { test, expect } from "@playwright/test";
 
 test("clearing all while a feature is open works", async ({ page }) => {
-  // TODO Fix the bug!
-  test.fail();
-
   await page.goto("/scheme.html?authority=North Somerset");
   await page.getByRole("button", { name: "New point" }).click();
   await page.getByRole("region", { name: "Map" }).click({
