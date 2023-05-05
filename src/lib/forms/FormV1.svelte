@@ -1,8 +1,10 @@
 <script lang="ts">
   import { gjScheme } from "../../stores";
-  import type { Helper } from "abst_helper";
+  import { type Worker } from "../../worker";
+  import type { Feature, LineString } from "geojson";
+  import { type Remote } from "comlink";
 
-  export let helper: Helper;
+  export let helper: Remote<Worker>;
   export let id: number;
   export let name: string;
   export let intervention_type: "area" | "route" | "crossing" | "other";
@@ -16,10 +18,12 @@
     return (x / 1000.0).toFixed(1) + "km";
   }
 
-  function autoFillDetails() {
-    let linestring = $gjScheme.features.find((f) => f.id == id);
+  async function autoFillDetails() {
+    let linestring = $gjScheme.features.find(
+      (f) => f.id == id
+    ) as Feature<LineString>;
     try {
-      name = helper.nameForRoute(linestring);
+      name = await helper.nameForRoute(linestring);
     } catch (e) {
       window.alert(`Couldn't auto-name route: ${e}`);
     }

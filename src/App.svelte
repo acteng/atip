@@ -3,8 +3,10 @@
   import { onMount } from "svelte";
   import authoritiesUrl from "../assets/authorities.geojson?url";
   import type { Schema } from "./types";
-  import init, { Helper } from "abst_helper";
   import bristolUrl from "../assets/bristol.bin?url";
+  import * as Comlink from "comlink";
+  import workerWrapper from "./worker?worker";
+  import { type Worker } from "./worker";
 
   import About from "./lib/About.svelte";
   import Instructions from "./lib/Instructions.svelte";
@@ -44,7 +46,7 @@
     routeUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
   }
 
-  let helper: Helper = null;
+  let helper: Comlink.Remote<Worker>;
 
   function toggleAbout() {
     showAbout = !showAbout;
@@ -59,13 +61,24 @@
   onMount(async () => {
     boundaryGeojson = await loadAuthorityBoundary();
 
-    await init();
+    // If you get "import declarations may only appear at top level of a
+    // module", then you need a newer browser.
+    // https://caniuse.com/mdn-api_worker_worker_ecmascript_modules
+    //
+    // In Firefox 112, go to about:config and enable dom.workers.modules.enabled
+    //
+    // Note this should work fine in older browsers when doing 'npm run build'.
+    // It's only a problem during local dev mode.
+    interface WorkerConstructor {
+      new (): Worker;
+    }
+
+    const MyWorker: Comlink.Remote<WorkerConstructor> = Comlink.wrap(
+      new workerWrapper()
+    );
+    helper = await new MyWorker();
     // TODO Like the route snapper, vary the URL of this
-    console.log(`Grabbing tmp abstreet map data from ${bristolUrl}`);
-    let resp = await fetch(bristolUrl);
-    let mapBytes = await resp.arrayBuffer();
-    helper = new Helper(new Uint8Array(mapBytes));
-    console.log(`Helper is ready!`);
+    await helper.loadFile(bristolUrl);
   });
 
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
