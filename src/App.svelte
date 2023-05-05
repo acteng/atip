@@ -3,6 +3,8 @@
   import { onMount } from "svelte";
   import authoritiesUrl from "../assets/authorities.geojson?url";
   import type { Schema } from "./types";
+  import init, { Helper } from "abst_helper";
+  import bristolUrl from "../assets/bristol.bin?url";
 
   import About from "./lib/About.svelte";
   import Instructions from "./lib/Instructions.svelte";
@@ -42,6 +44,8 @@
     routeUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
   }
 
+  let helper: Helper = null;
+
   function toggleAbout() {
     showAbout = !showAbout;
     showInstructions = false;
@@ -54,6 +58,14 @@
   let boundaryGeojson: FeatureCollection<Polygon>;
   onMount(async () => {
     boundaryGeojson = await loadAuthorityBoundary();
+
+    await init();
+    // TODO Like the route snapper, vary the URL of this
+    console.log(`Grabbing tmp abstreet map data from ${bristolUrl}`);
+    let resp = await fetch(bristolUrl);
+    let mapBytes = await resp.arrayBuffer();
+    helper = new Helper(new Uint8Array(mapBytes));
+    console.log(`Helper is ready!`);
   });
 
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
@@ -100,7 +112,7 @@
     <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
     <EntireScheme {authorityName} {schema} />
     <br />
-    <InterventionList {schema} />
+    <InterventionList {schema} {helper} />
   </div>
   <div slot="main">
     <Map {style}>

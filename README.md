@@ -27,9 +27,13 @@ The stack:
   snapped to existing roads
 
 You'll need
-[npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). Run
-`npm install` once. Use `npm run dev` to work locally. To auto-format code,
-`npm run fmt`. To see TypeScript errors, `npm run check`.
+[npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+
+- `npm install` to install dependencies
+- `npm run dev` to work locally
+- `npm run wasm` to rebuild the `abst_helper` Rust library (you'll need [wasm-pack](https://github.com/rustwasm/wasm-pack))
+- `npm run fmt` to auto-format code
+- `npm run check` to see TypeScript errors
 
 ### Monkey-patching dependencies
 
