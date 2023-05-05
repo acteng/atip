@@ -6,10 +6,11 @@
   import CriticalsForm from "./forms/CriticalsForm.svelte";
   import AccordionItem from "./AccordionItem.svelte";
   import { gjScheme, formOpen, deleteIntervention } from "../stores";
-  import type { Helper } from "abst_helper";
+  import { type Remote } from "comlink";
+  import { type Worker } from "../worker";
 
   export let schema: Schema;
-  export let helper: Helper;
+  export let helper: Remote<Worker>;
 
   function interventionName(feature: FeatureUnion): string {
     if (schema == "planning") {
