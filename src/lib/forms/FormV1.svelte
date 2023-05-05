@@ -1,4 +1,9 @@
 <script lang="ts">
+  import { gjScheme } from "../../stores";
+  import type { Helper } from "abst_helper";
+
+  export let helper: Helper;
+  export let id: number;
   export let name: string;
   export let intervention_type: "area" | "route" | "crossing" | "other";
   export let description: string;
@@ -9,6 +14,15 @@
       return Math.round(x) + " m";
     }
     return (x / 1000.0).toFixed(1) + "km";
+  }
+
+  function autoFillDetails() {
+    let linestring = $gjScheme.features.find((f) => f.id == id);
+    try {
+      name = helper.nameForRoute(linestring);
+    } catch (e) {
+      window.alert(`Couldn't auto-name route: ${e}`);
+    }
   }
 </script>
 
@@ -47,6 +61,9 @@
 
 {#if length_meters}
   Length: {prettyPrintMeters(length_meters)}
+  <br /><button type="button" on:click={() => autoFillDetails()}
+    >Auto-fill details</button
+  >
 {/if}
 
 <style>
