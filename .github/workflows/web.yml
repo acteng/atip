@@ -15,24 +15,29 @@ jobs:
           fetch-depth: 0
 
       - name: Install node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18.x
           cache: 'npm'
 
-      - name: Build main branch
+      - name: Build all branches
         run: |
-          npm ci
-          npm run build --if-present -- --base=/atip/
-          mv dist deployme
-
-      - name: Build all other branches
-        run: |
-          for branch in $(git branch -r | grep -vE "origin/(main|gh-pages)" | sed 's/origin\///'); do
+          mkdir deployme
+          for branch in $(git branch -r | grep -vE "origin/gh-pages" | sed 's/origin\///'); do
             echo "Building $branch"
             git checkout $branch
-            if npm ci && npm run build --if-present -- --base=/atip/$branch; then
-              mv dist deployme/$branch
+            if [ "$branch" == "main" ]; then
+              base=/atip/
+            else
+              base=/atip/$branch
+            fi
+
+            if npm ci && npm run build --if-present -- --base=$base; then
+              if [ "$branch" == "main" ]; then
+                mv dist/* deployme
+              else
+                mv dist deployme/$branch
+              fi
             else
               echo "Building $branch broke; skipping"
             fi
