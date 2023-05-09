@@ -66,8 +66,8 @@ Simple state is isolated to a component when possible. Most of the app-wide stat
 - The `gjScheme` store is the source-of-truth GeoJSON for the current data. It's automatically synced to local storage.
   - Feature IDs are unique, numeric, and always start at 1. See `newFeatureId`. They are **not** stable over time; if you load a file or refresh the page and load from local storage, some of the IDs may adjust.
   - Each feature has 3 simple fields -- `name`, `description`, and `intervention_type` (`area`, `route`, `crossing`, `other`). Anything produced by the route tool will also have `length_meters`, `waypoints`.
+  - Depending on the schema in use, the feature has other nested properties like `v2` and `planning`. This is in flux; the v1 fields above may be reorganized.
   - `InterventionLayer` renders these "finalized" features.
-  - The `editing` property is temporarily set in `gjScheme` to indicate that a feature is having its attributes edited. The form in the sidebar should be open. There's a derived store `currentlyEditing` and a `setCurrentlyEditing` that should generally be used, instead of manipulating this property directly.
   - When editing geometry of a feature, the `hide_while_editing` property is set. `InterventionLayer` skips drawing these, so something else can draw the actively-being-modified state.
 
 TODO: Visualize the component tree, and how props flow up and down, maybe with [svelte-sight](https://github.com/oslabs-beta/svelte-sight/)
@@ -84,4 +84,4 @@ TODO: Draw the finite state machine for modes
 
 It's helpful to think of ATIP as a somewhat generic data entry system. Per object ("intervention") drawn on the map, the app has a form to collect properties about the object. Multiple schemas are supported -- v1, v2, and planning are some examples.
 
-At the time of writing, v1 and planning are manually implemented in the form of TypeScript types and a Svelte component for the form. v2 is auto-generated from `src/schemas/v2_route.json`. There's a generic Svelte component that can auto-generate a form from this schema, and `npm run generate-schema-ts` auto-generates the TypeScript types. `v2_route.json` is written in a bespoke format; see code for more details.
+At the time of writing, v1 is manually implemented in the form of TypeScript types and a Svelte component for the form. v2 is auto-generated from `src/schemas/v2.json`, and there are other schemas defined there. There's a generic Svelte component that can auto-generate a form from this schema, and `npm run generate-schema-ts` auto-generates the TypeScript types. `v2.json` is written in a bespoke format; see code for more details.
