@@ -4,6 +4,18 @@ ATIP lets you sketch new plans for walking and cycling infrastructure with a
 low level of detail. See the initial version at
 <https://acteng.github.io/atip>.
 
+## Using ATIP
+
+If you're in England, go use the development version at <https://acteng.github.io/atip>. Note this is not a production service; we make no guarantees about the site's uptime or about backwards compatibility of ATIP files.
+
+You can run ATIP anywhere in the world, but you'll need some technical experience to get started. Right now the developers can't commit to helping with other deployments, but we're open to pull requests making deploying elsewhere easily. Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation about this.
+
+Very roughly, you'd need to:
+
+1.  Replace `assets/authorities.geojson` with appropriate boundaries for your region, and adjust Svelte components using this file
+2.  Generate files for the route-snapper tool to work, using <https://github.com/acteng/abstreet-to-atip/>. Right now, this only requires OpenStreetMap data and should work worldwide, but this may change.
+3.  Host those files and a compiled version of this Svelte app somewhere. You only need a static file host, like S3.
+
 ## Development
 
 The stack:
