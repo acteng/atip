@@ -27,13 +27,19 @@ The stack:
   snapped to existing roads
 
 You'll need
-[npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+[npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and
+[wasm-pack](https://github.com/rustwasm/wasm-pack).
 
 - `npm install` to install dependencies
 - `npm run dev` to work locally
-- `npm run wasm` to rebuild the `abst_helper` Rust library (you'll need [wasm-pack](https://github.com/rustwasm/wasm-pack))
+- `npm run wasm` to rebuild the `route_info` Rust library quickly (or
+  `wasm-release` to build slowly but run quickly)
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
+
+If you're using Firefox locally to develop and get "import declarations may
+only appear at top level" errors, upgrade to at least Firefox 112, go to
+`about:config` and enable `dom.workers.modules.enabled`
 
 ### Monkey-patching dependencies
 

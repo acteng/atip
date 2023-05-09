@@ -3,15 +3,15 @@ use map_model::{IntersectionID, Map};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-pub struct Helper {
+pub struct RouteInfo {
     map: Map,
     closest_intersection: FindClosest<IntersectionID>,
 }
 
 #[wasm_bindgen]
-impl Helper {
+impl RouteInfo {
     #[wasm_bindgen(constructor)]
-    pub fn new(map_bytes: &[u8]) -> Result<Helper, JsValue> {
+    pub fn new(map_bytes: &[u8]) -> Result<RouteInfo, JsValue> {
         // Panics shouldn't happen, but if they do, console.log them.
         console_error_panic_hook::set_once();
 
@@ -24,7 +24,7 @@ impl Helper {
             closest_intersection.add_polygon(i.id, &i.polygon);
         }
 
-        Ok(Helper {
+        Ok(RouteInfo {
             map,
             closest_intersection,
         })

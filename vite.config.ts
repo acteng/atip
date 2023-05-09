@@ -12,5 +12,5 @@ export default defineConfig({
       },
     },
   },
-  plugins: [svelte(), wasmPack(["./abst_helper"], ["route-snapper"])],
+  plugins: [svelte(), wasmPack(["./route_info"], ["route-snapper"])],
 });

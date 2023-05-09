@@ -1,10 +1,10 @@
 <script lang="ts">
   import { gjScheme } from "../../stores";
-  import { type Worker } from "../../worker";
+  import { type RouteInfo } from "../../worker";
   import type { Feature, LineString } from "geojson";
   import { type Remote } from "comlink";
 
-  export let helper: Remote<Worker>;
+  export let routeInfo: Remote<RouteInfo>;
   export let id: number;
   export let name: string;
   export let intervention_type: "area" | "route" | "crossing" | "other";
@@ -18,12 +18,13 @@
     return (x / 1000.0).toFixed(1) + "km";
   }
 
+  // TODO Disable the button until RouteInfo is loaded and ready?
   async function autoFillDetails() {
     let linestring = $gjScheme.features.find(
       (f) => f.id == id
     ) as Feature<LineString>;
     try {
-      name = await helper.nameForRoute(linestring);
+      name = await routeInfo.nameForRoute(linestring);
     } catch (e) {
       window.alert(`Couldn't auto-name route: ${e}`);
     }
