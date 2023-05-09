@@ -3,7 +3,6 @@
   import { onMount } from "svelte";
   import authoritiesUrl from "../assets/authorities.geojson?url";
   import type { Schema } from "./types";
-  import bristolUrl from "../assets/bristol.bin?url";
   import * as Comlink from "comlink";
   import workerWrapper from "./worker?worker";
   import { type RouteInfo } from "./worker";
@@ -41,9 +40,11 @@
   // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
   // CDN invalidations when we update these files. But when serving locally for
   // development, HTTPS is also fine to use.
-  var routeUrl = `https://atip.uk/route-snappers/${authorityName}.bin`;
+  var routeSnapperUrl = `https://atip.uk/route-snappers/${authorityName}.bin`;
+  var routeInfoUrl = `https://atip.uk/route-info/${authorityName}.bin`;
   if (!prod) {
-    routeUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
+    routeSnapperUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
+    routeInfoUrl = `https://atip.uk/route-info-dev/${authorityName}.bin`;
   }
 
   let routeInfo: Comlink.Remote<RouteInfo>;
@@ -77,8 +78,7 @@
       new workerWrapper()
     );
     routeInfo = await new MyWorker();
-    // TODO Like the route snapper, vary the URL of this
-    await routeInfo.loadFile(bristolUrl);
+    await routeInfo.loadFile(routeInfoUrl);
   });
 
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
@@ -132,7 +132,7 @@
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer {schema} />
       <HoverLayer />
-      <Toolbox {routeUrl} {schema} />
+      <Toolbox {routeSnapperUrl} {schema} />
       <BaselayerSwitcher {style} />
       <Legend {schema} />
     </Map>

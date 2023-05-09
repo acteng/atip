@@ -6,5 +6,3 @@ node_modules/
 /playwright-report/
 /playwright/.cache/
 dist
-
-assets/bristol.bin
