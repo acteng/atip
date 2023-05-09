@@ -15,7 +15,7 @@
   import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
   import SplitRouteMode from "./route/SplitRouteMode.svelte";
 
-  export let routeUrl: string;
+  export let routeSnapperUrl: string;
   export let schema: Schema;
   // Plumbed up from RouteMode, so we can pass it down to GeometryMode
   // TODO Create this here too?
@@ -134,7 +134,7 @@
       bind:this={routeMode}
       {mode}
       {changeMode}
-      url={routeUrl}
+      url={routeSnapperUrl}
       bind:routeTool
     />
   </div>
