@@ -14,7 +14,8 @@
 
   // This component creates a form to collect the property described by spec, and put the result in value
   export let spec: Field;
-  export let value;
+  // value's type depends on the Field. It's too difficult to express.
+  export let value: any;
 
   // Blank out initial values if needed
   let oneOfCase = "";
