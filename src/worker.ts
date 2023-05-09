@@ -1,30 +1,37 @@
 import * as Comlink from "comlink";
-import init, { Helper } from "abst_helper";
+import init, { RouteInfo as RouteInfoWasm } from "route_info";
 import type { Feature, LineString } from "geojson";
 
-export class Worker {
-  helper: Helper | null;
+/* This wraps the Rust/WASM API in the route_info crate, exposing it as a web
+ * worker. Svelte components shouldn't directly use the WASM API because:
+ *
+ * - Initially loading a file can be slow, and blocking the main thread is bad UX
+ * - We may want to later switch to calling a remote API over the network. Using
+ *   a web worker now immediately forces us to have an async API everywhere.
+ */
+export class RouteInfo {
+  inner: RouteInfoWasm | null;
 
   constructor() {
-    this.helper = null;
+    this.inner = null;
   }
 
   async loadFile(url: string) {
     await init();
-    console.log(`Grabbing abstreet map data from ${url}`);
+    console.log(`Grabbing A/B Street map model data from ${url}`);
     let resp = await fetch(url);
     let mapBytes = await resp.arrayBuffer();
-    this.helper = new Helper(new Uint8Array(mapBytes));
-    console.log(`Helper is ready!`);
+    this.inner = new RouteInfoWasm(new Uint8Array(mapBytes));
+    console.log(`RouteInfo is ready!`);
   }
 
   nameForRoute(linestring: Feature<LineString>): string {
-    if (!this.helper) {
-      throw new Error("Need to loadFile before using Worker");
+    if (!this.inner) {
+      throw new Error("Need to loadFile before using RouteInfo");
     }
 
-    return this.helper.nameForRoute(linestring);
+    return this.inner.nameForRoute(linestring);
   }
 }
 
-Comlink.expose(Worker);
+Comlink.expose(RouteInfo);

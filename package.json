@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "wasm": "wasm-pack build --dev --target web ./abst_helper",
+    "wasm": "wasm-pack build --dev --target web ./route_info",
+    "wasm-release": "wasm-pack build --release --target web ./route_info",
     "preview": "vite preview",
     "fmt": "npx prettier --write *.html tests/* src/*",
     "test": "npx playwright test",

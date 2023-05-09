@@ -6,7 +6,7 @@
   import bristolUrl from "../assets/bristol.bin?url";
   import * as Comlink from "comlink";
   import workerWrapper from "./worker?worker";
-  import { type Worker } from "./worker";
+  import { type RouteInfo } from "./worker";
 
   import About from "./lib/About.svelte";
   import Instructions from "./lib/Instructions.svelte";
@@ -46,7 +46,7 @@
     routeUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
   }
 
-  let helper: Comlink.Remote<Worker>;
+  let routeInfo: Comlink.Remote<RouteInfo>;
 
   function toggleAbout() {
     showAbout = !showAbout;
@@ -70,15 +70,15 @@
     // Note this should work fine in older browsers when doing 'npm run build'.
     // It's only a problem during local dev mode.
     interface WorkerConstructor {
-      new (): Worker;
+      new (): RouteInfo;
     }
 
     const MyWorker: Comlink.Remote<WorkerConstructor> = Comlink.wrap(
       new workerWrapper()
     );
-    helper = await new MyWorker();
+    routeInfo = await new MyWorker();
     // TODO Like the route snapper, vary the URL of this
-    await helper.loadFile(bristolUrl);
+    await routeInfo.loadFile(bristolUrl);
   });
 
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
@@ -125,7 +125,7 @@
     <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
     <EntireScheme {authorityName} {schema} />
     <br />
-    <InterventionList {schema} {helper} />
+    <InterventionList {schema} {routeInfo} />
   </div>
   <div slot="main">
     <Map {style}>
