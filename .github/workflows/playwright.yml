@@ -25,7 +25,7 @@ jobs:
       run: npm ci
 
     - name: Build WASM
-      run: [ -d route_info ] && npm run wasm-release
+      run: npm run wasm-release
 
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
