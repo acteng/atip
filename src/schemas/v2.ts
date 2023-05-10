@@ -4,6 +4,7 @@ export type Intervention = Route | Crossing;
 
 export interface Crossing {
   name?: string;
+  description?: string;
   CrossingType?: CrossingType;
   MatchesDesireLine?: boolean;
   MotorTrafficFlow?: MotorTrafficFlow;
@@ -42,6 +43,7 @@ export type SignalisedCrossingType = "Puffin" | "Toucan" | "Pegasus";
 
 export interface Route {
   name?: string;
+  description?: string;
   RouteType?: RouteType;
   Users?: Users;
 }

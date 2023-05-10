@@ -9,6 +9,10 @@
           "type": "one-liner"
         },
         {
+          "name": "description",
+          "type": "textbox"
+        },
+        {
           "name": "RouteType",
           "oneOf": [
             {
@@ -79,6 +83,10 @@
         {
           "name": "name",
           "type": "one-liner"
+        },
+        {
+          "name": "description",
+          "type": "textbox"
         },
         {
           "name": "CrossingType",
