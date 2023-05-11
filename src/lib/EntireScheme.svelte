@@ -11,6 +11,10 @@
     baseFilename += `_${schema}`;
   }
 
+  // Strings
+  let otherFiles = [];
+  let browseFileIdx = 0;
+
   // Set up local storage sync
   let loadLocal = window.localStorage.getItem(baseFilename);
   if (loadLocal) {
@@ -84,19 +88,29 @@
     document.body.removeChild(element);
   }
 
-  function loadFile(e: Event) {
-    const reader = new FileReader();
-    // TODO No await? :(
-    // TODO Should we prompt before deleting the current scheme?
-    reader.onload = (e) => {
-      try {
-        gjScheme.set(backfill(JSON.parse(e.target!.result as string)));
-      } catch (err) {
-        window.alert(`Couldn't load scheme from a file: ${err}`);
-      }
-    };
-    let files = (e.target as HTMLInputElement).files!;
-    reader.readAsText(files[0]);
+  function loadFile(e) {
+    otherFiles = [];
+    browseFileIdx = 0;
+
+    let first = true;
+    for (let file of e.target.files) {
+      let immutableFirst = first;
+      const reader = new FileReader();
+      // TODO No await? :(
+      // TODO Should we prompt before deleting the current scheme?
+      reader.onload = (e) => {
+        otherFiles = [...otherFiles, e.target.result];
+        if (immutableFirst) {
+          try {
+            gjScheme.set(backfill(JSON.parse(e.target!.result as string)));
+          } catch (err) {
+            window.alert(`Couldn't load scheme from a file: ${err}`);
+          }
+        }
+      };
+      reader.readAsText(file);
+      first = false;
+    }
   }
 
   // TODO This should eventually guarantee the output is a valid Scheme. Only
@@ -127,6 +141,14 @@
   function loadGeojson() {
     document.getElementById("load_geojson")!.click();
   }
+
+  $: if (otherFiles.length > 1) {
+    try {
+      gjScheme.set(backfill(JSON.parse(otherFiles[browseFileIdx])));
+    } catch (err) {
+      console.log(`Failed to load from local storage: ${err}`);
+    }
+  }
 </script>
 
 <div>
@@ -141,13 +163,29 @@
 <div>
   <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
   <label>
-    <input type="file" id="load_geojson" on:change={loadFile} />
+    <input type="file" id="load_geojson" multiple on:change={loadFile} />
     <button type="button" on:click={loadGeojson}> Load from GeoJSON </button>
   </label>
   <button type="button" class="align-right" on:click={exportToGeojson}>
     Export to GeoJSON
   </button>
 </div>
+
+{#if otherFiles.length > 1}
+  <div>
+    <button
+      type="button"
+      on:click={(e) => browseFileIdx--}
+      disabled={browseFileIdx == 0}>Previous</button
+    >
+    {browseFileIdx + 1} / {otherFiles.length}
+    <button
+      type="button"
+      on:click={(e) => browseFileIdx++}
+      disabled={browseFileIdx == otherFiles.length - 1}>Next</button
+    >
+  </div>
+{/if}
 
 <br />
 
