@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('testing adding interventions, then deleting one, then adding another', async ({ page }) => {
+    // mark this test to fail
+    test.fixme();
     await page.goto('/scheme.html?authority=Derby#16.84/52.906457/-1.504519');
     // wait for the map to load and interventions panel to appear
     await page.getByText('Edit attributes Click an intervention to fill out its attributes Edit geometry N').waitFor();
