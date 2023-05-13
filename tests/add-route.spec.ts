@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('testing add a route and save it', async ({ page }) => {
     await page.goto('/scheme.html?authority=Derby#16.84/52.906457/-1.504519');
     // wait for the map to load and interventions panel to appear
-    await page.getByText('Edit attributes Click an intervention to fill out its attributes Edit geometry N').waitFor();
+    await page.getByText('Click an intervention to fill out its attributes').waitFor();
     // wait for router snapper to load so we can use route tool
     await page.getByText('Route tool loading...').waitFor({ 'state': 'hidden' });
 
