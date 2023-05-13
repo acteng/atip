@@ -2,6 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test('testing adding interventions, then deleting one, then adding another', async ({ page }) => {
     await page.goto('/scheme.html?authority=Derby#16.84/52.906457/-1.504519');
+    // wait for the map to load and interventions panel to appear
+    await page.getByText('Edit attributes Click an intervention to fill out its attributes Edit geometry N').waitFor();
+    // wait for router snapper to load so we can use route tool
+    await page.getByText('Route tool loading...').waitFor({ 'state': 'hidden' });
+
     await page.getByRole('region', { name: 'Map' }).waitFor();
     await page.getByRole('button', { name: 'New route' }).click();
     await page.getByRole('region', { name: 'Map' }).click({
