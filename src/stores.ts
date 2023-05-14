@@ -49,6 +49,7 @@ export function newFeatureId(gj: Scheme): number {
 }
 
 export function deleteIntervention(id: number) {
+  console.log(`Deleting intervention ${id}`);
   gjScheme.update((gj) => {
     gj.features = gj.features.filter((f) => f.id != id);
     return gj;
@@ -56,4 +57,5 @@ export function deleteIntervention(id: number) {
   formOpen.set(null);
   mapHover.set(null);
   sidebarHover.set(null);
+  openFromSidebar.set(null);
 }
