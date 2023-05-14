@@ -1,6 +1,12 @@
 <script lang="ts">
   import length from "@turf/length";
-  import { gjScheme, formOpen, mapHover, sidebarHover } from "../stores";
+  import {
+    gjScheme,
+    formOpen,
+    mapHover,
+    sidebarHover,
+    openFromSidebar,
+  } from "../stores";
   import type { Scheme, Schema } from "../types";
 
   export let authorityName: string;
@@ -46,6 +52,7 @@
       formOpen.set(null);
       mapHover.set(null);
       sidebarHover.set(null);
+      openFromSidebar.set(null);
     }
   }
 
