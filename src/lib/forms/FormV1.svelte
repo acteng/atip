@@ -3,6 +3,7 @@
   import { type RouteInfo } from "../../worker";
   import type { Feature, LineString } from "geojson";
   import { type Remote } from "comlink";
+  import RouteInfoLayers from "./RouteInfoLayers.svelte";
 
   export let routeInfo: Remote<RouteInfo>;
   export let id: number;
@@ -69,6 +70,7 @@
   <br /><button type="button" on:click={() => autoFillDetails()}
     >Auto-fill details</button
   >
+  <RouteInfoLayers />
 {/if}
 
 <style>
