@@ -19,10 +19,6 @@
 
   export let schema: Schema;
 
-  // TODO Document here the z-ordering between all the layers defined
-  // everywhere. Or maybe even pass a list to overwriteLayer and have it figure
-  // things out!
-
   let source = "interventions";
 
   overwriteSource($map, source, {
@@ -99,19 +95,12 @@
     // TODO Outline?
   });
 
-  // Draw underneath the route tool
-  // TODO Also want this to be beneath route-points, but we can only specify one
-  // TODO Also draw beneath draw-split-route
-  overwriteLayer(
-    $map,
-    {
-      id: "interventions-lines",
-      source,
-      filter: ["all", isLine, hideWhileEditing],
-      ...drawLine(colorByInterventionType, lineWidth),
-    },
-    "route-lines"
-  );
+  overwriteLayer($map, {
+    id: "interventions-lines",
+    source,
+    filter: ["all", isLine, hideWhileEditing],
+    ...drawLine(colorByInterventionType, lineWidth),
+  });
   // Draw endpoints to emphasize where two LineStrings meet
   overwriteLayer($map, {
     id: "interventions-lines-endpoints",
@@ -126,18 +115,14 @@
     },
   });
 
-  overwriteLayer(
-    $map,
-    {
-      id: "interventions-polygons",
-      source,
-      filter: ["all", isPolygon, hideWhileEditing],
-      ...drawPolygon(
-        schema == "planning" ? colorByReferenceType : colorByInterventionType,
-        0.5
-      ),
-      // TODO Outline too?
-    },
-    "hover-polygons"
-  );
+  overwriteLayer($map, {
+    id: "interventions-polygons",
+    source,
+    filter: ["all", isPolygon, hideWhileEditing],
+    ...drawPolygon(
+      schema == "planning" ? colorByReferenceType : colorByInterventionType,
+      0.5
+    ),
+    // TODO Outline too?
+  });
 </script>

@@ -51,7 +51,6 @@
     data: emptyGeojson(),
   });
   // TODO Scissors icon?
-  // TODO Z-ordering wrong?
   overwriteLayer($map, {
     id: "draw-split-route",
     source,
