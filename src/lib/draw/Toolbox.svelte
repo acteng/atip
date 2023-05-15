@@ -7,6 +7,7 @@
   import { RouteTool } from "./route/route_tool";
   import type { Mode } from "./types";
 
+  import Button from "./Button.svelte";
   import AttributeMode from "./AttributeMode.svelte";
   import GeometryMode from "./GeometryMode.svelte";
   import RouteMode from "./route/RouteMode.svelte";
@@ -14,6 +15,14 @@
   import PolygonMode from "./polygon/PolygonMode.svelte";
   import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
   import SplitRouteMode from "./route/SplitRouteMode.svelte";
+
+  import editAttributesIcon from "../../../assets/edit_attributes.svg";
+  import editGeometryIcon from "../../../assets/edit_geometry.svg";
+  import pointIcon from "../../../assets/point.svg";
+  import polygonSnappedIcon from "../../../assets/polygon_snapped.svg";
+  import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
+  import routeIcon from "../../../assets/route.svg";
+  import splitRouteIcon from "../../../assets/split_route.svg";
 
   export let routeSnapperUrl: string;
   export let schema: Schema;
@@ -66,19 +75,23 @@
 
 <div class="toolbox">
   <div>
-    <button
-      type="button"
-      on:click={() => changeMode("edit-attribute")}
-      disabled={mode == "edit-attribute"}>Edit attributes</button
-    >
+    <Button
+      {mode}
+      thisMode="edit-attribute"
+      label="Edit attributes"
+      icon={editAttributesIcon}
+      {changeMode}
+    />
     <AttributeMode bind:this={attributeMode} {mode} {changeMode} />
   </div>
   <div>
-    <button
-      type="button"
-      on:click={() => changeMode("edit-geometry")}
-      disabled={mode == "edit-geometry"}>Edit geometry</button
-    >
+    <Button
+      {mode}
+      thisMode="edit-geometry"
+      label="Edit geometry"
+      icon={editGeometryIcon}
+      {changeMode}
+    />
     {#if routeTool}
       <GeometryMode
         bind:this={geometryMode}
@@ -91,28 +104,34 @@
   </div>
   <div>
     {#if schema != "planning"}
-      <button
-        type="button"
-        on:click={() => changeMode("point")}
-        disabled={mode == "point"}>New point</button
-      >
+      <Button
+        {mode}
+        thisMode="point"
+        label="New point"
+        icon={pointIcon}
+        {changeMode}
+      />
     {/if}
     <PointMode bind:this={pointMode} {mode} {changeMode} {pointTool} />
   </div>
   <div>
-    <button
-      type="button"
-      on:click={() => changeMode("free-polygon")}
-      disabled={mode == "free-polygon"}>New polygon (freehand)</button
-    >
+    <Button
+      {mode}
+      thisMode="free-polygon"
+      label="New polygon (freehand)"
+      icon={polygonFreehandIcon}
+      {changeMode}
+    />
     <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
   </div>
   <div>
-    <button
-      type="button"
-      on:click={() => changeMode("snap-polygon")}
-      disabled={mode == "snap-polygon"}>New polygon (snapped)</button
-    >
+    <Button
+      {mode}
+      thisMode="snap-polygon"
+      label="New polygon (snapped)"
+      icon={polygonSnappedIcon}
+      {changeMode}
+    />
     {#if routeTool}
       <SnapPolygonMode
         bind:this={snapPolygonMode}
@@ -124,11 +143,13 @@
   </div>
   <div>
     {#if schema != "planning"}
-      <button
-        type="button"
-        on:click={() => changeMode("route")}
-        disabled={mode == "route"}>New route</button
-      >
+      <Button
+        {mode}
+        thisMode="route"
+        label="New route"
+        icon={routeIcon}
+        {changeMode}
+      />
     {/if}
     <RouteMode
       bind:this={routeMode}
@@ -140,11 +161,13 @@
   </div>
   <div>
     {#if schema != "planning"}
-      <button
-        type="button"
-        on:click={() => changeMode("split-route")}
-        disabled={mode == "split-route"}>Split route</button
-      >
+      <Button
+        {mode}
+        thisMode="split-route"
+        label="Split route"
+        icon={splitRouteIcon}
+        {changeMode}
+      />
     {/if}
     <SplitRouteMode bind:this={splitRouteMode} {mode} {changeMode} />
   </div>
@@ -160,31 +183,5 @@
     border: solid 2px black;
     font-size: 1.5em;
     width: 250px;
-  }
-
-  button {
-    background-color: #4caf50;
-    border: solid 2px #4caf50;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    width: 100%;
-  }
-
-  button:hover:enabled {
-    background-color: white;
-    color: black;
-    transition-duration: 0.4s;
-    border: solid 2px black;
-  }
-
-  button:disabled {
-    opacity: 0.6;
-    cursor: auto;
   }
 </style>
