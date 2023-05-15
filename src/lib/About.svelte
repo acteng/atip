@@ -5,7 +5,7 @@
   export let open: boolean;
 </script>
 
-<Modal title="About the Active Travel Intervention Platform" bind:open>
+<Modal title="About the Active Travel Infrastructure Platform" bind:open>
   <p>
     ATIP v1 is an
     <ExternalLink href="https://github.com/acteng/atip"
