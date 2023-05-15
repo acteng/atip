@@ -23,7 +23,7 @@
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;
 
-  export let mode: string;
+  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
 
   export function start() {}
