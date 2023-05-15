@@ -29,7 +29,6 @@
     data: emptyGeojson(),
   });
 
-  // Draw polygon outlines on top of interventions-polygons
   overwriteLayer($map, {
     id: "hover-polygons",
     source,
@@ -37,28 +36,18 @@
     // Outline around the polygons
     ...drawLine(colors.hovering, 0.5 * lineWidth, 1.0),
   });
-  // Draw underneath lines, so the thick line looks like an outline
-  overwriteLayer(
-    $map,
-    {
-      id: "hover-lines",
-      source,
-      filter: isLine,
-      ...drawLine(colors.hovering, 1.5 * lineWidth, 1.0),
-    },
-    "interventions-lines"
-  );
-  // Draw underneath points, so it looks like an outline
-  overwriteLayer(
-    $map,
-    {
-      id: "hover-points",
-      source,
-      filter: isPoint,
-      ...drawCircle(colors.hovering, 1.5 * circleRadius, 1.0),
-    },
-    "interventions-points"
-  );
+  overwriteLayer($map, {
+    id: "hover-lines",
+    source,
+    filter: isLine,
+    ...drawLine(colors.hovering, 1.5 * lineWidth, 1.0),
+  });
+  overwriteLayer($map, {
+    id: "hover-points",
+    source,
+    filter: isPoint,
+    ...drawCircle(colors.hovering, 1.5 * circleRadius, 1.0),
+  });
 
   // When a form is open, ignore regular map and sidebar interactions
   $: {

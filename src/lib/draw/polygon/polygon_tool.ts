@@ -65,7 +65,6 @@ export class PolygonTool {
       data: emptyGeojson(),
     });
 
-    // Order matters here!
     overwriteLayer(map, {
       id: "edit-polygon-fill",
       source,
