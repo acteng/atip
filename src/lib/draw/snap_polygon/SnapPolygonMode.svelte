@@ -8,7 +8,7 @@
 
   const thisMode = "snap-polygon";
 
-  export let mode: string;
+  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
   export let routeTool: RouteTool;
 

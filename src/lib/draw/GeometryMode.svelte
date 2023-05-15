@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { type MapMouseEvent } from "maplibre-gl";
+  import type { Mode } from "./types";
   import type { LineString, Polygon } from "geojson";
   import type { PointTool } from "./point/point_tool";
   import type { PolygonTool } from "./polygon/polygon_tool";
@@ -14,7 +15,7 @@
 
   const thisMode = "edit-geometry";
 
-  export let mode: string;
+  export let mode: Mode;
   export let pointTool: PointTool;
   export let polygonTool: PolygonTool;
   export let routeTool: RouteTool;
