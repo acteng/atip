@@ -3,8 +3,7 @@
   import { slide } from "svelte/transition";
 
   export let label: string;
-
-  let open = false;
+  export let open = false;
 </script>
 
 <button on:click={() => (open = !open)} aria-expanded={open}
