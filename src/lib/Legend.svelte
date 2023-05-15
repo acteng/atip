@@ -1,27 +1,29 @@
 <script lang="ts">
   import { colors } from "../colors";
   import type { Schema, Scheme } from "../types";
+  import CollapsibleCard from "./CollapsibleCard.svelte";
 
   export let schema: Schema;
 </script>
 
 <div>
-  <h1>Interventions</h1>
-  <ul>
-    {#if schema == "planning"}
-      <li><span style:background={colors.preapp} />Preapp</li>
-      <li><span style:background={colors.outline} />Outline</li>
-      <li>
-        <span style:background={colors["reserved matters"]} />Reserved matters
-      </li>
-      <li><span style:background={colors["local plan"]} />Local plan</li>
-    {:else}
-      <li><span style:background={colors.area} />Areas</li>
-      <li><span style:background={colors.route} />Routes</li>
-      <li><span style:background={colors.crossing} />Crossings</li>
-      <li><span style:background={colors.other} />Other</li>
-    {/if}
-  </ul>
+  <CollapsibleCard label="Interventions" open>
+    <ul>
+      {#if schema == "planning"}
+        <li><span style:background={colors.preapp} />Preapp</li>
+        <li><span style:background={colors.outline} />Outline</li>
+        <li>
+          <span style:background={colors["reserved matters"]} />Reserved matters
+        </li>
+        <li><span style:background={colors["local plan"]} />Local plan</li>
+      {:else}
+        <li><span style:background={colors.area} />Areas</li>
+        <li><span style:background={colors.route} />Routes</li>
+        <li><span style:background={colors.crossing} />Crossings</li>
+        <li><span style:background={colors.other} />Other</li>
+      {/if}
+    </ul>
+  </CollapsibleCard>
 </div>
 
 <style>
@@ -31,10 +33,6 @@
     top: 60px;
     background-color: white;
     padding: 16px;
-  }
-
-  h1 {
-    font-size: 2em;
   }
 
   span {
