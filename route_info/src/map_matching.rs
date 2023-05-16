@@ -1,5 +1,7 @@
 use anyhow::Result;
 use geom::{Distance, LonLat, Pt2D};
+use osm2streets::{Direction, IntersectionID, RoadID};
+use petgraph::prelude::DiGraphMap;
 
 use super::{RawRouteWaypoint, RouteInfo, Waypoint};
 
@@ -26,6 +28,7 @@ impl RouteInfo {
         }
     }
 
+    /// Interpret waypoints from route-snapper in the context of this StreetNetwork.
     pub(crate) fn parse_waypoints(
         &self,
         raw_waypoints: Vec<RawRouteWaypoint>,
@@ -48,5 +51,31 @@ impl RouteInfo {
             }
         }
         Ok(waypoints)
+    }
+
+    /// Calculates a path between intersections, ignoring all semantics of the roads (lane types,
+    /// direction) just like route-snapper. The result says which direction to cross each road.
+    pub fn geometric_path(
+        &self,
+        from: IntersectionID,
+        to: IntersectionID,
+    ) -> Option<Vec<(RoadID, Direction)>> {
+        let mut graph = DiGraphMap::new();
+        for r in self.network.roads.values() {
+            graph.add_edge(r.src_i, r.dst_i, (r.id, Direction::Fwd));
+            graph.add_edge(r.dst_i, r.src_i, (r.id, Direction::Back));
+        }
+        let (_, path) = petgraph::algo::astar(
+            &graph,
+            from,
+            |i| i == to,
+            |(_, _, (r, _))| self.network.roads[r].untrimmed_length(),
+            |_| Distance::ZERO,
+        )?;
+        let roads: Vec<(RoadID, Direction)> = path
+            .windows(2)
+            .map(|pair| *graph.edge_weight(pair[0], pair[1]).unwrap())
+            .collect();
+        Some(roads)
     }
 }
