@@ -69,7 +69,7 @@
   Length: {prettyPrintMeters(length_meters)}
   <br /><button type="button" on:click={() => autoFillDetails()}
     >Auto-fill details</button
-  >
+  ><br />
   <RouteInfoLayers {routeInfo} {id} />
 {/if}
 
