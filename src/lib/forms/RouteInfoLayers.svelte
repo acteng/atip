@@ -11,27 +11,32 @@
     GeoJSONSource,
   } from "maplibre-gl";
   import type { Feature } from "../../types";
-  import { colors, lineWidth } from "../../colors";
+  import { lineWidth } from "../../colors";
   import { map, gjScheme } from "../../stores";
   import { type Remote } from "comlink";
   import { type RouteInfo } from "../../worker";
   import Tooltips from "./Tooltips.svelte";
+  import DiscreteLegend from "./DiscreteLegend.svelte";
 
   export let routeInfo: Remote<RouteInfo>;
   export let id: number;
 
   let layer: "none" | "speed limits" = "none";
+  let colors = ["#00AB4D", "#8ECA4D", "#F7BB00", "#BB0000"];
+  let speedLimitSteps = [30, 40, 50];
 
   let source = "speed-limits";
   // TODO Also draw a quantized legend
   const colorBySpeedLimit: DataDrivenPropertyValueSpecification<string> = [
-    "match",
-    ["get", "type"],
-    "snapped",
-    "red",
-    "free",
-    "blue",
-    "white",
+    "step",
+    ["get", "speed_limit"],
+    colors[0],
+    speedLimitSteps[0],
+    colors[1],
+    speedLimitSteps[1],
+    colors[2],
+    speedLimitSteps[2],
+    colors[3],
   ];
   // NOTE! There's only ever one source and layer with this name. This component
   // (and the source and layer) will get destroyed frequently, but even if not,
@@ -40,7 +45,6 @@
     type: "geojson",
     data: emptyGeojson(),
   });
-  // TODO Also tooltips on each segment?
   overwriteLayer($map, {
     id: "speed-limits",
     source,
@@ -50,7 +54,7 @@
   // TODO Disable the button until RouteInfo is loaded and ready?
   async function changeLayer() {
     if (layer == "none") {
-      // TODO Hide
+      // TODO We could toggle visibility, instead of recalculating everytime
       ($map.getSource(source) as GeoJSONSource).setData(emptyGeojson());
       return;
     }
@@ -67,6 +71,12 @@
       window.alert(`Couldn't calculate speed limits for route: ${e}`);
     }
   }
+
+  function tooltip(props: { [name: string]: any }): string {
+    return props.speed_limit
+      ? `${Math.round(props.speed_limit)} mph`
+      : "Unknown";
+  }
 </script>
 
 <label>
@@ -76,5 +86,8 @@
     <option value="speed limits">Speed limits</option>
   </select>
 </label>
+{#if layer == "speed limits"}
+  <DiscreteLegend {colors} steps={speedLimitSteps} />
+{/if}
 
-<Tooltips layer="speed-limits" />
+<Tooltips layer="speed-limits" contents={tooltip} />

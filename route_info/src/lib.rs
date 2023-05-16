@@ -84,7 +84,7 @@ impl RouteInfo {
     }
 
     /// Given the JSON waypoints array produced by route-snapper, generate GeoJSON LineStrings,
-    /// covering the entire route, each with a `speed_limit` property (in km/h) when that data is
+    /// covering the entire route, each with a `speed_limit` property (in mph) when that data is
     /// known.
     #[wasm_bindgen(js_name = speedLimitForRoute)]
     pub fn speed_limit_for_route(&self, raw_waypoints: JsValue) -> Result<String, JsValue> {
@@ -122,7 +122,7 @@ impl RouteInfo {
                                 );
                                 feature.set_property("type", "snapped");
                                 if let Some(speed) = speed_limit {
-                                    feature.set_property("speed_limit", to_kmph(speed));
+                                    feature.set_property("speed_limit", speed.to_miles_per_hour());
                                 }
                                 output.push(feature);
                             }
@@ -139,7 +139,7 @@ impl RouteInfo {
                         );
                         feature.set_property("type", "snapped");
                         if let Some(speed) = speed_limit {
-                            feature.set_property("speed_limit", to_kmph(speed));
+                            feature.set_property("speed_limit", speed.to_miles_per_hour());
                         }
                         output.push(feature);
                     }
@@ -191,9 +191,4 @@ impl Waypoint {
             Waypoint::Snapped(pt, _) => *pt,
         }
     }
-}
-
-// TODO Move to geom
-fn to_kmph(s: Speed) -> f64 {
-    3.6 * s.inner_meters_per_second()
 }

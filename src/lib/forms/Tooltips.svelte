@@ -5,6 +5,7 @@
   import { onDestroy } from "svelte";
 
   export let layer: string;
+  export let contents: (props: { [name: string]: any }) => string;
 
   let popup = new Popup({
     closeButton: false,
@@ -24,7 +25,10 @@
       layers: [layer],
     });
     if (results.length > 0) {
-      popup.setLngLat(e.lngLat).setHTML(contents(results[0])).addTo($map);
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(contents(results[0].properties))
+        .addTo($map);
     } else {
       popup.remove();
     }
@@ -32,9 +36,5 @@
 
   function onMouseOut() {
     popup.remove();
-  }
-
-  function contents(f) {
-    return `<pre>${JSON.stringify(f.properties)}</pre>`;
   }
 </script>
