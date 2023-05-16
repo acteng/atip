@@ -8,6 +8,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 abstutil = { git = "https://github.com/a-b-street/abstreet" }
+anyhow = "1.0.71"
 bincode = "1.3.1"
 console_error_panic_hook = "0.1.6"
 console_log = "1.0.0"

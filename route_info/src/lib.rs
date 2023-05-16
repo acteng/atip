@@ -1,10 +1,14 @@
 #[macro_use]
+extern crate anyhow;
+#[macro_use]
 extern crate log;
+
+mod map_matching;
 
 use std::collections::BTreeSet;
 
 use geojson::Feature;
-use geom::{Distance, FindClosest, LonLat, PolyLine, Pt2D};
+use geom::{Distance, FindClosest, PolyLine, Pt2D};
 use osm2streets::{Direction, IntersectionID, LaneType, StreetNetwork};
 use serde::Deserialize;
 use wasm_bindgen::prelude::*;
@@ -45,23 +49,7 @@ impl RouteInfo {
     #[wasm_bindgen(js_name = nameForRoute)]
     pub fn name_for_route(&self, raw_line_string: JsValue) -> Result<String, JsValue> {
         let feature: geojson::Feature = serde_wasm_bindgen::from_value(raw_line_string)?;
-        // TODO Duplicate non-adjacent points; make a more permissive version of PolyLine.
-        //let polyline = PolyLine::from_geojson(&feature, Some(self.network.gps_bounds)).map_err(err_to_js)?;
-        let (pt1, pt2) = if let Some(geojson::Geometry {
-            value: geojson::Value::LineString(ref pts),
-            ..
-        }) = feature.geometry
-        {
-            let pt1 = LonLat::new(pts[0][0], pts[0][1]);
-            let last = pts.last().unwrap();
-            let pt2 = LonLat::new(last[0], last[1]);
-            (
-                pt1.to_pt(&self.network.gps_bounds),
-                pt2.to_pt(&self.network.gps_bounds),
-            )
-        } else {
-            return Err(err_to_js("couldn't get line-string"));
-        };
+        let (pt1, pt2) = self.linestring_endpoints(&feature).map_err(err_to_js)?;
 
         // Find the closest intersections to the route endpoints
         let threshold = Distance::meters(100.0);
@@ -99,24 +87,8 @@ impl RouteInfo {
     /// covering the entire route, each with a `speed_limit` property.
     #[wasm_bindgen(js_name = speedLimitForRoute)]
     pub fn speed_limit_for_route(&self, raw_waypoints: JsValue) -> Result<String, JsValue> {
-        // Naively match snapped waypoints up with this StreetNetwork's intersections. If
-        // route-snapper is using a graph built from the same version of OSM data as the current
-        // StreetNetwork, everything should be fine.
         let raw_waypoints: Vec<RawRouteWaypoint> = serde_wasm_bindgen::from_value(raw_waypoints)?;
-        let threshold = Distance::meters(100.0);
-        let mut waypoints = Vec::new();
-        for waypt in raw_waypoints {
-            let pt = LonLat::new(waypt.lon, waypt.lat).to_pt(&self.network.gps_bounds);
-            if waypt.snapped {
-                let (i, _) = self
-                    .closest_intersection
-                    .closest_pt(pt, threshold)
-                    .ok_or_else(|| err_to_js("no intersection close to waypoint"))?;
-                waypoints.push(Waypoint::Snapped(pt, i));
-            } else {
-                waypoints.push(Waypoint::Free(pt));
-            }
-        }
+        let waypoints = self.parse_waypoints(raw_waypoints).map_err(err_to_js)?;
 
         // Generate output LineStrings in order, covering the whole route. For snapped sections,
         // chop it up whenever the speed limit changes.
