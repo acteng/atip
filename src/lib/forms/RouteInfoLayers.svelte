@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy } from "svelte";
   import {
     emptyGeojson,
     overwriteSource,
@@ -26,6 +27,7 @@
   let speedLimitSteps = [30, 40, 50];
 
   let source = "speed-limits";
+  let speedLimitLayer = "speed-limits";
   // TODO Also draw a quantized legend
   const colorBySpeedLimit: DataDrivenPropertyValueSpecification<string> = [
     "step",
@@ -46,9 +48,18 @@
     data: emptyGeojson(),
   });
   overwriteLayer($map, {
-    id: "speed-limits",
+    id: speedLimitLayer,
     source,
     ...drawLine(colorBySpeedLimit, lineWidth, 1.0),
+  });
+
+  onDestroy(() => {
+    if ($map.getLayer(speedLimitLayer)) {
+      $map.removeLayer(speedLimitLayer);
+    }
+    if ($map.getSource(source)) {
+      $map.removeSource(source);
+    }
   });
 
   // TODO Disable the button until RouteInfo is loaded and ready?
