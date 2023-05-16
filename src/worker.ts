@@ -1,6 +1,7 @@
 import * as Comlink from "comlink";
 import init, { RouteInfo as RouteInfoWasm } from "route_info";
 import type { Feature, LineString } from "geojson";
+import type { Waypoint } from "./types";
 
 /* This wraps the Rust/WASM API in the route_info crate, exposing it as a web
  * worker. Svelte components shouldn't directly use the WASM API because:
@@ -31,6 +32,14 @@ export class RouteInfo {
     }
 
     return this.inner.nameForRoute(linestring);
+  }
+
+  speedLimitForRoute(waypoints: Waypoint[]): string {
+    if (!this.inner) {
+      throw new Error("Need to loadFile before using RouteInfo");
+    }
+
+    return this.inner.speedLimitForRoute(waypoints);
   }
 }
 

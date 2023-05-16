@@ -70,7 +70,7 @@
   <br /><button type="button" on:click={() => autoFillDetails()}
     >Auto-fill details</button
   >
-  <RouteInfoLayers />
+  <RouteInfoLayers {routeInfo} {id} />
 {/if}
 
 <style>
