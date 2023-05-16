@@ -8,7 +8,7 @@ mod map_matching;
 use std::collections::BTreeSet;
 
 use geojson::Feature;
-use geom::{Distance, FindClosest, PolyLine, Pt2D};
+use geom::{Distance, FindClosest, PolyLine, Pt2D, Speed};
 use osm2streets::{Direction, IntersectionID, StreetNetwork};
 use serde::Deserialize;
 use wasm_bindgen::prelude::*;
@@ -84,7 +84,8 @@ impl RouteInfo {
     }
 
     /// Given the JSON waypoints array produced by route-snapper, generate GeoJSON LineStrings,
-    /// covering the entire route, each with a `speed_limit` property.
+    /// covering the entire route, each with a `speed_limit` property (in km/h) when that data is
+    /// known.
     #[wasm_bindgen(js_name = speedLimitForRoute)]
     pub fn speed_limit_for_route(&self, raw_waypoints: JsValue) -> Result<String, JsValue> {
         let raw_waypoints: Vec<RawRouteWaypoint> = serde_wasm_bindgen::from_value(raw_waypoints)?;
@@ -93,13 +94,14 @@ impl RouteInfo {
         // Generate output LineStrings in order, covering the whole route. For snapped sections,
         // chop it up whenever the speed limit changes.
         let mut output = Vec::new();
+
         for pair in waypoints.windows(2) {
             if let (Waypoint::Snapped(_, i1), Waypoint::Snapped(_, i2)) = (&pair[0], &pair[1]) {
                 if let Some(path) = self.geometric_path(*i1, *i2) {
                     // Walk along the path, building up a LineString as long as the speed limit is
                     // the same
                     let mut pts = Vec::new();
-                    let mut osm_ids = Vec::new();
+                    let mut speed_limit: Option<Speed> = None;
 
                     for (r, dir) in path {
                         let road = &self.network.roads[&r];
@@ -108,9 +110,7 @@ impl RouteInfo {
                             road_pts.reverse();
                         }
 
-                        // TODO Need to add speed_limit to osm2streets! For now, actually split
-                        // when the OSM ID changes, just to wire something up
-                        if road.osm_ids == osm_ids {
+                        if road.speed_limit == speed_limit {
                             pts.extend(road_pts);
                         } else {
                             // Start a new segment
@@ -121,10 +121,12 @@ impl RouteInfo {
                                         .to_geojson(Some(&self.network.gps_bounds)),
                                 );
                                 feature.set_property("type", "snapped");
-                                feature.set_property("osm_ids", abstutil::to_json(&osm_ids));
+                                if let Some(speed) = speed_limit {
+                                    feature.set_property("speed_limit", to_kmph(speed));
+                                }
                                 output.push(feature);
                             }
-                            osm_ids = road.osm_ids.clone();
+                            speed_limit = road.speed_limit;
                         }
                     }
 
@@ -136,7 +138,9 @@ impl RouteInfo {
                                 .to_geojson(Some(&self.network.gps_bounds)),
                         );
                         feature.set_property("type", "snapped");
-                        feature.set_property("osm_ids", abstutil::to_json(&osm_ids));
+                        if let Some(speed) = speed_limit {
+                            feature.set_property("speed_limit", to_kmph(speed));
+                        }
                         output.push(feature);
                     }
                 } else {
@@ -187,4 +191,9 @@ impl Waypoint {
             Waypoint::Snapped(pt, _) => *pt,
         }
     }
+}
+
+// TODO Move to geom
+fn to_kmph(s: Speed) -> f64 {
+    3.6 * s.inner_meters_per_second()
 }
