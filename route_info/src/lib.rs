@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate log;
+
 use std::collections::BTreeSet;
 
 use geojson::Feature;
@@ -19,8 +22,9 @@ impl RouteInfo {
     pub fn new(input_bytes: &[u8]) -> Result<RouteInfo, JsValue> {
         // Panics shouldn't happen, but if they do, console.log them.
         console_error_panic_hook::set_once();
+        console_log::init_with_level(log::Level::Info).unwrap();
 
-        web_sys::console::log_1(&format!("Got {} bytes, deserializing", input_bytes.len()).into());
+        info!("Got {} bytes, deserializing", input_bytes.len());
 
         let network: StreetNetwork = bincode::deserialize(input_bytes).map_err(err_to_js)?;
 
@@ -142,14 +146,17 @@ impl RouteInfo {
                             pts.extend(road_pts);
                         } else {
                             // Start a new segment
-                            let mut feature = Feature::from(
-                                PolyLine::deduping_new(std::mem::take(&mut pts))
-                                    .map_err(err_to_js)?
-                                    .to_geojson(Some(&self.network.gps_bounds)),
-                            );
-                            feature.set_property("type", "snapped");
-                            feature.set_property("osm_ids", abstutil::to_json(&osm_ids));
-                            osm_ids = Vec::new();
+                            if !pts.is_empty() {
+                                let mut feature = Feature::from(
+                                    PolyLine::deduping_new(std::mem::take(&mut pts))
+                                        .map_err(err_to_js)?
+                                        .to_geojson(Some(&self.network.gps_bounds)),
+                                );
+                                feature.set_property("type", "snapped");
+                                feature.set_property("osm_ids", abstutil::to_json(&osm_ids));
+                                output.push(feature);
+                            }
+                            osm_ids = road.osm_ids.clone();
                         }
                     }
 
@@ -162,6 +169,7 @@ impl RouteInfo {
                         );
                         feature.set_property("type", "snapped");
                         feature.set_property("osm_ids", abstutil::to_json(&osm_ids));
+                        output.push(feature);
                     }
                 } else {
                     return Err(err_to_js("no path between two waypoints"));

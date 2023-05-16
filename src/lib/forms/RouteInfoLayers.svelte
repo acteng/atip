@@ -1,6 +1,23 @@
 <script lang="ts">
-  import { emptyGeojson } from "../../maplibre_helpers";
+  import {
+    emptyGeojson,
+    overwriteSource,
+    overwriteLayer,
+    drawLine,
+  } from "../../maplibre_helpers";
+  import type { LineString } from "geojson";
+  import type {
+    DataDrivenPropertyValueSpecification,
+    GeoJSONSource,
+  } from "maplibre-gl";
+  import type { Feature } from "../../types";
   import { colors, lineWidth } from "../../colors";
+  import { map, gjScheme } from "../../stores";
+  import { type Remote } from "comlink";
+  import { type RouteInfo } from "../../worker";
+
+  export let routeInfo: Remote<RouteInfo>;
+  export let id: number;
 
   let layer: "none" | "speed limits" = "none";
 
@@ -32,7 +49,8 @@
   // TODO Disable the button until RouteInfo is loaded and ready?
   async function changeLayer() {
     if (layer == "none") {
-      // TODO Hide something
+      // TODO Hide
+      ($map.getSource(source) as GeoJSONSource).setData(emptyGeojson());
       return;
     }
 
@@ -40,14 +58,20 @@
       (f) => f.id == id
     ) as Feature<LineString>;
     try {
-      name = await routeInfo.nameForRoute(linestring);
+      let gj = JSON.parse(
+        await routeInfo.speedLimitForRoute(linestring.properties.waypoints)
+      );
+      ($map.getSource(source) as GeoJSONSource).setData(gj);
     } catch (e) {
-      window.alert(`Couldn't auto-name route: ${e}`);
+      window.alert(`Couldn't calculate speed limits for route: ${e}`);
     }
   }
 </script>
 
-<select bind:value={layer} on:change={changeLayer}>
-  <option value="none">None</option>
-  <option value="speed limits">Speed limits</option>
-</select>
+<label>
+  Show details:
+  <select bind:value={layer} on:change={changeLayer}>
+    <option value="none">None</option>
+    <option value="speed limits">Speed limits</option>
+  </select>
+</label>
