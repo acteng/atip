@@ -15,6 +15,7 @@
   import { map, gjScheme } from "../../stores";
   import { type Remote } from "comlink";
   import { type RouteInfo } from "../../worker";
+  import Tooltips from "./Tooltips.svelte";
 
   export let routeInfo: Remote<RouteInfo>;
   export let id: number;
@@ -75,3 +76,5 @@
     <option value="speed limits">Speed limits</option>
   </select>
 </label>
+
+<Tooltips layer="speed-limits" />
