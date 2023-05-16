@@ -9,7 +9,7 @@ use std::collections::BTreeSet;
 
 use geojson::Feature;
 use geom::{Distance, FindClosest, PolyLine, Pt2D};
-use osm2streets::{Direction, IntersectionID, LaneType, StreetNetwork};
+use osm2streets::{Direction, IntersectionID, StreetNetwork};
 use serde::Deserialize;
 use wasm_bindgen::prelude::*;
 
@@ -95,11 +95,7 @@ impl RouteInfo {
         let mut output = Vec::new();
         for pair in waypoints.windows(2) {
             if let (Waypoint::Snapped(_, i1), Waypoint::Snapped(_, i2)) = (&pair[0], &pair[1]) {
-                // TODO Use new pathfinding
-                if let Some(path) =
-                    self.network
-                        .simple_path(*i1, *i2, &[LaneType::Driving, LaneType::Biking])
-                {
+                if let Some(path) = self.geometric_path(*i1, *i2) {
                     // Walk along the path, building up a LineString as long as the speed limit is
                     // the same
                     let mut pts = Vec::new();
