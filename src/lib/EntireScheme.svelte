@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import length from "@turf/length";
   import {
     gjScheme,
@@ -17,16 +18,31 @@
     baseFilename += `_${schema}`;
   }
 
-  // Set up local storage sync
-  let loadLocal = window.localStorage.getItem(baseFilename);
-  if (loadLocal) {
-    try {
-      gjScheme.set(backfill(JSON.parse(loadLocal)));
-    } catch (err) {
-      console.log(`Failed to load from local storage: ${err}`);
-    }
-  }
+  onMount(async () => {
+    // Start by loading from a URL. If that's not specified, load from local storage.
+    let params = new URLSearchParams(window.location.search);
+    let loadUrl = params.get("geojsonUrl");
+    let loadLocal = window.localStorage.getItem(baseFilename);
 
+    if (loadUrl) {
+      console.log(`Loading GeoJSON from ${loadUrl}`);
+      try {
+        let resp = await fetch(loadUrl);
+        let body = await resp.text();
+        gjScheme.set(backfill(JSON.parse(body)));
+      } catch (err) {
+        console.log(`Failed to load from URL: ${err}`);
+      }
+    } else if (loadLocal) {
+      try {
+        gjScheme.set(backfill(JSON.parse(loadLocal)));
+      } catch (err) {
+        console.log(`Failed to load from local storage: ${err}`);
+      }
+    }
+  });
+
+  // Set up local storage sync
   $: {
     if ($gjScheme) {
       console.log(`GJ changed, saving to local storage`);
