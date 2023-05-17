@@ -7,7 +7,7 @@
 </script>
 
 <div>
-  <CollapsibleCard label="Interventions" open>
+  <CollapsibleCard label="Objects" open>
     <ul>
       {#if schema == "planning"}
         <li><span style:background={colors.preapp} />Preapp</li>

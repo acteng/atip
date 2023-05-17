@@ -14,6 +14,6 @@ test("clearing all while a feature is open works", async ({ page }) => {
   await page.getByRole("button", { name: "Clear all" }).click();
   // Make sure AttributeMode resets to nothing being selected
   await expect(
-    page.getByText("Click an intervention to fill out its attributes")
+    page.getByText("Click an object to fill out its attributes")
   ).toBeVisible();
 });

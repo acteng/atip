@@ -212,6 +212,6 @@
   {:else if currentlyEditingControls == "route"}
     <RouteControls {routeTool} />
   {:else}
-    <p>Click an intervention to edit its geometry</p>
+    <p>Click an object to edit its geometry</p>
   {/if}
 {/if}
