@@ -159,7 +159,7 @@
 <br />
 
 <div>
-  <span>{$gjScheme.features.length} interventions</span>
+  <span>{$gjScheme.features.length} objects</span>
   <button
     type="button"
     class="align-right"

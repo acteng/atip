@@ -99,8 +99,8 @@
 
 {#if mode == thisMode}
   {#if $formOpen}
-    <p>Edit attributes to the left, or click another intervention</p>
+    <p>Edit attributes to the left, or click another object</p>
   {:else}
-    <p>Click an intervention to fill out its attributes</p>
+    <p>Click an object to fill out its attributes</p>
   {/if}
 {/if}
