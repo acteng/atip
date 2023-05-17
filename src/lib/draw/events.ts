@@ -40,3 +40,14 @@ export class EventManager {
     this.documentHandlers = {};
   }
 }
+
+// Removes a callback from a list, complaining if the callback wasn't in there.
+export function mustRemoveCallback<T>(list: T[], callback: T) {
+  let len = list.length;
+  list = list.filter((x) => x != callback);
+  if (len != list.length - 1) {
+    window.alert(
+      `Bug: Tried to remove a callback that wasn't previously added`
+    );
+  }
+}

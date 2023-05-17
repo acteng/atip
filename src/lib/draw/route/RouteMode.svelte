@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { Mode } from "../types";
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import init from "route-snapper";
   import { fetchWithProgress } from "route-snapper/lib.js";
   import { RouteTool } from "./route_tool";
   import { gjScheme, map, newFeatureId, formOpen } from "../../../stores";
   import type { Feature } from "../../../types";
   import type { LineString } from "geojson";
+  import type { FeatureWithProps } from "../../../maplibre_helpers";
   import RouteControls from "./RouteControls.svelte";
 
   const thisMode = "route";
@@ -44,25 +45,34 @@
       return;
     }
 
-    routeTool.addEventListenerFailure(() => {
-      if (mode == thisMode) {
-        changeMode("edit-attribute");
-      }
-    });
-    routeTool.addEventListenerSuccessRoute((feature) => {
-      if (mode == thisMode) {
-        gjScheme.update((gj) => {
-          feature.id = newFeatureId(gj);
-          feature.properties.intervention_type = "route";
-          gj.features.push(feature as Feature<LineString>);
-          return gj;
-        });
-
-        changeMode("edit-attribute");
-        formOpen.set(feature.id as number);
-      }
-    });
+    routeTool.addEventListenerSuccessRoute(onSuccess);
+    routeTool.addEventListenerFailure(onFailure);
   });
+
+  onDestroy(() => {
+    routeTool.removeEventListenerSuccessRoute(onSuccess);
+    routeTool.removeEventListenerFailure(onFailure);
+  });
+
+  function onSuccess(feature: FeatureWithProps<LineString>) {
+    if (mode == thisMode) {
+      gjScheme.update((gj) => {
+        feature.id = newFeatureId(gj);
+        feature.properties.intervention_type = "route";
+        gj.features.push(feature as Feature<LineString>);
+        return gj;
+      });
+
+      changeMode("edit-attribute");
+      formOpen.set(feature.id as number);
+    }
+  }
+
+  function onFailure() {
+    if (mode == thisMode) {
+      changeMode("edit-attribute");
+    }
+  }
 </script>
 
 {#if !routeTool}

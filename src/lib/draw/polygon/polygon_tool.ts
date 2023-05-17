@@ -19,7 +19,7 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
-import { EventManager } from "../events";
+import { EventManager, mustRemoveCallback } from "../events";
 
 const source = "edit-polygon-mode";
 
@@ -199,6 +199,12 @@ export class PolygonTool {
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
+  }
+  removeEventListenerSuccess(callback: (f: FeatureWithProps<Polygon>) => void) {
+    mustRemoveCallback(this.eventListenersSuccess, callback);
+  }
+  removeEventListenerFailure(callback: () => void) {
+    mustRemoveCallback(this.eventListenersFailure, callback);
   }
 
   tearDown() {

@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { onDestroy } from "svelte";
   import type { Mode } from "../types";
   import type { Polygon } from "geojson";
   import type { Feature } from "../../../types";
   import type { PolygonTool } from "./polygon_tool";
+  import type { FeatureWithProps } from "../../../maplibre_helpers";
   import { gjScheme, newFeatureId, formOpen } from "../../../stores";
   import PolygonControls from "./PolygonControls.svelte";
 
@@ -19,7 +21,15 @@
     polygonTool.stop();
   }
 
-  polygonTool.addEventListenerSuccess((feature) => {
+  polygonTool.addEventListenerSuccess(onSuccess);
+  polygonTool.addEventListenerFailure(onFailure);
+
+  onDestroy(() => {
+    polygonTool.removeEventListenerSuccess(onSuccess);
+    polygonTool.removeEventListenerFailure(onFailure);
+  });
+
+  function onSuccess(feature: FeatureWithProps<Polygon>) {
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);
@@ -31,12 +41,13 @@
       changeMode("edit-attribute");
       formOpen.set(feature.id as number);
     }
-  });
-  polygonTool.addEventListenerFailure(() => {
+  }
+
+  function onFailure() {
     if (mode == thisMode) {
       changeMode("edit-attribute");
     }
-  });
+  }
 </script>
 
 {#if mode == thisMode}

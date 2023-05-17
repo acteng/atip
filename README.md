@@ -65,7 +65,7 @@ interact with the page normally, generating the equivalent test code.
 
 - Use `overwriteSource` and `overwriteLayer` instead of `map.addSource` and `map.addLayer`
 - Within a `.ts` file using classes, use `EventManager` to handle MapLibre and document event handlers. Otherwise as you edit a component, you'll keep running old versions of the callbacks!
-- Within a Svelte component, express event handlers using functions and remember to call `map.off()` within `onDestroy`. Refer to existing components.
+- Within a Svelte component, express event handlers using functions and remember to call `map.off()` and `whateverTool.removeEventListenerSuccess` within `onDestroy`. Refer to existing components.
 - When in doubt, Ctrl+Shift+R to hard refresh and get rid of any possible HMR weirdness
 
 ### Overall app state

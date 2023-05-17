@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { onDestroy } from "svelte";
   import type { Mode } from "../types";
   import type { Point } from "geojson";
   import type { Feature } from "../../../types";
   import type { PointTool } from "./point_tool";
+  import type { FeatureWithProps } from "../../../maplibre_helpers";
   import { gjScheme, newFeatureId, formOpen } from "../../../stores";
   import PointControls from "./PointControls.svelte";
 
@@ -19,7 +21,15 @@
     pointTool.stop();
   }
 
-  pointTool.addEventListenerSuccess((feature) => {
+  pointTool.addEventListenerSuccess(onSuccess);
+  pointTool.addEventListenerFailure(onFailure);
+
+  onDestroy(() => {
+    pointTool.removeEventListenerSuccess(onSuccess);
+    pointTool.removeEventListenerFailure(onFailure);
+  });
+
+  function onSuccess(feature: FeatureWithProps<Point>) {
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);
@@ -31,12 +41,13 @@
       changeMode("edit-attribute");
       formOpen.set(feature.id as number);
     }
-  });
-  pointTool.addEventListenerFailure(() => {
+  }
+
+  function onFailure() {
     if (mode == thisMode) {
       changeMode("edit-attribute");
     }
-  });
+  }
 </script>
 
 {#if mode == thisMode}

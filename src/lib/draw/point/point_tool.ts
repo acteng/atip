@@ -8,7 +8,7 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
-import { EventManager } from "../events";
+import { EventManager, mustRemoveCallback } from "../events";
 
 const source = "edit-point-mode";
 
@@ -76,6 +76,12 @@ export class PointTool {
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
+  }
+  removeEventListenerSuccess(callback: (f: FeatureWithProps<Point>) => void) {
+    mustRemoveCallback(this.eventListenersSuccess, callback);
+  }
+  removeEventListenerFailure(callback: () => void) {
+    mustRemoveCallback(this.eventListenersFailure, callback);
   }
 
   tearDown() {

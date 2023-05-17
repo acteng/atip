@@ -2,12 +2,13 @@
   import { onDestroy } from "svelte";
   import { type MapMouseEvent } from "maplibre-gl";
   import type { Mode } from "./types";
-  import type { LineString, Polygon } from "geojson";
+  import type { LineString, Point, Polygon } from "geojson";
   import type { PointTool } from "./point/point_tool";
   import type { PolygonTool } from "./polygon/polygon_tool";
   import type { RouteTool } from "./route/route_tool";
   import { map, gjScheme, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
+  import type { FeatureWithProps } from "../../maplibre_helpers";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
@@ -55,14 +56,33 @@
   // Handle clicking the hovered feature
   $map.on("click", onClick);
 
+  // Handle successful edits
+  routeTool.addEventListenerSuccessRoute(onSuccessRoute);
+  routeTool.addEventListenerSuccessArea(onSuccessArea);
+  pointTool.addEventListenerSuccess(onSuccessPointOrPolygon);
+  polygonTool.addEventListenerSuccess(onSuccessPointOrPolygon);
+
+  // Handle failures
+  pointTool.addEventListenerFailure(onFailure);
+  polygonTool.addEventListenerFailure(onFailure);
+  routeTool.addEventListenerFailure(onFailure);
+
   onDestroy(() => {
     $map.off("mousemove", onMouseMove);
     $map.off("mouseout", onMouseOut);
     $map.off("click", onClick);
+
+    routeTool.removeEventListenerSuccessRoute(onSuccessRoute);
+    routeTool.removeEventListenerSuccessArea(onSuccessArea);
+    pointTool.removeEventListenerSuccess(onSuccessPointOrPolygon);
+    polygonTool.removeEventListenerSuccess(onSuccessPointOrPolygon);
+
+    pointTool.removeEventListenerFailure(onFailure);
+    polygonTool.removeEventListenerFailure(onFailure);
+    routeTool.removeEventListenerFailure(onFailure);
   });
 
-  // Handle successful edits
-  routeTool.addEventListenerSuccessRoute((editedRoute) => {
+  function onSuccessRoute(editedRoute: FeatureWithProps<LineString>) {
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
@@ -79,8 +99,9 @@
       currentlyEditing = null;
       currentlyEditingControls = null;
     }
-  });
-  routeTool.addEventListenerSuccessArea((editedArea) => {
+  }
+
+  function onSuccessArea(editedArea: FeatureWithProps<Polygon>) {
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
@@ -96,42 +117,36 @@
       currentlyEditing = null;
       currentlyEditingControls = null;
     }
-  });
-  for (let tool of [pointTool, polygonTool]) {
-    tool.addEventListenerSuccess((feature) => {
-      if (mode == thisMode) {
-        gjScheme.update((gj) => {
-          let updateFeature = gj.features.find(
-            (f) => f.id == currentlyEditing
-          )!;
-          updateFeature.geometry = feature.geometry;
-          delete updateFeature.properties.hide_while_editing;
-          return gj;
-        });
-
-        // Stay in this mode
-        currentlyEditing = null;
-        currentlyEditingControls = null;
-      }
-    });
   }
 
-  // Handle failures
-  for (let tool of [pointTool, polygonTool, routeTool]) {
-    tool.addEventListenerFailure(() => {
-      if (mode == thisMode) {
-        // Don't modify the thing we were just editing
-        gjScheme.update((gj) => {
-          let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-          delete feature.properties.hide_while_editing;
-          return gj;
-        });
+  function onSuccessPointOrPolygon(feature: FeatureWithProps<Point | Polygon>) {
+    if (mode == thisMode) {
+      gjScheme.update((gj) => {
+        let updateFeature = gj.features.find((f) => f.id == currentlyEditing)!;
+        updateFeature.geometry = feature.geometry;
+        delete updateFeature.properties.hide_while_editing;
+        return gj;
+      });
 
-        // Stay in this mode
-        currentlyEditing = null;
-        currentlyEditingControls = null;
-      }
-    });
+      // Stay in this mode
+      currentlyEditing = null;
+      currentlyEditingControls = null;
+    }
+  }
+
+  function onFailure() {
+    if (mode == thisMode) {
+      // Don't modify the thing we were just editing
+      gjScheme.update((gj) => {
+        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+        delete feature.properties.hide_while_editing;
+        return gj;
+      });
+
+      // Stay in this mode
+      currentlyEditing = null;
+      currentlyEditingControls = null;
+    }
   }
 
   function onMouseMove(e: MapMouseEvent) {

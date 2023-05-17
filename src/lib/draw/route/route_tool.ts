@@ -13,7 +13,7 @@ import {
   drawPolygon,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
-import { EventManager } from "../events";
+import { EventManager, mustRemoveCallback } from "../events";
 
 const source = "route-snapper";
 
@@ -279,6 +279,19 @@ export class RouteTool {
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
+  }
+  removeEventListenerSuccessRoute(
+    callback: (f: FeatureWithProps<LineString>) => void
+  ) {
+    mustRemoveCallback(this.eventListenersSuccessRoute, callback);
+  }
+  removeEventListenerSuccessArea(
+    callback: (f: FeatureWithProps<Polygon>) => void
+  ) {
+    mustRemoveCallback(this.eventListenersSuccessArea, callback);
+  }
+  removeEventListenerFailure(callback: () => void) {
+    mustRemoveCallback(this.eventListenersFailure, callback);
   }
 
   isActive(): boolean {
