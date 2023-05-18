@@ -56,3 +56,21 @@ test("loading a file with null properties displays the length", async ({
   // We don't attempt to classify intervention_type for non-ATIP inputs
   await page.getByRole("button", { name: "1) Untitled line" }).click();
 });
+
+test("the previous file from local storage is loaded by default", async ({
+  page,
+}) => {
+  await page.goto("/scheme.html?authority=North Somerset");
+  await page.getByRole("button", { name: "New point" }).click();
+  await page.getByRole("region", { name: "Map" }).click({
+    position: {
+      x: 500,
+      y: 500,
+    },
+  });
+  await page.getByRole("button", { name: "Save" }).click();
+
+  await page.reload();
+
+  await page.getByRole("button", { name: "1) Untitled point" }).click();
+});

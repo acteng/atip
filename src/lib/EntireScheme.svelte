@@ -18,6 +18,7 @@
     baseFilename += `_${schema}`;
   }
 
+  let loaded = false;
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
     let params = new URLSearchParams(window.location.search);
@@ -40,11 +41,12 @@
         console.log(`Failed to load from local storage: ${err}`);
       }
     }
+    loaded = true;
   });
 
-  // Set up local storage sync
+  // Set up local storage sync. Don't run before onMount above is done with the initial load.
   $: {
-    if ($gjScheme) {
+    if (loaded && $gjScheme) {
       console.log(`GJ changed, saving to local storage`);
       window.localStorage.setItem(
         baseFilename,
