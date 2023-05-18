@@ -46,10 +46,7 @@
 
   // Rendering
   let source = "split-route";
-  overwriteSource($map, source, {
-    type: "geojson",
-    data: emptyGeojson(),
-  });
+  overwriteSource($map, source, emptyGeojson());
   // TODO Scissors icon?
   overwriteLayer($map, {
     id: "draw-split-route",

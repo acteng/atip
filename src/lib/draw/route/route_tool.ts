@@ -41,10 +41,7 @@ export class RouteTool {
     this.eventListenersFailure = [];
 
     // Rendering
-    overwriteSource(map, source, {
-      type: "geojson",
-      data: emptyGeojson(),
-    });
+    overwriteSource(map, source, emptyGeojson());
     overwriteLayer(map, {
       id: "route-points",
       source,

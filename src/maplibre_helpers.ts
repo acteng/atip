@@ -1,9 +1,5 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
-import type {
-  Map,
-  DataDrivenPropertyValueSpecification,
-  SourceSpecification,
-} from "maplibre-gl";
+import type { Map, DataDrivenPropertyValueSpecification } from "maplibre-gl";
 import type { GeoJSON, FeatureCollection, Feature, Geometry } from "geojson";
 import turfBbox from "@turf/bbox";
 
@@ -58,15 +54,12 @@ export function drawCircle(
   };
 }
 
-// MapLibre's API isn't idempotent; you can't overwrite an existing source or
-// layer. This complicates Vite's hot-reload feature, unless every component
-// correctly tears down all sources and layers. These methods workaround that
-// lifetime management hassle by overwriting if necessary.
-export function overwriteSource(
-  map: Map,
-  id: string,
-  source: SourceSpecification
-) {
+// This sets up a GeoJSON source. MapLibre's API isn't idempotent; you can't
+// overwrite an existing source or layer. This complicates Vite's hot-reload
+// feature, unless every component correctly tears down all sources and layers.
+// These methods workaround that lifetime management hassle by overwriting if
+// necessary.
+export function overwriteSource(map: Map, id: string, data: GeoJSON) {
   if (map.getSource(id)) {
     // First remove all layers using this source
     let layers = [];
@@ -81,7 +74,10 @@ export function overwriteSource(
 
     map.removeSource(id);
   }
-  map.addSource(id, source);
+  map.addSource(id, {
+    type: "geojson",
+    data,
+  });
 }
 
 // The layer.id here MUST be present in layerZorder.

@@ -35,10 +35,7 @@ export class PointTool {
     this.events.mapHandler("mousemove", this.onMouseMove);
 
     // Render
-    overwriteSource(map, source, {
-      type: "geojson",
-      data: emptyGeojson(),
-    });
+    overwriteSource(map, source, emptyGeojson());
     overwriteLayer(map, {
       id: "edit-point-mode",
       source,

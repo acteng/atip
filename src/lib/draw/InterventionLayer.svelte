@@ -21,10 +21,7 @@
 
   let source = "interventions";
 
-  overwriteSource($map, source, {
-    type: "geojson",
-    data: $gjScheme,
-  });
+  overwriteSource($map, source, $gjScheme);
   // Keep the final data synced to what's drawn here
   $: {
     let copy = JSON.parse(JSON.stringify($gjScheme));

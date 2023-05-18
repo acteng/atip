@@ -21,10 +21,7 @@
     });
   }
 
-  overwriteSource($map, "boundary", {
-    type: "geojson",
-    data: mask(boundaryGeojson),
-  });
+  overwriteSource($map, "boundary", mask(boundaryGeojson));
   overwriteLayer($map, {
     id: "boundary",
     source: "boundary",

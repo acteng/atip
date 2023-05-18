@@ -60,10 +60,7 @@ export class PolygonTool {
     this.events.documentHandler("keypress", this.onKeypress);
 
     // Render
-    overwriteSource(map, source, {
-      type: "geojson",
-      data: emptyGeojson(),
-    });
+    overwriteSource(map, source, emptyGeojson());
 
     overwriteLayer(map, {
       id: "edit-polygon-fill",
