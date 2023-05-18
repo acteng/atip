@@ -2,10 +2,10 @@
   import type { FeatureCollection } from "geojson";
   import maplibregl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { bbox } from "./maplibre_helpers";
-  import About from "./lib/About.svelte";
+  import { bbox } from "../maplibre_helpers";
+  import About from "../lib/sidebar/About.svelte";
 
-  import authoritiesUrl from "../assets/authorities.geojson?url";
+  import authoritiesUrl from "../../assets/authorities.geojson?url";
 
   let showAbout = false;
 

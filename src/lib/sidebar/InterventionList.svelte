@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { FeatureUnion, Schema } from "../types";
-  import FormV1 from "./forms/FormV1.svelte";
-  import FormV2 from "./forms/FormV2.svelte";
-  import PlanningForm from "./forms/PlanningForm.svelte";
-  import CriticalsForm from "./forms/CriticalsForm.svelte";
+  import type { FeatureUnion, Schema } from "../../types";
+  import FormV1 from "../forms/FormV1.svelte";
+  import FormV2 from "../forms/FormV2.svelte";
+  import PlanningForm from "../forms/PlanningForm.svelte";
+  import CriticalsForm from "../forms/CriticalsForm.svelte";
   import AccordionItem from "./AccordionItem.svelte";
-  import { gjScheme, formOpen, deleteIntervention } from "../stores";
+  import { gjScheme, formOpen, deleteIntervention } from "../../stores";
   import { type Remote } from "comlink";
-  import { type RouteInfo } from "../worker";
+  import { type RouteInfo } from "../../worker";
 
   export let schema: Schema;
   export let routeInfo: Remote<RouteInfo>;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { colors } from "../colors";
   import type { Schema, Scheme } from "../types";
-  import CollapsibleCard from "./CollapsibleCard.svelte";
+  import CollapsibleCard from "./common/CollapsibleCard.svelte";
 
   export let schema: Schema;
 </script>
