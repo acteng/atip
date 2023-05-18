@@ -1,21 +1,20 @@
 <script lang="ts">
   import { type Remote } from "comlink";
   import { type RouteInfo } from "../../worker";
-  import SpeedLimits from "../layers/SpeedLimits.svelte";
+  import SpeedLimits from "./SpeedLimits.svelte";
 
   export let routeInfo: Remote<RouteInfo>;
-  export let id: number;
 
-  let layer: "none" | "speed limits" = "none";
+  let show: "none" | "speed limits" = "none";
 </script>
 
 <label>
-  Show details:
-  <select bind:value={layer}>
+  Show layer:
+  <select bind:value={show}>
     <option value="none">None</option>
     <option value="speed limits">Speed limits</option>
   </select>
 </label>
-{#if layer == "speed limits"}
-  <SpeedLimits {routeInfo} {id} />
+{#if show == "speed limits"}
+  <SpeedLimits {routeInfo} />
 {/if}

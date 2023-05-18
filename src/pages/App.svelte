@@ -13,6 +13,7 @@
   import Layout from "../lib/common/Layout.svelte";
   import BoundaryLayer from "../lib/BoundaryLayer.svelte";
   import InterventionList from "../lib/sidebar/InterventionList.svelte";
+  import ContextualLayers from "../lib/layers/ContextualLayers.svelte";
   import EntireScheme from "../lib/sidebar/EntireScheme.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
@@ -126,6 +127,8 @@
     <EntireScheme {authorityName} {schema} />
     <br />
     <InterventionList {schema} {routeInfo} />
+    <hr />
+    <ContextualLayers {routeInfo} />
   </div>
   <div slot="main">
     <Map {style}>
