@@ -18,6 +18,7 @@
   import { type RouteInfo } from "../../worker";
   import Tooltips from "./Tooltips.svelte";
   import DiscreteLegend from "./DiscreteLegend.svelte";
+  import HelpIcon from "./HelpIcon.svelte";
 
   export let routeInfo: Remote<RouteInfo>;
   export let id: number;
@@ -43,10 +44,7 @@
   // NOTE! There's only ever one source and layer with this name. This component
   // (and the source and layer) will get destroyed frequently, but even if not,
   // overwriting should be safe.
-  overwriteSource($map, source, {
-    type: "geojson",
-    data: emptyGeojson(),
-  });
+  overwriteSource($map, source, emptyGeojson());
   overwriteLayer($map, {
     id: speedLimitLayer,
     source,
@@ -98,6 +96,10 @@
   </select>
 </label>
 {#if layer == "speed limits"}
+  (mph)
+  <HelpIcon
+    contents="Data comes from OpenStreetMap, and may not always be correct. Freehand segments and off-road paths generally have no speed data."
+  />
   <DiscreteLegend {colors} steps={speedLimitSteps} />
 {/if}
 
