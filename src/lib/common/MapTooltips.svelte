@@ -21,6 +21,13 @@
   });
 
   function onMouseMove(e: MapMouseEvent) {
+    // When this component is a child of another that defines a layer, during
+    // component teardown, the parent (and layer) will disappear first. Avoid
+    // errors.
+    if (!$map.getLayer(layer)) {
+      return;
+    }
+
     let results = $map.queryRenderedFeatures(e.point, {
       layers: [layer],
     });
