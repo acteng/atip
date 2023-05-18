@@ -7,8 +7,8 @@
     mapHover,
     sidebarHover,
     openFromSidebar,
-  } from "../stores";
-  import type { Scheme, Schema } from "../types";
+  } from "../../stores";
+  import type { Scheme, Schema } from "../../types";
 
   export let authorityName: string;
   export let schema: Schema;

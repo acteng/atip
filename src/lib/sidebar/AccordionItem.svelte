@@ -6,7 +6,7 @@
     mapHover,
     openFromSidebar,
     sidebarHover,
-  } from "../stores.js";
+  } from "../../stores.js";
 
   export let id: number;
   export let label: string;

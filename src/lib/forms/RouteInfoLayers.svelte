@@ -16,9 +16,9 @@
   import { map, gjScheme } from "../../stores";
   import { type Remote } from "comlink";
   import { type RouteInfo } from "../../worker";
-  import Tooltips from "./Tooltips.svelte";
-  import DiscreteLegend from "./DiscreteLegend.svelte";
-  import HelpIcon from "./HelpIcon.svelte";
+  import MapTooltips from "../common/MapTooltips.svelte";
+  import DiscreteLegend from "../common/DiscreteLegend.svelte";
+  import HelpIcon from "../common/HelpIcon.svelte";
 
   export let routeInfo: Remote<RouteInfo>;
   export let id: number;
@@ -103,4 +103,4 @@
   <DiscreteLegend {colors} steps={speedLimitSteps} />
 {/if}
 
-<Tooltips layer="speed-limits" contents={tooltip} />
+<MapTooltips layer="speed-limits" contents={tooltip} />
