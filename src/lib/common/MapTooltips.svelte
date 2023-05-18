@@ -18,6 +18,7 @@
   onDestroy(() => {
     $map.off("mousemove", onMouseMove);
     $map.off("mouseout", onMouseOut);
+    popup.remove();
   });
 
   function onMouseMove(e: MapMouseEvent) {
@@ -25,6 +26,7 @@
     // component teardown, the parent (and layer) will disappear first. Avoid
     // errors.
     if (!$map.getLayer(layer)) {
+      popup.remove();
       return;
     }
 
