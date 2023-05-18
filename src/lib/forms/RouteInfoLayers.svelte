@@ -29,7 +29,6 @@
 
   let source = "speed-limits";
   let speedLimitLayer = "speed-limits";
-  // TODO Also draw a quantized legend
   const colorBySpeedLimit: DataDrivenPropertyValueSpecification<string> = [
     "step",
     ["get", "speed_limit"],
