@@ -100,6 +100,7 @@ impl RouteInfo {
                 if let Some(path) = self.geometric_path(*i1, *i2) {
                     // Walk along the path, building up a LineString as long as the speed limit is
                     // the same
+                    // TODO Or just be simple and return one Feature per Road
                     let mut pts = Vec::new();
                     let mut speed_limit: Option<Speed> = None;
 
@@ -160,6 +161,26 @@ impl RouteInfo {
         let gj = geojson::GeoJson::from(geojson::FeatureCollection {
             bbox: None,
             features: output,
+            foreign_members: None,
+        });
+        Ok(abstutil::to_json(&gj))
+    }
+
+    /// Return GeoJSON LineStrings with all known `speed_limit`s.
+    #[wasm_bindgen(js_name = allSpeedLimits)]
+    pub fn all_speed_limits(&self) -> Result<String, JsValue> {
+        let mut features = Vec::new();
+        for r in self.network.roads.values() {
+            if let Some(speed) = r.speed_limit {
+                let mut feature =
+                    Feature::from(r.reference_line.to_geojson(Some(&self.network.gps_bounds)));
+                feature.set_property("speed_limit", speed.to_miles_per_hour());
+                features.push(feature);
+            }
+        }
+        let gj = geojson::GeoJson::from(geojson::FeatureCollection {
+            bbox: None,
+            features,
             foreign_members: None,
         });
         Ok(abstutil::to_json(&gj))

@@ -41,6 +41,14 @@ export class RouteInfo {
 
     return this.inner.speedLimitForRoute(waypoints);
   }
+
+  allSpeedLimits(): string {
+    if (!this.inner) {
+      throw new Error("Need to loadFile before using RouteInfo");
+    }
+
+    return this.inner.allSpeedLimits();
+  }
 }
 
 Comlink.expose(RouteInfo);
