@@ -8,8 +8,8 @@ mod map_matching;
 use std::collections::BTreeSet;
 
 use geojson::Feature;
-use geom::{Distance, FindClosest, PolyLine, Pt2D, Speed};
-use osm2streets::{Direction, IntersectionID, StreetNetwork};
+use geom::{Distance, FindClosest, Pt2D};
+use osm2streets::{IntersectionID, StreetNetwork};
 use serde::Deserialize;
 use wasm_bindgen::prelude::*;
 
@@ -83,84 +83,41 @@ impl RouteInfo {
         abstutil::plain_list_names(road_names)
     }
 
-    /// Given the JSON waypoints array produced by route-snapper, generate GeoJSON LineStrings,
-    /// covering the entire route, each with a `speed_limit` property (in mph) when that data is
-    /// known.
+    /// Given the JSON waypoints array produced by route-snapper, generate GeoJSON LineStrings
+    /// covering each segment of the route where `speed_limit` (in mph) is defined. Freehand and
+    /// unknown segments are not returned.
     #[wasm_bindgen(js_name = speedLimitForRoute)]
     pub fn speed_limit_for_route(&self, raw_waypoints: JsValue) -> Result<String, JsValue> {
         let raw_waypoints: Vec<RawRouteWaypoint> = serde_wasm_bindgen::from_value(raw_waypoints)?;
         let waypoints = self.parse_waypoints(raw_waypoints).map_err(err_to_js)?;
 
-        // Generate output LineStrings in order, covering the whole route. For snapped sections,
-        // chop it up whenever the speed limit changes.
-        let mut output = Vec::new();
-
+        let mut features = Vec::new();
         for pair in waypoints.windows(2) {
             if let (Waypoint::Snapped(_, i1), Waypoint::Snapped(_, i2)) = (&pair[0], &pair[1]) {
                 if let Some(path) = self.geometric_path(*i1, *i2) {
-                    // Walk along the path, building up a LineString as long as the speed limit is
-                    // the same
-                    // TODO Or just be simple and return one Feature per Road
-                    let mut pts = Vec::new();
-                    let mut speed_limit: Option<Speed> = None;
-
-                    for (r, dir) in path {
+                    // Add one LineString per Road where speed_limit is defined.
+                    // We could try to glue together contiguous LineStrings where the speed is the
+                    // same, but there's no benefit.
+                    for (r, _) in path {
                         let road = &self.network.roads[&r];
-                        let mut road_pts = road.reference_line.clone().into_points();
-                        if dir == Direction::Back {
-                            road_pts.reverse();
-                        }
-
-                        if road.speed_limit == speed_limit {
-                            pts.extend(road_pts);
-                        } else {
-                            // Start a new segment
-                            if !pts.is_empty() {
-                                let mut feature = Feature::from(
-                                    PolyLine::deduping_new(std::mem::take(&mut pts))
-                                        .map_err(err_to_js)?
-                                        .to_geojson(Some(&self.network.gps_bounds)),
-                                );
-                                feature.set_property("type", "snapped");
-                                if let Some(speed) = speed_limit {
-                                    feature.set_property("speed_limit", speed.to_miles_per_hour());
-                                }
-                                output.push(feature);
-                            }
-                            speed_limit = road.speed_limit;
-                        }
-                    }
-
-                    // Handle the end
-                    if !pts.is_empty() {
-                        let mut feature = Feature::from(
-                            PolyLine::deduping_new(std::mem::take(&mut pts))
-                                .map_err(err_to_js)?
-                                .to_geojson(Some(&self.network.gps_bounds)),
-                        );
-                        feature.set_property("type", "snapped");
-                        if let Some(speed) = speed_limit {
+                        if let Some(speed) = road.speed_limit {
+                            let mut feature = Feature::from(
+                                road.reference_line
+                                    .to_geojson(Some(&self.network.gps_bounds)),
+                            );
                             feature.set_property("speed_limit", speed.to_miles_per_hour());
+                            features.push(feature);
                         }
-                        output.push(feature);
                     }
                 } else {
                     return Err(err_to_js("no path between two waypoints"));
                 }
-            } else {
-                let mut feature = Feature::from(
-                    PolyLine::new(vec![pair[0].pt(), pair[1].pt()])
-                        .map_err(err_to_js)?
-                        .to_geojson(Some(&self.network.gps_bounds)),
-                );
-                feature.set_property("type", "free");
-                output.push(feature);
             }
         }
 
         let gj = geojson::GeoJson::from(geojson::FeatureCollection {
             bbox: None,
-            features: output,
+            features,
             foreign_members: None,
         });
         Ok(abstutil::to_json(&gj))
@@ -203,13 +160,4 @@ struct RawRouteWaypoint {
 enum Waypoint {
     Free(Pt2D),
     Snapped(Pt2D, IntersectionID),
-}
-
-impl Waypoint {
-    fn pt(&self) -> Pt2D {
-        match self {
-            Waypoint::Free(pt) => *pt,
-            Waypoint::Snapped(pt, _) => *pt,
-        }
-    }
 }
