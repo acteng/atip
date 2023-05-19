@@ -6,11 +6,8 @@
   import CriticalsForm from "../forms/CriticalsForm.svelte";
   import AccordionItem from "./AccordionItem.svelte";
   import { gjScheme, formOpen, deleteIntervention } from "../../stores";
-  import { type Remote } from "comlink";
-  import { type RouteInfo } from "../../worker";
 
   export let schema: Schema;
-  export let routeInfo: Remote<RouteInfo>;
 
   function interventionName(feature: FeatureUnion): string {
     if (schema == "planning") {
@@ -66,7 +63,6 @@
   >
     {#if schema == "v1"}
       <FormV1
-        {routeInfo}
         id={feature.id}
         bind:name={feature.properties.name}
         bind:intervention_type={feature.properties.intervention_type}

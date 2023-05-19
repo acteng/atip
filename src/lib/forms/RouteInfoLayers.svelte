@@ -1,9 +1,6 @@
 <script lang="ts">
-  import { type Remote } from "comlink";
-  import { type RouteInfo } from "../../worker";
   import SpeedLimits from "../layers/SpeedLimits.svelte";
 
-  export let routeInfo: Remote<RouteInfo>;
   export let id: number;
 
   let layer: "none" | "speed limits" = "none";
@@ -17,5 +14,5 @@
   </select>
 </label>
 {#if layer == "speed limits"}
-  <SpeedLimits {routeInfo} {id} />
+  <SpeedLimits {id} />
 {/if}

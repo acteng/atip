@@ -28,7 +28,9 @@ export class RouteInfo {
 
   nameForRoute(linestring: Feature<LineString>): string {
     if (!this.inner) {
-      throw new Error("Still loading route info, please retry after a few seconds");
+      throw new Error(
+        "Still loading route info, please retry after a few seconds"
+      );
     }
 
     return this.inner.nameForRoute(linestring);
@@ -36,7 +38,9 @@ export class RouteInfo {
 
   speedLimitForRoute(waypoints: Waypoint[]): string {
     if (!this.inner) {
-      throw new Error("Still loading route info, please retry after a few seconds");
+      throw new Error(
+        "Still loading route info, please retry after a few seconds"
+      );
     }
 
     return this.inner.speedLimitForRoute(waypoints);
@@ -44,7 +48,9 @@ export class RouteInfo {
 
   allSpeedLimits(): string {
     if (!this.inner) {
-      throw new Error("Still loading route info, please retry after a few seconds");
+      throw new Error(
+        "Still loading route info, please retry after a few seconds"
+      );
     }
 
     return this.inner.allSpeedLimits();
