@@ -128,6 +128,9 @@ impl RouteInfo {
     pub fn all_speed_limits(&self) -> Result<String, JsValue> {
         let mut features = Vec::new();
         for r in self.network.roads.values() {
+            if r.is_light_rail() {
+                continue;
+            }
             if let Some(speed) = r.speed_limit {
                 let mut feature =
                     Feature::from(r.reference_line.to_geojson(Some(&self.network.gps_bounds)));
