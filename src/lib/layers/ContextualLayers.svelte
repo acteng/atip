@@ -1,10 +1,6 @@
 <script lang="ts">
-  import { type Remote } from "comlink";
-  import { type RouteInfo } from "../../worker";
   import SpeedLimits from "./SpeedLimits.svelte";
   import { formOpen } from "../../stores";
-
-  export let routeInfo: Remote<RouteInfo>;
 
   let show: "none" | "speed limits" = "none";
 
@@ -24,5 +20,5 @@
   </select>
 </label>
 {#if show == "speed limits"}
-  <SpeedLimits {routeInfo} id={undefined} />
+  <SpeedLimits id={undefined} />
 {/if}

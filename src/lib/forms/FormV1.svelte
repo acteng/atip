@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { gjScheme } from "../../stores";
-  import { type RouteInfo } from "../../worker";
+  import { gjScheme, routeInfo } from "../../stores";
   import type { Feature, LineString } from "geojson";
-  import { type Remote } from "comlink";
   import RouteInfoLayers from "./RouteInfoLayers.svelte";
 
-  export let routeInfo: Remote<RouteInfo>;
   export let id: number;
   export let name: string;
   export let intervention_type: "area" | "route" | "crossing" | "other";
@@ -25,7 +22,7 @@
       (f) => f.id == id
     ) as Feature<LineString>;
     try {
-      name = await routeInfo.nameForRoute(linestring);
+      name = await $routeInfo.nameForRoute(linestring);
     } catch (e) {
       window.alert(`Couldn't auto-name route: ${e}`);
     }
@@ -70,7 +67,7 @@
   <br /><button type="button" on:click={() => autoFillDetails()}
     >Auto-fill details</button
   ><br />
-  <RouteInfoLayers {routeInfo} {id} />
+  <RouteInfoLayers {id} />
 {/if}
 
 <style>

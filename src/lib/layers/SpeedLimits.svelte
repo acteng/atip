@@ -13,14 +13,11 @@
   } from "maplibre-gl";
   import type { Feature } from "../../types";
   import { lineWidth } from "../../colors";
-  import { map, gjScheme } from "../../stores";
-  import { type Remote } from "comlink";
-  import { type RouteInfo } from "../../worker";
+  import { map, gjScheme, routeInfo } from "../../stores";
   import MapTooltips from "../common/MapTooltips.svelte";
   import DiscreteLegend from "../common/DiscreteLegend.svelte";
   import HelpIcon from "../common/HelpIcon.svelte";
 
-  export let routeInfo: Remote<RouteInfo>;
   // Show along a route if specified, or show all otherwise
   export let id: number | undefined;
 
@@ -79,11 +76,11 @@
           (f) => f.id == id
         ) as Feature<LineString>;
         let gj = JSON.parse(
-          await routeInfo.speedLimitForRoute(linestring.properties.waypoints)
+          await $routeInfo.speedLimitForRoute(linestring.properties.waypoints)
         );
         ($map.getSource(source) as GeoJSONSource).setData(gj);
       } else {
-        let gj = JSON.parse(await routeInfo.allSpeedLimits());
+        let gj = JSON.parse(await $routeInfo.allSpeedLimits());
         ($map.getSource(source) as GeoJSONSource).setData(gj);
       }
     } catch (e) {

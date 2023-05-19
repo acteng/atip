@@ -2,6 +2,7 @@
   import type { FeatureCollection, Polygon } from "geojson";
   import { onMount } from "svelte";
   import authoritiesUrl from "../../assets/authorities.geojson?url";
+  import { routeInfo } from "../stores";
   import type { Schema } from "../types";
   import * as Comlink from "comlink";
   import workerWrapper from "../worker?worker";
@@ -48,8 +49,6 @@
     routeInfoUrl = `https://atip.uk/route-info-dev/${authorityName}.bin`;
   }
 
-  let routeInfo: Comlink.Remote<RouteInfo>;
-
   function toggleAbout() {
     showAbout = !showAbout;
     showInstructions = false;
@@ -78,8 +77,10 @@
     const MyWorker: Comlink.Remote<WorkerConstructor> = Comlink.wrap(
       new workerWrapper()
     );
-    routeInfo = await new MyWorker();
-    await routeInfo.loadFile(routeInfoUrl);
+    // TODO Maybe don't set it until loadFile is done, so that everywhere using
+    // it can disable controls until loaded
+    routeInfo.set(await new MyWorker());
+    await $routeInfo.loadFile(routeInfoUrl);
   });
 
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
@@ -126,9 +127,9 @@
     <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
     <EntireScheme {authorityName} {schema} />
     <br />
-    <InterventionList {schema} {routeInfo} />
+    <InterventionList {schema} />
     <hr />
-    <ContextualLayers {routeInfo} />
+    <ContextualLayers />
   </div>
   <div slot="main">
     <Map {style}>

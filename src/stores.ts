@@ -2,10 +2,15 @@ import { writable, type Writable } from "svelte/store";
 import { emptyGeojson } from "./maplibre_helpers";
 import type { Map } from "maplibre-gl";
 import type { Scheme } from "./types";
+import { type Remote } from "comlink";
+import { type RouteInfo } from "./worker";
 
 // A global singleton, containing a loaded map
 // TODO | null. When we enable strictNullChecks, this'll become a problem
 export const map: Writable<Map> = writable(null);
+
+// A global singleton, with a RouteInfo web worker. It's null before it's loaded.
+export const routeInfo: Writable<Remote<RouteInfo> | null> = writable(null);
 
 // TODO Should we instead store a map from ID to feature?
 export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);
