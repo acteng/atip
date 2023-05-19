@@ -1,18 +1,11 @@
 <script lang="ts">
   export let colors: string[];
-  export let steps: number[];
+  export let labels: number[];
 
-  if (colors.length != steps.length + 1) {
-    throw new Error(`There must be one more color than step`);
+  if (colors.length != labels.length) {
+    throw new Error(`colors and labels must match`);
   }
-
-  let ranges = [];
-  let low = 0;
-  for (let high of steps) {
-    ranges.push(`${low}-${high}`);
-    low = high;
-  }
-  ranges.push(`>${low}`);
+  let width = `${100 / colors.length}%`;
 </script>
 
 <table>
@@ -22,8 +15,8 @@
     {/each}
   </tr>
   <tr>
-    {#each ranges as range}
-      <td>{range}</td>
+    {#each labels as label}
+      <td style:width>{label}</td>
     {/each}
   </tr>
 </table>
