@@ -1,6 +1,6 @@
 <script lang="ts">
   export let colors: string[];
-  export let labels: number[];
+  export let labels: string[];
 
   if (colors.length != labels.length) {
     throw new Error(`colors and labels must match`);
