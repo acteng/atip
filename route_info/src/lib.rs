@@ -84,8 +84,8 @@ impl RouteInfo {
     }
 
     /// Given the JSON waypoints array produced by route-snapper, generate GeoJSON LineStrings
-    /// covering each segment of the route where `speed_limit` (in mph) is defined. Freehand and
-    /// unknown segments are not returned.
+    /// covering each segment of the route where `speed_limit` (in mph, rounded) is defined.
+    /// Freehand and unknown segments are not returned.
     #[wasm_bindgen(js_name = speedLimitForRoute)]
     pub fn speed_limit_for_route(&self, raw_waypoints: JsValue) -> Result<String, JsValue> {
         let raw_waypoints: Vec<RawRouteWaypoint> = serde_wasm_bindgen::from_value(raw_waypoints)?;
@@ -105,7 +105,7 @@ impl RouteInfo {
                                 road.reference_line
                                     .to_geojson(Some(&self.network.gps_bounds)),
                             );
-                            feature.set_property("speed_limit", speed.to_miles_per_hour());
+                            feature.set_property("speed_limit", speed.to_miles_per_hour().round());
                             features.push(feature);
                         }
                     }
@@ -134,7 +134,7 @@ impl RouteInfo {
             if let Some(speed) = r.speed_limit {
                 let mut feature =
                     Feature::from(r.reference_line.to_geojson(Some(&self.network.gps_bounds)));
-                feature.set_property("speed_limit", speed.to_miles_per_hour());
+                feature.set_property("speed_limit", speed.to_miles_per_hour().round());
                 features.push(feature);
             }
         }
