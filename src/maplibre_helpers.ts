@@ -3,9 +3,11 @@ import type {
   Map,
   DataDrivenPropertyValueSpecification,
   FilterSpecification,
+  LayerSpecification,
 } from "maplibre-gl";
 import type { GeoJSON, FeatureCollection, Feature, Geometry } from "geojson";
 import turfBbox from "@turf/bbox";
+import flush from "just-flush";
 
 export const isPolygon: FilterSpecification = ["==", "$type", "Polygon"];
 export const isLine: FilterSpecification = ["==", "$type", "LineString"];
@@ -37,8 +39,13 @@ export function overwriteSource(map: Map, id: string, data: GeoJSON) {
   });
 }
 
-// The layer.id here MUST be present in layerZorder.
-export function overwriteLayer(map: Map, layer) {
+// This is an internal helper used by specialized functions for drawing
+// circles, lines, and polygons. The layer.id here MUST be present in
+// layerZorder.
+function overwriteLayer(
+  map: Map,
+  layer: LayerSpecification & { source: string }
+) {
   if (map.getLayer(layer.id)) {
     map.removeLayer(layer.id);
   }
@@ -83,16 +90,20 @@ export function overwritePolygonLayer(
     opacity: DataDrivenPropertyValueSpecification<number>;
   }
 ) {
-  overwriteLayer(map, {
-    id: params.id,
-    source: params.source,
-    filter: params.filter,
-    type: "fill",
-    paint: {
-      "fill-color": params.color,
-      "fill-opacity": params.opacity,
-    },
-  });
+  // Use flush to remove possibly undefined properties, like filter
+  overwriteLayer(
+    map,
+    flush({
+      id: params.id,
+      source: params.source,
+      filter: params.filter,
+      type: "fill",
+      paint: {
+        "fill-color": params.color,
+        "fill-opacity": params.opacity,
+      },
+    })
+  );
 }
 
 export function overwriteCircleLayer(
@@ -101,22 +112,29 @@ export function overwriteCircleLayer(
     id: string;
     source: string;
     filter?: FilterSpecification;
-    color: DataDrivenPropertyValueSpecification<string>;
+    color?: DataDrivenPropertyValueSpecification<string>;
     radius: DataDrivenPropertyValueSpecification<number>;
     opacity?: DataDrivenPropertyValueSpecification<number>;
+    strokeColor?: DataDrivenPropertyValueSpecification<string>;
+    strokeWidth?: DataDrivenPropertyValueSpecification<number>;
   }
 ) {
-  overwriteLayer(map, {
-    id: params.id,
-    source: params.source,
-    filter: params.filter,
-    type: "circle",
-    paint: {
-      "circle-radius": params.radius,
-      "circle-color": params.color,
-      "circle-opacity": params.opacity || 1.0,
-    },
-  });
+  overwriteLayer(
+    map,
+    flush({
+      id: params.id,
+      source: params.source,
+      filter: params.filter,
+      type: "circle",
+      paint: flush({
+        "circle-radius": params.radius,
+        "circle-color": params.color,
+        "circle-opacity": params.opacity ?? 1.0,
+        "circle-stroke-color": params.strokeColor,
+        "circle-stroke-width": params.strokeWidth,
+      }),
+    })
+  );
 }
 
 export function overwriteLineLayer(
@@ -130,21 +148,24 @@ export function overwriteLineLayer(
     opacity?: DataDrivenPropertyValueSpecification<number>;
   }
 ) {
-  overwriteLayer(map, {
-    id: params.id,
-    source: params.source,
-    filter: params.filter,
-    type: "line",
-    layout: {
-      "line-cap": "round",
-      "line-join": "round",
-    },
-    paint: {
-      "line-color": params.color,
-      "line-width": params.width,
-      "line-opacity": params.opacity || 1.0,
-    },
-  });
+  overwriteLayer(
+    map,
+    flush({
+      id: params.id,
+      source: params.source,
+      filter: params.filter,
+      type: "line",
+      layout: {
+        "line-cap": "round",
+        "line-join": "round",
+      },
+      paint: {
+        "line-color": params.color,
+        "line-width": params.width,
+        "line-opacity": params.opacity ?? 1.0,
+      },
+    })
+  );
 }
 
 export function emptyGeojson(): FeatureCollection {

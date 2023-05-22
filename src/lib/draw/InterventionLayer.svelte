@@ -12,7 +12,6 @@
     overwritePolygonLayer,
     overwriteLineLayer,
     overwriteSource,
-    overwriteLayer,
   } from "../../maplibre_helpers";
   import { colors, circleRadius, lineWidth } from "../../colors";
   import { gjScheme, map } from "../../stores";
@@ -111,17 +110,14 @@
     width: lineWidth,
   });
   // Draw endpoints to emphasize where two LineStrings meet
-  overwriteLayer($map, {
+  overwriteCircleLayer($map, {
     id: "interventions-lines-endpoints",
     source,
     filter: ["==", "endpoint", true],
-    type: "circle",
-    paint: {
-      "circle-radius": 0.5 * lineWidth,
-      "circle-opacity": 0.0,
-      "circle-stroke-color": colors.lineEndpointColor,
-      "circle-stroke-width": 2.0,
-    },
+    radius: 0.5 * lineWidth,
+    opacity: 0.0,
+    strokeColor: colors.lineEndpointColor,
+    strokeWidth: 2.0,
   });
 
   overwritePolygonLayer($map, {

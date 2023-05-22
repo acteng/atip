@@ -7,7 +7,6 @@ import {
   isLine,
   isPolygon,
   overwriteSource,
-  overwriteLayer,
   overwriteCircleLayer,
   overwriteLineLayer,
   overwritePolygonLayer,

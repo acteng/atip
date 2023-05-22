@@ -9,7 +9,6 @@ import nearestPointOnLine from "@turf/nearest-point-on-line";
 import {
   emptyGeojson,
   overwriteSource,
-  overwriteLayer,
   overwriteCircleLayer,
   overwritePolygonLayer,
   overwriteLineLayer,

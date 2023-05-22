@@ -3,7 +3,6 @@
   import {
     emptyGeojson,
     overwriteSource,
-    overwriteLayer,
     overwriteLineLayer,
   } from "../../maplibre_helpers";
   import type { LineString } from "geojson";
