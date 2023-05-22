@@ -210,6 +210,8 @@ const layerZorder = [
 
   "draw-split-route",
 
+  "draw-street-view",
+
   "speed-limits",
 
   // When editing a route, draw it over contextual layers like speed limits
