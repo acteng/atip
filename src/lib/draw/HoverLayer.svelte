@@ -7,7 +7,6 @@
     isLine,
     overwriteCircleLayer,
     overwriteSource,
-    overwriteLayer,
     emptyGeojson,
   } from "../../maplibre_helpers";
   import { colors, lineWidth, circleRadius } from "../../colors";
