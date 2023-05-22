@@ -10,7 +10,7 @@ import {
   overwriteLayer,
   drawCircle,
   drawLine,
-  drawPolygon,
+  overwritePolygonLayer,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { EventManager } from "../events";
@@ -73,11 +73,12 @@ export class RouteTool {
       filter: isLine,
       ...drawLine("black", 2.5),
     });
-    overwriteLayer(map, {
-      id: "route-polygons",
+    overwritePolygonLayer(map, {
       source,
+      layer: "route-polygons",
       filter: isPolygon,
-      ...drawPolygon("black", 0.5),
+      color: "black",
+      opacity: 0.5,
     });
 
     // Set up interactions

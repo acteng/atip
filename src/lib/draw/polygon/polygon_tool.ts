@@ -11,7 +11,7 @@ import {
   overwriteSource,
   overwriteLayer,
   drawCircle,
-  drawPolygon,
+  overwritePolygonLayer,
   drawLine,
   isPoint,
   isPolygon,
@@ -62,16 +62,12 @@ export class PolygonTool {
     // Render
     overwriteSource(map, source, emptyGeojson());
 
-    overwriteLayer(map, {
-      id: "edit-polygon-fill",
+    overwritePolygonLayer(map, {
       source,
+      layer: "edit-polygon-fill",
       filter: isPolygon,
-      ...drawPolygon("red", [
-        "case",
-        ["boolean", ["get", "hover"], "false"],
-        1.0,
-        0.5,
-      ]),
+      color: "red",
+      opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
     });
     overwriteLayer(map, {
       id: "edit-polygon-lines",

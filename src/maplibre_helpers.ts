@@ -1,11 +1,15 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
-import type { Map, DataDrivenPropertyValueSpecification } from "maplibre-gl";
+import type {
+  Map,
+  DataDrivenPropertyValueSpecification,
+  FilterSpecification,
+} from "maplibre-gl";
 import type { GeoJSON, FeatureCollection, Feature, Geometry } from "geojson";
 import turfBbox from "@turf/bbox";
 
-export const isPolygon = ["==", "$type", "Polygon"];
-export const isLine = ["==", "$type", "LineString"];
-export const isPoint = ["==", "$type", "Point"];
+export const isPolygon: FilterSpecification = ["==", "$type", "Polygon"];
+export const isLine: FilterSpecification = ["==", "$type", "LineString"];
+export const isPoint: FilterSpecification = ["==", "$type", "Point"];
 
 export function drawLine(
   color: DataDrivenPropertyValueSpecification<string>,
@@ -22,19 +26,6 @@ export function drawLine(
       "line-color": color,
       "line-width": width,
       "line-opacity": opacity,
-    },
-  };
-}
-
-export function drawPolygon(
-  color: DataDrivenPropertyValueSpecification<string>,
-  opacity: DataDrivenPropertyValueSpecification<number>
-) {
-  return {
-    type: "fill",
-    paint: {
-      "fill-color": color,
-      "fill-opacity": opacity,
     },
   };
 }
@@ -114,6 +105,28 @@ export function overwriteLayer(map: Map, layer) {
   // If beforeId isn't set, we'll add the layer on top of everything else.
 
   map.addLayer(layer, beforeId);
+}
+
+export function overwritePolygonLayer(
+  map: Map,
+  params: {
+    source: string;
+    layer: string;
+    filter?: FilterSpecification;
+    color: DataDrivenPropertyValueSpecification<string>;
+    opacity: DataDrivenPropertyValueSpecification<number>;
+  }
+) {
+  overwriteLayer(map, {
+    id: params.layer,
+    source: params.source,
+    filter: params.filter,
+    type: "fill",
+    paint: {
+      "fill-color": params.color,
+      "fill-opacity": params.opacity,
+    },
+  });
 }
 
 export function emptyGeojson(): FeatureCollection {
