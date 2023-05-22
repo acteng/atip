@@ -15,6 +15,7 @@
   import PolygonMode from "./polygon/PolygonMode.svelte";
   import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
   import SplitRouteMode from "./route/SplitRouteMode.svelte";
+  import StreetViewMode from "./StreetViewMode.svelte";
 
   import editAttributesIcon from "../../../assets/edit_attributes.svg";
   import editGeometryIcon from "../../../assets/edit_geometry.svg";
@@ -23,6 +24,7 @@
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
   import routeIcon from "../../../assets/route.svg";
   import splitRouteIcon from "../../../assets/split_route.svg";
+  import streetViewIcon from "../../../assets/street_view.svg";
 
   export let routeSnapperUrl: string;
   export let schema: Schema;
@@ -42,6 +44,7 @@
   let polygonMode: PolygonMode;
   let snapPolygonMode: SnapPolygonMode;
   let splitRouteMode: SplitRouteMode;
+  let streetViewMode: StreetViewMode;
 
   // This must be used; don't manually change mode
   function changeMode(newMode: Mode) {
@@ -53,6 +56,7 @@
       "free-polygon": polygonMode,
       "snap-polygon": snapPolygonMode,
       "split-route": splitRouteMode,
+      "street-view": streetViewMode,
     };
 
     if (mode == newMode) {
@@ -170,6 +174,16 @@
       />
     {/if}
     <SplitRouteMode bind:this={splitRouteMode} {mode} {changeMode} />
+  </div>
+  <div>
+    <Button
+      {mode}
+      thisMode="street-view"
+      label="Street View"
+      icon={streetViewIcon}
+      {changeMode}
+    />
+    <StreetViewMode bind:this={streetViewMode} {mode} {changeMode} />
   </div>
 </div>
 

@@ -5,4 +5,5 @@ export type Mode =
   | "point"
   | "free-polygon"
   | "snap-polygon"
-  | "split-route";
+  | "split-route"
+  | "street-view";
