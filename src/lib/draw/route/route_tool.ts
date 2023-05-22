@@ -9,7 +9,7 @@ import {
   overwriteSource,
   overwriteLayer,
   overwriteCircleLayer,
-  drawLine,
+  overwriteLineLayer,
   overwritePolygonLayer,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
@@ -65,11 +65,12 @@ export class RouteTool {
         circleRadiusPixels,
       ],
     });
-    overwriteLayer(map, {
+    overwriteLineLayer(map, {
       id: "route-lines",
       source,
       filter: isLine,
-      ...drawLine("black", 2.5),
+      color: "black",
+      width: 2.5,
     });
     overwritePolygonLayer(map, {
       id: "route-polygons",

@@ -5,12 +5,12 @@
     FilterSpecification,
   } from "maplibre-gl";
   import {
-    drawLine,
     isPolygon,
     isPoint,
     isLine,
     overwriteCircleLayer,
     overwritePolygonLayer,
+    overwriteLineLayer,
     overwriteSource,
     overwriteLayer,
   } from "../../maplibre_helpers";
@@ -92,17 +92,23 @@
   overwriteCircleLayer($map, {
     id: "interventions-points",
     source,
-    filter: ["all", isPoint, hideWhileEditing, notEndpoint] as FilterSpecification,
+    filter: [
+      "all",
+      isPoint,
+      hideWhileEditing,
+      notEndpoint,
+    ] as FilterSpecification,
     color: colorByInterventionType,
     radius: circleRadius,
     // TODO Outline?
   });
 
-  overwriteLayer($map, {
+  overwriteLineLayer($map, {
     id: "interventions-lines",
     source,
-    filter: ["all", isLine, hideWhileEditing],
-    ...drawLine(colorByInterventionType, lineWidth),
+    filter: ["all", isLine, hideWhileEditing] as FilterSpecification,
+    color: colorByInterventionType,
+    width: lineWidth,
   });
   // Draw endpoints to emphasize where two LineStrings meet
   overwriteLayer($map, {

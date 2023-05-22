@@ -4,7 +4,7 @@
     emptyGeojson,
     overwriteSource,
     overwriteLayer,
-    drawLine,
+    overwriteLineLayer,
   } from "../../maplibre_helpers";
   import type { LineString } from "geojson";
   import type {
@@ -63,10 +63,12 @@
   // (and the source and layer) will get destroyed frequently, but even if not,
   // overwriting should be safe.
   overwriteSource($map, source, emptyGeojson());
-  overwriteLayer($map, {
+  overwriteLineLayer($map, {
     id: layer,
     source,
-    ...drawLine(color, lineWidth, opacity),
+    color,
+    width: lineWidth,
+    opacity,
   });
 
   onMount(async () => {

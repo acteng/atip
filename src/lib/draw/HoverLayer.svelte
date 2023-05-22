@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { GeoJSONSource } from "maplibre-gl";
   import {
-    drawLine,
+    overwriteLineLayer,
     isPolygon,
     isPoint,
     isLine,
@@ -26,18 +26,20 @@
   // easier way to do this, but I can't make it work with the draw plugin.
   overwriteSource($map, source, emptyGeojson());
 
-  overwriteLayer($map, {
+  overwriteLineLayer($map, {
     id: "hover-polygons",
     source,
     filter: isPolygon,
     // Outline around the polygons
-    ...drawLine(colors.hovering, 0.5 * lineWidth, 1.0),
+    color: colors.hovering,
+    width: 0.5 * lineWidth,
   });
-  overwriteLayer($map, {
+  overwriteLineLayer($map, {
     id: "hover-lines",
     source,
     filter: isLine,
-    ...drawLine(colors.hovering, 1.5 * lineWidth, 1.0),
+    color: colors.hovering,
+    width: 1.5 * lineWidth,
   });
   overwriteCircleLayer($map, {
     id: "hover-points",

@@ -12,7 +12,7 @@ import {
   overwriteLayer,
   overwriteCircleLayer,
   overwritePolygonLayer,
-  drawLine,
+  overwriteLineLayer,
   isPoint,
   isPolygon,
   isLine,
@@ -69,12 +69,14 @@ export class PolygonTool {
       color: "red",
       opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
     });
-    overwriteLayer(map, {
+    overwriteLineLayer(map, {
       id: "edit-polygon-lines",
       source,
       filter: isLine,
       // TODO Dashed
-      ...drawLine("black", 8, 0.5),
+      color: "black",
+      width: 8,
+      opacity: 0.5,
     });
     overwriteCircleLayer(map, {
       id: "edit-polygon-vertices",
