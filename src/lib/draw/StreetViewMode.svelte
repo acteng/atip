@@ -19,7 +19,7 @@
   export let mode: Mode;
   export let changeMode: (m: Mode) => void;
 
-  let imagery: "google" | "bing" = "google";
+  let imagery: "google" | "bing" | "mapillary" = "google";
 
   export function start() {}
   export function stop() {
@@ -73,9 +73,14 @@
         `http://maps.google.com/maps?q=&layer=c&cbll=${lat},${lon}&cbp=11,0,0,0,0`,
         "_blank"
       );
-    } else {
+    } else if (imagery == "bing") {
       window.open(
         `https://www.bing.com/maps?cp=${lat}~${lon}&style=x`,
+        "_blank"
+      );
+    } else if (imagery == "mapillary") {
+      window.open(
+        `https://www.mapillary.com/app/?lat=${lat}&lng=${lon}&z=17`,
         "_blank"
       );
     }
@@ -110,6 +115,11 @@
   <label>
     <input type="radio" bind:group={imagery} value="bing" />
     Bing Streetside
+  </label>
+  <br />
+  <label>
+    <input type="radio" bind:group={imagery} value="mapillary" />
+    Mapillary
   </label>
 
   <ul>
