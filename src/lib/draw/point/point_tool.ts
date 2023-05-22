@@ -3,8 +3,7 @@ import type { Map, GeoJSONSource, MapMouseEvent } from "maplibre-gl";
 import {
   emptyGeojson,
   overwriteSource,
-  overwriteLayer,
-  drawCircle,
+  overwriteCircleLayer,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
@@ -36,10 +35,11 @@ export class PointTool {
 
     // Render
     overwriteSource(map, source, emptyGeojson());
-    overwriteLayer(map, {
+    overwriteCircleLayer(map, {
       id: "edit-point-mode",
       source,
-      ...drawCircle(colors.hovering, circleRadius, 1.0),
+      color: colors.hovering,
+      radius: circleRadius,
     });
   }
 

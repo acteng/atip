@@ -5,7 +5,7 @@
     isPolygon,
     isPoint,
     isLine,
-    drawCircle,
+    overwriteCircleLayer,
     overwriteSource,
     overwriteLayer,
     emptyGeojson,
@@ -39,11 +39,12 @@
     filter: isLine,
     ...drawLine(colors.hovering, 1.5 * lineWidth, 1.0),
   });
-  overwriteLayer($map, {
+  overwriteCircleLayer($map, {
     id: "hover-points",
     source,
     filter: isPoint,
-    ...drawCircle(colors.hovering, 1.5 * circleRadius, 1.0),
+    color: colors.hovering,
+    radius: 1.5 * circleRadius,
   });
 
   // When a form is open, ignore regular map and sidebar interactions

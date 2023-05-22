@@ -8,7 +8,7 @@ import {
   isPolygon,
   overwriteSource,
   overwriteLayer,
-  drawCircle,
+  overwriteCircleLayer,
   drawLine,
   overwritePolygonLayer,
   type FeatureWithProps,
@@ -42,30 +42,28 @@ export class RouteTool {
 
     // Rendering
     overwriteSource(map, source, emptyGeojson());
-    overwriteLayer(map, {
+    overwriteCircleLayer(map, {
       id: "route-points",
       source,
       filter: isPoint,
-      ...drawCircle(
-        [
-          "match",
-          ["get", "type"],
-          "hovered",
-          "green",
-          "important",
-          "red",
-          // other
-          "black",
-        ],
-        [
-          "match",
-          ["get", "type"],
-          "unimportant",
-          circleRadiusPixels / 2.0,
-          // other
-          circleRadiusPixels,
-        ]
-      ),
+      color: [
+        "match",
+        ["get", "type"],
+        "hovered",
+        "green",
+        "important",
+        "red",
+        // other
+        "black",
+      ],
+      radius: [
+        "match",
+        ["get", "type"],
+        "unimportant",
+        circleRadiusPixels / 2.0,
+        // other
+        circleRadiusPixels,
+      ],
     });
     overwriteLayer(map, {
       id: "route-lines",
@@ -74,8 +72,8 @@ export class RouteTool {
       ...drawLine("black", 2.5),
     });
     overwritePolygonLayer(map, {
+      id: "route-polygons",
       source,
-      layer: "route-polygons",
       filter: isPolygon,
       color: "black",
       opacity: 0.5,
