@@ -10,7 +10,7 @@ import {
   emptyGeojson,
   overwriteSource,
   overwriteLayer,
-  drawCircle,
+  overwriteCircleLayer,
   overwritePolygonLayer,
   drawLine,
   isPoint,
@@ -63,8 +63,8 @@ export class PolygonTool {
     overwriteSource(map, source, emptyGeojson());
 
     overwritePolygonLayer(map, {
+      id: "edit-polygon-fill",
       source,
-      layer: "edit-polygon-fill",
       filter: isPolygon,
       color: "red",
       opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
@@ -76,16 +76,13 @@ export class PolygonTool {
       // TODO Dashed
       ...drawLine("black", 8, 0.5),
     });
-    overwriteLayer(map, {
+    overwriteCircleLayer(map, {
       id: "edit-polygon-vertices",
       source,
       filter: isPoint,
-      ...drawCircle(colors.hovering, circleRadius, [
-        "case",
-        ["boolean", ["get", "hover"], "false"],
-        1.0,
-        0.5,
-      ]),
+      color: colors.hovering,
+      radius: circleRadius,
+      opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
     });
   }
 

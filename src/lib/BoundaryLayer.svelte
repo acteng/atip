@@ -22,8 +22,8 @@
 
   overwriteSource($map, "boundary", mask(boundaryGeojson));
   overwritePolygonLayer($map, {
+    id: "boundary",
     source: "boundary",
-    layer: "boundary",
     color: "black",
     opacity: 0.5,
   });

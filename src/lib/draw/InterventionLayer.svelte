@@ -9,7 +9,7 @@
     isPolygon,
     isPoint,
     isLine,
-    drawCircle,
+    overwriteCircleLayer,
     overwritePolygonLayer,
     overwriteSource,
     overwriteLayer,
@@ -89,11 +89,12 @@
   ];
   const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
 
-  overwriteLayer($map, {
+  overwriteCircleLayer($map, {
     id: "interventions-points",
     source,
-    filter: ["all", isPoint, hideWhileEditing, notEndpoint],
-    ...drawCircle(colorByInterventionType, circleRadius),
+    filter: ["all", isPoint, hideWhileEditing, notEndpoint] as FilterSpecification,
+    color: colorByInterventionType,
+    radius: circleRadius,
     // TODO Outline?
   });
 
@@ -118,8 +119,8 @@
   });
 
   overwritePolygonLayer($map, {
+    id: "interventions-polygons",
     source,
-    layer: "interventions-polygons",
     filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
     color:
       schema == "planning" ? colorByReferenceType : colorByInterventionType,

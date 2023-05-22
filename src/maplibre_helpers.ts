@@ -30,21 +30,6 @@ export function drawLine(
   };
 }
 
-export function drawCircle(
-  color: DataDrivenPropertyValueSpecification<string>,
-  radius: DataDrivenPropertyValueSpecification<number>,
-  opacity: DataDrivenPropertyValueSpecification<number> = 1.0
-) {
-  return {
-    type: "circle",
-    paint: {
-      "circle-radius": radius,
-      "circle-color": color,
-      "circle-opacity": opacity,
-    },
-  };
-}
-
 // This sets up a GeoJSON source. MapLibre's API isn't idempotent; you can't
 // overwrite an existing source or layer. This complicates Vite's hot-reload
 // feature, unless every component correctly tears down all sources and layers.
@@ -110,21 +95,45 @@ export function overwriteLayer(map: Map, layer) {
 export function overwritePolygonLayer(
   map: Map,
   params: {
+    id: string;
     source: string;
-    layer: string;
     filter?: FilterSpecification;
     color: DataDrivenPropertyValueSpecification<string>;
     opacity: DataDrivenPropertyValueSpecification<number>;
   }
 ) {
   overwriteLayer(map, {
-    id: params.layer,
+    id: params.id,
     source: params.source,
     filter: params.filter,
     type: "fill",
     paint: {
       "fill-color": params.color,
       "fill-opacity": params.opacity,
+    },
+  });
+}
+
+export function overwriteCircleLayer(
+  map: Map,
+  params: {
+    id: string;
+    source: string;
+    filter?: FilterSpecification;
+    color: DataDrivenPropertyValueSpecification<string>;
+    radius: DataDrivenPropertyValueSpecification<number>;
+    opacity?: DataDrivenPropertyValueSpecification<number>;
+  }
+) {
+  overwriteLayer(map, {
+    id: params.id,
+    source: params.source,
+    filter: params.filter,
+    type: "circle",
+    paint: {
+      "circle-radius": params.radius,
+      "circle-color": params.color,
+      "circle-opacity": params.opacity || 1.0,
     },
   });
 }

@@ -14,8 +14,7 @@
   import {
     emptyGeojson,
     overwriteSource,
-    overwriteLayer,
-    drawCircle,
+    overwriteCircleLayer,
   } from "../../../maplibre_helpers";
 
   const thisMode = "split-route";
@@ -48,15 +47,12 @@
   let source = "split-route";
   overwriteSource($map, source, emptyGeojson());
   // TODO Scissors icon?
-  overwriteLayer($map, {
+  overwriteCircleLayer($map, {
     id: "draw-split-route",
     source,
-    ...drawCircle("black", circleRadiusPixels, [
-      "case",
-      ["==", ["get", "snapped"], true],
-      1.0,
-      0.5,
-    ]),
+    color: "black",
+    radius: circleRadiusPixels,
+    opacity: ["case", ["==", ["get", "snapped"], true], 1.0, 0.5],
   });
 
   $: {
