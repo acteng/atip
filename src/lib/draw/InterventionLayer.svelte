@@ -2,6 +2,7 @@
   import type {
     GeoJSONSource,
     DataDrivenPropertyValueSpecification,
+    FilterSpecification,
   } from "maplibre-gl";
   import {
     drawLine,
@@ -9,7 +10,7 @@
     isPoint,
     isLine,
     drawCircle,
-    drawPolygon,
+    overwritePolygonLayer,
     overwriteSource,
     overwriteLayer,
   } from "../../maplibre_helpers";
@@ -81,8 +82,12 @@
     "white",
   ];
 
-  const hideWhileEditing = ["!=", "hide_while_editing", true];
-  const notEndpoint = ["!=", "endpoint", true];
+  const hideWhileEditing: FilterSpecification = [
+    "!=",
+    "hide_while_editing",
+    true,
+  ];
+  const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
 
   overwriteLayer($map, {
     id: "interventions-points",
@@ -112,14 +117,13 @@
     },
   });
 
-  overwriteLayer($map, {
-    id: "interventions-polygons",
+  overwritePolygonLayer($map, {
     source,
-    filter: ["all", isPolygon, hideWhileEditing],
-    ...drawPolygon(
+    layer: "interventions-polygons",
+    filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
+    color:
       schema == "planning" ? colorByReferenceType : colorByInterventionType,
-      0.5
-    ),
+    opacity: 0.5,
     // TODO Outline too?
   });
 </script>

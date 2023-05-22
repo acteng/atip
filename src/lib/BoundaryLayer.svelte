@@ -2,9 +2,8 @@
   import type { FeatureCollection, Polygon } from "geojson";
   import mask from "@turf/mask";
   import {
-    drawPolygon,
     overwriteSource,
-    overwriteLayer,
+    overwritePolygonLayer,
     bbox,
   } from "../maplibre_helpers";
   import { getContext } from "svelte";
@@ -22,9 +21,10 @@
   }
 
   overwriteSource($map, "boundary", mask(boundaryGeojson));
-  overwriteLayer($map, {
-    id: "boundary",
+  overwritePolygonLayer($map, {
     source: "boundary",
-    ...drawPolygon("black", 0.5),
+    layer: "boundary",
+    color: "black",
+    opacity: 0.5,
   });
 </script>
