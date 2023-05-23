@@ -17,10 +17,10 @@
 
   <h2>Filling out data</h2>
   <p>
-    While you're in <b>Edit attributes</b> mode, you can select an object to describe
-    it on the left. The level of detail depends what you're trying to map. Some objects,
-    like routes, have extra tools to auto-fill some details or show additional contextual
-    layers.
+    While you're in <b>Edit attributes</b> mode, you can select an object on the
+    left to describe it. The level of detail depends what you're trying to map. Some
+    objects, like routes, have extra tools to auto-fill some details or show additional
+    contextual layers.
   </p>
 
   <h2>Saving files</h2>
