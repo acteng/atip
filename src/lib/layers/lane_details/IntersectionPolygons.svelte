@@ -12,12 +12,13 @@
       "fill-color": caseHelper(
         "intersection_kind",
         {
-          Connection: "#666",
-          Intersection: "#966",
-          Terminus: "#999",
           MapEdge: "#696",
+          Terminus: "black",
+          Connection: "black",
+          Fork: "black",
+          Intersection: "black",
         },
-        "#666"
+        "red"
       ),
       "fill-opacity": 0.9,
     },

@@ -11,7 +11,7 @@
       "fill-color": caseHelper(
         "type",
         {
-          "center line": "yellow",
+          "center line": "white",
           "lane separator": "white",
           "lane arrow": "white",
           "buffer edge": "white",
