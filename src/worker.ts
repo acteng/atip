@@ -56,7 +56,7 @@ export class RouteInfo {
     return this.inner.allSpeedLimits();
   }
 
-  renderLaneDetails(): string[] {
+  renderAllLaneDetails(): string[] {
     if (!this.inner) {
       throw new Error(
         "Still loading route info, please retry after a few seconds"
@@ -75,6 +75,16 @@ export class RouteInfo {
     return [gj1, gj2, "", ""];
 
     //return [this.inner.renderLanePolygons(), this.inner.renderLaneMarkings(), this.inner.renderIntersectionPolygons(), this.inner.renderIntersectionMarkings()];
+  }
+
+  renderLaneDetailsForRoute(waypoints: Waypoint[]): string[] {
+    if (!this.inner) {
+      throw new Error(
+        "Still loading route info, please retry after a few seconds"
+      );
+    }
+    // Normally this code doesn't parse the results at all, but at least unpack the 4 strings
+    return JSON.parse(this.inner.renderLaneDetailsForRoute(waypoints));
   }
 }
 

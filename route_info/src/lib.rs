@@ -9,7 +9,7 @@ use std::collections::BTreeSet;
 
 use geojson::Feature;
 use geom::{Distance, FindClosest, Pt2D};
-use osm2streets::{IntersectionID, StreetNetwork};
+use osm2streets::{Filter, IntersectionID, StreetNetwork};
 use serde::Deserialize;
 use wasm_bindgen::prelude::*;
 
@@ -151,27 +151,69 @@ impl RouteInfo {
     /// Return a GeoJSON layer for rendering lane polygons
     #[wasm_bindgen(js_name = renderLanePolygons)]
     pub fn render_lane_polygons(&self) -> Result<String, JsValue> {
-        self.network.to_lane_polygons_geojson().map_err(err_to_js)
+        self.network
+            .to_lane_polygons_geojson(&Filter::All)
+            .map_err(err_to_js)
     }
 
     /// Return a GeoJSON layer for rendering lane markings
     #[wasm_bindgen(js_name = renderLaneMarkings)]
     pub fn render_lane_markings(&self) -> Result<String, JsValue> {
-        self.network.to_lane_markings_geojson().map_err(err_to_js)
+        self.network
+            .to_lane_markings_geojson(&Filter::All)
+            .map_err(err_to_js)
     }
 
     /// Return a GeoJSON layer for rendering intersection polygons
     #[wasm_bindgen(js_name = renderIntersectionPolygons)]
     pub fn render_intersection_polygons(&self) -> Result<String, JsValue> {
-        self.network.to_geojson().map_err(err_to_js)
+        self.network.to_geojson(&Filter::All).map_err(err_to_js)
     }
 
     /// Return a GeoJSON layer for rendering intersection markings
     #[wasm_bindgen(js_name = renderIntersectionMarkings)]
     pub fn render_intersection_markings(&self) -> Result<String, JsValue> {
         self.network
-            .to_intersection_markings_geojson()
+            .to_intersection_markings_geojson(&Filter::All)
             .map_err(err_to_js)
+    }
+
+    /// Return 4 GeoJSON layers for rendering lane details, limited to just roads along a route.
+    /// Due to encoding limitations, returns it as string JSON encoding 4 strings.
+    #[wasm_bindgen(js_name = renderLaneDetailsForRoute)]
+    pub fn render_lane_details_for_route(&self, raw_waypoints: JsValue) -> Result<String, JsValue> {
+        let raw_waypoints: Vec<RawRouteWaypoint> = serde_wasm_bindgen::from_value(raw_waypoints)?;
+        let waypoints = self.parse_waypoints(raw_waypoints).map_err(err_to_js)?;
+
+        let mut roads = BTreeSet::new();
+        let mut intersections = BTreeSet::new();
+
+        for pair in waypoints.windows(2) {
+            if let (Waypoint::Snapped(_, i1), Waypoint::Snapped(_, i2)) = (&pair[0], &pair[1]) {
+                if let Some(path) = self.geometric_path(*i1, *i2) {
+                    for (r, _) in path {
+                        let road = &self.network.roads[&r];
+                        roads.insert(r);
+                        intersections.insert(road.src_i);
+                        intersections.insert(road.dst_i);
+                    }
+                }
+            }
+        }
+        let filter = Filter::Filtered(roads, intersections);
+
+        Ok(abstutil::to_json(&vec![
+            self.network
+                .to_lane_polygons_geojson(&filter)
+                .map_err(err_to_js)?,
+            self.network
+                .to_lane_markings_geojson(&filter)
+                .map_err(err_to_js)?,
+            self.network.to_geojson(&filter).map_err(err_to_js)?,
+            self.network
+                .to_intersection_markings_geojson(&filter)
+                .map_err(err_to_js)?,
+        ]))
     }
 }
 

@@ -613,7 +613,7 @@ dependencies = [
 [[package]]
 name = "osm2streets"
 version = "0.1.0"
-source = "git+https://github.com/a-b-street/osm2streets#6c4eb464b2c086ef7b5da9605f88a5a395da3679"
+source = "git+https://github.com/a-b-street/osm2streets#0d6f0f973b3fa8dbdc8223aa6f412a8d997252fc"
 dependencies = [
  "abstutil",
  "anyhow",
