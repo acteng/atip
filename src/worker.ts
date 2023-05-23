@@ -56,27 +56,6 @@ export class RouteInfo {
     return this.inner.allSpeedLimits();
   }
 
-  renderAllLaneDetails(): string[] {
-    if (!this.inner) {
-      throw new Error(
-        "Still loading route info, please retry after a few seconds"
-      );
-    }
-    console.log("do 1");
-    let gj1 = this.inner.renderLanePolygons();
-    console.log("do 2");
-    let gj2 = this.inner.renderLaneMarkings();
-    /*console.log("do 3");
-    let gj3 = this.inner.renderIntersectionPolygons();
-    console.log("do 4");
-    let gj4 = this.inner.renderIntersectionMarkings();
-    console.log("return all");
-    return [gj1, gj2, gj3, gj4];*/
-    return [gj1, gj2, "", ""];
-
-    //return [this.inner.renderLanePolygons(), this.inner.renderLaneMarkings(), this.inner.renderIntersectionPolygons(), this.inner.renderIntersectionMarkings()];
-  }
-
   renderLaneDetailsForRoute(waypoints: Waypoint[]): string[] {
     if (!this.inner) {
       throw new Error(

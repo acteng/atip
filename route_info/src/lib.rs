@@ -146,40 +146,10 @@ impl RouteInfo {
         Ok(abstutil::to_json(&gj))
     }
 
-    // TODO Just have one call? Return 4 GJ layers in a dictionary
-
-    /// Return a GeoJSON layer for rendering lane polygons
-    #[wasm_bindgen(js_name = renderLanePolygons)]
-    pub fn render_lane_polygons(&self) -> Result<String, JsValue> {
-        self.network
-            .to_lane_polygons_geojson(&Filter::All)
-            .map_err(err_to_js)
-    }
-
-    /// Return a GeoJSON layer for rendering lane markings
-    #[wasm_bindgen(js_name = renderLaneMarkings)]
-    pub fn render_lane_markings(&self) -> Result<String, JsValue> {
-        self.network
-            .to_lane_markings_geojson(&Filter::All)
-            .map_err(err_to_js)
-    }
-
-    /// Return a GeoJSON layer for rendering intersection polygons
-    #[wasm_bindgen(js_name = renderIntersectionPolygons)]
-    pub fn render_intersection_polygons(&self) -> Result<String, JsValue> {
-        self.network.to_geojson(&Filter::All).map_err(err_to_js)
-    }
-
-    /// Return a GeoJSON layer for rendering intersection markings
-    #[wasm_bindgen(js_name = renderIntersectionMarkings)]
-    pub fn render_intersection_markings(&self) -> Result<String, JsValue> {
-        self.network
-            .to_intersection_markings_geojson(&Filter::All)
-            .map_err(err_to_js)
-    }
-
     /// Return 4 GeoJSON layers for rendering lane details, limited to just roads along a route.
-    /// Due to encoding limitations, returns it as string JSON encoding 4 strings.
+    /// Due to encoding limitations, returns it as a JSON string containing 4 more JSON strings.
+    /// The order returned is [lane polygons, lane markings, intersection polygons, intersection
+    /// markings], and the properties of each feature isn't documented anywhere clearly yet.
     #[wasm_bindgen(js_name = renderLaneDetailsForRoute)]
     pub fn render_lane_details_for_route(&self, raw_waypoints: JsValue) -> Result<String, JsValue> {
         let raw_waypoints: Vec<RawRouteWaypoint> = serde_wasm_bindgen::from_value(raw_waypoints)?;
