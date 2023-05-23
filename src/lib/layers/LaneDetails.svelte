@@ -12,6 +12,8 @@
   // Show along a route
   export let id: number;
 
+  // renderLaneDetailsForRoute returns 4 layers in a certain order. They're
+  // labeled when used below.
   let gj1;
   let gj2;
   let gj3;
