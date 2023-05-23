@@ -175,6 +175,21 @@ export function emptyGeojson(): FeatureCollection {
   };
 }
 
+// Helper for https://maplibre.org/maplibre-style-spec/expressions/#case based on one property
+export function caseHelper(
+  getKey: string,
+  map: { [name: string]: string },
+  backup: string
+): any[] {
+  let x: any[] = ["case"];
+  for (let [key, value] of Object.entries(map)) {
+    x.push(["==", ["get", getKey], key]);
+    x.push(value);
+  }
+  x.push(backup);
+  return x;
+}
+
 // Suitable for passing to map.fitBounds. Work around https://github.com/Turfjs/turf/issues/1807.
 export function bbox(gj: GeoJSON): [number, number, number, number] {
   return turfBbox(gj) as [number, number, number, number];
@@ -213,6 +228,11 @@ const layerZorder = [
   "draw-street-view",
 
   "speed-limits",
+
+  "lane-polygons-layer",
+  "intersection-polygons-layer",
+  "lane-markings-layer",
+  "intersection-markings-layer",
 
   // When editing a route, draw it over contextual layers like speed limits
   "route-points",

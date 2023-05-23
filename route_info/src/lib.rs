@@ -145,6 +145,34 @@ impl RouteInfo {
         });
         Ok(abstutil::to_json(&gj))
     }
+
+    // TODO Just have one call? Return 4 GJ layers in a dictionary
+
+    /// Return a GeoJSON layer for rendering lane polygons
+    #[wasm_bindgen(js_name = renderLanePolygons)]
+    pub fn render_lane_polygons(&self) -> Result<String, JsValue> {
+        self.network.to_lane_polygons_geojson().map_err(err_to_js)
+    }
+
+    /// Return a GeoJSON layer for rendering lane markings
+    #[wasm_bindgen(js_name = renderLaneMarkings)]
+    pub fn render_lane_markings(&self) -> Result<String, JsValue> {
+        self.network.to_lane_markings_geojson().map_err(err_to_js)
+    }
+
+    /// Return a GeoJSON layer for rendering intersection polygons
+    #[wasm_bindgen(js_name = renderIntersectionPolygons)]
+    pub fn render_intersection_polygons(&self) -> Result<String, JsValue> {
+        self.network.to_geojson().map_err(err_to_js)
+    }
+
+    /// Return a GeoJSON layer for rendering intersection markings
+    #[wasm_bindgen(js_name = renderIntersectionMarkings)]
+    pub fn render_intersection_markings(&self) -> Result<String, JsValue> {
+        self.network
+            .to_intersection_markings_geojson()
+            .map_err(err_to_js)
+    }
 }
 
 fn err_to_js<E: std::fmt::Display>(err: E) -> JsValue {
