@@ -17,7 +17,7 @@
   }
 
   // TODO Disable the button until RouteInfo is loaded and ready?
-  async function autoFillDetails() {
+  async function autoFillName() {
     let linestring = $gjScheme.features.find(
       (f) => f.id == id
     ) as Feature<LineString>;
@@ -29,8 +29,10 @@
   }
 </script>
 
-<label
-  >Name:<br />
+<label>
+  Name:
+  <button type="button" on:click={() => autoFillName()}>Auto-fill</button>
+  <br />
   <input type="text" bind:value={name} style="width: 100%" />
 </label>
 
@@ -64,9 +66,7 @@
 
 {#if length_meters}
   Length: {prettyPrintMeters(length_meters)}
-  <br /><button type="button" on:click={() => autoFillDetails()}
-    >Auto-fill details</button
-  ><br />
+  <br />
   <RouteInfoLayers {id} />
 {/if}
 
