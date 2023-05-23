@@ -84,6 +84,7 @@ export class RouteTool {
     this.events = new EventManager(this, map);
     this.events.mapHandler("mousemove", this.onMouseMove);
     this.events.mapHandler("click", this.onClick);
+    this.events.mapHandler("dblclick", this.onDoubleClick);
     this.events.mapHandler("dragstart", this.onDragStart);
     this.events.mapHandler("mouseup", this.onMouseUp);
     this.events.documentHandler("keypress", this.onKeyPress);
@@ -115,6 +116,17 @@ export class RouteTool {
     }
     this.inner.onClick();
     this.redraw();
+  }
+
+  private onDoubleClick(e: MapMouseEvent) {
+    if (!this.active) {
+      return;
+    }
+    // When we finish, we'll re-enable doubleClickZoom, but we don't want this to zoom in
+    e.preventDefault();
+    // Treat it like a click, to possibly add a final point
+    this.inner.onClick();
+    this.finish();
   }
 
   private onDragStart() {
@@ -177,7 +189,9 @@ export class RouteTool {
 
     this.active = true;
     // Otherwise, shift+click breaks
-    this.map["boxZoom"].disable();
+    this.map.boxZoom.disable();
+    // Otherwise, double clicking to finish breaks
+    this.map.doubleClickZoom.disable();
   }
 
   // Activate the tool with blank state.
@@ -190,8 +204,8 @@ export class RouteTool {
 
     this.inner.setConfig({ avoid_doubling_back: true, area_mode: true });
     this.active = true;
-    // Otherwise, shift+click breaks
-    this.map["boxZoom"].disable();
+    this.map.boxZoom.disable();
+    this.map.doubleClickZoom.disable();
   }
 
   // Deactivate the tool, clearing all state. No events are fired for addEventListenerFailure.
@@ -199,7 +213,8 @@ export class RouteTool {
     this.active = false;
     this.inner.clearState();
     this.redraw();
-    this.map["boxZoom"].enable();
+    this.map.boxZoom.enable();
+    this.map.doubleClickZoom.enable();
   }
 
   // This takes a GeoJSON feature previously returned. It must have all
