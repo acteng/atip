@@ -9,7 +9,9 @@ ATIP reduces barriers to entry into the transport planning process, and reduces 
 
 ## Using ATIP
 
-If you're in England, go use the development version at <https://acteng.github.io/atip>. Note this is not a production service; we make no guarantees about the site's uptime or about backwards compatibility of ATIP files.
+The development version of ATIP is available for use at <https://acteng.github.io/atip>.
+Note: this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of ATIP files.
+The route snapping functionality in that version only works in England.
 
 You can run ATIP anywhere in the world, but you'll need some technical experience to get started. Right now the developers can't commit to helping with other deployments, but we're open to pull requests making deploying elsewhere easily. Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation about this.
 
