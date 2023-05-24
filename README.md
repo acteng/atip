@@ -2,18 +2,17 @@
 
 ATIP lets you design, modify and share active travel infrastructure plans.
 
-<!-- If we want to say more (less can be more): -->
-<!-- It is an open source web application, meaning anyone can use it in their browser.
 It developed by the Alan Turing Institute in collaboration with Active Travel England.
-ATIP reduces barriers to entry into the transport planning process, and reduces friction between different stakeholders. -->
 
 ## Using ATIP
 
-The development version of ATIP is available for use at <https://acteng.github.io/atip>.
+The development version of ATIP with data for England is available for use at <https://acteng.github.io/atip>.
 Note: this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of ATIP files.
-The route snapping functionality in that version only works in England.
 
-You can run ATIP anywhere in the world, but you'll need some technical experience to get started. Right now the developers can't commit to helping with other deployments, but we're open to pull requests making deploying elsewhere easily. Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation about this.
+### Using ATIP in other places
+
+You can build your own hosted instance but will need some technical experience to get started.
+Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation about using ATIP in other places.
 
 Very roughly, you'd need to:
 
