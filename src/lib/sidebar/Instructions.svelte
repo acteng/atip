@@ -5,61 +5,30 @@
 </script>
 
 <Modal title="Instructions" bind:open>
-  <p>For each intervention:</p>
-
-  <ol>
-    <li>
-      Click one of the draw icons to the top right of the map (the icons allow
-      you to draw points, lines, polygons or routes)
-    </li>
-    <li>
-      Draw the intervention on the map, clicking the original point or 'Finish
-      snapping' for the Polygon and Route tools respectively
-    </li>
-    <li>
-      Fill in the details that appear (Intervention type, name, description)
-    </li>
-    <li>
-      Click the "Save" button or "Delete" button to save or remove the
-      intervention
-    </li>
-  </ol>
-
+  <h2>Drawing objects on the map</h2>
   <p>
-    Repeat the steps above for each substantial infrastructure intervention in
-    the scheme.
+    Use the tools on right to sketch new objects on the map. Each tool has
+    instructions that appear when you click on its icon.
+  </p>
+  <p>
+    Modify existing objects on the map using <b>Edit geometry</b> and clicking something.
   </p>
 
+  <h2>Filling out data</h2>
   <p>
-    To make further edits to attribute data, or to delete an intervention, click
-    on its name in the left hand panel or its geometry in the map.
+    <b>Edit attributes</b> mode allows selecting and adding attributes to objects
+    that appear on the left.
   </p>
 
+  <h2>Saving files</h2>
   <p>
-    Click the "Export to GeoJSON" button to download the dataset representing
-    the scheme, which can be made up of one or more intervention, as a GeoJSON
-    file. After saving the file, you can delete the interventions, change the
-    scheme name, and start a new set of interventions representing a new scheme.
-  </p>
-
-  <p>
-    To load a GeoJSON file that you have already saved from the tool, click the
-    "Load from GeoJSON" button and select the file.
-  </p>
-
-  <p>
-    Note: the <strong>Route tool</strong> works by calculating routes between
-    start and end points using the existing transport network according to
-    OpenStreetMap. Use it by clicking on the location where you would like the
-    route to start and then clicking on the location where you would like the
-    route to end on the map. The route will be calculated and drawn on the map.
-    After you click "Finish snapping" you can edit the route by dragging
-    individual points. This can be useful for representing links that are not
-    part of the existing transport network, such as a new bridge or path.
-    However,
-    <strong>you cannot add or remove points</strong> with the Route tool. If the
-    planned route intervention you would like to sketch as part of a scheme contains
-    one or more new links (for example containing new bridges or paths between cul-de-sacs),
-    you may want to use the Line tool instead.
+    ATIP does not send any data over the network or store your data in the
+    cloud. The current file you're editing will be saved in your browser's local
+    storage and automatically resume when you return to the page. The <b
+      >Export to GeoJSON</b
+    >
+    and <b>Load from GeoJSON</b> buttons save and load GeoJSON files (with a
+    <i>.txt</i> file extension) to your computer. You share these files with others
+    to collaborate on designs.
   </p>
 </Modal>
