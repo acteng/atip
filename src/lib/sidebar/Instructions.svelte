@@ -7,30 +7,26 @@
 <Modal title="Instructions" bind:open>
   <h2>Drawing objects on the map</h2>
   <p>
-    Use the tools on right to sketch on the map. Each tool has a <b>Help</b> button
-    or instructions.
+    Use the tools on right to sketch new objects on the map. Each tool has instructions that appear when you click on its icon.
   </p>
   <p>
-    You can modify the object on the map using <b>Edit geometry</b> and clicking
+    Modify existing objects on the map using <b>Edit geometry</b> and clicking
     something.
   </p>
 
   <h2>Filling out data</h2>
   <p>
-    While you're in <b>Edit attributes</b> mode, you can select an object on the
-    left to describe it. The level of detail depends what you're trying to map. Some
-    objects, like routes, have extra tools to auto-fill some details or show additional
-    contextual layers.
+    <b>Edit attributes</b> mode allows selecting and adding attributes to objects 
+    that appear on the left. 
   </p>
 
   <h2>Saving files</h2>
   <p>
-    ATIP does not send any data over the network or store in the cloud. The
+    ATIP does not send any data over the network or store your data in the cloud. The
     current file you're editing will be saved in your browser's local storage
-    (similar to cookies), and automatically resume when you return to the page.
-    You can use the <b>Export to GeoJSON</b> and <b>Load from GeoJSON</b>
-    buttons to save and load GeoJSON files (with a <i>.txt</i> file extension) to
-    your computer. You can email or share these files with your colleagues however
-    you normally distribute files.
+    and automatically resume when you return to the page.
+    The <b>Export to GeoJSON</b> and <b>Load from GeoJSON</b>
+    buttons save and load GeoJSON files (with a <i>.txt</i> file extension) to
+    your computer. You share these files with others to collaborate on designs.
   </p>
 </Modal>
