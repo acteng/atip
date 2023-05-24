@@ -1,8 +1,11 @@
 # Active Travel Infrastructure Platform
 
-ATIP lets you sketch new plans for walking and cycling infrastructure with a
-low level of detail. See the initial version at
-<https://acteng.github.io/atip>.
+ATIP lets you design, modify and share active travel infrastructure plans.
+
+<!-- If we want to say more (less can be more): -->
+<!-- It is an open source web application, meaning anyone can use it in their browser.
+It developed by the Alan Turing Institute in collaboration with Active Travel England.
+ATIP reduces barriers to entry into the transport planning process, and reduces friction between different stakeholders. -->
 
 ## Using ATIP
 
@@ -26,6 +29,9 @@ The main `scheme.html` page takes a few URL query parameters:
 - `style` can be `streets` (implied default) or `hybrid` (for a satellite basemap)
 
 ## Development
+
+See the up-to-date roadmap at on our [Milestones](https://github.com/acteng/atip/milestones?direction=desc&sort=completeness&state=open) page.
+Issues, feature requests, and pull requests are welcome.
 
 The stack:
 
