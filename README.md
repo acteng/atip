@@ -2,7 +2,7 @@
 
 ATIP lets you design, modify and share active travel infrastructure plans.
 
-It developed by the Alan Turing Institute in collaboration with Active Travel England.
+It's developed by the Alan Turing Institute in collaboration with Active Travel England.
 
 ## Using ATIP
 
