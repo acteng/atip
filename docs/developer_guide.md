@@ -16,7 +16,7 @@ There are some related repositorites also part of ATIP:
 
 ## Installation
 
-You'll need
+To run locally you'll need:
 [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and
 [wasm-pack](https://github.com/rustwasm/wasm-pack).
 
@@ -31,6 +31,17 @@ You'll need
 If you're using Firefox locally to develop and get "import declarations may
 only appear at top level" errors, upgrade to at least Firefox 112, go to
 `about:config` and enable `dom.workers.modules.enabled`
+
+To run via Docker in VSCode you'll need:
+- [Docker](https://www.docker.com/)
+- [VSCode ](https://code.visualstudio.com/) with the extension ["Dev Containers"](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
+
+Once you've installed these you can:
+1. Open VSCode
+2. Press F1 to open input command at top of window
+3.  Run `Dev Containers: Open Folder in Container`, and select the `atip` folder
+4. Press the plus on the top right of the terminal subwindow at the bottom of VSCode (by default) to open a terminal in your docker container
+5. Run `npm install`, `npm run wasm`, then `npm run dev` and you should have ATIP running on your docker image, VS Code should prompt you with a link to open it in your browser
 
 ### Monkey-patching dependencies
 
