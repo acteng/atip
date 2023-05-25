@@ -1,14 +1,18 @@
 # Active Travel Infrastructure Platform
 
-ATIP lets you sketch new plans for walking and cycling infrastructure with a
-low level of detail. See the initial version at
-<https://acteng.github.io/atip>.
+ATIP lets you design, modify and share active travel infrastructure plans.
+
+It's developed by the Alan Turing Institute in collaboration with Active Travel England.
 
 ## Using ATIP
 
-If you're in England, go use the development version at <https://acteng.github.io/atip>. Note this is not a production service; we make no guarantees about the site's uptime or about backwards compatibility of ATIP files.
+The development version of ATIP with data for England is available for use at <https://acteng.github.io/atip>.
+Note: this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of ATIP files.
 
-You can run ATIP anywhere in the world, but you'll need some technical experience to get started. Right now the developers can't commit to helping with other deployments, but we're open to pull requests making deploying elsewhere easily. Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation about this.
+### Using ATIP in other places
+
+You can build your own hosted instance but will need some technical experience to get started.
+Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation about using ATIP in other places.
 
 Very roughly, you'd need to:
 
@@ -26,6 +30,9 @@ The main `scheme.html` page takes a few URL query parameters:
 - `style` can be `streets` (implied default) or `hybrid` (for a satellite basemap)
 
 ## Development
+
+See the up-to-date roadmap at on our [Milestones](https://github.com/acteng/atip/milestones?direction=desc&sort=completeness&state=open) page.
+Issues, feature requests, and pull requests are welcome.
 
 The stack:
 
@@ -103,4 +110,4 @@ TODO: Draw the finite state machine for modes
 
 It's helpful to think of ATIP as a somewhat generic data entry system. Per object ("intervention") drawn on the map, the app has a form to collect properties about the object. Multiple schemas are supported -- v1, v2, and planning are some examples.
 
-At the time of writing, v1 is manually implemented in the form of TypeScript types and a Svelte component for the form. v2 is auto-generated from `src/schemas/v2.json`, and there are other schemas defined there. There's a generic Svelte component that can auto-generate a form from this schema, and `npm run generate-schema-ts` auto-generates the TypeScript types. `v2.json` is written in a bespoke format; see code for more details.
+At the time of writing, v1 is manually implemented in the form of TypeScript types and a Svelte component for the form. v2 is auto-generated from [`src/schemas/v2.json`](https://github.com/acteng/atip/blob/main/src/schemas/v2.json), and there are other schemas defined there. There's a generic Svelte component that can auto-generate a form from this schema, and `npm run generate-schema-ts` auto-generates the TypeScript types. `v2.json` is written in a bespoke format; see code for more details.
