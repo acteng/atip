@@ -31,4 +31,6 @@ The main `scheme.html` page takes a few URL query parameters:
 
 ## Development
 
+See our current roadmap on the [Milestones](https://github.com/acteng/atip/milestones?direction=desc&sort=completeness&state=open) page. Issues, feature requests, and pull requests are welcome. Please open an issue if you're interested in contributing!
+
 See the [developer guide](docs/developer_guide.md) if you want to work on ATIP.
