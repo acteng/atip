@@ -123,7 +123,9 @@ export class RouteTool {
     }
     // When we finish, we'll re-enable doubleClickZoom, but we don't want this to zoom in
     e.preventDefault();
-    // Treat it like a click, to possibly add a final point
+    // Double clicks happen as [click, click, dblclick]. The first click adds a
+    // point, the second immediately deletes it, and so we simulate a third
+    // click to add it again.
     this.inner.onClick();
     this.finish();
   }

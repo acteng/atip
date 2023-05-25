@@ -54,6 +54,7 @@ export class PolygonTool {
     this.events = new EventManager(this, map);
     this.events.mapHandler("mousemove", this.onMouseMove);
     this.events.mapHandler("click", this.onClick);
+    this.events.mapHandler("dblclick", this.onDoubleClick);
     this.events.mapHandler("mousedown", this.onMouseDown);
     this.events.mapHandler("mouseup", this.onMouseUp);
     this.events.documentHandler("keypress", this.onKeypress);
@@ -161,6 +162,21 @@ export class PolygonTool {
     }
   }
 
+  private onDoubleClick(e: MapMouseEvent) {
+    if (!this.active) {
+      return;
+    }
+    // When we finish, we'll re-enable doubleClickZoom, but we don't want this to zoom in
+    e.preventDefault();
+    // Double clicks happen as [click, click, dblclick]. The first click adds a
+    // point, the second immediately deletes it, and so we simulate a third
+    // click to add it again.
+    // TODO But since the delete case currently doesn't set cursor during recalculateHovering, do this hack
+    this.cursor = pointFeature(e.lngLat.toArray());
+    this.onClick(e);
+    this.finish();
+  }
+
   private onMouseDown(e: MapMouseEvent) {
     if (this.active && !this.dragFrom && this.hover != null) {
       e.preventDefault();
@@ -202,10 +218,13 @@ export class PolygonTool {
 
   startNew() {
     this.active = true;
+    // Otherwise, double clicking to finish breaks
+    this.map.doubleClickZoom.disable();
   }
 
   editExisting(feature: Feature<Polygon>) {
     this.active = true;
+    this.map.doubleClickZoom.disable();
     this.points = JSON.parse(JSON.stringify(feature.geometry.coordinates[0]));
     this.points.pop();
     this.redraw();
@@ -213,6 +232,7 @@ export class PolygonTool {
   }
 
   stop() {
+    this.map.doubleClickZoom.enable();
     this.points = [];
     this.cursor = null;
     this.active = false;
