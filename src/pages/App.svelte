@@ -42,11 +42,11 @@
   // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
   // CDN invalidations when we update these files. But when serving locally for
   // development, HTTPS is also fine to use.
-  var routeSnapperUrl = `https://atip.uk/route-snappers/${authorityName}.bin`;
-  var routeInfoUrl = `https://atip.uk/route-info/${authorityName}.bin`;
+  var routeSnapperUrl = `https://atip.uk/route-snappers/${authorityName}.bin.gz`;
+  var routeInfoUrl = `https://atip.uk/route-info/${authorityName}.bin.gz`;
   if (!prod) {
-    routeSnapperUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin`;
-    routeInfoUrl = `https://atip.uk/route-info-dev/${authorityName}.bin`;
+    routeSnapperUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin.gz`;
+    routeInfoUrl = `https://atip.uk/route-info-dev/${authorityName}.bin.gz`;
   }
 
   function toggleAbout() {
