@@ -1,7 +1,5 @@
 # Developer guide
 
-See our current roadmap on the [Milestones](https://github.com/acteng/atip/milestones?direction=desc&sort=completeness&state=open) page. Issues, feature requests, and pull requests are welcome. Please open an issue if you're interested in contributing!
-
 ## Code overview
 
 This repository contains the Svelte ATIP app. Our tech stack is:
