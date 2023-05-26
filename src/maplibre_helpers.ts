@@ -42,7 +42,8 @@ export function overwriteSource(map: Map, id: string, data: GeoJSON) {
 // This is an internal helper used by specialized functions for drawing
 // circles, lines, and polygons. The layer.id here MUST be present in
 // layerZorder.
-function overwriteLayer(
+// TODO It's exported for the LaneDetails Layer helper. Reconsider.
+export function overwriteLayer(
   map: Map,
   layer: LayerSpecification & { source: string }
 ) {
