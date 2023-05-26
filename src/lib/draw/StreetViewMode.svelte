@@ -8,9 +8,9 @@
   import {
     emptyGeojson,
     overwriteSource,
-    overwriteLayer,
-    drawCircle,
+    overwriteCircleLayer,
   } from "../../maplibre_helpers";
+  import CollapsibleCard from "../common/CollapsibleCard.svelte";
 
   const thisMode = "street-view";
 
@@ -19,7 +19,7 @@
   export let mode: Mode;
   export let changeMode: (m: Mode) => void;
 
-  let imagery: "google" | "bing" | "mapillary" = "google";
+  let imagery: "google" | "bing" = "google";
 
   export function start() {}
   export function stop() {
@@ -40,10 +40,11 @@
   let source = "street-view";
   overwriteSource($map, source, emptyGeojson());
   // TODO Different icon?
-  overwriteLayer($map, {
+  overwriteCircleLayer($map, {
     id: "draw-street-view",
     source,
-    ...drawCircle("black", circleRadiusPixels, 1.0),
+    color: "black",
+    radius: circleRadiusPixels,
   });
 
   $: {
@@ -76,11 +77,6 @@
     } else if (imagery == "bing") {
       window.open(
         `https://www.bing.com/maps?cp=${lat}~${lon}&style=x`,
-        "_blank"
-      );
-    } else if (imagery == "mapillary") {
-      window.open(
-        `https://www.mapillary.com/app/?lat=${lat}&lng=${lon}&z=17`,
         "_blank"
       );
     }
@@ -116,16 +112,15 @@
     <input type="radio" bind:group={imagery} value="bing" />
     Bing Streetside
   </label>
-  <br />
-  <label>
-    <input type="radio" bind:group={imagery} value="mapillary" />
-    Mapillary
-  </label>
 
-  <ul>
-    <li><b>Click</b> on the map to open imagery</li>
-    <li>Press <b>Escape</b> to cancel</li>
-  </ul>
+  <CollapsibleCard label="Help">
+    <ul>
+      <li>
+        <b>Click</b> on the map to open a new tab with a 3rd-party imagery provider
+      </li>
+      <li>Press <b>Escape</b> to exit this mode</li>
+    </ul>
+  </CollapsibleCard>
 {/if}
 
 <svelte:window on:keydown={onKeyDown} />
