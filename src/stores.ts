@@ -1,7 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 import { emptyGeojson } from "./maplibre_helpers";
 import type { Map } from "maplibre-gl";
-import type { Scheme } from "./types";
+import type { Scheme, UserSettings } from "./types";
 import { type Remote } from "comlink";
 import { type RouteInfo } from "./worker";
 
@@ -25,6 +25,13 @@ export const sidebarHover: Writable<number | null> = writable(null);
 
 // These act as event dispatchers, but are easier to plumb around.
 export const openFromSidebar: Writable<number | null> = writable(null);
+
+export const userSettings: Writable<UserSettings> = writable(
+  loadUserSettings()
+);
+userSettings.subscribe((value) =>
+  window.localStorage.setItem("userSettings", JSON.stringify(value))
+);
 
 // All feature IDs must:
 //
@@ -63,4 +70,26 @@ export function deleteIntervention(id: number) {
   mapHover.set(null);
   sidebarHover.set(null);
   openFromSidebar.set(null);
+}
+
+function loadUserSettings(): UserSettings {
+  let settings = {
+    streetViewImagery: "google",
+    avoidDoublingBack: false,
+  };
+
+  // Be paranoid when loading from local storage, and only copy over valid items
+  try {
+    let x = JSON.parse(window.localStorage.getItem("userSettings") || "{}");
+    if (x.streetViewImagery == "google" || x.streetViewImagery == "bing") {
+      settings.streetViewImagery = x.streetViewImagery;
+    }
+    if (typeof x.avoidDoublingBack == "boolean") {
+      settings.avoidDoublingBack = x.avoidDoublingBack;
+    }
+  } catch (error) {
+    console.log(`Couldn't parse userSettings from local storage: ${error}`);
+  }
+  // The cast is necessary, because of streetViewImagery looking like just a string
+  return settings as UserSettings;
 }

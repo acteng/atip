@@ -4,7 +4,7 @@
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   import type { Feature, Point } from "geojson";
   import { point } from "@turf/helpers";
-  import { map } from "../../stores";
+  import { map, userSettings } from "../../stores";
   import {
     emptyGeojson,
     overwriteSource,
@@ -18,8 +18,6 @@
 
   export let mode: Mode;
   export let changeMode: (m: Mode) => void;
-
-  let imagery: "google" | "bing" = "google";
 
   export function start() {}
   export function stop() {
@@ -69,12 +67,12 @@
     }
 
     let [lon, lat] = cursor.geometry.coordinates;
-    if (imagery == "google") {
+    if ($userSettings.streetViewImagery == "google") {
       window.open(
         `http://maps.google.com/maps?q=&layer=c&cbll=${lat},${lon}&cbp=11,0,0,0,0`,
         "_blank"
       );
-    } else if (imagery == "bing") {
+    } else if ($userSettings.streetViewImagery == "bing") {
       window.open(
         `https://www.bing.com/maps?cp=${lat}~${lon}&style=x`,
         "_blank"
@@ -104,12 +102,20 @@
 
 {#if mode == thisMode}
   <label>
-    <input type="radio" bind:group={imagery} value="google" />
+    <input
+      type="radio"
+      bind:group={$userSettings.streetViewImagery}
+      value="google"
+    />
     Google Street View
   </label>
   <br />
   <label>
-    <input type="radio" bind:group={imagery} value="bing" />
+    <input
+      type="radio"
+      bind:group={$userSettings.streetViewImagery}
+      value="bing"
+    />
     Bing Streetside
   </label>
 

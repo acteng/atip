@@ -57,3 +57,12 @@ export interface Waypoint {
   lat: number;
   snapped: boolean;
 }
+
+// Remember settings from different tools
+export interface UserSettings {
+  // From the StreetView tool
+  streetViewImagery: "google" | "bing";
+
+  // From the Route tool
+  avoidDoublingBack: boolean;
+}

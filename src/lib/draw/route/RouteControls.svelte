@@ -2,13 +2,13 @@
   import { RouteTool } from "./route_tool";
   import KeyHandler from "../KeyHandler.svelte";
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import { userSettings } from "../../../stores";
 
   export let routeTool: RouteTool;
 
-  // TODO Save this in the route
-  let avoidDoublingBack = false;
+  // TODO When editing, we should save in the route and use the previous value
   $: routeTool.setRouteConfig({
-    avoid_doubling_back: avoidDoublingBack,
+    avoid_doubling_back: $userSettings.avoidDoublingBack,
   });
 
   // TODO Show if shift is held or not
@@ -29,7 +29,7 @@
 </CollapsibleCard>
 
 <label>
-  <input type="checkbox" bind:checked={avoidDoublingBack} />
+  <input type="checkbox" bind:checked={$userSettings.avoidDoublingBack} />
   Avoid doubling back
 </label>
 
