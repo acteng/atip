@@ -203,7 +203,11 @@ export class RouteTool {
       return;
     }
 
-    this.inner.setConfig({ avoid_doubling_back: true, area_mode: true });
+    this.inner.setConfig({
+      avoid_doubling_back: true,
+      area_mode: true,
+      extend_route: true,
+    });
     this.active = true;
     this.map.boxZoom.disable();
     this.map.doubleClickZoom.disable();
@@ -329,7 +333,10 @@ export class RouteTool {
     this.finish();
   }
 
-  setRouteConfig(config: { avoid_doubling_back: boolean }) {
+  setRouteConfig(config: {
+    avoid_doubling_back: boolean;
+    extend_route: boolean;
+  }) {
     this.inner.setConfig({ ...config, area_mode: false });
     this.redraw();
   }
