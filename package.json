@@ -40,7 +40,7 @@
     "@types/geojson": "^7946.0.10",
     "comlink": "^4.4.1",
     "maplibre-gl": "^2.4.0",
-    "route-snapper": "^0.1.13",
+    "route-snapper": "^0.1.14",
     "svelte": "^3.54.0"
   }
 }

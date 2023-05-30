@@ -6,9 +6,11 @@
 
   export let routeTool: RouteTool;
 
+  let extendRoute = false;
   // TODO When editing, we should save in the route and use the previous value
   $: routeTool.setRouteConfig({
     avoid_doubling_back: $userSettings.avoidDoublingBack,
+    extend_route: extendRoute,
   });
 
   // TODO Show if shift is held or not
@@ -28,7 +30,16 @@
   </ul>
 </CollapsibleCard>
 
-<label>
+<label title="Keep clicking to add more points to the end of the route">
+  <input type="checkbox" bind:checked={extendRoute} />
+  Add points to end
+</label>
+
+<br />
+
+<label
+  title="Try to make the route avoid using the same streets with multiple waypoints"
+>
   <input type="checkbox" bind:checked={$userSettings.avoidDoublingBack} />
   Avoid doubling back
 </label>
