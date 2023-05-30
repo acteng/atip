@@ -16,13 +16,12 @@
     return (x / 1000.0).toFixed(1) + "km";
   }
 
-  // TODO Disable the button until RouteInfo is loaded and ready?
   async function autoFillName() {
     let linestring = $gjScheme.features.find(
       (f) => f.id == id
     ) as Feature<LineString>;
     try {
-      name = await $routeInfo.nameForRoute(linestring);
+      name = await $routeInfo!.nameForRoute(linestring);
     } catch (e) {
       window.alert(`Couldn't auto-name route: ${e}`);
     }
@@ -31,7 +30,9 @@
 
 <label>
   Name:
-  <button type="button" on:click={() => autoFillName()}>Auto-fill</button>
+  <button type="button" on:click={() => autoFillName()} disabled={!$routeInfo}
+    >Auto-fill</button
+  >
   <br />
   <input type="text" bind:value={name} style="width: 100%" />
 </label>

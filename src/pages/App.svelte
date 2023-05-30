@@ -77,10 +77,11 @@
     const MyWorker: Comlink.Remote<WorkerConstructor> = Comlink.wrap(
       new workerWrapper()
     );
-    // TODO Maybe don't set it until loadFile is done, so that everywhere using
-    // it can disable controls until loaded
-    routeInfo.set(await new MyWorker());
-    await $routeInfo.loadFile(routeInfoUrl);
+    // Don't populate the routeInfo store until loadFile is done, so other
+    // places can disable controls until it's ready
+    let info = await new MyWorker();
+    await info.loadFile(routeInfoUrl);
+    routeInfo.set(info);
   });
 
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
