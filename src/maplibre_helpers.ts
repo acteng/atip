@@ -7,7 +7,12 @@ import type {
 } from "maplibre-gl";
 import type { GeoJSON, FeatureCollection, Feature, Geometry } from "geojson";
 import turfBbox from "@turf/bbox";
-import flush from "just-flush";
+
+// Some methods take optional params. It's an error to pass in null or undefined, so use default values from
+// https://github.com/maplibre/maplibre-style-spec/blob/main/src/reference/v8.json.
+const defaultColor = "#000000";
+const defaultFilter = true;
+const defaultOpacity = 1;
 
 export const isPolygon: FilterSpecification = ["==", "$type", "Polygon"];
 export const isLine: FilterSpecification = ["==", "$type", "LineString"];
@@ -91,20 +96,16 @@ export function overwritePolygonLayer(
     opacity: DataDrivenPropertyValueSpecification<number>;
   }
 ) {
-  // Use flush to remove possibly undefined properties, like filter
-  overwriteLayer(
-    map,
-    flush({
-      id: params.id,
-      source: params.source,
-      filter: params.filter,
-      type: "fill",
-      paint: {
-        "fill-color": params.color,
-        "fill-opacity": params.opacity,
-      },
-    })
-  );
+  overwriteLayer(map, {
+    id: params.id,
+    source: params.source,
+    filter: params.filter ?? defaultFilter,
+    type: "fill",
+    paint: {
+      "fill-color": params.color,
+      "fill-opacity": params.opacity,
+    },
+  });
 }
 
 export function overwriteCircleLayer(
@@ -120,22 +121,19 @@ export function overwriteCircleLayer(
     strokeWidth?: DataDrivenPropertyValueSpecification<number>;
   }
 ) {
-  overwriteLayer(
-    map,
-    flush({
-      id: params.id,
-      source: params.source,
-      filter: params.filter,
-      type: "circle",
-      paint: flush({
-        "circle-radius": params.radius,
-        "circle-color": params.color,
-        "circle-opacity": params.opacity ?? 1.0,
-        "circle-stroke-color": params.strokeColor,
-        "circle-stroke-width": params.strokeWidth,
-      }),
-    })
-  );
+  overwriteLayer(map, {
+    id: params.id,
+    source: params.source,
+    filter: params.filter ?? defaultFilter,
+    type: "circle",
+    paint: {
+      "circle-radius": params.radius,
+      "circle-color": params.color ?? defaultColor,
+      "circle-opacity": params.opacity ?? defaultOpacity,
+      "circle-stroke-color": params.strokeColor ?? defaultColor,
+      "circle-stroke-width": params.strokeWidth ?? 0,
+    },
+  });
 }
 
 export function overwriteLineLayer(
@@ -149,24 +147,21 @@ export function overwriteLineLayer(
     opacity?: DataDrivenPropertyValueSpecification<number>;
   }
 ) {
-  overwriteLayer(
-    map,
-    flush({
-      id: params.id,
-      source: params.source,
-      filter: params.filter,
-      type: "line",
-      layout: {
-        "line-cap": "round",
-        "line-join": "round",
-      },
-      paint: {
-        "line-color": params.color,
-        "line-width": params.width,
-        "line-opacity": params.opacity ?? 1.0,
-      },
-    })
-  );
+  overwriteLayer(map, {
+    id: params.id,
+    source: params.source,
+    filter: params.filter ?? defaultFilter,
+    type: "line",
+    layout: {
+      "line-cap": "round",
+      "line-join": "round",
+    },
+    paint: {
+      "line-color": params.color,
+      "line-width": params.width,
+      "line-opacity": params.opacity ?? defaultOpacity,
+    },
+  });
 }
 
 export function emptyGeojson(): FeatureCollection {

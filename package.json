@@ -38,7 +38,6 @@
     "@turf/nearest-point-on-line": "^6.5.0",
     "@types/geojson": "^7946.0.10",
     "comlink": "^4.4.1",
-    "just-flush": "^2.3.0",
     "maplibre-gl": "^2.4.0",
     "route-snapper": "^0.1.13",
     "svelte": "^3.54.0"
