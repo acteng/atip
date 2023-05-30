@@ -10,8 +10,7 @@
     ATIP v1 is an
     <ExternalLink href="https://github.com/acteng/atip"
       >open source project</ExternalLink
-    >
-    developed by:
+    > supported by Active Travel England and developed by:
   </p>
 
   <ul>
@@ -22,14 +21,16 @@
       >: lead developer, from The Alan Turing Institute
     </li>
     <li>
+      With UX help from
       <ExternalLink href="https://www.linkedin.com/in/madison-wang-841977bb/"
         >Madison Wang</ExternalLink
-      >: UX design
-    </li>
-    <li>
+      > and CSS help from
       <ExternalLink href="https://github.com/BudgieInWA"
         >Ben Ritter</ExternalLink
-      >: CSS consulting
+      >
+    </li>
+    <li>
+      With great thanks to ATIP's various users for feedback, testing, and ideas
     </li>
   </ul>
 
@@ -40,8 +41,13 @@
     >
     contributors,
     <ExternalLink href="https://maplibre.org/">MapLibre</ExternalLink>,
-    <ExternalLink href="https://georust.org/">GeoRust</ExternalLink>, and other
-    open source projects.
+    <ExternalLink href="https://georust.org/">GeoRust</ExternalLink>,
+    <ExternalLink href="https://github.com/a-b-street/osm2streets"
+      >osm2streets</ExternalLink
+    >,
+    <ExternalLink href="https://material.io/resources/icons/"
+      >Material icons</ExternalLink
+    >, and other open source projects.
   </p>
 
   <p>
@@ -51,4 +57,16 @@
     >
     or email <a href="mailto: dcarlino@turing.ac.uk">dcarlino@turing.ac.uk</a>.
   </p>
+
+  <hr />
+
+  <h2>Recent changes</h2>
+  <ul>
+    <li>
+      <b>Unreleased</b>: Complete UI rewrite, new draw tools, drawing areas
+      snapped to roads, splitting routes, multiple data schemas, speed limit
+      layer, lane visualization layer
+    </li>
+    <li><b>v1</b> launched in March 2023</li>
+  </ul>
 </Modal>
