@@ -1,4 +1,6 @@
 <script lang="ts">
+  // This component can only be created once routeInfo is ready
+
   import { onMount, onDestroy } from "svelte";
   import {
     emptyGeojson,
@@ -77,11 +79,11 @@
           (f) => f.id == id
         ) as Feature<LineString>;
         let gj = JSON.parse(
-          await $routeInfo.speedLimitForRoute(linestring.properties.waypoints)
+          await $routeInfo!.speedLimitForRoute(linestring.properties.waypoints)
         );
         ($map.getSource(source) as GeoJSONSource).setData(gj);
       } else {
-        let gj = JSON.parse(await $routeInfo.allSpeedLimits());
+        let gj = JSON.parse(await $routeInfo!.allSpeedLimits());
         ($map.getSource(source) as GeoJSONSource).setData(gj);
       }
     } catch (e) {

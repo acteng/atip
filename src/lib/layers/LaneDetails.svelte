@@ -1,5 +1,7 @@
 <script lang="ts">
-  import type { LineString } from "geojson";
+  // This component can only be created once routeInfo is ready
+
+  import type { GeoJSON, LineString } from "geojson";
   import type { Feature } from "../../types";
   import { onMount } from "svelte";
   import { gjScheme, routeInfo } from "../../stores";
@@ -14,17 +16,17 @@
 
   // renderLaneDetailsForRoute returns 4 layers in a certain order. They're
   // labeled when used below.
-  let gj1;
-  let gj2;
-  let gj3;
-  let gj4;
+  let gj1: GeoJSON;
+  let gj2: GeoJSON;
+  let gj3: GeoJSON;
+  let gj4: GeoJSON;
 
   onMount(async () => {
     try {
       let linestring = $gjScheme.features.find(
         (f) => f.id == id
       ) as Feature<LineString>;
-      let raw = await $routeInfo.renderLaneDetailsForRoute(
+      let raw = await $routeInfo!.renderLaneDetailsForRoute(
         linestring.properties.waypoints
       );
       gj1 = JSON.parse(raw[0]);
