@@ -9,9 +9,6 @@
 <div class="overall-layout">
   <aside class={showSidebar ? "" : "collapsed"}>
     <div class="sidebar-content content-container">
-      <nav>
-        <slot name="nav" />
-      </nav>
       <slot name="sidebar" />
     </div>
     <button
@@ -112,12 +109,5 @@
 
   .collapsed .sidebar-toggle {
     transform: rotate(0deg);
-  }
-
-  .sidebar-content > nav {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: left;
-    margin-bottom: 10px;
   }
 </style>
