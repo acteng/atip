@@ -1,7 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 import { emptyGeojson } from "./maplibre_helpers";
 import type { Map } from "maplibre-gl";
-import type { Scheme, UserSettings } from "./types";
+import { isStreetViewImagery, type Scheme, type UserSettings } from "./types";
 import { type Remote } from "comlink";
 import { type RouteInfo } from "./worker";
 
@@ -81,7 +81,7 @@ function loadUserSettings(): UserSettings {
   // Be paranoid when loading from local storage, and only copy over valid items
   try {
     let x = JSON.parse(window.localStorage.getItem("userSettings") || "{}");
-    if (x.streetViewImagery == "google" || x.streetViewImagery == "bing") {
+    if (isStreetViewImagery(x.streetViewImagery)) {
       settings.streetViewImagery = x.streetViewImagery;
     }
     if (typeof x.avoidDoublingBack == "boolean") {
