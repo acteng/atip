@@ -6,24 +6,46 @@
   }
 </script>
 
-<aside class={showSidebar ? "" : "collapsed"}>
-  <div class="sidebar-content content-container">
-    <nav>
-      <slot name="nav" />
-    </nav>
-    <slot name="sidebar" />
-  </div>
-  <button
-    type="button"
-    class="sidebar-toggle rounded-rect"
-    on:click={toggleSidebar}>&rarr;</button
-  >
-</aside>
-<main>
-  <slot name="main" />
-</main>
+<div class="overall-layout">
+  <aside class={showSidebar ? "" : "collapsed"}>
+    <div class="sidebar-content content-container">
+      <nav>
+        <slot name="nav" />
+      </nav>
+      <slot name="sidebar" />
+    </div>
+    <button
+      type="button"
+      class="sidebar-toggle rounded-rect"
+      on:click={toggleSidebar}>&rarr;</button
+    >
+  </aside>
+  <main>
+    <slot name="main" />
+  </main>
+</div>
 
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .overall-layout {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    overflow: hidden;
+
+    /* Two columns, the sidebar on the left, and the main content on the right. */
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
   aside {
     position: relative; /* for children who want to position:absolute */
 
