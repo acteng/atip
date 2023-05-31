@@ -66,3 +66,7 @@ export interface UserSettings {
   // From the Route tool
   avoidDoublingBack: boolean;
 }
+
+export function isStreetViewImagery(x: string): x is "google" | "bing" {
+  return x == "google" || x == "bing";
+}
