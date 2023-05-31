@@ -104,7 +104,7 @@
 </script>
 
 <Layout>
-  <div slot="nav">
+  <div slot="sidebar">
     <div>
       <button type="button" on:click={() => window.open("index.html")}>
         Home</button
@@ -122,8 +122,6 @@
         <option value="criticals">Critical issues</option>
       </select>
     </label>
-  </div>
-  <div slot="sidebar">
     <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
     <EntireScheme {authorityName} {schema} />
     <br />
