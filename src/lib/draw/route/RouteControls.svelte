@@ -5,8 +5,10 @@
   import { userSettings } from "../../../stores";
 
   export let routeTool: RouteTool;
+  // Start with this enabled or disabled, based on whether we're drawing a new
+  // route or editing an existing.
+  export let extendRoute: boolean;
 
-  let extendRoute = false;
   // TODO When editing, we should save in the route and use the previous value
   $: routeTool.setRouteConfig({
     avoid_doubling_back: $userSettings.avoidDoublingBack,

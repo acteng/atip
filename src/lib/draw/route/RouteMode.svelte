@@ -69,5 +69,5 @@
   <!-- TODO the text should be fixed, and the progress bar float -->
   <div bind:this={progress}>Route tool loading...</div>
 {:else if mode == thisMode}
-  <RouteControls {routeTool} />
+  <RouteControls {routeTool} extendRoute />
 {/if}

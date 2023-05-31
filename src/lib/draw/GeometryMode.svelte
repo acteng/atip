@@ -210,7 +210,7 @@
   {:else if currentlyEditingControls == "snap-polygon"}
     <SnapPolygonControls {routeTool} />
   {:else if currentlyEditingControls == "route"}
-    <RouteControls {routeTool} />
+    <RouteControls {routeTool} extendRoute={false} />
   {:else}
     <p>Click an object to edit its geometry</p>
   {/if}
