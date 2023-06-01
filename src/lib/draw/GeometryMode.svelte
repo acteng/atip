@@ -66,6 +66,13 @@
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+        // TODO Hack around https://github.com/acteng/atip/issues/142
+        if (!feature) {
+          window.alert(
+            "You loaded another file or cleared everything while editing. Your changes were lost."
+          );
+          return gj;
+        }
         // Keep the ID and any properties. Just copy over stuff from routeSnapper.
         // TODO We're depending on implementation details here and knowing what to copy...
         feature.properties.length_meters = editedRoute.properties.length_meters;
@@ -84,6 +91,12 @@
     if (mode == thisMode) {
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+        if (!feature) {
+          window.alert(
+            "You loaded another file or cleared everything while editing. Your changes were lost."
+          );
+          return gj;
+        }
         // Keep the ID and any properties. Just copy over stuff from routeSnapper.
         // TODO We're depending on implementation details here and knowing what to copy...
         feature.properties.waypoints = editedArea.properties.waypoints;
@@ -104,6 +117,12 @@
           let updateFeature = gj.features.find(
             (f) => f.id == currentlyEditing
           )!;
+          if (!updateFeature) {
+            window.alert(
+              "You loaded another file or cleared everything while editing. Your changes were lost."
+            );
+            return gj;
+          }
           updateFeature.geometry = feature.geometry;
           delete updateFeature.properties.hide_while_editing;
           return gj;
@@ -123,6 +142,12 @@
         // Don't modify the thing we were just editing
         gjScheme.update((gj) => {
           let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+          if (!feature) {
+            window.alert(
+              "You loaded another file or cleared everything while editing. Your changes were lost."
+            );
+            return gj;
+          }
           delete feature.properties.hide_while_editing;
           return gj;
         });
