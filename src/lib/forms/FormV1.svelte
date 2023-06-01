@@ -16,6 +16,8 @@
     return (x / 1000.0).toFixed(1) + "km";
   }
 
+  // Sets the intervention name to "From {road1 and road2} to {road3 and
+  // road4}". Only meant to be useful for routes currently.
   async function autoFillName() {
     let linestring = $gjScheme.features.find(
       (f) => f.id == id
@@ -30,9 +32,12 @@
 
 <label>
   Name:
-  <button type="button" on:click={() => autoFillName()} disabled={!$routeInfo}
-    >Auto-fill</button
-  >
+  <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
+  {#if length_meters}
+    <button type="button" on:click={() => autoFillName()} disabled={!$routeInfo}
+      >Auto-fill</button
+    >
+  {/if}
   <br />
   <input type="text" bind:value={name} style="width: 100%" />
 </label>
