@@ -62,7 +62,9 @@ test("creating a new snapped polygon opens a form", async ({ page }) => {
   await page.getByLabel("Description:").click();
 });
 
-test("creating a new route opens a form", async ({ page }) => {
+test("creating a new route opens a form, and auto-fill sets its name", async ({
+  page,
+}) => {
   await page.goto("/scheme.html?authority=Adur");
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 500, 500);
@@ -71,6 +73,15 @@ test("creating a new route opens a form", async ({ page }) => {
 
   await page.getByRole("button", { name: "1) Untitled route" }).isVisible();
   await page.getByLabel("Description:").click();
+
+  // This button only works after RouteInfo is loaded. And note because the
+  // button is located inside a label, getByRole doesn't seem to work.
+  await page.getByText("Auto-fill").click();
+  await page
+    .getByRole("button", {
+      name: "1) Route from ??? and Brighton Road to Emerald Quay and Harbour Way",
+    })
+    .isVisible();
 });
 
 test("other tools work when route tool doesn't load", async ({ page }) => {

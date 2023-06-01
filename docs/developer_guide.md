@@ -56,11 +56,14 @@ To clean up afterwards, delete `node_modules` and `npm i` again.
 ## Tests
 
 We use [Playwright](https://playwright.dev) for end-to-end tests that mimic a
-user's actions. To run all tests: `npm run test`
+user's actions.
 
-To develop a test interactively, `npm run test -- --debug`. You can step
-through a test line-by-line with a browser open. Press "record" and then
-interact with the page normally, generating the equivalent test code.
+- To run all tests: `npm run test`
+- To develop a test interactively, `npm run test -- --debug -g 'test name'`.
+  You can omit the `-g` to run all tests, or pass a test file instead. You can
+  step through a test line-by-line with a browser open. Press "record" and then
+  interact with the page normally, generating the equivalent test code.
+- Use `npm run test -- --ui` for another useful debugger
 
 ## HMR best practices
 
