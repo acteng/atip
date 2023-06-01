@@ -99,7 +99,7 @@
 </script>
 
 <div class="left">
-  <h1>Welcome to ATIP v1</h1>
+  <h1>Welcome to ATIP v2</h1>
   <button type="button" on:click={() => (showAbout = !showAbout)}>About</button>
 
   <p>Select Transport Authority or Local Authority District:</p>

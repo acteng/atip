@@ -88,7 +88,7 @@
     var filename = baseFilename;
     geojson.authority = authorityName;
     // we could probably be more sophisticated here and set version more centrally
-    geojson.origin = "atip-v1";
+    geojson.origin = "atip-v2";
     // Include the scheme name if it's set
     if (geojson["scheme_name"]) {
       filename += "_" + geojson["scheme_name"];

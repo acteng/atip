@@ -7,7 +7,7 @@
 
 <Modal title="About the Active Travel Infrastructure Platform" bind:open>
   <p>
-    ATIP v1 is an
+    ATIP v2 is an
     <ExternalLink href="https://github.com/acteng/atip"
       >open source project</ExternalLink
     > supported by Active Travel England and developed by:
@@ -63,9 +63,9 @@
   <h2>Recent changes</h2>
   <ul>
     <li>
-      <b>Unreleased</b>: Complete UI rewrite, new draw tools, drawing areas
-      snapped to roads, splitting routes, multiple data schemas, speed limit
-      layer, lane visualization layer
+      <b>v2</b> launched on 2 June 2023. Changes: a complete UI rewrite, new draw
+      tools, drawing areas snapped to roads, splitting routes, multiple data schemas,
+      speed limit layer, lane visualization layer
     </li>
     <li><b>v1</b> launched in March 2023</li>
   </ul>
