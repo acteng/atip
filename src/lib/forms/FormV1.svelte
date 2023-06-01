@@ -30,9 +30,9 @@
 
 <label>
   Name:
-  <button type="button" on:click={() => autoFillName()} disabled={!$routeInfo}
-    >Auto-fill</button
-  >
+  {#if length_meters}
+    <button type="button" on:click={() => autoFillName()} disabled={!$routeInfo}>Auto-fill</button>
+  {/if}
   <br />
   <input type="text" bind:value={name} style="width: 100%" />
 </label>
