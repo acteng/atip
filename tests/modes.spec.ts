@@ -100,3 +100,31 @@ test("other tools work when route tool doesn't load", async ({ page }) => {
   await clickMap(page, 500, 500);
   await page.getByRole("button", { name: "1) Untitled point" }).isVisible();
 });
+
+test("editing geometry of a polygon works", async ({ page }) => {
+  await page.goto("/scheme.html?authority=Adur");
+
+  // Create a polygon
+  await page.getByRole("button", { name: "New polygon (snapped)" }).click();
+  await clickMap(page, 241, 579);
+  await clickMap(page, 235, 431);
+  await clickMap(page, 465, 459);
+  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "1) Untitled area" }).isVisible();
+  await page.getByLabel("Description:").click();
+
+  // Click off the polygon to close the form
+  await clickMap(page, 284, 284);
+  // Make sure the form is closed
+  await expect(page.getByLabel("Description:")).not.toBeVisible();
+
+  // Click the polygon to open the form
+  await clickMap(page, 312, 501);
+  await page.getByLabel("Description:").click();
+
+  // Edit geometry, and click the polygon again
+  await page.getByRole("button", { name: "Edit geometry" }).click();
+  await clickMap(page, 312, 501);
+  // This button indicates the mode is working
+  await page.getByRole("button", { name: "Finish" }).click();
+});
