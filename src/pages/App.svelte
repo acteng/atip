@@ -27,27 +27,17 @@
   let showAbout = false;
   let showInstructions = false;
 
-  // TODO This is a hacky way of detecting environment. 'npm run dev' and
-  // Github should be false, and only Cloudfront should be true.
-  let prod = window.location.hostname.includes("atip.uk");
-
   const params = new URLSearchParams(window.location.search);
   // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
   let style: string = params.get("style") || "streets";
   let schema: Schema = (params.get("schema") as Schema) || "v1";
 
-  // TODO Slight hack. These files are stored in an S3 bucket, which only has
-  // an HTTP interface. When deployed to Github pages over HTTPS, we can't mix
-  // HTTP and HTTPS content, so use the Cloudfront HTTPS interface. That'll need
-  // CDN invalidations when we update these files. But when serving locally for
-  // development, HTTPS is also fine to use.
-  var routeSnapperUrl = `https://atip.uk/route-snappers/${authorityName}.bin.gz`;
-  var routeInfoUrl = `https://atip.uk/route-info/${authorityName}.bin.gz`;
-  if (!prod) {
-    routeSnapperUrl = `https://atip.uk/route-snappers-dev/${authorityName}.bin.gz`;
-    routeInfoUrl = `https://atip.uk/route-info-dev/${authorityName}.bin.gz`;
-  }
+  // The "v2" here is an arbitrary number, not necessarily related to the app's
+  // version. The version of the code deployed has to match the data, and it's
+  // simplest to increment the number here for new incompatible data releases.
+  let routeSnapperUrl = `https://atip.uk/route-snappers/v2/${authorityName}.bin.gz`;
+  let routeInfoUrl = `https://atip.uk/route-info/v2/${authorityName}.bin.gz`;
 
   function toggleAbout() {
     showAbout = !showAbout;
