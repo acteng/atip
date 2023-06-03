@@ -2,12 +2,19 @@
   export let label: string;
   export let onChange: (e: Event) => void;
 
+  // TODO Only one component per page is supported, because the ID is
+  // hardcoded. This is only necessary for the Playwright test.
   let fileInput: HTMLInputElement;
 </script>
 
 <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
 <label>
-  <input type="file" bind:this={fileInput} on:change={onChange} />
+  <input
+    type="file"
+    id="file-input"
+    bind:this={fileInput}
+    on:change={onChange}
+  />
   <button type="button" on:click={() => fileInput.click()}>{label}</button>
 </label>
 
