@@ -9,6 +9,7 @@
     openFromSidebar,
   } from "../../stores";
   import type { Scheme, Schema } from "../../types";
+  import FileInput from "../common/FileInput.svelte";
 
   export let authorityName: string;
   export let schema: Schema;
@@ -148,10 +149,6 @@
 
     return json;
   }
-
-  function loadGeojson() {
-    document.getElementById("load_geojson")!.click();
-  }
 </script>
 
 <div>
@@ -164,11 +161,7 @@
 <br />
 
 <div>
-  <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
-  <label>
-    <input type="file" id="load_geojson" on:change={loadFile} />
-    <button type="button" on:click={loadGeojson}> Load from GeoJSON </button>
-  </label>
+  <FileInput label="Load from GeoJSON" onChange={loadFile} />
   <button type="button" class="align-right" on:click={exportToGeojson}>
     Export to GeoJSON
   </button>
@@ -189,17 +182,5 @@
 <style>
   .align-right {
     float: right;
-  }
-
-  input[type="file"] {
-    cursor: pointer;
-
-    /* Make the input type=file effectively invisible, but still let browser accessibility stuff work */
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
   }
 </style>
