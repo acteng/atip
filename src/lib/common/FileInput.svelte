@@ -1,20 +1,25 @@
 <script lang="ts">
   export let label: string;
-  export let onChange: (e: Event) => void;
+  // This must be unique in the DOM
+  export let uniqueId: string;
+  // Called with the file contents as text
+  export let loadFile: (text: string) => void;
 
-  // TODO Only one component per page is supported, because the ID is
-  // hardcoded. This is only necessary for the Playwright test.
   let fileInput: HTMLInputElement;
+
+  function onChange(e: Event) {
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      loadFile(e.target!.result as string);
+    };
+    let files = fileInput.files!;
+    reader.readAsText(files[0]);
+  }
 </script>
 
 <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
 <label>
-  <input
-    type="file"
-    id="file-input"
-    bind:this={fileInput}
-    on:change={onChange}
-  />
+  <input type="file" id={uniqueId} bind:this={fileInput} on:change={onChange} />
   <button type="button" on:click={() => fileInput.click()}>{label}</button>
 </label>
 

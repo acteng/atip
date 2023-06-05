@@ -5,7 +5,7 @@ test("loading a file with length displays the length", async ({ page }) => {
   await page.goto("/scheme.html?authority=North Somerset");
   // Note we use a weird styling trick to replace the file input element with a regular button.
   // This will not work: page.getByRole('button', { name: 'Load from GeoJSON' })
-  await page.locator("#file-input").setInputFiles("tests/data/route.json");
+  await page.locator("#load-geojson").setInputFiles("tests/data/route.json");
 
   await page.getByRole("button", { name: "1) Untitled route" }).click();
   await expect(page.getByText("Length: 8.5km")).toBeVisible();
@@ -25,7 +25,7 @@ test("loading a file without length displays the length", async ({ page }) => {
   let uploadFile = JSON.stringify(json);
 
   await page.goto("/scheme.html?authority=North Somerset");
-  await page.locator("#file-input").setInputFiles({
+  await page.locator("#load-geojson").setInputFiles({
     name: "route.json",
     mimeType: "application/json",
     buffer: Buffer.from(uploadFile),
@@ -47,7 +47,7 @@ test("loading a file with null properties displays the length", async ({
   let uploadFile = JSON.stringify(json);
 
   await page.goto("/scheme.html?authority=North Somerset");
-  await page.locator("#file-input").setInputFiles({
+  await page.locator("#load-geojson").setInputFiles({
     name: "route.json",
     mimeType: "application/json",
     buffer: Buffer.from(uploadFile),
@@ -79,7 +79,7 @@ test("loading a file from the homepage goes to the correct page", async ({
   page,
 }) => {
   await page.goto("/");
-  await page.locator("#file-input").setInputFiles("tests/data/route.json");
+  await page.locator("#load-geojson").setInputFiles("tests/data/route.json");
 
   await expect(page).toHaveURL(/scheme.html\?authority=North%20Somerset/);
   await page.getByRole("button", { name: "1) Untitled route" }).click();

@@ -110,19 +110,13 @@
     document.body.removeChild(element);
   }
 
-  function loadFile(e: Event) {
-    const reader = new FileReader();
-    // TODO No await? :(
-    // TODO Should we prompt before deleting the current scheme?
-    reader.onload = (e) => {
-      try {
-        gjScheme.set(backfill(JSON.parse(e.target!.result as string)));
-      } catch (err) {
-        window.alert(`Couldn't load scheme from a file: ${err}`);
-      }
-    };
-    let files = (e.target as HTMLInputElement).files!;
-    reader.readAsText(files[0]);
+  function loadFile(text: string) {
+    try {
+      // TODO Should we prompt before deleting the current scheme?
+      gjScheme.set(backfill(JSON.parse(text)));
+    } catch (err) {
+      window.alert(`Couldn't load scheme from a file: ${err}`);
+    }
   }
 
   // TODO This should eventually guarantee the output is a valid Scheme. Only
@@ -161,7 +155,7 @@
 <br />
 
 <div>
-  <FileInput label="Load from GeoJSON" onChange={loadFile} />
+  <FileInput label="Load from GeoJSON" uniqueId="load-geojson" {loadFile} />
   <button type="button" class="align-right" on:click={exportToGeojson}>
     Export to GeoJSON
   </button>
