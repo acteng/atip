@@ -94,35 +94,30 @@
     });
   });
 
-  function loadFile(e: Event) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        let gj = JSON.parse(e.target!.result as string);
-        if (!gj.authority) {
-          throw new Error(
-            `File doesn't have an authority set; is it an ATIP file?`
-          );
-        }
-        if (!authoritySet.has(gj.authority)) {
-          throw new Error(`Unknown authority ${gj.authority}`);
-        }
-
-        let filename = gj.authority;
-        let schema = detectSchema(gj);
-        if (schema != "v1") {
-          filename += `_${schema}`;
-        }
-
-        // Put the file in local storage, so it'll be loaded from the next page
-        window.localStorage.setItem(filename, JSON.stringify(gj));
-        window.location.href = `scheme.html?authority=${gj.authority}&schema=${schema}`;
-      } catch (err) {
-        window.alert(`Couldn't load scheme from a file: ${err}`);
+  function loadFile(text: string) {
+    try {
+      let gj = JSON.parse(text);
+      if (!gj.authority) {
+        throw new Error(
+          `File doesn't have an authority set; is it an ATIP file?`
+        );
       }
-    };
-    let files = (e.target as HTMLInputElement).files!;
-    reader.readAsText(files[0]);
+      if (!authoritySet.has(gj.authority)) {
+        throw new Error(`Unknown authority ${gj.authority}`);
+      }
+
+      let filename = gj.authority;
+      let schema = detectSchema(gj);
+      if (schema != "v1") {
+        filename += `_${schema}`;
+      }
+
+      // Put the file in local storage, so it'll be loaded from the next page
+      window.localStorage.setItem(filename, JSON.stringify(gj));
+      window.location.href = `scheme.html?authority=${gj.authority}&schema=${schema}`;
+    } catch (err) {
+      window.alert(`Couldn't load scheme from a file: ${err}`);
+    }
   }
 
   function detectSchema(gj: FeatureCollection): Schema {
@@ -158,7 +153,11 @@
   </div>
   <p>Or pick a Transport Authority on the map</p>
   <p>Or upload an ATIP file:</p>
-  <FileInput label="Upload ATIP GeoJSON file" onChange={loadFile} />
+  <FileInput
+    label="Upload ATIP GeoJSON file"
+    uniqueId="load-geojson"
+    {loadFile}
+  />
 </div>
 <div id="map" />
 <About bind:open={showAbout} />
