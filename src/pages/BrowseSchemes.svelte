@@ -3,17 +3,8 @@
   import Map from "../lib/Map.svelte";
   import Layout from "../lib/common/Layout.svelte";
   import FileInput from "../lib/common/FileInput.svelte";
-  import {
-    emptyGeojson,
-    overwriteSource,
-    overwriteCircleLayer,
-    overwriteLineLayer,
-    overwritePolygonLayer,
-    isPoint,
-    isLine,
-    isPolygon,
-  } from "../maplibre_helpers";
-  import { map } from "../stores";
+  import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
+  import { map, gjScheme } from "../stores";
   import { circleRadius, lineWidth } from "../colors";
   import MapTooltips from "../lib/common/MapTooltips.svelte";
   import CollapsibleCard from "../lib/common/CollapsibleCard.svelte";
@@ -31,48 +22,14 @@
 
   let schemes: Scheme[] = [];
 
-  function loadFile(e: Event) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        let gj = JSON.parse(e.target!.result as string);
-        addSchemeToMap(gj);
-        addSchemeToSidebar(gj);
-      } catch (err) {
-        window.alert(`Couldn't load schemes from a file: ${err}`);
-      }
-    };
-    let files = (e.target as HTMLInputElement).files!;
-    reader.readAsText(files[0]);
-  }
-
-  function addSchemeToMap(gj: GeoJSON) {
-    // TODO Assuming the map is loaded by now!
-    overwriteSource($map, source, gj);
-
-    overwritePolygonLayer($map, {
-      // TODO This is reusing layer IDs from a component in the main app to get
-      // z-ordering correct. The global list is for one page only...
-      id: "interventions-polygons",
-      source,
-      filter: isPolygon,
-      color,
-      opacity: 0.5,
-    });
-    overwriteLineLayer($map, {
-      id: "interventions-lines",
-      source,
-      filter: isLine,
-      color,
-      width: lineWidth,
-    });
-    overwriteCircleLayer($map, {
-      id: "interventions-points",
-      source,
-      filter: isPoint,
-      color,
-      radius: circleRadius,
-    });
+  function loadFile(text: string) {
+    try {
+      let gj = JSON.parse(text);
+      gjScheme.set(gj);
+      addSchemeToSidebar(gj);
+    } catch (err) {
+      window.alert(`Couldn't load schemes from a file: ${err}`);
+    }
   }
 
   function addSchemeToSidebar(gj: GeoJSON) {
@@ -123,6 +80,7 @@
   </div>
   <div slot="main">
     <Map style="streets">
+      <InterventionLayer schema="v1" />
       <MapTooltips
         layers={[
           "interventions-points",
