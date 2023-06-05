@@ -113,4 +113,4 @@
 />
 <DiscreteLegend {colors} labels={["< 20", "20", "30", "40", ">= 50"]} />
 
-<MapTooltips layer="speed-limits" contents={tooltip} />
+<MapTooltips layers={["speed-limits"]} contents={tooltip} />
