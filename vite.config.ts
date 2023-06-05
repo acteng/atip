@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
         nested: resolve(__dirname, "scheme.html"),
+        nested2: resolve(__dirname, "browse.html"),
       },
     },
   },

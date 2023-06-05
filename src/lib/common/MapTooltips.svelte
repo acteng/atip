@@ -4,7 +4,7 @@
   import { type MapMouseEvent } from "maplibre-gl";
   import { onDestroy } from "svelte";
 
-  export let layer: string;
+  export let layers: string[];
   export let contents: (props: { [name: string]: any }) => string;
 
   let popup = new Popup({
@@ -25,13 +25,13 @@
     // When this component is a child of another that defines a layer, during
     // component teardown, the parent (and layer) will disappear first. Avoid
     // errors.
-    if (!$map.getLayer(layer)) {
+    if (!layers.every((l) => $map.getLayer(l))) {
       popup.remove();
       return;
     }
 
     let results = $map.queryRenderedFeatures(e.point, {
-      layers: [layer],
+      layers,
     });
     if (results.length > 0) {
       popup
