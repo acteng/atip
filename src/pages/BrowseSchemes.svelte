@@ -5,12 +5,14 @@
   import FileInput from "../lib/common/FileInput.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { map, gjScheme } from "../stores";
-  import { circleRadius, lineWidth } from "../colors";
   import MapTooltips from "../lib/common/MapTooltips.svelte";
   import CollapsibleCard from "../lib/common/CollapsibleCard.svelte";
+  import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
+  import Legend from "../lib/Legend.svelte";
 
-  const source = "all-schemes";
-  const color = "black";
+  const params = new URLSearchParams(window.location.search);
+  let style: string = params.get("style") || "streets";
+  const schema = "v1";
 
   interface Scheme {
     file_name: string;
@@ -56,14 +58,13 @@
 </script>
 
 <Layout>
-  <div slot="nav">
+  <div slot="sidebar">
     <button type="button" on:click={() => window.open("index.html")}>
       Home</button
     >
-  </div>
-  <div slot="sidebar">
     <h1>Browse schemes</h1>
     <FileInput label="Load from GeoJSON" uniqueId="load_geojson" {loadFile} />
+
     <ul>
       {#each schemes as scheme}
         <CollapsibleCard
@@ -79,8 +80,10 @@
     </ul>
   </div>
   <div slot="main">
-    <Map style="streets">
-      <InterventionLayer schema="v1" />
+    <Map {style}>
+      <InterventionLayer {schema} />
+      <BaselayerSwitcher {style} />
+      <Legend {schema} />
       <MapTooltips
         layers={[
           "interventions-points",
