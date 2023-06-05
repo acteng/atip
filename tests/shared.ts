@@ -27,3 +27,9 @@ export const clearExistingInterventions = async (page: Page) => {
     await editAttributesLocator.click();
   }
 };
+
+export async function clickMap(page: Page, x: number, y: number) {
+  await page.getByRole("region", { name: "Map" }).click({
+    position: { x, y },
+  });
+}

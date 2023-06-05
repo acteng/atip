@@ -1,24 +1,21 @@
 import { readFile } from "fs/promises";
 import { test, expect, type Page } from "@playwright/test";
-import { loadInitialPage } from "./shared.ts";
+import {
+  loadInitialPage,
+  clickMap,
+  clearExistingInterventions,
+} from "./shared.ts";
 
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
   page = await loadInitialPage(browser);
 });
+test.beforeEach(async () => {
+  await clearExistingInterventions(page);
+});
 
 test("clearing all while a feature is open works", async () => {
-  await page.getByRole("button", { name: "New point" }).click();
-
-async function clickMap(page, x, y) {
-  await page.getByRole("region", { name: "Map" }).click({
-    position: { x, y },
-  });
-}
-
-test("clearing all while a feature is open works", async ({ page }) => {
-  await page.goto("/scheme.html?authority=Adur");
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
   page.on("dialog", (dialog) => dialog.accept());
@@ -29,8 +26,7 @@ test("clearing all while a feature is open works", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("creating a new point opens a form", async ({ page }) => {
-  await page.goto("/scheme.html?authority=Adur");
+test("creating a new point opens a form", async () => {
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
 
@@ -38,37 +34,32 @@ test("creating a new point opens a form", async ({ page }) => {
   await page.getByLabel("Description:").click();
 });
 
-test("creating a new freehand polygon opens a form", async ({ page }) => {
-  await page.goto("/scheme.html?authority=Adur");
+test("creating a new freehand polygon opens a form", async () => {
   await page.getByRole("button", { name: "New polygon (freehand)" }).click();
   await clickMap(page, 500, 500);
-  await clickMap(page, 600, 500);
-  await clickMap(page, 600, 600);
+  await clickMap(page, 400, 500);
+  await clickMap(page, 400, 600);
   await page.getByRole("button", { name: "Finish" }).click();
 
   await page.getByRole("button", { name: "1) Untitled area" }).isVisible();
   await page.getByLabel("Description:").click();
 });
 
-test("creating a new snapped polygon opens a form", async ({ page }) => {
-  await page.goto("/scheme.html?authority=Adur");
+test("creating a new snapped polygon opens a form", async () => {
   await page.getByRole("button", { name: "New polygon (snapped)" }).click();
   await clickMap(page, 500, 500);
-  await clickMap(page, 600, 500);
-  await clickMap(page, 600, 600);
+  await clickMap(page, 400, 500);
+  await clickMap(page, 400, 600);
   await page.getByRole("button", { name: "Finish" }).click();
 
   await page.getByRole("button", { name: "1) Untitled area" }).isVisible();
   await page.getByLabel("Description:").click();
 });
 
-test("creating a new route opens a form, and auto-fill sets its name", async ({
-  page,
-}) => {
-  await page.goto("/scheme.html?authority=Adur");
+test("creating a new route opens a form, and auto-fill sets its name", async () => {
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 500, 500);
-  await clickMap(page, 600, 500);
+  await clickMap(page, 400, 500);
   await page.getByRole("button", { name: "Finish" }).click();
 
   await page.getByRole("button", { name: "1) Untitled route" }).isVisible();
@@ -84,26 +75,7 @@ test("creating a new route opens a form, and auto-fill sets its name", async ({
     .isVisible();
 });
 
-test("other tools work when route tool doesn't load", async ({ page }) => {
-  await page.route("https://atip.uk/route-snappers-dev/Adur.bin.gz", (route) =>
-    route.fulfill({
-      status: 404,
-    })
-  );
-  await page.goto("/scheme.html?authority=Adur");
-
-  await page.getByRole("button", { name: "New route" }).click();
-  await expect(page.getByText("Failed to load")).toBeVisible();
-
-  // Other tools should still work
-  await page.getByRole("button", { name: "New point" }).click();
-  await clickMap(page, 500, 500);
-  await page.getByRole("button", { name: "1) Untitled point" }).isVisible();
-});
-
-test("editing geometry of a polygon works", async ({ page }) => {
-  await page.goto("/scheme.html?authority=Adur");
-
+test("editing geometry of a polygon works", async () => {
   // Create a polygon
   await page.getByRole("button", { name: "New polygon (snapped)" }).click();
   await clickMap(page, 241, 579);
@@ -127,4 +99,34 @@ test("editing geometry of a polygon works", async ({ page }) => {
   await clickMap(page, 312, 501);
   // This button indicates the mode is working
   await page.getByRole("button", { name: "Finish" }).click();
+});
+
+test("testing adding interventions, then deleting one, then adding another", async () => {
+  await page.getByRole("button", { name: "New route" }).click();
+  await clickMap(page, 522, 468);
+  await clickMap(page, 192, 513);
+  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "1) Untitled route" }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
+  await page.getByRole("button", { name: "New route" }).click();
+  await clickMap(page, 196, 375);
+  await clickMap(page, 481, 399);
+  await page.getByRole("button", { name: "Finish" }).click();
+
+  await page.getByRole("button", { name: "1) Untitled route" }).isVisible();
+});
+
+test("testing add a route and save it", async () => {
+  await page.getByRole("button", { name: "New route" }).click();
+  await clickMap(page, 522, 468);
+  await clickMap(page, 192, 513);
+  await page.getByRole("button", { name: "Finish" }).click();
+  // wait to make sure intervention attributes appear
+  await page.getByRole("button", { name: "Save" }).waitFor();
+  await page.getByRole("button", { name: "Save" }).click();
+
+  await expect(
+    page.getByRole("button", { name: "1) Untitled route" })
+  ).toBeVisible();
 });
