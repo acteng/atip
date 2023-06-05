@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import type { Mode } from "./types";
+  import type { Mode } from "../../types";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   import type { Feature, Point } from "geojson";
   import { point } from "@turf/helpers";
-  import { map, userSettings } from "../../stores";
+  import { map, userSettings, currentMode } from "../../stores";
   import {
     emptyGeojson,
     overwriteSource,
@@ -16,7 +16,6 @@
 
   const circleRadiusPixels = 10;
 
-  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
 
   export function start() {}
@@ -54,7 +53,7 @@
   }
 
   function onMouseMove(e: MapMouseEvent) {
-    if (mode != thisMode) {
+    if ($currentMode != thisMode) {
       return;
     }
 
@@ -62,7 +61,7 @@
   }
 
   function onClick() {
-    if (mode != thisMode) {
+    if ($currentMode != thisMode) {
       return;
     }
 
@@ -93,14 +92,14 @@
 
   // The escape key isn't registered at all for keypress, so use keydown
   function onKeyDown(e: KeyboardEvent) {
-    if (mode == thisMode && e.key == "Escape") {
+    if ($currentMode == thisMode && e.key == "Escape") {
       changeMode("edit-attribute");
       e.preventDefault();
     }
   }
 </script>
 
-{#if mode == thisMode}
+{#if $currentMode == thisMode}
   <label>
     <input
       type="radio"

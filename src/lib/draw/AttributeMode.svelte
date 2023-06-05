@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { type MapMouseEvent } from "maplibre-gl";
-  import type { Mode } from "./types";
+  import type { Mode } from "../../types";
   import { bbox } from "../../maplibre_helpers";
   import {
     map,
@@ -9,12 +9,12 @@
     mapHover,
     openFromSidebar,
     formOpen,
+    currentMode,
   } from "../../stores";
 
   const thisMode = "edit-attribute";
 
   // TODO Just tell us if we're the current mode or not, actually...
-  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
 
   export function start() {}
@@ -61,7 +61,7 @@
   }
 
   function onMouseMove(e: MapMouseEvent) {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -74,13 +74,13 @@
   }
 
   function onMouseOut() {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       mapHover.set(null);
     }
   }
 
   function onClick(e: MapMouseEvent) {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -97,7 +97,7 @@
   }
 </script>
 
-{#if mode == thisMode}
+{#if $currentMode == thisMode}
   {#if $formOpen}
     <p>Edit attributes to the left, or click another object</p>
   {:else}

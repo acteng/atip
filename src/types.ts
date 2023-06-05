@@ -70,3 +70,12 @@ export interface UserSettings {
 export function isStreetViewImagery(x: string): x is "google" | "bing" {
   return x == "google" || x == "bing";
 }
+export type Mode =
+  | "edit-attribute"
+  | "edit-geometry"
+  | "route"
+  | "point"
+  | "free-polygon"
+  | "snap-polygon"
+  | "split-route"
+  | "street-view";

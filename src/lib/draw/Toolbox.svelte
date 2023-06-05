@@ -5,9 +5,10 @@
   import { PointTool } from "./point/point_tool";
   import { PolygonTool } from "./polygon/polygon_tool";
   import { RouteTool } from "./route/route_tool";
-  import type { Mode } from "./types";
+  import type { Mode } from "../../types";
+  import { currentMode } from "../../stores";
 
-  import Button from "./Button.svelte";
+  import SelectToolButton from "./SelectToolButton.svelte";
   import AttributeMode from "./AttributeMode.svelte";
   import GeometryMode from "./GeometryMode.svelte";
   import RouteMode from "./route/RouteMode.svelte";
@@ -36,7 +37,6 @@
   let pointTool = new PointTool($map);
   let polygonTool = new PolygonTool($map);
 
-  let mode: Mode = "edit-attribute";
   let attributeMode: AttributeMode;
   let geometryMode: GeometryMode;
   let routeMode: RouteMode;
@@ -59,15 +59,16 @@
       "street-view": streetViewMode,
     };
 
+    const mode = $currentMode;
     if (mode == newMode) {
       console.log(`Mode is already ${mode}, not changing`);
       return;
     }
     console.log(`Stopping old mode ${mode}`);
     modes[mode].stop();
-    mode = newMode;
-    console.log(`Starting new mode ${mode}`);
-    modes[mode].start();
+    currentMode.set(newMode);
+    console.log(`Starting new mode ${newMode}`);
+    modes[newMode].start();
   }
 
   onDestroy(() => {
@@ -79,18 +80,16 @@
 
 <div class="toolbox">
   <div>
-    <Button
-      {mode}
+    <SelectToolButton
       thisMode="edit-attribute"
       label="Edit attributes"
       icon={editAttributesIcon}
       {changeMode}
     />
-    <AttributeMode bind:this={attributeMode} {mode} {changeMode} />
+    <AttributeMode bind:this={attributeMode} {changeMode} />
   </div>
   <div>
-    <Button
-      {mode}
+    <SelectToolButton
       thisMode="edit-geometry"
       label="Edit geometry"
       icon={editGeometryIcon}
@@ -99,7 +98,6 @@
     {#if routeTool}
       <GeometryMode
         bind:this={geometryMode}
-        {mode}
         {pointTool}
         {polygonTool}
         {routeTool}
@@ -108,47 +106,38 @@
   </div>
   <div>
     {#if schema != "planning"}
-      <Button
-        {mode}
+      <SelectToolButton
         thisMode="point"
         label="New point"
         icon={pointIcon}
         {changeMode}
       />
     {/if}
-    <PointMode bind:this={pointMode} {mode} {changeMode} {pointTool} />
+    <PointMode bind:this={pointMode} {changeMode} {pointTool} />
   </div>
   <div>
-    <Button
-      {mode}
+    <SelectToolButton
       thisMode="free-polygon"
       label="New polygon (freehand)"
       icon={polygonFreehandIcon}
       {changeMode}
     />
-    <PolygonMode bind:this={polygonMode} {mode} {changeMode} {polygonTool} />
+    <PolygonMode bind:this={polygonMode} {changeMode} {polygonTool} />
   </div>
   <div>
-    <Button
-      {mode}
+    <SelectToolButton
       thisMode="snap-polygon"
       label="New polygon (snapped)"
       icon={polygonSnappedIcon}
       {changeMode}
     />
     {#if routeTool}
-      <SnapPolygonMode
-        bind:this={snapPolygonMode}
-        {mode}
-        {changeMode}
-        {routeTool}
-      />
+      <SnapPolygonMode bind:this={snapPolygonMode} {changeMode} {routeTool} />
     {/if}
   </div>
   <div>
     {#if schema != "planning"}
-      <Button
-        {mode}
+      <SelectToolButton
         thisMode="route"
         label="New route"
         icon={routeIcon}
@@ -157,7 +146,6 @@
     {/if}
     <RouteMode
       bind:this={routeMode}
-      {mode}
       {changeMode}
       url={routeSnapperUrl}
       bind:routeTool
@@ -165,25 +153,23 @@
   </div>
   <div>
     {#if schema != "planning"}
-      <Button
-        {mode}
+      <SelectToolButton
         thisMode="split-route"
         label="Split route"
         icon={splitRouteIcon}
         {changeMode}
       />
     {/if}
-    <SplitRouteMode bind:this={splitRouteMode} {mode} {changeMode} />
+    <SplitRouteMode bind:this={splitRouteMode} {changeMode} />
   </div>
   <div>
-    <Button
-      {mode}
+    <SelectToolButton
       thisMode="street-view"
       label="Street View"
       icon={streetViewIcon}
       {changeMode}
     />
-    <StreetViewMode bind:this={streetViewMode} {mode} {changeMode} />
+    <StreetViewMode bind:this={streetViewMode} {changeMode} />
   </div>
 </div>
 

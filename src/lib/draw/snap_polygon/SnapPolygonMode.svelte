@@ -1,14 +1,12 @@
 <script lang="ts">
-  import type { Mode } from "../types";
   import type { Polygon } from "geojson";
-  import type { Feature } from "../../../types";
+  import type { Feature, Mode } from "../../../types";
   import type { RouteTool } from "../route/route_tool";
-  import { gjScheme, newFeatureId, formOpen } from "../../../stores";
+  import { gjScheme, newFeatureId, formOpen, currentMode } from "../../../stores";
   import SnapPolygonControls from "./SnapPolygonControls.svelte";
 
   const thisMode = "snap-polygon";
 
-  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
   export let routeTool: RouteTool;
 
@@ -20,7 +18,7 @@
   }
 
   routeTool.addEventListenerSuccessArea((feature) => {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);
         feature.properties.intervention_type = "area";
@@ -33,12 +31,12 @@
     }
   });
   routeTool.addEventListenerFailure(() => {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       changeMode("edit-attribute");
     }
   });
 </script>
 
-{#if mode == thisMode}
+{#if $currentMode == thisMode}
   <SnapPolygonControls {routeTool} />
 {/if}

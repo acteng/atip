@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Mode } from "./types";
+  import type { Mode } from "../../types";
+  import { currentMode } from "../../stores";
 
-  export let mode: Mode;
   export let thisMode: Mode;
   export let label: string;
   export let icon: string;
@@ -11,7 +11,7 @@
 <button
   type="button"
   on:click={() => changeMode(thisMode)}
-  disabled={mode == thisMode}><img src={icon} alt={label} /> {label}</button
+  disabled={$currentMode == thisMode}><img src={icon} alt={label} /> {label}</button
 >
 
 <style>

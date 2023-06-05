@@ -1,7 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 import { emptyGeojson } from "./maplibre_helpers";
 import type { Map } from "maplibre-gl";
-import { isStreetViewImagery, type Scheme, type UserSettings } from "./types";
+import { isStreetViewImagery, type Scheme, type UserSettings, type Mode } from "./types";
 import { type Remote } from "comlink";
 import { type RouteInfo } from "./worker";
 
@@ -32,6 +32,7 @@ export const userSettings: Writable<UserSettings> = writable(
 userSettings.subscribe((value) =>
   window.localStorage.setItem("userSettings", JSON.stringify(value))
 );
+export const currentMode: Writable<Mode> = writable("edit-attribute");
 
 // All feature IDs must:
 //
