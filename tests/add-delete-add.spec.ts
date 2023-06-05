@@ -1,14 +1,13 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+import { loadInitialPage } from "./shared.ts";
 
-test("testing adding interventions, then deleting one, then adding another", async ({
-  page,
-}) => {
-  await page.goto("/scheme.html?authority=Derby#16.84/52.906457/-1.504519");
-  // wait for the map to load and interventions panel to appear
-  await page.getByText("Click an object to fill out its attributes").waitFor();
-  // wait for router snapper to load so we can use route tool
-  await page.getByText("Route tool loading...").waitFor({ state: "hidden" });
+let page: Page;
 
+test.beforeAll(async ({ browser }) => {
+  page = await loadInitialPage(browser);
+});
+
+test("testing adding interventions, then deleting one, then adding another", async () => {
   await page.getByRole("region", { name: "Map" }).waitFor();
   await page.getByRole("button", { name: "New route" }).click();
   await page.getByRole("region", { name: "Map" }).click({
