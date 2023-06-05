@@ -87,9 +87,7 @@ test("the previous file from local storage is loaded by default", async () => {
   await page.getByRole("button", { name: "1) Untitled point" }).click();
 });
 
-test("loading a file from the homepage goes to the correct page", async ({
-  page,
-}) => {
+test("loading a file from the homepage goes to the correct page", async () => {
   await page.goto("/");
   await page.locator("#load-geojson").setInputFiles("tests/data/Adur.json");
 
