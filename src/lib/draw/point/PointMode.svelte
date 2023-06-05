@@ -1,14 +1,12 @@
 <script lang="ts">
-  import type { Mode } from "../types";
   import type { Point } from "geojson";
-  import type { Feature } from "../../../types";
+  import type { Feature, Mode } from "../../../types";
   import type { PointTool } from "./point_tool";
-  import { gjScheme, newFeatureId, formOpen } from "../../../stores";
+  import { gjScheme, newFeatureId, formOpen, currentMode} from "../../../stores";
   import PointControls from "./PointControls.svelte";
 
   const thisMode = "point";
 
-  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
   export let pointTool: PointTool;
 
@@ -20,7 +18,7 @@
   }
 
   pointTool.addEventListenerSuccess((feature) => {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);
         feature.properties.intervention_type = "other";
@@ -33,12 +31,12 @@
     }
   });
   pointTool.addEventListenerFailure(() => {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       changeMode("edit-attribute");
     }
   });
 </script>
 
-{#if mode == thisMode}
+{#if $currentMode == thisMode}
   <PointControls {pointTool} editingExisting={false} />
 {/if}

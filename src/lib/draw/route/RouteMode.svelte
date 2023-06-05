@@ -1,17 +1,21 @@
 <script lang="ts">
-  import type { Mode } from "../types";
   import { onMount } from "svelte";
   import init from "route-snapper";
   import { fetchWithProgress } from "route-snapper/lib.js";
   import { RouteTool } from "./route_tool";
-  import { gjScheme, map, newFeatureId, formOpen } from "../../../stores";
-  import type { Feature } from "../../../types";
+  import {
+    gjScheme,
+    map,
+    newFeatureId,
+    formOpen,
+    currentMode,
+  } from "../../../stores";
+  import type { Feature, Mode } from "../../../types";
   import type { LineString } from "geojson";
   import RouteControls from "./RouteControls.svelte";
 
   const thisMode = "route";
 
-  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
   export let url: string;
 
@@ -45,12 +49,12 @@
     }
 
     routeTool.addEventListenerFailure(() => {
-      if (mode == thisMode) {
+      if ($currentMode == thisMode) {
         changeMode("edit-attribute");
       }
     });
     routeTool.addEventListenerSuccessRoute((feature) => {
-      if (mode == thisMode) {
+      if ($currentMode == thisMode) {
         gjScheme.update((gj) => {
           feature.id = newFeatureId(gj);
           feature.properties.intervention_type = "route";
@@ -68,6 +72,6 @@
 {#if !routeTool}
   <!-- TODO the text should be fixed, and the progress bar float -->
   <div bind:this={progress}>Route tool loading...</div>
-{:else if mode == thisMode}
+{:else if $currentMode == thisMode}
   <RouteControls {routeTool} extendRoute />
 {/if}

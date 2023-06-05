@@ -1,14 +1,12 @@
 <script lang="ts">
-  import type { Mode } from "../types";
   import type { Polygon } from "geojson";
-  import type { Feature } from "../../../types";
+  import type { Feature, Mode } from "../../../types";
   import type { PolygonTool } from "./polygon_tool";
-  import { gjScheme, newFeatureId, formOpen } from "../../../stores";
+  import { gjScheme, newFeatureId, formOpen, currentMode} from "../../../stores";
   import PolygonControls from "./PolygonControls.svelte";
 
   const thisMode = "free-polygon";
 
-  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
   export let polygonTool: PolygonTool;
 
@@ -20,7 +18,7 @@
   }
 
   polygonTool.addEventListenerSuccess((feature) => {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);
         feature.properties.intervention_type = "area";
@@ -33,12 +31,12 @@
     }
   });
   polygonTool.addEventListenerFailure(() => {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       changeMode("edit-attribute");
     }
   });
 </script>
 
-{#if mode == thisMode}
+{#if $currentMode == thisMode}
   <PolygonControls {polygonTool} />
 {/if}

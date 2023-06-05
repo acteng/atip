@@ -1,12 +1,11 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { type MapMouseEvent } from "maplibre-gl";
-  import type { Mode } from "./types";
   import type { LineString, Polygon } from "geojson";
   import type { PointTool } from "./point/point_tool";
   import type { PolygonTool } from "./polygon/polygon_tool";
   import type { RouteTool } from "./route/route_tool";
-  import { map, gjScheme, mapHover } from "../../stores";
+  import { map, gjScheme, mapHover, currentMode } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
@@ -15,7 +14,6 @@
 
   const thisMode = "edit-geometry";
 
-  export let mode: Mode;
   export let pointTool: PointTool;
   export let polygonTool: PolygonTool;
   export let routeTool: RouteTool;
@@ -63,7 +61,7 @@
 
   // Handle successful edits
   routeTool.addEventListenerSuccessRoute((editedRoute) => {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
         // TODO Hack around https://github.com/acteng/atip/issues/142
@@ -88,7 +86,7 @@
     }
   });
   routeTool.addEventListenerSuccessArea((editedArea) => {
-    if (mode == thisMode) {
+    if ($currentMode == thisMode) {
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
         if (!feature) {
@@ -112,7 +110,7 @@
   });
   for (let tool of [pointTool, polygonTool]) {
     tool.addEventListenerSuccess((feature) => {
-      if (mode == thisMode) {
+      if ($currentMode == thisMode) {
         gjScheme.update((gj) => {
           let updateFeature = gj.features.find(
             (f) => f.id == currentlyEditing
@@ -138,7 +136,7 @@
   // Handle failures
   for (let tool of [pointTool, polygonTool, routeTool]) {
     tool.addEventListenerFailure(() => {
-      if (mode == thisMode) {
+      if ($currentMode == thisMode) {
         // Don't modify the thing we were just editing
         gjScheme.update((gj) => {
           let feature = gj.features.find((f) => f.id == currentlyEditing)!;
@@ -160,7 +158,7 @@
   }
 
   function onMouseMove(e: MapMouseEvent) {
-    if (mode == thisMode && currentlyEditing == null) {
+    if ($currentMode == thisMode && currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -173,13 +171,13 @@
   }
 
   function onMouseOut() {
-    if (mode == thisMode && currentlyEditing == null) {
+    if ($currentMode == thisMode && currentlyEditing == null) {
       mapHover.set(null);
     }
   }
 
   function onClick(e: MapMouseEvent) {
-    if (mode == thisMode && currentlyEditing == null) {
+    if ($currentMode == thisMode && currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -227,7 +225,7 @@
   }
 </script>
 
-{#if mode == thisMode}
+{#if $currentMode == thisMode}
   {#if currentlyEditingControls == "point"}
     <PointControls {pointTool} editingExisting={true} />
   {:else if currentlyEditingControls == "free-polygon"}
