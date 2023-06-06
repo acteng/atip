@@ -9,6 +9,7 @@
   import CollapsibleCard from "../lib/common/CollapsibleCard.svelte";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import Legend from "../lib/Legend.svelte";
+  import { bbox } from "../maplibre_helpers";
 
   const params = new URLSearchParams(window.location.search);
   let style: string = params.get("style") || "streets";
@@ -17,6 +18,7 @@
   interface Scheme {
     file_name: string;
     authority_code: string;
+    authority_name: string;
     internal_scheme_id: string;
     scheme_priority: number;
     num_features: number;
@@ -29,6 +31,8 @@
       let gj = JSON.parse(text);
       gjScheme.set(gj);
       addSchemeToSidebar(gj);
+
+      $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
     } catch (err) {
       window.alert(`Couldn't load schemes from a file: ${err}`);
     }
@@ -42,6 +46,7 @@
       byFilename[p.atip_file_name] ||= {
         file_name: p.atip_file_name,
         authority_code: p.authority_code,
+        authority_name: p.authority_name,
         internal_scheme_id: p.internal_scheme_id,
         scheme_priority: p.scheme_priority,
         num_features: 0,
@@ -54,6 +59,32 @@
 
   function tooltip(props: { [name: string]: any }): string {
     return JSON.stringify(props);
+  }
+
+  function showScheme(scheme: Scheme) {
+    // TODO Highlight on the map? Or fade everything else?
+    let gj = {
+      type: "FeatureCollection",
+      features: $gjScheme.features.filter(
+        (f) => f.properties.atip_file_name == scheme.file_name
+      ),
+    };
+    $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
+  }
+
+  function editScheme(scheme: Scheme) {
+    let gj = {
+      type: "FeatureCollection",
+      features: $gjScheme.features.filter(
+        (f) => f.properties.atip_file_name == scheme.file_name
+      ),
+    };
+    let filename = scheme.authority_name;
+    // Assuming the schema is always v1
+
+    // Put the file in local storage, so it'll be loaded from the next page
+    window.localStorage.setItem(filename, JSON.stringify(gj));
+    window.open(`scheme.html?authority=${scheme.authority_name}`, "_blank");
   }
 </script>
 
@@ -73,7 +104,19 @@
           <ul>
             <li>Filename: {scheme.file_name}</li>
             <li>Priority: {scheme.scheme_priority}</li>
-            <li>Authority code: {scheme.authority_code}</li>
+            <li>
+              Authority: {scheme.authority_name} ({scheme.authority_code})
+            </li>
+            <li>
+              <button type="button" on:click={() => showScheme(scheme)}
+                >Show on map</button
+              >
+            </li>
+            <li>
+              <button type="button" on:click={() => editScheme(scheme)}
+                >Edit scheme</button
+              >
+            </li>
           </ul>
         </CollapsibleCard>
       {/each}
