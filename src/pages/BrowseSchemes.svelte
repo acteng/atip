@@ -14,6 +14,7 @@
   import CollapsibleCard from "../lib/common/CollapsibleCard.svelte";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import Legend from "../lib/Legend.svelte";
+  import ZoomOutMap from "../lib/ZoomOutMap.svelte";
   import { bbox } from "../maplibre_helpers";
 
   const params = new URLSearchParams(window.location.search);
@@ -34,6 +35,10 @@
   let filterText = "";
   // by file_name
   let showSchemes: Set<string> = new Set();
+
+  // Stats about filtered schemes
+  // TODO Extract into a component
+  let counts = { area: 0, route: 0, crossing: 0, other: 0 };
 
   onDestroy(() => {
     gjScheme.set(null);
@@ -74,6 +79,14 @@
       }
       return gj;
     });
+
+    // Recalculate stats
+    counts = { area: 0, route: 0, crossing: 0, other: 0 };
+    for (let feature of $gjScheme?.features) {
+      if (showSchemes.has(feature.properties.atip_file_name)) {
+        counts[feature.properties.intervention_type]++;
+      }
+    }
 
     // Make Svelte see the update
     showSchemes = showSchemes;
@@ -146,7 +159,10 @@
     <button type="button" on:click={() => window.open("index.html")}>
       Home</button
     >
-    <h1>Browse schemes</h1>
+    <h1>
+      Browse schemes
+      <ZoomOutMap boundaryGeojson={$gjScheme} />
+    </h1>
     <FileInput label="Load from GeoJSON" uniqueId="load_geojson" {loadFile} />
 
     <br />
@@ -160,7 +176,11 @@
       <button type="button" on:click={() => (filterText = "")}>Clear</button>
     </div>
 
-    <p>Showing {showSchemes.size} schemes</p>
+    <p>
+      Showing {showSchemes.size} schemes ({counts.route} routes, {counts.area} areas,
+      {counts.crossing} crossings, {counts.other} other)
+    </p>
+
     <ul>
       {#each schemes as scheme}
         {#if showSchemes.has(scheme.file_name)}
