@@ -12,7 +12,8 @@ import {
   overwritePolygonLayer,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
-import { EventManager } from "../events";
+import type { Mode } from "../../../types";
+import singletonEventManager from "../events";
 
 const source = "route-snapper";
 
@@ -20,6 +21,7 @@ const circleRadiusPixels = 10;
 const snapDistancePixels = 30;
 
 export class RouteTool {
+  mode: Mode;
   map: Map;
   inner: JsRouteSnapper;
   active: boolean;
@@ -27,9 +29,7 @@ export class RouteTool {
   eventListenersSuccessArea: ((f: FeatureWithProps<Polygon>) => void)[];
   eventListenersFailure: (() => void)[];
 
-  events: EventManager;
-
-  constructor(map: Map, graphBytes: Uint8Array) {
+  constructor(map: Map, graphBytes: Uint8Array, mode: Mode) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(graphBytes);
@@ -81,6 +81,15 @@ export class RouteTool {
 
     // Set up interactions
     // this.events = new EventManager(this, map);
+    singletonEventManager.updateSpecificModeHandler(this.mode, true, "mousemove", this.onMouseMove, this);
+    singletonEventManager.updateSpecificModeHandler(this.mode, true, "mousemove", this.onMouseMove,this);
+    singletonEventManager.updateSpecificModeHandler(this.mode, true, "click", this.onClick,this);
+    singletonEventManager.updateSpecificModeHandler(this.mode, true, "dblclick", this.onDoubleClick,this);
+    singletonEventManager.updateSpecificModeHandler(this.mode, true, "mousedown", this.onDragStart,this);
+    singletonEventManager.updateSpecificModeHandler(this.mode, true, "mouseup", this.onMouseUp,this);
+    singletonEventManager.updateSpecificModeHandler(this.mode, false, "keypress", this.onKeyPress,this);
+    singletonEventManager.updateSpecificModeHandler(this.mode, false, "keydown", this.onKeyDown,this);
+    singletonEventManager.updateSpecificModeHandler(this.mode, false, "keyup", this.onKeyUp,this);
     // this.events.mapHandler("mousemove", this.onMouseMove);
     // this.events.mapHandler("click", this.onClick);
     // this.events.mapHandler("dblclick", this.onDoubleClick);
