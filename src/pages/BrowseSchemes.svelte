@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy } from "svelte";
   import type { GeoJSON } from "geojson";
   import Map from "../lib/Map.svelte";
   import Layout from "../lib/common/Layout.svelte";
@@ -24,7 +25,52 @@
     num_features: number;
   }
 
+  // unique by file_name
   let schemes: Scheme[] = [];
+  let filterText = "";
+  // by file_name
+  let showSchemes: Set<string> = new Set();
+
+  onDestroy(() => {
+    gjScheme.set(null);
+  });
+
+  $: {
+    // When schemes or filter changes, update showSchemes
+    showSchemes.clear();
+    if (filterText) {
+      let filterNormalized = filterText.toLowerCase();
+      for (let feature of $gjScheme.features) {
+        // TODO This is a very blunt free-form text search, of any property.
+        if (
+          JSON.stringify(feature.properties)
+            .toLowerCase()
+            .includes(filterNormalized)
+        ) {
+          showSchemes.add(feature.properties.atip_file_name);
+        }
+      }
+    } else {
+      for (let scheme of schemes) {
+        showSchemes.add(scheme.file_name);
+      }
+    }
+
+    // Hide things on the map
+    gjScheme.update((gj) => {
+      for (let feature of gj.features) {
+        if (showSchemes.has(feature.properties.atip_file_name)) {
+          delete feature.properties.hide_while_editing;
+        } else {
+          feature.properties.hide_while_editing = true;
+        }
+      }
+      return gj;
+    });
+
+    // Make Svelte see the update
+    showSchemes = showSchemes;
+  }
 
   function loadFile(text: string) {
     try {
@@ -58,7 +104,7 @@
   }
 
   function tooltip(props: { [name: string]: any }): string {
-    return JSON.stringify(props);
+    return JSON.stringify(props, null, "  ");
   }
 
   function showScheme(scheme: Scheme) {
@@ -96,29 +142,39 @@
     <h1>Browse schemes</h1>
     <FileInput label="Load from GeoJSON" uniqueId="load_geojson" {loadFile} />
 
+    <div>
+      <label>
+        Filter by any field:
+        <input type="text" bind:value={filterText} style="width: 100%" />
+      </label>
+    </div>
+
+    <p>Showing {showSchemes.size} schemes</p>
     <ul>
       {#each schemes as scheme}
-        <CollapsibleCard
-          label={`${scheme.internal_scheme_id}: ${scheme.num_features} features`}
-        >
-          <ul>
-            <li>Filename: {scheme.file_name}</li>
-            <li>Priority: {scheme.scheme_priority}</li>
-            <li>
-              Authority: {scheme.authority_name} ({scheme.authority_code})
-            </li>
-            <li>
-              <button type="button" on:click={() => showScheme(scheme)}
-                >Show on map</button
-              >
-            </li>
-            <li>
-              <button type="button" on:click={() => editScheme(scheme)}
-                >Edit scheme</button
-              >
-            </li>
-          </ul>
-        </CollapsibleCard>
+        {#if showSchemes.has(scheme.file_name)}
+          <CollapsibleCard
+            label={`${scheme.internal_scheme_id}: ${scheme.num_features} features`}
+          >
+            <ul>
+              <li>Filename: {scheme.file_name}</li>
+              <li>Priority: {scheme.scheme_priority}</li>
+              <li>
+                Authority: {scheme.authority_name} ({scheme.authority_code})
+              </li>
+              <li>
+                <button type="button" on:click={() => showScheme(scheme)}
+                  >Show on map</button
+                >
+              </li>
+              <li>
+                <button type="button" on:click={() => editScheme(scheme)}
+                  >Edit scheme</button
+                >
+              </li>
+            </ul>
+          </CollapsibleCard>
+        {/if}
       {/each}
     </ul>
   </div>
