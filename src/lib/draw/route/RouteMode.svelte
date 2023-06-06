@@ -41,7 +41,7 @@
     console.log(`Grabbing ${url}`);
     try {
       const graphBytes = await fetchWithProgress(url, progress);
-      routeTool = new RouteTool($map, graphBytes);
+      routeTool = new RouteTool($map, graphBytes, "route");
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
       progress.innerHTML = "Failed to load";
