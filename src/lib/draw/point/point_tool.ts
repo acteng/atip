@@ -7,7 +7,7 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
-import { EventManager } from "../events";
+import singletonEventManager from "../events";
 
 const source = "edit-point-mode";
 
@@ -19,8 +19,6 @@ export class PointTool {
   eventListenersFailure: (() => void)[];
   cursor: FeatureWithProps<Point> | null;
 
-  events: EventManager;
-
   constructor(map: Map) {
     this.map = map;
     this.active = false;
@@ -29,9 +27,8 @@ export class PointTool {
     this.cursor = null;
 
     // Set up interactions
-    this.events = new EventManager(this, map);
-    this.events.mapHandler("click", this.onClick);
-    this.events.mapHandler("mousemove", this.onMouseMove);
+    singletonEventManager.updateSpecificModeHandler("point", true, "click", this.onClick, this);
+    singletonEventManager.updateSpecificModeHandler("point", true, "mousemove", this.onMouseMove, this);
 
     // Render
     overwriteSource(map, source, emptyGeojson());
@@ -59,6 +56,7 @@ export class PointTool {
   }
 
   private onClick() {
+      console.log(`on click ${this.active}`);
     // TODO is it possible cursor is null?
     if (this.active && this.cursor) {
       for (let cb of this.eventListenersSuccess) {
@@ -78,7 +76,6 @@ export class PointTool {
   tearDown() {
     this.map.removeLayer("edit-point-mode");
     this.map.removeSource(source);
-    this.events.tearDown();
   }
 
   // Note there's no way to "edit an existing point." Just call this for a new

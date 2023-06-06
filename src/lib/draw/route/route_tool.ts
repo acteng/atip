@@ -80,15 +80,15 @@ export class RouteTool {
     });
 
     // Set up interactions
-    this.events = new EventManager(this, map);
-    this.events.mapHandler("mousemove", this.onMouseMove);
-    this.events.mapHandler("click", this.onClick);
-    this.events.mapHandler("dblclick", this.onDoubleClick);
-    this.events.mapHandler("dragstart", this.onDragStart);
-    this.events.mapHandler("mouseup", this.onMouseUp);
-    this.events.documentHandler("keypress", this.onKeyPress);
-    this.events.documentHandler("keydown", this.onKeyDown);
-    this.events.documentHandler("keyup", this.onKeyUp);
+    // this.events = new EventManager(this, map);
+    // this.events.mapHandler("mousemove", this.onMouseMove);
+    // this.events.mapHandler("click", this.onClick);
+    // this.events.mapHandler("dblclick", this.onDoubleClick);
+    // this.events.mapHandler("dragstart", this.onDragStart);
+    // this.events.mapHandler("mouseup", this.onMouseUp);
+    // this.events.documentHandler("keypress", this.onKeyPress);
+    // this.events.documentHandler("keydown", this.onKeyDown);
+    // this.events.documentHandler("keyup", this.onKeyUp);
   }
 
   private onMouseMove(e: MapMouseEvent) {
