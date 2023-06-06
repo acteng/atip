@@ -1,15 +1,16 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
+  import type { Mode } from "../types";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
-  import type { Feature as OurFeature, Mode } from "../../../types";
+  import type { Feature as OurFeature } from "../../../types";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
   import lineSplit from "@turf/line-split";
   import lineSlice from "@turf/line-slice";
-  import { gjScheme, map, newFeatureId, currentMode } from "../../../stores";
+  import { gjScheme, map, newFeatureId } from "../../../stores";
   import {
     emptyGeojson,
     overwriteSource,
@@ -22,6 +23,7 @@
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;
 
+  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
 
   export function start() {}
@@ -63,7 +65,7 @@
   }
 
   function onMouseMove(e: MapMouseEvent) {
-    if ($currentMode != thisMode) {
+    if (mode != thisMode) {
       return;
     }
 
@@ -105,7 +107,7 @@
   }
 
   function onClick() {
-    if ($currentMode != thisMode) {
+    if (mode != thisMode) {
       return;
     }
 
@@ -254,14 +256,14 @@
 
   // The escape key isn't registered at all for keypress, so use keydown
   function onKeyDown(e: KeyboardEvent) {
-    if ($currentMode == thisMode && e.key == "Escape") {
+    if (mode == thisMode && e.key == "Escape") {
       changeMode("edit-attribute");
       e.preventDefault();
     }
   }
 </script>
 
-{#if $currentMode == thisMode}
+{#if mode == thisMode}
   <CollapsibleCard label="Help">
     <ul>
       <li><b>Click</b> on a route to split it</li>

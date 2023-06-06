@@ -70,6 +70,7 @@ export interface UserSettings {
 export function isStreetViewImagery(x: string): x is "google" | "bing" {
   return x == "google" || x == "bing";
 }
+
 export type Mode =
   | "edit-attribute"
   | "edit-geometry"
@@ -79,3 +80,20 @@ export type Mode =
   | "snap-polygon"
   | "split-route"
   | "street-view";
+
+export interface EventHandler {
+  mapHandlers: {
+    click: Function,
+    dblclick: Function,
+    mousemove: Function,
+    mousedown: Function,
+    mouseup: Function,
+    dragstart: Function,
+  },
+  documentHandlers: {
+    click: Function,
+    keyPress: Function,
+    keyUp: Function,
+    keyDown: Function,
+  },
+}

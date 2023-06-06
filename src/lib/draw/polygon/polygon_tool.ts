@@ -18,7 +18,8 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
-import { EventManager } from "../events";
+import singletonEventManager from "../events"; 
+import type { Mode } from "fs";
 
 const source = "edit-polygon-mode";
 
@@ -32,8 +33,6 @@ export class PolygonTool {
   // The number is an index into points
   hover: "polygon" | number | null;
   dragFrom: Position | null;
-
-  events: EventManager;
 
   constructor(map: Map) {
     this.map = map;
@@ -51,13 +50,14 @@ export class PolygonTool {
     this.dragFrom = null;
 
     // Set up interactions
-    this.events = new EventManager(this, map);
-    this.events.mapHandler("mousemove", this.onMouseMove);
-    this.events.mapHandler("click", this.onClick);
-    this.events.mapHandler("dblclick", this.onDoubleClick);
-    this.events.mapHandler("mousedown", this.onMouseDown);
-    this.events.mapHandler("mouseup", this.onMouseUp);
-    this.events.documentHandler("keypress", this.onKeypress);
+
+    // this.events = new EventManager(this, map);
+    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "mousemove", this.onMouseMove,this);
+    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "click", this.onClick,this);
+    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "dblclick", this.onDoubleClick,this);
+    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "mousedown", this.onMouseDown,this);
+    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "mouseup", this.onMouseUp,this);
+    singletonEventManager.updateSpecificModeHandler("free-polygon", false, "keypress", this.onKeypress,this);
 
     // Render
     overwriteSource(map, source, emptyGeojson());
