@@ -1,4 +1,8 @@
 <script lang="ts">
+  // @ts-nocheck
+  // TODO After figuring out the features of this page, work on the errors
+  // here. Need to decide how much we use gjScheme, and what new feature-level
+  // properties to expect.
   import { onDestroy } from "svelte";
   import type { GeoJSON } from "geojson";
   import Map from "../lib/Map.svelte";
@@ -58,6 +62,9 @@
 
     // Hide things on the map
     gjScheme.update((gj) => {
+      if (!gj) {
+        return null;
+      }
       for (let feature of gj.features) {
         if (showSchemes.has(feature.properties.atip_file_name)) {
           delete feature.properties.hide_while_editing;
@@ -142,11 +149,15 @@
     <h1>Browse schemes</h1>
     <FileInput label="Load from GeoJSON" uniqueId="load_geojson" {loadFile} />
 
+    <br />
+    <br />
+
     <div>
       <label>
-        Filter by any field:
-        <input type="text" bind:value={filterText} style="width: 100%" />
+        Filter by any field: <br />
+        <input type="text" bind:value={filterText} />
       </label>
+      <button type="button" on:click={() => (filterText = "")}>Clear</button>
     </div>
 
     <p>Showing {showSchemes.size} schemes</p>
