@@ -28,7 +28,7 @@
     // Add points for the ends of every LineString
     let endpoints = [];
     for (let f of copy.features) {
-      if (f.geometry.type == "LineString") {
+      if (f.geometry.type == "LineString" && !f.properties.hide_while_editing) {
         for (let pt of [
           f.geometry.coordinates[0],
           f.geometry.coordinates[f.geometry.coordinates.length - 1],
