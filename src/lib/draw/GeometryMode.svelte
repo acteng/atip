@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import { type MapMouseEvent } from "maplibre-gl";
+  import { ClickZoomHandler, MapMouseEvent } from "maplibre-gl";
   import type { LineString, Polygon } from "geojson";
   import type { PointTool } from "./point/point_tool";
   import type { PolygonTool } from "./polygon/polygon_tool";
   import type { RouteTool } from "./route/route_tool";
   import { map, gjScheme, mapHover, currentMode } from "../../stores";
-  import type { Feature, FeatureUnion } from "../../types";
+  import type { EventHandler, Feature, FeatureUnion, MapEvent } from "../../types";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
@@ -17,6 +17,7 @@
   export let pointTool: PointTool;
   export let polygonTool: PolygonTool;
   export let routeTool: RouteTool;
+  export let eventHandler: EventHandler;
 
   // An optional ID of what we're currently editing in this mode
   let currentlyEditing: number | null = null;
@@ -26,6 +27,12 @@
     | "snap-polygon"
     | "route"
     | null = null;
+
+
+  // Calculate hover
+  eventHandler.mapHandlers["mousemove"] = onMouseMove;
+  eventHandler.mapHandlers["mouseout"] = onMouseOut;
+  eventHandler.mapHandlers["mouseclick"] = onClick;
 
   export function start() {}
   export function stop() {
@@ -46,12 +53,6 @@
     currentlyEditingControls = null;
     mapHover.set(null);
   }
-
-  // Calculate hover
-  $map.on("mousemove", onMouseMove);
-  $map.on("mouseout", onMouseOut);
-  // Handle clicking the hovered feature
-  $map.on("click", onClick);
 
   onDestroy(() => {
     $map.off("mousemove", onMouseMove);

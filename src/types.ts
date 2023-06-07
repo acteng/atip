@@ -81,6 +81,14 @@ export type Mode =
   | "split-route"
   | "street-view";
 
+export const MapEvents = ["click", "dblclick", "mousemove", "mousedown", "mouseup", "mouseout", "dragstart"];
+
+export type MapEvent = typeof MapEvents[number];
+
+export const DocumentEvents = ["click", "keyPress", "keyUp", "keyDown"];
+
+export type DocumentEvent = typeof DocumentEvents[number];
+
 export interface EventHandler {
   mapHandlers: {
     click: Function,
@@ -88,6 +96,7 @@ export interface EventHandler {
     mousemove: Function,
     mousedown: Function,
     mouseup: Function,
+    mouseout: Function,
     dragstart: Function,
   },
   documentHandlers: {

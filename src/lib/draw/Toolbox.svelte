@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { map } from "../../stores";
-  import type { Schema } from "../../types";
+  import type { EventHandler, Schema } from "../../types";
   import { PointTool } from "./point/point_tool";
   import { PolygonTool } from "./polygon/polygon_tool";
   import { RouteTool } from "./route/route_tool";
   import type { Mode } from "../../types";
+  import { MapEvents, DocumentEvents } from "../../types";
   import { currentMode } from "../../stores";
 
   import SelectToolButton from "./SelectToolButton.svelte";
@@ -26,6 +27,7 @@
   import routeIcon from "../../../assets/route.svg";
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
+  import { DefaultEventHandler } from "../../default_event_handler";
 
   export let routeSnapperUrl: string;
   export let schema: Schema;
@@ -45,6 +47,29 @@
   let snapPolygonMode: SnapPolygonMode;
   let splitRouteMode: SplitRouteMode;
   let streetViewMode: StreetViewMode;
+
+  const eventHandlers: { [mode in Mode]: EventHandler } = {
+    "edit-attribute": new DefaultEventHandler(),
+    "edit-geometry": new DefaultEventHandler(),
+    route: new DefaultEventHandler(),
+    point: new DefaultEventHandler(),
+    "free-polygon": new DefaultEventHandler(),
+    "snap-polygon": new DefaultEventHandler(),
+    "split-route": new DefaultEventHandler(),
+    "street-view": new DefaultEventHandler(),
+  };
+
+  MapEvents.forEach((eventName) => {
+    $map.on(eventName, (event) => {
+      eventHandlers[$currentMode].mapHandlers[eventName](event);
+    });
+  });
+
+  DocumentEvents.forEach((eventName) => {
+    $map.on(eventName, (event) => {
+      eventHandlers[$currentMode].documentHandlers[eventName](event);
+    });
+  });
 
   // This must be used; don't manually change mode
   function changeMode(newMode: Mode) {
@@ -86,7 +111,11 @@
       icon={editAttributesIcon}
       {changeMode}
     />
-    <AttributeMode bind:this={attributeMode} {changeMode} />
+    <AttributeMode
+      bind:this={attributeMode}
+      {changeMode}
+      bind:eventHandler={eventHandlers["edit-attribute"]}
+    />
   </div>
   <div>
     <SelectToolButton
@@ -101,6 +130,7 @@
         {pointTool}
         {polygonTool}
         {routeTool}
+        bind:eventHandler={eventHandlers["edit-geometry"]}
       />
     {/if}
   </div>
@@ -113,7 +143,12 @@
         {changeMode}
       />
     {/if}
-    <PointMode bind:this={pointMode} {changeMode} {pointTool} />
+    <PointMode
+      bind:this={pointMode}
+      {changeMode}
+      {pointTool}
+      bind:eventHandler={eventHandlers["point"]}
+    />
   </div>
   <div>
     <SelectToolButton
@@ -122,7 +157,12 @@
       icon={polygonFreehandIcon}
       {changeMode}
     />
-    <PolygonMode bind:this={polygonMode} {changeMode} {polygonTool} />
+    <PolygonMode
+      bind:this={polygonMode}
+      {changeMode}
+      {polygonTool}
+      bind:eventHandler={eventHandlers["free-polygon"]}
+    />
   </div>
   <div>
     <SelectToolButton
@@ -132,7 +172,12 @@
       {changeMode}
     />
     {#if routeTool}
-      <SnapPolygonMode bind:this={snapPolygonMode} {changeMode} {routeTool} />
+      <SnapPolygonMode
+        bind:this={snapPolygonMode}
+        {changeMode}
+        {routeTool}
+        bind:eventHandler={eventHandlers["snap-polygon"]}
+      />
     {/if}
   </div>
   <div>
@@ -149,6 +194,7 @@
       {changeMode}
       url={routeSnapperUrl}
       bind:routeTool
+      bind:eventHandler={eventHandlers["route"]}
     />
   </div>
   <div>
@@ -160,7 +206,11 @@
         {changeMode}
       />
     {/if}
-    <SplitRouteMode bind:this={splitRouteMode} {changeMode} />
+    <SplitRouteMode
+      bind:this={splitRouteMode}
+      {changeMode}
+      bind:eventHandler={eventHandlers["split-route"]}
+    />
   </div>
   <div>
     <SelectToolButton
@@ -169,7 +219,11 @@
       icon={streetViewIcon}
       {changeMode}
     />
-    <StreetViewMode bind:this={streetViewMode} {changeMode} />
+    <StreetViewMode
+      bind:this={streetViewMode}
+      {changeMode}
+      bind:eventHandler={eventHandlers["street-view"]}
+    />
   </div>
 </div>
 

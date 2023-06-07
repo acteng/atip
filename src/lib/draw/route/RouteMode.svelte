@@ -10,7 +10,7 @@
     formOpen,
     currentMode,
   } from "../../../stores";
-  import type { Feature, Mode } from "../../../types";
+  import type { EventHandler, Feature, Mode } from "../../../types";
   import type { LineString } from "geojson";
   import RouteControls from "./RouteControls.svelte";
 
@@ -21,6 +21,7 @@
 
   let progress: HTMLDivElement;
   export let routeTool: RouteTool;
+  export let eventHandler: EventHandler;
 
   // These're for drawing a new route, NOT for editing an existing.
   // GeometryMode manages the latter.
@@ -66,7 +67,21 @@
         formOpen.set(feature.id as number);
       }
     });
+
+    setHandlers();
   });
+
+  const setHandlers = () => {
+    eventHandler.mapHandlers.mousemove = routeTool.onMouseMove;
+    eventHandler.mapHandlers.click = routeTool.onClick;
+    eventHandler.mapHandlers.mousemove = routeTool.onMouseMove;
+    eventHandler.mapHandlers.dblclick = routeTool.onDoubleClick;
+    eventHandler.mapHandlers.dragstart = routeTool.onDragStart;
+    eventHandler.mapHandlers.mouseup = routeTool.onMouseUp;
+    eventHandler.documentHandlers.keyPress = routeTool.onKeyPress;
+    eventHandler.documentHandlers.keyDown = routeTool.onKeyDown;
+    eventHandler.documentHandlers.keyUp = routeTool.onKeyUp;
+  };
 </script>
 
 {#if !routeTool}

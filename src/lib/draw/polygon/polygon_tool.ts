@@ -52,12 +52,12 @@ export class PolygonTool {
     // Set up interactions
 
     // this.events = new EventManager(this, map);
-    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "mousemove", this.onMouseMove,this);
-    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "click", this.onClick,this);
-    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "dblclick", this.onDoubleClick,this);
-    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "mousedown", this.onMouseDown,this);
-    singletonEventManager.updateSpecificModeHandler("free-polygon", true, "mouseup", this.onMouseUp,this);
-    singletonEventManager.updateSpecificModeHandler("free-polygon", false, "keypress", this.onKeypress,this);
+    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "mousemove", this.onMouseMove,this);
+    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "click", this.onClick,this);
+    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "dblclick", this.onDoubleClick,this);
+    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "mousedown", this.onMouseDown,this);
+    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "mouseup", this.onMouseUp,this);
+    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", false, "keypress", this.onKeypress,this);
 
     // Render
     overwriteSource(map, source, emptyGeojson());

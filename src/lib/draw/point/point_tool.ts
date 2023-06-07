@@ -7,7 +7,6 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
-import singletonEventManager from "../events";
 
 const source = "edit-point-mode";
 
@@ -19,48 +18,12 @@ export class PointTool {
   eventListenersFailure: (() => void)[];
   cursor: FeatureWithProps<Point> | null;
 
-  constructor(map: Map) {
-    this.map = map;
-    this.active = false;
-    this.eventListenersSuccess = [];
-    this.eventListenersFailure = [];
-    this.cursor = null;
-
-    // Set up interactions
-
-    // Render
-    overwriteSource(map, source, emptyGeojson());
-    overwriteCircleLayer(map, {
-      id: "edit-point-mode",
-      source,
-      color: colors.hovering,
-      radius: circleRadius,
-    });
-  }
-
   // This stops the tool and fires a failure event
   cancel() {
     for (let cb of this.eventListenersFailure) {
       cb();
     }
     this.stop();
-  }
-
-  onMouseMove(e: MapMouseEvent) {
-    if (this.active) {
-      this.cursor = pointFeature(e.lngLat.toArray());
-      this.redraw();
-    }
-  }
-
-  onClick() {
-    // TODO is it possible cursor is null?
-    if (this.active && this.cursor) {
-      for (let cb of this.eventListenersSuccess) {
-        cb(this.cursor);
-      }
-      this.stop();
-    }
   }
 
   addEventListenerSuccess(callback: (f: FeatureWithProps<Point>) => void) {
@@ -87,6 +50,40 @@ export class PointTool {
     this.cursor = null;
     this.active = false;
     this.redraw();
+  }
+
+  onMouseMove = (e: MapMouseEvent) => {
+    if (this.active) {
+      this.cursor = pointFeature(e.lngLat.toArray());
+      this.redraw();
+    }
+  }
+
+  onClick = () => {
+    // TODO is it possible cursor is null?
+    if (this.active && this.cursor) {
+      for (let cb of this.eventListenersSuccess) {
+        cb(this.cursor);
+      }
+      this.stop();
+    }
+  };
+
+  constructor(map: Map) {
+    this.map = map;
+    this.active = false;
+    this.eventListenersSuccess = [];
+    this.eventListenersFailure = [];
+    this.cursor = null;
+
+    // Render
+    overwriteSource(map, source, emptyGeojson());
+    overwriteCircleLayer(map, {
+      id: "edit-point-mode",
+      source,
+      color: colors.hovering,
+      radius: circleRadius,
+    });
   }
 
   private redraw() {

@@ -4,7 +4,7 @@
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
-  import type { Feature as OurFeature } from "../../../types";
+  import type { EventHandler, Feature as OurFeature } from "../../../types";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
@@ -25,6 +25,7 @@
 
   export let mode: Mode;
   export let changeMode: (m: Mode) => void;
+  export let eventHandler: EventHandler;
 
   export function start() {}
   export function stop() {

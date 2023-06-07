@@ -1,15 +1,15 @@
 <script lang="ts">
   import type { Point } from "geojson";
-  import type { Feature, Mode } from "../../../types";
+  import type { EventHandler, Feature, Mode } from "../../../types";
   import type { PointTool } from "./point_tool";
   import { gjScheme, newFeatureId, formOpen, currentMode} from "../../../stores";
   import PointControls from "./PointControls.svelte";
-  import singletonEventManager from "../events";
 
   const thisMode = "point";
 
   export let changeMode: (m: Mode) => void;
   export let pointTool: PointTool;
+  export let eventHandler: EventHandler;
 
   export function start() {
     pointTool.start();
@@ -18,8 +18,10 @@
     pointTool.stop();
   }
 
-  singletonEventManager.updateEventHandlerForSpecificMode("point", true, "click", pointTool.onClick, pointTool);
-  singletonEventManager.updateEventHandlerForSpecificMode("point", true, "mousemove", pointTool.onMouseMove, pointTool);
+  pointTool.cancel
+
+  eventHandler.mapHandlers.click = pointTool.onClick;
+  eventHandler.mapHandlers.mousemove = pointTool.onMouseMove;
 
   pointTool.addEventListenerSuccess((feature) => {
     if ($currentMode == thisMode) {
