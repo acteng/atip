@@ -10,6 +10,7 @@
   let popup = new Popup({
     closeButton: false,
     closeOnClick: false,
+    maxWidth: "none",
   });
 
   $map.on("mousemove", onMouseMove);
