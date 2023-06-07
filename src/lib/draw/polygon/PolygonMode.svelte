@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import type { Feature, Mode } from "../../../types";
+  import type { EventHandler, Feature, Mode } from "../../../types";
   import type { PolygonTool } from "./polygon_tool";
   import { gjScheme, newFeatureId, formOpen, currentMode} from "../../../stores";
   import PolygonControls from "./PolygonControls.svelte";
@@ -9,6 +9,7 @@
 
   export let changeMode: (m: Mode) => void;
   export let polygonTool: PolygonTool;
+  export let eventHandler: EventHandler;
 
   export function start() {
     polygonTool.startNew();

@@ -8,6 +8,7 @@ export class DefaultEventHandler implements EventHandler {
             mousemove: () => { },
             mousedown: () => { },
             mouseup: () => { },
+            mouseout: () => { },
             dragstart: () => { },
         };
         this.documentHandlers = {
@@ -18,7 +19,7 @@ export class DefaultEventHandler implements EventHandler {
         }
     };
 
-    mapHandlers: { click: () => void; dblclick: () => void; mousemove: () => void; mousedown: () => void; mouseup: () => void; dragstart: () => void; };
+    mapHandlers: { click: () => void; dblclick: () => void; mousemove: () => void; mousedown: () => void; mouseup: () => void; mouseout: () => void; dragstart: () => void; };
 
     documentHandlers: { click: () => void; keyPress: () => void; keyUp: () => void; keyDown: () => void; };
 }

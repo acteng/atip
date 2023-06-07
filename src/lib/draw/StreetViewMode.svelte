@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import type { Mode } from "../../types";
+  import type { EventHandler, Mode } from "../../types";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   import type { Feature, Point } from "geojson";
   import { point } from "@turf/helpers";
@@ -11,6 +11,8 @@
     overwriteCircleLayer,
   } from "../../maplibre_helpers";
   import CollapsibleCard from "../common/CollapsibleCard.svelte";
+
+  export let eventHandler: EventHandler;
 
   const thisMode = "street-view";
 

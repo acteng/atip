@@ -13,7 +13,6 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import type { Mode } from "../../../types";
-import singletonEventManager from "../events";
 
 const source = "route-snapper";
 
@@ -78,29 +77,9 @@ export class RouteTool {
       color: "black",
       opacity: 0.5,
     });
-
-    // Set up interactions
-    // this.events = new EventManager(this, map);
-    singletonEventManager.updateSpecificModeHandler(this.mode, true, "mousemove", this.onMouseMove, this);
-    singletonEventManager.updateSpecificModeHandler(this.mode, true, "mousemove", this.onMouseMove,this);
-    singletonEventManager.updateSpecificModeHandler(this.mode, true, "click", this.onClick,this);
-    singletonEventManager.updateSpecificModeHandler(this.mode, true, "dblclick", this.onDoubleClick,this);
-    singletonEventManager.updateSpecificModeHandler(this.mode, true, "mousedown", this.onDragStart,this);
-    singletonEventManager.updateSpecificModeHandler(this.mode, true, "mouseup", this.onMouseUp,this);
-    singletonEventManager.updateSpecificModeHandler(this.mode, false, "keypress", this.onKeyPress,this);
-    singletonEventManager.updateSpecificModeHandler(this.mode, false, "keydown", this.onKeyDown,this);
-    singletonEventManager.updateSpecificModeHandler(this.mode, false, "keyup", this.onKeyUp,this);
-    // this.events.mapHandler("mousemove", this.onMouseMove);
-    // this.events.mapHandler("click", this.onClick);
-    // this.events.mapHandler("dblclick", this.onDoubleClick);
-    // this.events.mapHandler("dragstart", this.onDragStart);
-    // this.events.mapHandler("mouseup", this.onMouseUp);
-    // this.events.documentHandler("keypress", this.onKeyPress);
-    // this.events.documentHandler("keydown", this.onKeyDown);
-    // this.events.documentHandler("keyup", this.onKeyUp);
   }
 
-  private onMouseMove(e: MapMouseEvent) {
+  onMouseMove = (e: MapMouseEvent) => {
     if (!this.active) {
       return;
     }
@@ -118,7 +97,7 @@ export class RouteTool {
     }
   }
 
-  private onClick() {
+  onClick = () => {
     if (!this.active) {
       return;
     }
@@ -126,7 +105,7 @@ export class RouteTool {
     this.redraw();
   }
 
-  private onDoubleClick(e: MapMouseEvent) {
+  onDoubleClick = (e: MapMouseEvent) => {
     if (!this.active) {
       return;
     }
@@ -139,7 +118,7 @@ export class RouteTool {
     this.finish();
   }
 
-  private onDragStart() {
+  onDragStart = () => {
     if (!this.active) {
       return;
     }
@@ -148,7 +127,7 @@ export class RouteTool {
     }
   }
 
-  private onMouseUp() {
+  onMouseUp = () => {
     if (!this.active) {
       return;
     }
@@ -157,7 +136,7 @@ export class RouteTool {
     }
   }
 
-  private onKeyPress(e: KeyboardEvent) {
+  onKeyPress = (e: KeyboardEvent) => {
     if (!this.active) {
       return;
     }
@@ -167,7 +146,7 @@ export class RouteTool {
     }
   }
 
-  private onKeyDown(e: KeyboardEvent) {
+  onKeyDown = (e: KeyboardEvent) => {
     if (!this.active) {
       return;
     }
@@ -178,7 +157,7 @@ export class RouteTool {
     }
   }
 
-  private onKeyUp(e: KeyboardEvent) {
+  onKeyUp = (e: KeyboardEvent) => {
     if (!this.active) {
       return;
     }

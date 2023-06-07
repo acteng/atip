@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { type MapMouseEvent } from "maplibre-gl";
-  import type { Mode } from "../../types";
+  import type { EventHandler, Mode } from "../../types";
   import { bbox } from "../../maplibre_helpers";
   import {
     map,
@@ -16,6 +16,7 @@
 
   // TODO Just tell us if we're the current mode or not, actually...
   export let changeMode: (m: Mode) => void;
+  export let eventHandler: EventHandler;
 
   export function start() {}
   export function stop() {
