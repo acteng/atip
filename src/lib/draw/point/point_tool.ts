@@ -7,6 +7,7 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
+import { EventHandler } from "../../../types";
 
 const source = "edit-point-mode";
 
@@ -33,6 +34,11 @@ export class PointTool {
       }
       this.stop();
     }
+  };
+
+  setHandlers = (eventHandler: EventHandler) => {
+    eventHandler.mapHandlers.mousemove = this.onMouseMove;
+    eventHandler.mapHandlers.click = this.onClick;
   };
 
   constructor(map: Map) {

@@ -29,9 +29,8 @@
     // When we enter this mode by clicking the button from edit-geometry, we
     // call routeTool.stop(). Re-activate it if so.
     if (!routeTool.isActive()) {
-      routeTool.startRoute();
-
       routeTool.setHandlers(eventHandler);
+      routeTool.startRoute();
     }
   }
   export function stop() {
