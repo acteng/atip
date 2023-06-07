@@ -26,19 +26,23 @@
   }
 
   routeTool.addEventListenerSuccessArea((feature) => {
-    gjScheme.update((gj) => {
-      feature.id = newFeatureId(gj);
-      feature.properties.intervention_type = "area";
-      gj.features.push(feature as Feature<Polygon>);
-      return gj;
-    });
+    if ($currentMode == thisMode) {
+      gjScheme.update((gj) => {
+        feature.id = newFeatureId(gj);
+        feature.properties.intervention_type = "area";
+        gj.features.push(feature as Feature<Polygon>);
+        return gj;
+      });
 
-    changeMode("edit-attribute");
-    formOpen.set(feature.id as number);
+      changeMode("edit-attribute");
+      formOpen.set(feature.id as number);
+    }
   });
 
   routeTool.addEventListenerFailure(() => {
-    changeMode("edit-attribute");
+    if ($currentMode == thisMode) {
+      changeMode("edit-attribute");
+    }
   });
 </script>
 

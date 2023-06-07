@@ -55,15 +55,17 @@
     });
 
     routeTool.addEventListenerSuccessRoute((feature) => {
-      gjScheme.update((gj) => {
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "route";
-        gj.features.push(feature as Feature<LineString>);
-        return gj;
-      });
+      if ($currentMode == thisMode) {
+        gjScheme.update((gj) => {
+          feature.id = newFeatureId(gj);
+          feature.properties.intervention_type = "route";
+          gj.features.push(feature as Feature<LineString>);
+          return gj;
+        });
 
-      changeMode("edit-attribute");
-      formOpen.set(feature.id as number);
+        changeMode("edit-attribute");
+        formOpen.set(feature.id as number);
+      }
     });
   });
 </script>
