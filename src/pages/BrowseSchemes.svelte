@@ -123,7 +123,13 @@
   }
 
   function tooltip(props: { [name: string]: any }): string {
-    return JSON.stringify(props, null, "  ");
+    // TODO Move into a Svelte component, so we don't have to awkwardly build up HTML like this
+    var html = `<table>`;
+    for (let [key, value] of Object.entries(props)) {
+      html += `<tr><td>${key}</td><td>${value}</td></tr>`;
+    }
+    html += `</table>`;
+    return html;
   }
 
   function showScheme(scheme: Scheme) {
