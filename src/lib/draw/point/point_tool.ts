@@ -27,8 +27,6 @@ export class PointTool {
     this.cursor = null;
 
     // Set up interactions
-    singletonEventManager.updateSpecificModeHandler("point", true, "click", this.onClick, this);
-    singletonEventManager.updateSpecificModeHandler("point", true, "mousemove", this.onMouseMove, this);
 
     // Render
     overwriteSource(map, source, emptyGeojson());
@@ -48,15 +46,14 @@ export class PointTool {
     this.stop();
   }
 
-  private onMouseMove(e: MapMouseEvent) {
+  onMouseMove(e: MapMouseEvent) {
     if (this.active) {
       this.cursor = pointFeature(e.lngLat.toArray());
       this.redraw();
     }
   }
 
-  private onClick() {
-      console.log(`on click ${this.active}`);
+  onClick() {
     // TODO is it possible cursor is null?
     if (this.active && this.cursor) {
       for (let cb of this.eventListenersSuccess) {
