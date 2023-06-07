@@ -25,19 +25,23 @@
   }
 
   pointTool.addEventListenerSuccess((feature) => {
-    gjScheme.update((gj) => {
-      feature.id = newFeatureId(gj);
-      feature.properties.intervention_type = "other";
-      gj.features.push(feature as Feature<Point>);
-      return gj;
-    });
+    if ($currentMode == thisMode) {
+      gjScheme.update((gj) => {
+        feature.id = newFeatureId(gj);
+        feature.properties.intervention_type = "other";
+        gj.features.push(feature as Feature<Point>);
+        return gj;
+      });
 
-    changeMode("edit-attribute");
-    formOpen.set(feature.id as number);
+      changeMode("edit-attribute");
+      formOpen.set(feature.id as number);
+    }
   });
 
   pointTool.addEventListenerFailure(() => {
-    changeMode("edit-attribute");
+    if ($currentMode == thisMode) {
+      changeMode("edit-attribute");
+    }
   });
 </script>
 
