@@ -331,7 +331,6 @@ export class RouteTool {
   setHandlers = (eventHandler: EventHandler) => {
     eventHandler.mapHandlers.mousemove = this.onMouseMove;
     eventHandler.mapHandlers.click = this.onClick;
-    eventHandler.mapHandlers.mousemove = this.onMouseMove;
     eventHandler.mapHandlers.dblclick = this.onDoubleClick;
     eventHandler.mapHandlers.dragstart = this.onDragStart;
     eventHandler.mapHandlers.mouseup = this.onMouseUp;

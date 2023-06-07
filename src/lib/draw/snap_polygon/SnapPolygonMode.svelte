@@ -17,8 +17,8 @@
   export let eventHandler: EventHandler;
 
   export function start() {
-    routeTool.startArea();
     routeTool.setHandlers(eventHandler);
+    routeTool.startArea();
   }
 
   export function stop() {

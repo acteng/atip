@@ -17,14 +17,12 @@
   export let eventHandler: EventHandler;
 
   export function start() {
+    pointTool.setHandlers(eventHandler);
     pointTool.start();
   }
   export function stop() {
     pointTool.stop();
   }
-
-  eventHandler.mapHandlers.click = pointTool.onClick;
-  eventHandler.mapHandlers.mousemove = pointTool.onMouseMove;
 
   pointTool.addEventListenerSuccess((feature) => {
     gjScheme.update((gj) => {

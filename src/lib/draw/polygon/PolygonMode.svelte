@@ -17,8 +17,8 @@
   export let eventHandler: EventHandler;
 
   export function start() {
-    polygonTool.startNew();
     polygonTool.setHandlers(eventHandler);
+    polygonTool.startNew();
   }
   export function stop() {
     polygonTool.stop();

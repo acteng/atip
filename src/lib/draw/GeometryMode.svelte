@@ -154,6 +154,9 @@
   }
 
   const onMouseMove = (e: MapMouseEvent) => {
+    routeTool.onMouseMove(e);
+    pointTool.onMouseMove(e);
+    polygonTool.onMouseMove(e);
     if (currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
@@ -173,6 +176,10 @@
   };
 
   const onClick = (e: MapMouseEvent) => {
+    routeTool.onClick();
+    pointTool.onClick();
+    polygonTool.onClick(e);
+
     if (currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
@@ -187,9 +194,48 @@
     }
   };
 
+  const onMouseDown = (e: MapMouseEvent) => {
+    polygonTool.onMouseDown(e);
+  };
+
+  const onDoubleClick = (e: MapMouseEvent) => {
+    routeTool.onDoubleClick(e);
+    polygonTool.onDoubleClick(e);
+  };
+
+  const onDragStart = () => {
+    routeTool.onDragStart();
+  };
+
+  const onMouseUp = () => {
+    routeTool.onMouseUp();
+    polygonTool.onMouseUp();
+  };
+
+  const onKeyPress = (e: KeyboardEvent) => {
+    routeTool.onKeyPress(e);
+    polygonTool.onKeypress(e);
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    routeTool.onKeyDown(e);
+  };
+
+  const onKeyUp = (e: KeyboardEvent) => {
+    routeTool.onKeyUp(e);
+  };
+
   eventHandler.mapHandlers.mousemove = onMouseMove;
   eventHandler.mapHandlers.mouseout = onMouseOut;
   eventHandler.mapHandlers.click = onClick;
+  eventHandler.mapHandlers.mousedown = onMouseDown;
+  eventHandler.mapHandlers.dblclick = onDoubleClick;
+  eventHandler.mapHandlers.dragstart = onDragStart;
+  eventHandler.mapHandlers.mouseup = onMouseUp;
+
+  eventHandler.documentHandlers.keyPress = onKeyPress;
+  eventHandler.documentHandlers.keyDown = onKeyDown;
+  eventHandler.documentHandlers.keyUp = onKeyUp;
 
   function startEditing(id: number) {
     mapHover.set(null);
