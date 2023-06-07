@@ -18,9 +18,8 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
-import singletonEventManager from "../events";
 import type { Mode } from "fs";
-import { EventHandler } from "../../../types";
+import type { EventHandler } from "../../../types";
 
 const source = "edit-polygon-mode";
 
