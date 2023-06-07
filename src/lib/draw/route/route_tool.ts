@@ -95,7 +95,7 @@ export class RouteTool {
     ) {
       this.redraw();
     }
-  }
+  };
 
   onClick = () => {
     if (!this.active) {
@@ -103,7 +103,7 @@ export class RouteTool {
     }
     this.inner.onClick();
     this.redraw();
-  }
+  };
 
   onDoubleClick = (e: MapMouseEvent) => {
     if (!this.active) {
@@ -116,7 +116,7 @@ export class RouteTool {
     // click to add it again.
     this.inner.onClick();
     this.finish();
-  }
+  };
 
   onDragStart = () => {
     if (!this.active) {
@@ -125,7 +125,7 @@ export class RouteTool {
     if (this.inner.onDragStart()) {
       this.map.dragPan.disable();
     }
-  }
+  };
 
   onMouseUp = () => {
     if (!this.active) {
@@ -134,7 +134,7 @@ export class RouteTool {
     if (this.inner.onMouseUp()) {
       this.map.dragPan.enable();
     }
-  }
+  };
 
   onKeyPress = (e: KeyboardEvent) => {
     if (!this.active) {
@@ -144,7 +144,7 @@ export class RouteTool {
       e.preventDefault();
       this.finish();
     }
-  }
+  };
 
   onKeyDown = (e: KeyboardEvent) => {
     if (!this.active) {
@@ -155,7 +155,7 @@ export class RouteTool {
       this.inner.setSnapMode(false);
       this.redraw();
     }
-  }
+  };
 
   onKeyUp = (e: KeyboardEvent) => {
     if (!this.active) {
@@ -166,7 +166,7 @@ export class RouteTool {
       this.inner.setSnapMode(true);
       this.redraw();
     }
-  }
+  };
 
   // Activate the tool with blank state.
   startRoute() {
@@ -338,7 +338,7 @@ export class RouteTool {
     eventHandler.documentHandlers.keyPress = this.onKeyPress;
     eventHandler.documentHandlers.keyDown = this.onKeyDown;
     eventHandler.documentHandlers.keyUp = this.onKeyUp;
-  }; 
+  };
 
   private redraw() {
     (this.map.getSource(source) as GeoJSONSource).setData(

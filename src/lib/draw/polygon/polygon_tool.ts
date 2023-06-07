@@ -120,7 +120,7 @@ export class PolygonTool {
       this.dragFrom = e.lngLat.toArray();
       this.redraw();
     }
-  }
+  };
 
   onClick = (e: MapMouseEvent) => {
     if (this.active && this.cursor) {
@@ -151,7 +151,7 @@ export class PolygonTool {
       // on the polygon
       this.recalculateHovering(e);
     }
-  }
+  };
 
   onDoubleClick = (e: MapMouseEvent) => {
     if (!this.active) {
@@ -166,7 +166,7 @@ export class PolygonTool {
     this.cursor = pointFeature(e.lngLat.toArray());
     this.onClick(e);
     this.finish();
-  }
+  };
 
   onMouseDown = (e: MapMouseEvent) => {
     if (this.active && !this.dragFrom && this.hover != null) {
@@ -174,13 +174,13 @@ export class PolygonTool {
       this.cursor = null;
       this.dragFrom = e.lngLat.toArray();
     }
-  }
+  };
 
   onMouseUp = () => {
     if (this.active && this.dragFrom) {
       this.dragFrom = null;
     }
-  }
+  };
 
   onKeypress = (e: KeyboardEvent) => {
     if (!this.active) {
@@ -190,7 +190,7 @@ export class PolygonTool {
       e.preventDefault();
       this.finish();
     }
-  }
+  };
 
   setHandlers = (eventHandler: EventHandler) => {
     eventHandler.mapHandlers.mousemove = this.onMouseMove;
@@ -198,8 +198,8 @@ export class PolygonTool {
     eventHandler.mapHandlers.dblclick = this.onDoubleClick;
     eventHandler.mapHandlers.mousedown = this.onMouseDown;
     eventHandler.mapHandlers.mouseup = this.onMouseUp;
-    eventHandler.documentHandlers.keyPress = this.onKeypress
-  }
+    eventHandler.documentHandlers.keyPress = this.onKeypress;
+  };
 
   addEventListenerSuccess(callback: (f: FeatureWithProps<Polygon>) => void) {
     this.eventListenersSuccess.push(callback);
