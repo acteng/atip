@@ -22,18 +22,15 @@
   const schema = "v1";
 
   interface Scheme {
-    file_name: string;
-    authority_code: string;
-    authority_name: string;
-    internal_scheme_id: string;
-    scheme_priority: number;
+    scheme_reference: string;
+    authority_or_region: string;
     num_features: number;
   }
 
-  // unique by file_name
+  // unique by scheme_reference
   let schemes: Scheme[] = [];
   let filterText = "";
-  // by file_name
+  // by scheme_reference
   let showSchemes: Set<string> = new Set();
 
   // Stats about filtered schemes
@@ -56,12 +53,12 @@
             .toLowerCase()
             .includes(filterNormalized)
         ) {
-          showSchemes.add(feature.properties.atip_file_name);
+          showSchemes.add(feature.properties.scheme_reference);
         }
       }
     } else {
       for (let scheme of schemes) {
-        showSchemes.add(scheme.file_name);
+        showSchemes.add(scheme.scheme_reference);
       }
     }
 
@@ -71,7 +68,7 @@
         return null;
       }
       for (let feature of gj.features) {
-        if (showSchemes.has(feature.properties.atip_file_name)) {
+        if (showSchemes.has(feature.properties.scheme_reference)) {
           delete feature.properties.hide_while_editing;
         } else {
           feature.properties.hide_while_editing = true;
@@ -83,7 +80,7 @@
     // Recalculate stats
     counts = { area: 0, route: 0, crossing: 0, other: 0 };
     for (let feature of $gjScheme?.features) {
-      if (showSchemes.has(feature.properties.atip_file_name)) {
+      if (showSchemes.has(feature.properties.scheme_reference)) {
         counts[feature.properties.intervention_type]++;
       }
     }
@@ -105,22 +102,19 @@
   }
 
   function addSchemeToSidebar(gj: GeoJSON) {
-    let byFilename = {};
+    let byScheme = {};
 
     for (let feature of gj.features) {
       let p = feature.properties;
-      byFilename[p.atip_file_name] ||= {
-        file_name: p.atip_file_name,
-        authority_code: p.authority_code,
-        authority_name: p.authority_name,
-        internal_scheme_id: p.internal_scheme_id,
-        scheme_priority: p.scheme_priority,
+      byScheme[p.scheme_reference] ||= {
+        scheme_reference: p.scheme_reference,
+        authority_or_region: p.authority_or_region,
         num_features: 0,
       };
-      byFilename[p.atip_file_name].num_features++;
+      byScheme[p.scheme_reference].num_features++;
     }
 
-    schemes = Object.values(byFilename);
+    schemes = Object.values(byScheme);
   }
 
   function tooltip(props: { [name: string]: any }): string {
@@ -132,7 +126,7 @@
     let gj = {
       type: "FeatureCollection",
       features: $gjScheme.features.filter(
-        (f) => f.properties.atip_file_name == scheme.file_name
+        (f) => f.properties.scheme_reference == scheme.scheme_reference
       ),
     };
     $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
@@ -142,15 +136,18 @@
     let gj = {
       type: "FeatureCollection",
       features: $gjScheme.features.filter(
-        (f) => f.properties.atip_file_name == scheme.file_name
+        (f) => f.properties.scheme_reference == scheme.scheme_reference
       ),
     };
-    let filename = scheme.authority_name;
+    let filename = scheme.authority_or_region;
     // Assuming the schema is always v1
 
     // Put the file in local storage, so it'll be loaded from the next page
     window.localStorage.setItem(filename, JSON.stringify(gj));
-    window.open(`scheme.html?authority=${scheme.authority_name}`, "_blank");
+    window.open(
+      `scheme.html?authority=${scheme.authority_or_region}`,
+      "_blank"
+    );
   }
 </script>
 
@@ -183,16 +180,12 @@
 
     <ul>
       {#each schemes as scheme}
-        {#if showSchemes.has(scheme.file_name)}
+        {#if showSchemes.has(scheme.scheme_reference)}
           <CollapsibleCard
-            label={`${scheme.internal_scheme_id}: ${scheme.num_features} features`}
+            label={`${scheme.scheme_reference}: ${scheme.num_features} features`}
           >
             <ul>
-              <li>Filename: {scheme.file_name}</li>
-              <li>Priority: {scheme.scheme_priority}</li>
-              <li>
-                Authority: {scheme.authority_name} ({scheme.authority_code})
-              </li>
+              <li>Authority or region: {scheme.authority_or_region}</li>
               <li>
                 <button type="button" on:click={() => showScheme(scheme)}
                   >Show on map</button
