@@ -18,40 +18,6 @@ export class PointTool {
   eventListenersFailure: (() => void)[];
   cursor: FeatureWithProps<Point> | null;
 
-  // This stops the tool and fires a failure event
-  cancel() {
-    for (let cb of this.eventListenersFailure) {
-      cb();
-    }
-    this.stop();
-  }
-
-  addEventListenerSuccess(callback: (f: FeatureWithProps<Point>) => void) {
-    this.eventListenersSuccess.push(callback);
-  }
-  addEventListenerFailure(callback: () => void) {
-    this.eventListenersFailure.push(callback);
-  }
-
-  tearDown() {
-    this.map.removeLayer("edit-point-mode");
-    this.map.removeSource(source);
-  }
-
-  // Note there's no way to "edit an existing point." Just call this for a new
-  // or existing point; the state just depends on the cursor anyway.
-  start() {
-    this.active = true;
-    // TODO Figure out where the cursor is and immediately draw? To be useful,
-    // the user has to move their mouse anyway; it doesn't matter much
-  }
-
-  stop() {
-    this.cursor = null;
-    this.active = false;
-    this.redraw();
-  }
-
   onMouseMove = (e: MapMouseEvent) => {
     if (this.active) {
       this.cursor = pointFeature(e.lngLat.toArray());
@@ -84,6 +50,40 @@ export class PointTool {
       color: colors.hovering,
       radius: circleRadius,
     });
+  }
+
+  // This stops the tool and fires a failure event
+  cancel() {
+    for (let cb of this.eventListenersFailure) {
+      cb();
+    }
+    this.stop();
+  }
+
+  addEventListenerSuccess(callback: (f: FeatureWithProps<Point>) => void) {
+    this.eventListenersSuccess.push(callback);
+  }
+  addEventListenerFailure(callback: () => void) {
+    this.eventListenersFailure.push(callback);
+  }
+
+  tearDown() {
+    this.map.removeLayer("edit-point-mode");
+    this.map.removeSource(source);
+  }
+
+  // Note there's no way to "edit an existing point." Just call this for a new
+  // or existing point; the state just depends on the cursor anyway.
+  start() {
+    this.active = true;
+    // TODO Figure out where the cursor is and immediately draw? To be useful,
+    // the user has to move their mouse anyway; it doesn't matter much
+  }
+
+  stop() {
+    this.cursor = null;
+    this.active = false;
+    this.redraw();
   }
 
   private redraw() {

@@ -30,6 +30,8 @@
     // call routeTool.stop(). Re-activate it if so.
     if (!routeTool.isActive()) {
       routeTool.startRoute();
+
+      routeTool.setHandlers(eventHandler);
     }
   }
   export function stop() {
@@ -50,38 +52,21 @@
     }
 
     routeTool.addEventListenerFailure(() => {
-      if ($currentMode == thisMode) {
-        changeMode("edit-attribute");
-      }
+      changeMode("edit-attribute");
     });
+    
     routeTool.addEventListenerSuccessRoute((feature) => {
-      if ($currentMode == thisMode) {
-        gjScheme.update((gj) => {
-          feature.id = newFeatureId(gj);
-          feature.properties.intervention_type = "route";
-          gj.features.push(feature as Feature<LineString>);
-          return gj;
-        });
+      gjScheme.update((gj) => {
+        feature.id = newFeatureId(gj);
+        feature.properties.intervention_type = "route";
+        gj.features.push(feature as Feature<LineString>);
+        return gj;
+      });
 
-        changeMode("edit-attribute");
-        formOpen.set(feature.id as number);
-      }
+      changeMode("edit-attribute");
+      formOpen.set(feature.id as number);
     });
-
-    setHandlers();
   });
-
-  const setHandlers = () => {
-    eventHandler.mapHandlers.mousemove = routeTool.onMouseMove;
-    eventHandler.mapHandlers.click = routeTool.onClick;
-    eventHandler.mapHandlers.mousemove = routeTool.onMouseMove;
-    eventHandler.mapHandlers.dblclick = routeTool.onDoubleClick;
-    eventHandler.mapHandlers.dragstart = routeTool.onDragStart;
-    eventHandler.mapHandlers.mouseup = routeTool.onMouseUp;
-    eventHandler.documentHandlers.keyPress = routeTool.onKeyPress;
-    eventHandler.documentHandlers.keyDown = routeTool.onKeyDown;
-    eventHandler.documentHandlers.keyUp = routeTool.onKeyUp;
-  };
 </script>
 
 {#if !routeTool}

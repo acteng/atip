@@ -18,8 +18,9 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
-import singletonEventManager from "../events"; 
+import singletonEventManager from "../events";
 import type { Mode } from "fs";
+import { EventHandler } from "../../../types";
 
 const source = "edit-polygon-mode";
 
@@ -48,16 +49,6 @@ export class PolygonTool {
     // widgetry's World
     this.hover = null;
     this.dragFrom = null;
-
-    // Set up interactions
-
-    // this.events = new EventManager(this, map);
-    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "mousemove", this.onMouseMove,this);
-    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "click", this.onClick,this);
-    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "dblclick", this.onDoubleClick,this);
-    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "mousedown", this.onMouseDown,this);
-    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", true, "mouseup", this.onMouseUp,this);
-    singletonEventManager.updateEventHandlerForSpecificMode("free-polygon", false, "keypress", this.onKeypress,this);
 
     // Render
     overwriteSource(map, source, emptyGeojson());
@@ -111,7 +102,7 @@ export class PolygonTool {
     this.stop();
   }
 
-  private onMouseMove(e: MapMouseEvent) {
+  onMouseMove = (e: MapMouseEvent) => {
     if (this.active && !this.dragFrom) {
       this.recalculateHovering(e);
     } else if (this.active && this.dragFrom) {
@@ -131,7 +122,7 @@ export class PolygonTool {
     }
   }
 
-  private onClick(e: MapMouseEvent) {
+  onClick = (e: MapMouseEvent) => {
     if (this.active && this.cursor) {
       // Insert the new point in the "middle" of the closest line segment
       let candidates: [number, number][] = [];
@@ -162,7 +153,7 @@ export class PolygonTool {
     }
   }
 
-  private onDoubleClick(e: MapMouseEvent) {
+  onDoubleClick = (e: MapMouseEvent) => {
     if (!this.active) {
       return;
     }
@@ -177,7 +168,7 @@ export class PolygonTool {
     this.finish();
   }
 
-  private onMouseDown(e: MapMouseEvent) {
+  onMouseDown = (e: MapMouseEvent) => {
     if (this.active && !this.dragFrom && this.hover != null) {
       e.preventDefault();
       this.cursor = null;
@@ -185,13 +176,13 @@ export class PolygonTool {
     }
   }
 
-  private onMouseUp() {
+  onMouseUp = () => {
     if (this.active && this.dragFrom) {
       this.dragFrom = null;
     }
   }
 
-  private onKeypress(e: KeyboardEvent) {
+  onKeypress = (e: KeyboardEvent) => {
     if (!this.active) {
       return;
     }
@@ -199,6 +190,15 @@ export class PolygonTool {
       e.preventDefault();
       this.finish();
     }
+  }
+
+  setHandlers = (eventHandler: EventHandler) => {
+    eventHandler.mapHandlers.mousemove = this.onMouseMove;
+    eventHandler.mapHandlers.click = this.onClick;
+    eventHandler.mapHandlers.dblclick = this.onDoubleClick;
+    eventHandler.mapHandlers.mousedown = this.onMouseDown;
+    eventHandler.mapHandlers.mouseup = this.onMouseUp;
+    eventHandler.documentHandlers.keyPress = this.onKeypress
   }
 
   addEventListenerSuccess(callback: (f: FeatureWithProps<Polygon>) => void) {
@@ -213,7 +213,6 @@ export class PolygonTool {
     this.map.removeLayer("edit-polygon-fill");
     this.map.removeLayer("edit-polygon-lines");
     this.map.removeSource(source);
-    this.events.tearDown();
   }
 
   startNew() {

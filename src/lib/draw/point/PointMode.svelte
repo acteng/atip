@@ -2,7 +2,12 @@
   import type { Point } from "geojson";
   import type { EventHandler, Feature, Mode } from "../../../types";
   import type { PointTool } from "./point_tool";
-  import { gjScheme, newFeatureId, formOpen, currentMode} from "../../../stores";
+  import {
+    gjScheme,
+    newFeatureId,
+    formOpen,
+    currentMode,
+  } from "../../../stores";
   import PointControls from "./PointControls.svelte";
 
   const thisMode = "point";
@@ -18,28 +23,23 @@
     pointTool.stop();
   }
 
-  pointTool.cancel
-
   eventHandler.mapHandlers.click = pointTool.onClick;
   eventHandler.mapHandlers.mousemove = pointTool.onMouseMove;
 
   pointTool.addEventListenerSuccess((feature) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "other";
-        gj.features.push(feature as Feature<Point>);
-        return gj;
-      });
+    gjScheme.update((gj) => {
+      feature.id = newFeatureId(gj);
+      feature.properties.intervention_type = "other";
+      gj.features.push(feature as Feature<Point>);
+      return gj;
+    });
 
-      changeMode("edit-attribute");
-      formOpen.set(feature.id as number);
-    }
+    changeMode("edit-attribute");
+    formOpen.set(feature.id as number);
   });
+
   pointTool.addEventListenerFailure(() => {
-    if ($currentMode == thisMode) {
-      changeMode("edit-attribute");
-    }
+    changeMode("edit-attribute");
   });
 </script>
 

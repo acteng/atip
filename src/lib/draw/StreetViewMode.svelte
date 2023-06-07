@@ -27,14 +27,6 @@
 
   let cursor: Feature<Point> | null = null;
 
-  $map.on("mousemove", onMouseMove);
-  $map.on("click", onClick);
-
-  onDestroy(() => {
-    $map.off("mousemove", onMouseMove);
-    $map.off("click", onClick);
-  });
-
   // Rendering
   let source = "street-view";
   overwriteSource($map, source, emptyGeojson());
@@ -54,19 +46,11 @@
     ($map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
-  function onMouseMove(e: MapMouseEvent) {
-    if ($currentMode != thisMode) {
-      return;
-    }
-
+  const onMouseMove = (e: MapMouseEvent) => {
     cursor = cursorFeature(e.lngLat.toArray());
-  }
+  };
 
-  function onClick() {
-    if ($currentMode != thisMode) {
-      return;
-    }
-
+  const onClick = () => {
     let [lon, lat] = cursor.geometry.coordinates;
     if ($userSettings.streetViewImagery == "google") {
       window.open(
@@ -79,7 +63,10 @@
         "_blank"
       );
     }
-  }
+  };
+
+  eventHandler.mapHandlers.click = onClick;
+  eventHandler.mapHandlers.mousemove = onMouseMove;
 
   function cursorFeature(pt: number[]): Feature<Point> {
     return {
@@ -94,7 +81,7 @@
 
   // The escape key isn't registered at all for keypress, so use keydown
   function onKeyDown(e: KeyboardEvent) {
-    if ($currentMode == thisMode && e.key == "Escape") {
+    if (e.key == "Escape") {
       changeMode("edit-attribute");
       e.preventDefault();
     }
