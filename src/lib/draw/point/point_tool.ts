@@ -23,7 +23,7 @@ export class PointTool {
       this.cursor = pointFeature(e.lngLat.toArray());
       this.redraw();
     }
-  }
+  };
 
   onClick = () => {
     // TODO is it possible cursor is null?

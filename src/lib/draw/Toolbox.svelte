@@ -28,7 +28,7 @@
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
   import { DefaultEventHandler } from "../../default_event_handler";
-    import { get } from "svelte/store";
+  import { get } from "svelte/store";
 
   export let routeSnapperUrl: string;
   export let schema: Schema;
@@ -62,14 +62,18 @@
 
   MapEvents.forEach((eventName) => {
     $map.on(eventName, (event) => {
-      console.log(`map event happening ${$currentMode}, ${get(currentMode)}, ${eventName}`);
+      console.log(
+        `map event happening ${$currentMode}, ${get(currentMode)}, ${eventName}`
+      );
       eventHandlers[get(currentMode)].mapHandlers[eventName](event);
     });
   });
 
   DocumentEvents.forEach((eventName) => {
     $map.on(eventName, (event) => {
-      console.log(`dom event happening ${$currentMode}, ${get(currentMode)}, ${eventName}`);
+      console.log(
+        `dom event happening ${$currentMode}, ${get(currentMode)}, ${eventName}`
+      );
       eventHandlers[get(currentMode)].documentHandlers[eventName](event);
     });
   });

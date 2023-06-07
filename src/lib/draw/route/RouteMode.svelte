@@ -54,7 +54,7 @@
     routeTool.addEventListenerFailure(() => {
       changeMode("edit-attribute");
     });
-    
+
     routeTool.addEventListenerSuccessRoute((feature) => {
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);

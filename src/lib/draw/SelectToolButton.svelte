@@ -11,7 +11,8 @@
 <button
   type="button"
   on:click={() => changeMode(thisMode)}
-  disabled={$currentMode == thisMode}><img src={icon} alt={label} /> {label}</button
+  disabled={$currentMode == thisMode}
+  ><img src={icon} alt={label} /> {label}</button
 >
 
 <style>

@@ -35,7 +35,7 @@
     changeMode("edit-attribute");
     formOpen.set(feature.id as number);
   });
-  
+
   polygonTool.addEventListenerFailure(() => {
     changeMode("edit-attribute");
   });
