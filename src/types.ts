@@ -93,7 +93,7 @@ export const MapEvents = [
 
 export type MapEvent = (typeof MapEvents)[number];
 
-export const DocumentEvents = ["click", "keyPress", "keyUp", "keyDown"];
+export const DocumentEvents = ["keyPress", "keyUp", "keyDown"];
 
 export type DocumentEvent = (typeof DocumentEvents)[number];
 
