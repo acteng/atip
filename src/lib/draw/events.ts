@@ -36,7 +36,7 @@ export class EventManager {
     handlers[eventName](event);
   } 
 
-  updateSpecificModeHandler(mode: Mode, isMapEventHandler: boolean, eventName: string, callback: Function, functionOwner: any) {
+  updateEventHandlerForSpecificMode(mode: Mode, isMapEventHandler: boolean, eventName: string, callback: Function, functionOwner: any) {
     this.addGenericEventHandler(eventName, isMapEventHandler);
     const eventHandler = this.eventHandlers[mode];
     const handlerDictionary = isMapEventHandler ? eventHandler.mapHandlers : eventHandler.documentHandlers;

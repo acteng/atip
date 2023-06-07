@@ -4,6 +4,7 @@
   import type { PointTool } from "./point_tool";
   import { gjScheme, newFeatureId, formOpen, currentMode} from "../../../stores";
   import PointControls from "./PointControls.svelte";
+  import singletonEventManager from "../events";
 
   const thisMode = "point";
 
@@ -16,6 +17,9 @@
   export function stop() {
     pointTool.stop();
   }
+
+  singletonEventManager.updateEventHandlerForSpecificMode("point", true, "click", pointTool.onClick, pointTool);
+  singletonEventManager.updateEventHandlerForSpecificMode("point", true, "mousemove", pointTool.onMouseMove, pointTool);
 
   pointTool.addEventListenerSuccess((feature) => {
     if ($currentMode == thisMode) {
