@@ -27,7 +27,7 @@
   import routeIcon from "../../../assets/route.svg";
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
-  import { DefaultEventHandler } from "../../default_event_handler";
+  import { DefaultEventHandler } from "./default_event_handler";
   import { get } from "svelte/store";
 
   export let routeSnapperUrl: string;
