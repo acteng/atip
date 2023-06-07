@@ -24,6 +24,8 @@
   interface Scheme {
     scheme_reference: string;
     authority_or_region: string;
+    capital_scheme_id: string;
+    funding_programme: string;
     num_features: number;
   }
 
@@ -104,14 +106,17 @@
   function addSchemeToSidebar(gj: GeoJSON) {
     let byScheme = {};
 
-    for (let feature of gj.features) {
-      let p = feature.properties;
-      byScheme[p.scheme_reference] ||= {
-        scheme_reference: p.scheme_reference,
-        authority_or_region: p.authority_or_region,
+    // Assume the input has a top-level dictionary keyed by scheme_reference
+    for (let [scheme_reference, scheme] of Object.entries(gj.schemes)) {
+      byScheme[scheme_reference] = {
+        scheme_reference,
         num_features: 0,
+        ...scheme,
       };
-      byScheme[p.scheme_reference].num_features++;
+    }
+
+    for (let feature of gj.features) {
+      byScheme[feature.properties.scheme_reference].num_features++;
     }
 
     schemes = Object.values(byScheme);
@@ -186,6 +191,8 @@
           >
             <ul>
               <li>Authority or region: {scheme.authority_or_region}</li>
+              <li>Capital scheme ID: {scheme.capital_scheme_id}</li>
+              <li>Funding programme: {scheme.funding_programme}</li>
               <li>
                 <button type="button" on:click={() => showScheme(scheme)}
                   >Show on map</button
