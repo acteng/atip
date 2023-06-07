@@ -108,7 +108,6 @@ export interface EventHandler {
     dragstart: Function;
   };
   documentHandlers: {
-    click: Function;
     keyPress: Function;
     keyUp: Function;
     keyDown: Function;
