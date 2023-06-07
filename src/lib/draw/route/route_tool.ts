@@ -12,7 +12,7 @@ import {
   overwritePolygonLayer,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
-import type { Mode } from "../../../types";
+import type { EventHandler, Mode } from "../../../types";
 
 const source = "route-snapper";
 
@@ -269,7 +269,6 @@ export class RouteTool {
     this.map.removeLayer("route-lines");
     this.map.removeLayer("route-polygons");
     this.map.removeSource("route-snapper");
-    this.events.tearDown();
   }
 
   addEventListenerSuccessRoute(
@@ -328,6 +327,18 @@ export class RouteTool {
     this.inner.setConfig({ ...config, area_mode: false });
     this.redraw();
   }
+
+  setHandlers = (eventHandler: EventHandler) => {
+    eventHandler.mapHandlers.mousemove = this.onMouseMove;
+    eventHandler.mapHandlers.click = this.onClick;
+    eventHandler.mapHandlers.mousemove = this.onMouseMove;
+    eventHandler.mapHandlers.dblclick = this.onDoubleClick;
+    eventHandler.mapHandlers.dragstart = this.onDragStart;
+    eventHandler.mapHandlers.mouseup = this.onMouseUp;
+    eventHandler.documentHandlers.keyPress = this.onKeyPress;
+    eventHandler.documentHandlers.keyDown = this.onKeyDown;
+    eventHandler.documentHandlers.keyUp = this.onKeyUp;
+  }; 
 
   private redraw() {
     (this.map.getSource(source) as GeoJSONSource).setData(

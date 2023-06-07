@@ -6,7 +6,12 @@
   import type { PolygonTool } from "./polygon/polygon_tool";
   import type { RouteTool } from "./route/route_tool";
   import { map, gjScheme, mapHover, currentMode } from "../../stores";
-  import type { EventHandler, Feature, FeatureUnion, MapEvent } from "../../types";
+  import type {
+    EventHandler,
+    Feature,
+    FeatureUnion,
+    MapEvent,
+  } from "../../types";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
@@ -28,12 +33,6 @@
     | "route"
     | null = null;
 
-
-  // Calculate hover
-  eventHandler.mapHandlers["mousemove"] = onMouseMove;
-  eventHandler.mapHandlers["mouseout"] = onMouseOut;
-  eventHandler.mapHandlers["mouseclick"] = onClick;
-
   export function start() {}
   export function stop() {
     if (currentlyEditing) {
@@ -53,12 +52,6 @@
     currentlyEditingControls = null;
     mapHover.set(null);
   }
-
-  onDestroy(() => {
-    $map.off("mousemove", onMouseMove);
-    $map.off("mouseout", onMouseOut);
-    $map.off("click", onClick);
-  });
 
   // Handle successful edits
   routeTool.addEventListenerSuccessRoute((editedRoute) => {
@@ -86,6 +79,7 @@
       currentlyEditingControls = null;
     }
   });
+
   routeTool.addEventListenerSuccessArea((editedArea) => {
     if ($currentMode == thisMode) {
       gjScheme.update((gj) => {
@@ -109,6 +103,7 @@
       currentlyEditingControls = null;
     }
   });
+
   for (let tool of [pointTool, polygonTool]) {
     tool.addEventListenerSuccess((feature) => {
       if ($currentMode == thisMode) {
@@ -158,8 +153,8 @@
     });
   }
 
-  function onMouseMove(e: MapMouseEvent) {
-    if ($currentMode == thisMode && currentlyEditing == null) {
+  const onMouseMove = (e: MapMouseEvent) => {
+    if (currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -169,16 +164,16 @@
       });
       mapHover.set((results[0]?.id as number) || null);
     }
-  }
+  };
 
-  function onMouseOut() {
-    if ($currentMode == thisMode && currentlyEditing == null) {
+  const onMouseOut = () => {
+    if (currentlyEditing == null) {
       mapHover.set(null);
     }
-  }
+  };
 
-  function onClick(e: MapMouseEvent) {
-    if ($currentMode == thisMode && currentlyEditing == null) {
+  const onClick = (e: MapMouseEvent) => {
+    if (currentlyEditing == null) {
       let results = $map.queryRenderedFeatures(e.point, {
         layers: [
           "interventions-points",
@@ -190,7 +185,11 @@
         startEditing(results[0].id as number);
       }
     }
-  }
+  };
+
+  eventHandler.mapHandlers.mousemove = onMouseMove;
+  eventHandler.mapHandlers.mouseout = onMouseOut;
+  eventHandler.mapHandlers.click = onClick;
 
   function startEditing(id: number) {
     mapHover.set(null);

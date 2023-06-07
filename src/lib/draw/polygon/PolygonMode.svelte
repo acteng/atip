@@ -2,7 +2,12 @@
   import type { Polygon } from "geojson";
   import type { EventHandler, Feature, Mode } from "../../../types";
   import type { PolygonTool } from "./polygon_tool";
-  import { gjScheme, newFeatureId, formOpen, currentMode} from "../../../stores";
+  import {
+    gjScheme,
+    newFeatureId,
+    formOpen,
+    currentMode,
+  } from "../../../stores";
   import PolygonControls from "./PolygonControls.svelte";
 
   const thisMode = "free-polygon";
@@ -13,28 +18,26 @@
 
   export function start() {
     polygonTool.startNew();
+    polygonTool.setHandlers(eventHandler);
   }
   export function stop() {
     polygonTool.stop();
   }
 
   polygonTool.addEventListenerSuccess((feature) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "area";
-        gj.features.push(feature as Feature<Polygon>);
-        return gj;
-      });
+    gjScheme.update((gj) => {
+      feature.id = newFeatureId(gj);
+      feature.properties.intervention_type = "area";
+      gj.features.push(feature as Feature<Polygon>);
+      return gj;
+    });
 
-      changeMode("edit-attribute");
-      formOpen.set(feature.id as number);
-    }
+    changeMode("edit-attribute");
+    formOpen.set(feature.id as number);
   });
+  
   polygonTool.addEventListenerFailure(() => {
-    if ($currentMode == thisMode) {
-      changeMode("edit-attribute");
-    }
+    changeMode("edit-attribute");
   });
 </script>
 

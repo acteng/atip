@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import type { Mode } from "../types";
+  import type { Mode } from "../../../types";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
@@ -10,7 +10,7 @@
   import length from "@turf/length";
   import lineSplit from "@turf/line-split";
   import lineSlice from "@turf/line-slice";
-  import { gjScheme, map, newFeatureId } from "../../../stores";
+  import { gjScheme, map, newFeatureId, currentMode } from "../../../stores";
   import {
     emptyGeojson,
     overwriteSource,
@@ -23,7 +23,6 @@
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;
 
-  export let mode: Mode;
   export let changeMode: (m: Mode) => void;
   export let eventHandler: EventHandler;
 
@@ -36,14 +35,6 @@
   let cursor: Feature<Point> | null = null;
   // Index into gjScheme of what we're snapped to
   let snappedIndex: number | null = null;
-
-  $map.on("mousemove", onMouseMove);
-  $map.on("click", onClick);
-
-  onDestroy(() => {
-    $map.off("mousemove", onMouseMove);
-    $map.off("click", onClick);
-  });
 
   // Rendering
   let source = "split-route";
@@ -65,11 +56,7 @@
     ($map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
-  function onMouseMove(e: MapMouseEvent) {
-    if (mode != thisMode) {
-      return;
-    }
-
+  const onMouseMove = (e: MapMouseEvent) => {
     cursor = cursorFeature(e.lngLat.toArray(), false);
     snappedIndex = null;
 
@@ -105,13 +92,9 @@
       cursor = cursorFeature(candidates[0][1], true);
       snappedIndex = candidates[0][0];
     }
-  }
+  };
 
-  function onClick() {
-    if (mode != thisMode) {
-      return;
-    }
-
+  const onClick = () => {
     if (snappedIndex == null) {
       // We clicked the map, stop the tool
       changeMode("edit-attribute");
@@ -159,7 +142,10 @@
       // Stay in this mode, but reset state
       stop();
     }
-  }
+  };
+
+  eventHandler.mapHandlers.mousemove = onMouseMove;
+  eventHandler.mapHandlers.click = onClick;
 
   function cursorFeature(pt: number[], snapped: boolean): Feature<Point> {
     return {
@@ -257,14 +243,14 @@
 
   // The escape key isn't registered at all for keypress, so use keydown
   function onKeyDown(e: KeyboardEvent) {
-    if (mode == thisMode && e.key == "Escape") {
+    if (e.key == "Escape") {
       changeMode("edit-attribute");
       e.preventDefault();
     }
   }
 </script>
 
-{#if mode == thisMode}
+{#if $currentMode == thisMode}
   <CollapsibleCard label="Help">
     <ul>
       <li><b>Click</b> on a route to split it</li>

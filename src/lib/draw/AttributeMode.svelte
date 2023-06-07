@@ -23,18 +23,6 @@
     formOpen.set(null);
   }
 
-  // Calculate hover
-  $map.on("mousemove", onMouseMove);
-  $map.on("mouseout", onMouseOut);
-  // Handle clicking the hovered feature
-  $map.on("click", onClick);
-
-  onDestroy(() => {
-    $map.off("mousemove", onMouseMove);
-    $map.off("mouseout", onMouseOut);
-    $map.off("click", onClick);
-  });
-
   $: {
     let id = $openFromSidebar;
     if (id) {
@@ -61,41 +49,40 @@
     }
   }
 
-  function onMouseMove(e: MapMouseEvent) {
-    if ($currentMode == thisMode) {
-      let results = $map.queryRenderedFeatures(e.point, {
-        layers: [
-          "interventions-points",
-          "interventions-lines",
-          "interventions-polygons",
-        ],
-      });
-      mapHover.set((results[0]?.id as number) || null);
-    }
-  }
+  const onMouseMove = (e: MapMouseEvent) => {
+    let results = $map.queryRenderedFeatures(e.point, {
+      layers: [
+        "interventions-points",
+        "interventions-lines",
+        "interventions-polygons",
+      ],
+    });
+    mapHover.set((results[0]?.id as number) || null);
+  };
 
-  function onMouseOut() {
-    if ($currentMode == thisMode) {
-      mapHover.set(null);
-    }
-  }
+  const onMouseOut = () => {
+    mapHover.set(null);
+  };
 
-  function onClick(e: MapMouseEvent) {
-    if ($currentMode == thisMode) {
-      let results = $map.queryRenderedFeatures(e.point, {
-        layers: [
-          "interventions-points",
-          "interventions-lines",
-          "interventions-polygons",
-        ],
-      });
-      if (results.length > 0) {
-        formOpen.set(results[0].id as number);
-      } else {
-        formOpen.set(null);
-      }
+  const onClick = (e: MapMouseEvent) => {
+    let results = $map.queryRenderedFeatures(e.point, {
+      layers: [
+        "interventions-points",
+        "interventions-lines",
+        "interventions-polygons",
+      ],
+    });
+    if (results.length > 0) {
+      formOpen.set(results[0].id as number);
+    } else {
+      formOpen.set(null);
     }
-  }
+  };
+
+  eventHandler.mapHandlers.mousemove = onMouseMove;
+  eventHandler.mapHandlers.mouseout = onMouseOut;
+  // Handle clicking the hovered feature
+  eventHandler.mapHandlers.click = onClick;
 </script>
 
 {#if $currentMode == thisMode}

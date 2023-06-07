@@ -2,7 +2,12 @@
   import type { Polygon } from "geojson";
   import type { EventHandler, Feature, Mode } from "../../../types";
   import type { RouteTool } from "../route/route_tool";
-  import { gjScheme, newFeatureId, formOpen, currentMode } from "../../../stores";
+  import {
+    gjScheme,
+    newFeatureId,
+    formOpen,
+    currentMode,
+  } from "../../../stores";
   import SnapPolygonControls from "./SnapPolygonControls.svelte";
 
   const thisMode = "snap-polygon";
@@ -13,28 +18,27 @@
 
   export function start() {
     routeTool.startArea();
+    routeTool.setHandlers(eventHandler);
   }
+
   export function stop() {
     routeTool.stop();
   }
 
   routeTool.addEventListenerSuccessArea((feature) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "area";
-        gj.features.push(feature as Feature<Polygon>);
-        return gj;
-      });
+    gjScheme.update((gj) => {
+      feature.id = newFeatureId(gj);
+      feature.properties.intervention_type = "area";
+      gj.features.push(feature as Feature<Polygon>);
+      return gj;
+    });
 
-      changeMode("edit-attribute");
-      formOpen.set(feature.id as number);
-    }
+    changeMode("edit-attribute");
+    formOpen.set(feature.id as number);
   });
+
   routeTool.addEventListenerFailure(() => {
-    if ($currentMode == thisMode) {
-      changeMode("edit-attribute");
-    }
+    changeMode("edit-attribute");
   });
 </script>
 
