@@ -62,18 +62,12 @@
 
   MapEvents.forEach((eventName) => {
     $map.on(eventName, (event) => {
-      console.log(
-        `map event happening ${$currentMode}, ${get(currentMode)}, ${eventName}`
-      );
       eventHandlers[get(currentMode)].mapHandlers[eventName](event);
     });
   });
 
   DocumentEvents.forEach((eventName) => {
-    $map.on(eventName, (event) => {
-      console.log(
-        `dom event happening ${$currentMode}, ${get(currentMode)}, ${eventName}`
-      );
+    document.addEventListener(eventName, (event) => {
       eventHandlers[get(currentMode)].documentHandlers[eventName](event);
     });
   });
@@ -107,6 +101,18 @@
     pointTool?.tearDown();
     polygonTool?.tearDown();
     routeTool?.tearDown();
+
+    MapEvents.forEach((eventName) => {
+      $map.off(eventName, (event) => {
+        eventHandlers[get(currentMode)].mapHandlers[eventName](event);
+      });
+    });
+
+    DocumentEvents.forEach((eventName) => {
+      document.removeEventListener(eventName, (event) => {
+        eventHandlers[get(currentMode)].documentHandlers[eventName](event);
+      });
+    });
   });
 </script>
 

@@ -46,11 +46,7 @@
     ($map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
-  const onMouseMove = (e: MapMouseEvent) => {
-    cursor = cursorFeature(e.lngLat.toArray());
-  };
-
-  const onClick = () => {
+  eventHandler.mapHandlers.click = () => {
     let [lon, lat] = cursor.geometry.coordinates;
     if ($userSettings.streetViewImagery == "google") {
       window.open(
@@ -65,8 +61,16 @@
     }
   };
 
-  eventHandler.mapHandlers.click = onClick;
-  eventHandler.mapHandlers.mousemove = onMouseMove;
+  eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
+    cursor = cursorFeature(e.lngLat.toArray());
+  };
+
+  eventHandler.documentHandlers.keyDown = (e: KeyboardEvent) => {
+    if (e.key == "Escape") {
+      changeMode("edit-attribute");
+      e.preventDefault();
+    }
+  };
 
   function cursorFeature(pt: number[]): Feature<Point> {
     return {
@@ -77,15 +81,6 @@
         coordinates: pt,
       },
     };
-  }
-
-  // The escape key isn't registered at all for keypress, so use keydown
-  // TODO This doesn't use eventHandler, so it might run even when the mode isn't active.
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key == "Escape") {
-      changeMode("edit-attribute");
-      e.preventDefault();
-    }
   }
 </script>
 
