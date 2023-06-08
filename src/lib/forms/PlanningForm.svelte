@@ -1,8 +1,8 @@
 <script lang="ts">
   import schemaJson from "../../schemas/planning.json";
+  import type { InterventionProps } from "../../types";
   import AutogenerateForm from "./AutogenerateForm.svelte";
   import type { Field } from "./types";
-  import type { InterventionProps } from "../../types";
 
   export let props: InterventionProps;
 

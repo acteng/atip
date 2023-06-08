@@ -1,7 +1,7 @@
 <script lang="ts">
   import { routeInfo } from "../../stores";
-  import SpeedLimits from "../layers/SpeedLimits.svelte";
   import LaneDetails from "../layers/LaneDetails.svelte";
+  import SpeedLimits from "../layers/SpeedLimits.svelte";
 
   export let id: number;
 

@@ -3,19 +3,19 @@
   // TODO After figuring out the features of this page, work on the errors
   // here. Need to decide how much we use gjScheme, and what new feature-level
   // properties to expect.
-  import { onDestroy } from "svelte";
   import type { GeoJSON } from "geojson";
-  import Map from "../lib/Map.svelte";
-  import Layout from "../lib/common/Layout.svelte";
-  import FileInput from "../lib/common/FileInput.svelte";
-  import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
-  import { map, gjScheme } from "../stores";
-  import MapTooltips from "../lib/common/MapTooltips.svelte";
-  import CollapsibleCard from "../lib/common/CollapsibleCard.svelte";
+  import { onDestroy } from "svelte";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
+  import CollapsibleCard from "../lib/common/CollapsibleCard.svelte";
+  import FileInput from "../lib/common/FileInput.svelte";
+  import Layout from "../lib/common/Layout.svelte";
+  import MapTooltips from "../lib/common/MapTooltips.svelte";
+  import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import Legend from "../lib/Legend.svelte";
+  import Map from "../lib/Map.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
   import { bbox } from "../maplibre_helpers";
+  import { gjScheme, map } from "../stores";
 
   const params = new URLSearchParams(window.location.search);
   let style: string = params.get("style") || "streets";

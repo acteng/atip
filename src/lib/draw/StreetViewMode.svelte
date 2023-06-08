@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
-  import type { Mode } from "../../types";
-  import type { EventHandler } from "./event_handler";
-  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
-  import type { Feature, Point } from "geojson";
   import { point } from "@turf/helpers";
-  import { map, userSettings, currentMode } from "../../stores";
+  import type { Feature, Point } from "geojson";
+  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
+  import { onDestroy } from "svelte";
   import {
     emptyGeojson,
-    overwriteSource,
     overwriteCircleLayer,
+    overwriteSource,
   } from "../../maplibre_helpers";
+  import { currentMode, map, userSettings } from "../../stores";
+  import type { Mode } from "../../types";
   import CollapsibleCard from "../common/CollapsibleCard.svelte";
+  import type { EventHandler } from "./event_handler";
 
   export let eventHandler: EventHandler;
 

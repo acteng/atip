@@ -1,12 +1,12 @@
 import type { Point, Position } from "geojson";
-import type { Map, GeoJSONSource, MapMouseEvent } from "maplibre-gl";
+import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
+import { circleRadius, colors } from "../../../colors";
 import {
   emptyGeojson,
-  overwriteSource,
   overwriteCircleLayer,
+  overwriteSource,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
-import { colors, circleRadius } from "../../../colors";
 import type { EventHandler } from "../event_handler";
 
 const source = "edit-point-mode";

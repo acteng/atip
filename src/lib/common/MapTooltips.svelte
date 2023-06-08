@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { Popup } from "maplibre-gl";
-  import { map } from "../../stores";
-  import { type MapMouseEvent } from "maplibre-gl";
+  import { Popup, type MapMouseEvent } from "maplibre-gl";
   import { onDestroy } from "svelte";
+  import { map } from "../../stores";
 
   export let layers: string[];
   export let contents: (props: { [name: string]: any }) => string;

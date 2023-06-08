@@ -1,15 +1,15 @@
 <script lang="ts">
   import { slide } from "svelte/transition";
   import {
-    type Field,
-    isStruct,
-    isEnum,
     isBarewordEnumCase,
-    isSimpleEnumCase,
+    isCheckbox,
+    isEnum,
     isNumber,
     isOneLiner,
+    isSimpleEnumCase,
+    isStruct,
     isTextbox,
-    isCheckbox,
+    type Field,
   } from "./types";
 
   // This component creates a form to collect the property described by spec, and put the result in value

@@ -1,23 +1,23 @@
-import type { Feature, Point, Position, Polygon, LineString } from "geojson";
+import nearestPointOnLine from "@turf/nearest-point-on-line";
+import type { Feature, LineString, Point, Polygon, Position } from "geojson";
 import type {
+  GeoJSONSource,
   Map,
   MapLayerMouseEvent,
-  GeoJSONSource,
   MapMouseEvent,
 } from "maplibre-gl";
-import nearestPointOnLine from "@turf/nearest-point-on-line";
+import { circleRadius, colors } from "../../../colors";
 import {
   emptyGeojson,
-  overwriteSource,
-  overwriteCircleLayer,
-  overwritePolygonLayer,
-  overwriteLineLayer,
+  isLine,
   isPoint,
   isPolygon,
-  isLine,
+  overwriteCircleLayer,
+  overwriteLineLayer,
+  overwritePolygonLayer,
+  overwriteSource,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
-import { colors, circleRadius } from "../../../colors";
 import type { EventHandler } from "../event_handler";
 
 const source = "edit-polygon-mode";

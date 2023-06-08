@@ -1,23 +1,23 @@
 <script lang="ts">
   // This component can only be created once routeInfo is ready
 
-  import { onMount, onDestroy } from "svelte";
-  import {
-    emptyGeojson,
-    overwriteSource,
-    overwriteLineLayer,
-  } from "../../maplibre_helpers";
   import type { LineString } from "geojson";
   import type {
     DataDrivenPropertyValueSpecification,
     GeoJSONSource,
   } from "maplibre-gl";
-  import type { Feature } from "../../types";
+  import { onDestroy, onMount } from "svelte";
   import { lineWidth } from "../../colors";
-  import { map, gjScheme, routeInfo } from "../../stores";
-  import MapTooltips from "../common/MapTooltips.svelte";
+  import {
+    emptyGeojson,
+    overwriteLineLayer,
+    overwriteSource,
+  } from "../../maplibre_helpers";
+  import { gjScheme, map, routeInfo } from "../../stores";
+  import type { Feature } from "../../types";
   import DiscreteLegend from "../common/DiscreteLegend.svelte";
   import HelpIcon from "../common/HelpIcon.svelte";
+  import MapTooltips from "../common/MapTooltips.svelte";
 
   // Show along a route if specified, or show all otherwise
   export let id: number | undefined;

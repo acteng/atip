@@ -1,9 +1,9 @@
 import { readFile } from "fs/promises";
-import { test, expect, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import {
-  loadInitialPage,
-  clickMap,
   clearExistingInterventions,
+  clickMap,
+  loadInitialPage,
 } from "./shared.ts";
 
 let page: Page;

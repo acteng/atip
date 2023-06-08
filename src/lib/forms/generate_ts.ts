@@ -1,16 +1,16 @@
-import { argv } from "node:process";
 import * as fs from "fs";
+import { argv } from "node:process";
 // TODO Normally we leave off the file extension, but ts-node config is somehow wrong
 import {
-  type Field,
-  isStruct,
-  isEnum,
   isBarewordEnumCase,
-  isSimpleEnumCase,
-  isOneLiner,
-  isTextbox,
-  isNumber,
   isCheckbox,
+  isEnum,
+  isNumber,
+  isOneLiner,
+  isSimpleEnumCase,
+  isStruct,
+  isTextbox,
+  type Field,
 } from "./types.js";
 
 // This script transforms a schema expressed in JSON into TypeScript types

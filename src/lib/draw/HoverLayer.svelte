@@ -1,21 +1,21 @@
 <script lang="ts">
   import type { GeoJSONSource } from "maplibre-gl";
+  import { circleRadius, colors, lineWidth } from "../../colors";
   import {
-    overwriteLineLayer,
-    isPolygon,
-    isPoint,
-    isLine,
-    overwriteCircleLayer,
-    overwriteSource,
     emptyGeojson,
+    isLine,
+    isPoint,
+    isPolygon,
+    overwriteCircleLayer,
+    overwriteLineLayer,
+    overwriteSource,
   } from "../../maplibre_helpers";
-  import { colors, lineWidth, circleRadius } from "../../colors";
   import {
-    gjScheme,
     formOpen,
+    gjScheme,
+    map,
     mapHover,
     sidebarHover,
-    map,
   } from "../../stores";
 
   let source = "hover";

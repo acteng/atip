@@ -1,15 +1,15 @@
-import { JsRouteSnapper } from "route-snapper";
-import type { Map, GeoJSONSource, MapMouseEvent } from "maplibre-gl";
 import type { Feature, LineString, Polygon } from "geojson";
+import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
+import { JsRouteSnapper } from "route-snapper";
 import {
   emptyGeojson,
-  isPoint,
   isLine,
+  isPoint,
   isPolygon,
-  overwriteSource,
   overwriteCircleLayer,
   overwriteLineLayer,
   overwritePolygonLayer,
+  overwriteSource,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import type { EventHandler } from "../event_handler";

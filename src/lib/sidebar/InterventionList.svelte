@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { deleteIntervention, formOpen, gjScheme } from "../../stores";
   import type { FeatureUnion, Schema } from "../../types";
+  import CriticalsForm from "../forms/CriticalsForm.svelte";
   import FormV1 from "../forms/FormV1.svelte";
   import FormV2 from "../forms/FormV2.svelte";
   import PlanningForm from "../forms/PlanningForm.svelte";
-  import CriticalsForm from "../forms/CriticalsForm.svelte";
   import AccordionItem from "./AccordionItem.svelte";
-  import { gjScheme, formOpen, deleteIntervention } from "../../stores";
 
   export let schema: Schema;
 

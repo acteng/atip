@@ -1,4 +1,4 @@
-import { type Page, type Browser } from "playwright";
+import { type Browser, type Page } from "playwright";
 
 export const loadInitialPage = async (browser: Browser): Promise<Page> => {
   const page: Page = await browser.newPage();

@@ -1,7 +1,7 @@
-import type { Point, LineString, Polygon } from "geojson";
-import type { Intervention } from "./schemas/v2";
-import type { Planning } from "./schemas/planning";
+import type { LineString, Point, Polygon } from "geojson";
 import type { CriticalIssue } from "./schemas/criticals";
+import type { Planning } from "./schemas/planning";
+import type { Intervention } from "./schemas/v2";
 
 export type Schema = "v1" | "v2" | "planning" | "criticals";
 

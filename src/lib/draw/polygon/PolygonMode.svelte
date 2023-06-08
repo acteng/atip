@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import type { EventHandler } from "../event_handler";
-  import type { PolygonTool } from "./polygon_tool";
-  import type { Feature, Mode } from "../../../types";
   import {
+    currentMode,
+    formOpen,
     gjScheme,
     newFeatureId,
-    formOpen,
-    currentMode,
   } from "../../../stores";
+  import type { Feature, Mode } from "../../../types";
+  import type { EventHandler } from "../event_handler";
+  import type { PolygonTool } from "./polygon_tool";
   import PolygonControls from "./PolygonControls.svelte";
 
   const thisMode = "free-polygon";

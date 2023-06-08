@@ -1,23 +1,22 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
-  import type { Mode } from "../../../types";
-  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
-  // Note we don't use our specialization of Feature here
-  import type { Feature, LineString, Point, Position } from "geojson";
-  import type { Feature as OurFeature } from "../../../types";
-  import type { EventHandler } from "../event_handler";
-  import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
-  import lineSplit from "@turf/line-split";
   import lineSlice from "@turf/line-slice";
-  import { gjScheme, map, newFeatureId, currentMode } from "../../../stores";
+  import lineSplit from "@turf/line-split";
+  import nearestPointOnLine from "@turf/nearest-point-on-line";
+  // Note we don't use our specialization of Feature here
+  import type { Feature, LineString, Point, Position } from "geojson";
+  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
+  import { onDestroy } from "svelte";
   import {
     emptyGeojson,
-    overwriteSource,
     overwriteCircleLayer,
+    overwriteSource,
   } from "../../../maplibre_helpers";
+  import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
+  import type { Mode, Feature as OurFeature } from "../../../types";
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import type { EventHandler } from "../event_handler";
 
   const thisMode = "split-route";
 

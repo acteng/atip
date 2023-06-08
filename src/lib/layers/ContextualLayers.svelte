@@ -1,6 +1,6 @@
 <script lang="ts">
-  import SpeedLimits from "./SpeedLimits.svelte";
   import { formOpen, routeInfo } from "../../stores";
+  import SpeedLimits from "./SpeedLimits.svelte";
 
   let show: "none" | "speed limits" = "none";
 

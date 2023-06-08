@@ -1,19 +1,19 @@
 <script lang="ts">
   import type {
-    GeoJSONSource,
     DataDrivenPropertyValueSpecification,
     FilterSpecification,
+    GeoJSONSource,
   } from "maplibre-gl";
+  import { circleRadius, colors, lineWidth } from "../../colors";
   import {
-    isPolygon,
-    isPoint,
     isLine,
+    isPoint,
+    isPolygon,
     overwriteCircleLayer,
-    overwritePolygonLayer,
     overwriteLineLayer,
+    overwritePolygonLayer,
     overwriteSource,
   } from "../../maplibre_helpers";
-  import { colors, circleRadius, lineWidth } from "../../colors";
   import { gjScheme, map } from "../../stores";
   import type { Schema } from "../../types";
 

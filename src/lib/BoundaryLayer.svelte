@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { FeatureCollection, Polygon } from "geojson";
   import mask from "@turf/mask";
-  import {
-    overwriteSource,
-    overwritePolygonLayer,
-    bbox,
-  } from "../maplibre_helpers";
+  import type { FeatureCollection, Polygon } from "geojson";
   import { getContext } from "svelte";
+  import {
+    bbox,
+    overwritePolygonLayer,
+    overwriteSource,
+  } from "../maplibre_helpers";
   import { map } from "../stores";
 
   export let boundaryGeojson: FeatureCollection<Polygon>;
