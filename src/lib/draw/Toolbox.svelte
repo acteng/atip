@@ -126,7 +126,7 @@
     <AttributeMode
       bind:this={attributeMode}
       {changeMode}
-      bind:eventHandler={eventHandlers["edit-attribute"]}
+      eventHandler={eventHandlers["edit-attribute"]}
     />
   </div>
   <div>
@@ -142,7 +142,7 @@
         {pointTool}
         {polygonTool}
         {routeTool}
-        bind:eventHandler={eventHandlers["edit-geometry"]}
+        eventHandler={eventHandlers["edit-geometry"]}
       />
     {/if}
   </div>
@@ -159,7 +159,7 @@
       bind:this={pointMode}
       {changeMode}
       {pointTool}
-      bind:eventHandler={eventHandlers["point"]}
+      eventHandler={eventHandlers["point"]}
     />
   </div>
   <div>
@@ -173,7 +173,7 @@
       bind:this={polygonMode}
       {changeMode}
       {polygonTool}
-      bind:eventHandler={eventHandlers["free-polygon"]}
+      eventHandler={eventHandlers["free-polygon"]}
     />
   </div>
   <div>
@@ -188,7 +188,7 @@
         bind:this={snapPolygonMode}
         {changeMode}
         {routeTool}
-        bind:eventHandler={eventHandlers["snap-polygon"]}
+        eventHandler={eventHandlers["snap-polygon"]}
       />
     {/if}
   </div>
@@ -206,7 +206,7 @@
       {changeMode}
       url={routeSnapperUrl}
       bind:routeTool
-      bind:eventHandler={eventHandlers["route"]}
+      eventHandler={eventHandlers["route"]}
     />
   </div>
   <div>
@@ -221,7 +221,7 @@
     <SplitRouteMode
       bind:this={splitRouteMode}
       {changeMode}
-      bind:eventHandler={eventHandlers["split-route"]}
+      eventHandler={eventHandlers["split-route"]}
     />
   </div>
   <div>
@@ -234,7 +234,7 @@
     <StreetViewMode
       bind:this={streetViewMode}
       {changeMode}
-      bind:eventHandler={eventHandlers["street-view"]}
+      eventHandler={eventHandlers["street-view"]}
     />
   </div>
 </div>
