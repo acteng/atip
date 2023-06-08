@@ -8,11 +8,7 @@ export const MapEvents = [
   "dragstart",
 ];
 
-export type MapEvent = (typeof MapEvents)[number];
-
 export const DocumentEvents = ["keyPress", "keyUp", "keyDown"];
-
-export type DocumentEvent = (typeof DocumentEvents)[number];
 
 export interface EventHandler {
   mapHandlers: {
