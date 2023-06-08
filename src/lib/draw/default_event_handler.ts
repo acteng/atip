@@ -1,5 +1,5 @@
 import { MapMouseEvent } from "maplibre-gl";
-import type { EventHandler } from "../../types";
+import type { EventHandler } from "./types";
 
 export class DefaultEventHandler {
   constructor() {

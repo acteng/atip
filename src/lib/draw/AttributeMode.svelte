@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { type MapMouseEvent } from "maplibre-gl";
-  import type { EventHandler, Mode } from "../../types";
+  import type { Mode } from "../../types";
+  import type { EventHandler } from "./types";
   import { bbox } from "../../maplibre_helpers";
   import {
     map,

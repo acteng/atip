@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
   import { map } from "../../stores";
-  import type { EventHandler, Schema } from "../../types";
+  import type { Schema } from "../../types";
+  import { type EventHandler, MapEvents, DocumentEvents } from "./types";
   import { PointTool } from "./point/point_tool";
   import { PolygonTool } from "./polygon/polygon_tool";
   import { RouteTool } from "./route/route_tool";
   import type { Mode } from "../../types";
-  import { MapEvents, DocumentEvents } from "../../types";
   import { currentMode } from "../../stores";
 
   import SelectToolButton from "./SelectToolButton.svelte";
