@@ -15,7 +15,9 @@
     "checkJs": true,
     "isolatedModules": true,
     "types": ["node", "vite/client"],
-    "strict": false
+    "strict": false,
+    /* Necessary for Playwright tests */
+    "allowImportingTsExtensions": true
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "tests/**/*"]
 }
