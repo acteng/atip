@@ -145,6 +145,14 @@
     }
   };
 
+  // The escape key isn't registered at all for keypress, so use keydown
+  eventHandler.documentHandlers.onKeyDown = (e: KeyboardEvent) => {
+    if (e.key == "Escape") {
+      changeMode("edit-attribute");
+      e.preventDefault();
+    }
+  };
+
   function cursorFeature(pt: number[], snapped: boolean): Feature<Point> {
     return {
       type: "Feature",
@@ -238,14 +246,6 @@
     let sliced = lineSlice(start, point, line);
     return length(sliced, { units: "kilometers" }) * 1000.0;
   }
-
-  // The escape key isn't registered at all for keypress, so use keydown
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key == "Escape") {
-      changeMode("edit-attribute");
-      e.preventDefault();
-    }
-  }
 </script>
 
 {#if $currentMode == thisMode}
@@ -256,5 +256,3 @@
     </ul>
   </CollapsibleCard>
 {/if}
-
-<svelte:window on:keydown={onKeyDown} />
