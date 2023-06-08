@@ -12,7 +12,6 @@ import {
   overwritePolygonLayer,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
-import type { Mode } from "../../../types";
 import type { EventHandler } from "../event_handler";
 
 const source = "route-snapper";
@@ -21,7 +20,6 @@ const circleRadiusPixels = 10;
 const snapDistancePixels = 30;
 
 export class RouteTool {
-  mode: Mode;
   map: Map;
   inner: JsRouteSnapper;
   active: boolean;
@@ -29,7 +27,7 @@ export class RouteTool {
   eventListenersSuccessArea: ((f: FeatureWithProps<Polygon>) => void)[];
   eventListenersFailure: (() => void)[];
 
-  constructor(map: Map, graphBytes: Uint8Array, mode: Mode) {
+  constructor(map: Map, graphBytes: Uint8Array) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(graphBytes);
