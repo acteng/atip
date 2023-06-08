@@ -175,6 +175,10 @@
     }
   };
 
+  // Many event handlers below forward to some/all tools, even if we're not
+  // currently editing that type of object. This is safe, because they all ignore
+  // events unless active.
+
   const onClick = (e: MapMouseEvent) => {
     routeTool.onClick();
     pointTool.onClick();
