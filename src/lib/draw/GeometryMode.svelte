@@ -149,7 +149,7 @@
     });
   }
 
-  const onMouseMove = (e: MapMouseEvent) => {
+  eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
     routeTool.onMouseMove(e);
     pointTool.onMouseMove(e);
     polygonTool.onMouseMove(e);
@@ -165,7 +165,7 @@
     }
   };
 
-  const onMouseOut = () => {
+  eventHandler.mapHandlers.mouseout = () => {
     if (currentlyEditing == null) {
       mapHover.set(null);
     }
@@ -175,7 +175,7 @@
   // currently editing that type of object. This is safe, because they all ignore
   // events unless active.
 
-  const onClick = (e: MapMouseEvent) => {
+  eventHandler.mapHandlers.click = (e: MapMouseEvent) => {
     routeTool.onClick();
     pointTool.onClick();
     polygonTool.onClick(e);
@@ -194,48 +194,36 @@
     }
   };
 
-  const onMouseDown = (e: MapMouseEvent) => {
+  eventHandler.mapHandlers.mousedown = (e: MapMouseEvent) => {
     polygonTool.onMouseDown(e);
   };
 
-  const onDoubleClick = (e: MapMouseEvent) => {
+  eventHandler.mapHandlers.dblclick = (e: MapMouseEvent) => {
     routeTool.onDoubleClick(e);
     polygonTool.onDoubleClick(e);
   };
 
-  const onDragStart = () => {
+  eventHandler.mapHandlers.dragstart = () => {
     routeTool.onDragStart();
   };
 
-  const onMouseUp = () => {
+  eventHandler.mapHandlers.mouseup = () => {
     routeTool.onMouseUp();
     polygonTool.onMouseUp();
   };
 
-  const onKeyPress = (e: KeyboardEvent) => {
+  eventHandler.documentHandlers.keyPress = (e: KeyboardEvent) => {
     routeTool.onKeyPress(e);
     polygonTool.onKeypress(e);
   };
 
-  const onKeyDown = (e: KeyboardEvent) => {
+  eventHandler.documentHandlers.keyDown = (e: KeyboardEvent) => {
     routeTool.onKeyDown(e);
   };
 
-  const onKeyUp = (e: KeyboardEvent) => {
+  eventHandler.documentHandlers.keyUp = (e: KeyboardEvent) => {
     routeTool.onKeyUp(e);
   };
-
-  eventHandler.mapHandlers.mousemove = onMouseMove;
-  eventHandler.mapHandlers.mouseout = onMouseOut;
-  eventHandler.mapHandlers.click = onClick;
-  eventHandler.mapHandlers.mousedown = onMouseDown;
-  eventHandler.mapHandlers.dblclick = onDoubleClick;
-  eventHandler.mapHandlers.dragstart = onDragStart;
-  eventHandler.mapHandlers.mouseup = onMouseUp;
-
-  eventHandler.documentHandlers.keyPress = onKeyPress;
-  eventHandler.documentHandlers.keyDown = onKeyDown;
-  eventHandler.documentHandlers.keyUp = onKeyUp;
 
   function startEditing(id: number) {
     mapHover.set(null);

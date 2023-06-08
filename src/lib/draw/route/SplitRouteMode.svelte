@@ -57,7 +57,7 @@
     ($map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
-  const onMouseMove = (e: MapMouseEvent) => {
+  eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
     cursor = cursorFeature(e.lngLat.toArray(), false);
     snappedIndex = null;
 
@@ -95,7 +95,7 @@
     }
   };
 
-  const onClick = () => {
+  eventHandler.mapHandlers.click = () => {
     if (snappedIndex == null) {
       // We clicked the map, stop the tool
       changeMode("edit-attribute");
@@ -144,9 +144,6 @@
       stop();
     }
   };
-
-  eventHandler.mapHandlers.mousemove = onMouseMove;
-  eventHandler.mapHandlers.click = onClick;
 
   function cursorFeature(pt: number[], snapped: boolean): Feature<Point> {
     return {
