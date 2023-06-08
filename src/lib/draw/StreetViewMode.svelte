@@ -112,5 +112,3 @@
     </ul>
   </CollapsibleCard>
 {/if}
-
-<svelte:window on:keydown={onKeyDown} />
