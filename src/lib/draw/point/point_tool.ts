@@ -7,7 +7,7 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { colors, circleRadius } from "../../../colors";
-import type { EventHandler } from "../types";
+import type { EventHandler } from "../event_handler";
 
 const source = "edit-point-mode";
 

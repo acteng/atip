@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Point } from "geojson";
   import type { Feature, Mode } from "../../../types";
-  import type { EventHandler } from "../types";
+  import type { EventHandler } from "../event_handler";
   import type { PointTool } from "./point_tool";
   import {
     gjScheme,

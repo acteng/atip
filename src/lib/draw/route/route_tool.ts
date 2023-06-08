@@ -13,7 +13,7 @@ import {
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import type { Mode } from "../../../types";
-import type { EventHandler } from "../types";
+import type { EventHandler } from "../event_handler";
 
 const source = "route-snapper";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import type { EventHandler } from "../types";
+  import type { EventHandler } from "../event_handler";
   import type { PolygonTool } from "./polygon_tool";
   import type { Feature, Mode } from "../../../types";
   import {
