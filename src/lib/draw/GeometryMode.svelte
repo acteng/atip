@@ -6,11 +6,8 @@
   import type { PolygonTool } from "./polygon/polygon_tool";
   import type { RouteTool } from "./route/route_tool";
   import { map, gjScheme, mapHover, currentMode } from "../../stores";
-  import type {
-    Feature,
-    FeatureUnion,
-  } from "../../types";
-  import type { EventHandler } from "./types";
+  import type { Feature, FeatureUnion } from "../../types";
+  import type { EventHandler } from "./event_handler";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";

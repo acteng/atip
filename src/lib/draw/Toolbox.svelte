@@ -2,7 +2,6 @@
   import { onDestroy } from "svelte";
   import { map } from "../../stores";
   import type { Schema } from "../../types";
-  import { type EventHandler, MapEvents, DocumentEvents } from "./types";
   import { PointTool } from "./point/point_tool";
   import { PolygonTool } from "./polygon/polygon_tool";
   import { RouteTool } from "./route/route_tool";
@@ -27,7 +26,7 @@
   import routeIcon from "../../../assets/route.svg";
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
-  import { DefaultEventHandler } from "./default_event_handler";
+  import { EventHandler, MapEvents, DocumentEvents } from "./event_handler";
   import { get } from "svelte/store";
 
   export let routeSnapperUrl: string;
@@ -50,14 +49,14 @@
   let streetViewMode: StreetViewMode;
 
   const eventHandlers: { [mode in Mode]: EventHandler } = {
-    "edit-attribute": new DefaultEventHandler(),
-    "edit-geometry": new DefaultEventHandler(),
-    route: new DefaultEventHandler(),
-    point: new DefaultEventHandler(),
-    "free-polygon": new DefaultEventHandler(),
-    "snap-polygon": new DefaultEventHandler(),
-    "split-route": new DefaultEventHandler(),
-    "street-view": new DefaultEventHandler(),
+    "edit-attribute": new EventHandler(),
+    "edit-geometry": new EventHandler(),
+    route: new EventHandler(),
+    point: new EventHandler(),
+    "free-polygon": new EventHandler(),
+    "snap-polygon": new EventHandler(),
+    "split-route": new EventHandler(),
+    "street-view": new EventHandler(),
   };
 
   MapEvents.forEach((eventName) => {

@@ -11,7 +11,7 @@
     currentMode,
   } from "../../../stores";
   import type { Feature, Mode } from "../../../types";
-  import type { EventHandler } from "../types";
+  import type { EventHandler } from "../event_handler";
   import type { LineString } from "geojson";
   import RouteControls from "./RouteControls.svelte";
 

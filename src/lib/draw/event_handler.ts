@@ -1,7 +1,18 @@
 import { MapMouseEvent } from "maplibre-gl";
-import type { EventHandler } from "./types";
 
-export class DefaultEventHandler {
+export const MapEvents = [
+  "click",
+  "dblclick",
+  "mousemove",
+  "mousedown",
+  "mouseup",
+  "mouseout",
+  "dragstart",
+];
+
+export const DocumentEvents = ["keyPress", "keyUp", "keyDown"];
+
+export class EventHandler {
   constructor() {
     this.mapHandlers = {
       click: (e: MapMouseEvent) => {},

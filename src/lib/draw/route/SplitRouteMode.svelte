@@ -5,7 +5,7 @@
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
   import type { Feature as OurFeature } from "../../../types";
-  import type { EventHandler } from "../types";
+  import type { EventHandler } from "../event_handler";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import { point } from "@turf/helpers";
   import length from "@turf/length";
