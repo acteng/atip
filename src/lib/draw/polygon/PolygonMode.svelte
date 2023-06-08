@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import type { EventHandler, Feature, Mode } from "../../../types";
+  import type { EventHandler } from "../types";
   import type { PolygonTool } from "./polygon_tool";
+  import type { Feature, Mode } from "../../../types";
   import {
     gjScheme,
     newFeatureId,

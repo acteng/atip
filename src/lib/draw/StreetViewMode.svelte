@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import type { EventHandler, Mode } from "../../types";
+  import type { Mode } from "../../types";
+  import type { EventHandler } from "./types";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   import type { Feature, Point } from "geojson";
   import { point } from "@turf/helpers";

@@ -7,11 +7,10 @@
   import type { RouteTool } from "./route/route_tool";
   import { map, gjScheme, mapHover, currentMode } from "../../stores";
   import type {
-    EventHandler,
     Feature,
     FeatureUnion,
-    MapEvent,
   } from "../../types";
+  import type { EventHandler } from "./types";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";

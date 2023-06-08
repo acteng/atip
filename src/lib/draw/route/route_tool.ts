@@ -12,7 +12,8 @@ import {
   overwritePolygonLayer,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
-import type { EventHandler, Mode } from "../../../types";
+import type { Mode } from "../../../types";
+import type { EventHandler } from "../types";
 
 const source = "route-snapper";
 

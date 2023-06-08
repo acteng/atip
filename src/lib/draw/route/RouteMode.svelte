@@ -10,7 +10,8 @@
     formOpen,
     currentMode,
   } from "../../../stores";
-  import type { EventHandler, Feature, Mode } from "../../../types";
+  import type { Feature, Mode } from "../../../types";
+  import type { EventHandler } from "../types";
   import type { LineString } from "geojson";
   import RouteControls from "./RouteControls.svelte";
 
