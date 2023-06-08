@@ -1,12 +1,12 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
+import turfBbox from "@turf/bbox";
+import type { Feature, FeatureCollection, GeoJSON, Geometry } from "geojson";
 import type {
-  Map,
   DataDrivenPropertyValueSpecification,
   FilterSpecification,
   LayerSpecification,
+  Map,
 } from "maplibre-gl";
-import type { GeoJSON, FeatureCollection, Feature, Geometry } from "geojson";
-import turfBbox from "@turf/bbox";
 
 // Some methods take optional params. It's an error to pass in null or undefined, so use default values from
 // https://github.com/maplibre/maplibre-style-spec/blob/main/src/reference/v8.json.

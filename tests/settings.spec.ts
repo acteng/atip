@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test("changed settings are preserved across refresh", async ({ page }) => {
   await page.goto("/scheme.html?authority=Adur");

@@ -1,6 +1,6 @@
 import * as Comlink from "comlink";
-import init, { RouteInfo as RouteInfoWasm } from "route_info";
 import type { Feature, LineString } from "geojson";
+import init, { RouteInfo as RouteInfoWasm } from "route_info";
 import type { Waypoint } from "./types";
 
 /* This wraps the Rust/WASM API in the route_info crate, exposing it as a web

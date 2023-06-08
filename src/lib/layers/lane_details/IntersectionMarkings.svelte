@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Layer from "./Layer.svelte";
-  import { caseHelper } from "../../../maplibre_helpers";
   import type { GeoJSON } from "geojson";
+  import { caseHelper } from "../../../maplibre_helpers";
+  import Layer from "./Layer.svelte";
 
   export let gj: GeoJSON;
 

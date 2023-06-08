@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { PointTool } from "./point_tool";
-  import KeyHandler from "../KeyHandler.svelte";
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import KeyHandler from "../KeyHandler.svelte";
+  import { PointTool } from "./point_tool";
 
   export let pointTool: PointTool;
   export let editingExisting: boolean;

@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
+  import {
+    currentMode,
+    formOpen,
+    gjScheme,
+    newFeatureId,
+  } from "../../../stores";
   import type { Feature, Mode } from "../../../types";
   import type { EventHandler } from "../event_handler";
   import type { RouteTool } from "../route/route_tool";
-  import {
-    gjScheme,
-    newFeatureId,
-    formOpen,
-    currentMode,
-  } from "../../../stores";
   import SnapPolygonControls from "./SnapPolygonControls.svelte";
 
   const thisMode = "snap-polygon";

@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import length from "@turf/length";
+  import { onMount } from "svelte";
   import {
-    gjScheme,
     formOpen,
+    gjScheme,
     mapHover,
-    sidebarHover,
     openFromSidebar,
+    sidebarHover,
   } from "../../stores";
-  import type { Scheme, Schema } from "../../types";
+  import type { Schema, Scheme } from "../../types";
   import FileInput from "../common/FileInput.svelte";
 
   export let authorityName: string;

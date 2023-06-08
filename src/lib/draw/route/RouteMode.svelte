@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import type { LineString } from "geojson";
   import init from "route-snapper";
   import { fetchWithProgress } from "route-snapper/lib.js";
-  import { RouteTool } from "./route_tool";
+  import { onMount } from "svelte";
   import {
+    currentMode,
+    formOpen,
     gjScheme,
     map,
     newFeatureId,
-    formOpen,
-    currentMode,
   } from "../../../stores";
   import type { Feature, Mode } from "../../../types";
   import type { EventHandler } from "../event_handler";
-  import type { LineString } from "geojson";
+  import { RouteTool } from "./route_tool";
   import RouteControls from "./RouteControls.svelte";
 
   const thisMode = "route";

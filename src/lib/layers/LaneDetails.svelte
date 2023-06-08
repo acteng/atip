@@ -2,14 +2,14 @@
   // This component can only be created once routeInfo is ready
 
   import type { GeoJSON, LineString } from "geojson";
-  import type { Feature } from "../../types";
   import { onMount } from "svelte";
   import { gjScheme, routeInfo } from "../../stores";
-  import LanePolygons from "./lane_details/LanePolygons.svelte";
-  import LaneMarkings from "./lane_details/LaneMarkings.svelte";
-  import IntersectionPolygons from "./lane_details/IntersectionPolygons.svelte";
-  import IntersectionMarkings from "./lane_details/IntersectionMarkings.svelte";
+  import type { Feature } from "../../types";
   import HelpIcon from "../common/HelpIcon.svelte";
+  import IntersectionMarkings from "./lane_details/IntersectionMarkings.svelte";
+  import IntersectionPolygons from "./lane_details/IntersectionPolygons.svelte";
+  import LaneMarkings from "./lane_details/LaneMarkings.svelte";
+  import LanePolygons from "./lane_details/LanePolygons.svelte";
 
   // Show along a route
   export let id: number;

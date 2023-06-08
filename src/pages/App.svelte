@@ -1,28 +1,26 @@
 <script lang="ts">
+  import * as Comlink from "comlink";
   import type { FeatureCollection, Polygon } from "geojson";
   import { onMount } from "svelte";
   import authoritiesUrl from "../../assets/authorities.geojson?url";
+  import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
+  import BoundaryLayer from "../lib/BoundaryLayer.svelte";
+  import Layout from "../lib/common/Layout.svelte";
+  import HoverLayer from "../lib/draw/HoverLayer.svelte";
+  import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
+  import Toolbox from "../lib/draw/Toolbox.svelte";
+  import ContextualLayers from "../lib/layers/ContextualLayers.svelte";
+  import Legend from "../lib/Legend.svelte";
+  import Map from "../lib/Map.svelte";
+  import About from "../lib/sidebar/About.svelte";
+  import EntireScheme from "../lib/sidebar/EntireScheme.svelte";
+  import Instructions from "../lib/sidebar/Instructions.svelte";
+  import InterventionList from "../lib/sidebar/InterventionList.svelte";
+  import ZoomOutMap from "../lib/ZoomOutMap.svelte";
   import { routeInfo } from "../stores";
   import type { Schema } from "../types";
-  import * as Comlink from "comlink";
-  import workerWrapper from "../worker?worker";
   import { type RouteInfo } from "../worker";
-
-  import About from "../lib/sidebar/About.svelte";
-  import Instructions from "../lib/sidebar/Instructions.svelte";
-  import Map from "../lib/Map.svelte";
-  import Layout from "../lib/common/Layout.svelte";
-  import BoundaryLayer from "../lib/BoundaryLayer.svelte";
-  import InterventionList from "../lib/sidebar/InterventionList.svelte";
-  import ContextualLayers from "../lib/layers/ContextualLayers.svelte";
-  import EntireScheme from "../lib/sidebar/EntireScheme.svelte";
-  import ZoomOutMap from "../lib/ZoomOutMap.svelte";
-  import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
-  import Legend from "../lib/Legend.svelte";
-
-  import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
-  import HoverLayer from "../lib/draw/HoverLayer.svelte";
-  import Toolbox from "../lib/draw/Toolbox.svelte";
+  import workerWrapper from "../worker?worker";
 
   let showAbout = false;
   let showInstructions = false;

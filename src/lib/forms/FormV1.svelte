@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { gjScheme, routeInfo } from "../../stores";
   import type { Feature, LineString } from "geojson";
+  import { gjScheme, routeInfo } from "../../stores";
   import RouteInfoLayers from "./RouteInfoLayers.svelte";
 
   export let id: number;

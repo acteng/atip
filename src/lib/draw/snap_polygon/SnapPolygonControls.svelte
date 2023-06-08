@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { RouteTool } from "../route/route_tool";
-  import KeyHandler from "../KeyHandler.svelte";
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import KeyHandler from "../KeyHandler.svelte";
+  import { RouteTool } from "../route/route_tool";
 
   export let routeTool: RouteTool;
 

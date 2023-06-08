@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
   import { type MapMouseEvent } from "maplibre-gl";
-  import type { Mode } from "../../types";
-  import type { EventHandler } from "./event_handler";
+  import { onDestroy } from "svelte";
   import { bbox } from "../../maplibre_helpers";
   import {
-    map,
+    currentMode,
+    formOpen,
     gjScheme,
+    map,
     mapHover,
     openFromSidebar,
-    formOpen,
-    currentMode,
   } from "../../stores";
+  import type { Mode } from "../../types";
+  import type { EventHandler } from "./event_handler";
 
   const thisMode = "edit-attribute";
 

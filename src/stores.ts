@@ -1,13 +1,13 @@
+import { type Remote } from "comlink";
+import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
 import { emptyGeojson } from "./maplibre_helpers";
-import type { Map } from "maplibre-gl";
 import {
   isStreetViewImagery,
+  type Mode,
   type Scheme,
   type UserSettings,
-  type Mode,
 } from "./types";
-import { type Remote } from "comlink";
 import { type RouteInfo } from "./worker";
 
 // A global singleton, containing a loaded map

@@ -1,14 +1,13 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import type { FeatureCollection } from "geojson";
   import maplibregl from "maplibre-gl";
+  import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { bbox } from "../maplibre_helpers";
-  import About from "../lib/sidebar/About.svelte";
-  import FileInput from "../lib/common/FileInput.svelte";
-  import type { Schema } from "../types";
-
   import authoritiesUrl from "../../assets/authorities.geojson?url";
+  import FileInput from "../lib/common/FileInput.svelte";
+  import About from "../lib/sidebar/About.svelte";
+  import { bbox } from "../maplibre_helpers";
+  import type { Schema } from "../types";
 
   let showAbout = false;
 

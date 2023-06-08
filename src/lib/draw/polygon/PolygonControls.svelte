@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { PolygonTool } from "./polygon_tool";
-  import KeyHandler from "../KeyHandler.svelte";
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import KeyHandler from "../KeyHandler.svelte";
+  import { PolygonTool } from "./polygon_tool";
 
   export let polygonTool: PolygonTool;
 </script>

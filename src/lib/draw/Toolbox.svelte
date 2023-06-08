@@ -1,33 +1,29 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import { map } from "../../stores";
-  import type { Schema } from "../../types";
-  import { PointTool } from "./point/point_tool";
-  import { PolygonTool } from "./polygon/polygon_tool";
-  import { RouteTool } from "./route/route_tool";
-  import type { Mode } from "../../types";
-  import { currentMode } from "../../stores";
-
-  import SelectToolButton from "./SelectToolButton.svelte";
-  import AttributeMode from "./AttributeMode.svelte";
-  import GeometryMode from "./GeometryMode.svelte";
-  import RouteMode from "./route/RouteMode.svelte";
-  import PointMode from "./point/PointMode.svelte";
-  import PolygonMode from "./polygon/PolygonMode.svelte";
-  import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
-  import SplitRouteMode from "./route/SplitRouteMode.svelte";
-  import StreetViewMode from "./StreetViewMode.svelte";
-
+  import { get } from "svelte/store";
   import editAttributesIcon from "../../../assets/edit_attributes.svg";
   import editGeometryIcon from "../../../assets/edit_geometry.svg";
   import pointIcon from "../../../assets/point.svg";
-  import polygonSnappedIcon from "../../../assets/polygon_snapped.svg";
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
+  import polygonSnappedIcon from "../../../assets/polygon_snapped.svg";
   import routeIcon from "../../../assets/route.svg";
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
-  import { EventHandler, MapEvents, DocumentEvents } from "./event_handler";
-  import { get } from "svelte/store";
+  import { currentMode, map } from "../../stores";
+  import type { Mode, Schema } from "../../types";
+  import AttributeMode from "./AttributeMode.svelte";
+  import { DocumentEvents, EventHandler, MapEvents } from "./event_handler";
+  import GeometryMode from "./GeometryMode.svelte";
+  import { PointTool } from "./point/point_tool";
+  import PointMode from "./point/PointMode.svelte";
+  import { PolygonTool } from "./polygon/polygon_tool";
+  import PolygonMode from "./polygon/PolygonMode.svelte";
+  import { RouteTool } from "./route/route_tool";
+  import RouteMode from "./route/RouteMode.svelte";
+  import SplitRouteMode from "./route/SplitRouteMode.svelte";
+  import SelectToolButton from "./SelectToolButton.svelte";
+  import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
+  import StreetViewMode from "./StreetViewMode.svelte";
 
   export let routeSnapperUrl: string;
   export let schema: Schema;

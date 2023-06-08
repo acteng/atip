@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
-  import { ClickZoomHandler, MapMouseEvent } from "maplibre-gl";
   import type { LineString, Polygon } from "geojson";
-  import type { PointTool } from "./point/point_tool";
-  import type { PolygonTool } from "./polygon/polygon_tool";
-  import type { RouteTool } from "./route/route_tool";
-  import { map, gjScheme, mapHover, currentMode } from "../../stores";
+  import { ClickZoomHandler, MapMouseEvent } from "maplibre-gl";
+  import { onDestroy } from "svelte";
+  import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
   import type { EventHandler } from "./event_handler";
+  import type { PointTool } from "./point/point_tool";
   import PointControls from "./point/PointControls.svelte";
+  import type { PolygonTool } from "./polygon/polygon_tool";
   import PolygonControls from "./polygon/PolygonControls.svelte";
-  import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
+  import type { RouteTool } from "./route/route_tool";
   import RouteControls from "./route/RouteControls.svelte";
+  import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
 
   const thisMode = "edit-geometry";
 

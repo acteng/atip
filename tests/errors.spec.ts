@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { clickMap } from "./shared.ts";
 
 // This is separate from modes.spec.ts to avoid the common beforeAll

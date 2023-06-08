@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import { expect, test, type Page } from "@playwright/test";
-import { loadInitialPage, clearExistingInterventions } from "./shared.ts";
+import { clearExistingInterventions, loadInitialPage } from "./shared.ts";
 
 let page: Page;
 let json;

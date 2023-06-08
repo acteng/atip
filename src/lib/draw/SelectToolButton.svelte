@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Mode } from "../../types";
   import { currentMode } from "../../stores";
+  import type { Mode } from "../../types";
 
   export let thisMode: Mode;
   export let label: string;
