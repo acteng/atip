@@ -14,7 +14,6 @@
 
   const thisMode = "edit-attribute";
 
-  // TODO Just tell us if we're the current mode or not, actually...
   export let changeMode: (m: Mode) => void;
   export let eventHandler: EventHandler;
 

@@ -80,6 +80,7 @@
   }
 
   // The escape key isn't registered at all for keypress, so use keydown
+  // TODO This doesn't use eventHandler, so it might run even when the mode isn't active.
   function onKeyDown(e: KeyboardEvent) {
     if (e.key == "Escape") {
       changeMode("edit-attribute");
