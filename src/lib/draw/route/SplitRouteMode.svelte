@@ -146,7 +146,7 @@
   };
 
   // The escape key isn't registered at all for keypress, so use keydown
-  eventHandler.documentHandlers.onKeyDown = (e: KeyboardEvent) => {
+  eventHandler.documentHandlers.keyDown = (e: KeyboardEvent) => {
     if (e.key == "Escape") {
       changeMode("edit-attribute");
       e.preventDefault();
