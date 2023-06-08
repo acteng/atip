@@ -49,7 +49,7 @@
     }
   }
 
-  const onMouseMove = (e: MapMouseEvent) => {
+  eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
     let results = $map.queryRenderedFeatures(e.point, {
       layers: [
         "interventions-points",
@@ -60,11 +60,11 @@
     mapHover.set((results[0]?.id as number) || null);
   };
 
-  const onMouseOut = () => {
+  eventHandler.mapHandlers.mouseout = () => {
     mapHover.set(null);
   };
 
-  const onClick = (e: MapMouseEvent) => {
+  eventHandler.mapHandlers.click = (e: MapMouseEvent) => {
     let results = $map.queryRenderedFeatures(e.point, {
       layers: [
         "interventions-points",
@@ -78,11 +78,6 @@
       formOpen.set(null);
     }
   };
-
-  eventHandler.mapHandlers.mousemove = onMouseMove;
-  eventHandler.mapHandlers.mouseout = onMouseOut;
-  // Handle clicking the hovered feature
-  eventHandler.mapHandlers.click = onClick;
 </script>
 
 {#if $currentMode == thisMode}
