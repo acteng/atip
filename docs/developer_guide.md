@@ -14,6 +14,22 @@ There are some related repositorites also part of ATIP:
 - [route-snapper](https://github.com/dabreegster/route_snapper/) is a tool to draw routes snapped to existing roads
 - [osm2streets](https://github.com/a-b-street/osm2streets) is a library to process and query OpenStreetMap data
 
+### Background reading
+
+These are some resources to learn languages and libraries used in ATIP. Feel free to add more!
+
+- TypeScript
+  - [Docs based on your background](https://www.typescriptlang.org/docs/)
+- Svelte
+  - [Tutorial](https://svelte.dev/tutorial/basics)
+  - [Examples](https://svelte.dev/examples/hello-world)
+  - [Deep dive on reactivity](https://blog.thoughtspile.tech/2023/04/22/svelte-state/)
+- MapLibre
+  - [Examples](https://maplibre.org/maplibre-gl-js-docs/example/)
+  - Join the `#maplibre` channel on [osmus Slack](https://slack.openstreetmap.us/)
+- Rust
+  - [Docs](https://www.rust-lang.org/learn) for different learning styles
+
 ## Installation
 
 To run locally you'll need:
@@ -32,11 +48,15 @@ If you're using Firefox locally to develop and get "import declarations may
 only appear at top level" errors, upgrade to at least Firefox 112, go to
 `about:config` and enable `dom.workers.modules.enabled`
 
+### Docker
+
 To run via Docker in VSCode you'll need:
+
 - [Docker](https://www.docker.com/)
 - [VSCode ](https://code.visualstudio.com/) with the extension ["Dev Containers"](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
 
 Once you've installed these you can:
+
 1. Open VSCode
 2. Press F1 to open input command at top of window
 3.  Run `Dev Containers: Open Folder in Container`, and select the `atip` folder
