@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { isAToolInUse } from "../../stores";
+
   export let label: string;
   // This must be unique in the DOM
   export let uniqueId: string;
@@ -19,8 +21,18 @@
 
 <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
 <label>
-  <input type="file" id={uniqueId} bind:this={fileInput} on:change={onChange} />
-  <button type="button" on:click={() => fileInput.click()}>{label}</button>
+  <input
+    type="file"
+    id={uniqueId}
+    bind:this={fileInput}
+    on:change={onChange}
+    disabled={$isAToolInUse}
+  />
+  <button
+    type="button"
+    on:click={() => fileInput.click()}
+    disabled={$isAToolInUse}>{label}</button
+  >
 </label>
 
 <style>
