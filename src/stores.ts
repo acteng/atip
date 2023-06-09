@@ -1,7 +1,7 @@
 import { type Remote } from "comlink";
-import { deleteFeature } from "./commands";
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
+import { deleteFeature } from "./commands";
 import { emptyGeojson } from "./maplibre_helpers";
 import {
   isStreetViewImagery,

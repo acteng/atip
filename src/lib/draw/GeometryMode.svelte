@@ -38,6 +38,8 @@
       polygonTool.stop();
       routeTool.stop();
 
+      // TODO Annotate that this edit is not "interesting"; it shouldn't be on the undo list!
+      // (Arguably, the fact that we're abusing properties for hide_while_editing is the real problem here)
       editFeature(currentlyEditing, (feature) => {
         delete feature.properties.hide_while_editing;
       });
