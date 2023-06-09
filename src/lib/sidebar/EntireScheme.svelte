@@ -2,6 +2,7 @@
   import length from "@turf/length";
   import { onMount } from "svelte";
   import {
+    currentMode,
     formOpen,
     gjScheme,
     mapHover,
@@ -9,6 +10,7 @@
     sidebarHover,
   } from "../../stores";
   import type { Schema, Scheme } from "../../types";
+  import ConfirmationModal from "../common/ConfirmationModal.svelte";
   import FileInput from "../common/FileInput.svelte";
 
   export let authorityName: string;
@@ -20,6 +22,8 @@
   }
 
   let loaded = false;
+  let displayClearAllConfirmation = false;
+
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
     let params = new URLSearchParams(window.location.search);
@@ -56,23 +60,27 @@
     }
   }
 
+  function openClearAllDialogue() {
+    displayClearAllConfirmation = true;
+  }
+
+  function cancelClearAll() {
+    displayClearAllConfirmation = false;
+  }
+
   function clearAll() {
-    if (
-      confirm(
-        "Do you want to clear the current scheme? (You should save it first!)"
-      )
-    ) {
-      gjScheme.update((gj) => {
-        // Leave origin, authority, and other foreign members alone
-        delete gj.scheme_name;
-        gj.features = [];
-        return gj;
-      });
-      formOpen.set(null);
-      mapHover.set(null);
-      sidebarHover.set(null);
-      openFromSidebar.set(null);
-    }
+    displayClearAllConfirmation = false;
+
+    gjScheme.update((gj) => {
+      // Leave origin, authority, and other foreign members alone
+      delete gj.scheme_name;
+      gj.features = [];
+      return gj;
+    });
+    formOpen.set(null);
+    mapHover.set(null);
+    sidebarHover.set(null);
+    openFromSidebar.set(null);
   }
 
   // Remove the hide_while_editing property hack
@@ -168,9 +176,20 @@
   <button
     type="button"
     class="align-right"
-    on:click={clearAll}
-    disabled={$gjScheme.features.length == 0}>Clear all</button
+    on:click={openClearAllDialogue}
+    disabled={$gjScheme.features.length == 0 ||
+      $currentMode !== "edit-attribute"}>Clear all</button
   >
+  <ConfirmationModal
+    bind:open={displayClearAllConfirmation}
+    title={"Would you like to clear your work?"}
+    message={"This will delete all your drawn interventions."}
+    on:cancelAction={cancelClearAll}
+    on:confirmAction={clearAll}
+  />
+  {#if $currentMode !== "edit-attribute"}
+    <p class="reminder">Switch to 'Edit Attributes' to use these features.</p>
+  {/if}
 </div>
 
 <style>
