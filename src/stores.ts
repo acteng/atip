@@ -38,6 +38,7 @@ userSettings.subscribe((value) =>
   window.localStorage.setItem("userSettings", JSON.stringify(value))
 );
 export const currentMode: Writable<Mode> = writable("edit-attribute");
+export const isAToolInUse: Writable<boolean> = writable(false);
 
 // All feature IDs must:
 //

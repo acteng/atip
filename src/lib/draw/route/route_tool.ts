@@ -12,6 +12,7 @@ import {
   overwriteSource,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
+import { isAToolInUse } from "../../../stores";
 import type { EventHandler } from "../event_handler";
 
 const source = "route-snapper";
@@ -175,7 +176,8 @@ export class RouteTool {
       return;
     }
 
-    this.active = true;
+    this.setActivity(true);
+
     // Otherwise, shift+click breaks
     this.map.boxZoom.disable();
     // Otherwise, double clicking to finish breaks
@@ -195,14 +197,19 @@ export class RouteTool {
       area_mode: true,
       extend_route: true,
     });
-    this.active = true;
+    this.setActivity(true);
     this.map.boxZoom.disable();
     this.map.doubleClickZoom.disable();
   }
 
+  setActivity(isActive: boolean) {
+    this.active = isActive;
+    isAToolInUse.set(isActive);
+  }
+
   // Deactivate the tool, clearing all state. No events are fired for addEventListenerFailure.
   stop() {
-    this.active = false;
+    this.setActivity(false);
     this.inner.clearState();
     this.redraw();
     this.map.boxZoom.enable();

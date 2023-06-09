@@ -2,9 +2,9 @@
   import length from "@turf/length";
   import { onMount } from "svelte";
   import {
-    currentMode,
     formOpen,
     gjScheme,
+    isAToolInUse,
     mapHover,
     openFromSidebar,
     sidebarHover,
@@ -164,7 +164,12 @@
 
 <div>
   <FileInput label="Load from GeoJSON" uniqueId="load-geojson" {loadFile} />
-  <button type="button" class="align-right" on:click={exportToGeojson}>
+  <button
+    type="button"
+    class="align-right"
+    on:click={exportToGeojson}
+    disabled={$isAToolInUse}
+  >
     Export to GeoJSON
   </button>
 </div>
@@ -177,8 +182,7 @@
     type="button"
     class="align-right"
     on:click={openClearAllDialogue}
-    disabled={$gjScheme.features.length == 0 ||
-      $currentMode !== "edit-attribute"}>Clear all</button
+    disabled={$gjScheme.features.length == 0 || $isAToolInUse}>Clear all</button
   >
   <ConfirmationModal
     bind:open={displayClearAllConfirmation}
@@ -187,8 +191,11 @@
     on:cancelAction={cancelClearAll}
     on:confirmAction={clearAll}
   />
-  {#if $currentMode !== "edit-attribute"}
-    <p class="reminder">Switch to 'Edit Attributes' to use these features.</p>
+  {#if $isAToolInUse}
+    <p class="reminder">
+      Finish drawing on the map and/or select "Edit attributes" to use these
+      options.
+    </p>
   {/if}
 </div>
 
