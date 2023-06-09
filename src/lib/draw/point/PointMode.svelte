@@ -1,11 +1,7 @@
 <script lang="ts">
   import type { Point } from "geojson";
-  import {
-    currentMode,
-    formOpen,
-    gjScheme,
-    newFeatureId,
-  } from "../../../stores";
+  import { newFeature } from "../../../commands";
+  import { currentMode, formOpen } from "../../../stores";
   import type { Feature, Mode } from "../../../types";
   import type { EventHandler } from "../event_handler";
   import type { PointTool } from "./point_tool";
@@ -27,15 +23,10 @@
 
   pointTool.addEventListenerSuccess((feature) => {
     if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "other";
-        gj.features.push(feature as Feature<Point>);
-        return gj;
-      });
-
+      feature.properties.intervention_type = "other";
+      let id = newFeature(feature as Feature<Point>);
       changeMode("edit-attribute");
-      formOpen.set(feature.id as number);
+      formOpen.set(id);
     }
   });
 

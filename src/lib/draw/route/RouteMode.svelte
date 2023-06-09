@@ -3,13 +3,8 @@
   import init from "route-snapper";
   import { fetchWithProgress } from "route-snapper/lib.js";
   import { onMount } from "svelte";
-  import {
-    currentMode,
-    formOpen,
-    gjScheme,
-    map,
-    newFeatureId,
-  } from "../../../stores";
+  import { newFeature } from "../../../commands";
+  import { currentMode, formOpen, map } from "../../../stores";
   import type { Feature, Mode } from "../../../types";
   import type { EventHandler } from "../event_handler";
   import { RouteTool } from "./route_tool";
@@ -57,15 +52,10 @@
 
     routeTool.addEventListenerSuccessRoute((feature) => {
       if ($currentMode == thisMode) {
-        gjScheme.update((gj) => {
-          feature.id = newFeatureId(gj);
-          feature.properties.intervention_type = "route";
-          gj.features.push(feature as Feature<LineString>);
-          return gj;
-        });
-
+        feature.properties.intervention_type = "route";
+        let id = newFeature(feature as Feature<LineString>);
         changeMode("edit-attribute");
-        formOpen.set(feature.id as number);
+        formOpen.set(id);
       }
     });
   });

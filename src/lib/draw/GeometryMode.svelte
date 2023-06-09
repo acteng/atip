@@ -2,6 +2,7 @@
   import type { LineString, Polygon } from "geojson";
   import { ClickZoomHandler, MapMouseEvent } from "maplibre-gl";
   import { onDestroy } from "svelte";
+  import { editFeature } from "../../commands";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
   import type { EventHandler } from "./event_handler";
@@ -37,10 +38,8 @@
       polygonTool.stop();
       routeTool.stop();
 
-      gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+      editFeature(currentlyEditing, (feature) => {
         delete feature.properties.hide_while_editing;
-        return gj;
       });
     }
 
@@ -52,23 +51,22 @@
   // Handle successful edits
   routeTool.addEventListenerSuccessRoute((editedRoute) => {
     if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+      if (
+        !editFeature(currentlyEditing, (feature) => {
+          // Keep the ID and any properties. Just copy over stuff from routeSnapper.
+          // TODO We're depending on implementation details here and knowing what to copy...
+          feature.properties.length_meters =
+            editedRoute.properties.length_meters;
+          feature.properties.waypoints = editedRoute.properties.waypoints;
+          delete feature.properties.hide_while_editing;
+          feature.geometry = editedRoute.geometry;
+        })
+      ) {
         // TODO Hack around https://github.com/acteng/atip/issues/142
-        if (!feature) {
-          window.alert(
-            "You loaded another file or cleared everything while editing. Your changes were lost."
-          );
-          return gj;
-        }
-        // Keep the ID and any properties. Just copy over stuff from routeSnapper.
-        // TODO We're depending on implementation details here and knowing what to copy...
-        feature.properties.length_meters = editedRoute.properties.length_meters;
-        feature.properties.waypoints = editedRoute.properties.waypoints;
-        delete feature.properties.hide_while_editing;
-        feature.geometry = editedRoute.geometry;
-        return gj;
-      });
+        window.alert(
+          "You loaded another file or cleared everything while editing. Your changes were lost."
+        );
+      }
 
       // Stay in this mode
       currentlyEditing = null;
@@ -78,21 +76,19 @@
 
   routeTool.addEventListenerSuccessArea((editedArea) => {
     if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-        if (!feature) {
-          window.alert(
-            "You loaded another file or cleared everything while editing. Your changes were lost."
-          );
-          return gj;
-        }
-        // Keep the ID and any properties. Just copy over stuff from routeSnapper.
-        // TODO We're depending on implementation details here and knowing what to copy...
-        feature.properties.waypoints = editedArea.properties.waypoints;
-        delete feature.properties.hide_while_editing;
-        feature.geometry = editedArea.geometry;
-        return gj;
-      });
+      if (
+        !editFeature(currentlyEditing, (feature) => {
+          // Keep the ID and any properties. Just copy over stuff from routeSnapper.
+          // TODO We're depending on implementation details here and knowing what to copy...
+          feature.properties.waypoints = editedArea.properties.waypoints;
+          delete feature.properties.hide_while_editing;
+          feature.geometry = editedArea.geometry;
+        })
+      ) {
+        window.alert(
+          "You loaded another file or cleared everything while editing. Your changes were lost."
+        );
+      }
 
       // Stay in this mode
       currentlyEditing = null;
@@ -101,22 +97,18 @@
   });
 
   for (let tool of [pointTool, polygonTool]) {
-    tool.addEventListenerSuccess((feature) => {
+    tool.addEventListenerSuccess((updatedFeature) => {
       if ($currentMode == thisMode) {
-        gjScheme.update((gj) => {
-          let updateFeature = gj.features.find(
-            (f) => f.id == currentlyEditing
-          )!;
-          if (!updateFeature) {
-            window.alert(
-              "You loaded another file or cleared everything while editing. Your changes were lost."
-            );
-            return gj;
-          }
-          updateFeature.geometry = feature.geometry;
-          delete updateFeature.properties.hide_while_editing;
-          return gj;
-        });
+        if (
+          !editFeature(currentlyEditing, (feature) => {
+            feature.geometry = updatedFeature.geometry;
+            delete feature.properties.hide_while_editing;
+          })
+        ) {
+          window.alert(
+            "You loaded another file or cleared everything while editing. Your changes were lost."
+          );
+        }
 
         // Stay in this mode
         currentlyEditing = null;
@@ -130,17 +122,15 @@
     tool.addEventListenerFailure(() => {
       if ($currentMode == thisMode) {
         // Don't modify the thing we were just editing
-        gjScheme.update((gj) => {
-          let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-          if (!feature) {
-            window.alert(
-              "You loaded another file or cleared everything while editing. Your changes were lost."
-            );
-            return gj;
-          }
-          delete feature.properties.hide_while_editing;
-          return gj;
-        });
+        if (
+          !editFeature(currentlyEditing, (feature) => {
+            delete feature.properties.hide_while_editing;
+          })
+        ) {
+          window.alert(
+            "You loaded another file or cleared everything while editing. Your changes were lost."
+          );
+        }
 
         // Stay in this mode
         currentlyEditing = null;
@@ -229,11 +219,10 @@
     mapHover.set(null);
 
     let maybeFeature: FeatureUnion | null = null;
-    gjScheme.update((gj) => {
-      maybeFeature = gj.features.find((f) => f.id == id)!;
+    editFeature(currentlyEditing, (feature) => {
       // Hide it from the regular drawing while we're editing
-      maybeFeature.properties.hide_while_editing = true;
-      return gj;
+      feature.properties.hide_while_editing = true;
+      maybeFeature = feature;
     });
     let feature = maybeFeature!;
 

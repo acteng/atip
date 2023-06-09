@@ -1,4 +1,5 @@
 import { type Remote } from "comlink";
+import { deleteFeature } from "./commands";
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
 import { emptyGeojson } from "./maplibre_helpers";
@@ -68,10 +69,7 @@ export function newFeatureId(gj: Scheme): number {
 
 export function deleteIntervention(id: number) {
   console.log(`Deleting intervention ${id}`);
-  gjScheme.update((gj) => {
-    gj.features = gj.features.filter((f) => f.id != id);
-    return gj;
-  });
+  deleteFeature(id);
   formOpen.set(null);
   mapHover.set(null);
   sidebarHover.set(null);

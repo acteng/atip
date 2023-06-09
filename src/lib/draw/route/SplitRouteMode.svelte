@@ -128,6 +128,7 @@
           );
 
           // Replace the one LineString we snapped to with the two new pieces
+          // TODO It's nice to have both show up adjacent in the sidebar. Happens from order, not adjacent IDs. Test this!
           gj.features.splice(
             snappedIndex!,
             1,

@@ -1,11 +1,7 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import {
-    currentMode,
-    formOpen,
-    gjScheme,
-    newFeatureId,
-  } from "../../../stores";
+  import { newFeature } from "../../../commands";
+  import { currentMode, formOpen } from "../../../stores";
   import type { Feature, Mode } from "../../../types";
   import type { EventHandler } from "../event_handler";
   import type { PolygonTool } from "./polygon_tool";
@@ -27,15 +23,10 @@
 
   polygonTool.addEventListenerSuccess((feature) => {
     if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "area";
-        gj.features.push(feature as Feature<Polygon>);
-        return gj;
-      });
-
+      feature.properties.intervention_type = "area";
+      let id = newFeature(feature as Feature<Polygon>);
       changeMode("edit-attribute");
-      formOpen.set(feature.id as number);
+      formOpen.set(id);
     }
   });
 
