@@ -29,7 +29,7 @@ These are some resources to learn languages and libraries used in ATIP. Feel fre
   - Join the `#maplibre` channel on [osmus Slack](https://slack.openstreetmap.us/)
 - Rust
   - [Docs](https://www.rust-lang.org/learn) for different learning styles
-
+  - [The Rust Book](https://doc.rust-lang.org/stable/book/)
 ## Installation
 
 To run locally you'll need:
