@@ -53,7 +53,7 @@ only appear at top level" errors, upgrade to at least Firefox 112, go to
 To run via Docker in VSCode you'll need:
 
 - [Docker](https://www.docker.com/)
-- [VSCode ](https://code.visualstudio.com/) with the extension ["Dev Containers"](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
+- [VSCode](https://code.visualstudio.com/) with the extension ["Dev Containers"](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
 
 Once you've installed these you can:
 
