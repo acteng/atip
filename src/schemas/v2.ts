@@ -1,6 +1,9 @@
 // This file is auto-generated; do not manually edit
 
-export type Intervention = Route | Crossing;
+export type Intervention = {
+  Route?: Route;
+  Crossing?: Crossing;
+};
 
 export interface Crossing {
   name?: string;
