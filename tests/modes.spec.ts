@@ -3,13 +3,13 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   clearExistingInterventions,
   clickMap,
-  loadInitialPage,
+  loadInitialPageFromBrowser,
 } from "./shared.ts";
 
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
-  page = await loadInitialPage(browser);
+  page = await loadInitialPageFromBrowser(browser);
 });
 test.beforeEach(async () => {
   await clearExistingInterventions(page);

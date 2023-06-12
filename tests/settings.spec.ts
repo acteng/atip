@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { loadInitialPage } from "./shared.ts";
+import { checkPageLoaded, loadInitialPageFromBrowser } from "./shared.ts";
 
 test("changed settings are preserved across refresh", async ({ browser }) => {
-  let page = await loadInitialPage(browser);
+  test.slow();
+  let page = await loadInitialPageFromBrowser(browser);
   await page.goto("/scheme.html?authority=Adur");
   await page.getByRole("button", { name: "New route" }).click();
   let expectedToBeChecked = false;
@@ -16,7 +17,8 @@ test("changed settings are preserved across refresh", async ({ browser }) => {
     expectedToBeChecked = false;
   }
 
-  page = await loadInitialPage(browser);
+  await page.reload();
+  await checkPageLoaded(page);
   await page.getByRole("button", { name: "New route" }).click();
   if (expectedToBeChecked) {
     await expect(page.getByLabel("Avoid doubling back")).toBeChecked();

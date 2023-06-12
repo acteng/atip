@@ -1,13 +1,23 @@
 import { type Browser, type Page } from "playwright";
 
-export const loadInitialPage = async (browser: Browser): Promise<Page> => {
+export const loadInitialPageFromBrowser = async (
+  browser: Browser
+): Promise<Page> => {
   const page: Page = await browser.newPage();
+  await gotoInitialPage(page);
+  return page;
+};
+
+export const gotoInitialPage = async (page: Page): Promise<void> => {
   await page.goto("/scheme.html?authority=Adur");
+  await checkPageLoaded(page);
+};
+
+export const checkPageLoaded = async (page: Page): Promise<void> => {
   // wait for the map to load and interventions panel to appear
   await page.getByText("Click an object to fill out its attributes").waitFor();
   // wait for router snapper to load so we can use route tool
   await page.getByText("Route tool loading...").waitFor({ state: "hidden" });
-  return page;
 };
 
 export const clearExistingInterventions = async (page: Page) => {
