@@ -29,10 +29,9 @@ export const clearExistingInterventions = async (page: Page) => {
   }
 
   const clearAllLocator = page.getByRole("button", { name: "Clear all" });
-  const confirmButtonLocator = page.getByRole("button", { name: "Confirm" });
   if (!(await clearAllLocator.isDisabled())) {
     await clearAllLocator.click();
-    await confirmButtonLocator.click();
+    await page.getByRole("button", { name: "Confirm" }).click();
   }
 
   if (!(await editAttributesLocator.isDisabled())) {

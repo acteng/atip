@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { isAToolInUse } from "../../stores";
-
   export let label: string;
   // This must be unique in the DOM
   export let uniqueId: string;
   // Called with the file contents as text
   export let loadFile: (text: string) => void;
+
+  export let disabled = false;
 
   let fileInput: HTMLInputElement;
 
@@ -26,12 +26,10 @@
     id={uniqueId}
     bind:this={fileInput}
     on:change={onChange}
-    disabled={$isAToolInUse}
+    {disabled}
   />
-  <button
-    type="button"
-    on:click={() => fileInput.click()}
-    disabled={$isAToolInUse}>{label}</button
+  <button type="button" on:click={() => fileInput.click()} {disabled}
+    >{label}</button
   >
 </label>
 

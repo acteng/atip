@@ -11,16 +11,31 @@ let page: Page;
 test.beforeAll(async ({ browser }) => {
   page = await loadInitialPageFromBrowser(browser);
 });
+
 test.beforeEach(async () => {
   await clearExistingInterventions(page);
 });
 
 test("clearing all is disabled while a feature is in use", async () => {
   await page.getByRole("button", { name: "New point" }).click();
-  // Make sure AttributeMode resets to nothing being selected
   expect(
     await page.getByRole("button", { name: "Clear all" }).isDisabled()
   ).toBe(true);
+});
+
+test("clearing all resets to nothing being selected", async () => {
+  await page.getByRole("button", { name: "New point" }).click();
+  await clickMap(page, 500, 500);
+
+  await expect(
+    page.getByText("Edit attributes to the left, or click another object")
+  ).toBeVisible();
+  
+  await clearExistingInterventions(page)
+
+  await expect(
+    page.getByText("Click an object to fill out its attributes")
+  ).toBeVisible();
 });
 
 test("creating a new point opens a form", async () => {
