@@ -7,7 +7,6 @@
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
-  import { onDestroy } from "svelte";
   import {
     emptyGeojson,
     overwriteCircleLayer,

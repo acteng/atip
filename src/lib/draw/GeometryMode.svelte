@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { LineString, Polygon } from "geojson";
-  import { ClickZoomHandler, MapMouseEvent } from "maplibre-gl";
-  import { onDestroy } from "svelte";
+  import { MapMouseEvent } from "maplibre-gl";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
   import type { EventHandler } from "./event_handler";
