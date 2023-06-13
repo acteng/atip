@@ -17,7 +17,8 @@
     "types": ["node", "vite/client"],
     "strict": false,
     /* Necessary for Playwright tests */
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "noUnusedLocals": true
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "tests/**/*"]
 }

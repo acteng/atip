@@ -36,7 +36,6 @@ test("loading a file with length displays the length", async () => {
 test("loading a file without length displays the length", async () => {
   // Remove the property from the test data first
   await expect(Math.round(json.features[0].properties.length_meters)).toBe(450);
-  const lengthMeters = json.features[0].properties.length_meters;
   let copy = JSON.parse(JSON.stringify(json));
   delete copy.features[0].properties.length_meters;
   let uploadFile = JSON.stringify(copy);

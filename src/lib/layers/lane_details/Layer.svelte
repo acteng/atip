@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
-  import { onDestroy, onMount } from "svelte";
+  import { onDestroy } from "svelte";
   import { overwriteLayer, overwriteSource } from "../../../maplibre_helpers";
   import { map } from "../../../stores";
 

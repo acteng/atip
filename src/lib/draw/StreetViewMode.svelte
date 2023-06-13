@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { point } from "@turf/helpers";
   import type { Feature, Point } from "geojson";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
-  import { onDestroy } from "svelte";
   import {
     emptyGeojson,
     overwriteCircleLayer,

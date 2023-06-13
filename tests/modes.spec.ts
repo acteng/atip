@@ -1,4 +1,3 @@
-import { readFile } from "fs/promises";
 import { expect, test, type Page } from "@playwright/test";
 import {
   clearExistingInterventions,
