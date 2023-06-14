@@ -95,9 +95,7 @@
 <Layout>
   <div slot="sidebar">
     <div>
-      <button type="button" on:click={() => window.open("index.html")}>
-        Home</button
-      >
+      <button type="button" on:click={() => window.location.replace("/index.html")}> Home</button>
       <button type="button" on:click={toggleAbout}>About</button>
       <button type="button" on:click={toggleInstructions}>Instructions</button>
     </div>
