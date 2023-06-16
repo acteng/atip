@@ -5,6 +5,8 @@
   // Called with the file contents as text
   export let loadFile: (text: string) => void;
 
+  export let disabled = false;
+
   let fileInput: HTMLInputElement;
 
   function onChange(e: Event) {
@@ -19,8 +21,16 @@
 
 <!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
 <label>
-  <input type="file" id={uniqueId} bind:this={fileInput} on:change={onChange} />
-  <button type="button" on:click={() => fileInput.click()}>{label}</button>
+  <input
+    type="file"
+    id={uniqueId}
+    bind:this={fileInput}
+    on:change={onChange}
+    {disabled}
+  />
+  <button type="button" on:click={() => fileInput.click()} {disabled}
+    >{label}</button
+  >
 </label>
 
 <style>

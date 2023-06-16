@@ -18,6 +18,7 @@ import {
   overwriteSource,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
+import { isAToolInUse } from "../../../stores";
 import type { EventHandler } from "../event_handler";
 
 const source = "edit-polygon-mode";
@@ -214,13 +215,13 @@ export class PolygonTool {
   }
 
   startNew() {
-    this.active = true;
+    this.setActivity(true);
     // Otherwise, double clicking to finish breaks
     this.map.doubleClickZoom.disable();
   }
 
   editExisting(feature: Feature<Polygon>) {
-    this.active = true;
+    this.setActivity(true);
     this.map.doubleClickZoom.disable();
     this.points = JSON.parse(JSON.stringify(feature.geometry.coordinates[0]));
     this.points.pop();
@@ -228,11 +229,16 @@ export class PolygonTool {
     // TODO recalculateHovering, but we need to know where the mouse is
   }
 
+  setActivity(isActive: boolean) {
+    this.active = isActive;
+    isAToolInUse.set(isActive);
+  }
+
   stop() {
     this.map.doubleClickZoom.enable();
     this.points = [];
     this.cursor = null;
-    this.active = false;
+    this.setActivity(false);
     this.hover = null;
     this.dragFrom = null;
     this.redraw();

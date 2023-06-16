@@ -1,12 +1,16 @@
 <script lang="ts">
   export let title: string;
   export let open = false;
+  export let displayEscapeButton = true;
+  export let canCloseByClickingBackground = true;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="background"
-  on:click={() => (open = false)}
+  on:click={() => {
+    if (canCloseByClickingBackground) open = false;
+  }}
   class:open
   class:closed={!open}
 >
@@ -16,7 +20,9 @@
   >
     <div style="display: flex; justify-content: space-between;">
       <h1>{title}</h1>
-      <button on:click={() => (open = false)}>X</button>
+      {#if displayEscapeButton}
+        <button on:click={() => (open = false)}>X</button>
+      {/if}
     </div>
     <slot />
   </div>

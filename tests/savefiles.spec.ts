@@ -1,12 +1,15 @@
 import { readFile } from "fs/promises";
 import { expect, test, type Page } from "@playwright/test";
-import { clearExistingInterventions, loadInitialPage } from "./shared.ts";
+import {
+  clearExistingInterventions,
+  loadInitialPageFromBrowser,
+} from "./shared.ts";
 
 let page: Page;
 let json;
 
 test.beforeAll(async ({ browser }) => {
-  page = await loadInitialPage(browser);
+  page = await loadInitialPageFromBrowser(browser);
 
   json = JSON.parse(
     await readFile("tests/data/Adur.json", { encoding: "utf8" })

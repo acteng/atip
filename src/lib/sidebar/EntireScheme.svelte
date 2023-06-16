@@ -4,11 +4,13 @@
   import {
     formOpen,
     gjScheme,
+    isAToolInUse,
     mapHover,
     openFromSidebar,
     sidebarHover,
   } from "../../stores";
   import type { Schema, Scheme } from "../../types";
+  import ConfirmationModal from "../common/ConfirmationModal.svelte";
   import FileInput from "../common/FileInput.svelte";
 
   export let authorityName: string;
@@ -20,6 +22,8 @@
   }
 
   let loaded = false;
+  let displayClearAllConfirmation = false;
+
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
     let params = new URLSearchParams(window.location.search);
@@ -56,23 +60,27 @@
     }
   }
 
+  function openClearAllDialogue() {
+    displayClearAllConfirmation = true;
+  }
+
+  function cancelClearAll() {
+    displayClearAllConfirmation = false;
+  }
+
   function clearAll() {
-    if (
-      confirm(
-        "Do you want to clear the current scheme? (You should save it first!)"
-      )
-    ) {
-      gjScheme.update((gj) => {
-        // Leave origin, authority, and other foreign members alone
-        delete gj.scheme_name;
-        gj.features = [];
-        return gj;
-      });
-      formOpen.set(null);
-      mapHover.set(null);
-      sidebarHover.set(null);
-      openFromSidebar.set(null);
-    }
+    displayClearAllConfirmation = false;
+
+    gjScheme.update((gj) => {
+      // Leave origin, authority, and other foreign members alone
+      delete gj.scheme_name;
+      gj.features = [];
+      return gj;
+    });
+    formOpen.set(null);
+    mapHover.set(null);
+    sidebarHover.set(null);
+    openFromSidebar.set(null);
   }
 
   // Remove the hide_while_editing property hack
@@ -155,8 +163,18 @@
 <br />
 
 <div>
-  <FileInput label="Load from GeoJSON" uniqueId="load-geojson" {loadFile} />
-  <button type="button" class="align-right" on:click={exportToGeojson}>
+  <FileInput
+    label="Load from GeoJSON"
+    uniqueId="load-geojson"
+    disabled={$isAToolInUse}
+    {loadFile}
+  />
+  <button
+    type="button"
+    class="align-right"
+    on:click={exportToGeojson}
+    disabled={$isAToolInUse}
+  >
     Export to GeoJSON
   </button>
 </div>
@@ -168,9 +186,22 @@
   <button
     type="button"
     class="align-right"
-    on:click={clearAll}
-    disabled={$gjScheme.features.length == 0}>Clear all</button
+    on:click={openClearAllDialogue}
+    disabled={$gjScheme.features.length == 0 || $isAToolInUse}>Clear all</button
   >
+  <ConfirmationModal
+    bind:open={displayClearAllConfirmation}
+    title={"Would you like to clear your work?"}
+    message={"This will delete all your drawn interventions."}
+    on:cancelAction={cancelClearAll}
+    on:confirmAction={clearAll}
+  />
+  {#if $isAToolInUse}
+    <p class="reminder">
+      Finish drawing on the map and/or select "Edit attributes" to use these
+      options.
+    </p>
+  {/if}
 </div>
 
 <style>

@@ -2,24 +2,36 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   clearExistingInterventions,
   clickMap,
-  loadInitialPage,
+  loadInitialPageFromBrowser,
 } from "./shared.ts";
 
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
-  page = await loadInitialPage(browser);
+  page = await loadInitialPageFromBrowser(browser);
 });
+
 test.beforeEach(async () => {
   await clearExistingInterventions(page);
 });
 
-test("clearing all while a feature is open works", async () => {
+test("clearing all is disabled while a feature is in use", async () => {
+  await page.getByRole("button", { name: "New point" }).click();
+  expect(
+    await page.getByRole("button", { name: "Clear all" }).isDisabled()
+  ).toBe(true);
+});
+
+test("clearing all resets to nothing being selected", async () => {
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
-  page.on("dialog", (dialog) => dialog.accept());
-  await page.getByRole("button", { name: "Clear all" }).click();
-  // Make sure AttributeMode resets to nothing being selected
+
+  await expect(
+    page.getByText("Edit attributes to the left, or click another object")
+  ).toBeVisible();
+  
+  await clearExistingInterventions(page)
+
   await expect(
     page.getByText("Click an object to fill out its attributes")
   ).toBeVisible();

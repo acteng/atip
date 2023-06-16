@@ -7,6 +7,7 @@ import {
   overwriteSource,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
+import { isAToolInUse } from "../../../stores";
 import type { EventHandler } from "../event_handler";
 
 const source = "edit-point-mode";
@@ -81,15 +82,20 @@ export class PointTool {
   // Note there's no way to "edit an existing point." Just call this for a new
   // or existing point; the state just depends on the cursor anyway.
   start() {
-    this.active = true;
+    this.setActivity(true);
     // TODO Figure out where the cursor is and immediately draw? To be useful,
     // the user has to move their mouse anyway; it doesn't matter much
   }
 
   stop() {
     this.cursor = null;
-    this.active = false;
+    this.setActivity(false);
     this.redraw();
+  }
+
+  setActivity(isActive: boolean) {
+    this.active = isActive;
+    isAToolInUse.set(isActive);
   }
 
   private redraw() {
