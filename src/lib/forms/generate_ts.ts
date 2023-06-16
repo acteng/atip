@@ -26,6 +26,9 @@ while (queue.length > 0) {
 }
 
 function generate(field: Field) {
+  // The top-level object defined by the schema is the first one processed
+  let isTopLevel = seen.size == 0;
+
   if (seen.has(field.name)) {
     // We could also generate more detailed type names based on the nesting,
     // but this seems confusing
@@ -60,9 +63,15 @@ function generate(field: Field) {
       } else if (isSimpleEnumCase(x)) {
         cases.push(`"${x.value}"`);
       } else {
-        cases.push(x.name);
+        cases.push(`{ ${x.name}: ${x.name}; }`);
         queue.push(x);
       }
+    }
+    // If the top-level field in the schema is an enum, allow the entire thing
+    // to be empty. All fields in a struct are optional; this lets the
+    // top-level enum be optional too.
+    if (isTopLevel) {
+      cases.push(`{}`);
     }
     console.log(`export type ${field.name} = ${cases.join(" | ")};\n`);
   } else {

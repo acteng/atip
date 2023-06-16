@@ -1,6 +1,6 @@
 // This file is auto-generated; do not manually edit
 
-export type Intervention = Route | Crossing;
+export type Intervention = { Route: Route } | { Crossing: Crossing } | {};
 
 export interface Crossing {
   name?: string;
@@ -17,10 +17,10 @@ export type MotorTrafficFlow = "> 8000" | "3000 - 8000" | "< 3000";
 
 export type CrossingType =
   | "Zebra"
-  | Signalised
+  | { Signalised: Signalised }
   | "SchoolCrossing"
   | "Refuge"
-  | GradeSeparated;
+  | { GradeSeparated: GradeSeparated };
 
 export interface GradeSeparated {
   GradeSeparatedType?: GradeSeparatedType;
@@ -52,14 +52,14 @@ export type Users =
   | "Footpath"
   | "Cyclepath"
   | "SharedUseNoSeparation"
-  | SharedUseWithSeparation;
+  | { SharedUseWithSeparation: SharedUseWithSeparation };
 
 export interface SharedUseWithSeparation {
   width_footpath?: number;
   width_cyclepath?: number;
 }
 
-export type RouteType = OnRoad | OffRoad;
+export type RouteType = { OnRoad: OnRoad } | { OffRoad: OffRoad };
 
 export type OffRoad = "ThroughPark" | "CanalTowpath";
 
@@ -80,6 +80,6 @@ export type OnRoadType =
   | "PartSeparation"
   | "MandatoryLane"
   | "AdvisoryLane"
-  | NoSeparation;
+  | { NoSeparation: NoSeparation };
 
 export type NoSeparation = "TrafficCalming" | "ModalFilters" | "LowSpeed";

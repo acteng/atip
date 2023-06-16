@@ -95,7 +95,12 @@
 <Layout>
   <div slot="sidebar">
     <div>
-      <button type="button" on:click={() => window.location.href = "index.html"}> Home</button>
+      <button
+        type="button"
+        on:click={() => (window.location.href = "index.html")}
+      >
+        Home</button
+      >
       <button type="button" on:click={toggleAbout}>About</button>
       <button type="button" on:click={toggleInstructions}>Instructions</button>
     </div>

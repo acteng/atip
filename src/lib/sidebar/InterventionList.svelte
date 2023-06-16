@@ -14,13 +14,18 @@
       return feature.properties.planning?.name || "Untitled polygon";
     }
     if (schema == "v2") {
-      return (
-        feature.properties.v2?.Route?.name ||
-        feature.properties.v2?.Crossing?.name ||
-        "Untitled intervention"
-      );
+      if (feature.properties.v2) {
+        if ("Route" in feature.properties.v2) {
+          return feature.properties.v2!.Route.name || "Untitled route";
+        }
+        if ("Crossing" in feature.properties.v2) {
+          return feature.properties.v2!.Crossing.name || "Untitled crossing";
+        }
+      }
+      return "Untitled intervention";
     }
 
+    // v1
     if (feature.properties.name) {
       return feature.properties.name;
     }

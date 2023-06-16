@@ -29,8 +29,8 @@ test("clearing all resets to nothing being selected", async () => {
   await expect(
     page.getByText("Edit attributes to the left, or click another object")
   ).toBeVisible();
-  
-  await clearExistingInterventions(page)
+
+  await clearExistingInterventions(page);
 
   await expect(
     page.getByText("Click an object to fill out its attributes")
