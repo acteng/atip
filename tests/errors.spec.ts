@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { clickMap } from "./shared.ts";
+import { clickMap } from "./shared.js";
 
 // This is separate from modes.spec.ts to avoid the common beforeAll
 test("other tools work when route tool doesn't load", async ({ page }) => {
