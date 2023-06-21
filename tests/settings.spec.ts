@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { checkPageLoaded, loadInitialPageFromBrowser } from "./shared.ts";
+import { checkPageLoaded, loadInitialPageFromBrowser } from "./shared.js";
 
 test("changed settings are preserved across refresh", async ({ browser }) => {
   test.slow();

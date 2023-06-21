@@ -3,7 +3,7 @@ import {
   clearExistingInterventions,
   clickMap,
   loadInitialPageFromBrowser,
-} from "./shared.ts";
+} from "./shared.js";
 
 let page: Page;
 

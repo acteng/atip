@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   clearExistingInterventions,
   loadInitialPageFromBrowser,
-} from "./shared.ts";
+} from "./shared.js";
 
 let page: Page;
 let json;
