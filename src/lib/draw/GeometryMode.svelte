@@ -217,6 +217,8 @@
   };
 
   eventHandler.documentHandlers.keydown = (e: KeyboardEvent) => {
+    pointTool.onKeyDown(e);
+    polygonTool.onKeyDown(e);
     routeTool.onKeyDown(e);
   };
 
