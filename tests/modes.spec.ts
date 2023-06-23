@@ -107,7 +107,7 @@ test("editing geometry of a polygon works", async () => {
   await page.getByRole("button", { name: "Edit geometry" }).click();
   await clickMap(page, 312, 501);
   // This button indicates the mode is working
-  await page.getByRole("button", { name: "Finish" }).click();
+  await expect(page.getByRole("button", { name: "Finish" })).toBeVisible();
 });
 
 test("adding interventions, then deleting one, then adding another", async () => {
@@ -168,7 +168,65 @@ test("escape key works from every mode", async () => {
   await expectEditGeometryMode();
 });
 
-// TODO Test cancel/escape from each tool in edit geometry
+test("edit a point, then cancel", async () => {
+  await page.getByRole("button", { name: "New point" }).click();
+  await clickMap(page, 500, 500);
+
+  await page.getByRole("button", { name: "Edit geometry" }).click();
+  await clickMap(page, 500, 500);
+  // This button indicates the mode is working
+  await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
+
+  await page.keyboard.down("Escape");
+  await expectEditGeometryMode();
+});
+
+test("edit a freehand polygon, then cancel", async () => {
+  await page.getByRole("button", { name: "New polygon (freehand)" }).click();
+  await clickMap(page, 500, 500);
+  await clickMap(page, 400, 500);
+  await clickMap(page, 400, 600);
+  await page.getByRole("button", { name: "Finish" }).click();
+
+  await page.getByRole("button", { name: "Edit geometry" }).click();
+  await clickMap(page, 430, 530);
+  // This button indicates the mode is working
+  await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
+
+  await page.keyboard.down("Escape");
+  await expectEditGeometryMode();
+});
+
+test("edit a snapped polygon, then cancel", async () => {
+  await page.getByRole("button", { name: "New polygon (snapped)" }).click();
+  await clickMap(page, 500, 500);
+  await clickMap(page, 400, 500);
+  await clickMap(page, 400, 600);
+  await page.getByRole("button", { name: "Finish" }).click();
+
+  await page.getByRole("button", { name: "Edit geometry" }).click();
+  await clickMap(page, 430, 515);
+  // This button indicates the mode is working
+  await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
+
+  await page.keyboard.down("Escape");
+  await expectEditGeometryMode();
+});
+
+test("edit a route, then cancel", async () => {
+  await page.getByRole("button", { name: "New route" }).click();
+  await clickMap(page, 500, 500);
+  await clickMap(page, 400, 500);
+  await page.getByRole("button", { name: "Finish" }).click();
+
+  await page.getByRole("button", { name: "Edit geometry" }).click();
+  await clickMap(page, 442, 492);
+  // This button indicates the mode is working
+  await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
+
+  await page.keyboard.down("Escape");
+  await expectEditGeometryMode();
+});
 
 // Assert the page is in attribute mode with nothing selected.
 async function expectNeutralAttributeMode() {
