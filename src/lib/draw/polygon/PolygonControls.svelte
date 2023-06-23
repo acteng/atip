@@ -1,6 +1,5 @@
 <script lang="ts">
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
-  import KeyHandler from "../KeyHandler.svelte";
   import { PolygonTool } from "./polygon_tool";
 
   export let polygonTool: PolygonTool;
@@ -20,4 +19,3 @@
   <button type="button" on:click={() => polygonTool.finish()}>Finish</button>
   <button type="button" on:click={() => polygonTool.cancel()}>Cancel</button>
 </div>
-<KeyHandler tool={polygonTool} />

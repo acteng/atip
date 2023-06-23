@@ -37,9 +37,20 @@ export class PointTool {
     }
   };
 
+  onKeyDown = (e: KeyboardEvent) => {
+    if (!this.active) {
+      return;
+    }
+    if (e.key == "Escape") {
+      e.preventDefault();
+      this.cancel();
+    }
+  };
+
   setHandlers = (eventHandler: EventHandler) => {
     eventHandler.mapHandlers.mousemove = this.onMouseMove;
     eventHandler.mapHandlers.click = this.onClick;
+    eventHandler.documentHandlers.keydown = this.onKeyDown;
   };
 
   constructor(map: Map) {

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { userSettings } from "../../../stores";
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
-  import KeyHandler from "../KeyHandler.svelte";
   import { RouteTool } from "./route_tool";
 
   export let routeTool: RouteTool;
@@ -50,4 +49,3 @@
   <button type="button" on:click={() => routeTool.finish()}>Finish</button>
   <button type="button" on:click={() => routeTool.cancel()}>Cancel</button>
 </div>
-<KeyHandler tool={routeTool} />
