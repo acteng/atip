@@ -64,7 +64,7 @@
     cursor = cursorFeature(e.lngLat.toArray());
   };
 
-  eventHandler.documentHandlers.keyDown = (e: KeyboardEvent) => {
+  eventHandler.documentHandlers.keydown = (e: KeyboardEvent) => {
     if (e.key == "Escape") {
       changeMode("edit-attribute");
       e.preventDefault();
