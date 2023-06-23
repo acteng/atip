@@ -1,6 +1,5 @@
 <script lang="ts">
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
-  import KeyHandler from "../KeyHandler.svelte";
   import { PointTool } from "./point_tool";
 
   export let pointTool: PointTool;
@@ -19,4 +18,3 @@
 </CollapsibleCard>
 
 <button type="button" on:click={() => pointTool.cancel()}>Cancel</button>
-<KeyHandler tool={pointTool} />

@@ -154,6 +154,9 @@ export class RouteTool {
       e.preventDefault();
       this.inner.setSnapMode(false);
       this.redraw();
+    } else if (e.key == "Escape") {
+      e.preventDefault();
+      this.cancel();
     }
   };
 

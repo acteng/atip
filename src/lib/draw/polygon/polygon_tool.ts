@@ -191,6 +191,16 @@ export class PolygonTool {
     }
   };
 
+  onKeyDown = (e: KeyboardEvent) => {
+    if (!this.active) {
+      return;
+    }
+    if (e.key == "Escape") {
+      e.preventDefault();
+      this.cancel();
+    }
+  };
+
   setHandlers = (eventHandler: EventHandler) => {
     eventHandler.mapHandlers.mousemove = this.onMouseMove;
     eventHandler.mapHandlers.click = this.onClick;
@@ -198,6 +208,7 @@ export class PolygonTool {
     eventHandler.mapHandlers.mousedown = this.onMouseDown;
     eventHandler.mapHandlers.mouseup = this.onMouseUp;
     eventHandler.documentHandlers.keypress = this.onKeypress;
+    eventHandler.documentHandlers.keydown = this.onKeyDown;
   };
 
   addEventListenerSuccess(callback: (f: FeatureWithProps<Polygon>) => void) {
