@@ -32,9 +32,7 @@ test("clearing all resets to nothing being selected", async () => {
 
   await clearExistingInterventions(page);
 
-  await expect(
-    page.getByText("Click an object to fill out its attributes")
-  ).toBeVisible();
+  await expectNeutralAttributeMode();
 });
 
 test("creating a new point opens a form", async () => {
@@ -112,7 +110,7 @@ test("editing geometry of a polygon works", async () => {
   await page.getByRole("button", { name: "Finish" }).click();
 });
 
-test("testing adding interventions, then deleting one, then adding another", async () => {
+test("adding interventions, then deleting one, then adding another", async () => {
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 522, 468);
   await clickMap(page, 192, 513);
@@ -128,7 +126,7 @@ test("testing adding interventions, then deleting one, then adding another", asy
   await page.getByRole("button", { name: "1) Untitled route" }).isVisible();
 });
 
-test("testing add a route and save it", async () => {
+test("add a route and save it", async () => {
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 522, 468);
   await clickMap(page, 192, 513);
@@ -141,3 +139,47 @@ test("testing add a route and save it", async () => {
     page.getByRole("button", { name: "1) Untitled route" })
   ).toBeVisible();
 });
+
+test("escape key works from every mode", async () => {
+  // We start in edit attrbute mode
+  await expectNeutralAttributeMode();
+  // Pressing escape from there shouldn't do anything
+  await page.keyboard.down("Escape");
+  await expectNeutralAttributeMode();
+
+  // From each tool, make sure escape goes back to attribute mode
+  for (let mode of [
+    "New point",
+    "New polygon (freehand)",
+    "New polygon (snapped)",
+    "New route",
+    "Split route",
+    "Street View",
+  ]) {
+    await page.getByRole("button", { name: mode }).click();
+    await page.keyboard.down("Escape");
+    await expectNeutralAttributeMode();
+  }
+
+  // Edit geometry is different -- escape there should return to this mode, not attribute mode
+  await page.getByRole("button", { name: "Edit geometry" }).click();
+  await expectEditGeometryMode();
+  await page.keyboard.down("Escape");
+  await expectEditGeometryMode();
+});
+
+// TODO Test cancel/escape from each tool in edit geometry
+
+// Assert the page is in attribute mode with nothing selected.
+async function expectNeutralAttributeMode() {
+  await expect(
+    page.getByText("Click an object to fill out its attributes")
+  ).toBeVisible();
+}
+
+// Assert the page is in edit geometry mode with nothing selected.
+async function expectEditGeometryMode() {
+  await expect(
+    page.getByText("Click an object to edit its geometry")
+  ).toBeVisible();
+}
