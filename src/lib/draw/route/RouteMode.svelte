@@ -52,7 +52,9 @@
     }
 
     routeTool.addEventListenerFailure(() => {
-      changeMode("edit-attribute");
+      if ($currentMode == thisMode) {
+        changeMode("edit-attribute");
+      }
     });
 
     routeTool.addEventListenerSuccessRoute((feature) => {
