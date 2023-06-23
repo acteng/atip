@@ -10,7 +10,7 @@ export const MapEvents = [
   "dragstart",
 ];
 
-export const DocumentEvents = ["keyPress", "keyUp", "keyDown"];
+export const DocumentEvents = ["keypress", "keyup", "keydown"];
 
 export class EventHandler {
   constructor() {
@@ -24,9 +24,9 @@ export class EventHandler {
       dragstart: (e: MapMouseEvent) => {},
     };
     this.documentHandlers = {
-      keyPress: (e: KeyboardEvent) => {},
-      keyUp: (e: KeyboardEvent) => {},
-      keyDown: (e: KeyboardEvent) => {},
+      keypress: (e: KeyboardEvent) => {},
+      keyup: (e: KeyboardEvent) => {},
+      keydown: (e: KeyboardEvent) => {},
     };
   }
 
@@ -41,8 +41,8 @@ export class EventHandler {
   };
 
   documentHandlers: {
-    keyPress: (e: KeyboardEvent) => void;
-    keyUp: (e: KeyboardEvent) => void;
-    keyDown: (e: KeyboardEvent) => void;
+    keypress: (e: KeyboardEvent) => void;
+    keyup: (e: KeyboardEvent) => void;
+    keydown: (e: KeyboardEvent) => void;
   };
 }

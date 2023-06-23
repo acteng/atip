@@ -197,7 +197,7 @@ export class PolygonTool {
     eventHandler.mapHandlers.dblclick = this.onDoubleClick;
     eventHandler.mapHandlers.mousedown = this.onMouseDown;
     eventHandler.mapHandlers.mouseup = this.onMouseUp;
-    eventHandler.documentHandlers.keyPress = this.onKeypress;
+    eventHandler.documentHandlers.keypress = this.onKeypress;
   };
 
   addEventListenerSuccess(callback: (f: FeatureWithProps<Polygon>) => void) {

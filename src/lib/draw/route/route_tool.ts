@@ -340,9 +340,9 @@ export class RouteTool {
     eventHandler.mapHandlers.dblclick = this.onDoubleClick;
     eventHandler.mapHandlers.dragstart = this.onDragStart;
     eventHandler.mapHandlers.mouseup = this.onMouseUp;
-    eventHandler.documentHandlers.keyPress = this.onKeyPress;
-    eventHandler.documentHandlers.keyDown = this.onKeyDown;
-    eventHandler.documentHandlers.keyUp = this.onKeyUp;
+    eventHandler.documentHandlers.keypress = this.onKeyPress;
+    eventHandler.documentHandlers.keydown = this.onKeyDown;
+    eventHandler.documentHandlers.keyup = this.onKeyUp;
   };
 
   private redraw() {

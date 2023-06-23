@@ -211,16 +211,16 @@
     polygonTool.onMouseUp();
   };
 
-  eventHandler.documentHandlers.keyPress = (e: KeyboardEvent) => {
+  eventHandler.documentHandlers.keypress = (e: KeyboardEvent) => {
     routeTool.onKeyPress(e);
     polygonTool.onKeypress(e);
   };
 
-  eventHandler.documentHandlers.keyDown = (e: KeyboardEvent) => {
+  eventHandler.documentHandlers.keydown = (e: KeyboardEvent) => {
     routeTool.onKeyDown(e);
   };
 
-  eventHandler.documentHandlers.keyUp = (e: KeyboardEvent) => {
+  eventHandler.documentHandlers.keyup = (e: KeyboardEvent) => {
     routeTool.onKeyUp(e);
   };
 
