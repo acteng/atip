@@ -37,6 +37,11 @@ export const clearExistingInterventions = async (page: Page) => {
   if (!(await editAttributesLocator.isDisabled())) {
     await editAttributesLocator.click();
   }
+
+  // Reset the viewport between tests, since many tests click the map in specific places
+  await page
+    .getByRole("button", { name: "Zoom to show entire boundary" })
+    .click();
 };
 
 export async function clickMap(page: Page, x: number, y: number) {
