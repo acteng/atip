@@ -1,5 +1,6 @@
 <script lang="ts">
   import { type MapMouseEvent } from "maplibre-gl";
+  import { onDestroy } from "svelte";
   import { bbox } from "../../maplibre_helpers";
   import {
     currentMode,
@@ -22,8 +23,8 @@
     formOpen.set(null);
   }
 
-  $: {
-    let id = $openFromSidebar;
+  // Only run when openFromSidebar changes, not when gj changes.
+  const unsubscribe = openFromSidebar.subscribe((id) => {
     if (id) {
       // When the user starts editing something from the sidebar, warp to what's
       // being edited. (Don't do this when clicking the object on the map.)
@@ -46,7 +47,8 @@
       // touch formOpen.
       changeMode(thisMode);
     }
-  }
+  });
+  onDestroy(unsubscribe);
 
   eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
     let results = $map.queryRenderedFeatures(e.point, {
