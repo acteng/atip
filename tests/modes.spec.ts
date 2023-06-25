@@ -228,6 +228,40 @@ test("edit a route, then cancel", async () => {
   await expectEditGeometryMode();
 });
 
+test("the viewport changes only once when opening a form", async () => {
+  let defaultViewport = new URL(page.url()).hash;
+
+  // Create a point, and make sure the viewport hasn't changed
+  await page.getByRole("button", { name: "New point" }).click();
+  await clickMap(page, 500, 500);
+  expect(new URL(page.url()).hash).toEqual(defaultViewport);
+
+  // Close the form
+  await page.getByRole("button", { name: "Save" }).click();
+
+  // Open the form from the sidebar. The viewport should change
+  await page.getByRole("button", { name: "1) Untitled point" }).click();
+  // The zoom effect is set to happen over 500ms, so wait a bit
+  await page.waitForTimeout(700);
+  let pointViewport = new URL(page.url()).hash;
+  expect(pointViewport).not.toEqual(defaultViewport);
+
+  // Zoom in on the map without closing the form. The viewport should again differ.
+  await page.getByRole("region", { name: "Map" }).hover();
+  await page.mouse.wheel(0, -100);
+  // The above scroll doesn't auto-wait for anything
+  await page.waitForTimeout(1000);
+  let customViewport = new URL(page.url()).hash;
+  expect.soft(customViewport).not.toEqual(pointViewport);
+
+  // Interact with the form, which is already open. The viewport should stay the same.
+  await page.getByText("Crossing", { exact: true }).click();
+  // If we're incorrectly changing the viewport here, wait for the effect to happen
+  await page.waitForTimeout(700);
+  // TODO Expect the test to fails here. Remove 'not' after fixing.
+  expect(new URL(page.url()).hash).not.toEqual(customViewport);
+});
+
 // Assert the page is in attribute mode with nothing selected.
 async function expectNeutralAttributeMode() {
   await expect(
