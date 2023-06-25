@@ -258,8 +258,7 @@ test("the viewport changes only once when opening a form", async () => {
   await page.getByText("Crossing", { exact: true }).click();
   // If we're incorrectly changing the viewport here, wait for the effect to happen
   await page.waitForTimeout(700);
-  // TODO Expect the test to fails here. Remove 'not' after fixing.
-  expect(new URL(page.url()).hash).not.toEqual(customViewport);
+  expect(new URL(page.url()).hash).toEqual(customViewport);
 });
 
 // Assert the page is in attribute mode with nothing selected.
