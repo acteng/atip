@@ -126,7 +126,15 @@
     filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
     color:
       schema == "planning" ? colorByReferenceType : colorByInterventionType,
+    opacity: 0.2,
+  });
+  overwriteLineLayer($map, {
+    id: "interventions-polygon-outlines",
+    source,
+    filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
+    color:
+      schema == "planning" ? colorByReferenceType : colorByInterventionType,
     opacity: 0.5,
-    // TODO Outline too?
+    width: 0.7 * lineWidth,
   });
 </script>

@@ -22,7 +22,7 @@
   // Show along a route if specified, or show all otherwise
   export let id: number | undefined;
 
-  let colors = ["#00AB4D", "#8ECA4D", "#F7BB00", "#BB0000", "#470000"];
+  let colors = ["#086063", "#5BC2AE", "#E9C492", "#EBA14D", "#D94324"];
   // This'll never get displayed; its opacity will be set to 0 later
   let unknown = "white";
 
