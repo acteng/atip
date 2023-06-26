@@ -20,6 +20,9 @@
         "Untitled intervention"
       );
     }
+    if (schema == "criticals") {
+      return feature.properties.criticals?.name || "Untitled issue";
+    }
 
     if (feature.properties.name) {
       return feature.properties.name;
