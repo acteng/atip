@@ -18,6 +18,11 @@
     sidebarHover,
   } from "../../stores";
 
+  // Show clickable objects on the map using the cursor
+  $: {
+    $map.getCanvas().style.cursor = $mapHover ? "pointer" : "grab";
+  }
+
   let source = "hover";
 
   // Use a layer that only ever has zero or one features for hovering. I think
