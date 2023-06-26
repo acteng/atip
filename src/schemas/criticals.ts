@@ -1,6 +1,7 @@
 // This file is auto-generated; do not manually edit
 
 export interface CriticalIssue {
+  name?: string;
   Type?: Type;
   comment?: string;
   photographed?: boolean;

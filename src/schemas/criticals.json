@@ -2,6 +2,10 @@
   "name": "CriticalIssue",
   "members": [
     {
+      "name": "name",
+      "type": "one-liner"
+    },
+    {
       "name": "Type",
       "oneOf": [
         {
