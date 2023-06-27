@@ -94,6 +94,18 @@
           let updateFeature = gj.features.find(
             (f) => f.id == currentlyEditing
           )!;
+          if (!updateFeature) {
+            stopEditing();
+            // We could've been editing anything; just handle all possibilities
+            pointTool.stop();
+            polygonTool.stop();
+            routeTool.stop();
+            window.alert(
+              "You loaded another file or cleared everything while editing. Your changes were lost."
+            );
+            return gj;
+          }
+
           updateFeature.geometry = feature.geometry;
           if (feature.properties.length_meters) {
             updateFeature.properties.length_meters =
