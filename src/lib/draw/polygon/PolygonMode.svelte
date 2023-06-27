@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
+  import type { FeatureWithProps } from "../../../maplibre_helpers";
   import {
     currentMode,
     formOpen,
@@ -17,12 +18,26 @@
   export let polygonTool: PolygonTool;
   export let eventHandler: EventHandler;
 
+  // While the new feature is being drawn, remember its last valid version
+  let unsavedFeature: FeatureWithProps<Polygon> | null = null;
+
   export function start() {
     polygonTool.setHandlers(eventHandler);
     polygonTool.startNew();
   }
   export function stop() {
     polygonTool.stop();
+
+    // If we leave this mode without saving, still create a new feature
+    if (unsavedFeature) {
+      gjScheme.update((gj) => {
+        unsavedFeature.id = newFeatureId(gj);
+        unsavedFeature.properties.intervention_type = "area";
+        gj.features.push(unsavedFeature as Feature<Polygon>);
+        return gj;
+      });
+      unsavedFeature = null;
+    }
   }
 
   polygonTool.addEventListenerSuccess((feature) => {
@@ -34,9 +49,15 @@
         return gj;
       });
 
+      unsavedFeature = null;
+
       changeMode("edit-attribute");
       formOpen.set(feature.id as number);
     }
+  });
+
+  polygonTool.addEventListenerUpdated((feature) => {
+    unsavedFeature = feature;
   });
 
   polygonTool.addEventListenerFailure(() => {
