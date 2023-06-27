@@ -63,6 +63,7 @@
 
   routeTool.addEventListenerFailure(() => {
     if ($currentMode == thisMode) {
+      unsavedFeature = null;
       changeMode("edit-attribute");
     }
   });
