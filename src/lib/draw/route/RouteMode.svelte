@@ -57,7 +57,7 @@
       }
     });
 
-    routeTool.addEventListenerSuccessRoute((feature) => {
+    routeTool.addEventListenerSuccess((feature) => {
       if ($currentMode == thisMode) {
         gjScheme.update((gj) => {
           feature.id = newFeatureId(gj);

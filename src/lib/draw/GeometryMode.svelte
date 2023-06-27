@@ -50,55 +50,7 @@
   }
 
   // Handle successful edits
-  routeTool.addEventListenerSuccessRoute((editedRoute) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-        // TODO Hack around https://github.com/acteng/atip/issues/142
-        if (!feature) {
-          window.alert(
-            "You loaded another file or cleared everything while editing. Your changes were lost."
-          );
-          return gj;
-        }
-        // Keep the ID and any properties. Just copy over stuff from routeSnapper.
-        // TODO We're depending on implementation details here and knowing what to copy...
-        feature.properties.length_meters = editedRoute.properties.length_meters;
-        feature.properties.waypoints = editedRoute.properties.waypoints;
-        delete feature.properties.hide_while_editing;
-        feature.geometry = editedRoute.geometry;
-        return gj;
-      });
-
-      // Stay in this mode
-      stopEditing();
-    }
-  });
-
-  routeTool.addEventListenerSuccessArea((editedArea) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-        if (!feature) {
-          window.alert(
-            "You loaded another file or cleared everything while editing. Your changes were lost."
-          );
-          return gj;
-        }
-        // Keep the ID and any properties. Just copy over stuff from routeSnapper.
-        // TODO We're depending on implementation details here and knowing what to copy...
-        feature.properties.waypoints = editedArea.properties.waypoints;
-        delete feature.properties.hide_while_editing;
-        feature.geometry = editedArea.geometry;
-        return gj;
-      });
-
-      // Stay in this mode
-      stopEditing();
-    }
-  });
-
-  for (let tool of [pointTool, polygonTool]) {
+  for (let tool of [pointTool, polygonTool, routeTool]) {
     tool.addEventListenerSuccess((feature) => {
       if ($currentMode == thisMode) {
         gjScheme.update((gj) => {
@@ -112,6 +64,18 @@
             return gj;
           }
           updateFeature.geometry = feature.geometry;
+
+          // Copy properties that may come from routeTool. Not all tools or
+          // cases will produce all of these.
+          // TODO We're depending on implementation details here and knowing what to copy...
+          if (feature.properties.length_meters) {
+            updateFeature.properties.length_meters =
+              feature.properties.length_meters;
+          }
+          if (feature.properties.waypoints) {
+            updateFeature.properties.waypoints = feature.properties.waypoints;
+          }
+
           delete updateFeature.properties.hide_while_editing;
           return gj;
         });
