@@ -124,6 +124,21 @@
     });
   }
 
+  // Auto-save
+  for (let tool of [polygonTool]) {
+    tool.addEventListenerUpdated((feature) => {
+      if ($currentMode == thisMode) {
+        gjScheme.update((gj) => {
+          let updateFeature = gj.features.find(
+            (f) => f.id == currentlyEditing
+          )!;
+          updateFeature.geometry = feature.geometry;
+          return gj;
+        });
+      }
+    });
+  }
+
   // Handle failures
   for (let tool of [pointTool, polygonTool, routeTool]) {
     tool.addEventListenerFailure(() => {

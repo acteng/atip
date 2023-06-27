@@ -27,6 +27,7 @@ export class PolygonTool {
   map: Map;
   active: boolean;
   eventListenersSuccess: ((f: FeatureWithProps<Polygon>) => void)[];
+  eventListenersUpdated: ((f: FeatureWithProps<Polygon>) => void)[];
   eventListenersFailure: (() => void)[];
   points: Position[];
   cursor: Feature<Point> | null;
@@ -38,6 +39,7 @@ export class PolygonTool {
     this.map = map;
     this.active = false;
     this.eventListenersSuccess = [];
+    this.eventListenersUpdated = [];
     this.eventListenersFailure = [];
 
     // This doesn't repeat the first point at the end; it's not closed
@@ -142,10 +144,12 @@ export class PolygonTool {
         this.hover = this.points.length - 1;
       }
       this.redraw();
+      this.pointsUpdated();
     } else if (this.active && typeof this.hover === "number") {
       this.points.splice(this.hover, 1);
       this.hover = null;
       this.redraw();
+      this.pointsUpdated();
       // TODO Doesn't seem to work; you still have to move the mouse to hover
       // on the polygon
       this.recalculateHovering(e);
@@ -178,6 +182,7 @@ export class PolygonTool {
   onMouseUp = () => {
     if (this.active && this.dragFrom) {
       this.dragFrom = null;
+      this.pointsUpdated();
     }
   };
 
@@ -213,6 +218,9 @@ export class PolygonTool {
 
   addEventListenerSuccess(callback: (f: FeatureWithProps<Polygon>) => void) {
     this.eventListenersSuccess.push(callback);
+  }
+  addEventListenerUpdated(callback: (f: FeatureWithProps<Polygon>) => void) {
+    this.eventListenersUpdated.push(callback);
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
@@ -277,6 +285,16 @@ export class PolygonTool {
     }
 
     (this.map.getSource(source) as GeoJSONSource).setData(gj);
+  }
+
+  // If there's a valid polygon, also passes to eventListenersUpdated
+  private pointsUpdated() {
+    let polygon = this.polygonFeature();
+    if (polygon) {
+      for (let cb of this.eventListenersUpdated) {
+        cb(polygon);
+      }
+    }
   }
 
   private recalculateHovering(e: MapLayerMouseEvent) {
