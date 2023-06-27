@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { LineString, Polygon } from "geojson";
   import { MapMouseEvent } from "maplibre-gl";
+  import type { FeatureWithProps } from "../../maplibre_helpers";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
   import type { EventHandler } from "./event_handler";
@@ -27,8 +28,8 @@
     | "snap-polygon"
     | "route"
     | null = null;
-  // Retain a copy of the original feature before starting to edit
-  let uneditedFeature: FeatureUnion | null = null;
+  // As a feature is being edited, store the latest version
+  let latestEditedFeature: FeatureWithProps<LineString | Polygon> | null = null;
 
   export function start() {}
   export function stop() {
@@ -40,7 +41,21 @@
 
       gjScheme.update((gj) => {
         let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+        if (!feature) {
+          window.alert(
+            "You loaded another file or cleared everything while editing. Your changes were lost."
+          );
+          return gj;
+        }
+
+        // Show the feature again
         delete feature.properties.hide_while_editing;
+
+        // If there are unsaved edits to the feature, copy them over. If the
+        // user explicitly canceled, then a failure callback would've run.
+        if (latestEditedFeature) {
+          updateFeature(feature, latestEditedFeature);
+        }
         return gj;
       });
     }
@@ -51,32 +66,18 @@
 
   // Handle successful edits
   for (let tool of [pointTool, polygonTool, routeTool]) {
-    tool.addEventListenerSuccess((feature) => {
+    tool.addEventListenerSuccess((editedFeature) => {
       if ($currentMode == thisMode) {
         gjScheme.update((gj) => {
-          let updateFeature = gj.features.find(
-            (f) => f.id == currentlyEditing
-          )!;
-          if (!updateFeature) {
+          let feature = gj.features.find((f) => f.id == currentlyEditing)!;
+          if (!feature) {
             window.alert(
               "You loaded another file or cleared everything while editing. Your changes were lost."
             );
             return gj;
           }
-          updateFeature.geometry = feature.geometry;
-
-          // Copy properties that may come from routeTool. Not all tools or
-          // cases will produce all of these.
-          // TODO We're depending on implementation details here and knowing what to copy...
-          if (feature.properties.length_meters) {
-            updateFeature.properties.length_meters =
-              feature.properties.length_meters;
-          }
-          if (feature.properties.waypoints) {
-            updateFeature.properties.waypoints = feature.properties.waypoints;
-          }
-
-          delete updateFeature.properties.hide_while_editing;
+          updateFeature(feature, editedFeature);
+          delete feature.properties.hide_while_editing;
           return gj;
         });
 
@@ -90,32 +91,8 @@
   for (let tool of [polygonTool, routeTool]) {
     tool.addEventListenerUpdated((feature) => {
       if ($currentMode == thisMode) {
-        gjScheme.update((gj) => {
-          let updateFeature = gj.features.find(
-            (f) => f.id == currentlyEditing
-          )!;
-          if (!updateFeature) {
-            stopEditing();
-            // We could've been editing anything; just handle all possibilities
-            pointTool.stop();
-            polygonTool.stop();
-            routeTool.stop();
-            window.alert(
-              "You loaded another file or cleared everything while editing. Your changes were lost."
-            );
-            return gj;
-          }
-
-          updateFeature.geometry = feature.geometry;
-          if (feature.properties.length_meters) {
-            updateFeature.properties.length_meters =
-              feature.properties.length_meters;
-          }
-          if (feature.properties.waypoints) {
-            updateFeature.properties.waypoints = feature.properties.waypoints;
-          }
-          return gj;
-        });
+        // Just remember the update; don't apply it yet
+        latestEditedFeature = feature;
       }
     });
   }
@@ -124,7 +101,7 @@
   for (let tool of [pointTool, polygonTool, routeTool]) {
     tool.addEventListenerFailure(() => {
       if ($currentMode == thisMode) {
-        // Revert to the unedited feature
+        // Throw away any updates
         gjScheme.update((gj) => {
           let feature = gj.features.find((f) => f.id == currentlyEditing)!;
           if (!feature) {
@@ -133,8 +110,6 @@
             );
             return gj;
           }
-          feature.geometry = uneditedFeature.geometry;
-          feature.properties = uneditedFeature.properties;
           delete feature.properties.hide_while_editing;
           return gj;
         });
@@ -236,7 +211,6 @@
     let feature = maybeFeature!;
 
     currentlyEditing = id;
-    uneditedFeature = JSON.parse(JSON.stringify(feature));
 
     if (feature.geometry.type == "LineString") {
       routeTool.editExistingRoute(feature as Feature<LineString>);
@@ -260,7 +234,22 @@
   function stopEditing() {
     currentlyEditing = null;
     currentlyEditingControls = null;
-    uneditedFeature = null;
+    latestEditedFeature = null;
+  }
+
+  // Copy geometry and properties from source to destination
+  function updateFeature(destination, source) {
+    destination.geometry = source.geometry;
+
+    // Copy properties that may come from routeTool. Not all tools or cases
+    // will produce all of these.
+    // TODO We're depending on implementation details here and knowing what to copy...
+    if (source.properties.length_meters) {
+      destination.properties.length_meters = source.properties.length_meters;
+    }
+    if (source.properties.waypoints) {
+      destination.properties.waypoints = source.properties.waypoints;
+    }
   }
 </script>
 
