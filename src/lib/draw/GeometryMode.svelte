@@ -40,8 +40,10 @@
       routeTool.stop();
 
       gjScheme.update((gj) => {
-        let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-        if (!feature) {
+        let featureToBeUpdated = gj.features.find(
+          (f) => f.id == currentlyEditing
+        )!;
+        if (!featureToBeUpdated) {
           window.alert(
             "You loaded another file or cleared everything while editing. Your changes were lost."
           );
@@ -49,12 +51,12 @@
         }
 
         // Show the feature again
-        delete feature.properties.hide_while_editing;
+        delete featureToBeUpdated.properties.hide_while_editing;
 
         // If there are unsaved edits to the feature, copy them over. If the
         // user explicitly canceled, then a failure callback would've run.
         if (unsavedFeature) {
-          updateFeature(feature, unsavedFeature);
+          updateFeature(featureToBeUpdated, unsavedFeature);
         }
         return gj;
       });
@@ -69,15 +71,17 @@
     tool.addEventListenerSuccess((editedFeature) => {
       if ($currentMode == thisMode) {
         gjScheme.update((gj) => {
-          let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-          if (!feature) {
+          let featureToBeUpdated = gj.features.find(
+            (f) => f.id == currentlyEditing
+          )!;
+          if (!featureToBeUpdated) {
             window.alert(
               "You loaded another file or cleared everything while editing. Your changes were lost."
             );
             return gj;
           }
-          updateFeature(feature, editedFeature);
-          delete feature.properties.hide_while_editing;
+          updateFeature(featureToBeUpdated, editedFeature);
+          delete featureToBeUpdated.properties.hide_while_editing;
           return gj;
         });
 
@@ -103,14 +107,16 @@
       if ($currentMode == thisMode) {
         // Throw away any updates
         gjScheme.update((gj) => {
-          let feature = gj.features.find((f) => f.id == currentlyEditing)!;
-          if (!feature) {
+          let featureToBeUpdated = gj.features.find(
+            (f) => f.id == currentlyEditing
+          )!;
+          if (!featureToBeUpdated) {
             window.alert(
               "You loaded another file or cleared everything while editing. Your changes were lost."
             );
             return gj;
           }
-          delete feature.properties.hide_while_editing;
+          delete featureToBeUpdated.properties.hide_while_editing;
           return gj;
         });
 
