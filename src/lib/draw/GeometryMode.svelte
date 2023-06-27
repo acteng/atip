@@ -29,7 +29,7 @@
     | "route"
     | null = null;
   // As a feature is being edited, store the latest version
-  let latestEditedFeature: FeatureWithProps<LineString | Polygon> | null = null;
+  let unsavedFeature: FeatureWithProps<LineString | Polygon> | null = null;
 
   export function start() {}
   export function stop() {
@@ -53,8 +53,8 @@
 
         // If there are unsaved edits to the feature, copy them over. If the
         // user explicitly canceled, then a failure callback would've run.
-        if (latestEditedFeature) {
-          updateFeature(feature, latestEditedFeature);
+        if (unsavedFeature) {
+          updateFeature(feature, unsavedFeature);
         }
         return gj;
       });
@@ -92,7 +92,7 @@
     tool.addEventListenerUpdated((feature) => {
       if ($currentMode == thisMode) {
         // Just remember the update; don't apply it yet
-        latestEditedFeature = feature;
+        unsavedFeature = feature;
       }
     });
   }
@@ -234,7 +234,7 @@
   function stopEditing() {
     currentlyEditing = null;
     currentlyEditingControls = null;
-    latestEditedFeature = null;
+    unsavedFeature = null;
   }
 
   // Copy geometry and properties from source to destination
