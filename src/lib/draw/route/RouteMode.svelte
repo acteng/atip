@@ -3,6 +3,7 @@
   import init from "route-snapper";
   import { fetchWithProgress } from "route-snapper/lib.js";
   import { onMount } from "svelte";
+  import type { FeatureWithProps } from "../../../maplibre_helpers";
   import {
     currentMode,
     formOpen,
@@ -24,6 +25,9 @@
   export let routeTool: RouteTool;
   export let eventHandler: EventHandler;
 
+  // While the new feature is being drawn, remember its last valid version
+  let unsavedFeature: FeatureWithProps<LineString> | null = null;
+
   // These're for drawing a new route, NOT for editing an existing.
   // GeometryMode manages the latter.
   export function start() {
@@ -36,6 +40,17 @@
   }
   export function stop() {
     routeTool?.stop();
+
+    // If we leave this mode without saving, still create a new feature
+    if (unsavedFeature) {
+      gjScheme.update((gj) => {
+        unsavedFeature.id = newFeatureId(gj);
+        unsavedFeature.properties.intervention_type = "route";
+        gj.features.push(unsavedFeature as Feature<LineString>);
+        return gj;
+      });
+      unsavedFeature = null;
+    }
   }
 
   onMount(async () => {
@@ -51,12 +66,6 @@
       return;
     }
 
-    routeTool.addEventListenerFailure(() => {
-      if ($currentMode == thisMode) {
-        changeMode("edit-attribute");
-      }
-    });
-
     routeTool.addEventListenerSuccess((feature) => {
       if ($currentMode == thisMode) {
         gjScheme.update((gj) => {
@@ -66,8 +75,20 @@
           return gj;
         });
 
+        unsavedFeature = null;
+
         changeMode("edit-attribute");
         formOpen.set(feature.id as number);
+      }
+    });
+
+    routeTool.addEventListenerUpdated((feature) => {
+      unsavedFeature = feature as FeatureWithProps<LineString>;
+    });
+
+    routeTool.addEventListenerFailure(() => {
+      if ($currentMode == thisMode) {
+        changeMode("edit-attribute");
       }
     });
   });
