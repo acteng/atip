@@ -118,6 +118,8 @@ We can figure out the JSON (or gRPC?) API as we go. The output would generally b
 - get the latest version of a scheme
 - update one scheme
 - get all schemes combined (possibly filtering the results)
+- submit/save a scheme
+- submit/save edits
 
 ### Svelte / UI changes
 
