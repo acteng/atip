@@ -54,6 +54,31 @@ test("creating a new freehand polygon opens a form", async () => {
   await page.getByLabel("Description:").click();
 });
 
+test("creating a new freehand polygon and switching modes doesn't lose changes", async () => {
+  await page.getByRole("button", { name: "New polygon (freehand)" }).click();
+  await clickMap(page, 500, 500);
+  await clickMap(page, 400, 500);
+  await clickMap(page, 400, 600);
+
+  // Switch modes without finishing
+  await page.getByRole("button", { name: "New point" }).click();
+
+  await page.getByRole("button", { name: "1) Untitled area" }).click();
+  await page.getByLabel("Description:").click();
+});
+
+test("creating a new freehand polygon and canceling doesn't save anything", async () => {
+  await page.getByRole("button", { name: "New polygon (freehand)" }).click();
+  await clickMap(page, 500, 500);
+  await clickMap(page, 400, 500);
+  await clickMap(page, 400, 600);
+
+  await page.getByRole("button", { name: "Cancel" }).click();
+  await expect(page.getByText("0 objects")).toBeVisible();
+});
+
+// TODO Repeat switching modes and canceling for other draw tools
+
 test("creating a new snapped polygon opens a form", async () => {
   await page.getByRole("button", { name: "New polygon (snapped)" }).click();
   await clickMap(page, 500, 500);
@@ -212,6 +237,10 @@ test("edit a snapped polygon, then cancel", async () => {
   await page.keyboard.down("Escape");
   await expectEditGeometryMode();
 });
+
+// TODO Edit each type of object without saving, and verify the edits are
+// retained. Or cancel and make sure they're reverted. (How to test for
+// geometry changes?)
 
 test("edit a route, then cancel", async () => {
   await page.getByRole("button", { name: "New route" }).click();
