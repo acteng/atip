@@ -1,4 +1,4 @@
-import type { Feature, LineString, Polygon } from "geojson";
+import type { LineString, Polygon } from "geojson";
 import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
 import { JsRouteSnapper } from "route-snapper";
 import {
@@ -24,8 +24,9 @@ export class RouteTool {
   map: Map;
   inner: JsRouteSnapper;
   active: boolean;
-  eventListenersSuccessRoute: ((f: FeatureWithProps<LineString>) => void)[];
-  eventListenersSuccessArea: ((f: FeatureWithProps<Polygon>) => void)[];
+  eventListenersSuccess: ((
+    f: FeatureWithProps<LineString | Polygon>
+  ) => void)[];
   eventListenersUpdated: ((
     f: FeatureWithProps<LineString | Polygon>
   ) => void)[];
@@ -37,8 +38,7 @@ export class RouteTool {
     this.inner = new JsRouteSnapper(graphBytes);
     console.timeEnd("Deserialize and setup JsRouteSnapper");
     this.active = false;
-    this.eventListenersSuccessRoute = [];
-    this.eventListenersSuccessArea = [];
+    this.eventListenersSuccess = [];
     this.eventListenersUpdated = [];
     this.eventListenersFailure = [];
 
@@ -287,20 +287,15 @@ export class RouteTool {
     this.map.removeSource("route-snapper");
   }
 
-  addEventListenerSuccessRoute(
-    callback: (f: FeatureWithProps<LineString>) => void
+  addEventListenerSuccess(
+    callback: (f: FeatureWithProps<LineString | Polygon>) => void
   ) {
-    this.eventListenersSuccessRoute.push(callback);
+    this.eventListenersSuccess.push(callback);
   }
   addEventListenerUpdated(
     callback: (f: FeatureWithProps<LineString | Polygon>) => void
   ) {
     this.eventListenersUpdated.push(callback);
-  }
-  addEventListenerSuccessArea(
-    callback: (f: FeatureWithProps<Polygon>) => void
-  ) {
-    this.eventListenersSuccessArea.push(callback);
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
@@ -314,18 +309,9 @@ export class RouteTool {
   finish() {
     let rawJSON = this.inner.toFinalFeature();
     if (rawJSON) {
-      // Parse once just to check geometry type. But keep parsing the string
-      // for each callback, to copy and make sure different callbacks
-      // don't have the same reference
-      let f = JSON.parse(rawJSON) as Feature;
-      if (f.geometry.type == "LineString") {
-        for (let cb of this.eventListenersSuccessRoute) {
-          cb(JSON.parse(rawJSON) as FeatureWithProps<LineString>);
-        }
-      } else {
-        for (let cb of this.eventListenersSuccessArea) {
-          cb(JSON.parse(rawJSON) as FeatureWithProps<Polygon>);
-        }
+      // Pass copies to each callback
+      for (let cb of this.eventListenersSuccess) {
+        cb(JSON.parse(rawJSON) as FeatureWithProps<LineString | Polygon>);
       }
     } else {
       for (let cb of this.eventListenersFailure) {
