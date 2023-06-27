@@ -25,7 +25,9 @@ export class RouteTool {
   inner: JsRouteSnapper;
   active: boolean;
   eventListenersSuccessRoute: ((f: FeatureWithProps<LineString>) => void)[];
+  eventListenersUpdatedRoute: ((f: FeatureWithProps<LineString>) => void)[];
   eventListenersSuccessArea: ((f: FeatureWithProps<Polygon>) => void)[];
+  eventListenersUpdatedArea: ((f: FeatureWithProps<Polygon>) => void)[];
   eventListenersFailure: (() => void)[];
 
   constructor(map: Map, graphBytes: Uint8Array) {
@@ -35,7 +37,9 @@ export class RouteTool {
     console.timeEnd("Deserialize and setup JsRouteSnapper");
     this.active = false;
     this.eventListenersSuccessRoute = [];
+    this.eventListenersUpdatedRoute = [];
     this.eventListenersSuccessArea = [];
+    this.eventListenersUpdatedArea = [];
     this.eventListenersFailure = [];
 
     // Rendering
@@ -94,6 +98,8 @@ export class RouteTool {
       this.inner.onMouseMove(e.lngLat.lng, e.lngLat.lat, circleRadiusMeters)
     ) {
       this.redraw();
+      // TODO We'll call this too frequently
+      this.dataUpdated();
     }
   };
 
@@ -103,6 +109,7 @@ export class RouteTool {
     }
     this.inner.onClick();
     this.redraw();
+    this.dataUpdated();
   };
 
   onDoubleClick = (e: MapMouseEvent) => {
@@ -210,7 +217,7 @@ export class RouteTool {
     isAToolInUse.set(isActive);
   }
 
-  // Deactivate the tool, clearing all state. No events are fired for addEventListenerFailure.
+  // Deactivate the tool, clearing all state. No events are fired for eventListenersFailure.
   stop() {
     this.setActivity(false);
     this.inner.clearState();
@@ -285,10 +292,20 @@ export class RouteTool {
   ) {
     this.eventListenersSuccessRoute.push(callback);
   }
+  addEventListenerUpdatedRoute(
+    callback: (f: FeatureWithProps<LineString>) => void
+  ) {
+    this.eventListenersUpdatedRoute.push(callback);
+  }
   addEventListenerSuccessArea(
     callback: (f: FeatureWithProps<Polygon>) => void
   ) {
     this.eventListenersSuccessArea.push(callback);
+  }
+  addEventListenerUpdatedArea(
+    callback: (f: FeatureWithProps<Polygon>) => void
+  ) {
+    this.eventListenersUpdatedArea.push(callback);
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
@@ -352,5 +369,21 @@ export class RouteTool {
     (this.map.getSource(source) as GeoJSONSource).setData(
       JSON.parse(this.inner.renderGeojson())
     );
+  }
+
+  private dataUpdated() {
+    let rawJSON = this.inner.toFinalFeature();
+    if (rawJSON) {
+      let f = JSON.parse(rawJSON) as Feature;
+      if (f.geometry.type == "LineString") {
+        for (let cb of this.eventListenersUpdatedRoute) {
+          cb(JSON.parse(rawJSON) as FeatureWithProps<LineString>);
+        }
+      } else {
+        for (let cb of this.eventListenersUpdatedArea) {
+          cb(JSON.parse(rawJSON) as FeatureWithProps<Polygon>);
+        }
+      }
+    }
   }
 }

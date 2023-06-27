@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Geometry, LineString, Polygon } from "geojson";
+  import type { LineString, Polygon } from "geojson";
   import { MapMouseEvent } from "maplibre-gl";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
@@ -27,8 +27,8 @@
     | "snap-polygon"
     | "route"
     | null = null;
-  // Retain a copy of the original geometry before starting to edit
-  let uneditedGeometry: Geometry | null = null;
+  // Retain a copy of the original feature before starting to edit
+  let uneditedFeature: Feature | null = null;
 
   export function start() {}
   export function stop() {
@@ -122,26 +122,45 @@
     });
   }
 
-  // Auto-save
-  for (let tool of [polygonTool]) {
-    tool.addEventListenerUpdated((feature) => {
-      if ($currentMode == thisMode) {
-        gjScheme.update((gj) => {
-          let updateFeature = gj.features.find(
-            (f) => f.id == currentlyEditing
-          )!;
-          updateFeature.geometry = feature.geometry;
-          return gj;
-        });
-      }
-    });
-  }
+  // Auto-save for everything except pointTool
+  polygonTool.addEventListenerUpdated((feature) => {
+    if ($currentMode == thisMode) {
+      gjScheme.update((gj) => {
+        let updateFeature = gj.features.find((f) => f.id == currentlyEditing)!;
+        updateFeature.geometry = feature.geometry;
+        return gj;
+      });
+    }
+  });
+  // TODO Maybe use one callback (here and elsewhere); the type-safety is not really helpful
+  routeTool.addEventListenerUpdatedRoute((feature) => {
+    if ($currentMode == thisMode) {
+      gjScheme.update((gj) => {
+        let updateFeature = gj.features.find((f) => f.id == currentlyEditing)!;
+        updateFeature.geometry = feature.geometry;
+        updateFeature.properties.length_meters =
+          feature.properties.length_meters;
+        updateFeature.properties.waypoints = feature.properties.waypoints;
+        return gj;
+      });
+    }
+  });
+  routeTool.addEventListenerUpdatedArea((feature) => {
+    if ($currentMode == thisMode) {
+      gjScheme.update((gj) => {
+        let updateFeature = gj.features.find((f) => f.id == currentlyEditing)!;
+        updateFeature.geometry = feature.geometry;
+        updateFeature.properties.waypoints = feature.properties.waypoints;
+        return gj;
+      });
+    }
+  });
 
   // Handle failures
   for (let tool of [pointTool, polygonTool, routeTool]) {
     tool.addEventListenerFailure(() => {
       if ($currentMode == thisMode) {
-        // Revert to the unedited geometry
+        // Revert to the unedited feature
         gjScheme.update((gj) => {
           let feature = gj.features.find((f) => f.id == currentlyEditing)!;
           if (!feature) {
@@ -150,7 +169,8 @@
             );
             return gj;
           }
-          feature.geometry = uneditedGeometry;
+          feature.geometry = uneditedFeature.geometry;
+          feature.properties = uneditedFeature.properties;
           delete feature.properties.hide_while_editing;
           return gj;
         });
@@ -252,7 +272,7 @@
     let feature = maybeFeature!;
 
     currentlyEditing = id;
-    uneditedGeometry = JSON.parse(JSON.stringify(feature.geometry));
+    uneditedFeature = JSON.parse(JSON.stringify(feature));
 
     if (feature.geometry.type == "LineString") {
       routeTool.editExistingRoute(feature as Feature<LineString>);
@@ -276,7 +296,7 @@
   function stopEditing() {
     currentlyEditing = null;
     currentlyEditingControls = null;
-    uneditedGeometry = null;
+    uneditedFeature = null;
   }
 </script>
 
