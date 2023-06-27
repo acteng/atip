@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LineString, Polygon } from "geojson";
+  import type { Geometry, LineString, Polygon } from "geojson";
   import { MapMouseEvent } from "maplibre-gl";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
@@ -27,6 +27,8 @@
     | "snap-polygon"
     | "route"
     | null = null;
+  // Retain a copy of the original geometry before starting to edit
+  let uneditedGeometry: Geometry | null = null;
 
   export function start() {}
   export function stop() {
@@ -43,8 +45,7 @@
       });
     }
 
-    currentlyEditing = null;
-    currentlyEditingControls = null;
+    stopEditing();
     mapHover.set(null);
   }
 
@@ -70,8 +71,7 @@
       });
 
       // Stay in this mode
-      currentlyEditing = null;
-      currentlyEditingControls = null;
+      stopEditing();
     }
   });
 
@@ -94,8 +94,7 @@
       });
 
       // Stay in this mode
-      currentlyEditing = null;
-      currentlyEditingControls = null;
+      stopEditing();
     }
   });
 
@@ -118,8 +117,7 @@
         });
 
         // Stay in this mode
-        currentlyEditing = null;
-        currentlyEditingControls = null;
+        stopEditing();
       }
     });
   }
@@ -143,7 +141,7 @@
   for (let tool of [pointTool, polygonTool, routeTool]) {
     tool.addEventListenerFailure(() => {
       if ($currentMode == thisMode) {
-        // Don't modify the thing we were just editing
+        // Revert to the unedited geometry
         gjScheme.update((gj) => {
           let feature = gj.features.find((f) => f.id == currentlyEditing)!;
           if (!feature) {
@@ -152,13 +150,13 @@
             );
             return gj;
           }
+          feature.geometry = uneditedGeometry;
           delete feature.properties.hide_while_editing;
           return gj;
         });
 
         // Stay in this mode
-        currentlyEditing = null;
-        currentlyEditingControls = null;
+        stopEditing();
       }
     });
   }
@@ -254,6 +252,7 @@
     let feature = maybeFeature!;
 
     currentlyEditing = id;
+    uneditedGeometry = JSON.parse(JSON.stringify(feature.geometry));
 
     if (feature.geometry.type == "LineString") {
       routeTool.editExistingRoute(feature as Feature<LineString>);
@@ -272,6 +271,12 @@
       pointTool.start();
       currentlyEditingControls = "point";
     }
+  }
+
+  function stopEditing() {
+    currentlyEditing = null;
+    currentlyEditingControls = null;
+    uneditedGeometry = null;
   }
 </script>
 
