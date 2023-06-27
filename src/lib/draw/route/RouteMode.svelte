@@ -4,14 +4,9 @@
   import { fetchWithProgress } from "route-snapper/lib.js";
   import { onMount } from "svelte";
   import type { FeatureWithProps } from "../../../maplibre_helpers";
-  import {
-    currentMode,
-    formOpen,
-    gjScheme,
-    map,
-    newFeatureId,
-  } from "../../../stores";
+  import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
   import type { Feature, Mode } from "../../../types";
+  import { setupEventListeners } from "../common";
   import type { EventHandler } from "../event_handler";
   import { RouteTool } from "./route_tool";
   import RouteControls from "./RouteControls.svelte";
@@ -26,7 +21,9 @@
   export let eventHandler: EventHandler;
 
   // While the new feature is being drawn, remember its last valid version
-  let unsavedFeature: FeatureWithProps<LineString> | null = null;
+  let unsavedFeature: { value: FeatureWithProps<LineString> | null } = {
+    value: null,
+  };
 
   // These're for drawing a new route, NOT for editing an existing.
   // GeometryMode manages the latter.
@@ -42,14 +39,15 @@
     routeTool?.stop();
 
     // If we leave this mode without saving, still create a new feature
-    if (unsavedFeature) {
+    if (unsavedFeature.value) {
       gjScheme.update((gj) => {
-        unsavedFeature.id = newFeatureId(gj);
-        unsavedFeature.properties.intervention_type = "route";
-        gj.features.push(unsavedFeature as Feature<LineString>);
+        let feature = unsavedFeature.value;
+        feature.id = newFeatureId(gj);
+        feature.properties.intervention_type = "route";
+        gj.features.push(feature as Feature<LineString>);
         return gj;
       });
-      unsavedFeature = null;
+      unsavedFeature.value = null;
     }
   }
 
@@ -66,32 +64,13 @@
       return;
     }
 
-    routeTool.addEventListenerSuccess((feature) => {
-      if ($currentMode == thisMode) {
-        gjScheme.update((gj) => {
-          feature.id = newFeatureId(gj);
-          feature.properties.intervention_type = "route";
-          gj.features.push(feature as Feature<LineString>);
-          return gj;
-        });
-
-        unsavedFeature = null;
-
-        changeMode("edit-attribute");
-        formOpen.set(feature.id as number);
-      }
-    });
-
-    routeTool.addEventListenerUpdated((feature) => {
-      unsavedFeature = feature as FeatureWithProps<LineString>;
-    });
-
-    routeTool.addEventListenerFailure(() => {
-      if ($currentMode == thisMode) {
-        unsavedFeature = null;
-        changeMode("edit-attribute");
-      }
-    });
+    setupEventListeners(
+      routeTool,
+      unsavedFeature,
+      "route",
+      thisMode,
+      changeMode
+    );
   });
 </script>
 
