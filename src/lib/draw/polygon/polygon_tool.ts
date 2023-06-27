@@ -84,6 +84,8 @@ export class PolygonTool {
   finish() {
     let polygon = this.polygonFeature();
     if (polygon) {
+      // TODO RouteTool passes a copy to each callback for paranoia. Should we
+      // do the same everywhere here?
       for (let cb of this.eventListenersSuccess) {
         cb(polygon);
       }
