@@ -9,13 +9,19 @@ Terminology:
 - A **scheme** is one or more infrastructure interventions represented as a single ATIP GeoJSON file.
 - An **intervention** is a single point (e.g. crossing), line (e.g. route) or area (e.g. area-wide traffic management intervention) that is part of a scheme.
 - **Authorities** are the groups submitting schemes for some area. 
+- **Central** is the one group reviewing schemes from all authorities.
+
+Terminology specific to the UK:
+
+- ATE is Active Travel England, acting as "Central"
+- GDS is [Government Digital Service](https://www.gov.uk/government/organisations/government-digital-service)
 
 ## Requirements
 
-The primary goal of this doc is to facilitate ATE and LAs collaborating on schemes. An example interaction might be:
+The primary goal of this doc is to facilitate Central and authorities collaborating on schemes. An example interaction might be:
 
-1.  User1 from an LA submits a scheme and supplementary PDF files
-2.  User2 from ATE inspections comments on the scheme
+1.  User1 from an authority submits a scheme and supplementary PDF files
+2.  User2 from Central inspections comments on the scheme
 3.  User1 responds to comments, then submits a 2nd version of the scheme
 4.  User2 reviews the changes (viewable as a diff and with the existing regular ATIP tool), then resolves the comment
 
@@ -23,18 +29,18 @@ There are other tasks for which ATIP may later need a backend, like synchronizin
 
 ### User stories
 
-- as a LA
+- as an authority
 	- MVP: submit a scheme in various stages (for initial feedback or to request funding)
 	- MVP: submit new versions of an existing scheme
 	- MVP: respond to feedback
-	- MVP: see a timeline view of all interactions with ATE, including each version of a scheme
-	- out-of-scope: search or browse schemes by other LAs, to learn about best practices or other approaches to some common situation
+	- MVP: see a timeline view of all interactions with Central, including each version of a scheme
+	- out-of-scope: search or browse schemes by other authorities, to learn about best practices or other approaches to some common situation
 	- out-of-scope: share/publish scheme data publicly, as part of public consultation
-- as ATE inspections
-	- MVP: search or browse schemes across all LAs
+- as Central inspections
+	- MVP: search or browse schemes across all authorities
 	- MVP: give or respond to feedback to a scheme, whether it's proposed or already built
 	- out-of-scope: assign particular inspectors to a scheme or track outstanding tasks
-- as ATE data analysts
+- as Central data analysts
 	- MVP: access all submitted schemes in bulk for offline analysis
 
 ## Data & storage
@@ -80,9 +86,9 @@ TODO, requirements still unclear. How do we model:
 
 We need to pin down the data model more before choosing the database style -- relational, JSON blob, something with spatial indexing, etc.
 
-As a "strawman" step towards managing interactions between ATE and each LA, we could do something very simple:
+As a "strawman" step towards managing interactions between Central and each authority, we could do something very simple:
 
-- Have one Dropbox / Sharepoint / etc folder per LA, with appropriate edit rights. This would just organize files that today may be scattered through emails or other places
+- Have one Dropbox / Sharepoint / etc folder per authority, with appropriate edit rights. This would just organize files that today may be scattered through emails or other places
 - Use git, with a similar directory structure. This makes sure we never lose track of old versions of any file.
 
 A more practical, but still simple, approach would be a blob store, like S3 or GCS. We would use directory structure carefully, versioning things using subdirectories.
@@ -99,7 +105,7 @@ We should have a principled way of approaching data schema migrations. They **wi
 - trimming coordinate precision
 - evolving a v2 schema for describing interventions in more detail
 
-In an ideal situation, we can express migrations as two lossless functions, that transform the old to the new, and the new to the old. This will not be (completely) true for the examples above. So, we have to decide, possibly on a case-by-case basis, who is responsible for updating the data, if it can't be done automatically. For example, after we settle on a v2 schema, will we ask some or all LAs to fill out new forms for existing interventions? Will we attempt to automate this for them, using some kind of text parsing on the freeform description? What if the new schema requires them to split a linear route every time the cross-section design changes?
+In an ideal situation, we can express migrations as two lossless functions, that transform the old to the new, and the new to the old. This will not be (completely) true for the examples above. So, we have to decide, possibly on a case-by-case basis, who is responsible for updating the data, if it can't be done automatically. For example, after we settle on a v2 schema, will we ask some or all authorities to fill out new forms for existing interventions? Will we attempt to automate this for them, using some kind of text parsing on the freeform description? What if the new schema requires them to split a linear route every time the cross-section design changes?
 
 ## API
 
@@ -125,7 +131,7 @@ We can figure out the JSON (or gRPC?) API as we go. The output would generally b
 
 We need to integrate whatever GDS auth layer. Talking to the backend may be trivial (`fetch` calls), or maybe we use something like websockets for saving commands while people edit.
 
-We should be very careful to keep the existing ATIP pages (browsing authorities, editing a scheme, and browsing a bunch of combined schemes) able to be used **without** any of the backend and database this doc describes. The current file-based approach is very simple to deploy. There may be non-ATE users who don't want any sort of backend. So, we need to find a way to make the frontend changes agnostic to a backend (the current one being "local storage").
+We should be very careful to keep the existing ATIP pages (browsing authorities, editing a scheme, and browsing a bunch of combined schemes) able to be used **without** any of the backend and database this doc describes. The current file-based approach is very simple to deploy. There may be other users who don't want any sort of backend. So, we need to find a way to make the frontend changes agnostic to a backend (the current one being "local storage").
 
 Similarly, whatever backend we develop will inevitably be coupled to ATE use cases, scheme metadata, etc. Making it generic to allow another org to someday deploy it is not high priority. All the same, we should future-proof this from the start by keeping all the backend code open source from the start, using Docker and Terraform and similar to provision cloud resources based on config that somebody could easily adjust. There will be exceptions (like GDS auth integration), but we should try to keep things reasonably modular.
 
@@ -133,8 +139,8 @@ Similarly, whatever backend we develop will inevitably be coupled to ATE use cas
 
 Suppose somebody is editing an ATIP scheme. How often should the frontend save the changes to the cloud? Should this only happen when the user explicitly saves and submits a version of the scheme? Should we log every command/edit and stream those to a database with something like websockets?
 
-How should concurrent edits work? We do **not** want to take on the immense technical and design complexity of an app with real-time collaboration, like Google Docs or Felt or Figma, without very good reason. Can we ensure only one person from an LA is submitting a new version of some scheme at a time? Should we surface something in the UI to show the user currently editing a scheme? Can we come up with a robust UI and algorithm to diff two schemes and guide the user through resolving any conflicts, and make the user submitting a scheme second deal with any conflicts?
+How should concurrent edits work? We do **not** want to take on the immense technical and design complexity of an app with real-time collaboration, like Google Docs or Felt or Figma, without very good reason. Can we ensure only one person from an authority is submitting a new version of some scheme at a time? Should we surface something in the UI to show the user currently editing a scheme? Can we come up with a robust UI and algorithm to diff two schemes and guide the user through resolving any conflicts, and make the user submitting a scheme second deal with any conflicts?
 
 ### IAM / permissions
 
-I'm hoping the GDS auth system solves this for us. I would imagine we have, or can easily configure, groups of users and define some permissions in our API. Within an LA, there are read-only users and editors, who can submit a scheme. Within ATE, we have read-only data analysts, and inspectors who can write comments, but not directly modify a scheme.
+I'm hoping the GDS auth system solves this for us. I would imagine we have, or can easily configure, groups of users and define some permissions in our API. Within an authority, there are read-only users and editors, who can submit a scheme. Within ATE, we have read-only data analysts, and inspectors who can write comments, but not directly modify a scheme.
