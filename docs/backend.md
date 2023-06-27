@@ -6,9 +6,9 @@ As of June 2023, ATIP is a web app for editing GeoJSON data. Those GeoJSON files
 
 Terminology:
 
-- a **scheme** is a single ATIP GeoJSON file, with a list of **interventions** or **features** (these are used interchangeably)
-- **ATE** is the central group evaluating and inspecting schemes
-- **LAs** (local authorities) are the groups submitting schemes for some area. (The exact geographic scope doesn't matter; these could be transport or highway authorities or something else)
+- A **scheme** is one or more infrastructure interventions represented as a single ATIP GeoJSON file.
+- An **intervention** is a single point (e.g. crossing), line (e.g. route) or area (e.g. area-wide traffic management intervention) that is part of a scheme.
+- **Authorities** are the groups submitting schemes for some area. 
 
 ## Requirements
 
