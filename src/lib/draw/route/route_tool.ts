@@ -25,9 +25,10 @@ export class RouteTool {
   inner: JsRouteSnapper;
   active: boolean;
   eventListenersSuccessRoute: ((f: FeatureWithProps<LineString>) => void)[];
-  eventListenersUpdatedRoute: ((f: FeatureWithProps<LineString>) => void)[];
   eventListenersSuccessArea: ((f: FeatureWithProps<Polygon>) => void)[];
-  eventListenersUpdatedArea: ((f: FeatureWithProps<Polygon>) => void)[];
+  eventListenersUpdated: ((
+    f: FeatureWithProps<LineString | Polygon>
+  ) => void)[];
   eventListenersFailure: (() => void)[];
 
   constructor(map: Map, graphBytes: Uint8Array) {
@@ -37,9 +38,8 @@ export class RouteTool {
     console.timeEnd("Deserialize and setup JsRouteSnapper");
     this.active = false;
     this.eventListenersSuccessRoute = [];
-    this.eventListenersUpdatedRoute = [];
     this.eventListenersSuccessArea = [];
-    this.eventListenersUpdatedArea = [];
+    this.eventListenersUpdated = [];
     this.eventListenersFailure = [];
 
     // Rendering
@@ -292,20 +292,15 @@ export class RouteTool {
   ) {
     this.eventListenersSuccessRoute.push(callback);
   }
-  addEventListenerUpdatedRoute(
-    callback: (f: FeatureWithProps<LineString>) => void
+  addEventListenerUpdated(
+    callback: (f: FeatureWithProps<LineString | Polygon>) => void
   ) {
-    this.eventListenersUpdatedRoute.push(callback);
+    this.eventListenersUpdated.push(callback);
   }
   addEventListenerSuccessArea(
     callback: (f: FeatureWithProps<Polygon>) => void
   ) {
     this.eventListenersSuccessArea.push(callback);
-  }
-  addEventListenerUpdatedArea(
-    callback: (f: FeatureWithProps<Polygon>) => void
-  ) {
-    this.eventListenersUpdatedArea.push(callback);
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
@@ -374,15 +369,9 @@ export class RouteTool {
   private dataUpdated() {
     let rawJSON = this.inner.toFinalFeature();
     if (rawJSON) {
-      let f = JSON.parse(rawJSON) as Feature;
-      if (f.geometry.type == "LineString") {
-        for (let cb of this.eventListenersUpdatedRoute) {
-          cb(JSON.parse(rawJSON) as FeatureWithProps<LineString>);
-        }
-      } else {
-        for (let cb of this.eventListenersUpdatedArea) {
-          cb(JSON.parse(rawJSON) as FeatureWithProps<Polygon>);
-        }
+      // Pass copies to each callback
+      for (let cb of this.eventListenersUpdated) {
+        cb(JSON.parse(rawJSON) as FeatureWithProps<LineString | Polygon>);
       }
     }
   }

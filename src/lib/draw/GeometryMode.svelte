@@ -28,7 +28,7 @@
     | "route"
     | null = null;
   // Retain a copy of the original feature before starting to edit
-  let uneditedFeature: Feature | null = null;
+  let uneditedFeature: FeatureUnion | null = null;
 
   export function start() {}
   export function stop() {
@@ -123,38 +123,26 @@
   }
 
   // Auto-save for everything except pointTool
-  polygonTool.addEventListenerUpdated((feature) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        let updateFeature = gj.features.find((f) => f.id == currentlyEditing)!;
-        updateFeature.geometry = feature.geometry;
-        return gj;
-      });
-    }
-  });
-  // TODO Maybe use one callback (here and elsewhere); the type-safety is not really helpful
-  routeTool.addEventListenerUpdatedRoute((feature) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        let updateFeature = gj.features.find((f) => f.id == currentlyEditing)!;
-        updateFeature.geometry = feature.geometry;
-        updateFeature.properties.length_meters =
-          feature.properties.length_meters;
-        updateFeature.properties.waypoints = feature.properties.waypoints;
-        return gj;
-      });
-    }
-  });
-  routeTool.addEventListenerUpdatedArea((feature) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        let updateFeature = gj.features.find((f) => f.id == currentlyEditing)!;
-        updateFeature.geometry = feature.geometry;
-        updateFeature.properties.waypoints = feature.properties.waypoints;
-        return gj;
-      });
-    }
-  });
+  for (let tool of [polygonTool, routeTool]) {
+    tool.addEventListenerUpdated((feature) => {
+      if ($currentMode == thisMode) {
+        gjScheme.update((gj) => {
+          let updateFeature = gj.features.find(
+            (f) => f.id == currentlyEditing
+          )!;
+          updateFeature.geometry = feature.geometry;
+          if (feature.properties.length_meters) {
+            updateFeature.properties.length_meters =
+              feature.properties.length_meters;
+          }
+          if (feature.properties.waypoints) {
+            updateFeature.properties.waypoints = feature.properties.waypoints;
+          }
+          return gj;
+        });
+      }
+    });
+  }
 
   // Handle failures
   for (let tool of [pointTool, polygonTool, routeTool]) {
