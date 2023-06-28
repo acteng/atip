@@ -80,3 +80,12 @@ export type Mode =
   | "snap-polygon"
   | "split-route"
   | "street-view";
+
+export function schemaTitle(schema: Schema): string {
+  return {
+    v1: "Schema design",
+    v2: "Experimental schema design",
+    planning: "Development planning",
+    criticals: "Critical issues",
+  }[schema];
+}
