@@ -302,9 +302,7 @@ test("switching between modes saves, doesn't save anything if no actions taken",
   ).toBeVisible();
 
   await page.getByRole("button", { name: "New polygon (snapped)" }).click();
-  await expect(
-    page.getByRole("button", { name: "2) Untitled route" })
-  ).not.toBeVisible();
+  await expect(page.getByText("1 objects")).toBeVisible();
 });
 
 // Assert the page is in attribute mode with nothing selected.
