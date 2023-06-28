@@ -4,9 +4,9 @@
   import { fetchWithProgress } from "route-snapper/lib.js";
   import { onMount } from "svelte";
   import type { FeatureWithProps } from "../../../maplibre_helpers";
-  import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
-  import type { Feature, Mode } from "../../../types";
-  import { setupEventListeners } from "../common";
+  import { currentMode, map } from "../../../stores";
+  import type { Mode } from "../../../types";
+  import { handleUnsavedFeature, setupEventListeners } from "../common";
   import type { EventHandler } from "../event_handler";
   import { RouteTool } from "./route_tool";
   import RouteControls from "./RouteControls.svelte";
@@ -37,18 +37,7 @@
   }
   export function stop() {
     routeTool?.stop();
-
-    // If we leave this mode without saving, still create a new feature
-    if (unsavedFeature.value) {
-      gjScheme.update((gj) => {
-        let feature = unsavedFeature.value;
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "route";
-        gj.features.push(feature as Feature<LineString>);
-        return gj;
-      });
-      unsavedFeature.value = null;
-    }
+    handleUnsavedFeature(unsavedFeature, "route");
   }
 
   onMount(async () => {
