@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
   import type { FeatureWithProps } from "../../../maplibre_helpers";
-  import { currentMode, gjScheme, newFeatureId } from "../../../stores";
-  import type { Feature, Mode } from "../../../types";
-  import { setupEventListeners } from "../common";
+  import { currentMode } from "../../../stores";
+  import type { Mode } from "../../../types";
+  import { handleUnsavedFeature, setupEventListeners } from "../common";
   import type { EventHandler } from "../event_handler";
   import type { RouteTool } from "../route/route_tool";
   import SnapPolygonControls from "./SnapPolygonControls.svelte";
@@ -26,18 +26,7 @@
 
   export function stop() {
     routeTool.stop();
-
-    // If we leave this mode without saving, still create a new feature
-    if (unsavedFeature.value) {
-      gjScheme.update((gj) => {
-        let feature = unsavedFeature.value;
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "area";
-        gj.features.push(feature as Feature<Polygon>);
-        return gj;
-      });
-      unsavedFeature.value = null;
-    }
+    handleUnsavedFeature(unsavedFeature, "area");
   }
 
   setupEventListeners(routeTool, unsavedFeature, "area", thisMode, changeMode);

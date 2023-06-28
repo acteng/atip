@@ -49,3 +49,20 @@ export function setupEventListeners(
     }
   });
 }
+
+// If a user leaves a mode after drawing something valid but not saving, save it anyway.
+export function handleUnsavedFeature(
+  unsavedFeature: { value: FeatureWithProps<LineString | Polygon> | null },
+  intervention_type: "area" | "route" | "crossing" | "other"
+) {
+  if (unsavedFeature.value) {
+    gjScheme.update((gj) => {
+      let feature = unsavedFeature.value;
+      feature.id = newFeatureId(gj);
+      feature.properties.intervention_type = intervention_type;
+      gj.features.push(feature as FeatureUnion);
+      return gj;
+    });
+    unsavedFeature.value = null;
+  }
+}
