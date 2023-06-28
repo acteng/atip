@@ -39,7 +39,9 @@ export function setupEventListeners(
   });
 
   tool.addEventListenerUpdated((feature) => {
-    unsavedFeature.value = feature as FeatureWithProps<LineString | Polygon>;
+    if (get(currentMode) == thisMode) {
+      unsavedFeature.value = feature as FeatureWithProps<LineString | Polygon>;
+    }
   });
 
   tool.addEventListenerFailure(() => {
