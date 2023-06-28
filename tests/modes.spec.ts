@@ -290,6 +290,23 @@ test("the viewport changes only once when opening a form", async () => {
   expect(new URL(page.url()).hash).toEqual(customViewport);
 });
 
+test("switching between modes saves, doesn't save anything if no actions taken", async () => {
+  await page.getByRole("button", { name: "New polygon (snapped)" }).click();
+  await clickMap(page, 500, 500);
+  await clickMap(page, 400, 500);
+  await clickMap(page, 400, 600);
+
+  await page.getByRole("button", { name: "New route" }).click();
+  await expect(
+    page.getByRole("button", { name: "1) Untitled area" })
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "New polygon (snapped)" }).click();
+  await expect(
+    page.getByRole("button", { name: "2) Untitled route" })
+  ).not.toBeVisible();
+});
+
 // Assert the page is in attribute mode with nothing selected.
 async function expectNeutralAttributeMode() {
   await expect(
