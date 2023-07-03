@@ -3,7 +3,7 @@ import { clickMap } from "./shared.js";
 
 // This is separate from modes.spec.ts to avoid the common beforeAll
 test("other tools work when route tool doesn't load", async ({ page }) => {
-  await page.route("https://atip.uk/route-snappers/v2/Adur.bin.gz", (route) =>
+  await page.route("https://atip.uk/route-snappers/v2.1/Adur.bin.gz", (route) =>
     route.fulfill({
       status: 404,
     })
