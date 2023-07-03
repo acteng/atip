@@ -46,7 +46,10 @@
   });
 
   function setupTool(bytes: Uint8Array) {
+      console.log("hello1")
+    
     try {
+      console.log("hello2")
       routeTool = new RouteTool($map, bytes);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);

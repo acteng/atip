@@ -7,6 +7,9 @@
   // Both are units of bytes
   let bytesReceived = 0;
   let maxBytes = 100;
+  let progressBar = {
+    style: "background: linear-gradient(to right, red 0%, transparent 0);",
+  };
 
   onMount(async () => {
     console.log(`Fetching ${url} with a progress bar`);
@@ -26,13 +29,17 @@
       chunks.push(value);
       bytesReceived += value.length;
 
-      //const percent = (100.0 * receivedLength) / contentLength;
-      //progressBar.style = `background: linear-gradient(to right, red ${percent}%, transparent 0);`;
+      const percent = (bytesReceived / maxBytes) * 100;
+      progressBar.style = `background: linear-gradient(to right, red ${percent}%, transparent 0);`;
     }
 
     let outputBytes = new Uint8Array(maxBytes);
     let position = 0;
+    console.log(
+      `max bytes ${maxBytes} - bytes received ${bytesReceived} - progress bar style ${progressBar.style}`
+    );
     for (let chunk of chunks) {
+      console.log(`position ${position}, outputBytes ${outputBytes.length} - chunk length ${chunk.length}`);
       outputBytes.set(chunk, position);
       position += chunk.length;
     }
@@ -40,4 +47,4 @@
   });
 </script>
 
-<progress value={bytesReceived} max={maxBytes} />
+<progress style={progressBar.style} value={bytesReceived} max={maxBytes} />
