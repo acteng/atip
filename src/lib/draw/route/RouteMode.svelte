@@ -10,13 +10,13 @@
   import type { EventHandler } from "../event_handler";
   import { RouteTool } from "./route_tool";
   import RouteControls from "./RouteControls.svelte";
+  import FetchProgressBar from "../../FetchProgressBar.svelte";
 
   const thisMode = "route";
 
   export let changeMode: (m: Mode) => void;
   export let url: string;
 
-  let progress: HTMLDivElement;
   export let routeTool: RouteTool;
   export let eventHandler: EventHandler;
 
@@ -24,6 +24,7 @@
   let unsavedFeature: { value: FeatureWithProps<LineString> | null } = {
     value: null,
   };
+  let loadError = false;
 
   // These're for drawing a new route, NOT for editing an existing.
   // GeometryMode manages the latter.
@@ -42,14 +43,14 @@
 
   onMount(async () => {
     await init();
+  });
 
-    console.log(`Grabbing ${url}`);
+  function setupTool(bytes: Uint8Array) {
     try {
-      const graphBytes = await fetchWithProgress(url, progress);
-      routeTool = new RouteTool($map, graphBytes);
+      routeTool = new RouteTool($map, bytes);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
-      progress.innerHTML = "Failed to load";
+      loadError = true;
       return;
     }
 
@@ -60,12 +61,14 @@
       thisMode,
       changeMode
     );
-  });
+  }
 </script>
-
 {#if !routeTool}
-  <!-- TODO the text should be fixed, and the progress bar float -->
-  <div bind:this={progress}>Route tool loading...</div>
+  {#if loadError}
+    Route tool failed to load
+  {:else}
+    <FetchProgressBar {url} onSuccess={setupTool} />
+  {/if}
 {:else if $currentMode == thisMode}
   <RouteControls {routeTool} extendRoute />
 {/if}
