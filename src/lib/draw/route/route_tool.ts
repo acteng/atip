@@ -32,11 +32,12 @@ export class RouteTool {
   ) => void)[];
   eventListenersFailure: (() => void)[];
 
-  constructor(map: Map, graphBytes: Uint8Array) {
+  constructor(map: Map, graphBytes: Uint8Array, deserialisedCallback=()=>{}) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(graphBytes);
     console.timeEnd("Deserialize and setup JsRouteSnapper");
+    deserialisedCallback();
     this.active = false;
     this.eventListenersSuccess = [];
     this.eventListenersUpdated = [];

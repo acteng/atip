@@ -1,16 +1,15 @@
 <script lang="ts">
+  import ProgressBar from "@megapenthes/svelte4-progressbar";
   import type { LineString } from "geojson";
   import init from "route-snapper";
-  import { fetchWithProgress } from "route-snapper/lib.js";
   import { onMount } from "svelte";
   import type { FeatureWithProps } from "../../../maplibre_helpers";
-  import { currentMode, map } from "../../../stores";
+  import { currentMode, map, routeInfo } from "../../../stores";
   import type { Mode } from "../../../types";
   import { handleUnsavedFeature, setupEventListeners } from "../common";
   import type { EventHandler } from "../event_handler";
   import { RouteTool } from "./route_tool";
   import RouteControls from "./RouteControls.svelte";
-  import FetchProgressBar from "../../FetchProgressBar.svelte";
 
   const thisMode = "route";
 
@@ -20,11 +19,13 @@
   export let routeTool: RouteTool;
   export let eventHandler: EventHandler;
 
+  let progress: Array<number> = [0 ];
+  let routeToolReady = false;
+
   // While the new feature is being drawn, remember its last valid version
   let unsavedFeature: { value: FeatureWithProps<LineString> | null } = {
     value: null,
   };
-  let loadError = false;
 
   // These're for drawing a new route, NOT for editing an existing.
   // GeometryMode manages the latter.
@@ -43,17 +44,16 @@
 
   onMount(async () => {
     await init();
-  });
 
-  function setupTool(bytes: Uint8Array) {
-      console.log("hello1")
-    
+    console.log(`Grabbing ${url}`);
     try {
-      console.log("hello2")
-      routeTool = new RouteTool($map, bytes);
+      const graphBytes = await fetchWithProgress(
+        url,
+        (percentLoaded) => (progress[0] = Math.min(percentLoaded, 90))
+      );
+      routeTool = new RouteTool($map, graphBytes, routeInfoDeserialised);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
-      loadError = true;
       return;
     }
 
@@ -64,14 +64,52 @@
       thisMode,
       changeMode
     );
-  }
+  });
+
+  async function fetchWithProgress(
+    url,
+    setProgress: (number) => void = (percentLoaded) => {}
+  ) {
+    const response = await fetch(url);
+    const reader = response.body.getReader();
+
+    const contentLength = parseInt(response.headers.get("Content-Length"));
+
+    let receivedLength = 0;
+    let chunks = [];
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+
+      chunks.push(value);
+      receivedLength += value.length;
+
+      const percent = (100.0 * receivedLength) / contentLength;
+      setProgress(percent);
+    }
+
+    let allChunks = new Uint8Array(receivedLength);
+    let position = 0;
+    for (let chunk of chunks) {
+      allChunks.set(chunk, position);
+      position += chunk.length;
+    }
+
+    return allChunks;
+  } 
+
+ function routeInfoDeserialised() {
+  progress[0] = 100;
+  routeToolReady = true;
+ } 
 </script>
-{#if !routeTool}
-  {#if loadError}
-    Route tool failed to load
-  {:else}
-    <FetchProgressBar {url} onSuccess={setupTool} />
-  {/if}
+
+{#if !routeToolReady}
+  <!-- TODO the text should be fixed, and the progress bar float -->
+  <p>Route tool loading</p>
+  <ProgressBar bind:series={progress} />
 {:else if $currentMode == thisMode}
   <RouteControls {routeTool} extendRoute />
 {/if}

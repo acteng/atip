@@ -39,7 +39,9 @@
       `max bytes ${maxBytes} - bytes received ${bytesReceived} - progress bar style ${progressBar.style}`
     );
     for (let chunk of chunks) {
-      console.log(`position ${position}, outputBytes ${outputBytes.length} - chunk length ${chunk.length}`);
+      console.log(
+        `position ${position}, outputBytes ${outputBytes.length} - chunk length ${chunk.length}`
+      );
       outputBytes.set(chunk, position);
       position += chunk.length;
     }
