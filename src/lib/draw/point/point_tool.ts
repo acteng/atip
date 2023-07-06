@@ -1,16 +1,8 @@
 import type { Point, Position } from "geojson";
-import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
-import { circleRadius, colors } from "../../../colors";
-import {
-  emptyGeojson,
-  overwriteCircleLayer,
-  overwriteSource,
-  type FeatureWithProps,
-} from "../../../maplibre_helpers";
+import type { Map, MapMouseEvent } from "maplibre-gl";
+import { type FeatureWithProps } from "../../../maplibre_helpers";
 import { isAToolInUse } from "../../../stores";
 import type { EventHandler } from "../event_handler";
-
-const source = "edit-point-mode";
 
 // Note this uses the geojson FeatureWithProps, not our specialization in types.ts
 export class PointTool {
@@ -23,7 +15,6 @@ export class PointTool {
   onMouseMove = (e: MapMouseEvent) => {
     if (this.active) {
       this.cursor = pointFeature(e.lngLat.toArray());
-      this.redraw();
     }
   };
 
@@ -59,15 +50,6 @@ export class PointTool {
     this.eventListenersSuccess = [];
     this.eventListenersFailure = [];
     this.cursor = null;
-
-    // Render
-    overwriteSource(map, source, emptyGeojson());
-    overwriteCircleLayer(map, {
-      id: "edit-point-mode",
-      source,
-      color: colors.hovering,
-      radius: circleRadius,
-    });
   }
 
   // This stops the tool and fires a failure event
@@ -85,36 +67,24 @@ export class PointTool {
     this.eventListenersFailure.push(callback);
   }
 
-  tearDown() {
-    this.map.removeLayer("edit-point-mode");
-    this.map.removeSource(source);
-  }
-
   // Note there's no way to "edit an existing point." Just call this for a new
   // or existing point; the state just depends on the cursor anyway.
   start() {
+    this.map.getCanvas().style.cursor = "crosshair";
     this.setActivity(true);
     // TODO Figure out where the cursor is and immediately draw? To be useful,
     // the user has to move their mouse anyway; it doesn't matter much
   }
 
   stop() {
+    this.map.getCanvas().style.cursor = "grab";
     this.cursor = null;
     this.setActivity(false);
-    this.redraw();
   }
 
   setActivity(isActive: boolean) {
     this.active = isActive;
     isAToolInUse.set(isActive);
-  }
-
-  private redraw() {
-    let gj = emptyGeojson();
-    if (this.cursor) {
-      gj.features.push(this.cursor);
-    }
-    (this.map.getSource(source) as GeoJSONSource).setData(gj);
   }
 }
 

@@ -213,8 +213,6 @@ const layerZorder = [
   "hover-points",
   "interventions-points",
 
-  "edit-point-mode",
-
   "edit-polygon-fill",
   "edit-polygon-lines",
   "edit-polygon-vertices",
