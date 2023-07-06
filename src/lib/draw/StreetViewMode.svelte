@@ -15,7 +15,7 @@
     $map.getCanvas().style.cursor = "zoom-in";
   }
   export function stop() {
-    $map.getCanvas().style.cursor = "grab";
+    $map.getCanvas().style.cursor = "inherit";
   }
 
   eventHandler.mapHandlers.click = (e: MapMouseEvent) => {

@@ -77,7 +77,7 @@ export class PointTool {
   }
 
   stop() {
-    this.map.getCanvas().style.cursor = "grab";
+    this.map.getCanvas().style.cursor = "inherit";
     this.cursor = null;
     this.setActivity(false);
   }
