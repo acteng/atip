@@ -93,7 +93,6 @@
   }
 
   onDestroy(() => {
-    pointTool?.tearDown();
     polygonTool?.tearDown();
     routeTool?.tearDown();
 

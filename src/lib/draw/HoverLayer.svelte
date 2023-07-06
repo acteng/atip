@@ -13,6 +13,7 @@
   import {
     formOpen,
     gjScheme,
+    isAToolInUse,
     map,
     mapHover,
     sidebarHover,
@@ -20,7 +21,10 @@
 
   // Show clickable objects on the map using the cursor
   $: {
-    $map.getCanvas().style.cursor = $mapHover ? "pointer" : "grab";
+    // Don't override what an active tool has set
+    if (!$isAToolInUse) {
+      $map.getCanvas().style.cursor = $mapHover ? "pointer" : "grab";
+    }
   }
 
   let source = "hover";
