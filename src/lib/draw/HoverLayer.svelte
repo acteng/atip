@@ -23,7 +23,7 @@
   $: {
     // Don't override what an active tool has set
     if (!$isAToolInUse) {
-      $map.getCanvas().style.cursor = $mapHover ? "pointer" : "grab";
+      $map.getCanvas().style.cursor = $mapHover ? "pointer" : "inherit";
     }
   }
 

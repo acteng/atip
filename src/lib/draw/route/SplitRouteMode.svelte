@@ -31,7 +31,7 @@
     $map.getCanvas().style.cursor = `url(${splitIcon}), crosshair`;
   }
   export function stop() {
-    $map.getCanvas().style.cursor = "grab";
+    $map.getCanvas().style.cursor = "inherit";
     snappedCursor = null;
     snappedIndex = null;
   }

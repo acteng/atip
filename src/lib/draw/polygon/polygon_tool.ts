@@ -258,7 +258,7 @@ export class PolygonTool {
   }
 
   stop() {
-    this.map.getCanvas().style.cursor = "grab";
+    this.map.getCanvas().style.cursor = "inherit";
     this.map.doubleClickZoom.enable();
     this.points = [];
     this.cursor = null;
