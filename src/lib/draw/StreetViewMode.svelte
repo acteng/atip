@@ -1,11 +1,5 @@
 <script lang="ts">
-  import type { Feature, Point } from "geojson";
-  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
-  import {
-    emptyGeojson,
-    overwriteCircleLayer,
-    overwriteSource,
-  } from "../../maplibre_helpers";
+  import type { MapMouseEvent } from "maplibre-gl";
   import { currentMode, map, userSettings } from "../../stores";
   import type { Mode } from "../../types";
   import CollapsibleCard from "../common/CollapsibleCard.svelte";
@@ -15,38 +9,18 @@
 
   const thisMode = "street-view";
 
-  const circleRadiusPixels = 10;
-
   export let changeMode: (m: Mode) => void;
 
-  export function start() {}
+  export function start() {
+    $map.getCanvas().style.cursor = "zoom-in";
+  }
   export function stop() {
-    cursor = null;
+    $map.getCanvas().style.cursor = "grab";
   }
 
-  let cursor: Feature<Point> | null = null;
-
-  // Rendering
-  let source = "street-view";
-  overwriteSource($map, source, emptyGeojson());
-  // TODO Different icon?
-  overwriteCircleLayer($map, {
-    id: "draw-street-view",
-    source,
-    color: "black",
-    radius: circleRadiusPixels,
-  });
-
-  $: {
-    let gj = emptyGeojson();
-    if (cursor) {
-      gj.features.push(cursor);
-    }
-    ($map.getSource(source) as GeoJSONSource).setData(gj);
-  }
-
-  eventHandler.mapHandlers.click = () => {
-    let [lon, lat] = cursor.geometry.coordinates;
+  eventHandler.mapHandlers.click = (e: MapMouseEvent) => {
+    let lon = e.lngLat.lng;
+    let lat = e.lngLat.lat;
     if ($userSettings.streetViewImagery == "google") {
       window.open(
         `http://maps.google.com/maps?q=&layer=c&cbll=${lat},${lon}&cbp=11,0,0,0,0`,
@@ -60,27 +34,12 @@
     }
   };
 
-  eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
-    cursor = cursorFeature(e.lngLat.toArray());
-  };
-
   eventHandler.documentHandlers.keydown = (e: KeyboardEvent) => {
     if (e.key == "Escape") {
       changeMode("edit-attribute");
       e.preventDefault();
     }
   };
-
-  function cursorFeature(pt: number[]): Feature<Point> {
-    return {
-      type: "Feature",
-      properties: {},
-      geometry: {
-        type: "Point",
-        coordinates: pt,
-      },
-    };
-  }
 </script>
 
 {#if $currentMode == thisMode}
