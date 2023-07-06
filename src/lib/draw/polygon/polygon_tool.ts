@@ -178,12 +178,14 @@ export class PolygonTool {
       e.preventDefault();
       this.cursor = null;
       this.dragFrom = e.lngLat.toArray();
+      this.redraw();
     }
   };
 
   onMouseUp = () => {
     if (this.active && this.dragFrom) {
       this.dragFrom = null;
+      this.redraw();
       this.pointsUpdated();
     }
   };
@@ -256,6 +258,7 @@ export class PolygonTool {
   }
 
   stop() {
+    this.map.getCanvas().style.cursor = "grab";
     this.map.doubleClickZoom.enable();
     this.points = [];
     this.cursor = null;
@@ -274,9 +277,6 @@ export class PolygonTool {
       f.properties!.idx = idx;
       gj.features.push(f);
     });
-    if (this.cursor) {
-      gj.features.push(this.cursor);
-    }
 
     gj.features = gj.features.concat(pointsToLineSegments(this.points));
 
@@ -287,6 +287,11 @@ export class PolygonTool {
     }
 
     (this.map.getSource(source) as GeoJSONSource).setData(gj);
+    let cursorStyle = "crosshair";
+    if (this.hover != null) {
+      cursorStyle = this.dragFrom ? "grabbing" : "pointer";
+    }
+    this.map.getCanvas().style.cursor = cursorStyle;
   }
 
   // If there's a valid polygon, also passes to eventListenersUpdated
