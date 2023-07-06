@@ -7,6 +7,7 @@
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
+  import splitIcon from "../../../../assets/split_route.svg";
   import {
     emptyGeojson,
     overwriteCircleLayer,
@@ -25,40 +26,43 @@
   export let changeMode: (m: Mode) => void;
   export let eventHandler: EventHandler;
 
-  export function start() {}
+  export function start() {
+    // Use a fallback icon in case the image fails
+    $map.getCanvas().style.cursor = `url(${splitIcon}), crosshair`;
+  }
   export function stop() {
-    cursor = null;
+    $map.getCanvas().style.cursor = "grab";
+    snappedCursor = null;
     snappedIndex = null;
   }
 
-  let cursor: Feature<Point> | null = null;
+  let snappedCursor: Feature<Point> | null = null;
   // Index into gjScheme of what we're snapped to
   let snappedIndex: number | null = null;
 
   // Rendering
   let source = "split-route";
   overwriteSource($map, source, emptyGeojson());
-  // TODO Scissors icon?
   overwriteCircleLayer($map, {
     id: "draw-split-route",
     source,
     color: "black",
     radius: circleRadiusPixels,
-    opacity: ["case", ["==", ["get", "snapped"], true], 1.0, 0.5],
   });
 
   $: {
     let gj = emptyGeojson();
-    if (cursor) {
-      gj.features.push(cursor);
+    if (snappedCursor) {
+      gj.features.push(snappedCursor);
     }
     ($map.getSource(source) as GeoJSONSource).setData(gj);
   }
 
   eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
-    cursor = cursorFeature(e.lngLat.toArray(), false);
+    snappedCursor = null;
     snappedIndex = null;
 
+    let cursor = cursorFeature(e.lngLat.toArray());
     const nearbyPoint: [number, number] = [
       e.point.x - snapDistancePixels,
       e.point.y,
@@ -88,7 +92,7 @@
     candidates.sort((a, b) => a[2] - b[2]);
 
     if (candidates.length > 0) {
-      cursor = cursorFeature(candidates[0][1], true);
+      snappedCursor = cursorFeature(candidates[0][1]);
       snappedIndex = candidates[0][0];
     }
   };
@@ -101,7 +105,7 @@
       // TODO Can we avoid using ! everywhere here?
       let result = lineSplit(
         $gjScheme.features[snappedIndex!] as Feature<LineString>,
-        cursor!
+        snappedCursor!
       );
       if (result.features.length == 2) {
         let piece1 = result.features[0];
@@ -123,7 +127,7 @@
             gj.features[snappedIndex!] as OurFeature<LineString>,
             piece1 as OurFeature<LineString>,
             piece2 as OurFeature<LineString>,
-            cursor!
+            snappedCursor!
           );
 
           // Replace the one LineString we snapped to with the two new pieces
@@ -139,7 +143,8 @@
       }
 
       // Stay in this mode, but reset state
-      stop();
+      snappedCursor = null;
+      snappedIndex = null;
     }
   };
 
@@ -151,12 +156,10 @@
     }
   };
 
-  function cursorFeature(pt: number[], snapped: boolean): Feature<Point> {
+  function cursorFeature(pt: number[]): Feature<Point> {
     return {
       type: "Feature",
-      properties: {
-        snapped,
-      },
+      properties: {},
       geometry: {
         type: "Point",
         coordinates: pt,
