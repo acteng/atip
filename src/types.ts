@@ -84,7 +84,7 @@ export type Mode =
 export function schemaTitle(schema: Schema): string {
   return {
     v1: "Scheme Design",
-    v2: "Experimental Schema Design",
+    v2: "Experimental Scheme Design",
     planning: "Development Planning",
     criticals: "Critical Issues",
   }[schema];
