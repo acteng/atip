@@ -18,7 +18,7 @@
   import InterventionList from "../lib/sidebar/InterventionList.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
   import { routeInfo } from "../stores";
-  import type { Schema } from "../types";
+  import { schemaTitle, type Schema } from "../types";
   import { type RouteInfo } from "../worker";
   import workerWrapper from "../worker?worker";
 
@@ -82,15 +82,6 @@
     );
     return geojson;
   }
-
-  function changeSchema() {
-    let params = new URLSearchParams(window.location.search);
-    params.set("schema", schema);
-    let href = `${window.location.pathname}?${params.toString()}${
-      window.location.hash
-    }`;
-    window.location.href = href;
-  }
 </script>
 
 <Layout>
@@ -105,16 +96,7 @@
       <button type="button" on:click={toggleAbout}>About</button>
       <button type="button" on:click={toggleInstructions}>Instructions</button>
     </div>
-    <br />
-    <label>
-      ATIP schema:
-      <select bind:value={schema} on:change={changeSchema}>
-        <option value="v1">v1</option>
-        <!-- <option value="v2">v2</option> -->
-        <option value="planning">Housing developments</option>
-        <option value="criticals">Critical issues</option>
-      </select>
-    </label>
+    <p>{schemaTitle(schema)} mode</p>
     <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
     <EntireScheme {authorityName} {schema} />
     <br />
