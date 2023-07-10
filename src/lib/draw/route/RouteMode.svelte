@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { LineString } from "geojson";
   import init from "route-snapper";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import type { FeatureWithProps } from "../../../maplibre_helpers";
-  import { currentMode, map, routeInfo } from "../../../stores";
+  import { currentMode, map } from "../../../stores";
   import type { Mode } from "../../../types";
   import { handleUnsavedFeature, setupEventListeners } from "../common";
   import type { EventHandler } from "../event_handler";
@@ -20,7 +20,7 @@
 
   let progress: number = 0;
   let routeToolReady = false;
-  let downloadComplete = false;
+  $: downloadComplete = progress >= 100;
   let failedToLoadRouteTool = false;
 
   // While the new feature is being drawn, remember its last valid version
@@ -52,8 +52,7 @@
         url,
         (percentLoaded) => (progress = percentLoaded)
       );
-      downloadComplete = true;
-      routeTool = new RouteTool($map, graphBytes, routeInfoDeserialised);
+      routeTool = new RouteTool($map, graphBytes, routeToolInitialised);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
       failedToLoadRouteTool = true;
@@ -70,10 +69,7 @@
     );
   });
 
-  async function fetchWithProgress(
-    url,
-    setProgress: (number) => void
-  ) {
+  async function fetchWithProgress(url, setProgress: (number) => void) {
     const response = await fetch(url);
     const reader = response.body.getReader();
 
@@ -104,7 +100,7 @@
     return allChunks;
   }
 
-  function routeInfoDeserialised() {
+  function routeToolInitialised() {
     progress = 100;
     routeToolReady = true;
   }
@@ -112,12 +108,18 @@
 
 {#if !routeToolReady && !failedToLoadRouteTool && !downloadComplete}
   <label for="route-loading">Route tool loading</label>
-  <progress id="route-loading" value={progress}></progress>
-{:else if !routeToolReady && downloadComplete}
+  <progress id="route-loading" value={progress} />
+{:else if downloadComplete && !routeToolReady && !failedToLoadRouteTool}
   <label for="route-unpacking">Route data unpacking</label>
-  <progress id="route-unpacking"/>
+  <progress id="route-unpacking" />
 {:else if failedToLoadRouteTool}
   <p>Failed to load</p>
 {:else if $currentMode == thisMode}
   <RouteControls {routeTool} extendRoute />
 {/if}
+
+<style>
+  progress {
+    width: 100%;
+  }
+</style>

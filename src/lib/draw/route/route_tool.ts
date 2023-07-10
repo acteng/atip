@@ -35,13 +35,12 @@ export class RouteTool {
   constructor(
     map: Map,
     graphBytes: Uint8Array,
-    deserialisedCallback = () => {}
+    initialisedCallback: () => { void }
   ) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(graphBytes);
     console.timeEnd("Deserialize and setup JsRouteSnapper");
-    deserialisedCallback();
     this.active = false;
     this.eventListenersSuccess = [];
     this.eventListenersUpdated = [];
@@ -86,6 +85,7 @@ export class RouteTool {
       color: "black",
       opacity: 0.5,
     });
+    initialisedCallback();
   }
 
   onMouseMove = (e: MapMouseEvent) => {
