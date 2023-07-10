@@ -19,8 +19,9 @@
   export let routeTool: RouteTool;
   export let eventHandler: EventHandler;
 
-  let progress: Array<number> = [0 ];
+  let progress: Array<number> = [0];
   let routeToolReady = false;
+  let failedToLoadRouteTool = false;
 
   // While the new feature is being drawn, remember its last valid version
   let unsavedFeature: { value: FeatureWithProps<LineString> | null } = {
@@ -54,6 +55,8 @@
       routeTool = new RouteTool($map, graphBytes, routeInfoDeserialised);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
+      failedToLoadRouteTool = true;
+
       return;
     }
 
@@ -98,18 +101,20 @@
     }
 
     return allChunks;
-  } 
+  }
 
- function routeInfoDeserialised() {
-  progress[0] = 100;
-  routeToolReady = true;
- } 
+  function routeInfoDeserialised() {
+    progress[0] = 100;
+    routeToolReady = true;
+  }
 </script>
 
-{#if !routeToolReady}
+{#if !routeToolReady && !failedToLoadRouteTool}
   <!-- TODO the text should be fixed, and the progress bar float -->
   <p>Route tool loading</p>
   <ProgressBar bind:series={progress} />
+{:else if failedToLoadRouteTool}
+  <p>Failed to load</p>
 {:else if $currentMode == thisMode}
   <RouteControls {routeTool} extendRoute />
 {/if}
