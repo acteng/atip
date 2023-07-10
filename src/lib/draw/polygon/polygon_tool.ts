@@ -16,6 +16,8 @@ import {
   overwriteLineLayer,
   overwritePolygonLayer,
   overwriteSource,
+  pointFeature,
+  trimPrecision,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { isAToolInUse } from "../../../stores";
@@ -335,8 +337,9 @@ export class PolygonTool {
     if (this.points.length < 3) {
       return null;
     }
+    let trimmed = this.points.map(trimPrecision);
     // Deep clone here, or face the wrath of crazy bugs later!
-    let coordinates = [JSON.parse(JSON.stringify(this.points))];
+    let coordinates = [JSON.parse(JSON.stringify(trimmed))];
     coordinates[0].push(JSON.parse(JSON.stringify(coordinates[0][0])));
     return {
       type: "Feature",
@@ -347,17 +350,6 @@ export class PolygonTool {
       properties: {},
     };
   }
-}
-
-function pointFeature(pt: Position): Feature<Point> {
-  return {
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "Point",
-      coordinates: pt,
-    },
-  };
 }
 
 // Includes the line connecting the last to the first point

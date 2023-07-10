@@ -1,6 +1,6 @@
-import type { Point, Position } from "geojson";
+import type { Point } from "geojson";
 import type { Map, MapMouseEvent } from "maplibre-gl";
-import { type FeatureWithProps } from "../../../maplibre_helpers";
+import { pointFeature, type FeatureWithProps } from "../../../maplibre_helpers";
 import { isAToolInUse } from "../../../stores";
 import type { EventHandler } from "../event_handler";
 
@@ -86,15 +86,4 @@ export class PointTool {
     this.active = isActive;
     isAToolInUse.set(isActive);
   }
-}
-
-function pointFeature(pt: Position): FeatureWithProps<Point> {
-  return {
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "Point",
-      coordinates: pt,
-    },
-  };
 }
