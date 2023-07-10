@@ -1,5 +1,4 @@
 <script lang="ts">
-  import ProgressBar from "@megapenthes/svelte4-progressbar";
   import type { LineString } from "geojson";
   import init from "route-snapper";
   import { onMount } from "svelte";
@@ -19,8 +18,9 @@
   export let routeTool: RouteTool;
   export let eventHandler: EventHandler;
 
-  let progress: Array<number> = [0];
+  let progress: number = 0;
   let routeToolReady = false;
+  let downloadComplete = false;
   let failedToLoadRouteTool = false;
 
   // While the new feature is being drawn, remember its last valid version
@@ -50,8 +50,10 @@
     try {
       const graphBytes = await fetchWithProgress(
         url,
-        (percentLoaded) => (progress[0] = Math.min(percentLoaded, 90))
+        // We set the progress to max out at 90 here because unzipping happens whilst we construct the route tool
+        (percentLoaded) => (progress = Math.min(percentLoaded, 90))
       );
+      downloadComplete = true;
       routeTool = new RouteTool($map, graphBytes, routeInfoDeserialised);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
@@ -71,7 +73,7 @@
 
   async function fetchWithProgress(
     url,
-    setProgress: (number) => void = (percentLoaded) => {}
+    setProgress: (number) => void
   ) {
     const response = await fetch(url);
     const reader = response.body.getReader();
@@ -104,15 +106,17 @@
   }
 
   function routeInfoDeserialised() {
-    progress[0] = 100;
+    progress = 100;
     routeToolReady = true;
   }
 </script>
 
-{#if !routeToolReady && !failedToLoadRouteTool}
-  <!-- TODO the text should be fixed, and the progress bar float -->
-  <p>Route tool loading</p>
-  <ProgressBar bind:series={progress} />
+{#if !routeToolReady && !failedToLoadRouteTool && !downloadComplete}
+  <label for="route-loading">Route tool loading</label>
+  <progress id="route-loading" value={progress}></progress>
+{:else if !routeToolReady && downloadComplete}
+  <label for="route-unpacking">Route data unpacking</label>
+  <progress id="route-unpacking"/>
 {:else if failedToLoadRouteTool}
   <p>Failed to load</p>
 {:else if $currentMode == thisMode}

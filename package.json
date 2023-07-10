@@ -30,7 +30,6 @@
     "vite-plugin-wasm-pack": "0.1.11"
   },
   "dependencies": {
-    "@megapenthes/svelte4-progressbar": "1.0.1",
     "@turf/bbox": "^6.5.0",
     "@turf/boolean-point-in-polygon": "^6.5.0",
     "@turf/helpers": "^6.5.0",
