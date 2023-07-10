@@ -50,8 +50,7 @@
     try {
       const graphBytes = await fetchWithProgress(
         url,
-        // We set the progress to max out at 90 here because unzipping happens whilst we construct the route tool
-        (percentLoaded) => (progress = Math.min(percentLoaded, 90))
+        (percentLoaded) => (progress = percentLoaded)
       );
       downloadComplete = true;
       routeTool = new RouteTool($map, graphBytes, routeInfoDeserialised);
