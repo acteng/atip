@@ -1,9 +1,10 @@
 import type { LineString, Point, Polygon } from "geojson";
+import type { ATF4Intervention } from "./schemas/atf4";
 import type { CriticalIssue } from "./schemas/criticals";
 import type { Planning } from "./schemas/planning";
 import type { Intervention } from "./schemas/v2";
 
-export type Schema = "v1" | "v2" | "planning" | "criticals";
+export type Schema = "v1" | "v2" | "planning" | "criticals" | "atf4";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
@@ -47,6 +48,7 @@ export interface InterventionProps {
   planning?: Planning;
   v2?: Intervention;
   criticals?: CriticalIssue;
+  atf4?: ATF4Intervention;
 
   // Temporary state, not meant to be serialized
   hide_while_editing?: boolean;
@@ -87,5 +89,6 @@ export function schemaTitle(schema: Schema): string {
     v2: "Experimental Scheme Design",
     planning: "Development Planning",
     criticals: "Critical Issues",
+    atf4: "ATF4 Scheme",
   }[schema];
 }

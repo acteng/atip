@@ -1,6 +1,7 @@
 <script lang="ts">
   import { deleteIntervention, formOpen, gjScheme } from "../../stores";
   import type { FeatureUnion, Schema } from "../../types";
+  import ATF4Form from "../forms/ATF4Form.svelte";
   import CriticalsForm from "../forms/CriticalsForm.svelte";
   import FormV1 from "../forms/FormV1.svelte";
   import FormV2 from "../forms/FormV2.svelte";
@@ -22,6 +23,9 @@
     }
     if (schema == "criticals") {
       return feature.properties.criticals?.name || "Untitled issue";
+    }
+    if (schema == "atf4") {
+      return feature.properties.atf4?.name || "Untitled intervention";
     }
 
     if (feature.properties.name) {
@@ -78,6 +82,8 @@
       <PlanningForm bind:props={feature.properties} />
     {:else if schema == "criticals"}
       <CriticalsForm bind:props={feature.properties} />
+    {:else if schema == "atf4"}
+      <ATF4Form bind:props={feature.properties} />
     {/if}
 
     <br />
