@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { FeatureCollection } from "geojson";
-  import maplibregl from "maplibre-gl";
+  import { Map } from "maplibre-gl";
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
   import authoritiesUrl from "../../assets/authorities.geojson?url";
@@ -14,13 +14,19 @@
   let inputValue: string;
   let dataList: HTMLDataListElement;
   let authoritySet: Set<string> = new Set();
-
   $: validEntry = authoritySet.has(inputValue);
 
-  onMount(async () => {
-    let source = "boundary";
-    let layer = "boundary-layer";
+  let map: Map | null = null;
+  let source = "boundary";
+  let layer = "boundary-layer";
 
+  let showBoundaries: "TA" | "LAD" = "TA";
+  function changeBoundaries() {
+    map?.setFilter(layer, ["==", ["get", "level"], showBoundaries]);
+  }
+  let hoveredBoundary: string | null = null;
+
+  onMount(async () => {
     const resp = await fetch(authoritiesUrl);
     const body = await resp.text();
     const json: FeatureCollection = JSON.parse(body);
@@ -31,10 +37,7 @@
       authoritySet.add(feature.properties!.name);
     }
 
-    // Only show TAs, not LADs, in the map
-    json.features = json.features.filter((f) => f.properties!.level == "TA");
-
-    let map = new maplibregl.Map({
+    map = new Map({
       container: "map",
       style:
         "https://api.maptiler.com/maps/streets/style.json?key=MZEJTanw3WpxRvt7qDfo",
@@ -61,6 +64,7 @@
       map.addLayer({
         id: layer,
         source: source,
+        filter: ["==", ["get", "level"], showBoundaries],
         type: "fill",
         paint: {
           "fill-color": "rgb(200, 100, 240)",
@@ -78,12 +82,14 @@
         if (e.features!.length > 0) {
           unhover();
           hoverId = e.features![0].id as number;
+          hoveredBoundary = e.features![0].properties.name;
           map.setFeatureState({ source: source, id: hoverId }, { hover: true });
         }
       });
       map.on("mouseleave", layer, () => {
         unhover();
         hoverId = null;
+        hoveredBoundary = null;
       });
 
       map.on("click", layer, function (e) {
@@ -150,7 +156,18 @@
     <datalist id="authorities-list" bind:this={dataList} />
     <button type="button" on:click={start} disabled={!validEntry}>Start</button>
   </div>
-  <p>Or pick a Transport Authority on the map</p>
+  <hr />
+  <label>
+    Or pick from the map:
+    <select bind:value={showBoundaries} on:change={changeBoundaries}>
+      <option value="TA">Transport Authorities</option>
+      <option value="LAD">Local Authority District</option>
+    </select>
+    {#if hoveredBoundary}
+      <i>{hoveredBoundary}</i>
+    {/if}
+  </label>
+  <hr />
   <p>Or upload an ATIP file:</p>
   <FileInput
     label="Upload ATIP GeoJSON file"
