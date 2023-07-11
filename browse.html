@@ -13,6 +13,11 @@
     <script type="module">
       import BrowseSchemes from "./src/pages/BrowseSchemes.svelte";
 
+      // For govuk setup. For some reason, the initAll step doesn't work here.
+      document.body.className = document.body.className
+        ? document.body.className + " js-enabled"
+        : "js-enabled";
+
       new BrowseSchemes({
         target: document.getElementById("app"),
       });

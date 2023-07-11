@@ -35,6 +35,14 @@ jobs:
               base=/atip/$branch
             fi
 
+            # TODO New build step not present in all branches yet. Rebase them all and remove.
+            npm ci
+            if npm run setup-govuk; then
+              echo "GOV.UK setup successful"
+            else
+              echo "GOV.UK setup failed, continuing"
+            fi
+
             if npm run wasm-release && npm ci && npm run generate-schema-ts && npm run build --if-present -- --base=$base; then
               if [ "$branch" == "main" ]; then
                 mv dist/* deployme

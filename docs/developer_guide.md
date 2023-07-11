@@ -7,6 +7,7 @@ This repository contains the Svelte ATIP app. Our tech stack is:
 - [Vite](https://vitejs.dev) as the build tool
 - [Svelte](https://svelte.dev) as the UI framework
 - [MapLibre GL](https://maplibre.org) as the map
+- [GOV.UK frontend](https://frontend.design-system.service.gov.uk) for styling
 
 There are some related repositorites also part of ATIP:
 
@@ -30,6 +31,10 @@ These are some resources to learn languages and libraries used in ATIP. Feel fre
 - Rust
   - [Docs](https://www.rust-lang.org/learn) for different learning styles
   - [The Rust Book](https://doc.rust-lang.org/stable/book/)
+- GOV.UK frontend
+  - [Typography](https://design-system.service.gov.uk/styles/typography/) for CSS class reference
+  - [Components](https://design-system.service.gov.uk/components/)
+
 ## Installation
 
 To run locally you'll need:
@@ -42,11 +47,12 @@ To run locally you'll need:
   `wasm-release` to build slowly but run quickly)
   - If you're modifying the Rust code, a handy command is `npm run wasm && npm run dev`
 - `npm run generate-schema-ts` to rebuild TS definitions from changes to `src/schemas/*.json`
+- `npm run setup-govuk` to rerun Sass and generate GOV.UK styles
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
 
-Upon first setup, you'll need to `npm run wasm` and `npm run
-generate-schema-ts` to get all mandatory files for running.
+Upon first setup, you'll need to `npm run wasm`, `npm run generate-schema-ts`,
+`npm run setup-govuk` to get all mandatory files for running.
 
 If you're using Firefox locally to develop and get "import declarations may
 only appear at top level" errors, upgrade to at least Firefox 112, go to

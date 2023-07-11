@@ -30,6 +30,9 @@ jobs:
     - name: Build schema TS files
       run: npm run generate-schema-ts
 
+    - name: Setup GOV.UK
+      run: npm run setup-govuk
+
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
