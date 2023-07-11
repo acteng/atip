@@ -1,5 +1,6 @@
 <script lang="ts">
   import { slide } from "svelte/transition";
+  import P from "../govuk/P.svelte";
   import {
     isBarewordEnumCase,
     isCheckbox,
@@ -51,7 +52,7 @@
 </script>
 
 {#if spec.description}
-  <p>{spec.description}</p>
+  <P>{spec.description}</P>
 {/if}
 
 {#if isStruct(spec)}
@@ -72,7 +73,6 @@
           value={x}
         />
         {x}
-        <br />
       </label>
     {:else if isSimpleEnumCase(x)}
       <label>
@@ -84,9 +84,7 @@
         />
         {x.value}
         {#if x.description}
-          <p>({x.description})</p>
-        {:else}
-          <br />
+          <P>({x.description})</P>
         {/if}
       </label>
     {:else}
@@ -97,7 +95,7 @@
           on:change={otherOneOf}
           value={x.name}
         />
-        {x.name}<br />
+        {x.name}
       </label>
 
       {#if oneOfCase == x.name && typeof value == "object"}
@@ -108,11 +106,11 @@
     {/if}
   {/each}
 {:else if isNumber(spec)}
-  <input type="number" bind:value />
+  <input class="govuk-input" type="number" bind:value />
 {:else if isOneLiner(spec)}
-  <input type="text" bind:value style="width: 100%" />
+  <input class="govuk-input" type="text" bind:value style="width: 100%" />
 {:else if isTextbox(spec)}
-  <textarea bind:value style="width: 100%" rows="5" />
+  <textarea class="govuk-textarea" bind:value style="width: 100%" rows="5" />
 {:else if isCheckbox(spec)}
   <input type="checkbox" bind:checked={value} />
 {/if}
@@ -121,10 +119,6 @@
   div {
     border: solid 1px black;
     padding: 10px;
-  }
-
-  p {
-    font-style: italic;
   }
 
   textarea {

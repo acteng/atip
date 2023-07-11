@@ -9,6 +9,7 @@
   import HoverLayer from "../lib/draw/HoverLayer.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import Toolbox from "../lib/draw/Toolbox.svelte";
+  import Button from "../lib/govuk/Button.svelte";
   import ContextualLayers from "../lib/layers/ContextualLayers.svelte";
   import Legend from "../lib/Legend.svelte";
   import Map from "../lib/Map.svelte";
@@ -21,6 +22,7 @@
   import { schemaTitle, type Schema } from "../types";
   import { type RouteInfo } from "../worker";
   import workerWrapper from "../worker?worker";
+  import "../style/main.css";
 
   let showAbout = false;
   let showInstructions = false;
@@ -85,21 +87,21 @@
 </script>
 
 <Layout>
-  <div slot="sidebar">
+  <div slot="sidebar" class="govuk-body">
     <div>
-      <button
-        type="button"
-        on:click={() => (window.location.href = "index.html")}
+      <Button on:click={() => (window.location.href = "index.html")}>
+        Home</Button
       >
-        Home</button
-      >
-      <button type="button" on:click={toggleAbout}>About</button>
-      <button type="button" on:click={toggleInstructions}>Instructions</button>
+      <Button on:click={toggleAbout}>About</Button>
+      <Button on:click={toggleInstructions}>Instructions</Button>
     </div>
     <p>{schemaTitle(schema)} mode</p>
-    <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
+    <h1 class="govuk-heading-l">
+      {authorityName}
+      <ZoomOutMap {boundaryGeojson} />
+    </h1>
     <EntireScheme {authorityName} {schema} />
-    <br />
+
     <InterventionList {schema} />
     <hr />
     <ContextualLayers />

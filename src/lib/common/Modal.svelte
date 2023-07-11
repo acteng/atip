@@ -20,9 +20,11 @@
     on:click|stopPropagation={() => null}
   >
     <div style="display: flex; justify-content: space-between;">
-      <h1>{title}</h1>
+      <h1 class="govuk-heading-s">{title}</h1>
       {#if displayEscapeButton}
-        <button on:click={() => (open = false)}>X</button>
+        <button class="govuk-button--secondary" on:click={() => (open = false)}
+          >X</button
+        >
       {/if}
     </div>
     <slot />

@@ -34,16 +34,16 @@
   Name:
   <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
   {#if length_meters}
-    <button type="button" on:click={() => autoFillName()} disabled={!$routeInfo}
-      >Auto-fill</button
+    <button
+      class="govuk-button govuk-button--secondary align-right"
+      type="button"
+      on:click={() => autoFillName()}
+      disabled={!$routeInfo}>Auto-fill</button
     >
   {/if}
-  <br />
-  <input type="text" bind:value={name} style="width: 100%" />
-</label>
 
-<br />
-<br />
+  <input class="govuk-text" type="text" bind:value={name} style="width: 100%" />
+</label>
 
 <label>
   <input type="radio" bind:group={intervention_type} value="area" />
@@ -62,22 +62,33 @@
   Other
 </label>
 
-<br />
-<br />
-
 <label>
-  Description:<br />
-  <textarea bind:value={description} style="width: 100%" rows="5" />
+  Description:
+  <textarea
+    class="govuk-textarea"
+    bind:value={description}
+    style="width: 100%"
+    rows="5"
+  />
 </label>
 
 {#if length_meters}
   Length: {prettyPrintMeters(length_meters)}
-  <br />
+
   <RouteInfoLayers {id} />
 {/if}
 
 <style>
   textarea {
     resize: none;
+  }
+
+  [type="radio"] {
+    margin: 1px;
+  }
+
+  .align-right {
+    float: right;
+    margin-bottom: 0.5em;
   }
 </style>

@@ -5,9 +5,12 @@
   import "maplibre-gl/dist/maplibre-gl.css";
   import authoritiesUrl from "../../assets/authorities.geojson?url";
   import FileInput from "../lib/common/FileInput.svelte";
+  import Button from "../lib/govuk/Button.svelte";
+  import P from "../lib/govuk/P.svelte";
   import About from "../lib/sidebar/About.svelte";
   import { bbox } from "../maplibre_helpers";
   import type { Schema } from "../types";
+  import "../style/main.css";
 
   let showAbout = false;
 
@@ -143,10 +146,10 @@
 </script>
 
 <div class="left">
-  <h1>Welcome to ATIP v2</h1>
-  <button type="button" on:click={() => (showAbout = !showAbout)}>About</button>
+  <h1 class="govuk-heading-l">Welcome to ATIP v2</h1>
+  <Button on:click={() => (showAbout = !showAbout)}>About</Button>
 
-  <p>Select Transport Authority or Local Authority District:</p>
+  <P>Select Transport Authority or Local Authority District:</P>
   <div>
     <input
       data-testid="transport-authority"
@@ -154,7 +157,7 @@
       bind:value={inputValue}
     />
     <datalist id="authorities-list" bind:this={dataList} />
-    <button type="button" on:click={start} disabled={!validEntry}>Start</button>
+    <Button on:click={start} disabled={!validEntry}>Start</Button>
   </div>
   <hr />
   <label>
@@ -182,10 +185,6 @@
   :global(body) {
     margin: 0;
     padding: 0;
-  }
-
-  button {
-    margin-left: 6px;
   }
 
   #map {

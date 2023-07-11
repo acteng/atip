@@ -36,8 +36,6 @@
   Add points to end
 </label>
 
-<br />
-
 <label
   title="Try to make the route avoid using the same streets with multiple waypoints"
 >

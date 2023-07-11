@@ -11,6 +11,7 @@
     openFromSidebar,
   } from "../../stores";
   import type { Mode } from "../../types";
+  import P from "../govuk/P.svelte";
   import type { EventHandler } from "./event_handler";
 
   const thisMode = "edit-attribute";
@@ -83,8 +84,8 @@
 
 {#if $currentMode == thisMode}
   {#if $formOpen}
-    <p>Edit attributes to the left, or click another object</p>
+    <P>Edit attributes to the left, or click another object</P>
   {:else}
-    <p>Click an object to fill out its attributes</p>
+    <P>Click an object to fill out its attributes</P>
   {/if}
 {/if}

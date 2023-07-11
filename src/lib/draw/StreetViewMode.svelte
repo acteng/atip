@@ -51,7 +51,7 @@
     />
     Google Street View
   </label>
-  <br />
+
   <label>
     <input
       type="radio"

@@ -80,13 +80,27 @@
       <CriticalsForm bind:props={feature.properties} />
     {/if}
 
-    <br />
-    <br />
     <div style="display: flex; justify-content: space-between">
-      <button type="button" on:click={() => deleteIntervention(feature.id)}
-        >Delete</button
+      <button
+        class="govuk-button--secondary"
+        type="button"
+        on:click={() => deleteIntervention(feature.id)}>Delete</button
       >
-      <button type="button" on:click={() => formOpen.set(null)}>Save</button>
+      <button
+        class="govuk-button"
+        type="button"
+        on:click={() => formOpen.set(null)}>Save</button
+      >
     </div>
   </AccordionItem>
 {/each}
+
+<style>
+  .govuk-button {
+    margin-bottom: 0;
+  }
+
+  .govuk-button--secondary {
+    font-size: 1rem;
+  }
+</style>

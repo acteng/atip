@@ -111,7 +111,7 @@
 </script>
 
 <div class="toolbox">
-  <div>
+  <div class="toolbox-item">
     <SelectToolButton
       thisMode="edit-attribute"
       label="Edit attributes"
@@ -124,7 +124,7 @@
       eventHandler={eventHandlers["edit-attribute"]}
     />
   </div>
-  <div>
+  <div class="toolbox-item">
     <SelectToolButton
       thisMode="edit-geometry"
       label="Edit geometry"
@@ -141,7 +141,7 @@
       />
     {/if}
   </div>
-  <div>
+  <div class="toolbox-item">
     {#if schema != "planning"}
       <SelectToolButton
         thisMode="point"
@@ -157,7 +157,7 @@
       eventHandler={eventHandlers["point"]}
     />
   </div>
-  <div>
+  <div class="toolbox-item">
     <SelectToolButton
       thisMode="free-polygon"
       label="New polygon (freehand)"
@@ -171,7 +171,7 @@
       eventHandler={eventHandlers["free-polygon"]}
     />
   </div>
-  <div>
+  <div class="toolbox-item">
     <SelectToolButton
       thisMode="snap-polygon"
       label="New polygon (snapped)"
@@ -187,7 +187,7 @@
       />
     {/if}
   </div>
-  <div>
+  <div class="toolbox-item">
     {#if schema != "planning"}
       <SelectToolButton
         thisMode="route"
@@ -204,7 +204,7 @@
       eventHandler={eventHandlers["route"]}
     />
   </div>
-  <div>
+  <div class="toolbox-item">
     {#if schema != "planning"}
       <SelectToolButton
         thisMode="split-route"
@@ -219,7 +219,7 @@
       eventHandler={eventHandlers["split-route"]}
     />
   </div>
-  <div>
+  <div class="toolbox-item last">
     <SelectToolButton
       thisMode="street-view"
       label="Street View"
@@ -244,5 +244,13 @@
     border: solid 2px black;
     font-size: 1.5em;
     width: 250px;
+  }
+
+  .toolbox-item {
+    margin-bottom: 0.5em;
+  }
+
+  .toolbox-item.last {
+    margin-bottom: 0;
   }
 </style>

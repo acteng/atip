@@ -154,15 +154,13 @@
 </script>
 
 <div>
-  <label>
+  <label class="govuk-label">
     Scheme name:
-    <input type="text" bind:value={$gjScheme.scheme_name} />
+    <input class="align-right" type="text" bind:value={$gjScheme.scheme_name} />
   </label>
 </div>
 
-<br />
-
-<div>
+<div class="container">
   <FileInput
     label="Load from GeoJSON"
     uniqueId="load-geojson"
@@ -171,7 +169,7 @@
   />
   <button
     type="button"
-    class="align-right"
+    class="width-restricted-button govuk-button"
     on:click={exportToGeojson}
     disabled={$isAToolInUse}
   >
@@ -179,13 +177,11 @@
   </button>
 </div>
 
-<br />
-
-<div>
-  <span>{$gjScheme.features.length} objects</span>
+<div class="container">
+  <span class="govuk-body">{$gjScheme.features.length} objects</span>
   <button
     type="button"
-    class="align-right"
+    class="width-restricted-button govuk-button"
     on:click={openClearAllDialogue}
     disabled={$gjScheme.features.length == 0 || $isAToolInUse}>Clear all</button
   >
@@ -207,5 +203,10 @@
 <style>
   .align-right {
     float: right;
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
   }
 </style>

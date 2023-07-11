@@ -1,5 +1,6 @@
 <script lang="ts">
   import { formOpen, routeInfo } from "../../stores";
+  import P from "../govuk/P.svelte";
   import SpeedLimits from "./SpeedLimits.svelte";
 
   let show: "none" | "speed limits" = "none";
@@ -24,5 +25,5 @@
     <SpeedLimits id={undefined} />
   {/if}
 {:else}
-  <p>Route info loading...</p>
+  <P>Route info loading...</P>
 {/if}

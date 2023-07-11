@@ -1,5 +1,6 @@
 <script lang="ts">
   import { routeInfo } from "../../stores";
+  import P from "../govuk/P.svelte";
   import LaneDetails from "../layers/LaneDetails.svelte";
   import SpeedLimits from "../layers/SpeedLimits.svelte";
 
@@ -9,19 +10,19 @@
 </script>
 
 {#if $routeInfo}
-  <label>
-    Show details:
-    <select bind:value={layer}>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="routeinfo-select"> Show details: </label>
+    <select id="routeinfo-select" class="govuk-select" bind:value={layer}>
       <option value="none">None</option>
       <option value="speed limits">Speed limits</option>
       <option value="lane details">Lane details</option>
     </select>
-  </label>
-  {#if layer == "speed limits"}
-    <SpeedLimits {id} />
-  {:else if layer == "lane details"}
-    <LaneDetails {id} />
-  {/if}
+    {#if layer == "speed limits"}
+      <SpeedLimits {id} />
+    {:else if layer == "lane details"}
+      <LaneDetails {id} />
+    {/if}
+  </div>
 {:else}
-  <p>Route info loading...</p>
+  <P>Route info loading...</P>
 {/if}

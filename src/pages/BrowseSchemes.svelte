@@ -11,6 +11,7 @@
   import Layout from "../lib/common/Layout.svelte";
   import MapTooltips from "../lib/common/MapTooltips.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
+  import P from "../lib/govuk/P.svelte";
   import Legend from "../lib/Legend.svelte";
   import Map from "../lib/Map.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
@@ -173,21 +174,18 @@
     </h1>
     <FileInput label="Load from GeoJSON" uniqueId="load_geojson" {loadFile} />
 
-    <br />
-    <br />
-
     <div>
       <label>
-        Filter by any field: <br />
+        Filter by any field:
         <input type="text" bind:value={filterText} />
       </label>
       <button type="button" on:click={() => (filterText = "")}>Clear</button>
     </div>
 
-    <p>
+    <P>
       Showing {showSchemes.size} schemes ({counts.route} routes, {counts.area} areas,
       {counts.crossing} crossings, {counts.other} other)
-    </p>
+    </P>
 
     <ul>
       {#each schemes as scheme}

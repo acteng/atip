@@ -1,4 +1,6 @@
 <script lang="ts">
+  import "../../style/main.css";
+
   export let label: string;
   // This must be unique in the DOM
   export let uniqueId: string;
@@ -28,8 +30,11 @@
     on:change={onChange}
     {disabled}
   />
-  <button type="button" on:click={() => fileInput.click()} {disabled}
-    >{label}</button
+  <button
+    class="govuk-button width-restricted-button"
+    type="button"
+    on:click={() => fileInput.click()}
+    {disabled}>{label}</button
   >
 </label>
 

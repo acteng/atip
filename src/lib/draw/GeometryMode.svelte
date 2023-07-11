@@ -4,6 +4,7 @@
   import type { FeatureWithProps } from "../../maplibre_helpers";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion } from "../../types";
+  import P from "../govuk/P.svelte";
   import type { EventHandler } from "./event_handler";
   import type { PointTool } from "./point/point_tool";
   import PointControls from "./point/PointControls.svelte";
@@ -269,6 +270,6 @@
   {:else if currentlyEditingControls == "route"}
     <RouteControls {routeTool} extendRoute={false} />
   {:else}
-    <p>Click an object to edit its geometry</p>
+    <P>Click an object to edit its geometry</P>
   {/if}
 {/if}

@@ -37,9 +37,10 @@ To run locally you'll need:
 [wasm-pack](https://github.com/rustwasm/wasm-pack).
 
 - `npm install` to install dependencies
-- `npm run dev` to work locally
 - `npm run wasm` to rebuild the `route_info` Rust library quickly (or
   `wasm-release` to build slowly but run quickly)
+- `npm run compile-styles` to compile the css
+- `npm run dev` to work locally
   - If you're modifying the Rust code, a handy command is `npm run wasm && npm run dev`
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
