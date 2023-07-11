@@ -4,7 +4,10 @@ export interface ATF4Intervention {
   name?: string;
   description?: string;
   type?: type;
+  complexity?: complexity;
 }
+
+export type complexity = "high" | "medium" | "low";
 
 export type type =
   | "New segregated cycling facility"
