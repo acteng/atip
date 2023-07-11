@@ -6,3 +6,4 @@ node_modules/
 /playwright-report/
 /playwright/.cache/
 dist
+src/schemas/*.ts

@@ -41,8 +41,12 @@ To run locally you'll need:
 - `npm run wasm` to rebuild the `route_info` Rust library quickly (or
   `wasm-release` to build slowly but run quickly)
   - If you're modifying the Rust code, a handy command is `npm run wasm && npm run dev`
+- `npm run generate-schema-ts` to rebuild TS definitions from changes to `src/schemas/*.json`
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
+
+Upon first setup, you'll need to `npm run wasm` and `npm run
+generate-schema-ts` to get all mandatory files for running.
 
 If you're using Firefox locally to develop and get "import declarations may
 only appear at top level" errors, upgrade to at least Firefox 112, go to
