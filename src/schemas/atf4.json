@@ -24,6 +24,10 @@
         "Restriction or reduction of car parking availability",
         "School streets"
       ]
+    },
+    {
+      "name": "complexity",
+      "oneOf": ["high", "medium", "low"]
     }
   ]
 }
