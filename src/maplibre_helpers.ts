@@ -184,14 +184,14 @@ export function pointFeature(pt: Position): FeatureWithProps<Point> {
     properties: {},
     geometry: {
       type: "Point",
-      coordinates: trimPrecision(pt),
+      coordinates: setPrecision(pt),
     },
   };
 }
 
 // Per https://datatracker.ietf.org/doc/html/rfc7946#section-11.2, 6 decimal
 // places (10cm) is plenty of precision
-export function trimPrecision(pt: Position): Position {
+export function setPrecision(pt: Position): Position {
   return [Math.round(pt[0] * 10e6) / 10e6, Math.round(pt[1] * 10e6) / 10e6];
 }
 

@@ -12,7 +12,7 @@
     emptyGeojson,
     overwriteCircleLayer,
     overwriteSource,
-    trimPrecision,
+    setPrecision,
   } from "../../../maplibre_helpers";
   import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
   import type { Mode, Feature as OurFeature } from "../../../types";
@@ -113,9 +113,9 @@
         let piece2 = result.features[1];
         // lineSplit may introduce unnecessary coordinate precision
         piece1.geometry.coordinates =
-          piece1.geometry.coordinates.map(trimPrecision);
+          piece1.geometry.coordinates.map(setPrecision);
         piece2.geometry.coordinates =
-          piece2.geometry.coordinates.map(trimPrecision);
+          piece2.geometry.coordinates.map(setPrecision);
 
         gjScheme.update((gj) => {
           // Keep the old ID for one, assign a new ID to the other
@@ -168,7 +168,7 @@
       properties: {},
       geometry: {
         type: "Point",
-        coordinates: trimPrecision(pt),
+        coordinates: setPrecision(pt),
       },
     };
   }

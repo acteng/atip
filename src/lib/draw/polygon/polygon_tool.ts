@@ -17,7 +17,7 @@ import {
   overwritePolygonLayer,
   overwriteSource,
   pointFeature,
-  trimPrecision,
+  setPrecision,
   type FeatureWithProps,
 } from "../../../maplibre_helpers";
 import { isAToolInUse } from "../../../stores";
@@ -337,7 +337,7 @@ export class PolygonTool {
     if (this.points.length < 3) {
       return null;
     }
-    let trimmed = this.points.map(trimPrecision);
+    let trimmed = this.points.map(setPrecision);
     // Deep clone here, or face the wrath of crazy bugs later!
     let coordinates = [JSON.parse(JSON.stringify(trimmed))];
     coordinates[0].push(JSON.parse(JSON.stringify(coordinates[0][0])));
