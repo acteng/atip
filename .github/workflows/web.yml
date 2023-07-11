@@ -44,6 +44,11 @@ jobs:
             else
               echo "Building $branch broke; skipping"
             fi
+
+            # TODO generate-schema-ts modifies some files that're still in
+            # git on some old branches. Workaround by making that git diff
+            # disappear, so changing branches later works.
+            git checkout src/schemas
           done
 
       - name: Publish
