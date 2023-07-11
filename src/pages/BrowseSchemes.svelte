@@ -3,8 +3,10 @@
   // TODO After figuring out the features of this page, work on the errors
   // here. Need to decide how much we use gjScheme, and what new feature-level
   // properties to expect.
+  import { initAll } from "govuk-frontend";
+  import "../style/main.css";
   import type { GeoJSON } from "geojson";
-  import { onDestroy } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import CollapsibleCard from "../lib/common/CollapsibleCard.svelte";
   import FileInput from "../lib/common/FileInput.svelte";
@@ -16,6 +18,11 @@
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
   import { bbox } from "../maplibre_helpers";
   import { gjScheme, map } from "../stores";
+
+  onMount(() => {
+    // For govuk components. Must happen here.
+    initAll();
+  });
 
   const params = new URLSearchParams(window.location.search);
   let style: string = params.get("style") || "streets";
@@ -163,7 +170,7 @@
 </script>
 
 <Layout>
-  <div slot="sidebar">
+  <div slot="sidebar" class="sidebar">
     <button type="button" on:click={() => window.open("index.html")}>
       Home</button
     >

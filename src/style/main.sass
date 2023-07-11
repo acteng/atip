@@ -1,0 +1,12 @@
+@import "../../node_modules/govuk-frontend/govuk/all"
+
+// Rather than specify class="govuk-body" on every <p> element, use these rules
+// to modify all elements under anything with class="sidebar".
+//
+// See https://design-system.service.gov.uk/styles/typography/ for reference on
+// govuk classes
+.sidebar
+  p
+    @extend .govuk-body
+  h1
+    @extend .govuk-heading-l
