@@ -27,6 +27,9 @@ jobs:
     - name: Build WASM
       run: npm run wasm-release
 
+    - name: Build schema TS files
+      run: npm run generate-schema-ts
+
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
