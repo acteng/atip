@@ -35,7 +35,7 @@ export class RouteTool {
   constructor(
     map: Map,
     graphBytes: Uint8Array,
-    initialisedCallback: () => { void }
+    initialisedCallback: () => void
   ) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");

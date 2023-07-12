@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { LineString } from "geojson";
   import init from "route-snapper";
-  import { onMount, tick } from "svelte";
+  import { onMount } from "svelte";
   import type { FeatureWithProps } from "../../../maplibre_helpers";
   import { currentMode, map } from "../../../stores";
   import type { Mode } from "../../../types";
