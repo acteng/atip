@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { initAll } from "govuk-frontend";
+  import "../style/main.css";
   import type { FeatureCollection } from "geojson";
   import { Map } from "maplibre-gl";
   import { onMount } from "svelte";
@@ -27,6 +29,9 @@
   let hoveredBoundary: string | null = null;
 
   onMount(async () => {
+    // For govuk components. Must happen here.
+    initAll();
+
     const resp = await fetch(authoritiesUrl);
     const body = await resp.text();
     const json: FeatureCollection = JSON.parse(body);
@@ -142,40 +147,65 @@
   }
 </script>
 
-<div class="left">
-  <h1>Welcome to ATIP v2</h1>
-  <button type="button" on:click={() => (showAbout = !showAbout)}>About</button>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half left">
+    <h1 class="govuk-heading-l">Welcome to ATIP v2</h1>
+    <button
+      class="govuk-button govuk-button--secondary"
+      data-module="govuk-button"
+      on:click={() => (showAbout = !showAbout)}>About</button
+    >
 
-  <p>Select Transport Authority or Local Authority District:</p>
-  <div>
-    <input
-      data-testid="transport-authority"
-      list="authorities-list"
-      bind:value={inputValue}
-    />
-    <datalist id="authorities-list" bind:this={dataList} />
-    <button type="button" on:click={start} disabled={!validEntry}>Start</button>
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="inputValue">
+        Select Transport Authority or Local Authority District
+      </label>
+      <input
+        class="govuk-input govuk-input--width-20"
+        id="inputValue"
+        name="inputValue"
+        data-testid="transport-authority"
+        list="authorities-list"
+        bind:value={inputValue}
+      />
+      <datalist id="authorities-list" bind:this={dataList} />
+    </div>
+    <button
+      class="govuk-button"
+      data-module="govuk-button"
+      on:click={start}
+      disabled={!validEntry}>Start</button
+    >
+
+    <hr />
+
+    <div class="govuk-form-group">
+      <label class="govuk-label" for="showBoundaries">
+        Or pick from the map
+      </label>
+      <select
+        id="showBoundaries"
+        name="showBoundaries"
+        class="govuk-select"
+        bind:value={showBoundaries}
+        on:change={changeBoundaries}
+      >
+        <option value="TA">Transport Authorities</option>
+        <option value="LAD">Local Authority District</option>
+      </select>
+      {#if hoveredBoundary}
+        <i>{hoveredBoundary}</i>
+      {/if}
+    </div>
+
+    <hr />
+
+    <FileInput label="Or upload an ATIP GeoJSON file" {loadFile} />
   </div>
-  <hr />
-  <label>
-    Or pick from the map:
-    <select bind:value={showBoundaries} on:change={changeBoundaries}>
-      <option value="TA">Transport Authorities</option>
-      <option value="LAD">Local Authority District</option>
-    </select>
-    {#if hoveredBoundary}
-      <i>{hoveredBoundary}</i>
-    {/if}
-  </label>
-  <hr />
-  <p>Or upload an ATIP file:</p>
-  <FileInput
-    label="Upload ATIP GeoJSON file"
-    uniqueId="load-geojson"
-    {loadFile}
-  />
+  <div class="govuk-grid-column-one-half">
+    <div id="map" />
+  </div>
 </div>
-<div id="map" />
 <About bind:open={showAbout} />
 
 <style>
@@ -184,8 +214,8 @@
     padding: 0;
   }
 
-  button {
-    margin-left: 6px;
+  .left {
+    margin: 10px;
   }
 
   #map {
@@ -194,9 +224,5 @@
     bottom: 0;
     right: 0;
     width: 50%;
-  }
-
-  .left {
-    margin: 10px;
   }
 </style>
