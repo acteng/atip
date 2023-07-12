@@ -15,6 +15,10 @@ There are some related repositorites also part of ATIP:
 - [route-snapper](https://github.com/dabreegster/route_snapper/) is a tool to draw routes snapped to existing roads
 - [osm2streets](https://github.com/a-b-street/osm2streets) is a library to process and query OpenStreetMap data
 
+
+### Contributions to this doc
+We have only included instructions or guidance for environments we've worked on: if it doesn't work for you or your environment, please make a pull request so others don't face the same pain you did!
+
 ### Background reading
 
 These are some resources to learn languages and libraries used in ATIP. Feel free to add more!
@@ -39,15 +43,15 @@ These are some resources to learn languages and libraries used in ATIP. Feel fre
 
 To run locally you'll need:
 [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and
-[wasm-pack](https://github.com/rustwasm/wasm-pack).
+[wasm-pack](https://github.com/rustwasm/wasm-pack) ([quick-start](https://rustwasm.github.io/wasm-pack/book/quickstart.html)). Wasm pack depends on [Rust](https://www.rust-lang.org/tools/install) and gcc. Rust is covered in the wasm quick start guide but gcc can be installed using `apt install build-essential` for Ubuntu, at least.
 
 - `npm install` to install dependencies
-- `npm run dev` to work locally
 - `npm run wasm` to rebuild the `route_info` Rust library quickly (or
   `wasm-release` to build slowly but run quickly)
   - If you're modifying the Rust code, a handy command is `npm run wasm && npm run dev`
 - `npm run generate-schema-ts` to rebuild TS definitions from changes to `src/schemas/*.json`
 - `npm run setup-govuk` to rerun Sass and generate GOV.UK styles
+- `npm run dev` to run Atip locally (N.B. you need to run all the above commands before running this command)
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
 
