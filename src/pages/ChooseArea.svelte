@@ -6,6 +6,7 @@
   import { onMount } from "svelte";
   import DefaultButton from "../lib/govuk/DefaultButton.svelte";
   import FormElement from "../lib/govuk/FormElement.svelte";
+  import Radio from "../lib/govuk/Radio.svelte";
   import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
   import authoritiesUrl from "../../assets/authorities.geojson?url";
@@ -174,20 +175,19 @@
 
     <hr />
 
-    <FormElement label="Or pick from the map" id="showBoundaries">
-      <select
-        id="showBoundaries"
-        class="govuk-select"
-        bind:value={showBoundaries}
-        on:change={changeBoundaries}
-      >
-        <option value="TA">Transport Authorities</option>
-        <option value="LAD">Local Authority District</option>
-      </select>
-      {#if hoveredBoundary}
-        <i>{hoveredBoundary}</i>
-      {/if}
-    </FormElement>
+    <Radio
+      legend="Or pick from the map"
+      id="showBoundaries"
+      choices={[
+        ["TA", "Transport Authorities"],
+        ["LAD", "Local Authority Districts"],
+      ]}
+      bind:value={showBoundaries}
+      on:change={changeBoundaries}
+    />
+    {#if hoveredBoundary}
+      <i>{hoveredBoundary}</i>
+    {/if}
 
     <hr />
 
