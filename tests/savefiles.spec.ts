@@ -21,9 +21,9 @@ test.beforeEach(async () => {
 });
 
 test("loading a file with length displays the length", async () => {
-  // Note we use a weird styling trick to replace the file input element with a regular button.
-  // This will not work: page.getByRole('button', { name: 'Load from GeoJSON' })
-  await page.locator("#load-geojson").setInputFiles("tests/data/Adur.json");
+  await page
+    .getByLabel("Load from GeoJSON")
+    .setInputFiles("tests/data/Adur.json");
 
   page.on("dialog", (dialog) => dialog.accept());
   await page
@@ -43,7 +43,7 @@ test("loading a file without length displays the length", async () => {
   delete copy.features[0].properties.length_meters;
   let uploadFile = JSON.stringify(copy);
 
-  await page.locator("#load-geojson").setInputFiles({
+  await page.getByLabel("Load from GeoJSON").setInputFiles({
     name: "Adur.json",
     mimeType: "application/json",
     buffer: Buffer.from(uploadFile),
@@ -64,7 +64,7 @@ test("loading a file with null properties displays the length", async () => {
   copy.features[0].properties = null;
   let uploadFile = JSON.stringify(copy);
 
-  await page.locator("#load-geojson").setInputFiles({
+  await page.getByLabel("Load from GeoJSON").setInputFiles({
     name: "Adur.json",
     mimeType: "application/json",
     buffer: Buffer.from(uploadFile),
@@ -91,7 +91,9 @@ test("the previous file from local storage is loaded by default", async () => {
 
 test("loading a file from the homepage goes to the correct page", async () => {
   await page.goto("/");
-  await page.locator("#load-geojson").setInputFiles("tests/data/Adur.json");
+  await page
+    .getByLabel("Or upload an ATIP GeoJSON file")
+    .setInputFiles("tests/data/Adur.json");
 
   await expect(page).toHaveURL(/scheme.html\?authority=Adur/);
   await page
