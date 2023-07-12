@@ -3,6 +3,7 @@
   import icon from "../../assets/zoom_out_map.svg";
   import { bbox } from "../maplibre_helpers";
   import { map } from "../stores";
+  import SecondaryButton from "./govuk/SecondaryButton.svelte";
 
   export let boundaryGeojson: GeoJSON;
 
@@ -15,12 +16,6 @@
   }
 </script>
 
-<button type="button" title="Zoom to show entire boundary" on:click={recenter}>
+<SecondaryButton title="Zoom to show entire boundary" on:click={recenter}>
   <img src={icon} alt="Zoom to show entire boundary" />
-</button>
-
-<style>
-  button {
-    margin: 2px;
-  }
-</style>
+</SecondaryButton>

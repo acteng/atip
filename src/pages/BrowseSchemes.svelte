@@ -13,6 +13,8 @@
   import Layout from "../lib/common/Layout.svelte";
   import MapTooltips from "../lib/common/MapTooltips.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
+  import FormElement from "../lib/govuk/FormElement.svelte";
+  import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
   import Legend from "../lib/Legend.svelte";
   import Map from "../lib/Map.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
@@ -170,26 +172,28 @@
 </script>
 
 <Layout>
-  <div slot="sidebar">
-    <button type="button" on:click={() => window.open("index.html")}>
-      Home</button
+  <div slot="sidebar" class="govuk-prose">
+    <SecondaryButton on:click={() => window.open("index.html")}>
+      Home</SecondaryButton
     >
-    <h1>
-      Browse schemes
+    <div style="display: flex; justify-content: space-between">
+      <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
-    </h1>
+    </div>
     <FileInput label="Load from GeoJSON" {loadFile} />
 
     <br />
-    <br />
 
-    <div>
-      <label>
-        Filter by any field: <br />
-        <input type="text" bind:value={filterText} />
-      </label>
-      <button type="button" on:click={() => (filterText = "")}>Clear</button>
-    </div>
+    <FormElement label="Filter by any field" id="filterText">
+      <input
+        type="text"
+        class="govuk-input govuk-input--width-10"
+        id="filterText"
+        bind:value={filterText}
+      />
+      <SecondaryButton on:click={() => (filterText = "")}>Clear</SecondaryButton
+      >
+    </FormElement>
 
     <p>
       Showing {showSchemes.size} schemes ({counts.route} routes, {counts.area} areas,
@@ -202,21 +206,17 @@
           <CollapsibleCard
             label={`${scheme.scheme_reference}: ${scheme.num_features} features`}
           >
-            <ul>
-              <li>Authority or region: {scheme.authority_or_region}</li>
-              <li>Capital scheme ID: {scheme.capital_scheme_id}</li>
-              <li>Funding programme: {scheme.funding_programme}</li>
-              <li>
-                <button type="button" on:click={() => showScheme(scheme)}
-                  >Show on map</button
-                >
-              </li>
-              <li>
-                <button type="button" on:click={() => editScheme(scheme)}
-                  >Edit scheme</button
-                >
-              </li>
-            </ul>
+            <p>Authority or region: {scheme.authority_or_region}</p>
+            <p>Capital scheme ID: {scheme.capital_scheme_id}</p>
+            <p>Funding programme: {scheme.funding_programme}</p>
+            <div class="govuk-button-group">
+              <SecondaryButton on:click={() => showScheme(scheme)}
+                >Show on map</SecondaryButton
+              >
+              <SecondaryButton on:click={() => editScheme(scheme)}
+                >Edit scheme</SecondaryButton
+              >
+            </div>
           </CollapsibleCard>
         {/if}
       {/each}
