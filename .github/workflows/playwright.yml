@@ -24,6 +24,12 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Cache WASM build
+      uses: actions/cache@v3
+      with:
+        path: route_info/target
+        key: doesnt-matter-share-everything-for-tests
+
     - name: Build WASM
       run: npm run wasm-release
 
