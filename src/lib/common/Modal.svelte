@@ -1,4 +1,6 @@
 <script lang="ts">
+  import SecondaryButton from "../govuk/SecondaryButton.svelte";
+
   export let title: string;
   export let open = false;
   export let displayEscapeButton = true;
@@ -22,12 +24,7 @@
     <div style="display: flex; justify-content: space-between;">
       <h1 class="govuk-heading-l">{title}</h1>
       {#if displayEscapeButton}
-        <button
-          class="govuk-button govuk-button--secondary"
-          data-module="govuk-button"
-          type="button"
-          on:click={() => (open = false)}>X</button
-        >
+        <SecondaryButton on:click={() => (open = false)}>X</SecondaryButton>
       {/if}
     </div>
     <slot />
@@ -44,10 +41,6 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     display: block;
-  }
-
-  button {
-    background-color: whitesmoke;
   }
 
   .content {

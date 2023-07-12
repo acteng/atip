@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import type { FeatureCollection } from "geojson";
+  import { initAll } from "govuk-frontend";
   import { Map } from "maplibre-gl";
   import { onMount } from "svelte";
+  import DefaultButton from "../lib/govuk/DefaultButton.svelte";
+  import FormElement from "../lib/govuk/FormElement.svelte";
+  import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
   import authoritiesUrl from "../../assets/authorities.geojson?url";
   import FileInput from "../lib/common/FileInput.svelte";
@@ -150,42 +153,30 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half left">
     <h1 class="govuk-heading-l">Welcome to ATIP v2</h1>
-    <button
-      class="govuk-button govuk-button--secondary"
-      data-module="govuk-button"
-      on:click={() => (showAbout = !showAbout)}>About</button
+    <SecondaryButton on:click={() => (showAbout = !showAbout)}
+      >About</SecondaryButton
     >
 
-    <div class="govuk-form-group">
-      <label class="govuk-label" for="inputValue">
-        Select Transport Authority or Local Authority District
-      </label>
+    <FormElement
+      label="Select Transport Authority or Local Authority District"
+      id="inputValue"
+    >
       <input
         class="govuk-input govuk-input--width-20"
         id="inputValue"
-        name="inputValue"
         data-testid="transport-authority"
         list="authorities-list"
         bind:value={inputValue}
       />
       <datalist id="authorities-list" bind:this={dataList} />
-    </div>
-    <button
-      class="govuk-button"
-      data-module="govuk-button"
-      on:click={start}
-      disabled={!validEntry}>Start</button
-    >
+    </FormElement>
+    <DefaultButton on:click={start} disabled={!validEntry}>Start</DefaultButton>
 
     <hr />
 
-    <div class="govuk-form-group">
-      <label class="govuk-label" for="showBoundaries">
-        Or pick from the map
-      </label>
+    <FormElement label="Or pick from the map" id="showBoundaries">
       <select
         id="showBoundaries"
-        name="showBoundaries"
         class="govuk-select"
         bind:value={showBoundaries}
         on:change={changeBoundaries}
@@ -196,7 +187,7 @@
       {#if hoveredBoundary}
         <i>{hoveredBoundary}</i>
       {/if}
-    </div>
+    </FormElement>
 
     <hr />
 
