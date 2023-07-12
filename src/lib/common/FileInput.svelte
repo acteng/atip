@@ -1,7 +1,5 @@
 <script lang="ts">
   export let label: string;
-  // This must be unique in the DOM
-  export let uniqueId: string;
   // Called with the file contents as text
   export let loadFile: (text: string) => void;
 
@@ -19,30 +17,15 @@
   }
 </script>
 
-<!-- TODO Interactive elements inside a label are apparently invalid, but this works -->
-<label>
+<div class="govuk-form-group">
+  <label class="govuk-label" for="file-upload">{label}</label>
   <input
-    type="file"
-    id={uniqueId}
     bind:this={fileInput}
     on:change={onChange}
     {disabled}
+    class="govuk-file-upload"
+    id="file-upload"
+    name="file-upload"
+    type="file"
   />
-  <button type="button" on:click={() => fileInput.click()} {disabled}
-    >{label}</button
-  >
-</label>
-
-<style>
-  input[type="file"] {
-    cursor: pointer;
-
-    /* Make the input type=file effectively invisible, but still let browser accessibility stuff work */
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-  }
-</style>
+</div>

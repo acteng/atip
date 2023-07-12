@@ -163,12 +163,7 @@
 <br />
 
 <div>
-  <FileInput
-    label="Load from GeoJSON"
-    uniqueId="load-geojson"
-    disabled={$isAToolInUse}
-    {loadFile}
-  />
+  <FileInput label="Load from GeoJSON" disabled={$isAToolInUse} {loadFile} />
   <button
     type="button"
     class="align-right"

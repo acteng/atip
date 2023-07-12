@@ -170,7 +170,7 @@
 </script>
 
 <Layout>
-  <div slot="sidebar" class="sidebar">
+  <div slot="sidebar">
     <button type="button" on:click={() => window.open("index.html")}>
       Home</button
     >
@@ -178,7 +178,7 @@
       Browse schemes
       <ZoomOutMap boundaryGeojson={$gjScheme} />
     </h1>
-    <FileInput label="Load from GeoJSON" uniqueId="load_geojson" {loadFile} />
+    <FileInput label="Load from GeoJSON" {loadFile} />
 
     <br />
     <br />

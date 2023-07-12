@@ -13,6 +13,11 @@
     <script type="module">
       import ChooseArea from "./src/pages/ChooseArea.svelte";
 
+      // For govuk setup. For some reason, the initAll step doesn't work here.
+      document.body.className = document.body.className
+        ? document.body.className + " js-enabled"
+        : "js-enabled";
+
       new ChooseArea({
         target: document.getElementById("app"),
       });
