@@ -1,22 +1,26 @@
 <script lang="ts">
+  import { schemaPluralNoun, type Schema } from "../../types";
   import Modal from "../common/Modal.svelte";
 
   export let open: boolean;
+  export let schema: Schema;
+
+  let noun = schemaPluralNoun(schema);
 </script>
 
 <Modal title="Instructions" bind:open>
-  <h2>Drawing objects on the map</h2>
+  <h2>Drawing {noun} on the map</h2>
   <p>
-    Use the tools on right to sketch new objects on the map. Each tool has
-    instructions that appear when you click on its icon.
+    Use the tools on right to sketch new {noun} on the map. Each tool has instructions
+    that appear when you click on its icon.
   </p>
   <p>
-    Modify existing objects on the map using <b>Edit geometry</b> and clicking something.
+    Modify existing {noun} on the map using <b>Edit geometry</b> and clicking something.
   </p>
 
   <h2>Filling out data</h2>
   <p>
-    <b>Edit attributes</b> mode allows selecting and adding attributes to objects
+    <b>Edit attributes</b> mode allows selecting and adding attributes to {noun}
     that appear on the left.
   </p>
 
