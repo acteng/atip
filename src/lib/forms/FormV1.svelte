@@ -1,6 +1,10 @@
 <script lang="ts">
   import type { Feature, LineString } from "geojson";
   import { gjScheme, routeInfo } from "../../stores";
+  import FormElement from "../govuk/FormElement.svelte";
+  import Radio from "../govuk/Radio.svelte";
+  import SecondaryButton from "../govuk/SecondaryButton.svelte";
+  import TextArea from "../govuk/TextArea.svelte";
   import RouteInfoLayers from "./RouteInfoLayers.svelte";
 
   export let id: number;
@@ -30,54 +34,32 @@
   }
 </script>
 
-<label>
-  Name:
+<FormElement label="Name" id={"name-" + id}>
+  <input type="text" class="govuk-input" bind:value={name} />
   <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
   {#if length_meters}
-    <button type="button" on:click={() => autoFillName()} disabled={!$routeInfo}
-      >Auto-fill</button
+    <SecondaryButton on:click={() => autoFillName()} disabled={!$routeInfo}
+      >Auto-fill</SecondaryButton
     >
   {/if}
-  <br />
-  <input type="text" bind:value={name} style="width: 100%" />
-</label>
+</FormElement>
 
-<br />
-<br />
+<Radio
+  legend="Type"
+  id={"type-" + id}
+  choices={[
+    ["area", "Area"],
+    ["route", "Route"],
+    ["crossing", "Crossing"],
+    ["other", "Other"],
+  ]}
+  inlineSmall
+  bind:value={intervention_type}
+/>
 
-<label>
-  <input type="radio" bind:group={intervention_type} value="area" />
-  Area
-</label>
-<label>
-  <input type="radio" bind:group={intervention_type} value="route" />
-  Route
-</label>
-<label>
-  <input type="radio" bind:group={intervention_type} value="crossing" />
-  Crossing
-</label>
-<label>
-  <input type="radio" bind:group={intervention_type} value="other" />
-  Other
-</label>
-
-<br />
-<br />
-
-<label>
-  Description:<br />
-  <textarea bind:value={description} style="width: 100%" rows="5" />
-</label>
+<TextArea label="Description" bind:value={description} />
 
 {#if length_meters}
-  Length: {prettyPrintMeters(length_meters)}
-  <br />
+  <p>Length: {prettyPrintMeters(length_meters)}</p>
   <RouteInfoLayers {id} />
 {/if}
-
-<style>
-  textarea {
-    resize: none;
-  }
-</style>

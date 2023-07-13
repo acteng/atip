@@ -13,6 +13,11 @@
     <script type="module">
       import App from "./src/pages/App.svelte";
 
+      // For govuk setup. For some reason, the initAll step doesn't work here.
+      document.body.className = document.body.className
+        ? document.body.className + " js-enabled"
+        : "js-enabled";
+
       new App({
         target: document.getElementById("app"),
       });

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { formOpen, routeInfo } from "../../stores";
+  import Select from "../govuk/Select.svelte";
   import SpeedLimits from "./SpeedLimits.svelte";
 
   let show: "none" | "speed limits" = "none";
@@ -13,13 +14,17 @@
 </script>
 
 {#if $routeInfo}
-  <label>
-    Show layer:
-    <select bind:value={show} disabled={$formOpen != null}>
-      <option value="none">None</option>
-      <option value="speed limits">Speed limits</option>
-    </select>
-  </label>
+  <Select
+    label="Show layer"
+    id="show-layer"
+    choices={[
+      ["none", "None"],
+      ["speed limits", "Speed limits"],
+    ]}
+    emptyOption={false}
+    bind:value={show}
+    disabled={$formOpen != null}
+  />
   {#if show == "speed limits"}
     <SpeedLimits id={undefined} />
   {/if}
