@@ -1,5 +1,6 @@
 <script lang="ts">
   import { routeInfo } from "../../stores";
+  import Select from "../govuk/Select.svelte";
   import LaneDetails from "../layers/LaneDetails.svelte";
   import SpeedLimits from "../layers/SpeedLimits.svelte";
 
@@ -9,14 +10,17 @@
 </script>
 
 {#if $routeInfo}
-  <label>
-    Show details:
-    <select bind:value={layer}>
-      <option value="none">None</option>
-      <option value="speed limits">Speed limits</option>
-      <option value="lane details">Lane details</option>
-    </select>
-  </label>
+  <Select
+    label="Show details"
+    id="show-details-layer"
+    choices={[
+      ["none", "None"],
+      ["speed limits", "Speed limits"],
+      ["lane details", "Lane details"],
+    ]}
+    emptyOption={false}
+    bind:value={layer}
+  />
   {#if layer == "speed limits"}
     <SpeedLimits {id} />
   {:else if layer == "lane details"}

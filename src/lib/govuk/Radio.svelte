@@ -5,6 +5,8 @@
   export let id: string;
   // A list of [value, label] representing the choices
   export let choices: [string, string][];
+  // Lay out radio buttons horizontally and decrease font size
+  export let inlineSmall = false;
 
   // The current value
   export let value: string;
@@ -13,7 +15,12 @@
 <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend">{legend}</legend>
-    <div class="govuk-radios" data-module="govuk-radios">
+    <div
+      class="govuk-radios"
+      class:govuk-radios--inline={inlineSmall}
+      class:govuk-radios--small={inlineSmall}
+      data-module="govuk-radios"
+    >
       {#each choices as [thisValue, thisLabel]}
         <div class="govuk-radios__item">
           <input

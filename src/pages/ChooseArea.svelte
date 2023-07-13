@@ -187,6 +187,7 @@
         ["TA", "Transport Authorities"],
         ["LAD", "Local Authority Districts"],
       ]}
+      inlineSmall
       bind:value={showBoundaries}
       on:change={changeBoundaries}
     />

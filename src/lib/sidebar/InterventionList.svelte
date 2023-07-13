@@ -6,6 +6,8 @@
   import FormV1 from "../forms/FormV1.svelte";
   import FormV2 from "../forms/FormV2.svelte";
   import PlanningForm from "../forms/PlanningForm.svelte";
+  import SecondaryButton from "../govuk/SecondaryButton.svelte";
+  import WarningButton from "../govuk/WarningButton.svelte";
   import AccordionItem from "./AccordionItem.svelte";
 
   export let schema: Schema;
@@ -89,10 +91,11 @@
     <br />
     <br />
     <div style="display: flex; justify-content: space-between">
-      <button type="button" on:click={() => deleteIntervention(feature.id)}
-        >Delete</button
+      <WarningButton on:click={() => deleteIntervention(feature.id)}
+        >Delete</WarningButton
       >
-      <button type="button" on:click={() => formOpen.set(null)}>Save</button>
+      <SecondaryButton on:click={() => formOpen.set(null)}>Save</SecondaryButton
+      >
     </div>
   </AccordionItem>
 {/each}

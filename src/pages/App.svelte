@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { initAll } from "govuk-frontend";
+  import "../style/main.css";
   import * as Comlink from "comlink";
   import type { FeatureCollection, Polygon } from "geojson";
   import { onMount } from "svelte";
@@ -9,6 +11,7 @@
   import HoverLayer from "../lib/draw/HoverLayer.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import Toolbox from "../lib/draw/Toolbox.svelte";
+  import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
   import ContextualLayers from "../lib/layers/ContextualLayers.svelte";
   import Legend from "../lib/Legend.svelte";
   import Map from "../lib/Map.svelte";
@@ -49,6 +52,9 @@
 
   let boundaryGeojson: FeatureCollection<Polygon>;
   onMount(async () => {
+    // For govuk components. Must happen here.
+    initAll();
+
     boundaryGeojson = await loadAuthorityBoundary();
 
     // If you get "import declarations may only appear at top level of a
@@ -88,19 +94,21 @@
 </script>
 
 <Layout>
-  <div slot="sidebar">
-    <div>
-      <button
-        type="button"
-        on:click={() => (window.location.href = "index.html")}
+  <div slot="sidebar" class="govuk-prose">
+    <div class="govuk-button-group">
+      <SecondaryButton on:click={() => (window.location.href = "index.html")}>
+        Home</SecondaryButton
       >
-        Home</button
+      <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
+      <SecondaryButton on:click={toggleInstructions}
+        >Instructions</SecondaryButton
       >
-      <button type="button" on:click={toggleAbout}>About</button>
-      <button type="button" on:click={toggleInstructions}>Instructions</button>
     </div>
     <p>{schemaTitle(schema)} mode</p>
-    <h1>{authorityName} <ZoomOutMap {boundaryGeojson} /></h1>
+    <div style="display: flex; justify-content: space-between">
+      <h1>{authorityName}</h1>
+      <ZoomOutMap {boundaryGeojson} />
+    </div>
     <EntireScheme {authorityName} {schema} />
     <br />
     <InterventionList {schema} />

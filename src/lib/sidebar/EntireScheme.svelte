@@ -13,6 +13,9 @@
   import ConfirmationModal from "../common/ConfirmationModal.svelte";
   import FileInput from "../common/FileInput.svelte";
   import ErrorMessage from "../govuk/ErrorMessage.svelte";
+  import SecondaryButton from "../govuk/SecondaryButton.svelte";
+  import TextInput from "../govuk/TextInput.svelte";
+  import WarningButton from "../govuk/WarningButton.svelte";
 
   export let authorityName: string;
   export let schema: Schema;
@@ -155,62 +158,45 @@
   }
 </script>
 
-<div>
-  <label>
-    Scheme name:
-    <input type="text" bind:value={$gjScheme.scheme_name} />
-  </label>
-</div>
+<TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
 
-<br />
+{#if errorMessage}
+  <ErrorMessage {errorMessage} />
+{/if}
 
-<div>
-  {#if errorMessage}
-    <ErrorMessage {errorMessage} />
-  {/if}
-  <FileInput
-    label="Load from GeoJSON"
-    id="load-geojson"
-    disabled={$isAToolInUse}
-    {loadFile}
-  />
-  <button
-    type="button"
-    class="align-right"
-    on:click={exportToGeojson}
-    disabled={$isAToolInUse}
-  >
-    Export to GeoJSON
-  </button>
-</div>
+<FileInput
+  label="Load from GeoJSON"
+  id="load-geojson"
+  disabled={$isAToolInUse}
+  {loadFile}
+/>
 
-<br />
+<SecondaryButton on:click={exportToGeojson} disabled={$isAToolInUse}>
+  Export to GeoJSON
+</SecondaryButton>
 
-<div>
-  <span>{$gjScheme.features.length} {schemaPluralNoun(schema)}</span>
-  <button
-    type="button"
-    class="align-right"
+<hr />
+
+<div style="display: flex; justify-content: space-between">
+  <p>{$gjScheme.features.length} {schemaPluralNoun(schema)}</p>
+  <p>{$gjScheme.features.length} objects</p>
+  <WarningButton
     on:click={openClearAllDialogue}
-    disabled={$gjScheme.features.length == 0 || $isAToolInUse}>Clear all</button
+    disabled={$gjScheme.features.length == 0 || $isAToolInUse}
+    >Clear all</WarningButton
   >
-  <ConfirmationModal
-    bind:open={displayClearAllConfirmation}
-    title={"Would you like to clear your work?"}
-    message={"This will delete all your drawn interventions."}
-    on:cancelAction={cancelClearAll}
-    on:confirmAction={clearAll}
-  />
-  {#if $isAToolInUse}
-    <p class="reminder">
-      Finish drawing on the map and/or select "Edit attributes" to use these
-      options.
-    </p>
-  {/if}
 </div>
+<ConfirmationModal
+  bind:open={displayClearAllConfirmation}
+  title={"Would you like to clear your work?"}
+  message={"This will delete all your drawn interventions."}
+  on:cancelAction={cancelClearAll}
+  on:confirmAction={clearAll}
+/>
 
-<style>
-  .align-right {
-    float: right;
-  }
-</style>
+{#if $isAToolInUse}
+  <p>
+    Finish drawing on the map and/or select "Edit attributes" to use these
+    options.
+  </p>
+{/if}
