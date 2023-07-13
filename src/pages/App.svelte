@@ -5,6 +5,7 @@
   import authoritiesUrl from "../../assets/authorities.geojson?url";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import BoundaryLayer from "../lib/BoundaryLayer.svelte";
+  import { getAuthoritiesNameSet } from "../lib/common/data_getter";
   import Layout from "../lib/common/Layout.svelte";
   import HoverLayer from "../lib/draw/HoverLayer.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
@@ -26,10 +27,10 @@
   let showInstructions = false;
 
   const params = new URLSearchParams(window.location.search);
-  // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
   let style: string = params.get("style") || "streets";
   let schema: Schema = (params.get("schema") as Schema) || "v1";
+  checkAuthorityValid(authorityName);
 
   // The version numbers here are arbitrary, not necessarily related to the
   // app's version. The version of the code deployed has to match the data, and
@@ -81,6 +82,14 @@
       (feature) => feature.properties?.name == authorityName
     );
     return geojson;
+  }
+
+  async function checkAuthorityValid(authorityName: string): Promise<void> {
+    let authortiesNameSet = await getAuthoritiesNameSet();
+
+    if (!authortiesNameSet.has(authorityName)) {
+      window.location.href = `/?error=Authority name not found: ${authorityName}`;
+    }
   }
 </script>
 
