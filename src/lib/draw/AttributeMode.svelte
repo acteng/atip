@@ -10,11 +10,12 @@
     mapHover,
     openFromSidebar,
   } from "../../stores";
-  import type { Mode } from "../../types";
+  import { schemaSingularNoun, type Mode, type Schema } from "../../types";
   import type { EventHandler } from "./event_handler";
 
   const thisMode = "edit-attribute";
 
+  export let schema: Schema;
   export let changeMode: (m: Mode) => void;
   export let eventHandler: EventHandler;
 
@@ -83,8 +84,8 @@
 
 {#if $currentMode == thisMode}
   {#if $formOpen}
-    <p>Edit attributes to the left, or click another object</p>
+    <p>Edit attributes to the left, or click {schemaSingularNoun(schema)}</p>
   {:else}
-    <p>Click an object to fill out its attributes</p>
+    <p>Click {schemaSingularNoun(schema)} to fill out its attributes</p>
   {/if}
 {/if}

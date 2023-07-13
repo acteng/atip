@@ -117,4 +117,4 @@
 </Layout>
 
 <About bind:open={showAbout} />
-<Instructions bind:open={showInstructions} />
+<Instructions bind:open={showInstructions} {schema} />

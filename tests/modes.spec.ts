@@ -27,7 +27,7 @@ test("clearing all resets to nothing being selected", async () => {
   await clickMap(page, 500, 500);
 
   await expect(
-    page.getByText("Edit attributes to the left, or click another object")
+    page.getByText("Edit attributes to the left, or click an intervention")
   ).toBeVisible();
 
   await clearExistingInterventions(page);
@@ -74,7 +74,7 @@ test("creating a new freehand polygon and canceling doesn't save anything", asyn
   await clickMap(page, 400, 600);
 
   await page.getByRole("button", { name: "Cancel" }).click();
-  await expect(page.getByText("0 objects")).toBeVisible();
+  await expect(page.getByText("0 interventions")).toBeVisible();
 });
 
 // TODO Repeat switching modes and canceling for other draw tools
@@ -302,19 +302,19 @@ test("switching between modes saves, doesn't save anything if no actions taken",
   ).toBeVisible();
 
   await page.getByRole("button", { name: "New polygon (snapped)" }).click();
-  await expect(page.getByText("1 objects")).toBeVisible();
+  await expect(page.getByText("1 interventions")).toBeVisible();
 });
 
 // Assert the page is in attribute mode with nothing selected.
 async function expectNeutralAttributeMode() {
   await expect(
-    page.getByText("Click an object to fill out its attributes")
+    page.getByText("Click an intervention to fill out its attributes")
   ).toBeVisible();
 }
 
 // Assert the page is in edit geometry mode with nothing selected.
 async function expectEditGeometryMode() {
   await expect(
-    page.getByText("Click an object to edit its geometry")
+    page.getByText("Click an intervention to edit its geometry")
   ).toBeVisible();
 }

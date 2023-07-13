@@ -9,7 +9,7 @@
     openFromSidebar,
     sidebarHover,
   } from "../../stores";
-  import type { Schema, Scheme } from "../../types";
+  import { schemaPluralNoun, type Schema, type Scheme } from "../../types";
   import ConfirmationModal from "../common/ConfirmationModal.svelte";
   import FileInput from "../common/FileInput.svelte";
 
@@ -182,7 +182,7 @@
 <br />
 
 <div>
-  <span>{$gjScheme.features.length} objects</span>
+  <span>{$gjScheme.features.length} {schemaPluralNoun(schema)}</span>
   <button
     type="button"
     class="align-right"

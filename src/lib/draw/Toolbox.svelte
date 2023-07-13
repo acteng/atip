@@ -120,6 +120,7 @@
     />
     <AttributeMode
       bind:this={attributeMode}
+      {schema}
       {changeMode}
       eventHandler={eventHandlers["edit-attribute"]}
     />
@@ -134,6 +135,7 @@
     {#if routeTool}
       <GeometryMode
         bind:this={geometryMode}
+        {schema}
         {pointTool}
         {polygonTool}
         {routeTool}

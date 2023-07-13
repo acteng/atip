@@ -3,7 +3,12 @@
   import { MapMouseEvent } from "maplibre-gl";
   import type { FeatureWithProps } from "../../maplibre_helpers";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
-  import type { Feature, FeatureUnion } from "../../types";
+  import {
+    schemaSingularNoun,
+    type Feature,
+    type FeatureUnion,
+    type Schema,
+  } from "../../types";
   import type { EventHandler } from "./event_handler";
   import type { PointTool } from "./point/point_tool";
   import PointControls from "./point/PointControls.svelte";
@@ -15,6 +20,7 @@
 
   const thisMode = "edit-geometry";
 
+  export let schema: Schema;
   export let pointTool: PointTool;
   export let polygonTool: PolygonTool;
   export let routeTool: RouteTool;
@@ -269,6 +275,6 @@
   {:else if currentlyEditingControls == "route"}
     <RouteControls {routeTool} extendRoute={false} />
   {:else}
-    <p>Click an object to edit its geometry</p>
+    <p>Click {schemaSingularNoun(schema)} to edit its geometry</p>
   {/if}
 {/if}

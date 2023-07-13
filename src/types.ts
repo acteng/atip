@@ -92,3 +92,25 @@ export function schemaTitle(schema: Schema): string {
     atf4: "ATF4 Scheme",
   }[schema];
 }
+
+// The singular form of the object (with the article) managed by this schema
+export function schemaSingularNoun(schema: Schema): string {
+  return {
+    v1: "an intervention",
+    v2: "an intervention",
+    planning: "a development",
+    criticals: "a critical issue",
+    atf4: "an intervention",
+  }[schema];
+}
+
+// The plural form of the object managed by this schema
+export function schemaPluralNoun(schema: Schema): string {
+  return {
+    v1: "interventions",
+    v2: "interventions",
+    planning: "developments",
+    criticals: "critical issues",
+    atf4: "interventions",
+  }[schema];
+}
