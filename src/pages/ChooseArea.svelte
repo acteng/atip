@@ -191,7 +191,11 @@
 
     <hr />
 
-    <FileInput label="Or upload an ATIP GeoJSON file" {loadFile} />
+    <FileInput
+      label="Or upload an ATIP GeoJSON file"
+      {loadFile}
+      id="load-geojson"
+    />
   </div>
   <div class="govuk-grid-column-one-half">
     <div id="map" />

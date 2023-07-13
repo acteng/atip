@@ -1,5 +1,9 @@
 <script lang="ts">
+  import FormElement from "../govuk/FormElement.svelte";
+
   export let label: string;
+  // This must be unique in the page
+  export let id: string;
   // Called with the file contents as text
   export let loadFile: (text: string) => void;
 
@@ -17,15 +21,13 @@
   }
 </script>
 
-<div class="govuk-form-group">
-  <label class="govuk-label" for="file-upload">{label}</label>
+<FormElement {label} {id}>
   <input
     bind:this={fileInput}
     on:change={onChange}
     {disabled}
     class="govuk-file-upload"
-    id="file-upload"
-    name="file-upload"
+    {id}
     type="file"
   />
-</div>
+</FormElement>
