@@ -18,7 +18,6 @@
       ["speed limits", "Speed limits"],
       ["lane details", "Lane details"],
     ]}
-    emptyOption={false}
     bind:value={layer}
   />
   {#if layer == "speed limits"}

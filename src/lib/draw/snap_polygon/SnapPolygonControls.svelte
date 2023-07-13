@@ -1,5 +1,7 @@
 <script lang="ts">
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import DefaultButton from "../../govuk/DefaultButton.svelte";
+  import SecondaryButton from "../../govuk/SecondaryButton.svelte";
   import { RouteTool } from "../route/route_tool";
 
   export let routeTool: RouteTool;
@@ -20,6 +22,6 @@
 </CollapsibleCard>
 
 <div style="display: flex; justify-content: space-between">
-  <button type="button" on:click={() => routeTool.finish()}>Finish</button>
-  <button type="button" on:click={() => routeTool.cancel()}>Cancel</button>
+  <DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>
+  <SecondaryButton on:click={() => routeTool.cancel()}>Cancel</SecondaryButton>
 </div>

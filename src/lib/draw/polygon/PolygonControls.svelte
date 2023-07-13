@@ -1,5 +1,7 @@
 <script lang="ts">
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import DefaultButton from "../../govuk/DefaultButton.svelte";
+  import SecondaryButton from "../../govuk/SecondaryButton.svelte";
   import { PolygonTool } from "./polygon_tool";
 
   export let polygonTool: PolygonTool;
@@ -16,6 +18,7 @@
 </CollapsibleCard>
 
 <div style="display: flex; justify-content: space-between">
-  <button type="button" on:click={() => polygonTool.finish()}>Finish</button>
-  <button type="button" on:click={() => polygonTool.cancel()}>Cancel</button>
+  <DefaultButton on:click={() => polygonTool.finish()}>Finish</DefaultButton>
+  <SecondaryButton on:click={() => polygonTool.cancel()}>Cancel</SecondaryButton
+  >
 </div>

@@ -21,7 +21,6 @@
       ["none", "None"],
       ["speed limits", "Speed limits"],
     ]}
-    emptyOption={false}
     bind:value={show}
     disabled={$formOpen != null}
   />
