@@ -15,6 +15,7 @@
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import FormElement from "../lib/govuk/FormElement.svelte";
   import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
+  import Select from "../lib/govuk/Select.svelte";
   import Legend from "../lib/Legend.svelte";
   import Map from "../lib/Map.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
@@ -48,24 +49,43 @@
   // TODO Extract into a component
   let counts = { area: 0, route: 0, crossing: 0, other: 0 };
 
+  // Dropdown filters
+  let authorities: [string, string][] = [];
+  let filterAuthority = "";
+  let fundingProgrammes: [string, string][] = [];
+  let filterFundingProgramme = "";
+
   onDestroy(() => {
     gjScheme.set(null);
   });
 
-  $: {
+  $: if ($gjScheme) {
     // When schemes or filter changes, update showSchemes
     showSchemes.clear();
-    if (filterText) {
+    if (filterText || filterAuthority || filterFundingProgramme) {
       let filterNormalized = filterText.toLowerCase();
       for (let feature of $gjScheme.features) {
         // TODO This is a very blunt free-form text search, of any property.
         if (
-          JSON.stringify(feature.properties)
+          !JSON.stringify(feature.properties)
             .toLowerCase()
             .includes(filterNormalized)
         ) {
-          showSchemes.add(feature.properties.scheme_reference);
+          continue;
         }
+        if (
+          filterAuthority &&
+          feature.properties.authority_or_region != filterAuthority
+        ) {
+          continue;
+        }
+        if (
+          filterFundingProgramme &&
+          feature.properties.funding_programme != filterFundingProgramme
+        ) {
+          continue;
+        }
+        showSchemes.add(feature.properties.scheme_reference);
       }
     } else {
       for (let scheme of schemes) {
@@ -129,6 +149,21 @@
     }
 
     schemes = Object.values(byScheme);
+
+    let set1 = new Set();
+    let set2 = new Set();
+    for (let x of schemes) {
+      if (x.authority_or_region) {
+        set1.add(x.authority_or_region);
+      }
+      if (x.funding_programme) {
+        set2.add(x.funding_programme);
+      }
+    }
+    authorities = Array.from(set1.entries());
+    authorities.sort();
+    fundingProgrammes = Array.from(set2.entries());
+    fundingProgrammes.sort();
   }
 
   function tooltip(props: { [name: string]: any }): string {
@@ -182,18 +217,31 @@
     </div>
     <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
-    <br />
-
-    <FormElement label="Filter by any field" id="filterText">
-      <input
-        type="text"
-        class="govuk-input govuk-input--width-10"
-        id="filterText"
-        bind:value={filterText}
+    <CollapsibleCard label="Filters">
+      <Select
+        label="Authority or region"
+        id="filterAuthority"
+        choices={authorities}
+        bind:value={filterAuthority}
       />
-      <SecondaryButton on:click={() => (filterText = "")}>Clear</SecondaryButton
-      >
-    </FormElement>
+      <Select
+        label="Funding programme"
+        id="filterFundingProgramme"
+        choices={fundingProgrammes}
+        bind:value={filterFundingProgramme}
+      />
+      <FormElement label="Any field" id="filterText">
+        <input
+          type="text"
+          class="govuk-input govuk-input--width-10"
+          id="filterText"
+          bind:value={filterText}
+        />
+        <SecondaryButton on:click={() => (filterText = "")}
+          >Clear</SecondaryButton
+        >
+      </FormElement>
+    </CollapsibleCard>
 
     <p>
       Showing {showSchemes.size} schemes ({counts.route} routes, {counts.area} areas,
