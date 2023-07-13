@@ -7,7 +7,7 @@
   // A list of [value, label] representing the choices
   export let choices: [string, string][];
   // Make the first option the empty string
-  export let emptyOption = true;
+  export let emptyOption = false;
   export let disabled = false;
 
   // The current value

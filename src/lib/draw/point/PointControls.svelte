@@ -1,5 +1,6 @@
 <script lang="ts">
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import SecondaryButton from "../../govuk/SecondaryButton.svelte";
   import { PointTool } from "./point_tool";
 
   export let pointTool: PointTool;
@@ -17,4 +18,4 @@
   </ul>
 </CollapsibleCard>
 
-<button type="button" on:click={() => pointTool.cancel()}>Cancel</button>
+<SecondaryButton on:click={() => pointTool.cancel()}>Cancel</SecondaryButton>

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Select from "./govuk/Select.svelte";
+
   // TODO Be specific about "streets" | "hybrid", but then we need actual error
   // handling when we parse it from URL params
   export let style: string;
@@ -14,11 +16,16 @@
 </script>
 
 <div>
-  Basemap:
-  <select bind:value={style} on:change={changeStyle}>
-    <option value="streets">Streets</option>
-    <option value="hybrid">Satellite</option>
-  </select>
+  <Select
+    label="Basemap"
+    id="basemap"
+    choices={[
+      ["streets", "Streets"],
+      ["hybrid", "Satellite"],
+    ]}
+    bind:value={style}
+    on:change={changeStyle}
+  />
 </div>
 
 <style>

@@ -110,7 +110,7 @@
   });
 </script>
 
-<div class="toolbox">
+<div class="toolbox govuk-prose">
   <div>
     <SelectToolButton
       thisMode="edit-attribute"
