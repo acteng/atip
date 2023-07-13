@@ -180,7 +180,7 @@
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
     </div>
-    <FileInput label="Load from GeoJSON" {loadFile} />
+    <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
     <br />
 
