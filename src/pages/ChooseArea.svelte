@@ -4,7 +4,7 @@
   import { initAll } from "govuk-frontend";
   import { Map } from "maplibre-gl";
   import { onMount } from "svelte";
-  import ErrorMessage from "../lib/common/ErrorMessage.svelte";
+  import ErrorMessage from "../lib/govuk/ErrorMessage.svelte";
   import DefaultButton from "../lib/govuk/DefaultButton.svelte";
   import FormElement from "../lib/govuk/FormElement.svelte";
   import Radio from "../lib/govuk/Radio.svelte";
@@ -159,7 +159,7 @@
       >About</SecondaryButton
     >
     {#if errorMessage}
-      <ErrorMessage bind:errorMessage />
+      <ErrorMessage {errorMessage} />
     {/if}
 
     <FormElement

@@ -30,7 +30,6 @@
   let authorityName: string = params.get("authority")!;
   let style: string = params.get("style") || "streets";
   let schema: Schema = (params.get("schema") as Schema) || "v1";
-  checkAuthorityValid(authorityName);
 
   // The version numbers here are arbitrary, not necessarily related to the
   // app's version. The version of the code deployed has to match the data, and
@@ -81,15 +80,10 @@
     geojson.features = geojson.features.filter(
       (feature) => feature.properties?.name == authorityName
     );
-    return geojson;
-  }
-
-  async function checkAuthorityValid(authorityName: string): Promise<void> {
-    let authortiesNameSet = await getAuthoritiesNameSet();
-
-    if (!authortiesNameSet.has(authorityName)) {
+    if(geojson.features.length === 0) {
       window.location.href = `/?error=Authority name not found: ${authorityName}`;
     }
+    return geojson;
   }
 </script>
 
