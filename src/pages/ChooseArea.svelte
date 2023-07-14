@@ -10,7 +10,7 @@
   import Radio from "../lib/govuk/Radio.svelte";
   import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { getAuthoritiesData } from "../lib/common/data_getter";
+  import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import FileInput from "../lib/common/FileInput.svelte";
   import About from "../lib/sidebar/About.svelte";
   import { bbox } from "../maplibre_helpers";
@@ -18,7 +18,8 @@
 
   let showAbout = false;
   const params = new URLSearchParams(window.location.search);
-  let errorMessage: string = params.get("error")!;
+  let pageErrorMessage: string = params.get("error") || "";
+  let uploadErrorMessage: string = "";
 
   let inputValue: string;
   let dataList: HTMLDataListElement;
@@ -39,7 +40,7 @@
     // For govuk components. Must happen here.
     initAll();
 
-    const json: FeatureCollection = await getAuthoritiesData();
+    const json: FeatureCollection = await getAuthoritiesGeoJson();
     for (let feature of json.features) {
       let option = document.createElement("option");
       option.value = feature.properties!.name;
@@ -131,7 +132,7 @@
       window.localStorage.setItem(filename, JSON.stringify(gj));
       window.location.href = `scheme.html?authority=${gj.authority}&schema=${schema}`;
     } catch (err) {
-      errorMessage = `Couldn't load scheme from a file: ${err}`;
+      pageErrorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
 
@@ -158,8 +159,8 @@
     <SecondaryButton on:click={() => (showAbout = !showAbout)}
       >About</SecondaryButton
     >
-    {#if errorMessage}
-      <ErrorMessage {errorMessage} />
+    {#if pageErrorMessage}
+      <ErrorMessage errorMessage={pageErrorMessage} />
     {/if}
 
     <FormElement
@@ -195,6 +196,9 @@
 
     <hr />
 
+    {#if uploadErrorMessage}
+      <ErrorMessage errorMessage={uploadErrorMessage} />
+    {/if}
     <FileInput
       label="Or upload an ATIP GeoJSON file"
       {loadFile}

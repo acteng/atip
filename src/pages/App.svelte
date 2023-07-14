@@ -26,6 +26,7 @@
   let showInstructions = false;
 
   const params = new URLSearchParams(window.location.search);
+  // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
   let style: string = params.get("style") || "streets";
   let schema: Schema = (params.get("schema") as Schema) || "v1";

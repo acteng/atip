@@ -107,6 +107,7 @@
       let gj = JSON.parse(text);
       gjScheme.set(gj);
       addSchemeToSidebar(gj);
+      errorMessage = "";
 
       $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
     } catch (err) {
