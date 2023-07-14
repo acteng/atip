@@ -1,4 +1,5 @@
 <script lang="ts">
+  import humanizeString from "humanize-string";
   import { slide } from "svelte/transition";
   import {
     isBarewordEnumCase,
@@ -57,7 +58,7 @@
 {#if isStruct(spec)}
   {#each spec.members as x}
     <div>
-      <h3>{x.name}</h3>
+      <h3>{humanizeString(x.name)}</h3>
       <svelte:self spec={x} bind:value={value[x.name]} />
     </div>
   {/each}
