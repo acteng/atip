@@ -12,9 +12,11 @@
   import type { Schema, Scheme } from "../../types";
   import ConfirmationModal from "../common/ConfirmationModal.svelte";
   import FileInput from "../common/FileInput.svelte";
+  import ErrorMessage from "../govuk/ErrorMessage.svelte";
 
   export let authorityName: string;
   export let schema: Schema;
+  let errorMessage = "";
 
   let baseFilename = authorityName;
   if (schema != "v1") {
@@ -123,7 +125,7 @@
       // TODO Should we prompt before deleting the current scheme?
       gjScheme.set(backfill(JSON.parse(text)));
     } catch (err) {
-      window.alert(`Couldn't load scheme from a file: ${err}`);
+      errorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
 
@@ -163,6 +165,9 @@
 <br />
 
 <div>
+  {#if errorMessage}
+    <ErrorMessage {errorMessage} />
+  {/if}
   <FileInput
     label="Load from GeoJSON"
     id="load-geojson"

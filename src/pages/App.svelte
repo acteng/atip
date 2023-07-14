@@ -5,7 +5,6 @@
   import authoritiesUrl from "../../assets/authorities.geojson?url";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import BoundaryLayer from "../lib/BoundaryLayer.svelte";
-  import { getAuthoritiesNameSet } from "../lib/common/data_getter";
   import Layout from "../lib/common/Layout.svelte";
   import HoverLayer from "../lib/draw/HoverLayer.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
@@ -80,7 +79,7 @@
     geojson.features = geojson.features.filter(
       (feature) => feature.properties?.name == authorityName
     );
-    if(geojson.features.length === 0) {
+    if (geojson.features.length === 0) {
       window.location.href = `/?error=Authority name not found: ${authorityName}`;
     }
     return geojson;

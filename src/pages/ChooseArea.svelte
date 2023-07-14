@@ -4,8 +4,8 @@
   import { initAll } from "govuk-frontend";
   import { Map } from "maplibre-gl";
   import { onMount } from "svelte";
-  import ErrorMessage from "../lib/govuk/ErrorMessage.svelte";
   import DefaultButton from "../lib/govuk/DefaultButton.svelte";
+  import ErrorMessage from "../lib/govuk/ErrorMessage.svelte";
   import FormElement from "../lib/govuk/FormElement.svelte";
   import Radio from "../lib/govuk/Radio.svelte";
   import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
@@ -131,7 +131,7 @@
       window.localStorage.setItem(filename, JSON.stringify(gj));
       window.location.href = `scheme.html?authority=${gj.authority}&schema=${schema}`;
     } catch (err) {
-      window.alert(`Couldn't load scheme from a file: ${err}`);
+      errorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
 
