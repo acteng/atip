@@ -1,6 +1,6 @@
 # Backend design doc
 
-This is a design doc proposing some possible approaches for an ATIP backend. It doesn't represent any final decisions or describe anything actually built.
+This is a design doc proposing some possible approaches for an ATIP backend. It doesn't represent any final decisions or describe anything actually built. See <https://github.com/acteng/atip/pull/229> for comments/discussion.
 
 As of June 2023, ATIP is a web app for editing GeoJSON data. Those GeoJSON files are stored in each user's browser local storage and manually saved/loaded as local files. There is no central place to submit and store files, or any concept around tracking changes to a file.
 
