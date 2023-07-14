@@ -3,6 +3,7 @@
   import { currentMode, map, userSettings } from "../../stores";
   import type { Mode } from "../../types";
   import CollapsibleCard from "../common/CollapsibleCard.svelte";
+  import Radio from "../govuk/Radio.svelte";
   import type { EventHandler } from "./event_handler";
 
   export let eventHandler: EventHandler;
@@ -43,23 +44,16 @@
 </script>
 
 {#if $currentMode == thisMode}
-  <label>
-    <input
-      type="radio"
-      bind:group={$userSettings.streetViewImagery}
-      value="google"
-    />
-    Google Street View
-  </label>
-  <br />
-  <label>
-    <input
-      type="radio"
-      bind:group={$userSettings.streetViewImagery}
-      value="bing"
-    />
-    Bing Streetside
-  </label>
+  <Radio
+    legend="Source"
+    id="streetViewImagery"
+    choices={[
+      ["google", "Google Street View"],
+      ["bing", "Bing Streetside"],
+    ]}
+    inlineSmall
+    bind:value={$userSettings.streetViewImagery}
+  />
 
   <CollapsibleCard label="Help">
     <ul>

@@ -1,5 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+  import SecondaryButton from "../govuk/SecondaryButton.svelte";
+  import WarningButton from "../govuk/WarningButton.svelte";
   import Modal from "./Modal.svelte";
 
   const dispatch = createEventDispatcher();
@@ -28,6 +30,10 @@
   bind:canCloseByClickingBackground
 >
   <p>{message}</p>
-  <button type="button" on:click={onClickConfirm}>{confirmButtonText}</button>
-  <button type="button" on:click={onClickCancel}>{cancelButtonText}</button>
+  <div class="govuk-button-group">
+    <WarningButton on:click={onClickConfirm}>{confirmButtonText}</WarningButton>
+    <SecondaryButton on:click={onClickCancel}
+      >{cancelButtonText}</SecondaryButton
+    >
+  </div>
 </Modal>

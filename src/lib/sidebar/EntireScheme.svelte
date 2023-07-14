@@ -175,8 +175,6 @@
   Export to GeoJSON
 </SecondaryButton>
 
-<hr />
-
 <div style="display: flex; justify-content: space-between">
   <p>{$gjScheme.features.length} {schemaPluralNoun(schema)}</p>
   <p>{$gjScheme.features.length} objects</p>
