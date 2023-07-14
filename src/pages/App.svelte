@@ -110,7 +110,7 @@
       <ZoomOutMap {boundaryGeojson} />
     </div>
     <EntireScheme {authorityName} {schema} />
-    <br />
+    <hr />
     <InterventionList {schema} />
     <hr />
     <ContextualLayers />
