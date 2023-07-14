@@ -19,3 +19,14 @@ test("choosing a local authority and clicking start changes the url", async ({
     /.*scheme.html\?authority=West%20Yorkshire%20Combined%20Authority/
   );
 });
+
+test("Uploading a valid atip geojson redirects to the appropriate authority scheme page", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByLabel("Or upload an ATIP GeoJSON file")
+    .setInputFiles("tests/data/Adur.json");
+
+  await expect(page).toHaveURL(/.*scheme.html\?authority=Adur/);
+});

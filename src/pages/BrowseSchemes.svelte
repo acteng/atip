@@ -13,6 +13,7 @@
   import Layout from "../lib/common/Layout.svelte";
   import MapTooltips from "../lib/common/MapTooltips.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
+  import ErrorMessage from "../lib/govuk/ErrorMessage.svelte";
   import FormElement from "../lib/govuk/FormElement.svelte";
   import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
   import Legend from "../lib/Legend.svelte";
@@ -29,6 +30,7 @@
   const params = new URLSearchParams(window.location.search);
   let style: string = params.get("style") || "streets";
   const schema = "v1";
+  let errorMessage = "";
 
   interface Scheme {
     scheme_reference: string;
@@ -105,10 +107,11 @@
       let gj = JSON.parse(text);
       gjScheme.set(gj);
       addSchemeToSidebar(gj);
+      errorMessage = "";
 
       $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
     } catch (err) {
-      window.alert(`Couldn't load schemes from a file: ${err}`);
+      errorMessage = `Couldn't load schemes from a file: ${err}`;
     }
   }
 
@@ -180,6 +183,9 @@
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
     </div>
+    {#if errorMessage}
+      <ErrorMessage {errorMessage} />
+    {/if}
     <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
     <br />

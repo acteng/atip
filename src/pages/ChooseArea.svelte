@@ -5,17 +5,21 @@
   import { Map } from "maplibre-gl";
   import { onMount } from "svelte";
   import DefaultButton from "../lib/govuk/DefaultButton.svelte";
+  import ErrorMessage from "../lib/govuk/ErrorMessage.svelte";
   import FormElement from "../lib/govuk/FormElement.svelte";
   import Radio from "../lib/govuk/Radio.svelte";
   import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import authoritiesUrl from "../../assets/authorities.geojson?url";
+  import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import FileInput from "../lib/common/FileInput.svelte";
   import About from "../lib/sidebar/About.svelte";
   import { bbox } from "../maplibre_helpers";
   import type { Schema } from "../types";
 
   let showAbout = false;
+  const params = new URLSearchParams(window.location.search);
+  let pageErrorMessage: string = params.get("error") || "";
+  let uploadErrorMessage: string = "";
 
   let inputValue: string;
   let dataList: HTMLDataListElement;
@@ -36,9 +40,7 @@
     // For govuk components. Must happen here.
     initAll();
 
-    const resp = await fetch(authoritiesUrl);
-    const body = await resp.text();
-    const json: FeatureCollection = JSON.parse(body);
+    const json: FeatureCollection = await getAuthoritiesGeoJson();
     for (let feature of json.features) {
       let option = document.createElement("option");
       option.value = feature.properties!.name;
@@ -130,7 +132,7 @@
       window.localStorage.setItem(filename, JSON.stringify(gj));
       window.location.href = `scheme.html?authority=${gj.authority}&schema=${schema}`;
     } catch (err) {
-      window.alert(`Couldn't load scheme from a file: ${err}`);
+      pageErrorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
 
@@ -157,6 +159,9 @@
     <SecondaryButton on:click={() => (showAbout = !showAbout)}
       >About</SecondaryButton
     >
+    {#if pageErrorMessage}
+      <ErrorMessage errorMessage={pageErrorMessage} />
+    {/if}
 
     <FormElement
       label="Select Transport Authority or Local Authority District"
@@ -191,6 +196,9 @@
 
     <hr />
 
+    {#if uploadErrorMessage}
+      <ErrorMessage errorMessage={uploadErrorMessage} />
+    {/if}
     <FileInput
       label="Or upload an ATIP GeoJSON file"
       {loadFile}
