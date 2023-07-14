@@ -1,6 +1,8 @@
 <script lang="ts">
   import { userSettings } from "../../../stores";
   import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import Checkbox from "../../govuk/Checkbox.svelte";
+  import CheckboxGroup from "../../govuk/CheckboxGroup.svelte";
   import DefaultButton from "../../govuk/DefaultButton.svelte";
   import SecondaryButton from "../../govuk/SecondaryButton.svelte";
   import { RouteTool } from "./route_tool";
@@ -33,19 +35,18 @@
   </ul>
 </CollapsibleCard>
 
-<label title="Keep clicking to add more points to the end of the route">
-  <input type="checkbox" bind:checked={extendRoute} />
-  Add points to end
-</label>
-
-<br />
-
-<label
-  title="Try to make the route avoid using the same streets with multiple waypoints"
->
-  <input type="checkbox" bind:checked={$userSettings.avoidDoublingBack} />
-  Avoid doubling back
-</label>
+<CheckboxGroup small>
+  <Checkbox
+    label="Add points to end"
+    bind:checked={extendRoute}
+    hint="Keep clicking to add more points to the end of the route"
+  />
+  <Checkbox
+    label="Avoid doubling back"
+    bind:checked={$userSettings.avoidDoublingBack}
+    hint="Try to make the route avoid using the same streets with multiple waypoints"
+  />
+</CheckboxGroup>
 
 <div style="display: flex; justify-content: space-between">
   <DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>

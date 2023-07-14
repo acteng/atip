@@ -15,7 +15,7 @@
 </script>
 
 <FormElement {label} {id}>
-  <select class="govuk-select" {id} bind:value {disabled}>
+  <select class="govuk-select" {id} bind:value {disabled} on:change>
     {#if emptyOption}
       <option value="" />
     {/if}
