@@ -258,8 +258,16 @@
 {#if $currentMode == thisMode}
   <CollapsibleCard label="Help">
     <ul>
-      <li><b>Click</b> on a route to split it</li>
-      <li><b>Click</b> on the map or press <b>Escape</b> to cancel</li>
+      <li>
+        <b>Click</b>
+         on a route to split it
+      </li>
+      <li>
+        <b>Click</b>
+        on the map or press
+        <b>Escape</b>
+         to cancel
+      </li>
     </ul>
   </CollapsibleCard>
 {/if}

@@ -32,8 +32,8 @@
   <p>{message}</p>
   <div class="govuk-button-group">
     <WarningButton on:click={onClickConfirm}>{confirmButtonText}</WarningButton>
-    <SecondaryButton on:click={onClickCancel}
-      >{cancelButtonText}</SecondaryButton
-    >
+    <SecondaryButton on:click={onClickCancel}>
+      {cancelButtonText}
+    </SecondaryButton>
   </div>
 </Modal>

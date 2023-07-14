@@ -13,7 +13,7 @@
 
 <div class="govuk-checkboxes__item">
   <input type="checkbox" class="govuk-checkboxes__input" {id} bind:checked />
-  <label class="govuk-label govuk-checkboxes__label" for={id} title={hint}
-    >{label}</label
-  >
+  <label class="govuk-label govuk-checkboxes__label" for={id} title={hint}>
+    {label}
+  </label>
 </div>

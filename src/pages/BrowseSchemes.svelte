@@ -212,8 +212,8 @@
 <Layout>
   <div slot="sidebar" class="govuk-prose">
     <SecondaryButton on:click={() => window.open("index.html")}>
-      Home</SecondaryButton
-    >
+      Home
+    </SecondaryButton>
     <div style="display: flex; justify-content: space-between">
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
@@ -243,9 +243,9 @@
           id="filterText"
           bind:value={filterText}
         />
-        <SecondaryButton on:click={() => (filterText = "")}
-          >Clear</SecondaryButton
-        >
+        <SecondaryButton on:click={() => (filterText = "")}>
+          Clear
+        </SecondaryButton>
       </FormElement>
     </CollapsibleCard>
 
@@ -264,12 +264,12 @@
             <p>Capital scheme ID: {scheme.capital_scheme_id}</p>
             <p>Funding programme: {scheme.funding_programme}</p>
             <div class="govuk-button-group">
-              <SecondaryButton on:click={() => showScheme(scheme)}
-                >Show on map</SecondaryButton
-              >
-              <SecondaryButton on:click={() => editScheme(scheme)}
-                >Edit scheme</SecondaryButton
-              >
+              <SecondaryButton on:click={() => showScheme(scheme)}>
+                Show on map
+              </SecondaryButton>
+              <SecondaryButton on:click={() => editScheme(scheme)}>
+                Edit scheme
+              </SecondaryButton>
             </div>
           </CollapsibleCard>
         {/if}

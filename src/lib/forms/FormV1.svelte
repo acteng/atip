@@ -38,9 +38,9 @@
   <input type="text" class="govuk-input" bind:value={name} />
   <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
   {#if length_meters}
-    <SecondaryButton on:click={() => autoFillName()} disabled={!$routeInfo}
-      >Auto-fill</SecondaryButton
-    >
+    <SecondaryButton on:click={() => autoFillName()} disabled={!$routeInfo}>
+      Auto-fill
+    </SecondaryButton>
   {/if}
 </FormElement>
 
