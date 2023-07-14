@@ -91,11 +91,12 @@
     <br />
     <br />
     <div style="display: flex; justify-content: space-between">
-      <WarningButton on:click={() => deleteIntervention(feature.id)}
-        >Delete</WarningButton
-      >
-      <SecondaryButton on:click={() => formOpen.set(null)}>Save</SecondaryButton
-      >
+      <WarningButton on:click={() => deleteIntervention(feature.id)}>
+        Delete
+      </WarningButton>
+      <SecondaryButton on:click={() => formOpen.set(null)}>
+        Save
+      </SecondaryButton>
     </div>
   </AccordionItem>
 {/each}

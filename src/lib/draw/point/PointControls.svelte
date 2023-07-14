@@ -14,7 +14,10 @@
     {:else}
       <li>Click to add a new point</li>
     {/if}
-    <li>Press <b>Escape</b> to cancel</li>
+    <li>
+      Press <b>Escape</b>
+       to cancel
+    </li>
   </ul>
 </CollapsibleCard>
 

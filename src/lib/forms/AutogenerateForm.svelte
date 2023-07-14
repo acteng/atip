@@ -98,7 +98,8 @@
           on:change={otherOneOf}
           value={x.name}
         />
-        {x.name}<br />
+        {x.name}
+        <br />
       </label>
 
       {#if oneOfCase == x.name && typeof value == "object"}

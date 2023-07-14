@@ -156,9 +156,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half left">
     <h1 class="govuk-heading-l">Welcome to ATIP v2</h1>
-    <SecondaryButton on:click={() => (showAbout = !showAbout)}
-      >About</SecondaryButton
-    >
+    <SecondaryButton on:click={() => (showAbout = !showAbout)}>
+      About
+    </SecondaryButton>
     {#if pageErrorMessage}
       <ErrorMessage errorMessage={pageErrorMessage} />
     {/if}

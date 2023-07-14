@@ -180,8 +180,9 @@
   <WarningButton
     on:click={openClearAllDialogue}
     disabled={$gjScheme.features.length == 0 || $isAToolInUse}
-    >Clear all</WarningButton
   >
+    Clear all
+  </WarningButton>
 </div>
 <ConfirmationModal
   bind:open={displayClearAllConfirmation}

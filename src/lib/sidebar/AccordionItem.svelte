@@ -45,7 +45,8 @@
   on:mouseleave={() => sidebarHover.set(null)}
   aria-expanded={isOpen}
   class:underlined={underlineRemotely}
-  ><svg
+>
+  <svg
     style="tran"
     width="20"
     height="20"
@@ -54,8 +55,10 @@
     stroke-linejoin="round"
     stroke-width="2"
     viewBox="0 0 24 24"
-    stroke="currentColor"><path d="M9 5l7 7-7 7" /></svg
+    stroke="currentColor"
   >
+    <path d="M9 5l7 7-7 7" />
+  </svg>
   {label}
 </button>
 {#if isOpen}

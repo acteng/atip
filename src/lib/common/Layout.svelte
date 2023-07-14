@@ -14,8 +14,10 @@
     <button
       type="button"
       class="sidebar-toggle rounded-rect"
-      on:click={toggleSidebar}>&rarr;</button
+      on:click={toggleSidebar}
     >
+      &rarr;
+    </button>
   </aside>
   <main>
     <slot name="main" />

@@ -97,12 +97,12 @@
   <div slot="sidebar" class="govuk-prose">
     <div class="govuk-button-group">
       <SecondaryButton on:click={() => (window.location.href = "index.html")}>
-        Home</SecondaryButton
-      >
+        Home
+      </SecondaryButton>
       <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
-      <SecondaryButton on:click={toggleInstructions}
-        >Instructions</SecondaryButton
-      >
+      <SecondaryButton on:click={toggleInstructions}>
+        Instructions
+      </SecondaryButton>
     </div>
     <p>{schemaTitle(schema)} mode</p>
     <div style="display: flex; justify-content: space-between">
