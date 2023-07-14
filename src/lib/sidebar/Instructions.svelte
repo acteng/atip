@@ -12,12 +12,11 @@
   <div class="govuk-prose">
     <h2>Drawing {noun} on the map</h2>
     <p>
-      Use the tools on right to sketch new {noun} on the map. Each tool has
-      instructions that appear when you click on its icon.
+      Use the tools on right to sketch new {noun} on the map. Each tool has instructions
+      that appear when you click on its icon.
     </p>
     <p>
-      Modify existing {noun} on the map using <b>Edit geometry</b> and clicking
-      something.
+      Modify existing {noun} on the map using <b>Edit geometry</b> and clicking something.
     </p>
 
     <h2>Filling out data</h2>

@@ -177,7 +177,6 @@
 
 <div style="display: flex; justify-content: space-between">
   <p>{$gjScheme.features.length} {schemaPluralNoun(schema)}</p>
-  <p>{$gjScheme.features.length} objects</p>
   <WarningButton
     on:click={openClearAllDialogue}
     disabled={$gjScheme.features.length == 0 || $isAToolInUse}
