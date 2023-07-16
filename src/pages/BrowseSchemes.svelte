@@ -1,7 +1,6 @@
 <script lang="ts">
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
-  import type { GeoJSON } from "geojson";
   import { onDestroy, onMount } from "svelte";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
