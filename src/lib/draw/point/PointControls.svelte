@@ -16,7 +16,7 @@
     {/if}
     <li>
       Press <b>Escape</b>
-       to cancel
+      to cancel
     </li>
   </ul>
 </CollapsibleCard>

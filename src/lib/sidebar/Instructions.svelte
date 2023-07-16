@@ -18,7 +18,7 @@
     <p>
       Modify existing {noun} on the map using
       <b>Edit geometry</b>
-       and clicking something.
+      and clicking something.
     </p>
 
     <h2>Filling out data</h2>
@@ -40,7 +40,7 @@
       <b>Load from GeoJSON</b>
       buttons save and load GeoJSON files (with a
       <i>.txt</i>
-       file extension) to your computer. You share these files with others to collaborate
+      file extension) to your computer. You share these files with others to collaborate
       on designs.
     </p>
   </div>

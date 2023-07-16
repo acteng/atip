@@ -70,13 +70,13 @@
     <ul>
       <li>
         <b>v2</b>
-         launched on 2 June 2023. Changes: a complete UI rewrite, new draw tools,
+        launched on 2 June 2023. Changes: a complete UI rewrite, new draw tools,
         drawing areas snapped to roads, splitting routes, multiple data schemas,
         speed limit layer, lane visualization layer
       </li>
       <li>
         <b>v1</b>
-         launched in March 2023
+        launched in March 2023
       </li>
     </ul>
   </div>

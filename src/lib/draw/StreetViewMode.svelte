@@ -59,11 +59,11 @@
     <ul>
       <li>
         <b>Click</b>
-         on the map to open a new tab with a 3rd-party imagery provider
+        on the map to open a new tab with a 3rd-party imagery provider
       </li>
       <li>
         Press <b>Escape</b>
-         to exit this mode
+        to exit this mode
       </li>
     </ul>
   </CollapsibleCard>
