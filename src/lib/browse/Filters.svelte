@@ -25,8 +25,8 @@
   let counts = { area: 0, route: 0, crossing: 0, other: 0 };
 
   onMount(() => {
-    let set1 = new Set();
-    let set2 = new Set();
+    let set1: Set<string> = new Set();
+    let set2: Set<string> = new Set();
     for (let x of schemes.values()) {
       if (x.authority_or_region) {
         set1.add(x.authority_or_region);

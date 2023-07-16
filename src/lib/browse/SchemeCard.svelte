@@ -1,15 +1,16 @@
 <script lang="ts">
+  import type { FeatureCollection } from "geojson";
   import { bbox } from "../../maplibre_helpers";
   import { gjScheme, map } from "../../stores";
   import CollapsibleCard from "../common/CollapsibleCard.svelte";
   import SecondaryButton from "../govuk/SecondaryButton.svelte";
-  import type { Scheme } from "./types";
+  import type { Scheme } from "./data";
 
   export let scheme: Scheme;
 
   function showScheme() {
     // TODO Highlight on the map? Or fade everything else?
-    let gj = {
+    let gj: FeatureCollection = {
       type: "FeatureCollection",
       features: $gjScheme.features.filter(
         (f) => f.properties.scheme_reference == scheme.scheme_reference
