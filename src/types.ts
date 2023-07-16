@@ -49,6 +49,8 @@ export interface InterventionProps {
   v2?: Intervention;
   criticals?: CriticalIssue;
   atf4?: ATF4Intervention;
+  // An extra field present in input for the browse schemes page only
+  scheme_reference?: string;
 
   // Temporary state, not meant to be serialized
   hide_while_editing?: boolean;
