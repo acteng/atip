@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Feature, LineString } from "geojson";
+  import { prettyPrintMeters } from "../../maplibre_helpers";
   import { gjScheme, routeInfo } from "../../stores";
   import FormElement from "../govuk/FormElement.svelte";
   import Radio from "../govuk/Radio.svelte";
@@ -12,13 +13,6 @@
   export let intervention_type: "area" | "route" | "crossing" | "other";
   export let description: string;
   export let length_meters: number | undefined;
-
-  function prettyPrintMeters(x: number): string {
-    if (x < 1000.0) {
-      return Math.round(x) + " m";
-    }
-    return (x / 1000.0).toFixed(1) + "km";
-  }
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.

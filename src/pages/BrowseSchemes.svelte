@@ -8,6 +8,8 @@
   import type { GeoJSON } from "geojson";
   import { onDestroy, onMount } from "svelte";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
+  import { processInput, type Scheme } from "../lib/browse/data";
+  import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import CollapsibleCard from "../lib/common/CollapsibleCard.svelte";
   import FileInput from "../lib/common/FileInput.svelte";
   import Layout from "../lib/common/Layout.svelte";
@@ -20,7 +22,7 @@
   import Legend from "../lib/Legend.svelte";
   import Map from "../lib/Map.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
-  import { bbox } from "../maplibre_helpers";
+  import { bbox, prettyPrintMeters } from "../maplibre_helpers";
   import { gjScheme, map } from "../stores";
 
   onMount(() => {
@@ -32,14 +34,6 @@
   let style: string = params.get("style") || "streets";
   const schema = "v1";
   let errorMessage = "";
-
-  interface Scheme {
-    scheme_reference: string;
-    authority_or_region: string;
-    capital_scheme_id: string;
-    funding_programme: string;
-    num_features: number;
-  }
 
   // unique by scheme_reference
   let schemes: Scheme[] = [];
@@ -125,9 +119,25 @@
   function loadFile(text: string) {
     try {
       let gj = JSON.parse(text);
+      schemes = processInput(gj);
       gjScheme.set(gj);
-      addSchemeToSidebar(gj);
       errorMessage = "";
+
+      // Set up filters
+      let set1 = new Set();
+      let set2 = new Set();
+      for (let x of schemes) {
+        if (x.authority_or_region) {
+          set1.add(x.authority_or_region);
+        }
+        if (x.funding_programme) {
+          set2.add(x.funding_programme);
+        }
+      }
+      authorities = Array.from(set1.entries());
+      authorities.sort();
+      fundingProgrammes = Array.from(set2.entries());
+      fundingProgrammes.sort();
 
       $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
     } catch (err) {
@@ -135,77 +145,18 @@
     }
   }
 
-  function addSchemeToSidebar(gj: GeoJSON) {
-    let byScheme = {};
-
-    // Assume the input has a top-level dictionary keyed by scheme_reference
-    for (let [scheme_reference, scheme] of Object.entries(gj.schemes)) {
-      byScheme[scheme_reference] = {
-        scheme_reference,
-        num_features: 0,
-        ...scheme,
-      };
-    }
-
-    for (let feature of gj.features) {
-      byScheme[feature.properties.scheme_reference].num_features++;
-    }
-
-    schemes = Object.values(byScheme);
-
-    let set1 = new Set();
-    let set2 = new Set();
-    for (let x of schemes) {
-      if (x.authority_or_region) {
-        set1.add(x.authority_or_region);
-      }
-      if (x.funding_programme) {
-        set2.add(x.funding_programme);
-      }
-    }
-    authorities = Array.from(set1.entries());
-    authorities.sort();
-    fundingProgrammes = Array.from(set2.entries());
-    fundingProgrammes.sort();
-  }
-
   function tooltip(props: { [name: string]: any }): string {
     // TODO Move into a Svelte component, so we don't have to awkwardly build up HTML like this
-    var html = `<table>`;
-    for (let [key, value] of Object.entries(props)) {
-      html += `<tr><td>${key}</td><td>${value}</td></tr>`;
+    var html = `<div class="govuk-prose" style="max-width: 30vw;">`;
+    html += `<h2>${props.name} (${props.intervention_type})</h2>`;
+    html += `<p>Scheme reference: ${props.scheme_reference}</p>`;
+    if (props.length_meters) {
+      html += `<p>Length: ${prettyPrintMeters(props.length_meters)}</p>`;
     }
-    html += `</table>`;
+    if (props.description) {
+      html += `<p>${props.description}</p>`;
+    }
     return html;
-  }
-
-  function showScheme(scheme: Scheme) {
-    // TODO Highlight on the map? Or fade everything else?
-    let gj = {
-      type: "FeatureCollection",
-      features: $gjScheme.features.filter(
-        (f) => f.properties.scheme_reference == scheme.scheme_reference
-      ),
-    };
-    $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
-  }
-
-  function editScheme(scheme: Scheme) {
-    let gj = {
-      type: "FeatureCollection",
-      features: $gjScheme.features.filter(
-        (f) => f.properties.scheme_reference == scheme.scheme_reference
-      ),
-    };
-    let filename = scheme.authority_or_region;
-    // Assuming the schema is always v1
-
-    // Put the file in local storage, so it'll be loaded from the next page
-    window.localStorage.setItem(filename, JSON.stringify(gj));
-    window.open(
-      `scheme.html?authority=${scheme.authority_or_region}`,
-      "_blank"
-    );
   }
 </script>
 
@@ -257,21 +208,7 @@
     <ul>
       {#each schemes as scheme}
         {#if showSchemes.has(scheme.scheme_reference)}
-          <CollapsibleCard
-            label={`${scheme.scheme_reference}: ${scheme.num_features} features`}
-          >
-            <p>Authority or region: {scheme.authority_or_region}</p>
-            <p>Capital scheme ID: {scheme.capital_scheme_id}</p>
-            <p>Funding programme: {scheme.funding_programme}</p>
-            <div class="govuk-button-group">
-              <SecondaryButton on:click={() => showScheme(scheme)}>
-                Show on map
-              </SecondaryButton>
-              <SecondaryButton on:click={() => editScheme(scheme)}>
-                Edit scheme
-              </SecondaryButton>
-            </div>
-          </CollapsibleCard>
+          <SchemeCard {scheme} />
         {/if}
       {/each}
     </ul>

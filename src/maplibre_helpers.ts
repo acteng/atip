@@ -215,6 +215,13 @@ export function bbox(gj: GeoJSON): [number, number, number, number] {
   return turfBbox(gj) as [number, number, number, number];
 }
 
+export function prettyPrintMeters(x: number): string {
+  if (x < 1000.0) {
+    return Math.round(x) + " m";
+  }
+  return (x / 1000.0).toFixed(1) + "km";
+}
+
 // Properties are guaranteed to exist
 export type FeatureWithProps<G extends Geometry> = Feature<G> & {
   properties: { [name: string]: any };
