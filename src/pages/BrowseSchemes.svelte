@@ -1,4 +1,5 @@
 <script lang="ts">
+  // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import { onDestroy, onMount } from "svelte";
@@ -15,8 +16,9 @@
   import Legend from "../lib/Legend.svelte";
   import MapLibreMap from "../lib/Map.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
-  import { bbox, prettyPrintMeters } from "../maplibre_helpers";
+  import { bbox, emptyGeojson, prettyPrintMeters } from "../maplibre_helpers";
   import { gjScheme, map } from "../stores";
+  import type { Scheme as GjScheme } from "../types";
 
   onMount(() => {
     // For govuk components. Must happen here.
@@ -29,10 +31,10 @@
   let errorMessage = "";
 
   let schemes: Map<string, Scheme> = new Map();
-  let showSchemes: Set<string> = new Set();
+  let schemesToBeShown: Set<string> = new Set();
 
   onDestroy(() => {
-    gjScheme.set(null);
+    gjScheme.set(emptyGeojson() as GjScheme);
   });
 
   function loadFile(text: string) {
@@ -78,12 +80,12 @@
     <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
     {#if schemes.size > 0}
-      <Filters {schemes} bind:showSchemes />
+      <Filters {schemes} bind:schemesToBeShown />
     {/if}
 
     <ul>
       {#each schemes.values() as scheme}
-        {#if showSchemes.has(scheme.scheme_reference)}
+        {#if schemesToBeShown.has(scheme.scheme_reference)}
           <SchemeCard {scheme} />
         {/if}
       {/each}
