@@ -7,11 +7,11 @@ import type { FeatureUnion, Mode } from "../../types";
 interface Tool {
   addEventListenerSuccess(
     callback: (f: FeatureWithProps<LineString | Polygon>) => void
-  );
+  ): void;
   addEventListenerUpdated(
     callback: (f: FeatureWithProps<LineString | Polygon>) => void
-  );
-  addEventListenerFailure(callback: () => void);
+  ): void;
+  addEventListenerFailure(callback: () => void): void;
 }
 
 // unsavedFeature is nested in an object, so pass-by-reference works
@@ -59,7 +59,7 @@ export function handleUnsavedFeature(
 ) {
   if (unsavedFeature.value) {
     gjScheme.update((gj) => {
-      let feature = unsavedFeature.value;
+      let feature = unsavedFeature.value!;
       feature.id = newFeatureId(gj);
       feature.properties.intervention_type = intervention_type;
       gj.features.push(feature as FeatureUnion);

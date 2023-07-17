@@ -13,6 +13,22 @@ export const MapEvents = [
 export const DocumentEvents = ["keypress", "keyup", "keydown"];
 
 export class EventHandler {
+  mapHandlers: {
+    click: (e: MapMouseEvent) => void;
+    dblclick: (e: MapMouseEvent) => void;
+    mousemove: (e: MapMouseEvent) => void;
+    mousedown: (e: MapMouseEvent) => void;
+    mouseup: (e: MapMouseEvent) => void;
+    mouseout: (e: MapMouseEvent) => void;
+    dragstart: (e: MapMouseEvent) => void;
+  };
+
+  documentHandlers: {
+    keypress: (e: KeyboardEvent) => void;
+    keyup: (e: KeyboardEvent) => void;
+    keydown: (e: KeyboardEvent) => void;
+  };
+
   constructor() {
     this.mapHandlers = {
       click: (e: MapMouseEvent) => {},
@@ -29,20 +45,4 @@ export class EventHandler {
       keydown: (e: KeyboardEvent) => {},
     };
   }
-
-  mapHandlers: {
-    click: (e: MapMouseEvent) => void;
-    dblclick: (e: MapMouseEvent) => void;
-    mousemove: (e: MapMouseEvent) => void;
-    mousedown: (e: MapMouseEvent) => void;
-    mouseup: (e: MapMouseEvent) => void;
-    mouseout: (e: MapMouseEvent) => void;
-    dragstart: (e: MapMouseEvent) => void;
-  };
-
-  documentHandlers: {
-    keypress: (e: KeyboardEvent) => void;
-    keyup: (e: KeyboardEvent) => void;
-    keydown: (e: KeyboardEvent) => void;
-  };
 }

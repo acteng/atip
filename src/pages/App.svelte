@@ -1,4 +1,5 @@
 <script lang="ts">
+  // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import * as Comlink from "comlink";

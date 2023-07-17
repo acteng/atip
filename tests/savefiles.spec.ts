@@ -1,12 +1,13 @@
 import { readFile } from "fs/promises";
 import { expect, test, type Page } from "@playwright/test";
+import type { FeatureCollection } from "geojson";
 import {
   clearExistingInterventions,
   loadInitialPageFromBrowser,
 } from "./shared.js";
 
 let page: Page;
-let json;
+let json: FeatureCollection;
 
 test.beforeAll(async ({ browser }) => {
   page = await loadInitialPageFromBrowser(browser);
@@ -38,7 +39,9 @@ test("loading a file with length displays the length", async () => {
 // property. Upload a file with that missing, and make sure it's backfilled.
 test("loading a file without length displays the length", async () => {
   // Remove the property from the test data first
-  await expect(Math.round(json.features[0].properties.length_meters)).toBe(450);
+  await expect(Math.round(json.features[0].properties!.length_meters)).toBe(
+    450
+  );
   let copy = JSON.parse(JSON.stringify(json));
   delete copy.features[0].properties.length_meters;
   let uploadFile = JSON.stringify(copy);

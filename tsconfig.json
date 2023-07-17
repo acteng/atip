@@ -15,7 +15,7 @@
     "checkJs": true,
     "isolatedModules": true,
     "types": ["node", "vite/client"],
-    "strict": false,
+    "strict": true,
     /* Necessary for Playwright tests */
     "allowImportingTsExtensions": true,
     "noUnusedLocals": true

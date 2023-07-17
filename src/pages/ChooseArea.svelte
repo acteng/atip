@@ -1,6 +1,7 @@
 <script lang="ts">
   import "../style/main.css";
   import type { FeatureCollection } from "geojson";
+  // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import { Map } from "maplibre-gl";
   import { onMount } from "svelte";
@@ -26,13 +27,13 @@
   let authoritySet: Set<string> = new Set();
   $: validEntry = authoritySet.has(inputValue);
 
-  let map: Map | null = null;
+  let loadedMap: Map | null = null;
   let source = "boundary";
   let layer = "boundary-layer";
 
   let showBoundaries: "TA" | "LAD" = "TA";
   function changeBoundaries() {
-    map?.setFilter(layer, ["==", ["get", "level"], showBoundaries]);
+    loadedMap?.setFilter(layer, ["==", ["get", "level"], showBoundaries]);
   }
   let hoveredBoundary: string | null = null;
 
@@ -48,11 +49,13 @@
       authoritySet.add(feature.properties!.name);
     }
 
-    map = new Map({
+    let map = new Map({
       container: "map",
       style:
         "https://api.maptiler.com/maps/streets/style.json?key=MZEJTanw3WpxRvt7qDfo",
     });
+    // Use map within onMount, so it's guaranteed to exist
+    loadedMap = map;
 
     let hoverId: number | null = null;
     function unhover() {

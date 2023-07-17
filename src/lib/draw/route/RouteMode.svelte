@@ -69,11 +69,22 @@
     );
   });
 
-  async function fetchWithProgress(url, setProgress: (number) => void) {
+  // This requires the server to send back a Content-Length header. The actual
+  // bytes received may exceed this length (when the file is compressed), which
+  // means setProgress may get percentages over 100.
+  async function fetchWithProgress(
+    url: string,
+    setProgress: (percent: number) => void
+  ) {
     const response = await fetch(url);
-    const reader = response.body.getReader();
+    // TODO Handle error cases better
+    const reader = response.body!.getReader();
 
-    const contentLength = parseInt(response.headers.get("Content-Length"));
+    let lengthHeader = response.headers.get("Content-Length");
+    if (!lengthHeader) {
+      throw new Error(`No Content-Length header from ${url}`);
+    }
+    const contentLength = parseInt(lengthHeader);
 
     let receivedLength = 0;
     let chunks = [];
