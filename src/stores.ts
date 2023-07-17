@@ -11,7 +11,8 @@ import {
 import { type RouteInfo } from "./worker";
 
 // A global singleton, containing a loaded map
-// TODO | null. When we enable strictNullChecks, this'll become a problem
+// @ts-ignore TODO By construction, no components using the store should be
+// mounted before this is populated.
 export const map: Writable<Map> = writable(null);
 
 // A global singleton, with a RouteInfo web worker. It's null before it's loaded.

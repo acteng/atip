@@ -2,7 +2,7 @@
   import FormElement from "./FormElement.svelte";
 
   export let label: string;
-  export let value: string;
+  export let value: string | undefined;
 
   // TODO Using the label as a unique ID, so users don't have to invent an arbitrary string
 </script>

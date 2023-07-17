@@ -27,7 +27,7 @@
         (f) => f.id == id
       ) as Feature<LineString>;
       let raw = await $routeInfo!.renderLaneDetailsForRoute(
-        linestring.properties.waypoints
+        linestring.properties.waypoints!
       );
       gj1 = JSON.parse(raw[0]);
       gj2 = JSON.parse(raw[1]);

@@ -79,7 +79,7 @@
           (f) => f.id == id
         ) as Feature<LineString>;
         let gj = JSON.parse(
-          await $routeInfo!.speedLimitForRoute(linestring.properties.waypoints)
+          await $routeInfo!.speedLimitForRoute(linestring.properties.waypoints!)
         );
         ($map.getSource(source) as GeoJSONSource).setData(gj);
       } else {

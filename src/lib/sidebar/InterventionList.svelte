@@ -17,8 +17,11 @@
       return feature.properties.planning?.name || "Untitled polygon";
     }
     if (schema == "v2") {
+      // TODO Revisit auto-generated enum types
       return (
+        // @ts-ignore
         feature.properties.v2?.Route?.name ||
+        // @ts-ignore
         feature.properties.v2?.Crossing?.name ||
         "Untitled intervention"
       );

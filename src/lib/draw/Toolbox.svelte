@@ -55,17 +55,19 @@
     "street-view": new EventHandler(),
   };
 
-  MapEvents.forEach((eventName) => {
+  for (let eventName of MapEvents) {
     $map.on(eventName, (event) => {
+      // @ts-ignore TODO Can't express that MapEvents are the keys
       eventHandlers[get(currentMode)].mapHandlers[eventName](event);
     });
-  });
+  }
 
-  DocumentEvents.forEach((eventName) => {
+  for (let eventName of DocumentEvents) {
     document.addEventListener(eventName, (event) => {
+      // @ts-ignore TODO Can't express that DocumentEvents are the keys
       eventHandlers[get(currentMode)].documentHandlers[eventName](event);
     });
-  });
+  }
 
   // This must be used; don't manually change mode
   function changeMode(newMode: Mode) {
@@ -96,17 +98,19 @@
     polygonTool?.tearDown();
     routeTool?.tearDown();
 
-    MapEvents.forEach((eventName) => {
+    for (let eventName of MapEvents) {
       $map.off(eventName, (event) => {
+        // @ts-ignore TODO Can't express that MapEvents are the keys
         eventHandlers[get(currentMode)].mapHandlers[eventName](event);
       });
-    });
+    }
 
-    DocumentEvents.forEach((eventName) => {
+    for (let eventName of DocumentEvents) {
       document.removeEventListener(eventName, (event) => {
+        // @ts-ignore TODO Can't express that DocumentEvents are the keys
         eventHandlers[get(currentMode)].documentHandlers[eventName](event);
       });
-    });
+    }
   });
 </script>
 

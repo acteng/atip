@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LineString, Polygon } from "geojson";
+  import type { LineString, Point, Polygon } from "geojson";
   import { MapMouseEvent } from "maplibre-gl";
   import type { FeatureWithProps } from "../../maplibre_helpers";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
@@ -250,7 +250,10 @@
   }
 
   // Copy geometry and properties from source to destination
-  function updateFeature(destination, source) {
+  function updateFeature(
+    destination: FeatureUnion,
+    source: FeatureWithProps<Point | LineString | Polygon>
+  ) {
     destination.geometry = source.geometry;
 
     // Copy properties that may come from routeTool. Not all tools or cases

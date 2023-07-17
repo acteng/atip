@@ -45,6 +45,9 @@ jobs:
     - name: Run Playwright tests
       run: npm test
 
+    - name: Run type-checker
+      run: npm run check
+
     - uses: actions/upload-artifact@v3
       with:
         name: playwright-report
