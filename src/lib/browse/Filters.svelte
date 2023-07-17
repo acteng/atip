@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { gjScheme } from "../../stores";
+  import type { FeatureUnion } from "../../types";
   import CollapsibleCard from "../common/CollapsibleCard.svelte";
   import FormElement from "../govuk/FormElement.svelte";
   import SecondaryButton from "../govuk/SecondaryButton.svelte";
@@ -11,7 +12,7 @@
   export let schemes: Map<string, Scheme>;
 
   // by scheme_reference
-  export let showSchemes: Set<string> = new Set();
+  export let schemesToBeShown: Set<string> = new Set();
 
   let filterText = "";
 
@@ -41,15 +42,14 @@
     fundingProgrammes.sort();
   });
 
-  // When any filters change, update showSchemes
+  // When any filters change, update schemesToBeShown
   function filtersUpdated(
     filterText: string,
     filterAuthority: string,
     filterFundingProgramme: string
   ) {
-    showSchemes.clear();
     let filterNormalized = filterText.toLowerCase();
-    for (let feature of $gjScheme.features) {
+    let filterFeatures = (feature: FeatureUnion) => {
       // TODO This is a very blunt free-form text search of any property in the
       // feature only, not the scheme.
       if (
@@ -58,30 +58,33 @@
           .toLowerCase()
           .includes(filterNormalized)
       ) {
-        continue;
+        return false;
       }
       if (filterAuthority || filterFundingProgramme) {
-        let scheme = schemes.get(feature.properties.scheme_reference);
+        let scheme = schemes.get(feature.properties.scheme_reference!)!;
         if (filterAuthority && scheme.authority_or_region != filterAuthority) {
-          continue;
+          return false;
         }
         if (
           filterFundingProgramme &&
           scheme.funding_programme != filterFundingProgramme
         ) {
-          continue;
+          return false;
         }
       }
-      showSchemes.add(feature.properties.scheme_reference);
-    }
-    // Make Svelte see the update
-    showSchemes = showSchemes;
+      return true;
+    };
+    schemesToBeShown = new Set(
+      $gjScheme.features
+        .filter(filterFeatures)
+        .map((f) => f.properties.scheme_reference!)
+    );
 
     // Hide things on the map, and recalculate stats
     counts = { area: 0, route: 0, crossing: 0, other: 0 };
     gjScheme.update((gj) => {
       for (let feature of gj.features) {
-        if (showSchemes.has(feature.properties.scheme_reference)) {
+        if (schemesToBeShown.has(feature.properties.scheme_reference!)) {
           delete feature.properties.hide_while_editing;
           counts[feature.properties.intervention_type]++;
         } else {
@@ -122,6 +125,6 @@
 </CollapsibleCard>
 
 <p>
-  Showing {showSchemes.size} schemes ({counts.route} routes, {counts.area} areas,
+  Showing {schemesToBeShown.size} schemes ({counts.route} routes, {counts.area} areas,
   {counts.crossing} crossings, {counts.other} other)
 </p>

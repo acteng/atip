@@ -35,17 +35,17 @@ export function processInput(
   }
 
   for (let feature of gj.features) {
-    schemes.get(feature.properties.scheme_reference).num_features++;
+    schemes.get(feature.properties!.scheme_reference).num_features++;
     // Remove extraneous fields from the input. Aside from the v1
     // InterventionProps, there should just be a scheme_reference linking to
     // the top-level dictionary.
-    delete feature.properties.id;
-    delete feature.properties.authority_or_region;
-    delete feature.properties.capital_scheme_id;
-    delete feature.properties.funding_programme;
-    delete feature.properties.valid;
-    delete feature.properties.centroid_lon;
-    delete feature.properties.centroid_lat;
+    delete feature.properties!.id;
+    delete feature.properties!.authority_or_region;
+    delete feature.properties!.capital_scheme_id;
+    delete feature.properties!.funding_programme;
+    delete feature.properties!.valid;
+    delete feature.properties!.centroid_lon;
+    delete feature.properties!.centroid_lat;
   }
 
   return schemes;
