@@ -45,7 +45,7 @@ jobs:
               base=/atip/$branch
             fi
 
-            if npm run ci && wasm-release && npm run setup-govuk && npm run generate-schema-ts && npm run build -- --base=$base; then
+            if npm ci && wasm-release && npm run setup-govuk && npm run generate-schema-ts && npm run build -- --base=$base; then
               if [ "$branch" == "main" ]; then
                 mv dist/* deployme
               else
