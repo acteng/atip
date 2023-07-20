@@ -2,9 +2,9 @@ name: Deploy web
 
 on:
   push:
-    branches:
-      - '**'
-      - '!gh-pages'
+    branches-ignore:
+      - 'gh-pages'
+      - 'nobuild_**'
 
 jobs:
   build:
@@ -32,7 +32,11 @@ jobs:
       - name: Build all branches
         run: |
           mkdir deployme
-          for branch in $(git branch -r | grep -vE "origin/gh-pages" | sed 's/origin\///'); do
+          for branch in $(git branch -r | sed 's/origin\///' | grep -v nobuild_); do
+            if [ "$branch" == "gh-pages" ]; then
+              continue
+            fi
+
             echo "Building $branch"
             git checkout $branch
             if [ "$branch" == "main" ]; then
@@ -41,15 +45,7 @@ jobs:
               base=/atip/$branch
             fi
 
-            # TODO New build step not present in all branches yet. Rebase them all and remove.
-            npm ci
-            if npm run setup-govuk; then
-              echo "GOV.UK setup successful"
-            else
-              echo "GOV.UK setup failed, continuing"
-            fi
-
-            if npm run wasm-release && npm ci && npm run generate-schema-ts && npm run build --if-present -- --base=$base; then
+            if npm run ci && wasm-release && npm run setup-govuk && npm run generate-schema-ts && npm run build -- --base=$base; then
               if [ "$branch" == "main" ]; then
                 mv dist/* deployme
               else
@@ -58,11 +54,6 @@ jobs:
             else
               echo "Building $branch broke; skipping"
             fi
-
-            # TODO generate-schema-ts modifies some files that're still in
-            # git on some old branches. Workaround by making that git diff
-            # disappear, so changing branches later works.
-            git checkout src/schemas
           done
 
       - name: Publish

@@ -17,6 +17,7 @@ There are some related repositorites also part of ATIP:
 
 
 ### Contributions to this doc
+
 We have only included instructions or guidance for environments we've worked on: if it doesn't work for you or your environment, please make a pull request so others don't face the same pain you did!
 
 ### Background reading
@@ -98,6 +99,12 @@ user's actions.
   step through a test line-by-line with a browser open. Press "record" and then
   interact with the page normally, generating the equivalent test code.
 - Use `npm run test -- --ui` for another useful debugger
+
+## Continuous deployment
+
+We use [Github actions](https://github.com/acteng/atip/tree/main/.github/workflows) to run Playwright tests for every PR, and to deploy the site to Github pages. The deployent is slightly unusual -- instead of just building and publishing `main`, it builds every single branch in the GH repo, unless the branch name starts with `nobuild_`. This is used for easily sharing experiments for feedback. If you push a branch called `xyz`, after the actions finish, <https://acteng.github.io/atip/xyz> should work.
+
+Building each branch is best-effort; failed ones will be skipped. You can see which branches succeeded by checking <https://github.com/acteng/atip/tree/gh-pages>.
 
 ## HMR best practices
 
