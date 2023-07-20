@@ -17,7 +17,7 @@ Please [file an issue](https://github.com/acteng/atip/issues/new) to start a con
 Very roughly, you'd need to:
 
 1.  Replace `assets/authorities.geojson` with appropriate boundaries for your region, and adjust Svelte components using this file
-2.  Generate files for the route-snapper tool to work, using <https://github.com/acteng/abstreet-to-atip/>. Right now, this only requires OpenStreetMap data and should work worldwide, but this may change.
+2.  Generate files for the route-snapper tool to work, using <https://github.com/acteng/atip-data-prep>. Right now, this only requires OpenStreetMap data and should work worldwide, but this may change.
 3.  Host those files and a compiled version of this Svelte app somewhere. You only need a static file host, like S3.
 
 ### Query parameters

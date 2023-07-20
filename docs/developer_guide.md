@@ -11,7 +11,7 @@ This repository contains the Svelte ATIP app. Our tech stack is:
 
 There are some related repositorites also part of ATIP:
 
-- [abstreet-to-atip](https://github.com/acteng/abstreet-to-atip) is a set of scripts to generate data files that ATIP loads
+- [atip-data-prep](https://github.com/acteng/atip-data-prep) is a set of scripts to generate data files that ATIP loads
 - [route-snapper](https://github.com/dabreegster/route_snapper/) is a tool to draw routes snapped to existing roads
 - [osm2streets](https://github.com/a-b-street/osm2streets) is a library to process and query OpenStreetMap data
 
