@@ -1,6 +1,6 @@
 <script lang="ts">
   import { routeInfo } from "../../stores";
-  import Select from "../govuk/Select.svelte";
+  import { Select } from "../govuk";
   import LaneDetails from "../layers/LaneDetails.svelte";
   import SpeedLimits from "../layers/SpeedLimits.svelte";
 

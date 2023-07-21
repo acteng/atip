@@ -15,9 +15,7 @@
   } from "../../maplibre_helpers";
   import { gjScheme, map, routeInfo } from "../../stores";
   import type { Feature } from "../../types";
-  import DiscreteLegend from "../common/DiscreteLegend.svelte";
-  import HelpIcon from "../common/HelpIcon.svelte";
-  import MapTooltips from "../common/MapTooltips.svelte";
+  import { DiscreteLegend, HelpIcon, MapTooltips } from "../common";
 
   // Show along a route if specified, or show all otherwise
   export let id: number | undefined;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SecondaryButton from "../govuk/SecondaryButton.svelte";
+  import { SecondaryButton } from "../govuk";
 
   export let title: string;
   export let open = false;

@@ -1,7 +1,6 @@
 <script lang="ts">
-  import CollapsibleCard from "../../common/CollapsibleCard.svelte";
-  import DefaultButton from "../../govuk/DefaultButton.svelte";
-  import SecondaryButton from "../../govuk/SecondaryButton.svelte";
+  import { CollapsibleCard } from "../../common";
+  import { DefaultButton, SecondaryButton } from "../../govuk";
   import { PolygonTool } from "./polygon_tool";
 
   export let polygonTool: PolygonTool;

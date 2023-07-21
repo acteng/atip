@@ -6,8 +6,7 @@
   import FormV1 from "../forms/FormV1.svelte";
   import FormV2 from "../forms/FormV2.svelte";
   import PlanningForm from "../forms/PlanningForm.svelte";
-  import SecondaryButton from "../govuk/SecondaryButton.svelte";
-  import WarningButton from "../govuk/WarningButton.svelte";
+  import { SecondaryButton, WarningButton } from "../govuk";
   import AccordionItem from "./AccordionItem.svelte";
 
   export let schema: Schema;

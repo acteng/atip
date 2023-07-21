@@ -1,6 +1,5 @@
 <script lang="ts">
-  import ExternalLink from "../common/ExternalLink.svelte";
-  import Modal from "../common/Modal.svelte";
+  import { ExternalLink, Modal } from "../common";
 
   export let open: boolean;
 </script>

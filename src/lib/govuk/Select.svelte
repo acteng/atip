@@ -1,5 +1,5 @@
 <script lang="ts">
-  import FormElement from "../govuk/FormElement.svelte";
+  import { FormElement } from "../govuk";
 
   export let label: string;
   // A unique (per page) ID

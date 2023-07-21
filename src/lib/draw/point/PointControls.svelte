@@ -1,6 +1,6 @@
 <script lang="ts">
-  import CollapsibleCard from "../../common/CollapsibleCard.svelte";
-  import SecondaryButton from "../../govuk/SecondaryButton.svelte";
+  import { CollapsibleCard } from "../../common";
+  import { SecondaryButton } from "../../govuk";
   import { PointTool } from "./point_tool";
 
   export let pointTool: PointTool;

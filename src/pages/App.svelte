@@ -8,11 +8,11 @@
   import authoritiesUrl from "../../assets/authorities.geojson?url";
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import BoundaryLayer from "../lib/BoundaryLayer.svelte";
-  import Layout from "../lib/common/Layout.svelte";
+  import { Layout } from "../lib/common";
   import HoverLayer from "../lib/draw/HoverLayer.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import Toolbox from "../lib/draw/Toolbox.svelte";
-  import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
+  import { SecondaryButton } from "../lib/govuk";
   import ContextualLayers from "../lib/layers/ContextualLayers.svelte";
   import Legend from "../lib/Legend.svelte";
   import Map from "../lib/Map.svelte";
