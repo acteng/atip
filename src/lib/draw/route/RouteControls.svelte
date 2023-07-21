@@ -1,10 +1,12 @@
 <script lang="ts">
   import { userSettings } from "../../../stores";
-  import CollapsibleCard from "../../common/CollapsibleCard.svelte";
-  import Checkbox from "../../govuk/Checkbox.svelte";
-  import CheckboxGroup from "../../govuk/CheckboxGroup.svelte";
-  import DefaultButton from "../../govuk/DefaultButton.svelte";
-  import SecondaryButton from "../../govuk/SecondaryButton.svelte";
+  import { CollapsibleCard } from "../../common";
+  import {
+    Checkbox,
+    CheckboxGroup,
+    DefaultButton,
+    SecondaryButton,
+  } from "../../govuk";
   import { RouteTool } from "./route_tool";
 
   export let routeTool: RouteTool;

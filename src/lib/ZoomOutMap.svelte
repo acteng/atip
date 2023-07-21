@@ -3,7 +3,7 @@
   import icon from "../../assets/zoom_out_map.svg";
   import { bbox } from "../maplibre_helpers";
   import { map } from "../stores";
-  import SecondaryButton from "./govuk/SecondaryButton.svelte";
+  import { SecondaryButton } from "./govuk";
 
   export let boundaryGeojson: GeoJSON;
 

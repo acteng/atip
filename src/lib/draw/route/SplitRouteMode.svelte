@@ -16,7 +16,7 @@
   } from "../../../maplibre_helpers";
   import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
   import type { Mode, Feature as OurFeature } from "../../../types";
-  import CollapsibleCard from "../../common/CollapsibleCard.svelte";
+  import { CollapsibleCard } from "../../common";
   import type { EventHandler } from "../event_handler";
 
   const thisMode = "split-route";

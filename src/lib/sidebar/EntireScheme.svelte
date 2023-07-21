@@ -10,12 +10,13 @@
     sidebarHover,
   } from "../../stores";
   import { schemaPluralNoun, type Schema, type Scheme } from "../../types";
-  import ConfirmationModal from "../common/ConfirmationModal.svelte";
-  import FileInput from "../common/FileInput.svelte";
-  import ErrorMessage from "../govuk/ErrorMessage.svelte";
-  import SecondaryButton from "../govuk/SecondaryButton.svelte";
-  import TextInput from "../govuk/TextInput.svelte";
-  import WarningButton from "../govuk/WarningButton.svelte";
+  import { ConfirmationModal, FileInput } from "../common";
+  import {
+    ErrorMessage,
+    SecondaryButton,
+    TextInput,
+    WarningButton,
+  } from "../govuk";
 
   export let authorityName: string;
   export let schema: Schema;

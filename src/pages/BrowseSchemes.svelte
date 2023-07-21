@@ -7,12 +7,9 @@
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
-  import FileInput from "../lib/common/FileInput.svelte";
-  import Layout from "../lib/common/Layout.svelte";
-  import MapTooltips from "../lib/common/MapTooltips.svelte";
+  import { FileInput, Layout, MapTooltips } from "../lib/common";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
-  import ErrorMessage from "../lib/govuk/ErrorMessage.svelte";
-  import SecondaryButton from "../lib/govuk/SecondaryButton.svelte";
+  import { ErrorMessage, SecondaryButton } from "../lib/govuk";
   import Legend from "../lib/Legend.svelte";
   import MapLibreMap from "../lib/Map.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";

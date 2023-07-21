@@ -2,8 +2,8 @@
   import type { FeatureCollection } from "geojson";
   import { bbox } from "../../maplibre_helpers";
   import { gjScheme, map } from "../../stores";
-  import CollapsibleCard from "../common/CollapsibleCard.svelte";
-  import SecondaryButton from "../govuk/SecondaryButton.svelte";
+  import { CollapsibleCard } from "../common";
+  import { SecondaryButton } from "../govuk";
   import type { Scheme } from "./data";
 
   export let scheme: Scheme;

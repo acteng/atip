@@ -2,10 +2,7 @@
   import type { Feature, LineString } from "geojson";
   import { prettyPrintMeters } from "../../maplibre_helpers";
   import { gjScheme, routeInfo } from "../../stores";
-  import FormElement from "../govuk/FormElement.svelte";
-  import Radio from "../govuk/Radio.svelte";
-  import SecondaryButton from "../govuk/SecondaryButton.svelte";
-  import TextArea from "../govuk/TextArea.svelte";
+  import { FormElement, Radio, SecondaryButton, TextArea } from "../govuk";
   import RouteInfoLayers from "./RouteInfoLayers.svelte";
 
   export let id: number;

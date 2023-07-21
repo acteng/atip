@@ -5,7 +5,7 @@
   import { onMount } from "svelte";
   import { gjScheme, routeInfo } from "../../stores";
   import type { Feature } from "../../types";
-  import HelpIcon from "../common/HelpIcon.svelte";
+  import { HelpIcon } from "../common";
   import IntersectionMarkings from "./lane_details/IntersectionMarkings.svelte";
   import IntersectionPolygons from "./lane_details/IntersectionPolygons.svelte";
   import LaneMarkings from "./lane_details/LaneMarkings.svelte";

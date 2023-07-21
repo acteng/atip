@@ -2,8 +2,8 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import { currentMode, map, userSettings } from "../../stores";
   import type { Mode } from "../../types";
-  import CollapsibleCard from "../common/CollapsibleCard.svelte";
-  import Radio from "../govuk/Radio.svelte";
+  import { CollapsibleCard } from "../common";
+  import { Radio } from "../govuk";
   import type { EventHandler } from "./event_handler";
 
   export let eventHandler: EventHandler;

@@ -2,10 +2,8 @@
   import { onMount } from "svelte";
   import { gjScheme } from "../../stores";
   import type { FeatureUnion } from "../../types";
-  import CollapsibleCard from "../common/CollapsibleCard.svelte";
-  import FormElement from "../govuk/FormElement.svelte";
-  import SecondaryButton from "../govuk/SecondaryButton.svelte";
-  import Select from "../govuk/Select.svelte";
+  import { CollapsibleCard } from "../common";
+  import { FormElement, SecondaryButton, Select } from "../govuk";
   import { type Scheme } from "./data";
 
   // These are immutable; re-create this component if they change
