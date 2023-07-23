@@ -6,9 +6,8 @@
   import type { FeatureCollection, Polygon } from "geojson";
   import { onMount } from "svelte";
   import authoritiesUrl from "../../assets/authorities.geojson?url";
-  import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import BoundaryLayer from "../lib/BoundaryLayer.svelte";
-  import { Layout } from "../lib/common";
+  import { BaselayerSwitcher, Layout, ZoomOutMap } from "../lib/common";
   import HoverLayer from "../lib/draw/HoverLayer.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import Toolbox from "../lib/draw/Toolbox.svelte";
@@ -20,7 +19,6 @@
   import EntireScheme from "../lib/sidebar/EntireScheme.svelte";
   import Instructions from "../lib/sidebar/Instructions.svelte";
   import InterventionList from "../lib/sidebar/InterventionList.svelte";
-  import ZoomOutMap from "../lib/ZoomOutMap.svelte";
   import { routeInfo } from "../stores";
   import { schemaTitle, type Schema } from "../types";
   import { type RouteInfo } from "../worker";

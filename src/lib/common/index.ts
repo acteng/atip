@@ -1,3 +1,4 @@
+export { default as BaselayerSwitcher } from "./BaselayerSwitcher.svelte";
 export { default as CollapsibleCard } from "./CollapsibleCard.svelte";
 export { default as ColorLegend } from "./ColorLegend.svelte";
 export { default as ConfirmationModal } from "./ConfirmationModal.svelte";
@@ -8,3 +9,4 @@ export { default as HelpIcon } from "./HelpIcon.svelte";
 export { default as Layout } from "./Layout.svelte";
 export { default as MapTooltips } from "./MapTooltips.svelte";
 export { default as Modal } from "./Modal.svelte";
+export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
