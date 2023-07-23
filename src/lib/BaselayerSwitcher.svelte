@@ -15,25 +15,13 @@
   }
 </script>
 
-<div>
-  <Select
-    label="Basemap"
-    id="basemap"
-    choices={[
-      ["streets", "Streets"],
-      ["hybrid", "Satellite"],
-    ]}
-    bind:value={style}
-    on:change={changeStyle}
-  />
-</div>
-
-<style>
-  div {
-    position: absolute;
-    left: 10px;
-    bottom: 50px;
-    background-color: white;
-    padding: 16px;
-  }
-</style>
+<Select
+  label="Basemap"
+  id="basemap"
+  choices={[
+    ["streets", "Streets"],
+    ["hybrid", "Satellite"],
+  ]}
+  bind:value={style}
+  on:change={changeStyle}
+/>

@@ -1,30 +1,11 @@
 <script lang="ts">
-  import {
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "../../maplibre_helpers";
-  import { map } from "../../stores";
-  import { MapTooltips } from "../common";
-
-  let source = "hospitals";
-
-  overwritePmtilesSource(
-    $map,
-    source,
-    "https://atip.uk/layers/v1/hospitals.pmtiles"
-  );
-
-  overwritePolygonLayer($map, {
-    id: source,
-    source,
-    sourceLayer: source,
-    color: "blue",
-    opacity: 0.8,
-  });
-
-  function tooltip(props: { [name: string]: any }): string {
-    return props.name ?? "Unnamed hospital";
-  }
+  import OptionalLayer from "./OptionalLayer.svelte";
 </script>
 
-<MapTooltips layers={["hospitals"]} contents={tooltip} />
+<OptionalLayer
+  name="hospitals"
+  singularNoun="hospital"
+  pluralNoun="Hospitals"
+  color="blue"
+  hint="Hospital data from OpenStreetMap. Doesn't include outpatient clinics or individual doctor's offices."
+/>

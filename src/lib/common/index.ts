@@ -1,4 +1,5 @@
 export { default as CollapsibleCard } from "./CollapsibleCard.svelte";
+export { default as ColorLegend } from "./ColorLegend.svelte";
 export { default as ConfirmationModal } from "./ConfirmationModal.svelte";
 export { default as DiscreteLegend } from "./DiscreteLegend.svelte";
 export { default as ExternalLink } from "./ExternalLink.svelte";
