@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Select } from "./govuk";
+  import { Select } from "../govuk";
 
   // TODO Be specific about "streets" | "hybrid", but then we need actual error
   // handling when we parse it from URL params

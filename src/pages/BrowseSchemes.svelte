@@ -3,24 +3,24 @@
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import { onDestroy, onMount } from "svelte";
-  import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import HospitalsLayer from "../lib/browse/HospitalsLayer.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
   import {
+    BaselayerSwitcher,
     CollapsibleCard,
     FileInput,
     Layout,
     MapTooltips,
+    ZoomOutMap,
   } from "../lib/common";
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
   import Legend from "../lib/Legend.svelte";
   import MapLibreMap from "../lib/Map.svelte";
-  import ZoomOutMap from "../lib/ZoomOutMap.svelte";
   import { bbox, emptyGeojson, prettyPrintMeters } from "../maplibre_helpers";
   import { gjScheme, map } from "../stores";
   import type { Scheme as GjScheme } from "../types";
