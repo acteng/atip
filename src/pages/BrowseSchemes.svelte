@@ -8,6 +8,7 @@
   import Filters from "../lib/browse/Filters.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
+  import HospitalsLayer from "../lib/browse/HospitalsLayer.svelte";
   import { FileInput, Layout, MapTooltips } from "../lib/common";
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
@@ -105,6 +106,7 @@
         contents={tooltip}
       />
       <SchoolsLayer />
+      <HospitalsLayer />
     </MapLibreMap>
   </div>
 </Layout>
