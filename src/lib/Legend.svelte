@@ -1,7 +1,7 @@
 <script lang="ts">
   import { colors } from "../colors";
   import type { Schema } from "../types";
-  import { CollapsibleCard } from "./common";
+  import { CollapsibleCard, ColorLegend } from "./common";
 
   export let schema: Schema;
 </script>
@@ -11,36 +11,36 @@
     <ul>
       {#if schema == "planning"}
         <li>
-          <span style:background={colors.preapp} />
+          <ColorLegend color={colors.preapp} />
           Preapp
         </li>
         <li>
-          <span style:background={colors.outline} />
+          <ColorLegend color={colors.outline} />
           Outline
         </li>
         <li>
-          <span style:background={colors["reserved matters"]} />
+          <ColorLegend color={colors["reserved matters"]} />
           Reserved matters
         </li>
         <li>
-          <span style:background={colors["local plan"]} />
+          <ColorLegend color={colors["local plan"]} />
           Local plan
         </li>
       {:else}
         <li>
-          <span style:background={colors.area} />
+          <ColorLegend color={colors.area} />
           Areas
         </li>
         <li>
-          <span style:background={colors.route} />
+          <ColorLegend color={colors.route} />
           Routes
         </li>
         <li>
-          <span style:background={colors.crossing} />
+          <ColorLegend color={colors.crossing} />
           Crossings
         </li>
         <li>
-          <span style:background={colors.other} />
+          <ColorLegend color={colors.other} />
           Other
         </li>
       {/if}
@@ -55,14 +55,5 @@
     top: 60px;
     background-color: white;
     padding: 16px;
-  }
-
-  span {
-    display: block;
-    float: left;
-    height: 16px;
-    width: 30px;
-    margin-right: 5px;
-    border: 1px solid #999;
   }
 </style>

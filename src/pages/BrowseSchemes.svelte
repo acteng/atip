@@ -6,13 +6,18 @@
   import BaselayerSwitcher from "../lib/BaselayerSwitcher.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
+  import HospitalsLayer from "../lib/browse/HospitalsLayer.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
-  import HospitalsLayer from "../lib/browse/HospitalsLayer.svelte";
-  import { FileInput, Layout, MapTooltips } from "../lib/common";
+  import {
+    CollapsibleCard,
+    FileInput,
+    Layout,
+    MapTooltips,
+  } from "../lib/common";
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
-  import { ErrorMessage, SecondaryButton } from "../lib/govuk";
+  import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
   import Legend from "../lib/Legend.svelte";
   import MapLibreMap from "../lib/Map.svelte";
   import ZoomOutMap from "../lib/ZoomOutMap.svelte";
@@ -95,7 +100,6 @@
     <PmTiles />
     <MapLibreMap {style}>
       <InterventionLayer {schema} />
-      <BaselayerSwitcher {style} />
       <Legend {schema} />
       <MapTooltips
         layers={[
@@ -105,8 +109,25 @@
         ]}
         contents={tooltip}
       />
-      <SchoolsLayer />
-      <HospitalsLayer />
+      <div class="top-right">
+        <CollapsibleCard label="Layers" open>
+          <BaselayerSwitcher {style} />
+          <CheckboxGroup small>
+            <SchoolsLayer />
+            <HospitalsLayer />
+          </CheckboxGroup>
+        </CollapsibleCard>
+      </div>
     </MapLibreMap>
   </div>
 </Layout>
+
+<style>
+  .top-right {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: white;
+    padding: 16px;
+  }
+</style>

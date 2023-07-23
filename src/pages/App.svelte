@@ -122,7 +122,9 @@
       <InterventionLayer {schema} />
       <HoverLayer />
       <Toolbox {routeSnapperUrl} {schema} />
-      <BaselayerSwitcher {style} />
+      <div class="bottom-left">
+        <BaselayerSwitcher {style} />
+      </div>
       <Legend {schema} />
     </Map>
   </div>
@@ -130,3 +132,13 @@
 
 <About bind:open={showAbout} />
 <Instructions bind:open={showInstructions} {schema} />
+
+<style>
+  .bottom-left {
+    position: absolute;
+    left: 10px;
+    bottom: 50px;
+    background-color: white;
+    padding: 16px;
+  }
+</style>
