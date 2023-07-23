@@ -7,7 +7,9 @@
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
+  import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
   import { FileInput, Layout, MapTooltips } from "../lib/common";
+  import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { ErrorMessage, SecondaryButton } from "../lib/govuk";
   import Legend from "../lib/Legend.svelte";
@@ -89,6 +91,7 @@
     </ul>
   </div>
   <div slot="main">
+    <PmTiles />
     <MapLibreMap {style}>
       <InterventionLayer {schema} />
       <BaselayerSwitcher {style} />
@@ -101,6 +104,7 @@
         ]}
         contents={tooltip}
       />
+      <SchoolsLayer />
     </MapLibreMap>
   </div>
 </Layout>
