@@ -48,12 +48,12 @@
   ) {
     let filterNormalized = filterText.toLowerCase();
     let filterFeatures = (feature: FeatureUnion) => {
-      // TODO This is a very blunt free-form text search of any property in the
-      // feature only, not the scheme.
+      // Only the name and description fields have anything worth filtering
       if (
         filterNormalized &&
-        !JSON.stringify(feature.properties)
-          .toLowerCase()
+        !feature.properties.name?.toLowerCase().includes(filterNormalized) &&
+        !feature.properties.description
+          ?.toLowerCase()
           .includes(filterNormalized)
       ) {
         return false;
@@ -80,9 +80,25 @@
 
     // Hide things on the map, and recalculate stats
     counts = { area: 0, route: 0, crossing: 0, other: 0 };
+    let showFeature = (feature: FeatureUnion) => {
+      if (!schemesToBeShown.has(feature.properties.scheme_reference!)) {
+        return false;
+      }
+      // If there's free-text, only show interventions matching it within a scheme
+      if (
+        filterNormalized &&
+        !feature.properties.name?.toLowerCase().includes(filterNormalized) &&
+        !feature.properties.description
+          ?.toLowerCase()
+          .includes(filterNormalized)
+      ) {
+        return false;
+      }
+      return true;
+    };
     gjScheme.update((gj) => {
       for (let feature of gj.features) {
-        if (schemesToBeShown.has(feature.properties.scheme_reference!)) {
+        if (showFeature(feature)) {
           delete feature.properties.hide_while_editing;
           counts[feature.properties.intervention_type]++;
         } else {
@@ -111,7 +127,7 @@
     emptyOption
     bind:value={filterFundingProgramme}
   />
-  <FormElement label="Any field" id="filterText">
+  <FormElement label="Name or description" id="filterText">
     <input
       type="text"
       class="govuk-input govuk-input--width-10"
