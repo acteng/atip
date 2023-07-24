@@ -7,7 +7,12 @@
   import { onMount } from "svelte";
   import authoritiesUrl from "../../assets/authorities.geojson?url";
   import BoundaryLayer from "../lib/BoundaryLayer.svelte";
-  import { BaselayerSwitcher, Layout, ZoomOutMap } from "../lib/common";
+  import {
+    BaselayerSwitcher,
+    CollapsibleCard,
+    Layout,
+    ZoomOutMap,
+  } from "../lib/common";
   import HoverLayer from "../lib/draw/HoverLayer.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import Toolbox from "../lib/draw/Toolbox.svelte";
@@ -111,8 +116,6 @@
     <EntireScheme {authorityName} {schema} />
     <hr />
     <InterventionList {schema} />
-    <hr />
-    <ContextualLayers />
   </div>
   <div slot="main">
     <Map {style}>
@@ -120,10 +123,13 @@
       <InterventionLayer {schema} />
       <HoverLayer />
       <Toolbox {routeSnapperUrl} {schema} />
-      <div class="bottom-left">
-        <BaselayerSwitcher {style} />
+      <div class="top-left">
+        <CollapsibleCard label="Layers">
+          <Legend {schema} />
+          <BaselayerSwitcher {style} />
+          <ContextualLayers />
+        </CollapsibleCard>
       </div>
-      <Legend {schema} />
     </Map>
   </div>
 </Layout>
@@ -132,10 +138,10 @@
 <Instructions bind:open={showInstructions} {schema} />
 
 <style>
-  .bottom-left {
+  .top-left {
     position: absolute;
     left: 10px;
-    bottom: 50px;
+    top: 60px;
     background-color: white;
     padding: 16px;
   }

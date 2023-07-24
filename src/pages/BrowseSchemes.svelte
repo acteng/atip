@@ -19,7 +19,6 @@
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
-  import Legend from "../lib/Legend.svelte";
   import MapLibreMap from "../lib/Map.svelte";
   import { bbox, emptyGeojson, prettyPrintMeters } from "../maplibre_helpers";
   import { gjScheme, map } from "../stores";
@@ -100,7 +99,6 @@
     <PmTiles />
     <MapLibreMap {style}>
       <InterventionLayer {schema} />
-      <Legend {schema} />
       <MapTooltips
         layers={[
           "interventions-points",
