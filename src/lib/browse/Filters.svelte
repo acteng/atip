@@ -12,7 +12,8 @@
   // by scheme_reference
   export let schemesToBeShown: Set<string> = new Set();
 
-  let filterText = "";
+  // Read-only, so callers can highlight search terms
+  export let filterText = "";
 
   // Dropdown filters
   let authorities: [string, string][] = [];
@@ -127,7 +128,7 @@
     emptyOption
     bind:value={filterFundingProgramme}
   />
-  <FormElement label="Name or description" id="filterText">
+  <FormElement label="Intervention name or description" id="filterText">
     <input
       type="text"
       class="govuk-input govuk-input--width-10"

@@ -36,6 +36,7 @@
 
   let schemes: Map<string, Scheme> = new Map();
   let schemesToBeShown: Set<string> = new Set();
+  let filterText = "";
 
   onDestroy(() => {
     gjScheme.set(emptyGeojson() as GjScheme);
@@ -57,15 +58,28 @@
   function tooltip(props: { [name: string]: any }): string {
     // TODO Move into a Svelte component, so we don't have to awkwardly build up HTML like this
     var html = `<div class="govuk-prose" style="max-width: 30vw;">`;
-    html += `<h2>${props.name} (${props.intervention_type})</h2>`;
+    html += `<h2>${highlightFilter(props.name)} (${
+      props.intervention_type
+    })</h2>`;
     html += `<p>Scheme reference: ${props.scheme_reference}</p>`;
     if (props.length_meters) {
       html += `<p>Length: ${prettyPrintMeters(props.length_meters)}</p>`;
     }
     if (props.description) {
-      html += `<p>${props.description}</p>`;
+      html += `<p>${highlightFilter(props.description)}</p>`;
     }
     return html;
+  }
+
+  // When the user is filtering name/description by freeform text, highlight the matching pieces.
+  function highlightFilter(input: string): string {
+    if (!filterText) {
+      return input;
+    }
+    return input.replace(
+      new RegExp(filterText, "gi"),
+      (match) => `<mark>${match}</mark>`
+    );
   }
 </script>
 
@@ -84,7 +98,7 @@
     <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
     {#if schemes.size > 0}
-      <Filters {schemes} bind:schemesToBeShown />
+      <Filters {schemes} bind:schemesToBeShown bind:filterText />
     {/if}
 
     <ul>
