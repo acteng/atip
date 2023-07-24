@@ -13,10 +13,11 @@
     SecondaryButton,
   } from "../lib/govuk";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { FileInput } from "../lib/common";
+  import { FileInput, MapTooltips } from "../lib/common";
   import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import About from "../lib/sidebar/About.svelte";
   import { bbox } from "../maplibre_helpers";
+  import { map as mapStore } from "../stores";
   import type { Schema } from "../types";
 
   let showAbout = false;
@@ -37,7 +38,6 @@
   function changeBoundaries() {
     loadedMap?.setFilter(layer, ["==", ["get", "level"], showBoundaries]);
   }
-  let hoveredBoundary: string | null = null;
 
   onMount(async () => {
     // For govuk components. Must happen here.
@@ -58,6 +58,7 @@
     });
     // Use map within onMount, so it's guaranteed to exist
     loadedMap = map;
+    mapStore.set(loadedMap);
 
     let hoverId: number | null = null;
     function unhover() {
@@ -98,14 +99,12 @@
         if (e.features!.length > 0) {
           unhover();
           hoverId = e.features![0].id as number;
-          hoveredBoundary = e.features![0].properties.name;
           map.setFeatureState({ source: source, id: hoverId }, { hover: true });
         }
       });
       map.on("mouseleave", layer, () => {
         unhover();
         hoverId = null;
-        hoveredBoundary = null;
       });
 
       map.on("click", layer, function (e) {
@@ -156,6 +155,10 @@
   function start() {
     window.location.href = `scheme.html?authority=${inputValue}`;
   }
+
+  function tooltip(props: { [name: string]: any }): string {
+    return `<div class="govuk-prose"><p>${props.name}</p></div>`;
+  }
 </script>
 
 <div class="govuk-grid-row">
@@ -196,9 +199,6 @@
       bind:value={showBoundaries}
       on:change={changeBoundaries}
     />
-    {#if hoveredBoundary}
-      <i>{hoveredBoundary}</i>
-    {/if}
 
     <hr />
 
@@ -214,6 +214,9 @@
   <div class="govuk-grid-column-one-half">
     <div id="map" />
   </div>
+  {#if loadedMap}
+    <MapTooltips layers={[layer]} contents={tooltip} />
+  {/if}
 </div>
 <About bind:open={showAbout} />
 
