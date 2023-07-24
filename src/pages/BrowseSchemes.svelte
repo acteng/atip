@@ -16,6 +16,7 @@
     MapTooltips,
     ZoomOutMap,
   } from "../lib/common";
+  import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
@@ -24,9 +25,15 @@
   import { gjScheme, map } from "../stores";
   import type { Scheme as GjScheme } from "../types";
 
-  onMount(() => {
+  // TODO Remove after the input data is fixed to plumb correct authority names.
+  let authorityNames: Set<string> | null = null;
+
+  onMount(async () => {
     // For govuk components. Must happen here.
     initAll();
+
+    let geojson = await getAuthoritiesGeoJson();
+    authorityNames = new Set(geojson.features.map((f) => f.properties!.name));
   });
 
   const params = new URLSearchParams(window.location.search);
@@ -101,13 +108,15 @@
       <Filters {schemes} bind:schemesToBeShown bind:filterText />
     {/if}
 
-    <ul>
-      {#each schemes.values() as scheme}
-        {#if schemesToBeShown.has(scheme.scheme_reference)}
-          <SchemeCard {scheme} />
-        {/if}
-      {/each}
-    </ul>
+    {#if authorityNames}
+      <ul>
+        {#each schemes.values() as scheme}
+          {#if schemesToBeShown.has(scheme.scheme_reference)}
+            <SchemeCard {scheme} {authorityNames} />
+          {/if}
+        {/each}
+      </ul>
+    {/if}
   </div>
   <div slot="main">
     <PmTiles />
