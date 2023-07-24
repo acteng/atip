@@ -33,7 +33,7 @@
     opacity: 0.8,
   });
 
-  let show = true;
+  let show = false;
   $: {
     if ($map.getLayer(name)) {
       $map.setLayoutProperty(name, "visibility", show ? "visible" : "none");
