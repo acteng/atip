@@ -5,7 +5,6 @@
   import * as Comlink from "comlink";
   import type { FeatureCollection, Polygon } from "geojson";
   import { onMount } from "svelte";
-  import authoritiesUrl from "../../assets/authorities.geojson?url";
   import BoundaryLayer from "../lib/BoundaryLayer.svelte";
   import {
     BaselayerSwitcher,
@@ -13,6 +12,7 @@
     Layout,
     ZoomOutMap,
   } from "../lib/common";
+  import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import HoverLayer from "../lib/draw/HoverLayer.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import Toolbox from "../lib/draw/Toolbox.svelte";
@@ -84,9 +84,7 @@
   });
 
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
-    const resp = await fetch(authoritiesUrl);
-    const body = await resp.text();
-    const geojson: FeatureCollection<Polygon> = JSON.parse(body);
+    let geojson = await getAuthoritiesGeoJson();
     geojson.features = geojson.features.filter(
       (feature) => feature.properties?.name == authorityName
     );

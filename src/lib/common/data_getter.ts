@@ -1,8 +1,9 @@
-import type { FeatureCollection } from "geojson";
+import type { FeatureCollection, Polygon } from "geojson";
 import authoritiesUrl from "../../../assets/authorities.geojson?url";
 
-export async function getAuthoritiesGeoJson(): Promise<FeatureCollection> {
+export async function getAuthoritiesGeoJson(): Promise<
+  FeatureCollection<Polygon>
+> {
   const resp = await fetch(authoritiesUrl);
-  const body = await resp.text();
-  return JSON.parse(body);
+  return await resp.json();
 }
