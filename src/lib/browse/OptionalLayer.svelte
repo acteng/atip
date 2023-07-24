@@ -12,7 +12,9 @@
   // - The layer name within that file
   // - The layer name, for layerZorder
   export let name: string;
+  // Uncapitalized
   export let singularNoun: string;
+  // Capitalized
   export let pluralNoun: string;
   export let color: string;
   export let hint: string;
