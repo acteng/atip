@@ -26,7 +26,7 @@
     source: name,
     sourceLayer: name,
     color,
-    width: 10,
+    width: 7,
   });
 
   let show = false;
