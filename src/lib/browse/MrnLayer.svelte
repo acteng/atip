@@ -4,12 +4,16 @@
     overwritePmtilesSource,
   } from "../../maplibre_helpers";
   import { map } from "../../stores";
-  import { ColorLegend, MapTooltips } from "../common";
+  import {
+    ColorLegend,
+    ExternalLink,
+    HelpButton,
+    MapTooltips,
+  } from "../common";
   import { Checkbox } from "../govuk";
 
   let name = "mrn";
   let color = "purple";
-  let hint = "Major Road Network";
 
   overwritePmtilesSource(
     $map,
@@ -38,9 +42,20 @@
   }
 </script>
 
-<Checkbox id={name} bind:checked={show} {hint}>
+<Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
   MRN
+  <span slot="right">
+    <HelpButton>
+      <p>
+        Data from the <ExternalLink
+          href="https://maps.dft.gov.uk/major-road-network/index.html"
+        >
+          Major Road Network
+        </ExternalLink>.
+      </p>
+    </HelpButton>
+  </span>
 </Checkbox>
 
 <MapTooltips layers={[name]} contents={tooltip} />

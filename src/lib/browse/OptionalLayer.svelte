@@ -4,7 +4,7 @@
     overwritePolygonLayer,
   } from "../../maplibre_helpers";
   import { map } from "../../stores";
-  import { ColorLegend, MapTooltips } from "../common";
+  import { ColorLegend, HelpButton, MapTooltips } from "../common";
   import { Checkbox } from "../govuk";
 
   // This name is used for multiple things:
@@ -17,7 +17,8 @@
   // Capitalized
   export let pluralNoun: string;
   export let color: string;
-  export let hint: string;
+
+  // The caller must also fill in the default slot with the contents of a help modal
 
   overwritePmtilesSource(
     $map,
@@ -46,9 +47,12 @@
   }
 </script>
 
-<Checkbox id={name} bind:checked={show} {hint}>
+<Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
   {pluralNoun}
+  <span slot="right">
+    <HelpButton><slot /></HelpButton>
+  </span>
 </Checkbox>
 
 <MapTooltips layers={[name]} contents={tooltip} />
