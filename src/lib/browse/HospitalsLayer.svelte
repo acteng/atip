@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ExternalLink } from "../common";
   import OptionalLayer from "./OptionalLayer.svelte";
 </script>
 
@@ -7,5 +8,13 @@
   singularNoun="hospital"
   pluralNoun="Hospitals"
   color="blue"
-  hint="Hospital data from OpenStreetMap. Doesn't include outpatient clinics or individual doctor's offices."
-/>
+>
+  <p>
+    This shows <ExternalLink
+      href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
+    >
+      hospital
+    </ExternalLink> data from OpenStreetMap. It doesn't include outpatient clinics
+    or individual doctor's offices.
+  </p>
+</OptionalLayer>
