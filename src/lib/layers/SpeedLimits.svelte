@@ -100,7 +100,7 @@
 
   function tooltip(props: { [name: string]: any }): string {
     return props.speed_limit
-      ? `${Math.round(props.speed_limit)} mph`
+      ? `<p>${Math.round(props.speed_limit)} mph</p>`
       : "Unknown";
   }
 </script>

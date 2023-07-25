@@ -157,7 +157,7 @@
   }
 
   function tooltip(props: { [name: string]: any }): string {
-    return `<div class="govuk-prose"><p>${props.name}</p></div>`;
+    return `<p>${props.name}</p>`;
   }
 </script>
 

@@ -34,7 +34,7 @@
 
   function tooltip(props: { [name: string]: any }): string {
     let name = props.name ?? `Unknown MRN road`;
-    return `<div class="govuk-prose"><p>${name}</p></div>`;
+    return `<p>${name}</p>`;
   }
 </script>
 

@@ -4,6 +4,7 @@
   import { map } from "../../stores";
 
   export let layers: string[];
+  // The tooltip contents will be wrapped in a govuk-prose div
   export let contents: (props: { [name: string]: any }) => string;
 
   let popup = new Popup({
@@ -34,10 +35,10 @@
       layers,
     });
     if (results.length > 0) {
-      popup
-        .setLngLat(e.lngLat)
-        .setHTML(contents(results[0].properties))
-        .addTo($map);
+      let html = `<div class="govuk-prose">${contents(
+        results[0].properties
+      )}</div>`;
+      popup.setLngLat(e.lngLat).setHTML(html).addTo($map);
     } else {
       popup.remove();
     }
