@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { schemaPluralNoun, type Schema } from "../../types";
+  import { schemaPluralNoun } from "../../schemas";
+  import type { Schema } from "../../types";
   import { Modal } from "../common";
 
   export let open: boolean;

@@ -24,8 +24,9 @@
   import EntireScheme from "../lib/sidebar/EntireScheme.svelte";
   import Instructions from "../lib/sidebar/Instructions.svelte";
   import InterventionList from "../lib/sidebar/InterventionList.svelte";
+  import { colorInterventionsBySchema, schemaTitle } from "../schemas";
   import { routeInfo } from "../stores";
-  import { schemaTitle, type Schema } from "../types";
+  import type { Schema } from "../types";
   import { type RouteInfo } from "../worker";
   import workerWrapper from "../worker?worker";
 
@@ -118,7 +119,9 @@
   <div slot="main">
     <Map {style}>
       <BoundaryLayer {boundaryGeojson} />
-      <InterventionLayer {schema} />
+      <InterventionLayer
+        colorInterventions={colorInterventionsBySchema(schema)}
+      />
       <HoverLayer />
       <Toolbox {routeSnapperUrl} {schema} />
       <div class="top-left">
