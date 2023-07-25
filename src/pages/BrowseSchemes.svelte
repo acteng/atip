@@ -65,7 +65,7 @@
 
   function tooltip(props: { [name: string]: any }): string {
     // TODO Move into a Svelte component, so we don't have to awkwardly build up HTML like this
-    var html = `<div class="govuk-prose" style="max-width: 30vw;">`;
+    var html = `<div style="max-width: 30vw;">`;
     html += `<h2>${highlightFilter(props.name)} (${
       props.intervention_type
     })</h2>`;
@@ -76,6 +76,7 @@
     if (props.description) {
       html += `<p>${highlightFilter(props.description)}</p>`;
     }
+    html += `</div>`;
     return html;
   }
 
