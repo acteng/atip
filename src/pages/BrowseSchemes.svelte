@@ -23,6 +23,7 @@
   import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
   import MapLibreMap from "../lib/Map.svelte";
   import { bbox, emptyGeojson, prettyPrintMeters } from "../maplibre_helpers";
+  import { colorInterventionsBySchema } from "../schemas";
   import { gjScheme, map } from "../stores";
   import type { Scheme as GjScheme } from "../types";
 
@@ -39,7 +40,6 @@
 
   const params = new URLSearchParams(window.location.search);
   let style: string = params.get("style") || "streets";
-  const schema = "v1";
   let errorMessage = "";
 
   let schemes: Map<string, Scheme> = new Map();
@@ -123,7 +123,9 @@
   <div slot="main">
     <PmTiles />
     <MapLibreMap {style}>
-      <InterventionLayer {schema} />
+      <InterventionLayer
+        colorInterventions={colorInterventionsBySchema("v1")}
+      />
       <MapTooltips
         layers={[
           "interventions-points",

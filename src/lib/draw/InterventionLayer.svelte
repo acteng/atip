@@ -15,9 +15,8 @@
     overwriteSource,
   } from "../../maplibre_helpers";
   import { gjScheme, map } from "../../stores";
-  import type { Schema } from "../../types";
 
-  export let schema: Schema;
+  export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
 
   let source = "interventions";
 
@@ -51,36 +50,6 @@
     ($map.getSource(source) as GeoJSONSource).setData(copy);
   }
 
-  // The fallback white should never be used in practice
-  const colorByInterventionType: DataDrivenPropertyValueSpecification<string> =
-    [
-      "match",
-      ["get", "intervention_type"],
-      "area",
-      colors.area,
-      "route",
-      colors.route,
-      "crossing",
-      colors.crossing,
-      "other",
-      colors.other,
-      "white",
-    ];
-  // For planning mode
-  const colorByReferenceType: DataDrivenPropertyValueSpecification<string> = [
-    "match",
-    ["get", "reference_type", ["get", "planning"]],
-    "preapp",
-    colors.preapp,
-    "outline",
-    colors.outline,
-    "reserved matters",
-    colors["reserved matters"],
-    "local plan",
-    colors["local plan"],
-    "white",
-  ];
-
   const hideWhileEditing: FilterSpecification = [
     "!=",
     "hide_while_editing",
@@ -97,7 +66,7 @@
       hideWhileEditing,
       notEndpoint,
     ] as FilterSpecification,
-    color: colorByInterventionType,
+    color: colorInterventions,
     radius: circleRadius,
     // TODO Outline?
   });
@@ -106,7 +75,7 @@
     id: "interventions-lines",
     source,
     filter: ["all", isLine, hideWhileEditing] as FilterSpecification,
-    color: colorByInterventionType,
+    color: colorInterventions,
     width: lineWidth,
   });
   // Draw endpoints to emphasize where two LineStrings meet
@@ -124,16 +93,14 @@
     id: "interventions-polygons",
     source,
     filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
-    color:
-      schema == "planning" ? colorByReferenceType : colorByInterventionType,
+    color: colorInterventions,
     opacity: 0.2,
   });
   overwriteLineLayer($map, {
     id: "interventions-polygon-outlines",
     source,
     filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
-    color:
-      schema == "planning" ? colorByReferenceType : colorByInterventionType,
+    color: colorInterventions,
     opacity: 0.5,
     width: 0.7 * lineWidth,
   });

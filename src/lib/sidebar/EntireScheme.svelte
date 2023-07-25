@@ -1,6 +1,7 @@
 <script lang="ts">
   import length from "@turf/length";
   import { onMount } from "svelte";
+  import { schemaPluralNoun } from "../../schemas";
   import {
     formOpen,
     gjScheme,
@@ -9,7 +10,7 @@
     openFromSidebar,
     sidebarHover,
   } from "../../stores";
-  import { schemaPluralNoun, type Schema, type Scheme } from "../../types";
+  import type { Schema, Scheme } from "../../types";
   import { ConfirmationModal, FileInput } from "../common";
   import {
     ErrorMessage,
