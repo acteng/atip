@@ -5,7 +5,7 @@
   import { onMount } from "svelte";
   import { gjScheme, routeInfo } from "../../stores";
   import type { Feature } from "../../types";
-  import { HelpIcon } from "../common";
+  import { HelpButton } from "../common";
   import IntersectionMarkings from "./lane_details/IntersectionMarkings.svelte";
   import IntersectionPolygons from "./lane_details/IntersectionPolygons.svelte";
   import LaneMarkings from "./lane_details/LaneMarkings.svelte";
@@ -46,6 +46,10 @@
   <IntersectionMarkings gj={gj4} />
 {/if}
 
-<HelpIcon
-  contents="This visualizes lane data according to OpenStreetMap. There may be many errors with incorrect or missing lane data, lane width and intersection geometry, and markings. Use with caution."
-/>
+<HelpButton>
+  <p>
+    This visualizes lane data according to OpenStreetMap. There may be many
+    errors with incorrect or missing lane data, lane width and intersection
+    geometry, and markings. Use with caution.
+  </p>
+</HelpButton>

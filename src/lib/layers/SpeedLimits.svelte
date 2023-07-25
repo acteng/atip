@@ -15,7 +15,7 @@
   } from "../../maplibre_helpers";
   import { gjScheme, map, routeInfo } from "../../stores";
   import type { Feature } from "../../types";
-  import { DiscreteLegend, HelpIcon, MapTooltips } from "../common";
+  import { DiscreteLegend, HelpButton, MapTooltips } from "../common";
 
   // Show along a route if specified, or show all otherwise
   export let id: number | undefined;
@@ -106,9 +106,13 @@
 </script>
 
 (mph)
-<HelpIcon
-  contents="Data comes from OpenStreetMap, and may not always be correct. Unexpected values are treated as unknown. Freehand route segments and off-road paths generally have no speed data."
-/>
+<HelpButton>
+  <p>
+    Data comes from OpenStreetMap, and may not always be correct. Unexpected
+    values are treated as unknown. Freehand route segments and off-road paths
+    generally have no speed data.
+  </p>
+</HelpButton>
 <DiscreteLegend {colors} labels={["< 20", "20", "30", "40", ">= 50"]} />
 
 <MapTooltips layers={["speed-limits"]} contents={tooltip} />
