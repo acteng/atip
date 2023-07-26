@@ -4,6 +4,7 @@
   import { map } from "../../stores";
   import { Legend } from "../common";
   import { Select } from "../govuk";
+  import { colors } from "./colors";
 
   let colorInterventions = "interventionType";
   let legendRows = schemaLegend("v1");
@@ -16,13 +17,13 @@
     } else {
       color = matchValue(
         ["get", "funding_programme"],
-        { ATF2: "red", ATF3: "green", ATF4: "blue" },
+        { ATF2: colors.atf2, ATF3: colors.atf3, ATF4: colors.atf4 },
         "grey"
       );
       legendRows = [
-        ["ATF2", "red"],
-        ["ATF3", "green"],
-        ["ATF4", "blue"],
+        ["ATF2", colors.atf2],
+        ["ATF3", colors.atf3],
+        ["ATF4", colors.atf4],
       ];
     }
 
