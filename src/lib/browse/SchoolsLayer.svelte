@@ -12,4 +12,9 @@
     </ExternalLink> from OpenStreetMap. It doesn't include kindergartens, colleges,
     universities, or other training schools.
   </p>
+  <p>
+    License: <ExternalLink href="https://www.openstreetmap.org/copyright">
+      Open Data Commons Open Database License
+    </ExternalLink>
+  </p>
 </OptionalLayer>
