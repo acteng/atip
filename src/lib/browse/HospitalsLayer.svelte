@@ -12,4 +12,9 @@
     </ExternalLink> data from OpenStreetMap. It doesn't include outpatient clinics
     or individual doctor's offices.
   </p>
+  <p>
+    License: <ExternalLink href="https://www.openstreetmap.org/copyright">
+      Open Data Commons Open Database License
+    </ExternalLink>
+  </p>
 </OptionalLayer>

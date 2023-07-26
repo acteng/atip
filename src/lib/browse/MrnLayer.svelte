@@ -55,6 +55,13 @@
           Major Road Network
         </ExternalLink>.
       </p>
+      <p>
+        License: <ExternalLink
+          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+        >
+          Open Government License
+        </ExternalLink>
+      </p>
     </HelpButton>
   </span>
 </Checkbox>
