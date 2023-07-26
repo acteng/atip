@@ -65,3 +65,21 @@ export function colorInterventionsBySchema(
     "white"
   );
 }
+
+// Produce input for the Legend component
+export function schemaLegend(schema: Schema): [string, string][] {
+  if (schema == "planning") {
+    return [
+      ["Preapp", colors.preapp],
+      ["Outline", colors.outline],
+      ["Reserved matters", colors["reserved matters"]],
+      ["Local plan", colors["local plan"]],
+    ];
+  }
+  return [
+    ["Areas", colors.area],
+    ["Routes", colors.route],
+    ["Crossings", colors.crossing],
+    ["Other", colors.other],
+  ];
+}
