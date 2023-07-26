@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
-  import { caseHelper } from "../../../maplibre_helpers";
+  import { matchValue } from "../../../maplibre_helpers";
   import Layer from "./Layer.svelte";
 
   export let gj: GeoJSON;
@@ -8,8 +8,8 @@
   let style = {
     type: "fill",
     paint: {
-      "fill-color": caseHelper(
-        "type",
+      "fill-color": matchValue(
+        ["get", "type"],
         // TODO Generate TS types from osm2streets
         {
           Driving: "black",

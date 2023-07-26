@@ -6,6 +6,7 @@ import {
   isLine,
   isPoint,
   isPolygon,
+  matchValue,
   overwriteCircleLayer,
   overwriteLineLayer,
   overwritePolygonLayer,
@@ -52,24 +53,19 @@ export class RouteTool {
       id: "route-points",
       source,
       filter: isPoint,
-      color: [
-        "match",
+      color: matchValue(
         ["get", "type"],
-        "hovered",
-        "green",
-        "important",
-        "red",
-        // other
-        "black",
-      ],
-      radius: [
-        "match",
+        {
+          hovered: "green",
+          important: "red",
+        },
+        "black"
+      ),
+      radius: matchValue(
         ["get", "type"],
-        "unimportant",
-        circleRadiusPixels / 2.0,
-        // other
-        circleRadiusPixels,
-      ],
+        { unimportant: circleRadiusPixels / 2.0 },
+        circleRadiusPixels
+      ),
     });
     overwriteLineLayer(map, {
       id: "route-lines",

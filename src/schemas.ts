@@ -1,5 +1,6 @@
 import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 import { colors } from "./colors";
+import { matchValue } from "./maplibre_helpers";
 import type { Schema } from "./types";
 
 export function schemaTitle(schema: Schema): string {
@@ -38,35 +39,29 @@ export function colorInterventionsBySchema(
   schema: Schema
 ): DataDrivenPropertyValueSpecification<string> {
   if (schema == "planning") {
-    return [
-      "match",
+    return matchValue(
       ["get", "reference_type", ["get", "planning"]],
-      "preapp",
-      colors.preapp,
-      "outline",
-      colors.outline,
-      "reserved matters",
-      colors["reserved matters"],
-      "local plan",
-      colors["local plan"],
+      {
+        preapp: colors.preapp,
+        outline: colors.outline,
+        "reserved matters": colors["reserved matters"],
+        "local plan": colors["local plan"],
+      },
       // The fallback will be used until the user sets the reference_type
-      "black",
-    ];
+      "black"
+    );
   }
 
   // All other schemas go by intervention type
-  return [
-    "match",
+  return matchValue(
     ["get", "intervention_type"],
-    "area",
-    colors.area,
-    "route",
-    colors.route,
-    "crossing",
-    colors.crossing,
-    "other",
-    colors.other,
+    {
+      area: colors.area,
+      route: colors.route,
+      crossing: colors.crossing,
+      other: colors.other,
+    },
     // The fallback white should never be used in practice
-    "white",
-  ];
+    "white"
+  );
 }
