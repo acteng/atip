@@ -21,6 +21,7 @@
   choices={[
     ["streets", "Streets"],
     ["hybrid", "Satellite"],
+    ["dataviz", "Dataviz"],
   ]}
   bind:value={style}
   on:change={changeStyle}

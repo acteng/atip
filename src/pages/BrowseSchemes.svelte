@@ -9,6 +9,7 @@
   import MrnLayer from "../lib/browse/MrnLayer.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
+  import StyleInterventions from "../lib/browse/StyleInterventions.svelte";
   import {
     BaselayerSwitcher,
     CollapsibleCard,
@@ -39,7 +40,7 @@
   });
 
   const params = new URLSearchParams(window.location.search);
-  let style: string = params.get("style") || "streets";
+  let style: string = params.get("style") || "dataviz";
   let errorMessage = "";
 
   let schemes: Map<string, Scheme> = new Map();
@@ -136,12 +137,14 @@
       />
       <div class="top-right">
         <CollapsibleCard label="Layers" open>
-          <BaselayerSwitcher {style} />
+          <StyleInterventions />
+          <hr />
           <CheckboxGroup small>
             <SchoolsLayer />
             <HospitalsLayer />
             <MrnLayer />
           </CheckboxGroup>
+          <BaselayerSwitcher {style} />
         </CollapsibleCard>
       </div>
     </MapLibreMap>
