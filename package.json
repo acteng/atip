@@ -13,7 +13,8 @@
     "test": "npx playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "generate-schema-ts": "for x in v2 planning criticals atf4; do npx ts-node --project tsconfig_tsnode.json --esm src/lib/forms/generate_ts.ts src/schemas/$x.json > src/schemas/$x.ts; done",
-    "setup-govuk": "sass src/style/main.sass src/style/main.css; rm -rf public/assets; mkdir -p public/assets; cp -R node_modules/govuk-frontend/govuk/assets/ public/"
+    "setup-govuk": "sass src/style/main.sass src/style/main.css; rm -rf public/assets; mkdir -p public/assets; cp -R node_modules/govuk-frontend/govuk/assets/ public/",
+    "generate-random-schemes": "npx ts-node --project tsconfig_tsnode.json --esm src/random_schemes.ts"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.0.2",
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "@turf/bbox": "^6.5.0",
+    "@turf/boolean-contains": "^6.5.0",
     "@turf/boolean-point-in-polygon": "^6.5.0",
     "@turf/helpers": "^6.5.0",
     "@turf/length": "^6.5.0",
@@ -40,6 +42,7 @@
     "@turf/line-split": "^6.5.0",
     "@turf/mask": "^6.5.0",
     "@turf/nearest-point-on-line": "^6.5.0",
+    "@turf/random": "^6.5.0",
     "@types/geojson": "^7946.0.10",
     "comlink": "^4.4.1",
     "govuk-frontend": "^4.6.0",
