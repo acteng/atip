@@ -11,9 +11,10 @@
     MapTooltips,
   } from "../common";
   import { Checkbox } from "../govuk";
+  import { colors } from "./colors";
 
   let name = "mrn";
-  let color = "purple";
+  let color = colors.mrn;
 
   overwritePmtilesSource(
     $map,

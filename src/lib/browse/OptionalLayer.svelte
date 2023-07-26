@@ -6,19 +6,23 @@
   import { map } from "../../stores";
   import { ColorLegend, HelpButton, MapTooltips } from "../common";
   import { Checkbox } from "../govuk";
+  import { colors } from "./colors";
 
   // This name is used for multiple things:
   // - The name of a .pmtiles file
   // - The layer name within that file
   // - The layer name, for layerZorder
+  // - A color name in colors.ts
   export let name: string;
   // Uncapitalized
   export let singularNoun: string;
   // Capitalized
   export let pluralNoun: string;
-  export let color: string;
 
   // The caller must also fill in the default slot with the contents of a help modal
+
+  // @ts-ignore TODO Also constrain name to exist in the colors type
+  let color = colors[name];
 
   overwritePmtilesSource(
     $map,

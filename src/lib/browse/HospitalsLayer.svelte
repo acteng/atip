@@ -3,12 +3,7 @@
   import OptionalLayer from "./OptionalLayer.svelte";
 </script>
 
-<OptionalLayer
-  name="hospitals"
-  singularNoun="hospital"
-  pluralNoun="Hospitals"
-  color="blue"
->
+<OptionalLayer name="hospitals" singularNoun="hospital" pluralNoun="Hospitals">
   <p>
     This shows <ExternalLink
       href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
