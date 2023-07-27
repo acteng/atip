@@ -1,10 +1,11 @@
 <script lang="ts">
+  import type { MapGeoJSONFeature } from "maplibre-gl";
   import {
     overwritePmtilesSource,
     overwritePolygonLayer,
   } from "../../maplibre_helpers";
   import { map } from "../../stores";
-  import { ColorLegend, HelpButton, MapTooltips } from "../common";
+  import { ColorLegend, HelpButton, InteractiveLayer } from "../common";
   import { Checkbox } from "../govuk";
   import { colors } from "./colors";
 
@@ -39,14 +40,9 @@
   });
 
   let show = false;
-  $: {
-    if ($map.getLayer(name)) {
-      $map.setLayoutProperty(name, "visibility", show ? "visible" : "none");
-    }
-  }
 
-  function tooltip(props: { [name: string]: any }): string {
-    let name = props.name ?? `Unnamed ${singularNoun}`;
+  function tooltip(feature: MapGeoJSONFeature): string {
+    let name = feature.properties.name ?? `Unnamed ${singularNoun}`;
     return `<p>${name}</p>`;
   }
 </script>
@@ -59,4 +55,4 @@
   </span>
 </Checkbox>
 
-<MapTooltips layers={[name]} contents={tooltip} />
+<InteractiveLayer layer={name} {tooltip} {show} />

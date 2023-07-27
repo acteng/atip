@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { MapGeoJSONFeature } from "maplibre-gl";
   import {
     overwriteLineLayer,
     overwritePmtilesSource,
@@ -8,7 +9,7 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
-    MapTooltips,
+    InteractiveLayer,
   } from "../common";
   import { Checkbox } from "../govuk";
   import { colors } from "./colors";
@@ -31,14 +32,9 @@
   });
 
   let show = false;
-  $: {
-    if ($map.getLayer(name)) {
-      $map.setLayoutProperty(name, "visibility", show ? "visible" : "none");
-    }
-  }
 
-  function tooltip(props: { [name: string]: any }): string {
-    let name = props.name ?? `Unknown MRN road`;
+  function tooltip(feature: MapGeoJSONFeature): string {
+    let name = feature.properties.name ?? `Unknown MRN road`;
     return `<p>${name}</p>`;
   }
 </script>
@@ -66,4 +62,4 @@
   </span>
 </Checkbox>
 
-<MapTooltips layers={[name]} contents={tooltip} />
+<InteractiveLayer layer={name} {tooltip} {show} />

@@ -7,7 +7,7 @@ mod map_matching;
 
 use std::collections::BTreeSet;
 
-use geojson::Feature;
+use geojson::{feature::Id, Feature};
 use geom::{Distance, FindClosest, Pt2D};
 use osm2streets::{Filter, IntersectionID, StreetNetwork};
 use serde::Deserialize;
@@ -105,6 +105,7 @@ impl RouteInfo {
                                 road.reference_line
                                     .to_geojson(Some(&self.network.gps_bounds)),
                             );
+                            feature.id = Some(Id::Number((1 + features.len()).into()));
                             feature.set_property("speed_limit", speed.to_miles_per_hour().round());
                             features.push(feature);
                         }
@@ -135,6 +136,7 @@ impl RouteInfo {
                 let mut feature =
                     Feature::from(r.reference_line.to_geojson(Some(&self.network.gps_bounds)));
                 feature.set_property("speed_limit", speed.to_miles_per_hour().round());
+                feature.id = Some(Id::Number((1 + features.len()).into()));
                 features.push(feature);
             }
         }
