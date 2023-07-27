@@ -6,12 +6,12 @@
   import { Select } from "../govuk";
   import { colors } from "./colors";
 
-  let colorInterventions = "interventionType";
+  let colorInterventionsAccordingTo = "interventionType";
   let legendRows = schemaLegend("v1");
 
   function changeStyle() {
     let color;
-    if (colorInterventions == "interventionType") {
+    if (colorInterventionsAccordingTo == "interventionType") {
       color = colorInterventionsBySchema("v1");
       legendRows = schemaLegend("v1");
     } else {
@@ -45,7 +45,7 @@
     ["interventionType", "By intervention type"],
     ["fundingProgramme", "By funding programme"],
   ]}
-  bind:value={colorInterventions}
+  bind:value={colorInterventionsAccordingTo}
   on:change={changeStyle}
 />
 

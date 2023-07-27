@@ -9,7 +9,7 @@
   import MrnLayer from "../lib/browse/MrnLayer.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
-  import StyleInterventions from "../lib/browse/StyleInterventions.svelte";
+  import InterventionColorSelector from "../lib/browse/InterventionColorSelector.svelte";
   import {
     BaselayerSwitcher,
     CollapsibleCard,
@@ -137,7 +137,7 @@
       />
       <div class="top-right">
         <CollapsibleCard label="Layers" open>
-          <StyleInterventions />
+          <InterventionColorSelector />
           <hr />
           <CheckboxGroup small>
             <SchoolsLayer />
