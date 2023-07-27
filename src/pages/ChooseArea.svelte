@@ -124,8 +124,7 @@
   }
 
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
-    let name = e.detail.properties!.name;
-    window.location.href = `scheme.html?authority=${name}`;
+    window.location.href = `scheme.html?authority=${e.detail.properties.name}`;
   }
 
   function tooltip(feature: MapGeoJSONFeature): string {

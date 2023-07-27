@@ -54,7 +54,7 @@
   }
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    return `<p>${feature.properties.Name} (${feature.properties.Census_Code})</p>`;
+    return `<p>${feature.properties.Name}</p>`;
   }
 
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
