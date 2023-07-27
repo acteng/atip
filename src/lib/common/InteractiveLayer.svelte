@@ -67,6 +67,19 @@
         `Features in the ${layer} layer don't have IDs; InteractiveLayer won't work`
       );
     }
+
+    // This event will happen even if the feature is beneath something in a
+    // different layer. Query everything at this point from any layer, and bail
+    // out if this isn't on top.
+    //
+    // Note every other InteractiveLayer for something overlapping will also do
+    // this query. Performance is fine so far.
+    let allResults = $map.queryRenderedFeatures(e.point);
+    if (allResults.length > 0 && allResults[0].layer.id != layer) {
+      onMouseLeave();
+      return;
+    }
+
     if (hoveredFeature?.id != features[0].id) {
       unhover();
       hoveredFeature = features[0];
