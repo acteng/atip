@@ -16,7 +16,7 @@
   import { FileInput, InteractiveLayer } from "../lib/common";
   import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import About from "../lib/sidebar/About.svelte";
-  import { bbox } from "../maplibre_helpers";
+  import { bbox, hoveredToggle } from "../maplibre_helpers";
   import { map as mapStore } from "../stores";
   import type { Schema } from "../types";
 
@@ -79,12 +79,7 @@
         paint: {
           "fill-color": "rgb(200, 100, 240)",
           "fill-outline-color": "rgb(200, 100, 240)",
-          "fill-opacity": [
-            "case",
-            ["boolean", ["feature-state", "hover"], false],
-            0.8,
-            0.4,
-          ],
+          "fill-opacity": hoveredToggle(0.8, 0.4),
         },
       });
     });
