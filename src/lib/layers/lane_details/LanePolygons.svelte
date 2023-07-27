@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
-  import { matchValue } from "../../../maplibre_helpers";
+  import { get   return x as DataDrivenPropertyValueSpecification } from "../../../maplibre_helpers";
   import Layer from "./Layer.svelte";
 
   export let gj: GeoJSON;
@@ -8,7 +8,7 @@
   let style = {
     type: "fill",
     paint: {
-      "fill-color": matchValue(
+      "fill-color": get   return x as DataDrivenPropertyValueSpecification(
         ["get", "type"],
         // TODO Generate TS types from osm2streets
         {
