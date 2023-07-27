@@ -5,6 +5,7 @@
   import type {
     DataDrivenPropertyValueSpecification,
     GeoJSONSource,
+    MapGeoJSONFeature,
   } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
   import { lineWidth } from "../../colors";
@@ -15,7 +16,7 @@
   } from "../../maplibre_helpers";
   import { gjScheme, map, routeInfo } from "../../stores";
   import type { Feature } from "../../types";
-  import { DiscreteLegend, HelpButton, MapTooltips } from "../common";
+  import { DiscreteLegend, HelpButton, InteractiveLayer } from "../common";
 
   // Show along a route if specified, or show all otherwise
   export let id: number | undefined;
@@ -98,9 +99,9 @@
     }
   });
 
-  function tooltip(props: { [name: string]: any }): string {
-    return props.speed_limit
-      ? `<p>${Math.round(props.speed_limit)} mph</p>`
+  function tooltip(feature: MapGeoJSONFeature): string {
+    return feature.properties.speed_limit
+      ? `<p>${Math.round(feature.properties.speed_limit)} mph</p>`
       : "Unknown";
   }
 </script>
@@ -115,4 +116,4 @@
 </HelpButton>
 <DiscreteLegend {colors} labels={["< 20", "20", "30", "40", ">= 50"]} />
 
-<MapTooltips layers={["speed-limits"]} contents={tooltip} />
+<InteractiveLayer {layer} {tooltip} />

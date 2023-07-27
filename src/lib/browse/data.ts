@@ -33,6 +33,7 @@ export function processInput(
     });
   }
 
+  let id = 1;
   for (let feature of gj.features) {
     let scheme = schemes.get(feature.properties!.scheme_reference);
     scheme.num_features++;
@@ -40,6 +41,8 @@ export function processInput(
     // TODO For easy styling, copy one field from scheme to all its features.
     // As we have more cases like this, revisit what's most performant.
     feature.properties!.funding_programme = scheme.funding_programme;
+    // Force numeric IDs (skipping 0) for hovering to work
+    feature.id = id++;
   }
 
   return schemes;

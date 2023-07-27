@@ -3,7 +3,7 @@
   import type { FeatureCollection } from "geojson";
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
-  import { Map } from "maplibre-gl";
+  import { Map, type MapGeoJSONFeature } from "maplibre-gl";
   import { onMount } from "svelte";
   import {
     DefaultButton,
@@ -13,7 +13,7 @@
     SecondaryButton,
   } from "../lib/govuk";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { FileInput, MapTooltips } from "../lib/common";
+  import { FileInput, InteractiveLayer } from "../lib/common";
   import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import About from "../lib/sidebar/About.svelte";
   import { bbox } from "../maplibre_helpers";
@@ -60,13 +60,6 @@
     loadedMap = map;
     mapStore.set(loadedMap);
 
-    let hoverId: number | null = null;
-    function unhover() {
-      if (hoverId !== null) {
-        map.setFeatureState({ source, id: hoverId }, { hover: false });
-      }
-    }
-
     map.on("load", function () {
       map.fitBounds(bbox(json), {
         padding: 20,
@@ -93,23 +86,6 @@
             0.4,
           ],
         },
-      });
-
-      map.on("mousemove", layer, (e) => {
-        if (e.features!.length > 0) {
-          unhover();
-          hoverId = e.features![0].id as number;
-          map.setFeatureState({ source: source, id: hoverId }, { hover: true });
-        }
-      });
-      map.on("mouseleave", layer, () => {
-        unhover();
-        hoverId = null;
-      });
-
-      map.on("click", layer, function (e) {
-        let name = e.features![0].properties!.name;
-        window.location.href = `scheme.html?authority=${name}`;
       });
     });
   });
@@ -152,12 +128,17 @@
     return "v1";
   }
 
-  function start() {
-    window.location.href = `scheme.html?authority=${inputValue}`;
+  function onClick(e: CustomEvent<MapGeoJSONFeature>) {
+    let name = e.detail.properties!.name;
+    window.location.href = `scheme.html?authority=${name}`;
   }
 
-  function tooltip(props: { [name: string]: any }): string {
-    return `<p>${props.name}</p>`;
+  function tooltip(feature: MapGeoJSONFeature): string {
+    return `<p>${feature.properties.name}</p>`;
+  }
+
+  function start() {
+    window.location.href = `scheme.html?authority=${inputValue}`;
   }
 </script>
 
@@ -215,7 +196,7 @@
     <div id="map" />
   </div>
   {#if loadedMap}
-    <MapTooltips layers={[layer]} contents={tooltip} />
+    <InteractiveLayer {layer} on:click={onClick} {tooltip} />
   {/if}
 </div>
 <About bind:open={showAbout} />

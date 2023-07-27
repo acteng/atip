@@ -2,6 +2,7 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
+  import type { MapGeoJSONFeature } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
@@ -14,8 +15,8 @@
     BaselayerSwitcher,
     CollapsibleCard,
     FileInput,
+    InteractiveLayer,
     Layout,
-    MapTooltips,
     ZoomOutMap,
   } from "../lib/common";
   import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
@@ -64,7 +65,8 @@
     }
   }
 
-  function tooltip(props: { [name: string]: any }): string {
+  function tooltip(feature: MapGeoJSONFeature): string {
+    let props = feature.properties;
     // TODO Move into a Svelte component, so we don't have to awkwardly build up HTML like this
     var html = `<div style="max-width: 30vw;">`;
     html += `<h2>${highlightFilter(props.name)} (${
@@ -127,14 +129,9 @@
       <InterventionLayer
         colorInterventions={colorInterventionsBySchema("v1")}
       />
-      <MapTooltips
-        layers={[
-          "interventions-points",
-          "interventions-lines",
-          "interventions-polygons",
-        ]}
-        contents={tooltip}
-      />
+      <InteractiveLayer layer="interventions-points" {tooltip} />
+      <InteractiveLayer layer="interventions-lines" {tooltip} />
+      <InteractiveLayer layer="interventions-polygons" {tooltip} />
       <div class="top-right">
         <CollapsibleCard label="Layers" open>
           <InterventionColorSelector />
