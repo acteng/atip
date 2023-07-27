@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import {
+    hoveredToggle,
     overwritePmtilesSource,
     overwritePolygonLayer,
   } from "../../maplibre_helpers";
@@ -36,7 +37,7 @@
     source: name,
     sourceLayer: name,
     color,
-    opacity: 0.8,
+    opacity: hoveredToggle(1.0, 0.7),
   });
 
   let show = false;

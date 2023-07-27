@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import {
+    hoveredToggle,
     overwriteLineLayer,
     overwritePmtilesSource,
     overwritePolygonLayer,
@@ -30,7 +31,7 @@
     source: name,
     sourceLayer: name,
     color,
-    opacity: ["case", ["boolean", ["feature-state", "hover"], false], 0.5, 0.1],
+    opacity: hoveredToggle(0.5, 0.1),
   });
   overwriteLineLayer($map, {
     id: outlineLayer,

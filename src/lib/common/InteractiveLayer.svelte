@@ -14,7 +14,7 @@
   // This component manages hovering and clicking on objects in one layer. The
   // caller must create and manage the source and layer. The source features must
   // have numeric IDs defined. The caller can change style based on
-  // ["feature-state", "hover"].
+  // ["feature-state", "hover"] using the hoveredToggle helper.
   export let layer: string;
 
   // Optionally, display a popup for the hovered feature. The callback receives

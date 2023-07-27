@@ -226,9 +226,9 @@ export function setPrecision(pt: Position): Position {
   return [Math.round(pt[0] * 10e6) / 10e6, Math.round(pt[1] * 10e6) / 10e6];
 }
 
-//  Helper for https://maplibre.org/maplibre-style-spec/expressions/#match.
-//  Gets one feature property, uses a map to match a key to a value, and
-//  includes a fallback if no keys match.
+// Helper for https://maplibre.org/maplibre-style-spec/expressions/#match.
+// Gets one feature property, uses a map to match a key to a value, and
+// includes a fallback if no keys match.
 export function constructMatchExpression<OutputType>(
   getter: any[],
   map: { [name: string]: OutputType },
@@ -241,6 +241,20 @@ export function constructMatchExpression<OutputType>(
   }
   x.push(fallback);
   return x as DataDrivenPropertyValueSpecification<OutputType>;
+}
+
+// Returns hoveredValue when the feature is hovered on, and defaultValue
+// otherwise. Use with InteractiveLayer.
+export function hoveredToggle<Type>(
+  hoveredValue: Type,
+  defaultValue: Type
+): DataDrivenPropertyValueSpecification<Type> {
+  return [
+    "case",
+    ["boolean", ["feature-state", "hover"], false],
+    hoveredValue,
+    defaultValue,
+  ] as DataDrivenPropertyValueSpecification<Type>;
 }
 
 // Suitable for passing to map.fitBounds. Work around https://github.com/Turfjs/turf/issues/1807.
