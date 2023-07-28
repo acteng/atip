@@ -2,11 +2,11 @@ import type { LineString, Polygon } from "geojson";
 import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
 import { JsRouteSnapper } from "route-snapper";
 import {
+  constructMatchExpression,
   emptyGeojson,
   isLine,
   isPoint,
   isPolygon,
-  constructMatchExpression,
   overwriteCircleLayer,
   overwriteLineLayer,
   overwritePolygonLayer,

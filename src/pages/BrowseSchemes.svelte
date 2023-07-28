@@ -6,10 +6,10 @@
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import HospitalsLayer from "../lib/browse/HospitalsLayer.svelte";
+  import InterventionColorSelector from "../lib/browse/InterventionColorSelector.svelte";
   import MrnLayer from "../lib/browse/MrnLayer.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
-  import InterventionColorSelector from "../lib/browse/InterventionColorSelector.svelte";
   import {
     BaselayerSwitcher,
     CollapsibleCard,
