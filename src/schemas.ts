@@ -1,6 +1,6 @@
 import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 import { colors } from "./colors";
-import { getDataDrivenPropertyValueSpecification } from "./maplibre_helpers";
+import { constructMatchExpression } from "./maplibre_helpers";
 import type { Schema } from "./types";
 
 export function schemaTitle(schema: Schema): string {
@@ -39,7 +39,7 @@ export function colorInterventionsBySchema(
   schema: Schema
 ): DataDrivenPropertyValueSpecification<string> {
   if (schema == "planning") {
-    return getDataDrivenPropertyValueSpecification(
+    return constructMatchExpression(
       ["get", "reference_type", ["get", "planning"]],
       {
         preapp: colors.preapp,
@@ -53,7 +53,7 @@ export function colorInterventionsBySchema(
   }
 
   // All other schemas go by intervention type
-  return getDataDrivenPropertyValueSpecification(
+  return constructMatchExpression(
     ["get", "intervention_type"],
     {
       area: colors.area,

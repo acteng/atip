@@ -6,7 +6,7 @@ import {
   isLine,
   isPoint,
   isPolygon,
-  getDataDrivenPropertyValueSpecification,
+  constructMatchExpression,
   overwriteCircleLayer,
   overwriteLineLayer,
   overwritePolygonLayer,
@@ -53,7 +53,7 @@ export class RouteTool {
       id: "route-points",
       source,
       filter: isPoint,
-      color: getDataDrivenPropertyValueSpecification(
+      color: constructMatchExpression(
         ["get", "type"],
         {
           hovered: "green",
@@ -61,7 +61,7 @@ export class RouteTool {
         },
         "black"
       ),
-      radius: getDataDrivenPropertyValueSpecification(
+      radius: constructMatchExpression(
         ["get", "type"],
         { unimportant: circleRadiusPixels / 2.0 },
         circleRadiusPixels

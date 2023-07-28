@@ -229,19 +229,11 @@ export function setPrecision(pt: Position): Position {
 //  Helper for https://maplibre.org/maplibre-style-spec/expressions/#match.
 //  Gets one feature property, uses a map to match a key to a value, and
 //  includes a fallback if no keys match.
-export function getDataDrivenPropertyValueSpecification<OutputType>(
+export function constructMatchExpression<OutputType>(
   getter: any[],
   map: { [name: string]: OutputType },
   fallback: OutputType
 ): DataDrivenPropertyValueSpecification<OutputType> {
-  // This looks weird because it is weird. I hate to add a comment but here we are.
-  // MapLibre's DataDrivenPropertyValueSpecification allows you to have a value which depends on properties
-  // of an object you are drawing, so you could see for a route which funding round it belonged to, for an
-  // ATIP example. Their specification is an array containing ordered elements of any kind. The first is how
-  // you want to match, then, an array defining the route to property you want to look at in your object.
-  // Key, value pairs are added directly to the array, where key is what you want the property in the object being tested
-  // to equal or not, and value is what you want to return. So in our case it might be ATF3 (a funding round)
-  // and red (a color to use for drawing the object). Finally there is a fallback value (e.g. grey) if nothing matches. Nonsense. 
   let x: any[] = ["match", getter];
   for (let [key, value] of Object.entries(map)) {
     x.push(key);

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { get   return x as DataDrivenPropertyValueSpecification } from "../../maplibre_helpers";
+  import { constructMatchExpression } from "../../maplibre_helpers";
   import { colorInterventionsBySchema, schemaLegend } from "../../schemas";
   import { map } from "../../stores";
   import { Legend } from "../common";
@@ -15,7 +15,7 @@
       color = colorInterventionsBySchema("v1");
       legendRows = schemaLegend("v1");
     } else {
-      color = get   return x as DataDrivenPropertyValueSpecification(
+      color = constructMatchExpression(
         ["get", "funding_programme"],
         { ATF2: colors.atf2, ATF3: colors.atf3, ATF4: colors.atf4 },
         "grey"
