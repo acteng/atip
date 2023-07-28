@@ -229,18 +229,18 @@ export function setPrecision(pt: Position): Position {
 //  Helper for https://maplibre.org/maplibre-style-spec/expressions/#match.
 //  Gets one feature property, uses a map to match a key to a value, and
 //  includes a fallback if no keys match.
-export function matchValue<Output>(
+export function constructMatchExpression<OutputType>(
   getter: any[],
-  map: { [name: string]: Output },
-  fallback: Output
-): DataDrivenPropertyValueSpecification<Output> {
+  map: { [name: string]: OutputType },
+  fallback: OutputType
+): DataDrivenPropertyValueSpecification<OutputType> {
   let x: any[] = ["match", getter];
   for (let [key, value] of Object.entries(map)) {
     x.push(key);
     x.push(value);
   }
   x.push(fallback);
-  return x as DataDrivenPropertyValueSpecification<Output>;
+  return x as DataDrivenPropertyValueSpecification<OutputType>;
 }
 
 // Suitable for passing to map.fitBounds. Work around https://github.com/Turfjs/turf/issues/1807.

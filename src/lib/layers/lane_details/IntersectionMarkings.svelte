@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
-  import { matchValue } from "../../../maplibre_helpers";
+  import { constructMatchExpression } from "../../../maplibre_helpers";
   import Layer from "./Layer.svelte";
 
   export let gj: GeoJSON;
@@ -8,7 +8,7 @@
   let style = {
     type: "fill",
     paint: {
-      "fill-color": matchValue(
+      "fill-color": constructMatchExpression(
         ["get", "type"],
         {
           "sidewalk corner": "#CCCCCC",

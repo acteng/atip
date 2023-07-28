@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { matchValue } from "../../maplibre_helpers";
+  import { constructMatchExpression } from "../../maplibre_helpers";
   import { colorInterventionsBySchema, schemaLegend } from "../../schemas";
   import { map } from "../../stores";
   import { Legend } from "../common";
   import { Select } from "../govuk";
   import { colors } from "./colors";
 
-  let colorInterventions = "interventionType";
+  let colorInterventionsAccordingTo = "interventionType";
   let legendRows = schemaLegend("v1");
 
   function changeStyle() {
     let color;
-    if (colorInterventions == "interventionType") {
+    if (colorInterventionsAccordingTo == "interventionType") {
       color = colorInterventionsBySchema("v1");
       legendRows = schemaLegend("v1");
     } else {
-      color = matchValue(
+      color = constructMatchExpression(
         ["get", "funding_programme"],
         { ATF2: colors.atf2, ATF3: colors.atf3, ATF4: colors.atf4 },
         "grey"
@@ -45,7 +45,7 @@
     ["interventionType", "By intervention type"],
     ["fundingProgramme", "By funding programme"],
   ]}
-  bind:value={colorInterventions}
+  bind:value={colorInterventionsAccordingTo}
   on:change={changeStyle}
 />
 

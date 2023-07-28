@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
-  import { matchValue } from "../../../maplibre_helpers";
+  import { constructMatchExpression } from "../../../maplibre_helpers";
   import Layer from "./Layer.svelte";
 
   export let gj: GeoJSON;
@@ -9,7 +9,7 @@
     type: "fill",
     filter: ["==", ["get", "type"], "intersection"],
     paint: {
-      "fill-color": matchValue(
+      "fill-color": constructMatchExpression(
         ["get", "intersection_kind"],
         {
           MapEdge: "#696",

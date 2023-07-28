@@ -2,11 +2,11 @@ import type { LineString, Polygon } from "geojson";
 import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
 import { JsRouteSnapper } from "route-snapper";
 import {
+  constructMatchExpression,
   emptyGeojson,
   isLine,
   isPoint,
   isPolygon,
-  matchValue,
   overwriteCircleLayer,
   overwriteLineLayer,
   overwritePolygonLayer,
@@ -53,7 +53,7 @@ export class RouteTool {
       id: "route-points",
       source,
       filter: isPoint,
-      color: matchValue(
+      color: constructMatchExpression(
         ["get", "type"],
         {
           hovered: "green",
@@ -61,7 +61,7 @@ export class RouteTool {
         },
         "black"
       ),
-      radius: matchValue(
+      radius: constructMatchExpression(
         ["get", "type"],
         { unimportant: circleRadiusPixels / 2.0 },
         circleRadiusPixels
