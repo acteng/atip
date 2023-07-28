@@ -8,10 +8,12 @@
   import Filters from "../lib/browse/Filters.svelte";
   import HospitalsLayer from "../lib/browse/HospitalsLayer.svelte";
   import InterventionColorSelector from "../lib/browse/InterventionColorSelector.svelte";
-  import MrnLayer from "../lib/browse/MrnLayer.svelte";
-  import ParliamentaryConstituenciesLayer from "../lib/browse/ParliamentaryConstituenciesLayer.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
-  import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
+  import HospitalsLayerToggle from "../lib/browse/HospitalsLayerToggle.svelte";
+  import MrnLayerToggle from "../lib/browse/MrnLayerToggle.svelte";
+  import ParliamentaryConstituenciesLayer from "../lib/browse/ParliamentaryConstituenciesLayer.svelte";
+  import SchoolsLayerToggle from "../lib/browse/SchoolsLayerToggle.svelte";
+  import StyleInterventions from "../lib/browse/StyleInterventions.svelte";
   import {
     BaselayerSwitcher,
     CollapsibleCard,
@@ -138,9 +140,9 @@
           <InterventionColorSelector />
           <hr />
           <CheckboxGroup small>
-            <SchoolsLayer />
-            <HospitalsLayer />
-            <MrnLayer />
+            <SchoolsLayerToggle />
+            <HospitalsLayerToggle />
+            <MrnLayerToggle />
             <ParliamentaryConstituenciesLayer />
           </CheckboxGroup>
           <BaselayerSwitcher {style} />
