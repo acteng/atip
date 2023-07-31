@@ -9,7 +9,7 @@
   import HospitalsLayer from "../lib/browse/HospitalsLayer.svelte";
   import InterventionColorSelector from "../lib/browse/InterventionColorSelector.svelte";
   import MrnLayer from "../lib/browse/MrnLayer.svelte";
-  import PCBoundaryLayer from "../lib/browse/PCBoundaryLayer.svelte";
+  import ParliamentaryConstituenciesLayer from "../lib/browse/ParliamentaryConstituenciesLayer.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayer from "../lib/browse/SchoolsLayer.svelte";
   import {
@@ -141,7 +141,7 @@
             <SchoolsLayer />
             <HospitalsLayer />
             <MrnLayer />
-            <PCBoundaryLayer />
+            <ParliamentaryConstituenciesLayer />
           </CheckboxGroup>
           <BaselayerSwitcher {style} />
         </CollapsibleCard>
