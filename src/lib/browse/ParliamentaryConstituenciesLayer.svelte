@@ -58,8 +58,14 @@
   }
 
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
+    // There are common suffixes that don't work with the search
+    let name = e.detail.properties.Name;
+    name = name.replace(/ Boro Const$/, "");
+    name = name.replace(/ Co Const$/, "");
+
+    // Help people find the MP for this area
     window.open(
-      `https://www.ons.gov.uk/visualisations/areas/${e.detail.properties.Census_Code}`,
+      `https://members.parliament.uk/members/Commons?SearchText=${name}`,
       "_blank"
     );
   }
