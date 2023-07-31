@@ -1,9 +1,13 @@
 <script lang="ts">
   import { ExternalLink } from "../common";
-  import OptionalLayerToggle from "./OptionalLayerToggle.svelte";
+  import PolygonAmenityLayerControl from "./PolygonAmenityLayerControl.svelte";
 </script>
 
-<OptionalLayerToggle name="hospitals" singularNoun="hospital" pluralNoun="Hospitals">
+<PolygonAmenityLayerControl
+  name="hospitals"
+  singularNoun="hospital"
+  pluralNoun="Hospitals"
+>
   <p>
     This shows <ExternalLink
       href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
@@ -17,4 +21,4 @@
       Open Data Commons Open Database License
     </ExternalLink>
   </p>
-</OptionalLayerToggle>
+</PolygonAmenityLayerControl>

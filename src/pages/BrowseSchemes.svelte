@@ -6,14 +6,12 @@
   import { onDestroy, onMount } from "svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
-  import HospitalsLayer from "../lib/browse/HospitalsLayer.svelte";
+  import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
   import InterventionColorSelector from "../lib/browse/InterventionColorSelector.svelte";
+  import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
+  import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
-  import HospitalsLayerToggle from "../lib/browse/HospitalsLayerToggle.svelte";
-  import MrnLayerToggle from "../lib/browse/MrnLayerToggle.svelte";
-  import ParliamentaryConstituenciesLayer from "../lib/browse/ParliamentaryConstituenciesLayer.svelte";
-  import SchoolsLayerToggle from "../lib/browse/SchoolsLayerToggle.svelte";
-  import StyleInterventions from "../lib/browse/StyleInterventions.svelte";
+  import SchoolsLayerControl from "../lib/browse/SchoolsLayerControl.svelte";
   import {
     BaselayerSwitcher,
     CollapsibleCard,
@@ -140,10 +138,10 @@
           <InterventionColorSelector />
           <hr />
           <CheckboxGroup small>
-            <SchoolsLayerToggle />
-            <HospitalsLayerToggle />
-            <MrnLayerToggle />
-            <ParliamentaryConstituenciesLayer />
+            <SchoolsLayerControl />
+            <HospitalsLayerControl />
+            <MrnLayerControl />
+            <ParliamentaryConstituenciesLayerControl />
           </CheckboxGroup>
           <BaselayerSwitcher {style} />
         </CollapsibleCard>
