@@ -4,6 +4,7 @@ export const colors = {
   hospitals: "#B73D25",
   mrn: "#006478",
   parliamentary_constituencies: "#006E59",
+  wards: "purple",
 
   atf2: "#00AFFF",
   atf3: "#FF62DC",

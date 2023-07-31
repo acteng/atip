@@ -12,6 +12,7 @@
   import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayerControl from "../lib/browse/SchoolsLayerControl.svelte";
+  import WardsLayerControl from "../lib/browse/WardsLayerControl.svelte";
   import {
     BaselayerSwitcher,
     CollapsibleCard,
@@ -142,6 +143,7 @@
             <HospitalsLayerControl />
             <MrnLayerControl />
             <ParliamentaryConstituenciesLayerControl />
+            <WardsLayerControl />
           </CheckboxGroup>
           <BaselayerSwitcher {style} />
         </CollapsibleCard>
