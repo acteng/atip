@@ -16,8 +16,8 @@
   import { Checkbox } from "../govuk";
   import { colors } from "./colors";
 
-  let name = "parliamentary_constituencies";
-  let color = colors.parliamentary_constituencies;
+  let name = "wards";
+  let color = colors.wards;
   let outlineLayer = `${name}-outline`;
 
   overwritePmtilesSource(
@@ -38,7 +38,7 @@
     source: name,
     sourceLayer: name,
     color,
-    width: 5,
+    width: 2.5,
   });
 
   let show = false;
@@ -54,42 +54,35 @@
   }
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    return `<p>${feature.properties.Name}</p>`;
+    return `<p>${feature.properties.name}</p>`;
   }
 
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
-    // There are common suffixes that don't work with the search
-    let name = e.detail.properties.Name;
-    name = name.replace(/ Boro Const$/, "");
-    name = name.replace(/ Co Const$/, "");
-    name = encodeURIComponent(name);
-
-    // Help people find the MP for this area
-    window.open(
-      `https://members.parliament.uk/members/Commons?SearchText=${name}`,
-      "_blank"
-    );
+    let name = encodeURIComponent(e.detail.properties.name);
+    // Help people find the councillor for this area
+    window.open(`https://www.google.com/search?q=${name}+councillor`, "_blank");
   }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
-  Parliamentary constituencies
+  Wards
   <span slot="right">
     <HelpButton>
       <p>
         Data from <ExternalLink
-          href="https://www.ordnancesurvey.co.uk/products/boundary-line"
+          href="https://geoportal.statistics.gov.uk/datasets/ons::wards-may-2023-boundaries-uk-bgc/explore"
         >
-          Ordnance Survey Boundary-Line
-        </ExternalLink>.
+          ONS Geography
+        </ExternalLink>, as of May 2023.
       </p>
       <p>
         License: <ExternalLink
           href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
         >
           Open Government License
-        </ExternalLink>
+        </ExternalLink>. Contains OS data &copy; Crown copyright and database
+        right 2023.
       </p>
     </HelpButton>
   </span>
