@@ -44,6 +44,7 @@
     "@turf/nearest-point-on-line": "^6.5.0",
     "@turf/random": "^6.5.0",
     "@types/geojson": "^7946.0.10",
+    "chroma-js": "^2.4.2",
     "comlink": "^4.4.1",
     "govuk-frontend": "^4.6.0",
     "humanize-string": "^3.0.0",
