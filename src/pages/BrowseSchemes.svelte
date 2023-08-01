@@ -4,6 +4,7 @@
   import "../style/main.css";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
+  import CensusOutputAreaLayerControl from "../lib/browse/CensusOutputAreaLayerControl.svelte";
   import CombinedAuthoritiesLayerControl from "../lib/browse/CombinedAuthoritiesLayerControl.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
@@ -149,6 +150,7 @@
             <CombinedAuthoritiesLayerControl />
             <LocalAuthorityDistrictsLayerControl />
           </CheckboxGroup>
+          <CensusOutputAreaLayerControl />
           <BaselayerSwitcher {style} />
         </CollapsibleCard>
       </div>
