@@ -4,10 +4,12 @@
   import "../style/main.css";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
+  import CombinedAuthoritiesLayerControl from "../lib/browse/CombinedAuthoritiesLayerControl.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
   import InterventionColorSelector from "../lib/browse/InterventionColorSelector.svelte";
+  import LocalAuthorityDistrictsLayerControl from "../lib/browse/LocalAuthorityDistrictsLayerControl.svelte";
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
   import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
@@ -144,6 +146,8 @@
             <MrnLayerControl />
             <ParliamentaryConstituenciesLayerControl />
             <WardsLayerControl />
+            <CombinedAuthoritiesLayerControl />
+            <LocalAuthorityDistrictsLayerControl />
           </CheckboxGroup>
           <BaselayerSwitcher {style} />
         </CollapsibleCard>

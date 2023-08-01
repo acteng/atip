@@ -5,6 +5,8 @@ export const colors = {
   mrn: "#006478",
   parliamentary_constituencies: "#006E59",
   wards: "purple",
+  combined_authorities: "cyan",
+  local_authority_districts: "orange",
 
   atf2: "#00AFFF",
   atf3: "#FF62DC",
