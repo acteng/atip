@@ -17,17 +17,17 @@
   let colorScale = colors.sequential_low_to_high;
 
   // Mutually exclusive, like a radio button
-  let showHouseholdsWithoutCar = false;
+  let showHouseholdsWithCar = false;
   let showAverageCars = false;
   let showPopulationDensity = false;
   let colorBy = "";
   $: {
-    if (showHouseholdsWithoutCar) {
-      colorBy = "percent_households_without_car";
+    if (showHouseholdsWithCar) {
+      colorBy = "percent_households_with_car";
     } else if (showAverageCars) {
       colorBy = "average_cars_per_household";
     } else if (showPopulationDensity) {
-      colorBy = "pop_density";
+      colorBy = "population_density";
     } else {
       colorBy = "";
     }
@@ -65,8 +65,8 @@
   function tooltip(feature: MapGeoJSONFeature): string {
     let oa = feature.properties["OA21CD"];
     let value = feature.properties[colorBy];
-    if (colorBy == "percent_households_without_car") {
-      return `<p>${value}% of households in ${oa} don't have a car</p>`;
+    if (colorBy == "percent_households_with_car") {
+      return `<p>${value}% of households in ${oa} have 1 or more cars</p>`;
     } else if (colorBy == "average_cars_per_household") {
       return `<p>Households in ${oa} have an average of ${value} cars</p>`;
     } else {
@@ -77,7 +77,7 @@
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
     let oa = e.detail.properties["OA21CD"];
     if (
-      colorBy == "percent_households_without_car" ||
+      colorBy == "percent_households_with_car" ||
       colorBy == "average_cars_per_household"
     ) {
       window.open(
@@ -94,7 +94,7 @@
 
   // Should return 6 things (1 more than colorScale)
   function makeLimits(): number[] {
-    if (colorBy == "percent_households_without_car") {
+    if (colorBy == "percent_households_with_car") {
       // Equal buckets of 20%
       return [0, 20, 40, 60, 80, 100];
     } else if (colorBy == "average_cars_per_household") {
@@ -113,22 +113,23 @@
       fillColor.push(colorScale[i - 1]);
       fillColor.push(limits[i]);
     }
-    // If we have data greater than the upper limit, then this fallback color
-    // is used. It's effectively a bug -- the limits need to be set correctly.
-    fillColor.push("red");
+    // Repeat the last color. The upper limit is exclusive, meaning a value
+    // exactly equal to it will use this fallback. For things like percentages,
+    // we want to set 100 as the cap.
+    fillColor.push(colorScale[colorScale.length - 1]);
     return fillColor;
   }
 </script>
 
 <Checkbox
-  id="percent_households_without_car"
-  bind:checked={showHouseholdsWithoutCar}
+  id="percent_households_with_car"
+  bind:checked={showHouseholdsWithCar}
   on:change={() => {
     showAverageCars = false;
     showPopulationDensity = false;
   }}
 >
-  Percent of households without a car
+  Percent of households with a car
   <span slot="right">
     <HelpButton>
       <p>
@@ -153,7 +154,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if colorBy == "percent_households_without_car"}
+{#if colorBy == "percent_households_with_car"}
   <SequentialLegend {colorScale} limits={makeLimits()} />
 {/if}
 
@@ -161,7 +162,7 @@
   id="average_cars_per_household"
   bind:checked={showAverageCars}
   on:change={() => {
-    showHouseholdsWithoutCar = false;
+    showHouseholdsWithCar = false;
     showPopulationDensity = false;
   }}
 >
@@ -199,10 +200,10 @@
 {/if}
 
 <Checkbox
-  id="pop_density"
+  id="population_density"
   bind:checked={showPopulationDensity}
   on:change={() => {
-    showHouseholdsWithoutCar = false;
+    showHouseholdsWithCar = false;
     showAverageCars = false;
   }}
 >
@@ -231,7 +232,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if colorBy == "pop_density"}
+{#if colorBy == "population_density"}
   <p>(people per square kilometres)</p>
   <SequentialLegend {colorScale} limits={makeLimits()} />
 {/if}
