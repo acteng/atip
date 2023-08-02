@@ -7,20 +7,38 @@
     overwritePolygonLayer,
   } from "../../maplibre_helpers";
   import { map } from "../../stores";
-  import {
-    ExternalLink,
-    HelpButton,
-    InteractiveLayer,
-  } from "../common";
-  import { Checkbox, Select } from "../govuk";
+  import { ExternalLink, HelpButton, InteractiveLayer } from "../common";
+  import { Checkbox } from "../govuk";
   import { colors } from "./colors";
+  import SequentialLegend from "./SequentialLegend.svelte";
 
   let name = "census_output_areas";
   let outlineLayer = `${name}-outline`;
-
-  let colorBy = "percent_households_without_car";
   let colorScale = colors.sequential_low_to_high;
-  let limits = makeLimits();
+
+  // Mutually exclusive, like a radio button
+  let showHouseholdsWithoutCar = false;
+  let showAverageCars = false;
+  let showPopulationDensity = false;
+  let colorBy = "";
+  $: {
+    if (showHouseholdsWithoutCar) {
+      colorBy = "percent_households_without_car";
+    } else if (showAverageCars) {
+      colorBy = "average_cars_per_household";
+    } else if (showPopulationDensity) {
+      colorBy = "pop_density";
+    } else {
+      colorBy = "";
+    }
+    if (colorBy) {
+      $map.setPaintProperty(name, "fill-color", makeColorRamp());
+      // InteractiveLayer manages the polygon layer, but we also need to control the outline
+      $map.setLayoutProperty(outlineLayer, "visibility", "visible");
+    } else {
+      $map.setLayoutProperty(outlineLayer, "visibility", "none");
+    }
+  }
 
   overwritePmtilesSource(
     $map,
@@ -32,8 +50,9 @@
     id: name,
     source: name,
     sourceLayer: name,
-    color: makeColorRamp(),
-    opacity: hoveredToggle(0.5, 0.9),
+    // Initially set to a dummy value
+    color: "black",
+    opacity: hoveredToggle(0.5, 0.7),
   });
   overwriteLineLayer($map, {
     id: outlineLayer,
@@ -43,18 +62,6 @@
     width: 0.5,
   });
 
-  let show = false;
-  // InteractiveLayer manages the polygon layer, but we also need to control the outline
-  $: {
-    if ($map.getLayer(outlineLayer)) {
-      $map.setLayoutProperty(
-        outlineLayer,
-        "visibility",
-        show ? "visible" : "none"
-      );
-    }
-  }
-
   function tooltip(feature: MapGeoJSONFeature): string {
     let oa = feature.properties["OA21CD"];
     let value = feature.properties[colorBy];
@@ -63,7 +70,7 @@
     } else if (colorBy == "average_cars_per_household") {
       return `<p>Households in ${oa} have an average of ${value} cars</p>`;
     } else {
-      return `<p>There are ${value} people per square kilometre in ${oa}</p>`;
+      return `<p>There are ${value.toLocaleString()} people per square kilometre in ${oa}</p>`;
     }
   }
 
@@ -86,20 +93,22 @@
   }
 
   // Should return 6 things (1 more than colorScale)
-  function makeLimits() {
+  function makeLimits(): number[] {
     if (colorBy == "percent_households_without_car") {
+      // Equal buckets of 20%
       return [0, 20, 40, 60, 80, 100];
     } else if (colorBy == "average_cars_per_household") {
-      // TODO Figure it out
+      // The max value is 2.4, so pick equal buckets
       return [0.0, 0.5, 1.0, 1.5, 2.0, 2.5];
     } else {
-      // TODO Figure it out
-      return [100, 200, 300, 400, 500, 600];
+      // Use the same (slightly rounded) buckets as https://www.ons.gov.uk/census/maps/choropleth/population/population-density/population-density/persons-per-square-kilometre
+      return [0, 4700, 13000, 33000, 94000, 1980000];
     }
   }
 
   function makeColorRamp(): any[] {
-    let fillColor = ["step", ["get", colorBy]];
+    let limits = makeLimits();
+    let fillColor: any[] = ["step", ["get", colorBy]];
     for (let i = 1; i < limits.length; i++) {
       fillColor.push(colorScale[i - 1]);
       fillColor.push(limits[i]);
@@ -107,50 +116,129 @@
     // If we have data greater than the upper limit, then this fallback color
     // is used. It's effectively a bug -- the limits need to be set correctly.
     fillColor.push("red");
-    console.log(fillColor);
     return fillColor;
-  }
-
-  function changeStyle() {
-    limits = makeLimits();
-    $map.setPaintProperty(name, "fill-color", makeColorRamp());
   }
 </script>
 
-<Checkbox id={name} bind:checked={show}>
-  Census Output Areas
+<Checkbox
+  id="percent_households_without_car"
+  bind:checked={showHouseholdsWithoutCar}
+  on:change={() => {
+    showAverageCars = false;
+    showPopulationDensity = false;
+  }}
+>
+  Percent of households without a car
   <span slot="right">
     <HelpButton>
-      <p>TODO!</p>
+      <p>
+        Car/van availability data is from the 2021 census, via <ExternalLink
+          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+        >
+          NOMIS TS045
+        </ExternalLink>. Output area boundaries from <ExternalLink
+          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+        >
+          ONS Geography
+        </ExternalLink>.
+      </p>
+      <p>
+        License: <ExternalLink
+          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+        >
+          Open Government License
+        </ExternalLink>. Contains OS data &copy; Crown copyright and database
+        right 2023.
+      </p>
     </HelpButton>
   </span>
 </Checkbox>
-
-{#if show}
-  <div style="display: flex">
-    {#each colorScale as color}
-      <span style="background: {color}; width: 100%; border: 1px solid black;">
-        &nbsp;
-      </span>
-    {/each}
-  </div>
-  <div style="display: flex; justify-content: space-between;">
-    {#each limits as limit}
-      <span>{limit}</span>
-    {/each}
-  </div>
-
-  <Select
-    label="OA color by"
-    id="colorBy"
-    choices={[
-      ["percent_households_without_car", "Percent of households without a car"],
-      ["average_cars_per_household", "Average cars per household"],
-      ["pop_density", "Population density (people per square kilometres)"],
-    ]}
-    bind:value={colorBy}
-    on:change={changeStyle}
-  />
+{#if colorBy == "percent_households_without_car"}
+  <SequentialLegend {colorScale} limits={makeLimits()} />
 {/if}
 
-<InteractiveLayer layer={name} {tooltip} {show} on:click={onClick} />
+<Checkbox
+  id="average_cars_per_household"
+  bind:checked={showAverageCars}
+  on:change={() => {
+    showHouseholdsWithoutCar = false;
+    showPopulationDensity = false;
+  }}
+>
+  Average cars per household
+  <span slot="right">
+    <HelpButton>
+      <p>
+        Where the census counts "3 or more cars or vans", the average shown here
+        assumes 3.
+      </p>
+      <p>
+        Car/van availability data is from the 2021 census, via <ExternalLink
+          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+        >
+          NOMIS TS045
+        </ExternalLink>. Output area boundaries from <ExternalLink
+          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+        >
+          ONS Geography
+        </ExternalLink>.
+      </p>
+      <p>
+        License: <ExternalLink
+          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+        >
+          Open Government License
+        </ExternalLink>. Contains OS data &copy; Crown copyright and database
+        right 2023.
+      </p>
+    </HelpButton>
+  </span>
+</Checkbox>
+{#if colorBy == "average_cars_per_household"}
+  <SequentialLegend {colorScale} limits={makeLimits()} />
+{/if}
+
+<Checkbox
+  id="pop_density"
+  bind:checked={showPopulationDensity}
+  on:change={() => {
+    showHouseholdsWithoutCar = false;
+    showAverageCars = false;
+  }}
+>
+  Population density
+  <span slot="right">
+    <HelpButton>
+      <p>
+        Population density data is from the 2021 census, via <ExternalLink
+          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+        >
+          NOMIS TS006
+        </ExternalLink>. Output area boundaries from <ExternalLink
+          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+        >
+          ONS Geography
+        </ExternalLink>.
+      </p>
+      <p>
+        License: <ExternalLink
+          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+        >
+          Open Government License
+        </ExternalLink>. Contains OS data &copy; Crown copyright and database
+        right 2023.
+      </p>
+    </HelpButton>
+  </span>
+</Checkbox>
+{#if colorBy == "pop_density"}
+  <p>(people per square kilometres)</p>
+  <SequentialLegend {colorScale} limits={makeLimits()} />
+{/if}
+
+<InteractiveLayer
+  layer={name}
+  {tooltip}
+  show={colorBy != ""}
+  on:click={onClick}
+/>
