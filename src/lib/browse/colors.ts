@@ -8,6 +8,15 @@ export const colors = {
   combined_authorities: "cyan",
   local_authority_districts: "orange",
 
+  // Color ramp from https://www.ons.gov.uk/census/maps/choropleth
+  sequential_low_to_high: [
+    "#CDE594",
+    "#80C6A3",
+    "#1F9EB7",
+    "#186290",
+    "#080C54",
+  ],
+
   atf2: "#00AFFF",
   atf3: "#FF62DC",
   atf4: "#FFD833",

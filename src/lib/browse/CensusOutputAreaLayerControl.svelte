@@ -1,5 +1,4 @@
 <script lang="ts">
-  import chroma from "chroma-js";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import {
     hoveredToggle,
@@ -9,22 +8,19 @@
   } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import {
-    ColorLegend,
     ExternalLink,
     HelpButton,
     InteractiveLayer,
   } from "../common";
   import { Checkbox, Select } from "../govuk";
+  import { colors } from "./colors";
 
-  // TODO Rename, no abbreviations
-  let name = "census_oa";
+  let name = "census_output_areas";
   let outlineLayer = `${name}-outline`;
 
-  let colorScale = chroma
-    .scale(["rgba(222,235,247,1)", "rgba(49,130,189,1)"])
-    .mode("lch")
-    .colors(10);
-  let colorBy = "Pcnt HH With Car Bands";
+  let colorBy = "percent_households_without_car";
+  let colorScale = colors.sequential_low_to_high;
+  let limits = makeLimits();
 
   overwritePmtilesSource(
     $map,
@@ -36,7 +32,7 @@
     id: name,
     source: name,
     sourceLayer: name,
-    color: colorRamp(),
+    color: makeColorRamp(),
     opacity: hoveredToggle(0.5, 0.9),
   });
   overwriteLineLayer($map, {
@@ -60,37 +56,69 @@
   }
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    let key = {
-      "Pcnt HH With Car Bands": "Pcnt HH With Car",
-      "Avg Cars per HH Bands": "Avg Cars per HH",
-      pop_density_deciles: "pop_density",
-    }[colorBy];
-    return `<p>${feature.properties[key]}</p>`;
+    let oa = feature.properties["OA21CD"];
+    let value = feature.properties[colorBy];
+    if (colorBy == "percent_households_without_car") {
+      return `<p>${value}% of households in ${oa} don't have a car</p>`;
+    } else if (colorBy == "average_cars_per_household") {
+      return `<p>Households in ${oa} have an average of ${value} cars</p>`;
+    } else {
+      return `<p>There are ${value} people per square kilometre in ${oa}</p>`;
+    }
   }
 
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
-    window.alert(JSON.stringify(e.detail.properties, "  ", null));
+    let oa = e.detail.properties["OA21CD"];
+    if (
+      colorBy == "percent_households_without_car" ||
+      colorBy == "average_cars_per_household"
+    ) {
+      window.open(
+        `https://www.ons.gov.uk/census/maps/choropleth/housing/number-of-cars-or-vans/number-of-cars-5a/no-cars-or-vans-in-household?oa=${oa}`,
+        "_blank"
+      );
+    } else {
+      window.open(
+        `https://www.ons.gov.uk/census/maps/choropleth/population/population-density/population-density/persons-per-square-kilometre?oa=${oa}`,
+        "_blank"
+      );
+    }
   }
 
-  function colorRamp(): any[] {
-    let fillColor = ["step", ["get", colorBy]];
-    for (let band = 0; band < 10; band++) {
-      fillColor.push(colorScale[band]);
-      fillColor.push(band);
+  // Should return 6 things (1 more than colorScale)
+  function makeLimits() {
+    if (colorBy == "percent_households_without_car") {
+      return [0, 20, 40, 60, 80, 100];
+    } else if (colorBy == "average_cars_per_household") {
+      // TODO Figure it out
+      return [0.0, 0.5, 1.0, 1.5, 2.0, 2.5];
+    } else {
+      // TODO Figure it out
+      return [100, 200, 300, 400, 500, 600];
     }
-    // TODO Unused?
+  }
+
+  function makeColorRamp(): any[] {
+    let fillColor = ["step", ["get", colorBy]];
+    for (let i = 1; i < limits.length; i++) {
+      fillColor.push(colorScale[i - 1]);
+      fillColor.push(limits[i]);
+    }
+    // If we have data greater than the upper limit, then this fallback color
+    // is used. It's effectively a bug -- the limits need to be set correctly.
     fillColor.push("red");
     console.log(fillColor);
     return fillColor;
   }
 
   function changeStyle() {
-    $map.setPaintProperty(name, "fill-color", colorRamp());
+    limits = makeLimits();
+    $map.setPaintProperty(name, "fill-color", makeColorRamp());
   }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
-  Census OA
+  Census Output Areas
   <span slot="right">
     <HelpButton>
       <p>TODO!</p>
@@ -99,9 +127,16 @@
 </Checkbox>
 
 {#if show}
-  <div>
+  <div style="display: flex">
     {#each colorScale as color}
-      <ColorLegend {color} />
+      <span style="background: {color}; width: 100%; border: 1px solid black;">
+        &nbsp;
+      </span>
+    {/each}
+  </div>
+  <div style="display: flex; justify-content: space-between;">
+    {#each limits as limit}
+      <span>{limit}</span>
     {/each}
   </div>
 
@@ -109,9 +144,9 @@
     label="OA color by"
     id="colorBy"
     choices={[
-      ["Pcnt HH With Car Bands", "Percent of households with a car"],
-      ["Avg Cars per HH Bands", "Average cars per household"],
-      ["pop_density_deciles", "Population density"],
+      ["percent_households_without_car", "Percent of households without a car"],
+      ["average_cars_per_household", "Average cars per household"],
+      ["pop_density", "Population density (people per square kilometres)"],
     ]}
     bind:value={colorBy}
     on:change={changeStyle}
