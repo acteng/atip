@@ -13,7 +13,13 @@
 </script>
 
 <div class="govuk-checkboxes__item">
-  <input type="checkbox" class="govuk-checkboxes__input" {id} bind:checked />
+  <input
+    type="checkbox"
+    class="govuk-checkboxes__input"
+    {id}
+    bind:checked
+    on:change
+  />
   <label class="govuk-label govuk-checkboxes__label" for={id} title={hint}>
     <slot />
   </label>
