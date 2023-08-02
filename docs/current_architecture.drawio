@@ -1,0 +1,156 @@
+<mxfile host="app.diagrams.net" modified="2023-08-02T16:43:33.427Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0" etag="yhf9s9vkrhrYeemCf8Ue" version="21.6.6" type="device">
+  <diagram name="Page-1" id="UUytPAGVN2ev72YduaS3">
+    <mxGraphModel dx="3585" dy="1818" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="500" pageHeight="400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="TjFygDTn7_1m40md8oT8-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.003;entryY=0.581;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-1" target="TjFygDTn7_1m40md8oT8-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="192" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-1" value="&lt;div&gt;OpenStreetMap (via Geofabrik)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="15" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.187;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-2" target="TjFygDTn7_1m40md8oT8-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-2" value="data.gov.uk" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="160" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.453;entryY=0.004;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-3" target="TjFygDTn7_1m40md8oT8-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-3" value="geoportal.statistics.gov.uk" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="310" y="20" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.977;entryY=0.322;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-4" target="TjFygDTn7_1m40md8oT8-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-4" value="nomisweb.co.uk" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="490" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=50;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-5" target="TjFygDTn7_1m40md8oT8-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=25;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-5" target="TjFygDTn7_1m40md8oT8-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=25;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-5" target="TjFygDTn7_1m40md8oT8-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-5" value="atip-data-prep Python pipeline" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="200" y="140" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.27;entryY=0.147;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-11" target="TjFygDTn7_1m40md8oT8-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-11" value="route-info files" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="55" y="300" width="80" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.512;entryY=0.08;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-12" target="TjFygDTn7_1m40md8oT8-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-12" value="route-snapper files" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="180" y="300" width="80" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.923;entryY=0.42;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-13" target="TjFygDTn7_1m40md8oT8-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-13" value="Contextual layer files (PMTiles, GeoJson)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="320" y="295" width="105" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.55;exitY=0.95;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.45;entryY=0.091;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-17" target="TjFygDTn7_1m40md8oT8-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-17" value="atip.uk S3 bucket" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="100" y="470" width="285" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.956;entryY=0.569;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-21" target="TjFygDTn7_1m40md8oT8-17">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="470" />
+              <mxPoint x="410" y="470" />
+              <mxPoint x="410" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-23" value="deploy_prod.sh (manually)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TjFygDTn7_1m40md8oT8-22">
+          <mxGeometry x="-0.1502" y="4" relative="1" as="geometry">
+            <mxPoint x="32" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-21" value="ATIP v1 prod version (compiled Svelte app = HTML + CSS + JS)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="540" y="230" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-24" target="TjFygDTn7_1m40md8oT8-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-28" value="every commit to any branch" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TjFygDTn7_1m40md8oT8-27">
+          <mxGeometry x="0.3047" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-24" value="atip GH repo (Svelte)" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="730" y="180" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-25" target="TjFygDTn7_1m40md8oT8-43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-25" value="acteng.github.io/atip (GH pages)" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="590" y="770" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.417;entryY=-0.014;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-26" target="TjFygDTn7_1m40md8oT8-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-26" value="GH actions" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="795" y="350" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-29" target="TjFygDTn7_1m40md8oT8-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-29" value="ATIP dev version (compiled Svelte app)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="795" y="485" width="110" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-32" target="TjFygDTn7_1m40md8oT8-37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.8;exitY=0.8;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.65;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-32" target="TjFygDTn7_1m40md8oT8-43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-32" value="Cloudfront CDN (atip.uk)" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="55" y="680" width="260" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-36" target="TjFygDTn7_1m40md8oT8-37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-36" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="25" y="950" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-37" value="atip.uk (prod)" style="shape=tape;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="127.5" y="950" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.16;exitY=0.55;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-40" target="TjFygDTn7_1m40md8oT8-37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-67" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.17;entryY=1.002;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-40" target="TjFygDTn7_1m40md8oT8-43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-40" value="MapTiler" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="290" y="1010" width="170" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-43" value="acteng.github.io/atip (dev)" style="shape=tape;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="385" y="750" width="165" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TjFygDTn7_1m40md8oT8-63" target="TjFygDTn7_1m40md8oT8-43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TjFygDTn7_1m40md8oT8-63" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="520" y="980" width="30" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
