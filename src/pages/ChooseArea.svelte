@@ -190,7 +190,7 @@
     <div id="map" />
   </div>
   {#if loadedMap}
-    <InteractiveLayer {layer} on:click={onClick} {tooltip} />
+    <InteractiveLayer {layer} clickable on:click={onClick} {tooltip} />
   {/if}
 </div>
 <About bind:open={showAbout} />

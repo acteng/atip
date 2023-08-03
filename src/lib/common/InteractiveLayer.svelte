@@ -16,6 +16,7 @@
   // have numeric IDs defined. The caller can change style based on
   // ["feature-state", "hover"] using the hoveredToggle helper.
   export let layer: string;
+  export let clickable: boolean;
 
   // Optionally, display a popup for the hovered feature. The callback receives
   // the hovered feature (noting that array and object properties are
@@ -39,13 +40,17 @@
   onMount(() => {
     $map.on("mousemove", layer, onMouseMove);
     $map.on("mouseleave", layer, onMouseLeave);
-    $map.on("click", layer, onClick);
+    if (clickable) {
+      $map.on("click", layer, onClick);
+    }
   });
 
   onDestroy(() => {
     $map.off("mousemove", layer, onMouseMove);
     $map.off("mouseleave", layer, onMouseLeave);
-    $map.off("click", layer, onClick);
+    if (clickable) {
+      $map.off("click", layer, onClick);
+    }
     unhover();
     popup.remove();
   });
@@ -88,6 +93,9 @@
         let html = `<div class="govuk-prose">${tooltip(hoveredFeature)}</div>`;
         popup.setLngLat(e.lngLat).setHTML(html).addTo($map);
       }
+      if (clickable) {
+        $map.getCanvas().style.cursor = "pointer";
+      }
     } else if (tooltip) {
       // Still hovering on the same feature, but move the popup
       popup.setLngLat(e.lngLat);
@@ -98,6 +106,9 @@
     unhover();
     hoveredFeature = null;
     popup.remove();
+    if (clickable) {
+      $map.getCanvas().style.cursor = "inherit";
+    }
   }
 
   function unhover() {

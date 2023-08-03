@@ -56,4 +56,4 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} />
+<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />

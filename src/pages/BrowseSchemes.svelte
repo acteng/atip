@@ -134,9 +134,21 @@
       <InterventionLayer
         colorInterventions={colorInterventionsBySchema("v1")}
       />
-      <InteractiveLayer layer="interventions-points" {tooltip} />
-      <InteractiveLayer layer="interventions-lines" {tooltip} />
-      <InteractiveLayer layer="interventions-polygons" {tooltip} />
+      <InteractiveLayer
+        layer="interventions-points"
+        {tooltip}
+        clickable={false}
+      />
+      <InteractiveLayer
+        layer="interventions-lines"
+        {tooltip}
+        clickable={false}
+      />
+      <InteractiveLayer
+        layer="interventions-polygons"
+        {tooltip}
+        clickable={false}
+      />
       <div class="top-right">
         <CollapsibleCard label="Layers" open>
           <InterventionColorSelector />

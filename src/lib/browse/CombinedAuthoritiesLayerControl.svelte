@@ -83,4 +83,4 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} on:click={onClick} />
+<InteractiveLayer layer={name} {tooltip} {show} clickable on:click={onClick} />
