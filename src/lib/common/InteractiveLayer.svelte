@@ -109,6 +109,13 @@
   function onClick(e: MapLayerMouseEvent) {
     let features = e.features ?? [];
     if (features.length > 0) {
+      // Same problem as onMouseMove -- every overlapping InteractiveLayer will
+      // also see this event. Check we're the top layer.
+      let allResults = $map.queryRenderedFeatures(e.point);
+      if (allResults.length > 0 && allResults[0].layer.id != layer) {
+        return;
+      }
+
       dispatch("click", features[0]);
       // Leave the hovering state and popup alone
     }
