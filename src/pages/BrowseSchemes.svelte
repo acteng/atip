@@ -22,13 +22,13 @@
     FileInput,
     InteractiveLayer,
     Layout,
+    MapLibreMap,
     ZoomOutMap,
   } from "../lib/common";
   import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
-  import MapLibreMap from "../lib/Map.svelte";
   import { bbox, emptyGeojson, prettyPrintMeters } from "../maplibre_helpers";
   import { colorInterventionsBySchema } from "../schemas";
   import { gjScheme, map } from "../stores";
@@ -130,7 +130,7 @@
   </div>
   <div slot="main">
     <PmTiles />
-    <MapLibreMap {style}>
+    <MapLibreMap {style} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <InterventionLayer
         colorInterventions={colorInterventionsBySchema("v1")}
       />

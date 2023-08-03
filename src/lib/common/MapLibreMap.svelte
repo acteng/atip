@@ -1,10 +1,16 @@
 <script lang="ts">
-  import { Map, NavigationControl, ScaleControl } from "maplibre-gl";
+  import {
+    Map,
+    NavigationControl,
+    ScaleControl,
+    type LngLatBoundsLike,
+  } from "maplibre-gl";
   import { onDestroy, onMount, setContext } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { map as mapStore } from "../stores";
+  import { map as mapStore } from "../../stores";
 
   export let style: string;
+  export let startBounds: LngLatBoundsLike | null = null;
 
   let map: Map;
   let mapContainer: HTMLDivElement;
@@ -12,7 +18,8 @@
 
   // Before creating the map, check if there's a hash, because one will get set below
   // TODO Supposed to use a phantom type, not a string, as the key
-  setContext("setCamera", !window.location.hash);
+  let setCamera = !window.location.hash;
+  setContext("setCamera", setCamera);
 
   onMount(() => {
     map = new Map({
@@ -28,6 +35,9 @@
 
     map.on("load", () => {
       loaded = true;
+      if (setCamera && startBounds) {
+        map.fitBounds(startBounds, { animate: false });
+      }
       mapStore.set(map);
     });
 
