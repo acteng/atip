@@ -9,5 +9,6 @@ export { default as HelpButton } from "./HelpButton.svelte";
 export { default as InteractiveLayer } from "./InteractiveLayer.svelte";
 export { default as Layout } from "./Layout.svelte";
 export { default as Legend } from "./Legend.svelte";
+export { default as MapLibreMap } from "./MapLibreMap.svelte";
 export { default as Modal } from "./Modal.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";

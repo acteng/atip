@@ -11,6 +11,7 @@
     CollapsibleCard,
     Layout,
     Legend,
+    MapLibreMap,
     ZoomOutMap,
   } from "../lib/common";
   import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
@@ -19,7 +20,6 @@
   import Toolbox from "../lib/draw/Toolbox.svelte";
   import { SecondaryButton } from "../lib/govuk";
   import ContextualLayers from "../lib/layers/ContextualLayers.svelte";
-  import Map from "../lib/Map.svelte";
   import About from "../lib/sidebar/About.svelte";
   import EntireScheme from "../lib/sidebar/EntireScheme.svelte";
   import Instructions from "../lib/sidebar/Instructions.svelte";
@@ -121,7 +121,7 @@
     <InterventionList {schema} />
   </div>
   <div slot="main">
-    <Map {style}>
+    <MapLibreMap {style}>
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer
         colorInterventions={colorInterventionsBySchema(schema)}
@@ -135,7 +135,7 @@
           <ContextualLayers />
         </CollapsibleCard>
       </div>
-    </Map>
+    </MapLibreMap>
   </div>
 </Layout>
 
