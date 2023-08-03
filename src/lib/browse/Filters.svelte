@@ -5,6 +5,7 @@
   import { CollapsibleCard } from "../common";
   import { FormElement, SecondaryButton, Select } from "../govuk";
   import { type Scheme } from "./data";
+  import InterventionColorSelector from "./InterventionColorSelector.svelte";
 
   // These are immutable; re-create this component if they change
   export let schemes: Map<string, Scheme>;
@@ -137,6 +138,7 @@
     />
     <SecondaryButton on:click={() => (filterText = "")}>Clear</SecondaryButton>
   </FormElement>
+  <InterventionColorSelector />
 </CollapsibleCard>
 
 <p>

@@ -9,7 +9,6 @@
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
-  import InterventionColorSelector from "../lib/browse/InterventionColorSelector.svelte";
   import LocalAuthorityDistrictsLayerControl from "../lib/browse/LocalAuthorityDistrictsLayerControl.svelte";
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
   import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
@@ -151,8 +150,6 @@
       />
       <div class="top-right">
         <CollapsibleCard label="Layers" open>
-          <InterventionColorSelector />
-          <hr />
           <CheckboxGroup small>
             <SchoolsLayerControl />
             <HospitalsLayerControl />
