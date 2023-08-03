@@ -18,3 +18,14 @@
     <slot />
   </div>
 </Modal>
+
+<style>
+  button {
+    background: none;
+    border: none;
+  }
+
+  button:hover {
+    border: 1px solid black;
+  }
+</style>
