@@ -150,16 +150,28 @@
       />
       <div class="top-right">
         <CollapsibleCard label="Layers" open>
-          <CheckboxGroup small>
-            <SchoolsLayerControl />
-            <HospitalsLayerControl />
-            <MrnLayerControl />
-            <ParliamentaryConstituenciesLayerControl />
-            <WardsLayerControl />
-            <CombinedAuthoritiesLayerControl />
-            <LocalAuthorityDistrictsLayerControl />
-          </CheckboxGroup>
-          <CensusOutputAreaLayerControl />
+          <CollapsibleCard label="Trip generators">
+            <CheckboxGroup small>
+              <SchoolsLayerControl />
+              <HospitalsLayerControl />
+            </CheckboxGroup>
+          </CollapsibleCard>
+          <CollapsibleCard label="Road network">
+            <CheckboxGroup small>
+              <MrnLayerControl />
+            </CheckboxGroup>
+          </CollapsibleCard>
+          <CollapsibleCard label="Boundaries">
+            <CheckboxGroup small>
+              <ParliamentaryConstituenciesLayerControl />
+              <WardsLayerControl />
+              <CombinedAuthoritiesLayerControl />
+              <LocalAuthorityDistrictsLayerControl />
+            </CheckboxGroup>
+          </CollapsibleCard>
+          <CollapsibleCard label="Census">
+            <CensusOutputAreaLayerControl />
+          </CollapsibleCard>
           <BaselayerSwitcher {style} />
         </CollapsibleCard>
       </div>

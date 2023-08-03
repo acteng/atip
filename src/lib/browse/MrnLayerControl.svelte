@@ -43,7 +43,7 @@
 
 <Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
-  MRN
+  Major Road Network
   <span slot="right">
     <HelpButton>
       <p>
