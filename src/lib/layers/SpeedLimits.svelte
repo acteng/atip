@@ -116,4 +116,4 @@
 </HelpButton>
 <DiscreteLegend {colors} labels={["< 20", "20", "30", "40", ">= 50"]} />
 
-<InteractiveLayer {layer} {tooltip} />
+<InteractiveLayer {layer} {tooltip} clickable={false} />

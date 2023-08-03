@@ -241,5 +241,6 @@
   layer={name}
   {tooltip}
   show={colorBy != ""}
+  clickable
   on:click={onClick}
 />
