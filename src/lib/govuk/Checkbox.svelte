@@ -10,9 +10,14 @@
   // TODO Using class="govuk-hint govuk-checkboxes__hint" takes too much space
   // in the use cases so far, so use a tooltip instead.
   export let hint: string | null = null;
+
+  // If the caller is aligning something to the right of the checkbox and
+  // label, we have to disable this in the govuk style.
+  let haveRightSlot = $$slots.right !== undefined;
+  let style = haveRightSlot ? "float: none" : "";
 </script>
 
-<div class="govuk-checkboxes__item">
+<div class="govuk-checkboxes__item" {style}>
   <input
     type="checkbox"
     class="govuk-checkboxes__input"
@@ -23,5 +28,7 @@
   <label class="govuk-label govuk-checkboxes__label" for={id} title={hint}>
     <slot />
   </label>
-  <slot name="right" />
+  <span style="float: right">
+    <slot name="right" />
+  </span>
 </div>
