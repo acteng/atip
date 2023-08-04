@@ -287,6 +287,8 @@ const layerZorder = [
   "combined_authorities-outline",
   "local_authority_districts",
   "local_authority_districts-outline",
+  "local_planning_authorities",
+  "local_planning_authorities-outline",
   "census_output_areas",
   "census_output_areas-outline",
   // Then smaller optional layers on top
