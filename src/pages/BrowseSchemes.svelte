@@ -8,12 +8,14 @@
   import CombinedAuthoritiesLayerControl from "../lib/browse/CombinedAuthoritiesLayerControl.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
+  import GreenSpacesLayerControl from "../lib/browse/GreenSpacesLayerControl.svelte";
   import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
   import LocalAuthorityDistrictsLayerControl from "../lib/browse/LocalAuthorityDistrictsLayerControl.svelte";
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
   import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayerControl from "../lib/browse/SchoolsLayerControl.svelte";
+  import SportsSpacesLayerControl from "../lib/browse/SportsSpacesLayerControl.svelte";
   import WardsLayerControl from "../lib/browse/WardsLayerControl.svelte";
   import {
     BaselayerSwitcher,
@@ -154,6 +156,8 @@
             <CheckboxGroup small>
               <SchoolsLayerControl />
               <HospitalsLayerControl />
+              <GreenSpacesLayerControl />
+              <SportsSpacesLayerControl />
             </CheckboxGroup>
           </CollapsibleCard>
           <CollapsibleCard label="Road network">
