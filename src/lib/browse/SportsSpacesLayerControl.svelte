@@ -4,7 +4,7 @@
 </script>
 
 <PolygonAmenityLayerControl
-  name="sportsSpaces"
+  name="sports_spaces"
   singularNoun="sports space"
   pluralNoun="Sports spaces"
 >

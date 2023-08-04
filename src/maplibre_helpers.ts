@@ -47,6 +47,16 @@ export function overwritePmtilesSource(map: Map, id: string, url: string) {
   });
 }
 
+// Like overwriteSource, but for geojson data hosted at a URL.
+export function overwriteGeojsonSource(map: Map, id: string, url: string) {
+  cleanupSource(map, id);
+  map.addSource(id, {
+    type: "vector",
+    url: `geojson://${url}`,
+  });
+}
+
+
 function cleanupSource(map: Map, id: string) {
   if (map.getSource(id)) {
     // First remove all layers using this source
@@ -292,6 +302,8 @@ const layerZorder = [
   // Then smaller optional layers on top
   "schools",
   "hospitals",
+  "green_spaces",
+  "sports_spaces",
   "mrn",
 
   // Polygons are bigger than lines, which're bigger than points. When geometry

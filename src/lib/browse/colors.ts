@@ -3,6 +3,8 @@ export const colors = {
   schools: "#007DBB",
   hospitals: "#B73D25",
   mrn: "#006478",
+  green_spaces: "green",
+  sports_spaces: "#013220",
   parliamentary_constituencies: "#006E59",
   wards: "purple",
   combined_authorities: "cyan",

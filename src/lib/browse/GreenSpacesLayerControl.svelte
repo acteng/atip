@@ -4,7 +4,7 @@
 </script>
 
 <PolygonAmenityLayerControl
-  name="greenSpaces   "
+  name="green_spaces"
   singularNoun="green space"
   pluralNoun="Green spaces"
 >

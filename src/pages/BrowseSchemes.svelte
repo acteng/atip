@@ -14,6 +14,7 @@
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
   import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
+  import RailwayStationsLayerControl from "../lib/browse/RailwayStationsLayerControl.svelte";
   import SchoolsLayerControl from "../lib/browse/SchoolsLayerControl.svelte";
   import SportsSpacesLayerControl from "../lib/browse/SportsSpacesLayerControl.svelte";
   import WardsLayerControl from "../lib/browse/WardsLayerControl.svelte";
@@ -158,6 +159,7 @@
               <HospitalsLayerControl />
               <GreenSpacesLayerControl />
               <SportsSpacesLayerControl />
+              <RailwayStationsLayerControl />
             </CheckboxGroup>
           </CollapsibleCard>
           <CollapsibleCard label="Road network">
