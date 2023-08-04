@@ -10,6 +10,7 @@
   import Filters from "../lib/browse/Filters.svelte";
   import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
   import LocalAuthorityDistrictsLayerControl from "../lib/browse/LocalAuthorityDistrictsLayerControl.svelte";
+  import LocalPlanningAuthoritiesLayerControl from "../lib/browse/LocalPlanningAuthoritiesLayerControl.svelte";
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
   import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
@@ -167,6 +168,7 @@
               <WardsLayerControl />
               <CombinedAuthoritiesLayerControl />
               <LocalAuthorityDistrictsLayerControl />
+              <LocalPlanningAuthoritiesLayerControl />
             </CheckboxGroup>
           </CollapsibleCard>
           <CollapsibleCard label="Census">

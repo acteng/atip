@@ -7,6 +7,7 @@ export const colors = {
   wards: "purple",
   combined_authorities: "cyan",
   local_authority_districts: "orange",
+  local_planning_authorities: "red",
 
   // Color ramp from https://www.ons.gov.uk/census/maps/choropleth
   sequential_low_to_high: [
