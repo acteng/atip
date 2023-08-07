@@ -14,7 +14,6 @@ import type {
   LayerSpecification,
   Map,
 } from "maplibre-gl";
-import stationsUrl from "../assets/railway_stations.geojson?url";
 
 // Some methods take optional params. It's an error to pass in null or undefined, so use default values from
 // https://github.com/maplibre/maplibre-style-spec/blob/main/src/reference/v8.json.
