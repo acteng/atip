@@ -53,12 +53,10 @@ export async function overwriteGeojsonSource(
   map: Map,
   id: string,
   url: string,
-  useRailwayStationURl: boolean = false,
-  callback = () => {}
+  callback = () => { }
 ) {
-  const urlToUse: string = useRailwayStationURl ? stationsUrl : url;
   cleanupSource(map, id);
-  fetch(urlToUse).then((response: Response) => {
+  fetch(url).then((response: Response) => {
     response.json().then((value: any) => {
       map.addSource(id, {
         type: "geojson",

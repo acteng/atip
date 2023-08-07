@@ -40,7 +40,7 @@
     show = false;
   };
 
-  overwriteGeojsonSource($map, name, "", true, layerLoadedCallback);
+  overwriteGeojsonSource($map, name, `https://atip.uk/layers/v1/${name}.geojson`, layerLoadedCallback);
 
   let show = true;
 
