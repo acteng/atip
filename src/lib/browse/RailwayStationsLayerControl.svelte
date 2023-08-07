@@ -1,40 +1,16 @@
 <script lang="ts">
-  import type { FeatureCollection } from "@turf/helpers";
-  import { hoveredToggle } from "../../maplibre_helpers";
-  import { map } from "../../stores";
+    import { circleRadius } from "../../colors";
   import { ExternalLink } from "../common";
   import PointAmenityLayerControl from "./PointAmenityLayerControl.svelte";
-  import { getRailwayStationsGeoJson } from "./railway_geojson_data_getter";
 
-  const name = "railwayStations";
-
-  const addRailwayLayer = (data: FeatureCollection) => {
-    let source = name;
-    let layer = name;
-    $map.addSource(source, {
-      type: "geojson",
-      data: data,
-      generateId: true,
-    });
-    $map.addLayer({
-      id: layer,
-      source: source,
-      type: "fill",
-      paint: {
-        "fill-color": "rgb(200, 100, 240)",
-        "fill-outline-color": "rgb(200, 100, 240)",
-        "fill-opacity": hoveredToggle(0.8, 0.4),
-      },
-    });
-  };
-
-  getRailwayStationsGeoJson().then(addRailwayLayer);
+  const name = "railway_stations";
 </script>
 
 <PointAmenityLayerControl
-  name={name}
+  {name}
   singularNoun="railway station"
   pluralNoun="Railway stations"
+  circleRadius={circleRadius}
 >
   <p>
     This shows <ExternalLink

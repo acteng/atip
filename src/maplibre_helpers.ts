@@ -14,6 +14,8 @@ import type {
   LayerSpecification,
   Map,
 } from "maplibre-gl";
+import stationsUrl from "../assets/railway_stations.geojson?url";
+import stationGeojson from "../assets/railway_stations.geojson";
 
 // Some methods take optional params. It's an error to pass in null or undefined, so use default values from
 // https://github.com/maplibre/maplibre-style-spec/blob/main/src/reference/v8.json.
@@ -48,12 +50,20 @@ export function overwritePmtilesSource(map: Map, id: string, url: string) {
 }
 
 // Like overwriteSource, but for geojson data hosted at a URL.
-export function overwriteGeojsonSource(map: Map, id: string, url: string) {
+export async function overwriteGeojsonSource(map: Map, id: string, url: string, useRailwayStationURl: boolean = false, callback = () => { }) {
+  const urlToUse: string = useRailwayStationURl ? stationsUrl : url;
   cleanupSource(map, id);
-  map.addSource(id, {
-    type: "vector",
-    url: `geojson://${url}`,
+  fetch(urlToUse).then((response: Response) => {
+    response.json().then((value: any) => {
+      console.log(value);
+      map.addSource(id, {
+        type: "geojson",
+        data: value,
+      });
+      callback();
+    });
   });
+
 }
 
 
@@ -305,6 +315,7 @@ const layerZorder = [
   "green_spaces",
   "sports_spaces",
   "mrn",
+  "railway_stations",
 
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top

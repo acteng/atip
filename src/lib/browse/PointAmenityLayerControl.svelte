@@ -1,5 +1,11 @@
 <script lang="ts">
-  import type { MapGeoJSONFeature } from "maplibre-gl";
+  import type { FilterSpecification, MapGeoJSONFeature } from "maplibre-gl";
+  import {
+    isPoint,
+    overwriteCircleLayer,
+    overwriteGeojsonSource,
+  } from "../../maplibre_helpers";
+  import { map } from "../../stores";
   import { ColorLegend, HelpButton, InteractiveLayer } from "../common";
   import { Checkbox } from "../govuk";
   import { colors } from "./colors";
@@ -15,11 +21,23 @@
   // Capitalized
   export let pluralNoun: string;
 
+  export let circleRadius: number;
 
   // The caller must also fill in the default slot with the contents of a help modal
 
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
+
+  overwriteGeojsonSource($map, name, "", true, () => {
+    overwriteCircleLayer($map, {
+      id: name,
+      source: name,
+      filter: ["all", isPoint] as FilterSpecification,
+      color: color,
+      radius: circleRadius,
+      // TODO Outline?
+    });
+  });
 
   let show = false;
 
