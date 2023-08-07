@@ -5,7 +5,7 @@ export const colors = {
   mrn: "#006478",
   green_spaces: "green",
   sports_spaces: "#013220",
-  railway_stations: "#102302",
+  railway_stations: "#7BD352",
   parliamentary_constituencies: "#006E59",
   wards: "purple",
   combined_authorities: "cyan",

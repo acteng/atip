@@ -28,18 +28,21 @@
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  overwriteGeojsonSource($map, name, "", true, () => {
+  const layerLoadedCallback = () => {
     overwriteCircleLayer($map, {
       id: name,
       source: name,
       filter: ["all", isPoint] as FilterSpecification,
       color: color,
-      radius: circleRadius,
+      radius: circleRadius / 2,
       // TODO Outline?
     });
-  });
+    show = false;
+  };
 
-  let show = false;
+  overwriteGeojsonSource($map, name, "", true, layerLoadedCallback);
+
+  let show = true;
 
   function tooltip(feature: MapGeoJSONFeature): string {
     let name = feature.properties.name ?? `Unnamed ${singularNoun}`;

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { circleRadius } from "../../colors";
+  import { circleRadius } from "../../colors";
   import { ExternalLink } from "../common";
   import PointAmenityLayerControl from "./PointAmenityLayerControl.svelte";
 
@@ -10,7 +10,7 @@
   {name}
   singularNoun="railway station"
   pluralNoun="Railway stations"
-  circleRadius={circleRadius}
+  {circleRadius}
 >
   <p>
     This shows <ExternalLink

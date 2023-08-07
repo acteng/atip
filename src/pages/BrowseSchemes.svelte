@@ -13,8 +13,8 @@
   import LocalAuthorityDistrictsLayerControl from "../lib/browse/LocalAuthorityDistrictsLayerControl.svelte";
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
   import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
-  import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import RailwayStationsLayerControl from "../lib/browse/RailwayStationsLayerControl.svelte";
+  import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayerControl from "../lib/browse/SchoolsLayerControl.svelte";
   import SportsSpacesLayerControl from "../lib/browse/SportsSpacesLayerControl.svelte";
   import WardsLayerControl from "../lib/browse/WardsLayerControl.svelte";

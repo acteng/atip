@@ -15,7 +15,6 @@ import type {
   Map,
 } from "maplibre-gl";
 import stationsUrl from "../assets/railway_stations.geojson?url";
-import stationGeojson from "../assets/railway_stations.geojson";
 
 // Some methods take optional params. It's an error to pass in null or undefined, so use default values from
 // https://github.com/maplibre/maplibre-style-spec/blob/main/src/reference/v8.json.
@@ -50,12 +49,17 @@ export function overwritePmtilesSource(map: Map, id: string, url: string) {
 }
 
 // Like overwriteSource, but for geojson data hosted at a URL.
-export async function overwriteGeojsonSource(map: Map, id: string, url: string, useRailwayStationURl: boolean = false, callback = () => { }) {
+export async function overwriteGeojsonSource(
+  map: Map,
+  id: string,
+  url: string,
+  useRailwayStationURl: boolean = false,
+  callback = () => {}
+) {
   const urlToUse: string = useRailwayStationURl ? stationsUrl : url;
   cleanupSource(map, id);
   fetch(urlToUse).then((response: Response) => {
     response.json().then((value: any) => {
-      console.log(value);
       map.addSource(id, {
         type: "geojson",
         data: value,
@@ -63,9 +67,7 @@ export async function overwriteGeojsonSource(map: Map, id: string, url: string, 
       callback();
     });
   });
-
 }
-
 
 function cleanupSource(map: Map, id: string) {
   if (map.getSource(id)) {
