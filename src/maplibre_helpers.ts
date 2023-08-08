@@ -47,25 +47,6 @@ export function overwritePmtilesSource(map: Map, id: string, url: string) {
   });
 }
 
-// Like overwriteSource, but for geojson data hosted at a URL.
-export async function overwriteGeojsonSource(
-  map: Map,
-  id: string,
-  url: string,
-  callback = () => { }
-) {
-  cleanupSource(map, id);
-  fetch(url).then((response: Response) => {
-    response.json().then((value: any) => {
-      map.addSource(id, {
-        type: "geojson",
-        data: value,
-      });
-      callback();
-    });
-  });
-}
-
 function cleanupSource(map: Map, id: string) {
   if (map.getSource(id)) {
     // First remove all layers using this source

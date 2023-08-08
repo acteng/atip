@@ -8,7 +8,6 @@
   import CombinedAuthoritiesLayerControl from "../lib/browse/CombinedAuthoritiesLayerControl.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
-  import GreenSpacesLayerControl from "../lib/browse/GreenSpacesLayerControl.svelte";
   import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
   import LocalAuthorityDistrictsLayerControl from "../lib/browse/LocalAuthorityDistrictsLayerControl.svelte";
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
@@ -157,7 +156,6 @@
             <CheckboxGroup small>
               <SchoolsLayerControl />
               <HospitalsLayerControl />
-              <GreenSpacesLayerControl />
               <SportsSpacesLayerControl />
               <RailwayStationsLayerControl />
             </CheckboxGroup>

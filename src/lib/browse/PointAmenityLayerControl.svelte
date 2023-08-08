@@ -1,9 +1,8 @@
 <script lang="ts">
   import type { FilterSpecification, MapGeoJSONFeature } from "maplibre-gl";
   import {
-    isPoint,
     overwriteCircleLayer,
-    overwriteGeojsonSource,
+    overwriteSource,
   } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import { ColorLegend, HelpButton, InteractiveLayer } from "../common";
@@ -28,21 +27,20 @@
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  const layerLoadedCallback = () => {
-    overwriteCircleLayer($map, {
-      id: name,
-      source: name,
-      filter: ["all", isPoint] as FilterSpecification,
-      color: color,
-      radius: circleRadius / 2,
-      // TODO Outline?
-    });
-    show = false;
-  };
+  overwriteSource(
+    $map,
+    name,
+    `https://atip.uk/layers/v1/${name}.geojson`
+  );
 
-  overwriteGeojsonSource($map, name, `https://atip.uk/layers/v1/${name}.geojson`, layerLoadedCallback);
-
-  let show = true;
+  overwriteCircleLayer($map, {
+    id: name,
+    source: name,
+    color: color,
+    radius: circleRadius / 2,
+    // TODO Outline?
+  });
+  let show = false;
 
   function tooltip(feature: MapGeoJSONFeature): string {
     let name = feature.properties.name ?? `Unnamed ${singularNoun}`;
