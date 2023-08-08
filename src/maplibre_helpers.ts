@@ -294,7 +294,9 @@ const layerZorder = [
   // Then smaller optional layers on top
   "schools",
   "hospitals",
+  "sports_spaces",
   "mrn",
+  "railway_stations",
 
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top

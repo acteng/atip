@@ -13,8 +13,10 @@
   import LocalPlanningAuthoritiesLayerControl from "../lib/browse/LocalPlanningAuthoritiesLayerControl.svelte";
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
   import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
+  import RailwayStationsLayerControl from "../lib/browse/RailwayStationsLayerControl.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import SchoolsLayerControl from "../lib/browse/SchoolsLayerControl.svelte";
+  import SportsSpacesLayerControl from "../lib/browse/SportsSpacesLayerControl.svelte";
   import WardsLayerControl from "../lib/browse/WardsLayerControl.svelte";
   import {
     BaselayerSwitcher,
@@ -155,6 +157,8 @@
             <CheckboxGroup small>
               <SchoolsLayerControl />
               <HospitalsLayerControl />
+              <SportsSpacesLayerControl />
+              <RailwayStationsLayerControl />
             </CheckboxGroup>
           </CollapsibleCard>
           <CollapsibleCard label="Road network">
