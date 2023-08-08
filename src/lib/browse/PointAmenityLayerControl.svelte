@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { FilterSpecification, MapGeoJSONFeature } from "maplibre-gl";
+  import type { MapGeoJSONFeature } from "maplibre-gl";
   import {
     overwriteCircleLayer,
     overwriteSource,
@@ -27,11 +27,7 @@
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  overwriteSource(
-    $map,
-    name,
-    `https://atip.uk/layers/v1/${name}.geojson`
-  );
+  overwriteSource($map, name, `https://atip.uk/layers/v1/${name}.geojson`);
 
   overwriteCircleLayer($map, {
     id: name,
