@@ -292,7 +292,6 @@ const layerZorder = [
   // Then smaller optional layers on top
   "schools",
   "hospitals",
-  "green_spaces",
   "sports_spaces",
   "mrn",
   "railway_stations",

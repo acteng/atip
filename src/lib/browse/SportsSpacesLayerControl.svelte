@@ -13,7 +13,7 @@
       href="https://wiki.openstreetmap.org/wiki/Tag:leisure%3Dpitch"
     >
       sports pitches
-    </ExternalLink>, and <ExternalLink
+    </ExternalLink> and <ExternalLink
       href="https://wiki.openstreetmap.org/wiki/Tag:leisure%3Dsports_centre"
     >
       sports centres

@@ -10,7 +10,7 @@
   import { colors } from "./colors";
 
   // This name is used for multiple things:
-  // - The name of a .pmtiles file
+  // - The name of a .geojson file
   // - The layer name within that file
   // - The layer name, for layerZorder
   // - A color name in colors.ts
