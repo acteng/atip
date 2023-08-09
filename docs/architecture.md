@@ -91,10 +91,6 @@ We'll configure [IAP](https://cloud.google.com/iap) to sit in front of the web a
 
 Next, we'll [generate fake data](https://github.com/acteng/atip/blob/main/src/random_schemes.ts) for the scheme browser, and host it on GCS. We'll add a feature flag to the Svelte app. For this new GCP deployment, we'll automatically load this fake file representing all submitted scheme data, instead of ask the user to load a file.
 
-### Step 3: add a databse
+### Diagram
 
-We'll provision Postgres through Cloud SQL and begin exploring how to give ATIP a stateful backend, where people using the scheme sketcher can upload a proposal without leaving the app. We'll develop a REST API using Express, Flask, or something else, and adapt the Svelte app to make API calls when the feature flag is enabled. The API and everything else will still be protected by IAP.
-
-We'll also configure a local developer environment with an empty Postgres DB, to work on the backend locally.
-
-We can also incorporate the ongoing database schema being built and, if useful, integrate read and write operations to it from both the scheme sketcher and browser. (For instance, prefilling a scheme ID list in the sketcher page, or displaying construction status in the browse page.)
+![Diagram of proposed architecture](proposed_architecture.svg)
