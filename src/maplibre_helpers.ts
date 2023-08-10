@@ -296,6 +296,7 @@ const layerZorder = [
   "hospitals",
   "sports_spaces",
   "mrn",
+  "bus_routes",
   "railway_stations",
 
   // Polygons are bigger than lines, which're bigger than points. When geometry

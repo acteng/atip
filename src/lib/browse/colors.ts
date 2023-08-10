@@ -10,6 +10,8 @@ export const colors = {
   combined_authorities: "cyan",
   local_authority_districts: "orange",
   local_planning_authorities: "red",
+  bus_route_with_lane: "#9362BA",
+  bus_route_without_lane: "#C2A6D8",
 
   // Color ramp from https://www.ons.gov.uk/census/maps/choropleth
   sequential_low_to_high: [
