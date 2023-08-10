@@ -51,7 +51,7 @@
           href="https://maps.dft.gov.uk/major-road-network/index.html"
         >
           Major Road Network
-        </ExternalLink>.
+        </ExternalLink>, as of September 2021.
       </p>
       <p>
         License: <ExternalLink

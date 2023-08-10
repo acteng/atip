@@ -13,8 +13,8 @@
       href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dschool"
     >
       primary and secondary schools
-    </ExternalLink> from OpenStreetMap. It doesn't include kindergartens, colleges,
-    universities, or other training schools.
+    </ExternalLink> from OpenStreetMap (as of 9 August 2023). It doesn't include
+    kindergartens, colleges, universities, or other training schools.
   </p>
   <p>
     License: <ExternalLink href="https://www.openstreetmap.org/copyright">

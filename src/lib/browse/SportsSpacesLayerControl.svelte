@@ -17,7 +17,7 @@
       href="https://wiki.openstreetmap.org/wiki/Tag:leisure%3Dsports_centre"
     >
       sports centres
-    </ExternalLink> data from OpenStreetMap.
+    </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
   </p>
 
   <p>

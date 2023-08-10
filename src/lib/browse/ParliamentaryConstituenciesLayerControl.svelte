@@ -82,7 +82,7 @@
           href="https://www.ordnancesurvey.co.uk/products/boundary-line"
         >
           Ordnance Survey Boundary-Line
-        </ExternalLink>.
+        </ExternalLink>, as of May 2023.
       </p>
       <p>
         License: <ExternalLink
