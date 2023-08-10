@@ -4,6 +4,7 @@
   import "../style/main.css";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
+  import BusRoutesLayerControl from "../lib/browse/BusRoutesLayerControl.svelte";
   import CensusOutputAreaLayerControl from "../lib/browse/CensusOutputAreaLayerControl.svelte";
   import CombinedAuthoritiesLayerControl from "../lib/browse/CombinedAuthoritiesLayerControl.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
@@ -164,6 +165,7 @@
           <CollapsibleCard label="Road network">
             <CheckboxGroup small>
               <MrnLayerControl />
+              <BusRoutesLayerControl />
             </CheckboxGroup>
           </CollapsibleCard>
           <CollapsibleCard label="Boundaries">
