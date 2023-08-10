@@ -17,7 +17,7 @@
       href="https://wiki.openstreetmap.org/wiki/Tag:railway%3Dstation"
     >
       railway station
-    </ExternalLink> data from OpenStreetMap.
+    </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
   </p>
 
   <p>
