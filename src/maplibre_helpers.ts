@@ -298,6 +298,7 @@ const layerZorder = [
   "mrn",
   "bus_routes",
   "railway_stations",
+  "cycle_parking",
 
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top
