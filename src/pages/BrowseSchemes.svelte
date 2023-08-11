@@ -7,6 +7,7 @@
   import BusRoutesLayerControl from "../lib/browse/BusRoutesLayerControl.svelte";
   import CensusOutputAreaLayerControl from "../lib/browse/CensusOutputAreaLayerControl.svelte";
   import CombinedAuthoritiesLayerControl from "../lib/browse/CombinedAuthoritiesLayerControl.svelte";
+  import CycleParkingLayerControl from "../lib/browse/CycleParkingLayerControl.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
@@ -163,10 +164,11 @@
               <RailwayStationsLayerControl />
             </CheckboxGroup>
           </CollapsibleCard>
-          <CollapsibleCard label="Road network">
+          <CollapsibleCard label="Existing infrastructure">
             <CheckboxGroup small>
               <MrnLayerControl />
               <BusRoutesLayerControl />
+              <CycleParkingLayerControl />
             </CheckboxGroup>
           </CollapsibleCard>
           <CollapsibleCard label="Boundaries">

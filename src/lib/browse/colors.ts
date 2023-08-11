@@ -12,6 +12,7 @@ export const colors = {
   local_planning_authorities: "red",
   bus_route_with_lane: "#9362BA",
   bus_route_without_lane: "#C2A6D8",
+  cycle_parking: "black",
 
   // Color ramp from https://www.ons.gov.uk/census/maps/choropleth
   sequential_low_to_high: [
