@@ -2,6 +2,7 @@
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import {
     hoveredToggle,
+    makeColorRamp,
     overwriteLineLayer,
     overwritePmtilesSource,
     overwritePolygonLayer,
@@ -32,7 +33,11 @@
       colorBy = "";
     }
     if (colorBy) {
-      $map.setPaintProperty(name, "fill-color", makeColorRamp());
+      $map.setPaintProperty(
+        name,
+        "fill-color",
+        makeColorRamp(["get", colorBy], makeLimits(), colorScale)
+      );
       // InteractiveLayer manages the polygon layer, but we also need to control the outline
       $map.setLayoutProperty(outlineLayer, "visibility", "visible");
     } else {
@@ -104,20 +109,6 @@
       // Use the same (slightly rounded) buckets as https://www.ons.gov.uk/census/maps/choropleth/population/population-density/population-density/persons-per-square-kilometre
       return [0, 4700, 13000, 33000, 94000, 1980000];
     }
-  }
-
-  function makeColorRamp(): any[] {
-    let limits = makeLimits();
-    let fillColor: any[] = ["step", ["get", colorBy]];
-    for (let i = 1; i < limits.length; i++) {
-      fillColor.push(colorScale[i - 1]);
-      fillColor.push(limits[i]);
-    }
-    // Repeat the last color. The upper limit is exclusive, meaning a value
-    // exactly equal to it will use this fallback. For things like percentages,
-    // we want to set 100 as the cap.
-    fillColor.push(colorScale[colorScale.length - 1]);
-    return fillColor;
   }
 </script>
 
@@ -234,7 +225,10 @@
 </Checkbox>
 {#if colorBy == "population_density"}
   <p>(people per square kilometres)</p>
-  <SequentialLegend {colorScale} limits={makeLimits()} />
+  <SequentialLegend
+    {colorScale}
+    limits={makeLimits().map((x) => x.toLocaleString())}
+  />
 {/if}
 
 <InteractiveLayer
