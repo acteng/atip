@@ -10,6 +10,7 @@
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
+  import ImdLayerControl from "../lib/browse/ImdLayerControl.svelte";
   import LocalAuthorityDistrictsLayerControl from "../lib/browse/LocalAuthorityDistrictsLayerControl.svelte";
   import LocalPlanningAuthoritiesLayerControl from "../lib/browse/LocalPlanningAuthoritiesLayerControl.svelte";
   import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
@@ -179,6 +180,7 @@
           </CollapsibleCard>
           <CollapsibleCard label="Census">
             <CensusOutputAreaLayerControl />
+            <ImdLayerControl />
           </CollapsibleCard>
           <BaselayerSwitcher {style} />
         </CollapsibleCard>

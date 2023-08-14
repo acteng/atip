@@ -257,6 +257,24 @@ export function hoveredToggle<Type>(
   ] as DataDrivenPropertyValueSpecification<Type>;
 }
 
+// Helper for https://maplibre.org/maplibre-style-spec/expressions/#step.
+export function makeColorRamp(
+  input: DataDrivenPropertyValueSpecification<number>,
+  limits: number[],
+  colorScale: string[]
+): DataDrivenPropertyValueSpecification<string> {
+  let step: any[] = ["step", input];
+  for (let i = 1; i < limits.length; i++) {
+    step.push(colorScale[i - 1]);
+    step.push(limits[i]);
+  }
+  // Repeat the last color. The upper limit is exclusive, meaning a value
+  // exactly equal to it will use this fallback. For things like percentages,
+  // we want to set 100 as the cap.
+  step.push(colorScale[colorScale.length - 1]);
+  return step as DataDrivenPropertyValueSpecification<string>;
+}
+
 // Suitable for passing to map.fitBounds. Work around https://github.com/Turfjs/turf/issues/1807.
 export function bbox(gj: GeoJSON): [number, number, number, number] {
   return turfBbox(gj) as [number, number, number, number];
@@ -291,6 +309,8 @@ const layerZorder = [
   "local_planning_authorities-outline",
   "census_output_areas",
   "census_output_areas-outline",
+  "imd",
+  "imd-outline",
   // Then smaller optional layers on top
   "schools",
   "hospitals",

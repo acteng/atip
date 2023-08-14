@@ -1,6 +1,6 @@
 <script lang="ts">
   export let colorScale: string[];
-  export let limits: number[];
+  export let limits: any[];
 </script>
 
 <div style="display: flex">
@@ -12,6 +12,6 @@
 </div>
 <div style="display: flex; justify-content: space-between;">
   {#each limits as limit}
-    <span>{limit.toLocaleString()}</span>
+    <span>{limit}</span>
   {/each}
 </div>
