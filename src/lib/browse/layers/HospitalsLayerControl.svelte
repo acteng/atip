@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { ExternalLink } from "../common";
+  import { ExternalLink } from "../../common";
   import PolygonAmenityLayerControl from "./PolygonAmenityLayerControl.svelte";
 </script>
 
 <PolygonAmenityLayerControl
-  name="schools"
-  singularNoun="school"
-  pluralNoun="Schools"
+  name="hospitals"
+  singularNoun="hospital"
+  pluralNoun="Hospitals"
 >
   <p>
     This shows <ExternalLink
-      href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dschool"
+      href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
     >
-      primary and secondary schools
-    </ExternalLink> from OpenStreetMap (as of 9 August 2023). It doesn't include
-    kindergartens, colleges, universities, or other training schools.
+      hospital
+    </ExternalLink> data from OpenStreetMap (as of 9 August 2023). It doesn't include
+    outpatient clinics or individual doctor's offices.
   </p>
   <p>
     License: <ExternalLink href="https://www.openstreetmap.org/copyright">

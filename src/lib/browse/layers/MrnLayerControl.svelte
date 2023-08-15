@@ -4,16 +4,16 @@
     hoveredToggle,
     overwriteLineLayer,
     overwritePmtilesSource,
-  } from "../../maplibre_helpers";
-  import { map } from "../../stores";
+  } from "../../../maplibre_helpers";
+  import { map } from "../../../stores";
   import {
     ColorLegend,
     ExternalLink,
     HelpButton,
     InteractiveLayer,
-  } from "../common";
-  import { Checkbox } from "../govuk";
-  import { colors } from "./colors";
+  } from "../../common";
+  import { Checkbox } from "../../govuk";
+  import { colors } from "../colors";
 
   let name = "mrn";
   let color = colors.mrn;

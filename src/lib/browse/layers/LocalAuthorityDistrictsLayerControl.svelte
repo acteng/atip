@@ -3,42 +3,36 @@
   import {
     hoveredToggle,
     overwriteLineLayer,
-    overwritePmtilesSource,
     overwritePolygonLayer,
-  } from "../../maplibre_helpers";
-  import { map } from "../../stores";
+    overwriteSource,
+  } from "../../../maplibre_helpers";
+  import { map } from "../../../stores";
   import {
     ColorLegend,
     ExternalLink,
     HelpButton,
     InteractiveLayer,
-  } from "../common";
-  import { Checkbox } from "../govuk";
-  import { colors } from "./colors";
+  } from "../../common";
+  import { Checkbox } from "../../govuk";
+  import { colors } from "../colors";
 
-  let name = "parliamentary_constituencies";
-  let color = colors.parliamentary_constituencies;
+  let name = "local_authority_districts";
+  let color = colors.local_authority_districts;
   let outlineLayer = `${name}-outline`;
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `https://atip.uk/layers/v1/${name}.pmtiles`
-  );
+  overwriteSource($map, name, `https://atip.uk/layers/v1/${name}.geojson`);
 
   overwritePolygonLayer($map, {
     id: name,
     source: name,
-    sourceLayer: name,
     color,
     opacity: hoveredToggle(0.5, 0.1),
   });
   overwriteLineLayer($map, {
     id: outlineLayer,
     source: name,
-    sourceLayer: name,
     color,
-    width: 5,
+    width: 2.5,
   });
 
   let show = false;
@@ -54,19 +48,12 @@
   }
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    return `<p>${feature.properties.Name}</p>`;
+    return `<p>${feature.properties.name}</p>`;
   }
 
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
-    // There are common suffixes that don't work with the search
-    let name = e.detail.properties.Name;
-    name = name.replace(/ Boro Const$/, "");
-    name = name.replace(/ Co Const$/, "");
-    name = encodeURIComponent(name);
-
-    // Help people find the MP for this area
     window.open(
-      `https://members.parliament.uk/members/Commons?SearchText=${name}`,
+      `https://www.ons.gov.uk/visualisations/areas/${e.detail.properties.LAD23CD}`,
       "_blank"
     );
   }
@@ -74,14 +61,14 @@
 
 <Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
-  Parliamentary constituencies
+  Local Authority Districts
   <span slot="right">
     <HelpButton>
       <p>
         Data from <ExternalLink
-          href="https://www.ordnancesurvey.co.uk/products/boundary-line"
+          href="https://geoportal.statistics.gov.uk/datasets/ons::local-authority-districts-may-2023-boundaries-uk-buc/explore"
         >
-          Ordnance Survey Boundary-Line
+          ONS Geography
         </ExternalLink>, as of May 2023.
       </p>
       <p>
@@ -89,7 +76,8 @@
           href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
         >
           Open Government License
-        </ExternalLink>
+        </ExternalLink>. Contains OS data &copy; Crown copyright and database
+        right 2023.
       </p>
     </HelpButton>
   </span>

@@ -3,34 +3,40 @@
   import {
     hoveredToggle,
     overwriteLineLayer,
+    overwritePmtilesSource,
     overwritePolygonLayer,
-    overwriteSource,
-  } from "../../maplibre_helpers";
-  import { map } from "../../stores";
+  } from "../../../maplibre_helpers";
+  import { map } from "../../../stores";
   import {
     ColorLegend,
     ExternalLink,
     HelpButton,
     InteractiveLayer,
-  } from "../common";
-  import { Checkbox } from "../govuk";
-  import { colors } from "./colors";
+  } from "../../common";
+  import { Checkbox } from "../../govuk";
+  import { colors } from "../colors";
 
-  let name = "combined_authorities";
-  let color = colors.combined_authorities;
+  let name = "wards";
+  let color = colors.wards;
   let outlineLayer = `${name}-outline`;
 
-  overwriteSource($map, name, `https://atip.uk/layers/v1/${name}.geojson`);
+  overwritePmtilesSource(
+    $map,
+    name,
+    `https://atip.uk/layers/v1/${name}.pmtiles`
+  );
 
   overwritePolygonLayer($map, {
     id: name,
     source: name,
+    sourceLayer: name,
     color,
     opacity: hoveredToggle(0.5, 0.1),
   });
   overwriteLineLayer($map, {
     id: outlineLayer,
     source: name,
+    sourceLayer: name,
     color,
     width: 2.5,
   });
@@ -52,24 +58,23 @@
   }
 
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
-    window.open(
-      `https://www.ons.gov.uk/visualisations/areas/${e.detail.properties.CAUTH22CD}`,
-      "_blank"
-    );
+    let name = encodeURIComponent(e.detail.properties.name);
+    // Help people find the councillor for this area
+    window.open(`https://www.google.com/search?q=${name}+councillor`, "_blank");
   }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
-  Combined authorities
+  Wards
   <span slot="right">
     <HelpButton>
       <p>
         Data from <ExternalLink
-          href="https://geoportal.statistics.gov.uk/datasets/ons::combined-authorities-december-2022-boundaries-en-buc/explore"
+          href="https://geoportal.statistics.gov.uk/datasets/ons::wards-may-2023-boundaries-uk-bgc/explore"
         >
           ONS Geography
-        </ExternalLink>, as of December 2022.
+        </ExternalLink>, as of May 2023.
       </p>
       <p>
         License: <ExternalLink
