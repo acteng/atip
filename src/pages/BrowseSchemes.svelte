@@ -4,6 +4,7 @@
   import "../style/main.css";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
+  import authorityNamesList from "../../assets/authority_names.json";
   import BusRoutesLayerControl from "../lib/browse/BusRoutesLayerControl.svelte";
   import CensusOutputAreaLayerControl from "../lib/browse/CensusOutputAreaLayerControl.svelte";
   import CombinedAuthoritiesLayerControl from "../lib/browse/CombinedAuthoritiesLayerControl.svelte";
@@ -30,7 +31,6 @@
     MapLibreMap,
     ZoomOutMap,
   } from "../lib/common";
-  import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
@@ -40,14 +40,11 @@
   import type { Scheme as GjScheme } from "../types";
 
   // TODO Remove after the input data is fixed to plumb correct authority names.
-  let authorityNames: Set<string> | null = null;
+  let authorityNames: Set<string> = new Set(authorityNamesList);
 
-  onMount(async () => {
+  onMount(() => {
     // For govuk components. Must happen here.
     initAll();
-
-    let geojson = await getAuthoritiesGeoJson();
-    authorityNames = new Set(geojson.features.map((f) => f.properties!.name));
   });
 
   const params = new URLSearchParams(window.location.search);
@@ -123,15 +120,13 @@
       <Filters {schemes} bind:schemesToBeShown bind:filterText />
     {/if}
 
-    {#if authorityNames}
-      <ul>
-        {#each schemes.values() as scheme}
-          {#if schemesToBeShown.has(scheme.scheme_reference)}
-            <SchemeCard {scheme} {authorityNames} />
-          {/if}
-        {/each}
-      </ul>
-    {/if}
+    <ul>
+      {#each schemes.values() as scheme}
+        {#if schemesToBeShown.has(scheme.scheme_reference)}
+          <SchemeCard {scheme} {authorityNames} />
+        {/if}
+      {/each}
+    </ul>
   </div>
   <div slot="main">
     <PmTiles />
