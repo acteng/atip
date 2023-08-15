@@ -5,16 +5,16 @@
     overwriteLineLayer,
     overwritePmtilesSource,
     overwritePolygonLayer,
-  } from "../../maplibre_helpers";
-  import { map } from "../../stores";
+  } from "../../../maplibre_helpers";
+  import { map } from "../../../stores";
   import {
     ColorLegend,
     ExternalLink,
     HelpButton,
     InteractiveLayer,
-  } from "../common";
-  import { Checkbox } from "../govuk";
-  import { colors } from "./colors";
+  } from "../../common";
+  import { Checkbox } from "../../govuk";
+  import { colors } from "../colors";
 
   let name = "local_planning_authorities";
   let color = colors.local_planning_authorities;

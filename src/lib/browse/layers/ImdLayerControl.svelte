@@ -6,11 +6,11 @@
     overwriteLineLayer,
     overwritePmtilesSource,
     overwritePolygonLayer,
-  } from "../../maplibre_helpers";
-  import { map } from "../../stores";
-  import { ExternalLink, HelpButton, InteractiveLayer } from "../common";
-  import { Checkbox } from "../govuk";
-  import { colors } from "./colors";
+  } from "../../../maplibre_helpers";
+  import { map } from "../../../stores";
+  import { ExternalLink, HelpButton, InteractiveLayer } from "../../common";
+  import { Checkbox } from "../../govuk";
+  import { colors } from "../colors";
   import SequentialLegend from "./SequentialLegend.svelte";
 
   let name = "imd";

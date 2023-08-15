@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ExternalLink } from "../common";
+  import { ExternalLink } from "../../common";
   import PolygonAmenityLayerControl from "./PolygonAmenityLayerControl.svelte";
 </script>
 

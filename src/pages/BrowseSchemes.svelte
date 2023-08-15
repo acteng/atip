@@ -2,29 +2,15 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { onDestroy, onMount } from "svelte";
   import authorityNamesList from "../../assets/authority_names.json";
-  import BusRoutesLayerControl from "../lib/browse/BusRoutesLayerControl.svelte";
-  import CensusOutputAreaLayerControl from "../lib/browse/CensusOutputAreaLayerControl.svelte";
-  import CombinedAuthoritiesLayerControl from "../lib/browse/CombinedAuthoritiesLayerControl.svelte";
-  import CycleParkingLayerControl from "../lib/browse/CycleParkingLayerControl.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
-  import HospitalsLayerControl from "../lib/browse/HospitalsLayerControl.svelte";
-  import ImdLayerControl from "../lib/browse/ImdLayerControl.svelte";
-  import LocalAuthorityDistrictsLayerControl from "../lib/browse/LocalAuthorityDistrictsLayerControl.svelte";
-  import LocalPlanningAuthoritiesLayerControl from "../lib/browse/LocalPlanningAuthoritiesLayerControl.svelte";
-  import MrnLayerControl from "../lib/browse/MrnLayerControl.svelte";
-  import ParliamentaryConstituenciesLayerControl from "../lib/browse/ParliamentaryConstituenciesLayerControl.svelte";
-  import RailwayStationsLayerControl from "../lib/browse/RailwayStationsLayerControl.svelte";
+  import LayerControls from "../lib/browse/LayerControls.svelte";
   import SchemeCard from "../lib/browse/SchemeCard.svelte";
-  import SchoolsLayerControl from "../lib/browse/SchoolsLayerControl.svelte";
-  import SportsSpacesLayerControl from "../lib/browse/SportsSpacesLayerControl.svelte";
-  import WardsLayerControl from "../lib/browse/WardsLayerControl.svelte";
+  import "../style/main.css";
+  import type { MapGeoJSONFeature } from "maplibre-gl";
+  import { onDestroy, onMount } from "svelte";
   import {
-    BaselayerSwitcher,
-    CollapsibleCard,
     FileInput,
     InteractiveLayer,
     Layout,
@@ -33,7 +19,7 @@
   } from "../lib/common";
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
-  import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
+  import { ErrorMessage, SecondaryButton } from "../lib/govuk";
   import { bbox, emptyGeojson, prettyPrintMeters } from "../maplibre_helpers";
   import { colorInterventionsBySchema } from "../schemas";
   import { gjScheme, map } from "../stores";
@@ -150,37 +136,7 @@
         clickable={false}
       />
       <div class="top-right">
-        <CollapsibleCard label="Layers" open>
-          <CollapsibleCard label="Trip generators">
-            <CheckboxGroup small>
-              <SchoolsLayerControl />
-              <HospitalsLayerControl />
-              <SportsSpacesLayerControl />
-              <RailwayStationsLayerControl />
-            </CheckboxGroup>
-          </CollapsibleCard>
-          <CollapsibleCard label="Existing infrastructure">
-            <CheckboxGroup small>
-              <MrnLayerControl />
-              <BusRoutesLayerControl />
-              <CycleParkingLayerControl />
-            </CheckboxGroup>
-          </CollapsibleCard>
-          <CollapsibleCard label="Boundaries">
-            <CheckboxGroup small>
-              <ParliamentaryConstituenciesLayerControl />
-              <WardsLayerControl />
-              <CombinedAuthoritiesLayerControl />
-              <LocalAuthorityDistrictsLayerControl />
-              <LocalPlanningAuthoritiesLayerControl />
-            </CheckboxGroup>
-          </CollapsibleCard>
-          <CollapsibleCard label="Census">
-            <CensusOutputAreaLayerControl />
-            <ImdLayerControl />
-          </CollapsibleCard>
-          <BaselayerSwitcher {style} />
-        </CollapsibleCard>
+        <LayerControls {style} />
       </div>
     </MapLibreMap>
   </div>
