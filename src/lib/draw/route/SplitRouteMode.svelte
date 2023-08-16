@@ -8,15 +8,10 @@
   import type { Feature, LineString, Point, Position } from "geojson";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   import splitIcon from "../../../../assets/split_route.svg";
-  import {
-    emptyGeojson,
-    overwriteCircleLayer,
-    overwriteSource,
-    setPrecision,
-  } from "../../../maplibre_helpers";
   import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
   import type { Mode, Feature as OurFeature } from "../../../types";
   import { CollapsibleCard } from "../../common";
+  import { MapLibreUtils } from "../../maplibre";
   import type { EventHandler } from "../event_handler";
 
   const thisMode = "split-route";
@@ -43,8 +38,8 @@
 
   // Rendering
   let source = "split-route";
-  overwriteSource($map, source, emptyGeojson());
-  overwriteCircleLayer($map, {
+  MapLibreUtils.overwriteSource($map, source, MapLibreUtils.emptyGeojson());
+  MapLibreUtils.overwriteCircleLayer($map, {
     id: "draw-split-route",
     source,
     color: "black",
@@ -52,7 +47,7 @@
   });
 
   $: {
-    let gj = emptyGeojson();
+    let gj = MapLibreUtils.emptyGeojson();
     if (snappedCursor) {
       gj.features.push(snappedCursor);
     }
@@ -112,10 +107,12 @@
         let piece1 = result.features[0];
         let piece2 = result.features[1];
         // lineSplit may introduce unnecessary coordinate precision
-        piece1.geometry.coordinates =
-          piece1.geometry.coordinates.map(setPrecision);
-        piece2.geometry.coordinates =
-          piece2.geometry.coordinates.map(setPrecision);
+        piece1.geometry.coordinates = piece1.geometry.coordinates.map(
+          MapLibreUtils.setPrecision
+        );
+        piece2.geometry.coordinates = piece2.geometry.coordinates.map(
+          MapLibreUtils.setPrecision
+        );
 
         gjScheme.update((gj) => {
           // Keep the old ID for one, assign a new ID to the other
@@ -168,7 +165,7 @@
       properties: {},
       geometry: {
         type: "Point",
-        coordinates: setPrecision(pt),
+        coordinates: MapLibreUtils.setPrecision(pt),
       },
     };
   }

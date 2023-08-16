@@ -7,20 +7,9 @@ import type {
   MapMouseEvent,
 } from "maplibre-gl";
 import { circleRadius, colors } from "../../../colors";
-import {
-  emptyGeojson,
-  isLine,
-  isPoint,
-  isPolygon,
-  overwriteCircleLayer,
-  overwriteLineLayer,
-  overwritePolygonLayer,
-  overwriteSource,
-  pointFeature,
-  setPrecision,
-  type FeatureWithProps,
-} from "../../../maplibre_helpers";
 import { isAToolInUse } from "../../../stores";
+import type { FeatureWithProps } from "../../maplibre";
+import { MapLibreUtils } from "../../maplibre/index";
 import type { EventHandler } from "../event_handler";
 
 const source = "edit-polygon-mode";
@@ -54,28 +43,28 @@ export class PolygonTool {
     this.dragFrom = null;
 
     // Render
-    overwriteSource(map, source, emptyGeojson());
+    MapLibreUtils.overwriteSource(map, source, MapLibreUtils.emptyGeojson());
 
-    overwritePolygonLayer(map, {
+    MapLibreUtils.overwritePolygonLayer(map, {
       id: "edit-polygon-fill",
       source,
-      filter: isPolygon,
+      filter: MapLibreUtils.isPolygon,
       color: "red",
       opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
     });
-    overwriteLineLayer(map, {
+    MapLibreUtils.overwriteLineLayer(map, {
       id: "edit-polygon-lines",
       source,
-      filter: isLine,
+      filter: MapLibreUtils.isLine,
       // TODO Dashed
       color: "black",
       width: 8,
       opacity: 0.5,
     });
-    overwriteCircleLayer(map, {
+    MapLibreUtils.overwriteCircleLayer(map, {
       id: "edit-polygon-vertices",
       source,
-      filter: isPoint,
+      filter: MapLibreUtils.isPoint,
       color: colors.hovering,
       radius: circleRadius,
       opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
@@ -170,7 +159,7 @@ export class PolygonTool {
     // point, the second immediately deletes it, and so we simulate a third
     // click to add it again.
     // TODO But since the delete case currently doesn't set cursor during recalculateHovering, do this hack
-    this.cursor = pointFeature(e.lngLat.toArray());
+    this.cursor = MapLibreUtils.pointFeature(e.lngLat.toArray());
     this.onClick(e);
     this.finish();
   };
@@ -271,10 +260,10 @@ export class PolygonTool {
   }
 
   private redraw() {
-    let gj = emptyGeojson();
+    let gj = MapLibreUtils.emptyGeojson();
 
     this.points.forEach((pt, idx) => {
-      let f = pointFeature(pt);
+      let f = MapLibreUtils.pointFeature(pt);
       f.properties!.hover = this.hover == idx;
       f.properties!.idx = idx;
       gj.features.push(f);
@@ -326,7 +315,7 @@ export class PolygonTool {
       }
     }
     if (this.hover == null) {
-      this.cursor = pointFeature(e.lngLat.toArray());
+      this.cursor = MapLibreUtils.pointFeature(e.lngLat.toArray());
     }
 
     this.redraw();
@@ -337,7 +326,7 @@ export class PolygonTool {
     if (this.points.length < 3) {
       return null;
     }
-    let trimmed = this.points.map(setPrecision);
+    let trimmed = this.points.map(MapLibreUtils.setPrecision);
     // Deep clone here, or face the wrath of crazy bugs later!
     let coordinates = [JSON.parse(JSON.stringify(trimmed))];
     coordinates[0].push(JSON.parse(JSON.stringify(coordinates[0][0])));

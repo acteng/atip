@@ -1,7 +1,6 @@
 <script lang="ts">
   import { type MapMouseEvent } from "maplibre-gl";
   import { onDestroy } from "svelte";
-  import { bbox } from "../../maplibre_helpers";
   import { schemaSingularNoun } from "../../schemas";
   import {
     currentMode,
@@ -12,6 +11,7 @@
     openFromSidebar,
   } from "../../stores";
   import type { Mode, Schema } from "../../types";
+  import { MapLibreUtils } from "../maplibre";
   import type { EventHandler } from "./event_handler";
 
   const thisMode = "edit-attribute";
@@ -39,7 +39,7 @@
           duration: 500,
         });
       } else {
-        $map.fitBounds(bbox(feature), {
+        $map.fitBounds(MapLibreUtils.bbox(feature), {
           padding: 200,
           duration: 500,
         });

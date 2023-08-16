@@ -34,7 +34,7 @@
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { CheckboxGroup, ErrorMessage, SecondaryButton } from "../lib/govuk";
-  import { bbox, emptyGeojson, prettyPrintMeters } from "../maplibre_helpers";
+  import { MapLibreUtils } from "../lib/maplibre";
   import { colorInterventionsBySchema } from "../schemas";
   import { gjScheme, map } from "../stores";
   import type { Scheme as GjScheme } from "../types";
@@ -56,7 +56,7 @@
   let filterText = "";
 
   onDestroy(() => {
-    gjScheme.set(emptyGeojson() as GjScheme);
+    gjScheme.set(MapLibreUtils.emptyGeojson() as GjScheme);
   });
 
   function loadFile(text: string) {
@@ -66,7 +66,7 @@
       gjScheme.set(gj);
       errorMessage = "";
 
-      $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
+      $map?.fitBounds(MapLibreUtils.bbox(gj), { padding: 20, animate: false });
     } catch (err) {
       errorMessage = `Couldn't load schemes from a file: ${err}`;
     }
@@ -81,7 +81,9 @@
     })</h2>`;
     html += `<p>Scheme reference: ${props.scheme_reference}</p>`;
     if (props.length_meters) {
-      html += `<p>Length: ${prettyPrintMeters(props.length_meters)}</p>`;
+      html += `<p>Length: ${MapLibreUtils.prettyPrintMeters(
+        props.length_meters
+      )}</p>`;
     }
     if (props.description) {
       html += `<p>${highlightFilter(props.description)}</p>`;

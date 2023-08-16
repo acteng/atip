@@ -2,15 +2,6 @@
   import type { GeoJSONSource } from "maplibre-gl";
   import { circleRadius, colors, lineWidth } from "../../colors";
   import {
-    emptyGeojson,
-    isLine,
-    isPoint,
-    isPolygon,
-    overwriteCircleLayer,
-    overwriteLineLayer,
-    overwriteSource,
-  } from "../../maplibre_helpers";
-  import {
     formOpen,
     gjScheme,
     isAToolInUse,
@@ -18,6 +9,7 @@
     mapHover,
     sidebarHover,
   } from "../../stores";
+  import { MapLibreUtils } from "../maplibre";
 
   // Show clickable objects on the map using the cursor
   $: {
@@ -32,27 +24,27 @@
   // Use a layer that only ever has zero or one features for hovering. I think
   // https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an
   // easier way to do this, but I can't make it work with the draw plugin.
-  overwriteSource($map, source, emptyGeojson());
+  MapLibreUtils.overwriteSource($map, source, MapLibreUtils.emptyGeojson());
 
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteLineLayer($map, {
     id: "hover-polygons",
     source,
-    filter: isPolygon,
+    filter: MapLibreUtils.isPolygon,
     // Outline around the polygons
     color: colors.hovering,
     width: 0.5 * lineWidth,
   });
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteLineLayer($map, {
     id: "hover-lines",
     source,
-    filter: isLine,
+    filter: MapLibreUtils.isLine,
     color: colors.hovering,
     width: 1.5 * lineWidth,
   });
-  overwriteCircleLayer($map, {
+  MapLibreUtils.overwriteCircleLayer($map, {
     id: "hover-points",
     source,
-    filter: isPoint,
+    filter: MapLibreUtils.isPoint,
     color: colors.hovering,
     radius: 1.5 * circleRadius,
   });
@@ -65,7 +57,9 @@
         $gjScheme.features.find((f) => f.id == id)!
       );
     } else {
-      ($map.getSource(source) as GeoJSONSource).setData(emptyGeojson());
+      ($map.getSource(source) as GeoJSONSource).setData(
+        MapLibreUtils.emptyGeojson()
+      );
     }
   }
 </script>

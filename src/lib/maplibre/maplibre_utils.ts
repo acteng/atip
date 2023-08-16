@@ -21,16 +21,16 @@ const defaultColor = "#000000";
 const defaultFilter = true;
 const defaultOpacity = 1;
 
-export const isPolygon: FilterSpecification = ["==", "$type", "Polygon"];
-export const isLine: FilterSpecification = ["==", "$type", "LineString"];
-export const isPoint: FilterSpecification = ["==", "$type", "Point"];
+const isPolygon: FilterSpecification = ["==", "$type", "Polygon"];
+const isLine: FilterSpecification = ["==", "$type", "LineString"];
+const isPoint: FilterSpecification = ["==", "$type", "Point"];
 
 // This sets up a GeoJSON source. MapLibre's API isn't idempotent; you can't
 // overwrite an existing source or layer. This complicates Vite's hot-reload
 // feature, unless every component correctly tears down all sources and layers.
 // These methods workaround that lifetime management hassle by overwriting if
 // necessary. The data can be GeoJSON or a URL to a GeoJSON file.
-export function overwriteSource(map: Map, id: string, data: GeoJSON | string) {
+function overwriteSource(map: Map, id: string, data: GeoJSON | string) {
   cleanupSource(map, id);
   map.addSource(id, {
     type: "geojson",
@@ -39,7 +39,7 @@ export function overwriteSource(map: Map, id: string, data: GeoJSON | string) {
 }
 
 // Like overwriteSource, but for PMTiles data hosted at a URL.
-export function overwritePmtilesSource(map: Map, id: string, url: string) {
+function overwritePmtilesSource(map: Map, id: string, url: string) {
   cleanupSource(map, id);
   map.addSource(id, {
     type: "vector",
@@ -68,7 +68,7 @@ function cleanupSource(map: Map, id: string) {
 // circles, lines, and polygons. The layer.id here MUST be present in
 // layerZorder.
 // TODO It's exported for the LaneDetails Layer helper. Reconsider.
-export function overwriteLayer(
+function overwriteLayer(
   map: Map,
   layer: LayerSpecification & { source: string }
 ) {
@@ -106,7 +106,7 @@ export function overwriteLayer(
   map.addLayer(layer, beforeId);
 }
 
-export function overwritePolygonLayer(
+function overwritePolygonLayer(
   map: Map,
   params: {
     id: string;
@@ -134,7 +134,7 @@ export function overwritePolygonLayer(
   overwriteLayer(map, layerSpec);
 }
 
-export function overwriteCircleLayer(
+function overwriteCircleLayer(
   map: Map,
   params: {
     id: string;
@@ -168,7 +168,7 @@ export function overwriteCircleLayer(
   overwriteLayer(map, layerSpec);
 }
 
-export function overwriteLineLayer(
+function overwriteLineLayer(
   map: Map,
   params: {
     id: string;
@@ -202,14 +202,14 @@ export function overwriteLineLayer(
   overwriteLayer(map, layerSpec);
 }
 
-export function emptyGeojson(): FeatureCollection {
+function emptyGeojson(): FeatureCollection {
   return {
     type: "FeatureCollection",
     features: [],
   };
 }
 
-export function pointFeature(pt: Position): FeatureWithProps<Point> {
+function pointFeature(pt: Position): FeatureWithProps<Point> {
   return {
     type: "Feature",
     properties: {},
@@ -222,14 +222,14 @@ export function pointFeature(pt: Position): FeatureWithProps<Point> {
 
 // Per https://datatracker.ietf.org/doc/html/rfc7946#section-11.2, 6 decimal
 // places (10cm) is plenty of precision
-export function setPrecision(pt: Position): Position {
+function setPrecision(pt: Position): Position {
   return [Math.round(pt[0] * 10e6) / 10e6, Math.round(pt[1] * 10e6) / 10e6];
 }
 
 // Helper for https://maplibre.org/maplibre-style-spec/expressions/#match.
 // Gets one feature property, uses a map to match a key to a value, and
 // includes a fallback if no keys match.
-export function constructMatchExpression<OutputType>(
+function constructMatchExpression<OutputType>(
   getter: any[],
   map: { [name: string]: OutputType },
   fallback: OutputType
@@ -245,7 +245,7 @@ export function constructMatchExpression<OutputType>(
 
 // Returns hoveredValue when the feature is hovered on, and defaultValue
 // otherwise. Use with InteractiveLayer.
-export function hoveredToggle<Type>(
+function hoveredToggle<Type>(
   hoveredValue: Type,
   defaultValue: Type
 ): DataDrivenPropertyValueSpecification<Type> {
@@ -258,7 +258,7 @@ export function hoveredToggle<Type>(
 }
 
 // Helper for https://maplibre.org/maplibre-style-spec/expressions/#step.
-export function makeColorRamp(
+function makeColorRamp(
   input: DataDrivenPropertyValueSpecification<number>,
   limits: number[],
   colorScale: string[]
@@ -276,11 +276,11 @@ export function makeColorRamp(
 }
 
 // Suitable for passing to map.fitBounds. Work around https://github.com/Turfjs/turf/issues/1807.
-export function bbox(gj: GeoJSON): [number, number, number, number] {
+function bbox(gj: GeoJSON): [number, number, number, number] {
   return turfBbox(gj) as [number, number, number, number];
 }
 
-export function prettyPrintMeters(x: number): string {
+function prettyPrintMeters(x: number): string {
   if (x < 1000.0) {
     return Math.round(x) + " m";
   }
@@ -362,3 +362,23 @@ const layerZorder = [
   // Draw the inverted boundary fade on top of basemap labels
   "boundary",
 ];
+
+export default {
+  isLine,
+  isPoint,
+  isPolygon,
+  overwriteSource,
+  overwritePmtilesSource,
+  overwriteLayer,
+  overwriteCircleLayer,
+  overwritePolygonLayer,
+  overwriteLineLayer,
+  emptyGeojson,
+  pointFeature,
+  setPrecision,
+  constructMatchExpression,
+  hoveredToggle,
+  makeColorRamp,
+  bbox,
+  prettyPrintMeters,
+};

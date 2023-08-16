@@ -1,7 +1,7 @@
 import { type Remote } from "comlink";
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
-import { emptyGeojson } from "./maplibre_helpers";
+import { MapLibreUtils } from "./lib/maplibre/index";
 import {
   isStreetViewImagery,
   type Mode,
@@ -19,7 +19,9 @@ export const map: Writable<Map> = writable(null);
 export const routeInfo: Writable<Remote<RouteInfo> | null> = writable(null);
 
 // TODO Should we instead store a map from ID to feature?
-export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);
+export const gjScheme: Writable<Scheme> = writable(
+  MapLibreUtils.emptyGeojson() as Scheme
+);
 
 // The optional ID of a feature whose form is open on the sidebar.
 // TODO Can we make a type for feature ID?

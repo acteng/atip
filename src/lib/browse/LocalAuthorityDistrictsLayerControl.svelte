@@ -1,11 +1,5 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    hoveredToggle,
-    overwriteLineLayer,
-    overwritePolygonLayer,
-    overwriteSource,
-  } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import {
     ColorLegend,
@@ -14,21 +8,26 @@
     InteractiveLayer,
   } from "../common";
   import { Checkbox } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import { colors } from "./colors";
 
   let name = "local_authority_districts";
   let color = colors.local_authority_districts;
   let outlineLayer = `${name}-outline`;
 
-  overwriteSource($map, name, `https://atip.uk/layers/v1/${name}.geojson`);
+  MapLibreUtils.overwriteSource(
+    $map,
+    name,
+    `https://atip.uk/layers/v1/${name}.geojson`
+  );
 
-  overwritePolygonLayer($map, {
+  MapLibreUtils.overwritePolygonLayer($map, {
     id: name,
     source: name,
     color,
-    opacity: hoveredToggle(0.5, 0.1),
+    opacity: MapLibreUtils.hoveredToggle(0.5, 0.1),
   });
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteLineLayer($map, {
     id: outlineLayer,
     source: name,
     color,

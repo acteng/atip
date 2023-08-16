@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
   import { onDestroy } from "svelte";
-  import { overwriteLayer, overwriteSource } from "../../../maplibre_helpers";
   import { map } from "../../../stores";
+  import { MapLibreUtils } from "../../maplibre";
 
   // This component manages a source with exactly one layer. Both are torn down
   // when this component is destroyed.
@@ -13,8 +13,8 @@
 
   let layer = `${source}-layer`;
 
-  overwriteSource($map, source, gj);
-  overwriteLayer($map, {
+  MapLibreUtils.overwriteSource($map, source, gj);
+  MapLibreUtils.overwriteLayer($map, {
     id: layer,
     source,
     ...style,

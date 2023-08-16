@@ -2,26 +2,22 @@
   import mask from "@turf/mask";
   import type { FeatureCollection, Polygon } from "geojson";
   import { getContext } from "svelte";
-  import {
-    bbox,
-    overwritePolygonLayer,
-    overwriteSource,
-  } from "../maplibre_helpers";
   import { map } from "../stores";
+  import { MapLibreUtils } from "./maplibre";
 
   export let boundaryGeojson: FeatureCollection<Polygon>;
 
   const setCamera = getContext("setCamera");
 
   if (setCamera) {
-    $map.fitBounds(bbox(boundaryGeojson), {
+    $map.fitBounds(MapLibreUtils.bbox(boundaryGeojson), {
       padding: 20,
       animate: false,
     });
   }
 
-  overwriteSource($map, "boundary", mask(boundaryGeojson));
-  overwritePolygonLayer($map, {
+  MapLibreUtils.overwriteSource($map, "boundary", mask(boundaryGeojson));
+  MapLibreUtils.overwritePolygonLayer($map, {
     id: "boundary",
     source: "boundary",
     color: "black",

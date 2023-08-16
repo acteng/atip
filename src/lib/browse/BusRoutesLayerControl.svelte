@@ -1,10 +1,5 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    hoveredToggle,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-  } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import {
     ColorLegend,
@@ -13,17 +8,18 @@
     InteractiveLayer,
   } from "../common";
   import { Checkbox } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import { colors } from "./colors";
 
   let name = "bus_routes";
 
-  overwritePmtilesSource(
+  MapLibreUtils.overwritePmtilesSource(
     $map,
     name,
     `https://atip.uk/layers/v1/${name}.pmtiles`
   );
 
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteLineLayer($map, {
     id: name,
     source: name,
     sourceLayer: name,
@@ -34,7 +30,7 @@
       colors.bus_route_without_lane,
     ],
     width: 5,
-    opacity: hoveredToggle(0.5, 1.0),
+    opacity: MapLibreUtils.hoveredToggle(0.5, 1.0),
   });
 
   let show = false;

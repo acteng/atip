@@ -5,22 +5,14 @@
     GeoJSONSource,
   } from "maplibre-gl";
   import { circleRadius, colors, lineWidth } from "../../colors";
-  import {
-    isLine,
-    isPoint,
-    isPolygon,
-    overwriteCircleLayer,
-    overwriteLineLayer,
-    overwritePolygonLayer,
-    overwriteSource,
-  } from "../../maplibre_helpers";
   import { gjScheme, map } from "../../stores";
+  import { MapLibreUtils } from "../maplibre";
 
   export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
 
   let source = "interventions";
 
-  overwriteSource($map, source, $gjScheme);
+  MapLibreUtils.overwriteSource($map, source, $gjScheme);
   // Keep the final data synced to what's drawn here
   $: {
     let copy = JSON.parse(JSON.stringify($gjScheme));
@@ -57,12 +49,12 @@
   ];
   const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
 
-  overwriteCircleLayer($map, {
+  MapLibreUtils.overwriteCircleLayer($map, {
     id: "interventions-points",
     source,
     filter: [
       "all",
-      isPoint,
+      MapLibreUtils.isPoint,
       hideWhileEditing,
       notEndpoint,
     ] as FilterSpecification,
@@ -71,15 +63,19 @@
     // TODO Outline?
   });
 
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteLineLayer($map, {
     id: "interventions-lines",
     source,
-    filter: ["all", isLine, hideWhileEditing] as FilterSpecification,
+    filter: [
+      "all",
+      MapLibreUtils.isLine,
+      hideWhileEditing,
+    ] as FilterSpecification,
     color: colorInterventions,
     width: lineWidth,
   });
   // Draw endpoints to emphasize where two LineStrings meet
-  overwriteCircleLayer($map, {
+  MapLibreUtils.overwriteCircleLayer($map, {
     id: "interventions-lines-endpoints",
     source,
     filter: ["==", "endpoint", true],
@@ -89,17 +85,25 @@
     strokeWidth: 2.0,
   });
 
-  overwritePolygonLayer($map, {
+  MapLibreUtils.overwritePolygonLayer($map, {
     id: "interventions-polygons",
     source,
-    filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
+    filter: [
+      "all",
+      MapLibreUtils.isPolygon,
+      hideWhileEditing,
+    ] as FilterSpecification,
     color: colorInterventions,
     opacity: 0.2,
   });
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteLineLayer($map, {
     id: "interventions-polygon-outlines",
     source,
-    filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
+    filter: [
+      "all",
+      MapLibreUtils.isPolygon,
+      hideWhileEditing,
+    ] as FilterSpecification,
     color: colorInterventions,
     opacity: 0.5,
     width: 0.7 * lineWidth,

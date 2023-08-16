@@ -1,12 +1,9 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    overwriteCircleLayer,
-    overwriteSource,
-  } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import { ColorLegend, HelpButton, InteractiveLayer } from "../common";
   import { Checkbox } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import { colors } from "./colors";
 
   // This name is used for multiple things:
@@ -27,9 +24,13 @@
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  overwriteSource($map, name, `https://atip.uk/layers/v1/${name}.geojson`);
+  MapLibreUtils.overwriteSource(
+    $map,
+    name,
+    `https://atip.uk/layers/v1/${name}.geojson`
+  );
 
-  overwriteCircleLayer($map, {
+  MapLibreUtils.overwriteCircleLayer($map, {
     id: name,
     source: name,
     color: color,

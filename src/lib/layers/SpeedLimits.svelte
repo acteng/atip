@@ -9,14 +9,10 @@
   } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
   import { lineWidth } from "../../colors";
-  import {
-    emptyGeojson,
-    overwriteLineLayer,
-    overwriteSource,
-  } from "../../maplibre_helpers";
   import { gjScheme, map, routeInfo } from "../../stores";
   import type { Feature } from "../../types";
   import { DiscreteLegend, HelpButton, InteractiveLayer } from "../common";
+  import { MapLibreUtils } from "../maplibre";
 
   // Show along a route if specified, or show all otherwise
   export let id: number | undefined;
@@ -62,8 +58,8 @@
   // NOTE! There's only ever one source and layer with this name. This component
   // (and the source and layer) will get destroyed frequently, but even if not,
   // overwriting should be safe.
-  overwriteSource($map, source, emptyGeojson());
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteSource($map, source, MapLibreUtils.emptyGeojson());
+  MapLibreUtils.overwriteLineLayer($map, {
     id: layer,
     source,
     color,

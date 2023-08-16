@@ -1,13 +1,9 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    hoveredToggle,
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import { ColorLegend, HelpButton, InteractiveLayer } from "../common";
   import { Checkbox } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import { colors } from "./colors";
 
   // This name is used for multiple things:
@@ -26,18 +22,18 @@
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  overwritePmtilesSource(
+  MapLibreUtils.overwritePmtilesSource(
     $map,
     name,
     `https://atip.uk/layers/v1/${name}.pmtiles`
   );
 
-  overwritePolygonLayer($map, {
+  MapLibreUtils.overwritePolygonLayer($map, {
     id: name,
     source: name,
     sourceLayer: name,
     color,
-    opacity: hoveredToggle(1.0, 0.7),
+    opacity: MapLibreUtils.hoveredToggle(1.0, 0.7),
   });
 
   let show = false;

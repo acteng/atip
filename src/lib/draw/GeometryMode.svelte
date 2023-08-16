@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { LineString, Point, Polygon } from "geojson";
   import { MapMouseEvent } from "maplibre-gl";
-  import type { FeatureWithProps } from "../../maplibre_helpers";
   import { schemaSingularNoun } from "../../schemas";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion, Schema } from "../../types";
+  import type { FeatureWithProps } from "../maplibre";
   import type { EventHandler } from "./event_handler";
   import type { PointTool } from "./point/point_tool";
   import PointControls from "./point/PointControls.svelte";

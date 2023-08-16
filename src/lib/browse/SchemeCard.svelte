@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { FeatureCollection } from "geojson";
-  import { bbox } from "../../maplibre_helpers";
   import { gjScheme, map } from "../../stores";
   import { CollapsibleCard } from "../common";
   import { SecondaryButton } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import type { Scheme } from "./data";
 
   export let scheme: Scheme;
@@ -22,7 +22,7 @@
         (f) => f.properties.scheme_reference == scheme.scheme_reference
       ),
     };
-    $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
+    $map?.fitBounds(MapLibreUtils.bbox(gj), { padding: 20, animate: false });
   }
 
   function editScheme() {

@@ -1,15 +1,9 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    hoveredToggle,
-    makeColorRamp,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import { ExternalLink, HelpButton, InteractiveLayer } from "../common";
   import { Checkbox } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import { colors } from "./colors";
   import SequentialLegend from "./SequentialLegend.svelte";
 
@@ -20,21 +14,25 @@
   // The deciles are [1, 10]. The 5 colors cover two each.
   let limits = [0, 2, 4, 6, 8, 10];
 
-  overwritePmtilesSource(
+  MapLibreUtils.overwritePmtilesSource(
     $map,
     name,
     `https://atip.uk/layers/v1/${name}.pmtiles`
   );
 
-  overwritePolygonLayer($map, {
+  MapLibreUtils.overwritePolygonLayer($map, {
     id: name,
     source: name,
     sourceLayer: name,
     // Decile 1 is the most deprived, but we want to invert for the color scale
-    color: makeColorRamp(["-", 10, ["get", "decile"]], limits, colorScale),
-    opacity: hoveredToggle(0.5, 0.7),
+    color: MapLibreUtils.makeColorRamp(
+      ["-", 10, ["get", "decile"]],
+      limits,
+      colorScale
+    ),
+    opacity: MapLibreUtils.hoveredToggle(0.5, 0.7),
   });
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteLineLayer($map, {
     id: outlineLayer,
     source: name,
     sourceLayer: name,

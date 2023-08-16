@@ -1,7 +1,8 @@
 import type { Point } from "geojson";
 import type { Map, MapMouseEvent } from "maplibre-gl";
-import { pointFeature, type FeatureWithProps } from "../../../maplibre_helpers";
 import { isAToolInUse } from "../../../stores";
+import type { FeatureWithProps } from "../../maplibre";
+import { MapLibreUtils } from "../../maplibre/index";
 import type { EventHandler } from "../event_handler";
 
 // Note this uses the geojson FeatureWithProps, not our specialization in types.ts
@@ -14,7 +15,7 @@ export class PointTool {
 
   onMouseMove = (e: MapMouseEvent) => {
     if (this.active) {
-      this.cursor = pointFeature(e.lngLat.toArray());
+      this.cursor = MapLibreUtils.pointFeature(e.lngLat.toArray());
     }
   };
 

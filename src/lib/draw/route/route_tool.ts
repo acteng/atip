@@ -1,19 +1,9 @@
 import type { LineString, Polygon } from "geojson";
 import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
 import { JsRouteSnapper } from "route-snapper";
-import {
-  constructMatchExpression,
-  emptyGeojson,
-  isLine,
-  isPoint,
-  isPolygon,
-  overwriteCircleLayer,
-  overwriteLineLayer,
-  overwritePolygonLayer,
-  overwriteSource,
-  type FeatureWithProps,
-} from "../../../maplibre_helpers";
 import { isAToolInUse } from "../../../stores";
+import { type FeatureWithProps } from "../../maplibre";
+import { MapLibreUtils } from "../../maplibre/index";
 import type { EventHandler } from "../event_handler";
 
 const source = "route-snapper";
@@ -48,12 +38,12 @@ export class RouteTool {
     this.eventListenersFailure = [];
 
     // Rendering
-    overwriteSource(map, source, emptyGeojson());
-    overwriteCircleLayer(map, {
+    MapLibreUtils.overwriteSource(map, source, MapLibreUtils.emptyGeojson());
+    MapLibreUtils.overwriteCircleLayer(map, {
       id: "route-points",
       source,
-      filter: isPoint,
-      color: constructMatchExpression(
+      filter: MapLibreUtils.isPoint,
+      color: MapLibreUtils.constructMatchExpression(
         ["get", "type"],
         {
           hovered: "green",
@@ -61,23 +51,23 @@ export class RouteTool {
         },
         "black"
       ),
-      radius: constructMatchExpression(
+      radius: MapLibreUtils.constructMatchExpression(
         ["get", "type"],
         { unimportant: circleRadiusPixels / 2.0 },
         circleRadiusPixels
       ),
     });
-    overwriteLineLayer(map, {
+    MapLibreUtils.overwriteLineLayer(map, {
       id: "route-lines",
       source,
-      filter: isLine,
+      filter: MapLibreUtils.isLine,
       color: "black",
       width: 2.5,
     });
-    overwritePolygonLayer(map, {
+    MapLibreUtils.overwritePolygonLayer(map, {
       id: "route-polygons",
       source,
-      filter: isPolygon,
+      filter: MapLibreUtils.isPolygon,
       color: "black",
       opacity: 0.5,
     });

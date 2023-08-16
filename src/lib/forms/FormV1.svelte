@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Feature, LineString } from "geojson";
-  import { prettyPrintMeters } from "../../maplibre_helpers";
   import { gjScheme, routeInfo } from "../../stores";
   import { FormElement, Radio, SecondaryButton, TextArea } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import RouteInfoLayers from "./RouteInfoLayers.svelte";
 
   export let id: number;
@@ -51,6 +51,6 @@
 <TextArea label="Description" bind:value={description} />
 
 {#if length_meters}
-  <p>Length: {prettyPrintMeters(length_meters)}</p>
+  <p>Length: {MapLibreUtils.prettyPrintMeters(length_meters)}</p>
   <RouteInfoLayers {id} />
 {/if}

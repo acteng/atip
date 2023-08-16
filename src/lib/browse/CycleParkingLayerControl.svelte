@@ -1,9 +1,5 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    overwriteCircleLayer,
-    overwritePmtilesSource,
-  } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import {
     ColorLegend,
@@ -12,18 +8,19 @@
     InteractiveLayer,
   } from "../common";
   import { Checkbox } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import { colors } from "./colors";
 
   let name = "cycle_parking";
   let color = colors.cycle_parking;
 
-  overwritePmtilesSource(
+  MapLibreUtils.overwritePmtilesSource(
     $map,
     name,
     `https://atip.uk/layers/v1/${name}.pmtiles`
   );
 
-  overwriteCircleLayer($map, {
+  MapLibreUtils.overwriteCircleLayer($map, {
     id: name,
     source: name,
     sourceLayer: name,

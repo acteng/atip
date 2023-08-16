@@ -15,8 +15,8 @@
   import "maplibre-gl/dist/maplibre-gl.css";
   import { FileInput, InteractiveLayer } from "../lib/common";
   import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
+  import { MapLibreUtils } from "../lib/maplibre";
   import About from "../lib/sidebar/About.svelte";
-  import { bbox, hoveredToggle } from "../maplibre_helpers";
   import { map as mapStore } from "../stores";
   import type { Schema } from "../types";
 
@@ -61,7 +61,7 @@
     mapStore.set(loadedMap);
 
     map.on("load", function () {
-      map.fitBounds(bbox(json), {
+      map.fitBounds(MapLibreUtils.bbox(json), {
         padding: 20,
         animate: false,
       });
@@ -79,7 +79,7 @@
         paint: {
           "fill-color": "rgb(200, 100, 240)",
           "fill-outline-color": "rgb(200, 100, 240)",
-          "fill-opacity": hoveredToggle(0.8, 0.4),
+          "fill-opacity": MapLibreUtils.hoveredToggle(0.8, 0.4),
         },
       });
     });

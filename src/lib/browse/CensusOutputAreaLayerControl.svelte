@@ -1,15 +1,9 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    hoveredToggle,
-    makeColorRamp,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "../../maplibre_helpers";
   import { map } from "../../stores";
   import { ExternalLink, HelpButton, InteractiveLayer } from "../common";
   import { Checkbox } from "../govuk";
+  import { MapLibreUtils } from "../maplibre";
   import { colors } from "./colors";
   import SequentialLegend from "./SequentialLegend.svelte";
 
@@ -36,7 +30,7 @@
       $map.setPaintProperty(
         name,
         "fill-color",
-        makeColorRamp(["get", colorBy], makeLimits(), colorScale)
+        MapLibreUtils.makeColorRamp(["get", colorBy], makeLimits(), colorScale)
       );
       // InteractiveLayer manages the polygon layer, but we also need to control the outline
       $map.setLayoutProperty(outlineLayer, "visibility", "visible");
@@ -45,21 +39,21 @@
     }
   }
 
-  overwritePmtilesSource(
+  MapLibreUtils.overwritePmtilesSource(
     $map,
     name,
     `https://atip.uk/layers/v1/${name}.pmtiles`
   );
 
-  overwritePolygonLayer($map, {
+  MapLibreUtils.overwritePolygonLayer($map, {
     id: name,
     source: name,
     sourceLayer: name,
     // Initially set to a dummy value
     color: "black",
-    opacity: hoveredToggle(0.5, 0.7),
+    opacity: MapLibreUtils.hoveredToggle(0.5, 0.7),
   });
-  overwriteLineLayer($map, {
+  MapLibreUtils.overwriteLineLayer($map, {
     id: outlineLayer,
     source: name,
     sourceLayer: name,
