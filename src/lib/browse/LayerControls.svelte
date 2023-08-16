@@ -5,6 +5,7 @@
   import CensusOutputAreaLayerControl from "./layers/CensusOutputAreaLayerControl.svelte";
   import CombinedAuthoritiesLayerControl from "./layers/CombinedAuthoritiesLayerControl.svelte";
   import CycleParkingLayerControl from "./layers/CycleParkingLayerControl.svelte";
+  import CyclePathsLayerControl from "./layers/CyclePathsLayerControl.svelte";
   import HospitalsLayerControl from "./layers/HospitalsLayerControl.svelte";
   import ImdLayerControl from "./layers/ImdLayerControl.svelte";
   import LocalAuthorityDistrictsLayerControl from "./layers/LocalAuthorityDistrictsLayerControl.svelte";
@@ -30,6 +31,7 @@
   </CollapsibleCard>
   <CollapsibleCard label="Existing infrastructure">
     <CheckboxGroup small>
+      <CyclePathsLayerControl />
       <MrnLayerControl />
       <BusRoutesLayerControl />
       <CycleParkingLayerControl />
