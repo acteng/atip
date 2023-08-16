@@ -14,6 +14,14 @@ export const colors = {
   bus_route_without_lane: "#C2A6D8",
   cycle_parking: "black",
 
+  // Thanks to https://github.com/cyipt/cyipt-website/issues/23
+  cycle_paths: {
+    track: "#0000FF",
+    lane: "#009FEF",
+    shared_use_segregated: "#FF9900",
+    shared_use_unsegregated: "#E7E700",
+  },
+
   // Color ramp from https://www.ons.gov.uk/census/maps/choropleth
   sequential_low_to_high: [
     "#CDE594",
