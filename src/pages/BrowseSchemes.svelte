@@ -19,7 +19,7 @@
   } from "../lib/common";
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
-  import { ErrorMessage, SecondaryButton } from "../lib/govuk";
+  import { ErrorMessage } from "../lib/govuk";
   import { bbox, emptyGeojson, prettyPrintMeters } from "../lib/maplibre";
   import { colorInterventionsBySchema } from "../schemas";
   import { gjScheme, map } from "../stores";
@@ -90,9 +90,6 @@
 
 <Layout>
   <div slot="sidebar" class="govuk-prose">
-    <SecondaryButton on:click={() => window.open("index.html")}>
-      Home
-    </SecondaryButton>
     <div style="display: flex; justify-content: space-between">
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
