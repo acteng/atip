@@ -9,14 +9,14 @@
   } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
   import { lineWidth } from "../../colors";
+  import { gjScheme, map, routeInfo } from "../../stores";
+  import type { Feature } from "../../types";
+  import { DiscreteLegend, HelpButton, InteractiveLayer } from "../common";
   import {
     emptyGeojson,
     overwriteLineLayer,
     overwriteSource,
   } from "../maplibre";
-  import { gjScheme, map, routeInfo } from "../../stores";
-  import type { Feature } from "../../types";
-  import { DiscreteLegend, HelpButton, InteractiveLayer } from "../common";
 
   // Show along a route if specified, or show all otherwise
   export let id: number | undefined;

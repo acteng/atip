@@ -2,6 +2,14 @@
   import type { GeoJSONSource } from "maplibre-gl";
   import { circleRadius, colors, lineWidth } from "../../colors";
   import {
+    formOpen,
+    gjScheme,
+    isAToolInUse,
+    map,
+    mapHover,
+    sidebarHover,
+  } from "../../stores";
+  import {
     emptyGeojson,
     isLine,
     isPoint,
@@ -10,14 +18,6 @@
     overwriteLineLayer,
     overwriteSource,
   } from "../maplibre";
-  import {
-    formOpen,
-    gjScheme,
-    isAToolInUse,
-    map,
-    mapHover,
-    sidebarHover,
-  } from "../../stores";
 
   // Show clickable objects on the map using the cursor
   $: {

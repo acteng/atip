@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { constructMatchExpression } from "../maplibre";
   import { colorInterventionsBySchema, schemaLegend } from "../../schemas";
   import { map } from "../../stores";
   import { Legend } from "../common";
   import { Select } from "../govuk";
+  import { constructMatchExpression } from "../maplibre";
   import { colors } from "./colors";
 
   let colorInterventionsAccordingTo = "interventionType";

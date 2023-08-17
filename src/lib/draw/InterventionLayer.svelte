@@ -5,6 +5,7 @@
     GeoJSONSource,
   } from "maplibre-gl";
   import { circleRadius, colors, lineWidth } from "../../colors";
+  import { gjScheme, map } from "../../stores";
   import {
     isLine,
     isPoint,
@@ -14,7 +15,6 @@
     overwritePolygonLayer,
     overwriteSource,
   } from "../maplibre";
-  import { gjScheme, map } from "../../stores";
 
   export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
 
