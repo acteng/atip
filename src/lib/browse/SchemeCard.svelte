@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { FeatureCollection } from "geojson";
-  import { bbox } from "../../maplibre_helpers";
+  import { bbox } from "../maplibre";
   import { gjScheme, map } from "../../stores";
   import { CollapsibleCard } from "../common";
   import { SecondaryButton } from "../govuk";

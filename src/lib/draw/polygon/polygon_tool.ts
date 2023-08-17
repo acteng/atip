@@ -7,6 +7,7 @@ import type {
   MapMouseEvent,
 } from "maplibre-gl";
 import { circleRadius, colors } from "../../../colors";
+import { isAToolInUse } from "../../../stores";
 import {
   emptyGeojson,
   isLine,
@@ -19,8 +20,7 @@ import {
   pointFeature,
   setPrecision,
   type FeatureWithProps,
-} from "../../../maplibre_helpers";
-import { isAToolInUse } from "../../../stores";
+} from "../../maplibre/utils";
 import type { EventHandler } from "../event_handler";
 
 const source = "edit-polygon-mode";

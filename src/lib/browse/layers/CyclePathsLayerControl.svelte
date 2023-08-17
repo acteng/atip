@@ -1,11 +1,5 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    constructMatchExpression,
-    hoveredToggle,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-  } from "../../../maplibre_helpers";
   import { map } from "../../../stores";
   import {
     ColorLegend,
@@ -14,6 +8,12 @@
     InteractiveLayer,
   } from "../../common";
   import { Checkbox } from "../../govuk";
+  import {
+    constructMatchExpression,
+    hoveredToggle,
+    overwriteLineLayer,
+    overwritePmtilesSource,
+  } from "../../maplibre";
   import { colors } from "../colors";
 
   let name = "cycle_paths";

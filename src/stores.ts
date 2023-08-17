@@ -1,7 +1,7 @@
 import { type Remote } from "comlink";
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
-import { emptyGeojson } from "./maplibre_helpers";
+import { emptyGeojson } from "./lib/maplibre/utils";
 import {
   isStreetViewImagery,
   type Mode,

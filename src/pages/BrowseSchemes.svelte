@@ -20,7 +20,7 @@
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { ErrorMessage, SecondaryButton } from "../lib/govuk";
-  import { bbox, emptyGeojson, prettyPrintMeters } from "../maplibre_helpers";
+  import { bbox, emptyGeojson, prettyPrintMeters } from "../lib/maplibre";
   import { colorInterventionsBySchema } from "../schemas";
   import { gjScheme, map } from "../stores";
   import type { Scheme as GjScheme } from "../types";

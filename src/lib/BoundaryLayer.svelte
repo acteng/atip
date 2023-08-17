@@ -6,7 +6,7 @@
     bbox,
     overwritePolygonLayer,
     overwriteSource,
-  } from "../maplibre_helpers";
+  } from "../lib/maplibre";
   import { map } from "../stores";
 
   export let boundaryGeojson: FeatureCollection<Polygon>;

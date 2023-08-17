@@ -9,7 +9,7 @@
     overwriteCircleLayer,
     overwriteLineLayer,
     overwriteSource,
-  } from "../../maplibre_helpers";
+  } from "../maplibre";
   import {
     formOpen,
     gjScheme,

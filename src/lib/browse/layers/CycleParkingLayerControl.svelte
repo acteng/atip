@@ -1,9 +1,5 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import {
-    overwriteCircleLayer,
-    overwritePmtilesSource,
-  } from "../../../maplibre_helpers";
   import { map } from "../../../stores";
   import {
     ColorLegend,
@@ -12,6 +8,7 @@
     InteractiveLayer,
   } from "../../common";
   import { Checkbox } from "../../govuk";
+  import { overwriteCircleLayer, overwritePmtilesSource } from "../../maplibre";
   import { colors } from "../colors";
 
   let name = "cycle_parking";

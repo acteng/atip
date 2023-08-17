@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
   import { onDestroy } from "svelte";
-  import { overwriteLayer, overwriteSource } from "../../../maplibre_helpers";
   import { map } from "../../../stores";
+  import { overwriteLayer, overwriteSource } from "../../maplibre";
 
   // This component manages a source with exactly one layer. Both are torn down
   // when this component is destroyed.

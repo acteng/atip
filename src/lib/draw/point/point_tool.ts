@@ -1,7 +1,7 @@
 import type { Point } from "geojson";
 import type { Map, MapMouseEvent } from "maplibre-gl";
-import { pointFeature, type FeatureWithProps } from "../../../maplibre_helpers";
 import { isAToolInUse } from "../../../stores";
+import { pointFeature, type FeatureWithProps } from "../../maplibre/utils";
 import type { EventHandler } from "../event_handler";
 
 // Note this uses the geojson FeatureWithProps, not our specialization in types.ts

@@ -13,7 +13,7 @@
     emptyGeojson,
     overwriteLineLayer,
     overwriteSource,
-  } from "../../maplibre_helpers";
+  } from "../maplibre";
   import { gjScheme, map, routeInfo } from "../../stores";
   import type { Feature } from "../../types";
   import { DiscreteLegend, HelpButton, InteractiveLayer } from "../common";

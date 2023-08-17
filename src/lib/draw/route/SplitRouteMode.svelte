@@ -8,15 +8,15 @@
   import type { Feature, LineString, Point, Position } from "geojson";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   import splitIcon from "../../../../assets/split_route.svg";
+  import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
+  import type { Mode, Feature as OurFeature } from "../../../types";
+  import { CollapsibleCard } from "../../common";
   import {
     emptyGeojson,
     overwriteCircleLayer,
     overwriteSource,
     setPrecision,
-  } from "../../../maplibre_helpers";
-  import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
-  import type { Mode, Feature as OurFeature } from "../../../types";
-  import { CollapsibleCard } from "../../common";
+  } from "../../maplibre";
   import type { EventHandler } from "../event_handler";
 
   const thisMode = "split-route";
