@@ -1,6 +1,7 @@
 import type { LineString, Polygon } from "geojson";
 import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
 import { JsRouteSnapper } from "route-snapper";
+import { isAToolInUse } from "../../../stores";
 import {
   constructMatchExpression,
   emptyGeojson,
@@ -12,8 +13,7 @@ import {
   overwritePolygonLayer,
   overwriteSource,
   type FeatureWithProps,
-} from "../../../maplibre_helpers";
-import { isAToolInUse } from "../../../stores";
+} from "../../maplibre/utils";
 import type { EventHandler } from "../event_handler";
 
 const source = "route-snapper";

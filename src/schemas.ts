@@ -1,6 +1,6 @@
 import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 import { colors } from "./colors";
-import { constructMatchExpression } from "./maplibre_helpers";
+import { constructMatchExpression } from "./lib/maplibre/utils";
 import type { Schema } from "./types";
 
 export function schemaTitle(schema: Schema): string {

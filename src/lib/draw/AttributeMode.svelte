@@ -1,7 +1,6 @@
 <script lang="ts">
   import { type MapMouseEvent } from "maplibre-gl";
   import { onDestroy } from "svelte";
-  import { bbox } from "../../maplibre_helpers";
   import { schemaSingularNoun } from "../../schemas";
   import {
     currentMode,
@@ -12,6 +11,7 @@
     openFromSidebar,
   } from "../../stores";
   import type { Mode, Schema } from "../../types";
+  import { bbox } from "../maplibre";
   import type { EventHandler } from "./event_handler";
 
   const thisMode = "edit-attribute";

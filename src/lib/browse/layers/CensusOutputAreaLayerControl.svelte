@@ -1,15 +1,15 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
+  import { map } from "../../../stores";
+  import { ExternalLink, HelpButton, InteractiveLayer } from "../../common";
+  import { Checkbox } from "../../govuk";
   import {
     hoveredToggle,
     makeColorRamp,
     overwriteLineLayer,
     overwritePmtilesSource,
     overwritePolygonLayer,
-  } from "../../../maplibre_helpers";
-  import { map } from "../../../stores";
-  import { ExternalLink, HelpButton, InteractiveLayer } from "../../common";
-  import { Checkbox } from "../../govuk";
+  } from "../../maplibre";
   import { colors } from "../colors";
   import SequentialLegend from "./SequentialLegend.svelte";
 

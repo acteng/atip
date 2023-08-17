@@ -13,7 +13,7 @@
     overwriteLineLayer,
     overwritePolygonLayer,
     overwriteSource,
-  } from "../../maplibre_helpers";
+  } from "../maplibre";
   import { gjScheme, map } from "../../stores";
 
   export let colorInterventions: DataDrivenPropertyValueSpecification<string>;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { LineString, Point, Polygon } from "geojson";
   import { MapMouseEvent } from "maplibre-gl";
-  import type { FeatureWithProps } from "../../maplibre_helpers";
+  import type { FeatureWithProps } from "../maplibre";
   import { schemaSingularNoun } from "../../schemas";
   import { currentMode, gjScheme, map, mapHover } from "../../stores";
   import type { Feature, FeatureUnion, Schema } from "../../types";

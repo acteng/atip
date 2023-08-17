@@ -2,9 +2,9 @@
   import type { LineString } from "geojson";
   import init from "route-snapper";
   import { onMount } from "svelte";
-  import type { FeatureWithProps } from "../../../maplibre_helpers";
   import { currentMode, map } from "../../../stores";
   import type { Mode } from "../../../types";
+  import type { FeatureWithProps } from "../../maplibre";
   import { handleUnsavedFeature, setupEventListeners } from "../common";
   import type { EventHandler } from "../event_handler";
   import { RouteTool } from "./route_tool";

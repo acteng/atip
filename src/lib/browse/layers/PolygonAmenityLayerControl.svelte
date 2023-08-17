@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { MapGeoJSONFeature } from "maplibre-gl";
+  import { map } from "../../../stores";
+  import { ColorLegend, HelpButton, InteractiveLayer } from "../../common";
+  import { Checkbox } from "../../govuk";
   import {
     hoveredToggle,
     overwritePmtilesSource,
     overwritePolygonLayer,
-  } from "../../../maplibre_helpers";
-  import { map } from "../../../stores";
-  import { ColorLegend, HelpButton, InteractiveLayer } from "../../common";
-  import { Checkbox } from "../../govuk";
+  } from "../../maplibre";
   import { colors } from "../colors";
 
   // This name is used for multiple things:
