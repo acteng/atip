@@ -21,13 +21,17 @@ export const roadLayerIds = [
     "tunnel_trunk_primary",
     "tunnel_motorway",
     "road_service_track",
+    "Road network",
 ];
 
 export const getRoadLayerHelpers: () => Array<LayerHelper> = () => {
     const mapValue = get(mapStore);
+    console.log(mapValue)
     return mapValue.getStyle().layers.filter((layer: any) => {
+        console.log(layer.id)
         return roadLayerIds.includes(layer.id);
     }).map((layer: any) => {
+        console.log(layer.id);
         const defaultValues: Array<[string, string]> = Object.keys(layer.paint ? layer.paint : {}).map((paintPropertyKey) => {
             //@ts-ignore Not sure how to convince ts that layer.paint will contain strings
             return [paintPropertyKey, layer.paint[paintPropertyKey]];

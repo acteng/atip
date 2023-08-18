@@ -31,26 +31,28 @@
     }
   };
 
-  export const enableStreetView = () => {
+  export function enableStreetView() {
     isActive = true;
+    $map.on("click", handleMapClickEvent);
     $map.getCanvas().style.cursor = "zoom-in";
     roadLayerHelpers.forEach((roadLayerHelper) => {
       roadLayerHelper.setProperty($map, "line-color", "blue");
     });
-  };
+  }
 
-  export const disableStreetView = () => {
+  export function disableStreetView() {
     isActive = false;
+    $map.off('click', handleMapClickEvent)
     $map.getCanvas().style.cursor = "inherit";
     roadLayerHelpers.forEach((roadLayerHelper) => {
       roadLayerHelper.returnToDefaultPaintValues($map);
     });
-  };
+  }
 </script>
 
 {#if displayEnableButton}
-  <DefaultButton on:click{enableStreetView}>Enable Street View</DefaultButton>
-  <SecondaryButton on:click{disableStreetView}>
+  <DefaultButton on:click={enableStreetView}>Enable Street View</DefaultButton>
+  <SecondaryButton on:click={disableStreetView}>
     Disable Street View
   </SecondaryButton>
 {/if}
