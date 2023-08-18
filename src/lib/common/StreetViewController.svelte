@@ -4,8 +4,7 @@
   import { Radio } from "../govuk";
   import DefaultButton from "../govuk/DefaultButton.svelte";
   import SecondaryButton from "../govuk/SecondaryButton.svelte";
-  import type { LayerHelper } from "../maplibre/layer_helper";
-  import { getRoadLayerHelpers } from "../maplibre/road_layers";
+  import { getRoadLayerHelpers, type LayerHelper } from "../maplibre";
   import CollapsibleCard from "./CollapsibleCard.svelte";
 
   export let displayEnableButton: boolean = false;
@@ -42,7 +41,7 @@
 
   export function disableStreetView() {
     isActive = false;
-    $map.off('click', handleMapClickEvent)
+    $map.off("click", handleMapClickEvent);
     $map.getCanvas().style.cursor = "inherit";
     roadLayerHelpers.forEach((roadLayerHelper) => {
       roadLayerHelper.returnToDefaultPaintValues($map);
