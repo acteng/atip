@@ -3,6 +3,7 @@ import type { Map } from "maplibre-gl";
 export class LayerHelper {
   id: string;
   defaultPaintValues: Array<[string, string]>;
+  changedValues: Array<string> = []; 
 
   constructor(layer: any) {
     this.id = layer.id;
@@ -20,11 +21,13 @@ export class LayerHelper {
 
   setProperty(map: Map, propertyName: string, value: string) {
     map.setPaintProperty(this.id, propertyName, value);
+    this.changedValues.push(propertyName);
   }
 
   returnToDefaultPaintValues(map: Map) {
     this.defaultPaintValues.forEach(([propertyName, value]) => {
       map.setPaintProperty(this.id, propertyName, value);
     });
+    this.changedValues = [];
   }
 }
