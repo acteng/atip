@@ -152,5 +152,6 @@
     /* Leave room at the bottom for some of the map controls */
     max-height: calc(100vh - 200px);
     overflow: auto;
+    max-width: 300px;
   }
 </style>

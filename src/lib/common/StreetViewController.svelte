@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { MapMouseEvent } from "maplibre-gl";
+  import cameraCursorUrl from "../../../assets/camera_cursor.svg?url";
   import { map, userSettings } from "../../stores";
   import { Radio } from "../govuk";
-  import DefaultButton from "../govuk/DefaultButton.svelte";
   import SecondaryButton from "../govuk/SecondaryButton.svelte";
   import { getRoadLayerHelpers, type LayerHelper } from "../maplibre";
   import CollapsibleCard from "./CollapsibleCard.svelte";
+
 
   export let displayEnableButton: boolean = false;
   export let escapeKeyExits: boolean = false;
@@ -33,7 +34,9 @@
   export function enableStreetView() {
     isActive = true;
     $map.on("click", handleMapClickEvent);
-    $map.getCanvas().style.cursor = "zoom-in";
+    const cursorStyle = `url(${cameraCursorUrl}), auto`;
+    console.log(cursorStyle);
+    $map.getCanvas().style.cursor = cursorStyle;
     roadLayerHelpers.forEach((roadLayerHelper) => {
       roadLayerHelper.setProperty($map, "line-color", "blue");
     });
@@ -50,10 +53,15 @@
 </script>
 
 {#if displayEnableButton}
-  <DefaultButton on:click={enableStreetView}>Enable Street View</DefaultButton>
-  <SecondaryButton on:click={disableStreetView}>
-    Disable Street View
-  </SecondaryButton>
+  {#if !isActive}
+    <SecondaryButton on:click={enableStreetView}>
+      Enable Street View
+    </SecondaryButton>
+  {:else}
+    <SecondaryButton on:click={disableStreetView}>
+      Disable Street View
+    </SecondaryButton>
+  {/if}
 {/if}
 {#if isActive}
   <Radio
@@ -63,12 +71,11 @@
       ["google", "Google Street View"],
       ["bing", "Bing Streetside"],
     ]}
-    inlineSmall
     bind:value={$userSettings.streetViewImagery}
   />
 
   <CollapsibleCard label="Help">
-    <ul>
+    <ul >
       <li>
         <b>Click</b>
         on the map to open a new tab with a 3rd-party imagery provider
@@ -80,6 +87,9 @@
           to exit this mode
         </li>
       {/if}
+      <li>
+        Cursor by <a href="https://icon-icons.com/icon/screenshot-cursor-camera/100181">Luc Chaissac</a>
+      </li>
     </ul>
   </CollapsibleCard>
 {/if}
