@@ -6,6 +6,7 @@
   import SecondaryButton from "../govuk/SecondaryButton.svelte";
   import { getRoadLayerHelpers, type LayerHelper } from "../maplibre";
   import CollapsibleCard from "./CollapsibleCard.svelte";
+  import { ExternalLink } from "./";
 
   export let displayEnableButton: boolean = false;
   export let escapeKeyExits: boolean = false;
@@ -87,11 +88,11 @@
         </li>
       {/if}
       <li>
-        Cursor by <a
+        Cursor by <ExternalLink
           href="https://icon-icons.com/icon/screenshot-cursor-camera/100181"
         >
           Luc Chaissac
-        </a>
+        </ExternalLink>
       </li>
     </ul>
   </CollapsibleCard>
