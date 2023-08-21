@@ -5,7 +5,7 @@
     type MapLayerMouseEvent,
   } from "maplibre-gl";
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
-  import { map } from "../../stores";
+  import { interactiveMapLayersEnabled, map } from "../../stores";
 
   const dispatch = createEventDispatcher<{
     click: MapGeoJSONFeature;
@@ -63,6 +63,9 @@
   }
 
   function onMouseMove(e: MapLayerMouseEvent) {
+    if (!$interactiveMapLayersEnabled) {
+      return;
+    }
     let features = e.features ?? [];
     if (features.length == 0) {
       return;
@@ -103,6 +106,9 @@
   }
 
   function onMouseLeave() {
+    if (!$interactiveMapLayersEnabled) {
+      return;
+    }
     unhover();
     hoveredFeature = null;
     popup.remove();
@@ -118,6 +124,9 @@
   }
 
   function onClick(e: MapLayerMouseEvent) {
+    if (!$interactiveMapLayersEnabled) {
+      return;
+    }
     let features = e.features ?? [];
     if (features.length > 0) {
       // Same problem as onMouseMove -- every overlapping InteractiveLayer will

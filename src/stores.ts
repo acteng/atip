@@ -42,6 +42,8 @@ export const currentMode: Writable<Mode> = writable("edit-attribute");
 // This is used to represent whether a tool is in use for the purpose of disabling buttons such as clear all
 export const isAToolInUse: Writable<boolean> = writable(false);
 
+export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
+
 // All feature IDs must:
 //
 // - be unique

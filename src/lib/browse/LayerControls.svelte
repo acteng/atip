@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { interactiveMapLayersEnabled } from "../../stores";
   import { BaselayerSwitcher, CollapsibleCard } from "../common";
+  import StreetViewController from "../common/StreetViewController.svelte";
   import { CheckboxGroup } from "../govuk";
   import BusRoutesLayerControl from "./layers/BusRoutesLayerControl.svelte";
   import CensusOutputAreaLayerControl from "./layers/CensusOutputAreaLayerControl.svelte";
@@ -50,5 +52,9 @@
     <CensusOutputAreaLayerControl />
     <ImdLayerControl />
   </CollapsibleCard>
+  <StreetViewController
+    displayEnableButton={true}
+    bind:isInactive={$interactiveMapLayersEnabled}
+  />
   <BaselayerSwitcher {style} />
 </CollapsibleCard>
