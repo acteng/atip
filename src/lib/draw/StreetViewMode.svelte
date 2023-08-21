@@ -24,4 +24,4 @@
   };
 </script>
 
-<StreetViewController bind:this={streetViewController} />
+<StreetViewController bind:this={streetViewController} isInactive={true}/>

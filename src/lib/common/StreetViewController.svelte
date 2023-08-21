@@ -12,7 +12,6 @@
   const roadLayerHelpers: Array<LayerHelper> = getRoadLayerHelpers();
   export let isInactive: boolean;
 
-
   export const handleMapClickEvent = (e: MapMouseEvent) => {
     if (!isInactive) {
       let lon = e.lngLat.lng;

@@ -3,7 +3,7 @@ import type { Map } from "maplibre-gl";
 export class LayerHelper {
   id: string;
   defaultPaintValues: Array<[string, string]>;
-  changedValues: Array<string> = []; 
+  changedValues: Array<string> = [];
 
   constructor(layer: any) {
     this.id = layer.id;
