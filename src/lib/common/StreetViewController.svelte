@@ -1,44 +1,44 @@
 <script lang="ts">
   import type { MapMouseEvent } from "maplibre-gl";
   import cameraCursorUrl from "../../../assets/camera_cursor.svg?url";
+  import { colors } from "../../colors";
   import { map, userSettings } from "../../stores";
   import { Radio } from "../govuk";
   import SecondaryButton from "../govuk/SecondaryButton.svelte";
   import { getRoadLayerHelpers, type LayerHelper } from "../maplibre";
-  import CollapsibleCard from "./CollapsibleCard.svelte";
   import { ExternalLink } from "./";
+  import CollapsibleCard from "./CollapsibleCard.svelte";
 
-  export let displayEnableButton: boolean = false;
+  export let displayEnableButton = false;
   export let escapeKeyExits: boolean = false;
   const roadLayerHelpers: Array<LayerHelper> = getRoadLayerHelpers();
   export let isInactive: boolean;
 
   export const handleMapClickEvent = (e: MapMouseEvent) => {
-    if (!isInactive) {
-      let lon = e.lngLat.lng;
-      let lat = e.lngLat.lat;
-      if ($userSettings.streetViewImagery == "google") {
-        window.open(
-          `http://maps.google.com/maps?q=&layer=c&cbll=${lat},${lon}&cbp=11,0,0,0,0`,
-          "_blank"
-        );
-      } else if ($userSettings.streetViewImagery == "bing") {
-        window.open(
-          `https://www.bing.com/maps?cp=${lat}~${lon}&style=x`,
-          "_blank"
-        );
-      }
+    if (isInactive) {
+      return;
+    }
+    let lon = e.lngLat.lng;
+    let lat = e.lngLat.lat;
+    if ($userSettings.streetViewImagery == "google") {
+      window.open(
+        `http://maps.google.com/maps?q=&layer=c&cbll=${lat},${lon}&cbp=11,0,0,0,0`,
+        "_blank"
+      );
+    } else if ($userSettings.streetViewImagery == "bing") {
+      window.open(
+        `https://www.bing.com/maps?cp=${lat}~${lon}&style=x`,
+        "_blank"
+      );
     }
   };
 
   export function enableStreetView() {
     isInactive = false;
     $map.on("click", handleMapClickEvent);
-    const cursorStyle = `url(${cameraCursorUrl}), auto`;
-    console.log(cursorStyle);
-    $map.getCanvas().style.cursor = cursorStyle;
+    $map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
     roadLayerHelpers.forEach((roadLayerHelper) => {
-      roadLayerHelper.setProperty($map, "line-color", "blue");
+      roadLayerHelper.setProperty($map, "line-color", colors.streetviewBlue);
     });
   }
 

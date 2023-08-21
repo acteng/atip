@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { map as mapStore } from "../../stores";
 import { LayerHelper } from "./layer_helper";
 
+// These depend on MapTiler basemap styles
 export const roadLayerIds = [
   "road_minor",
   "road_secondary_tertiary",
