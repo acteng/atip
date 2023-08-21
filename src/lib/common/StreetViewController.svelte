@@ -7,14 +7,14 @@
   import { getRoadLayerHelpers, type LayerHelper } from "../maplibre";
   import CollapsibleCard from "./CollapsibleCard.svelte";
 
-
   export let displayEnableButton: boolean = false;
   export let escapeKeyExits: boolean = false;
   const roadLayerHelpers: Array<LayerHelper> = getRoadLayerHelpers();
-  let isActive: boolean;
+  export let isInactive: boolean;
+
 
   export const handleMapClickEvent = (e: MapMouseEvent) => {
-    if (isActive) {
+    if (!isInactive) {
       let lon = e.lngLat.lng;
       let lat = e.lngLat.lat;
       if ($userSettings.streetViewImagery == "google") {
@@ -32,7 +32,7 @@
   };
 
   export function enableStreetView() {
-    isActive = true;
+    isInactive = false;
     $map.on("click", handleMapClickEvent);
     const cursorStyle = `url(${cameraCursorUrl}), auto`;
     console.log(cursorStyle);
@@ -43,7 +43,7 @@
   }
 
   export function disableStreetView() {
-    isActive = false;
+    isInactive = true;
     $map.off("click", handleMapClickEvent);
     $map.getCanvas().style.cursor = "inherit";
     roadLayerHelpers.forEach((roadLayerHelper) => {
@@ -53,7 +53,7 @@
 </script>
 
 {#if displayEnableButton}
-  {#if !isActive}
+  {#if isInactive}
     <SecondaryButton on:click={enableStreetView}>
       Enable Street View
     </SecondaryButton>
@@ -63,7 +63,7 @@
     </SecondaryButton>
   {/if}
 {/if}
-{#if isActive}
+{#if !isInactive}
   <Radio
     legend="Source"
     id="streetViewImagery"
@@ -75,7 +75,7 @@
   />
 
   <CollapsibleCard label="Help">
-    <ul >
+    <ul>
       <li>
         <b>Click</b>
         on the map to open a new tab with a 3rd-party imagery provider
@@ -88,7 +88,11 @@
         </li>
       {/if}
       <li>
-        Cursor by <a href="https://icon-icons.com/icon/screenshot-cursor-camera/100181">Luc Chaissac</a>
+        Cursor by <a
+          href="https://icon-icons.com/icon/screenshot-cursor-camera/100181"
+        >
+          Luc Chaissac
+        </a>
       </li>
     </ul>
   </CollapsibleCard>
