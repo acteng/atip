@@ -13,7 +13,7 @@ export const colors = {
 
   hovering: "black",
   lineEndpointColor: "black",
-  streetviewBlue: "blue",
+  streetview: "blue",
 };
 
 // For points

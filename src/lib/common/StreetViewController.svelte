@@ -38,7 +38,7 @@
     $map.on("click", handleMapClickEvent);
     $map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
     roadLayerHelpers.forEach((roadLayerHelper) => {
-      roadLayerHelper.setProperty($map, "line-color", colors.streetviewBlue);
+      roadLayerHelper.setProperty($map, "line-color", colors.streetview);
     });
   }
 
