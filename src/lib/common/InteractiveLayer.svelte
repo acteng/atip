@@ -106,6 +106,9 @@
   }
 
   function onMouseLeave() {
+    if (!$interactiveMapLayersEnabled) {
+      return;
+    }
     unhover();
     hoveredFeature = null;
     popup.remove();
