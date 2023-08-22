@@ -5,16 +5,16 @@
   import { map, userSettings } from "../../stores";
   import { Radio } from "../govuk";
   import SecondaryButton from "../govuk/SecondaryButton.svelte";
-  import { getRoadLayerHelpers, type LayerHelper } from "../maplibre";
+  import { getRoadLayerHelpers } from "../maplibre";
   import { ExternalLink } from "./";
   import CollapsibleCard from "./CollapsibleCard.svelte";
 
   export let displayEnableButton = false;
-  export let escapeKeyExits: boolean = false;
-  const roadLayerHelpers: Array<LayerHelper> = getRoadLayerHelpers();
   export let isInactive: boolean;
 
-  export const handleMapClickEvent = (e: MapMouseEvent) => {
+  let roadLayerHelpers = getRoadLayerHelpers();
+
+  export function handleMapClickEvent(e: MapMouseEvent) {
     if (isInactive) {
       return;
     }
@@ -31,7 +31,7 @@
         "_blank"
       );
     }
-  };
+  }
 
   export function enableStreetView() {
     isInactive = false;
@@ -80,13 +80,10 @@
         <b>Click</b>
         on the map to open a new tab with a 3rd-party imagery provider
       </li>
-
-      {#if escapeKeyExits}
-        <li>
-          Press <b>Escape</b>
-          to exit this mode
-        </li>
-      {/if}
+      <li>
+        Press <b>Escape</b>
+        to exit this mode
+      </li>
       <li>
         Cursor by <ExternalLink
           href="https://icon-icons.com/icon/screenshot-cursor-camera/100181"
