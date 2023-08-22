@@ -20,6 +20,15 @@
   import WardsLayerControl from "./layers/WardsLayerControl.svelte";
 
   export let style: string;
+
+  let streetViewController: StreetViewController;
+
+  function onKeydown(e: KeyboardEvent) {
+    if (!$interactiveMapLayersEnabled && e.key == "Escape") {
+      streetViewController.disableStreetView();
+      e.preventDefault();
+    }
+  }
 </script>
 
 <CollapsibleCard label="Layers" open>
@@ -53,8 +62,11 @@
     <ImdLayerControl />
   </CollapsibleCard>
   <StreetViewController
-    displayEnableButton={true}
+    bind:this={streetViewController}
+    displayEnableButton
     bind:isInactive={$interactiveMapLayersEnabled}
   />
   <BaselayerSwitcher {style} />
 </CollapsibleCard>
+
+<svelte:window on:keydown={onKeydown} />
