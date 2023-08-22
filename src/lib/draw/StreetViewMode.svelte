@@ -9,7 +9,6 @@
   let streetViewController: StreetViewController;
 
   export function start() {
-    eventHandler.mapHandlers.click = streetViewController.handleMapClickEvent;
     streetViewController.enableStreetView();
   }
   export function stop() {
@@ -24,4 +23,8 @@
   };
 </script>
 
-<StreetViewController bind:this={streetViewController} isInactive={true} />
+<StreetViewController
+  bind:this={streetViewController}
+  displayEnableButton={false}
+  isInactive
+/>

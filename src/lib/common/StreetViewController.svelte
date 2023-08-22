@@ -9,7 +9,7 @@
   import { ExternalLink } from "./";
   import CollapsibleCard from "./CollapsibleCard.svelte";
 
-  export let displayEnableButton = false;
+  export let displayEnableButton: boolean;
   export let isInactive: boolean;
 
   let roadLayerHelpers = getRoadLayerHelpers();
@@ -37,18 +37,18 @@
     isInactive = false;
     $map.on("click", handleMapClickEvent);
     $map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
-    roadLayerHelpers.forEach((roadLayerHelper) => {
-      roadLayerHelper.setProperty($map, "line-color", colors.streetview);
-    });
+    for (let helper of roadLayerHelpers) {
+      helper.setProperty($map, "line-color", colors.streetview);
+    }
   }
 
   export function disableStreetView() {
     isInactive = true;
     $map.off("click", handleMapClickEvent);
     $map.getCanvas().style.cursor = "inherit";
-    roadLayerHelpers.forEach((roadLayerHelper) => {
-      roadLayerHelper.returnToDefaultPaintValues($map);
-    });
+    for (let helper of roadLayerHelpers) {
+      helper.returnToDefaultPaintValues($map);
+    }
   }
 </script>
 
