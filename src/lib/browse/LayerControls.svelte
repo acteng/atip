@@ -17,6 +17,7 @@
   import RailwayStationsLayerControl from "./layers/RailwayStationsLayerControl.svelte";
   import SchoolsLayerControl from "./layers/SchoolsLayerControl.svelte";
   import SportsSpacesLayerControl from "./layers/SportsSpacesLayerControl.svelte";
+  import VehicleCountsLayerControl from "./layers/VehicleCountsLayerControl.svelte";
   import WardsLayerControl from "./layers/WardsLayerControl.svelte";
 
   export let style: string;
@@ -60,6 +61,9 @@
   <CollapsibleCard label="Census">
     <CensusOutputAreaLayerControl />
     <ImdLayerControl />
+  </CollapsibleCard>
+  <CollapsibleCard label="Other">
+    <VehicleCountsLayerControl />
   </CollapsibleCard>
   <StreetViewController
     bind:this={streetViewController}
