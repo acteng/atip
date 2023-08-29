@@ -6,6 +6,7 @@
   import BusRoutesLayerControl from "./layers/BusRoutesLayerControl.svelte";
   import CensusOutputAreaLayerControl from "./layers/CensusOutputAreaLayerControl.svelte";
   import CombinedAuthoritiesLayerControl from "./layers/CombinedAuthoritiesLayerControl.svelte";
+  import CriticalIssuesLayerControl from "./layers/CriticalIssuesLayerControl.svelte";
   import CycleParkingLayerControl from "./layers/CycleParkingLayerControl.svelte";
   import CyclePathsLayerControl from "./layers/CyclePathsLayerControl.svelte";
   import HospitalsLayerControl from "./layers/HospitalsLayerControl.svelte";
@@ -33,6 +34,7 @@
 </script>
 
 <CollapsibleCard label="Layers" open>
+  <CriticalIssuesLayerControl />
   <CollapsibleCard label="Trip generators">
     <CheckboxGroup small>
       <SchoolsLayerControl />

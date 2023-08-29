@@ -142,6 +142,7 @@
 </CollapsibleCard>
 
 <p>
-  Showing {schemesToBeShown.size} schemes ({counts.route} routes, {counts.area} areas,
-  {counts.crossing} crossings, {counts.other} other)
+  Showing {schemesToBeShown.size.toLocaleString()} schemes ({counts.route.toLocaleString()}
+  routes, {counts.area.toLocaleString()} areas,
+  {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()} other)
 </p>
