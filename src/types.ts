@@ -15,6 +15,12 @@ export interface Scheme {
   scheme_name?: string;
   authority?: string;
   origin?: string;
+  atf4?: Atf4Categories;
+}
+
+interface Atf4Categories {
+  // TODO
+  new_segregated_cycling: boolean;
 }
 
 // TODO Can we use a wildcard type, like Feature<? extends Geometry>

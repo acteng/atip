@@ -15,6 +15,8 @@ ATIP produces a [GeoJSON file](https://datatracker.ietf.org/doc/html/rfc7946). T
   - An optional string `authority`, belonging to [this set](https://github.com/acteng/atip/blob/main/assets/authority_names.json)
   - An optional free-form string `scheme_name`
 
+TODO: Update
+
 An example of the overall structure:
 
 ```
@@ -57,6 +59,8 @@ If you are generating a file from another tool, omit `waypoints` and don't expec
 ## Versioning
 
 This format was defined as of 23 March, 2023. It has not changed since then. If you used an earlier prototype of ATIP, the output file may not match this specification.
+
+TODO: Update
 
 ## Example
 

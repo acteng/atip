@@ -18,6 +18,7 @@
     TextInput,
     WarningButton,
   } from "../govuk";
+  import Atf4Categories from "./Atf4Categories.svelte";
 
   export let authorityName: string;
   export let schema: Schema;
@@ -161,6 +162,10 @@
 </script>
 
 <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
+
+{#if schema == "v1"}
+  <Atf4Categories />
+{/if}
 
 {#if errorMessage}
   <ErrorMessage {errorMessage} />
