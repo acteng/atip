@@ -3,7 +3,6 @@
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import authorityNamesList from "../../assets/authority_names.json";
-  import Criticals from "../lib/browse/Criticals.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import LayerControls from "../lib/browse/LayerControls.svelte";
@@ -21,9 +20,9 @@
   import PmTiles from "../lib/common/PmTiles.svelte";
   import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
   import { ErrorMessage } from "../lib/govuk";
-  import { bbox, emptyGeojson, prettyPrintMeters } from "../lib/maplibre";
+  import { emptyGeojson, prettyPrintMeters } from "../lib/maplibre";
   import { colorInterventionsBySchema } from "../schemas";
-  import { gjScheme, map } from "../stores";
+  import { gjScheme } from "../stores";
   import type { Scheme as GjScheme } from "../types";
 
   // TODO Remove after the input data is fixed to plumb correct authority names.
@@ -46,14 +45,12 @@
     gjScheme.set(emptyGeojson() as GjScheme);
   });
 
-  function loadSchemes(text: string) {
+  function loadFile(text: string) {
     try {
       let gj = JSON.parse(text);
       schemes = processInput(gj);
       gjScheme.set(gj);
       errorMessage = "";
-
-      $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
     } catch (err) {
       errorMessage = `Couldn't load schemes from a file: ${err}`;
     }
@@ -98,12 +95,7 @@
     {#if errorMessage}
       <ErrorMessage {errorMessage} />
     {/if}
-    <FileInput
-      label="Load schemes from GeoJSON"
-      id="load-geojson"
-      {loadSchemes}
-    />
-    <Criticals />
+    <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />
 
     {#if schemes.size > 0}
       <Filters {schemes} bind:schemesToBeShown bind:filterText />
