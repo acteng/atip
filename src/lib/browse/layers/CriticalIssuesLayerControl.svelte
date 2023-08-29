@@ -2,8 +2,8 @@
   import type { GeoJSON, GeoJSONSource } from "maplibre-gl";
   import readXlsxFile from "read-excel-file";
   import { map } from "../../../stores";
-  import { CollapsibleCard, InteractiveLayer } from "../../common";
-  import { Checkbox, FormElement } from "../../govuk";
+  import { CollapsibleCard, ColorLegend, InteractiveLayer } from "../../common";
+  import { Checkbox, CheckboxGroup, FormElement } from "../../govuk";
   import {
     emptyGeojson,
     overwriteCircleLayer,
@@ -14,15 +14,16 @@
   let fileInput: HTMLInputElement;
 
   let source = "criticals";
+  let color = "red";
   let show = true;
-  let summary = "";
+  let numberIssues = 0;
 
   $: if ($map) {
     overwriteSource($map, source, emptyGeojson());
     overwriteCircleLayer($map, {
       id: source,
       source,
-      color: "red",
+      color,
       opacity: 0.9,
       radius: 15,
       strokeColor: "black",
@@ -76,11 +77,12 @@
   async function onChange(e: Event) {
     let gj = await parseExcel();
     ($map.getSource(source) as GeoJSONSource).setData(gj);
-    summary = `Showing ${gj.features.length.toLocaleString()} issues`;
+    numberIssues = gj.features.length;
   }
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    let x = `<h2>${feature.properties.critical_type}</h2>`;
+    let x = `<div style="max-width: 30vw;">`;
+    x += `<h2>${feature.properties.critical_type}</h2>`;
     x += `<p><u>Location</u>: ${feature.properties.location_description}</p>`;
     x += `<p><u>Notes</u>: ${feature.properties.notes}</p>`;
     x += `<hr />`;
@@ -89,6 +91,7 @@
       feature.properties.inspector ?? "???"
     }</b> at <b>${feature.properties.submission_time}</b></p>`;
     x += `<p>For scheme <b>${feature.properties.scheme_reference}</b> in stage <b>${feature.properties.current_design_stage}</b></p>`;
+    x += `</div>`;
     return x;
   }
 </script>
@@ -103,9 +106,13 @@
       type="file"
     />
   </FormElement>
-  {#if summary}
-    <Checkbox id="show-criticals" bind:checked={show}>Show</Checkbox>
-    <p>{summary}</p>
+  {#if numberIssues > 0}
+    <CheckboxGroup small>
+      <Checkbox id="show-criticals" bind:checked={show}>
+        <ColorLegend {color} />
+        Show {numberIssues.toLocaleString()} issues
+      </Checkbox>
+    </CheckboxGroup>
   {/if}
 </CollapsibleCard>
 
