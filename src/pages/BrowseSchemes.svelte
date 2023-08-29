@@ -3,6 +3,7 @@
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import authorityNamesList from "../../assets/authority_names.json";
+  import Criticals from "../lib/browse/Criticals.svelte";
   import { processInput, type Scheme } from "../lib/browse/data";
   import Filters from "../lib/browse/Filters.svelte";
   import LayerControls from "../lib/browse/LayerControls.svelte";
@@ -45,7 +46,7 @@
     gjScheme.set(emptyGeojson() as GjScheme);
   });
 
-  function loadFile(text: string) {
+  function loadSchemes(text: string) {
     try {
       let gj = JSON.parse(text);
       schemes = processInput(gj);
@@ -97,7 +98,12 @@
     {#if errorMessage}
       <ErrorMessage {errorMessage} />
     {/if}
-    <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
+    <FileInput
+      label="Load schemes from GeoJSON"
+      id="load-geojson"
+      {loadSchemes}
+    />
+    <Criticals />
 
     {#if schemes.size > 0}
       <Filters {schemes} bind:schemesToBeShown bind:filterText />
