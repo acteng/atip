@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { GeoJSON, GeoJSONSource } from "maplibre-gl";
+  import type { FeatureCollection } from "geojson";
+  import type { GeoJSONSource, MapGeoJSONFeature } from "maplibre-gl";
   import readXlsxFile from "read-excel-file";
   import { map } from "../../../stores";
   import { CollapsibleCard, ColorLegend, InteractiveLayer } from "../../common";
@@ -76,7 +77,19 @@
     }
   }
 
-  async function parseExcel(): Promise<GeoJSON> {
+  interface Row {
+    id: string;
+    inspector: string;
+    submission_time: Date;
+    scheme_reference: string;
+    current_design_stage: string;
+    critical_type: string;
+    lat_lon: string;
+    location_description: string;
+    notes: string;
+  }
+
+  async function parseExcel(): Promise<FeatureCollection> {
     let mapping = {
       ID: "id",
       Inspector: "inspector",
@@ -97,18 +110,19 @@
       sheet: "Form Input",
     });
 
-    let gj = {
+    let gj: FeatureCollection = {
       type: "FeatureCollection",
       features: [],
     };
-    for (let row of rows) {
+    for (let row of rows as Row[]) {
       let coordinates = setPrecision(
         row.lat_lon.split(",").map(parseFloat).reverse()
       );
-      row.submission_time = row.submission_time.toLocaleString();
+      let properties: { [name: string]: any } = row;
+      properties.submission_time = row.submission_time.toLocaleString();
       gj.features.push({
         type: "Feature",
-        properties: row,
+        properties,
         geometry: {
           type: "Point",
           coordinates,
@@ -146,16 +160,18 @@
   }
 
   function clickCluster(e: CustomEvent<MapGeoJSONFeature>) {
-    $map
-      .getSource(source)
-      .getClusterExpansionZoom(e.detail.properties.cluster_id, (err, zoom) => {
+    ($map.getSource(source) as GeoJSONSource).getClusterExpansionZoom(
+      e.detail.properties.cluster_id,
+      (err, zoom) => {
         if (!err) {
           $map.easeTo({
+            // @ts-ignore Something's wrong with MapGeoJSONFeature types
             center: e.detail.geometry.coordinates,
-            zoom,
+            zoom: zoom as number,
           });
         }
-      });
+      }
+    );
   }
 </script>
 
