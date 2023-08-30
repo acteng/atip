@@ -322,10 +322,6 @@ const layerZorder = [
   "cycle_paths",
   "vehicle_counts",
 
-  "criticals-clusters",
-  "criticals-counts",
-  "criticals-points",
-
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top
   "interventions-polygons",
@@ -340,6 +336,11 @@ const layerZorder = [
 
   "hover-points",
   "interventions-points",
+
+  // Criticals are one layer that should display on top of scheme data
+  "criticals-clusters",
+  "criticals-counts",
+  "criticals-points",
 
   "edit-polygon-fill",
   "edit-polygon-lines",
