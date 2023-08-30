@@ -162,9 +162,7 @@
 
 <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
 
-{#if errorMessage}
-  <ErrorMessage {errorMessage} />
-{/if}
+<ErrorMessage {errorMessage} />
 
 <FileInput
   label="Load from GeoJSON"
