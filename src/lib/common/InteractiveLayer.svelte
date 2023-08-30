@@ -26,6 +26,11 @@
   // Toggle visibility by changing this
   export let show = true;
 
+  // By default, the hovering and clicking behavior for this layer won't happen
+  // if another layer covers this one up. Set this to pretend other layers on top
+  // are invisible.
+  export let ignoreHigherLayers: string[] = [];
+
   // The currently hovered feature is exposed here. Note that any array or
   // object properties get stringified here; this is not equivalent to the raw
   // feature passed into the source.
@@ -82,8 +87,7 @@
     //
     // Note every other InteractiveLayer for something overlapping will also do
     // this query. Performance is fine so far.
-    let allResults = $map.queryRenderedFeatures(e.point);
-    if (allResults.length > 0 && allResults[0].layer.id != layer) {
+    if (notOnTop(e)) {
       onMouseLeave();
       return;
     }
@@ -131,13 +135,29 @@
     if (features.length > 0) {
       // Same problem as onMouseMove -- every overlapping InteractiveLayer will
       // also see this event. Check we're the top layer.
-      let allResults = $map.queryRenderedFeatures(e.point);
-      if (allResults.length > 0 && allResults[0].layer.id != layer) {
+      if (notOnTop(e)) {
         return;
       }
 
       dispatch("click", features[0]);
       // Leave the hovering state and popup alone
     }
+  }
+
+  function notOnTop(e: MapLayerMouseEvent): boolean {
+    for (let feature of $map.queryRenderedFeatures(e.point)) {
+      // If we hit this layer, we're on top
+      if (feature.layer.id == layer) {
+        return false;
+      }
+      // If we're supposed to ignore a layer on top, keep going
+      if (ignoreHigherLayers.includes(feature.layer.id)) {
+        continue;
+      }
+      // Something's on top
+      return true;
+    }
+    // Nothing matched this point
+    return false;
   }
 </script>
