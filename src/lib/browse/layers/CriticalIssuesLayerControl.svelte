@@ -3,7 +3,12 @@
   import readXlsxFile from "read-excel-file";
   import { map } from "../../../stores";
   import { CollapsibleCard, ColorLegend, InteractiveLayer } from "../../common";
-  import { Checkbox, CheckboxGroup, FormElement } from "../../govuk";
+  import {
+    Checkbox,
+    CheckboxGroup,
+    ErrorMessage,
+    FormElement,
+  } from "../../govuk";
   import {
     cleanupSource,
     emptyGeojson,
@@ -17,6 +22,7 @@
   let color = "red";
   let show = true;
   let numberIssues = 0;
+  let errorMessage = "";
 
   cleanupSource($map, source);
   $map.addSource(source, {
@@ -114,9 +120,14 @@
   }
 
   async function onChange(e: Event) {
-    let gj = await parseExcel();
-    ($map.getSource(source) as GeoJSONSource).setData(gj);
-    numberIssues = gj.features.length;
+    try {
+      let gj = await parseExcel();
+      ($map.getSource(source) as GeoJSONSource).setData(gj);
+      numberIssues = gj.features.length;
+      errorMessage = "";
+    } catch (err) {
+      errorMessage = `The file you loaded is broken: ${err}`;
+    }
   }
 
   function tooltip(feature: MapGeoJSONFeature): string {
@@ -158,6 +169,7 @@
       type="file"
     />
   </FormElement>
+  <ErrorMessage {errorMessage} />
   {#if numberIssues > 0}
     <CheckboxGroup small>
       <Checkbox id="show-criticals" bind:checked={show}>

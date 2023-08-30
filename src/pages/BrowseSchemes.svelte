@@ -52,7 +52,7 @@
       gjScheme.set(gj);
       errorMessage = "";
     } catch (err) {
-      errorMessage = `Couldn't load schemes from a file: ${err}`;
+      errorMessage = `The file you loaded is broken: ${err}`;
     }
   }
 
@@ -92,10 +92,8 @@
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
     </div>
-    {#if errorMessage}
-      <ErrorMessage {errorMessage} />
-    {/if}
     <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />
+    <ErrorMessage {errorMessage} />
 
     {#if schemes.size > 0}
       <Filters {schemes} bind:schemesToBeShown bind:filterText />

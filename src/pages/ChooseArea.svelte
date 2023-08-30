@@ -142,9 +142,7 @@
     <SecondaryButton on:click={() => (showAbout = !showAbout)}>
       About
     </SecondaryButton>
-    {#if pageErrorMessage}
-      <ErrorMessage errorMessage={pageErrorMessage} />
-    {/if}
+    <ErrorMessage errorMessage={pageErrorMessage} />
 
     <FormElement
       label="Select Transport Authority or Local Authority District"
@@ -177,9 +175,7 @@
 
     <hr />
 
-    {#if uploadErrorMessage}
-      <ErrorMessage errorMessage={uploadErrorMessage} />
-    {/if}
+    <ErrorMessage errorMessage={uploadErrorMessage} />
     <FileInput
       label="Or upload an ATIP GeoJSON file"
       {loadFile}

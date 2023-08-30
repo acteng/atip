@@ -2,7 +2,9 @@
   export let errorMessage: string;
 </script>
 
-<p class="govuk-error-message">
-  <span class="govuk-visually-hidden">Error:</span>
-  {errorMessage}
-</p>
+{#if errorMessage}
+  <div class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span>
+    {errorMessage}
+  </div>
+{/if}
