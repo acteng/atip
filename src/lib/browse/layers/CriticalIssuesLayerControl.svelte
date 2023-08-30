@@ -5,9 +5,9 @@
   import { CollapsibleCard, ColorLegend, InteractiveLayer } from "../../common";
   import { Checkbox, CheckboxGroup, FormElement } from "../../govuk";
   import {
+    cleanupSource,
     emptyGeojson,
     overwriteCircleLayer,
-    overwriteSource,
     setPrecision,
   } from "../../maplibre";
 
@@ -18,18 +18,49 @@
   let show = true;
   let numberIssues = 0;
 
-  $: if ($map) {
-    overwriteSource($map, source, emptyGeojson());
-    overwriteCircleLayer($map, {
-      id: source,
-      source,
-      color,
-      opacity: 0.9,
-      radius: 15,
-      strokeColor: "black",
-      strokeWidth: 3,
-    });
-  }
+  cleanupSource($map, source);
+  $map.addSource(source, {
+    type: "geojson",
+    data: emptyGeojson(),
+    cluster: true,
+    clusterMaxZoom: 14,
+    clusterRadius: 50,
+  });
+
+  // Render clusters
+  overwriteCircleLayer($map, {
+    id: `${source}-clusters`,
+    source,
+    filter: ["has", "point_count"],
+    color,
+    opacity: 0.9,
+    radius: 15,
+    strokeColor: "black",
+    strokeWidth: 3,
+  });
+  $map.addLayer({
+    id: `${source}-counts`,
+    source,
+    type: "symbol",
+    filter: ["has", "point_count"],
+    layout: {
+      "text-field": "{point_count_abbreviated}",
+      "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+      "text-size": 12,
+    },
+  });
+
+  // Render individual criticals
+  overwriteCircleLayer($map, {
+    id: `${source}-points`,
+    source,
+    filter: ["!", ["has", "point_count"]],
+    color,
+    opacity: 0.9,
+    radius: 15,
+    strokeColor: "black",
+    strokeWidth: 3,
+  });
 
   async function parseExcel(): Promise<GeoJSON> {
     let mapping = {
@@ -94,6 +125,19 @@
     x += `</div>`;
     return x;
   }
+
+  function clickCluster(e: CustomEvent<MapGeoJSONFeature>) {
+    $map
+      .getSource(source)
+      .getClusterExpansionZoom(e.detail.properties.cluster_id, (err, zoom) => {
+        if (!err) {
+          $map.easeTo({
+            center: e.detail.geometry.coordinates,
+            zoom,
+          });
+        }
+      });
+  }
 </script>
 
 <CollapsibleCard label="Critical Issues">
@@ -116,4 +160,15 @@
   {/if}
 </CollapsibleCard>
 
-<InteractiveLayer layer={source} {tooltip} {show} clickable={false} />
+<InteractiveLayer
+  layer={source + "-points"}
+  {tooltip}
+  {show}
+  clickable={false}
+/>
+<InteractiveLayer
+  layer={source + "-clusters"}
+  {show}
+  clickable
+  on:click={clickCluster}
+/>

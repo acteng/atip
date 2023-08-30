@@ -47,7 +47,7 @@ export function overwritePmtilesSource(map: Map, id: string, url: string) {
   });
 }
 
-function cleanupSource(map: Map, id: string) {
+export function cleanupSource(map: Map, id: string) {
   if (map.getSource(id)) {
     // First remove all layers using this source
     let layers = [];
@@ -322,7 +322,9 @@ const layerZorder = [
   "cycle_paths",
   "vehicle_counts",
 
-  "criticals",
+  "criticals-clusters",
+  "criticals-counts",
+  "criticals-points",
 
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top
