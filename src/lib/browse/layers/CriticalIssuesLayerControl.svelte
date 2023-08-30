@@ -171,4 +171,5 @@
   {show}
   clickable
   on:click={clickCluster}
+  ignoreHigherLayers={[source + "-counts"]}
 />
