@@ -1,9 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { gjScheme } from "../../stores";
+  import { gjScheme, map } from "../../stores";
   import type { FeatureUnion } from "../../types";
   import { CollapsibleCard } from "../common";
-  import { FormElement, SecondaryButton, Select } from "../govuk";
+  import {
+    Checkbox,
+    CheckboxGroup,
+    FormElement,
+    SecondaryButton,
+    Select,
+  } from "../govuk";
   import { type Scheme } from "./data";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
 
@@ -24,6 +30,21 @@
 
   // Stats about filtered schemes
   let counts = { area: 0, route: 0, crossing: 0, other: 0 };
+
+  let show = true;
+  $: {
+    for (let layer of [
+      "interventions-polygon",
+      "interventions-polygon-outlines",
+      "interventions-lines",
+      "interventions-lines-endpoints",
+      "interventions-points",
+    ]) {
+      if ($map.getLayer(layer)) {
+        $map.setLayoutProperty(layer, "visibility", show ? "visible" : "none");
+      }
+    }
+  }
 
   onMount(() => {
     let set1: Set<string> = new Set();
@@ -141,8 +162,11 @@
   <InterventionColorSelector />
 </CollapsibleCard>
 
-<p>
-  Showing {schemesToBeShown.size.toLocaleString()} schemes ({counts.route.toLocaleString()}
-  routes, {counts.area.toLocaleString()} areas,
-  {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()} other)
-</p>
+<CheckboxGroup small>
+  <Checkbox id="show-schemes" bind:checked={show}>
+    Showing {schemesToBeShown.size.toLocaleString()} schemes ({counts.route.toLocaleString()}
+    routes, {counts.area.toLocaleString()} areas,
+    {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()}
+    other)
+  </Checkbox>
+</CheckboxGroup>

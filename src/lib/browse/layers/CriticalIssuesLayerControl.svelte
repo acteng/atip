@@ -59,6 +59,17 @@
     strokeWidth: 3,
   });
 
+  // InteractiveLayers don't manage one layer
+  $: {
+    if ($map.getLayer(`${source}-counts`)) {
+      $map.setLayoutProperty(
+        `${source}-counts`,
+        "visibility",
+        show ? "visible" : "none"
+      );
+    }
+  }
+
   async function parseExcel(): Promise<GeoJSON> {
     let mapping = {
       ID: "id",
