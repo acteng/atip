@@ -34,9 +34,8 @@
     filter: ["has", "point_count"],
     color,
     opacity: 0.9,
-    radius: 15,
-    strokeColor: "black",
-    strokeWidth: 3,
+    // 20 pixels for clusters with < 15 points, 30 pixels for < 30 points, and 40 pixels for more
+    radius: ["step", ["get", "point_count"], 20, 15, 30, 30, 40],
   });
   $map.addLayer({
     id: `${source}-counts`,
@@ -45,8 +44,6 @@
     filter: ["has", "point_count"],
     layout: {
       "text-field": "{point_count_abbreviated}",
-      "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-      "text-size": 12,
     },
   });
 
