@@ -34,7 +34,7 @@
   let show = true;
   $: {
     for (let layer of [
-      "interventions-polygon",
+      "interventions-polygons",
       "interventions-polygon-outlines",
       "interventions-lines",
       "interventions-lines-endpoints",
