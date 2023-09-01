@@ -1,27 +1,33 @@
 <script lang="ts">
   import type { LngLat } from "maplibre-gl";
+  import { Modal } from "../common";
   import {
-    Checkbox,
-    CheckboxGroup,
     DefaultButton,
     FormElement,
+    SecondaryButton,
     Select,
     TextArea,
+    WarningButton,
   } from "../govuk";
   import { setPrecision } from "../maplibre";
+  import LocationDescription from "./LocationDescription.svelte";
 
   export let pt: LngLat;
 
-  // Auto-save inspector and scheme_reference to make it easier to repeatedly fill out the form
+  // Auto-save 3 fields to make it easier to repeatedly fill out the form
   let inspector = window.localStorage.getItem("inspector") ?? "";
   let scheme_reference = window.localStorage.getItem("scheme_reference") ?? "";
+  let current_design_stage =
+    window.localStorage.getItem("current_design_stage") ?? "";
   $: window.localStorage.setItem("inspector", inspector);
   $: window.localStorage.setItem("scheme_reference", scheme_reference);
+  $: window.localStorage.setItem("current_design_stage", current_design_stage);
 
-  let current_design_stage = "";
   let critical_issue_type = "";
   let location_description = "";
   let notes = "";
+
+  let modalOpen = false;
 
   let designStages = listToChoices([
     "Baseline",
@@ -75,7 +81,7 @@
     return date.getTime() / day + daysBeforeUnixEpoch;
   }
 
-  function exportForm() {
+  function getExcelRow(): string {
     // Whoever's copying this will have to assign a new ID manually
     let id = 0;
     let submission_time = excelDatetime(new Date());
@@ -92,34 +98,17 @@
       location_description,
       notes,
     ];
-    navigator.clipboard.writeText(row.join("\t"));
-    window.alert(
-      "Go to a new row at the bottom of Form Input, and press Control+V to paste"
-    );
+    return row.join("\t");
   }
 
-  let lookupLocation = true;
-  $: updateLocationDescription(pt);
-  async function updateLocationDescription(pt: LngLat) {
-    if (!lookupLocation) {
-      return;
-    }
-    // TODO Don't overwrite something the user entered
-    let url = `https://nominatim.openstreetmap.org/reverse?lat=${pt.lat}&lon=${pt.lng}&format=json`;
-    try {
-      location_description = "Loading...";
-      let resp = await fetch(url);
-      let json = await resp.json();
-      // The road usually seems filled out, but fallback to a (verbose) name.
-      location_description = json.address.road ?? json.display_name;
-    } catch (err) {
-      console.log(`Location lookup failed: ${err}`);
-    }
+  function exportForm() {
+    navigator.clipboard.writeText(getExcelRow());
+    modalOpen = true;
   }
 
-  // If the user manually types something, stop geocoding
-  function locationDescriptionChanged() {
-    lookupLocation = false;
+  function reset() {
+    // Simpler than plumbing around something to reset the pin
+    location.reload();
   }
 </script>
 
@@ -149,6 +138,8 @@
   bind:value={current_design_stage}
 />
 
+<LocationDescription bind:location_description {pt} />
+
 <Select
   label="Critical issue type"
   id="critical_issue_type"
@@ -157,21 +148,35 @@
   bind:value={critical_issue_type}
 />
 
-<FormElement label="Describe this location" id="location_description">
-  <input
-    type="text"
-    class="govuk-input govuk-input--width-20"
-    id="location_description"
-    bind:value={location_description}
-    on:change={locationDescriptionChanged}
-  />
-</FormElement>
-<CheckboxGroup small>
-  <Checkbox id="lookupLocation" bind:checked={lookupLocation}>
-    Lookup location description automatically
-  </Checkbox>
-</CheckboxGroup>
-
 <TextArea label="Comments or notes" bind:value={notes} />
 
 <DefaultButton on:click={exportForm}>Export</DefaultButton>
+
+<Modal
+  title="Almost done!"
+  bind:open={modalOpen}
+  displayEscapeButton={false}
+  canCloseByClickingBackground={false}
+>
+  <div class="govuk-prose">
+    <p>
+      Edit <i>Inspectors Log.xlsx</i>
+      , add a new row at the bottom of
+      <i>Form Input</i>
+      , and press
+      <i>Control+V</i>
+      to paste.
+    </p>
+    <p><b>You have to manually fill out the first ID column!</b></p>
+    <TextArea
+      label="The new row has already been copied to your clipboard. If it didn't work, copy from below"
+      value={getExcelRow()}
+    />
+    <div class="govuk-button-group">
+      <SecondaryButton on:click={() => (modalOpen = false)}>
+        Keep editing this issue
+      </SecondaryButton>
+      <WarningButton on:click={reset}>Done! Enter a new critical</WarningButton>
+    </div>
+  </div>
+</Modal>
