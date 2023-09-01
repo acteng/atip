@@ -3,6 +3,7 @@
   import { Modal } from "../common";
   import {
     DefaultButton,
+    ErrorMessage,
     FormElement,
     SecondaryButton,
     Select,
@@ -16,17 +17,23 @@
 
   // Auto-save 3 fields to make it easier to repeatedly fill out the form
   let inspector = window.localStorage.getItem("inspector") ?? "";
-  let scheme_reference = window.localStorage.getItem("scheme_reference") ?? "";
-  let current_design_stage =
-    window.localStorage.getItem("current_design_stage") ?? "";
+  let schemeReference = window.localStorage.getItem("schemeReference") ?? "";
+  let currentDesignStage =
+    window.localStorage.getItem("currentDesignStage") ?? "";
   $: window.localStorage.setItem("inspector", inspector);
-  $: window.localStorage.setItem("scheme_reference", scheme_reference);
-  $: window.localStorage.setItem("current_design_stage", current_design_stage);
+  $: window.localStorage.setItem("schemeReference", schemeReference);
+  $: window.localStorage.setItem("currentDesignStage", currentDesignStage);
 
-  let critical_issue_type = "";
-  let location_description = "";
+  let criticalIssueType = "";
+  let locationDescription = "";
   let notes = "";
 
+  let inspectorError = "";
+  let schemeReferenceError = "";
+  let currentDesignStageError = "";
+  let criticalIssueTypeError = "";
+  let locationDescriptionError = "";
+  let notesError = "";
   let modalOpen = false;
 
   let designStages = listToChoices([
@@ -91,17 +98,35 @@
       id,
       inspector,
       submission_time,
-      scheme_reference,
-      current_design_stage,
-      critical_issue_type,
-      setPrecision(pt.toArray().reverse()).join(","),
-      location_description,
+      schemeReference,
+      currentDesignStage,
+      criticalIssueType,
+      setPrecision(pt.toArray().reverse()).join(", "),
+      locationDescription,
       notes,
     ];
     return row.join("\t");
   }
 
   function exportForm() {
+    // Trivial validation currently
+    inspectorError = inspector ? "" : "Required";
+    schemeReferenceError = schemeReference ? "" : "Required";
+    currentDesignStageError = currentDesignStage ? "" : "Required";
+    criticalIssueTypeError = criticalIssueType ? "" : "Required";
+    locationDescriptionError = locationDescription ? "" : "Required";
+    notesError = notes ? "" : "Required";
+
+    if (
+      inspectorError ||
+      schemeReferenceError ||
+      currentDesignStageError ||
+      criticalIssueTypeError ||
+      locationDescriptionError ||
+      notesError
+    ) {
+      return;
+    }
     navigator.clipboard.writeText(getExcelRow());
     modalOpen = true;
   }
@@ -113,6 +138,7 @@
 </script>
 
 <FormElement label="Inspector name" id="inspector">
+  <ErrorMessage errorMessage={inspectorError} />
   <input
     type="text"
     class="govuk-input govuk-input--width-10"
@@ -121,34 +147,41 @@
   />
 </FormElement>
 
-<FormElement label="Scheme reference" id="scheme_reference">
+<FormElement label="Scheme reference" id="schemeReference">
+  <ErrorMessage errorMessage={schemeReferenceError} />
   <input
     type="text"
     class="govuk-input govuk-input--width-10"
-    id="scheme_reference"
-    bind:value={scheme_reference}
+    id="schemeReference"
+    bind:value={schemeReference}
   />
 </FormElement>
 
 <Select
   label="Current design stage"
-  id="current_design_stage"
+  id="currentDesignStage"
   choices={designStages}
   emptyOption
-  bind:value={current_design_stage}
+  bind:value={currentDesignStage}
+  errorMessage={currentDesignStageError}
 />
 
-<LocationDescription bind:location_description {pt} />
+<LocationDescription bind:locationDescription {pt} {locationDescriptionError} />
 
 <Select
   label="Critical issue type"
-  id="critical_issue_type"
+  id="criticalIssueType"
   choices={criticalIssueTypes}
   emptyOption
-  bind:value={critical_issue_type}
+  bind:value={criticalIssueType}
+  errorMessage={criticalIssueTypeError}
 />
 
-<TextArea label="Comments or notes" bind:value={notes} />
+<TextArea
+  label="Comments or notes"
+  bind:value={notes}
+  errorMessage={notesError}
+/>
 
 <DefaultButton on:click={exportForm}>Export</DefaultButton>
 
