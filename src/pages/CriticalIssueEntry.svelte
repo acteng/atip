@@ -21,7 +21,7 @@
     <h1>Critical issue entry</h1>
     {#if markerPosition}
       <p>Critical at {markerPosition}</p>
-      <Form />
+      <Form pt={markerPosition} />
     {:else}
       <p>Click the map to add a critical</p>
     {/if}

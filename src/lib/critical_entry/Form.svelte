@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { FormElement, Select, TextArea } from "../govuk";
+  import type { LngLat } from "maplibre-gl";
+  import { DefaultButton, FormElement, Select, TextArea } from "../govuk";
+  import { setPrecision } from "../maplibre";
+
+  export let pt: LngLat;
 
   // Auto-save inspector and scheme_reference to make it easier to repeatedly fill out the form
   let inspector = window.localStorage.getItem("inspector") ?? "";
@@ -53,6 +57,39 @@
   function listToChoices(list: string[]): [string, string][] {
     return list.map((x) => [x, x]);
   }
+
+  // Thanks to
+  // https://gitlab.com/catamphetamine/write-excel-file/-/blob/main/source/write/convertDateToExcelSerial.js,
+  // MIT licensed
+  function excelDatetime(date: Date): number {
+    let daysBeforeUnixEpoch = 70 * 365 + 19;
+    let hour = 60 * 60 * 1000;
+    let day = 24 * hour;
+    return date.getTime() / day + daysBeforeUnixEpoch;
+  }
+
+  function exportForm() {
+    // Whoever's copying this will have to assign a new ID manually
+    let id = 0;
+    let submission_time = excelDatetime(new Date());
+
+    // The column order is defined by the Excel file
+    let row = [
+      id,
+      inspector,
+      submission_time,
+      scheme_reference,
+      current_design_stage,
+      critical_issue_type,
+      setPrecision(pt.toArray().reverse()).join(","),
+      location_description,
+      notes,
+    ];
+    navigator.clipboard.writeText(row.join("\t"));
+    window.alert(
+      "Go to a new row at the bottom of Form Input, and press Control+V to paste"
+    );
+  }
 </script>
 
 <FormElement label="Inspector name" id="inspector">
@@ -99,3 +136,5 @@
 </FormElement>
 
 <TextArea label="Comments or notes" bind:value={notes} />
+
+<DefaultButton on:click={exportForm}>Export</DefaultButton>

@@ -23,7 +23,7 @@
     marker = new Marker({ draggable: true }).setLngLat(e.lngLat).addTo($map);
     markerPosition = marker.getLngLat();
     marker.on("dragend", () => {
-      markerPosition = marker.getLngLat();
+      markerPosition = marker!.getLngLat();
     });
   }
 </script>
