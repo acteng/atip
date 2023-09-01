@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FormElement } from "lib/govuk";
+  import { errorMessage, FormElement } from "lib/govuk";
 
   export let label: string;
   // A unique (per page) ID
@@ -9,12 +9,14 @@
   // Make the first option the empty string
   export let emptyOption = false;
   export let disabled = false;
+  export let errorMessage = "";
 
   // The current value
   export let value: string;
 </script>
 
 <FormElement {label} {id}>
+  <ErrorMessage {errorMessage} />
   <select class="govuk-select" {id} bind:value {disabled} on:change>
     {#if emptyOption}
       <option value="" />

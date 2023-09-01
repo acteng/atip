@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { LngLat } from "maplibre-gl";
-  import { Checkbox, CheckboxGroup, FormElement } from "../govuk";
+  import { Checkbox, CheckboxGroup, ErrorMessage, FormElement } from "../govuk";
 
-  export let location_description: string;
+  export let locationDescription: string;
+  export let locationDescriptionError: string;
   export let pt: LngLat;
 
   let lookupLocation = true;
@@ -14,11 +15,11 @@
     // TODO Don't overwrite something the user entered
     let url = `https://nominatim.openstreetmap.org/reverse?lat=${pt.lat}&lon=${pt.lng}&format=json`;
     try {
-      location_description = "Loading...";
+      locationDescription = "Loading...";
       let resp = await fetch(url);
       let json = await resp.json();
       // The road usually seems filled out, but fallback to a (verbose) name.
-      location_description = json.address.road ?? json.display_name;
+      locationDescription = json.address.road ?? json.display_name;
     } catch (err) {
       console.log(`Location lookup failed: ${err}`);
     }
@@ -30,12 +31,13 @@
   }
 </script>
 
-<FormElement label="Describe this location" id="location_description">
+<FormElement label="Describe this location" id="locationDescription">
+  <ErrorMessage errorMessage={locationDescriptionError} />
   <input
     type="text"
     class="govuk-input govuk-input--width-20"
-    id="location_description"
-    bind:value={location_description}
+    id="locationDescription"
+    bind:value={locationDescription}
     on:change={locationDescriptionChanged}
   />
 </FormElement>
