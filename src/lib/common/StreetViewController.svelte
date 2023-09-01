@@ -10,7 +10,7 @@
   export let displayEnableButton: boolean;
   export let isInactive: boolean;
 
-  let roadLayerHelpers = getRoadLayerHelpers();
+  let roadLayerHelpers: LayerHelper[] = [];
 
   export function handleMapClickEvent(e: MapMouseEvent) {
     if (isInactive) {
@@ -35,6 +35,8 @@
     isInactive = false;
     $map.on("click", handleMapClickEvent);
     $map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
+    // Create these as late as possible, so changes to basemap layers are used
+    roadLayerHelpers = getRoadLayerHelpers();
     for (let helper of roadLayerHelpers) {
       helper.setProperty($map, "line-color", colors.streetview);
     }
