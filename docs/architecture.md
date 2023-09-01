@@ -1,9 +1,10 @@
 # Architecture
 
-"ATIP" can be split into two pieces of functionality, with different users:
+"ATIP" can be split into three pieces of functionality, with different users:
 
 - Scheme Sketcher: for external authorities to sketch GeoJSON files
 - Scheme Browser: for internal ATE users to explore all submitted schemes
+- Critical issue entry: for internal ATE users to record critical issues
 
 ## Current (August 2023)
 
@@ -45,6 +46,7 @@ An user accessing ATIP in their browser will depend on:
 - Files from atip-data-prep, served by Cloudfront
 - [MapTiler](maptiler.com) for the basemap
   - Note we can readily switch to another basemap provider, or self-host tiles for England, if needed
+- [Nominatim](https://nominatim.org) for reverse geocoding in the critical issue entry mode
 - GeoJSON files manually loaded in the app by the user
   - For the scheme sketcher, a file representing a single scheme. Also stored in browser local storage for convenience.
   - For the scheme browser, a file representing all submitted schemes. This file is manually shared with appropriate users through internal Sharepoint.
