@@ -1,4 +1,6 @@
 <script lang="ts">
+  export let sidebarWidth = "25rem";
+
   let showSidebar = true;
 
   function toggleSidebar() {
@@ -7,7 +9,10 @@
 </script>
 
 <div class="overall-layout">
-  <aside class={showSidebar ? "" : "collapsed"}>
+  <aside
+    class={showSidebar ? "" : "collapsed"}
+    style="--sidebarWidth: {sidebarWidth}"
+  >
     <div class="sidebar-content content-container">
       <slot name="sidebar" />
     </div>
@@ -49,12 +54,16 @@
     position: relative; /* for children who want to position:absolute */
 
     flex: 0;
-    min-width: 25rem; /* use min/max-width because we're in a flex containter. */
-    max-width: 25rem;
+    min-width: var(
+      --sidebarWidth
+    ); /* use min/max-width because we're in a flex containter. */
+    max-width: var(--sidebarWidth);
   }
 
   .sidebar-content {
-    width: 25em; /* Keep the size constant, so the main panel overlaps it when it collapses. */
+    width: var(
+      --sidebarWidth
+    ); /* Keep the size constant, so the main panel overlaps it when it collapses. */
 
     min-height: 100%;
     max-height: 100%;

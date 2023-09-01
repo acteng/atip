@@ -27,7 +27,7 @@
   }
 </script>
 
-<Layout>
+<Layout sidebarWidth="35rem">
   <div slot="sidebar" class="govuk-prose">
     <h1>Critical issue entry</h1>
     {#if markerPosition}

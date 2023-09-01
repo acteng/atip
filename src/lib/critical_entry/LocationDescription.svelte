@@ -12,7 +12,6 @@
     if (!lookupLocation) {
       return;
     }
-    // TODO Don't overwrite something the user entered
     let url = `https://nominatim.openstreetmap.org/reverse?lat=${pt.lat}&lon=${pt.lng}&format=json`;
     try {
       locationDescription = "Loading...";
@@ -35,7 +34,7 @@
   <ErrorMessage errorMessage={locationDescriptionError} />
   <input
     type="text"
-    class="govuk-input govuk-input--width-20"
+    class="govuk-input"
     id="locationDescription"
     bind:value={locationDescription}
     on:change={locationDescriptionChanged}
