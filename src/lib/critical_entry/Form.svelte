@@ -141,17 +141,18 @@
   <ErrorMessage errorMessage={inspectorError} />
   <input
     type="text"
-    class="govuk-input govuk-input--width-10"
+    class="govuk-input"
     id="inspector"
     bind:value={inspector}
   />
 </FormElement>
 
 <FormElement label="Scheme reference" id="schemeReference">
+  <div class="govuk-hint">Example: ATF2_WLT_01</div>
   <ErrorMessage errorMessage={schemeReferenceError} />
   <input
     type="text"
-    class="govuk-input govuk-input--width-10"
+    class="govuk-input"
     id="schemeReference"
     bind:value={schemeReference}
   />
