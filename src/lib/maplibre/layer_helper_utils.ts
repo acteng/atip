@@ -36,6 +36,7 @@ const satelliteLayers = ["Path", "Road", "Tunnel"];
 
 const roadLayerIds = datavizLayers.concat(streetsLayers(), satelliteLayers);
 
+// If the basemap style changes dynamically, be careful about saving this.
 export function getRoadLayerHelpers(): LayerHelper[] {
   return get(mapStore)
     .getStyle()
