@@ -1,0 +1,7 @@
+# To test this, run: gcloud meta list-files-for-upload
+# Ignore everything by default, then include a few things
+*
+!app.yaml
+!dist
+!package.json
+!tsconfig_tsnode.json
