@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "npx ts-node --project tsconfig_tsnode.json --esm src/server.ts",
     "wasm": "wasm-pack build --dev --target web ./route_info",
     "wasm-release": "wasm-pack build --release --target web ./route_info",
     "preview": "vite preview",
@@ -22,7 +21,6 @@
     "@playwright/test": "^1.35.1",
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
     "@tsconfig/svelte": "^4.0.1",
-    "@types/express": "^4.17.17",
     "@types/node": "^20.3.2",
     "playwright": "^1.35.1",
     "prettier": "2.8.8",
@@ -48,7 +46,6 @@
     "@turf/random": "^6.5.0",
     "@types/geojson": "^7946.0.10",
     "comlink": "^4.4.1",
-    "express": "^4.18.2",
     "govuk-frontend": "^4.6.0",
     "humanize-string": "^3.0.0",
     "maplibre-gl": "^3.1.0",
