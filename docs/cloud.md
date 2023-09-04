@@ -25,9 +25,46 @@
 - <https://cloud.google.com/appengine/docs/standard/nodejs/runtime>
 - <https://cloud.google.com/appengine/docs/standard/nodejs/running-custom-build-step>
 
+# Setting up IAP
+
+- `gcloud services --project=atip-test-1 enable iap.googleapis.com`, few seconds
+- Go to <https://console.cloud.google.com/apis/credentials/consent?project=atip-test-1> and manually configure the oauth consent screen
+	- No automation? <https://issuetracker.google.com/issues/35907249?pli=1>
+	- Choose "External" (unless everyone internal can be part of our cloud org?)
+	- App name = ATIP test
+	- email = dabreegster@gmail.com
+	- no logo
+	- no app domains or authorized domains
+	- scopes: .../auth/userinfo.email (see email)
+	- test users: xyz@dft.gov.uk, not activetravelengland.gov.uk
+		- these aren't added as principals to IAP, so what are these?
+- Go to <https://console.cloud.google.com/security/iap?project=atip-test-1> and enable IAP (it'll have an oauth misconfigured error)
+- On that same page, manually add principals
+	- Propagation delay is a few minutes
+
+TODO: Try entire dft.gov.uk domain
+
+## Automation
+
+- How to add someone with gcloud? Per <https://cloud.google.com/iap/docs/managing-access>, probably something to set the IAM policy with roles/iap.httpsResourceAccessor
+- `gcloud iap --project=atip-test-1 web enable --resource-type=app-engine`
+	- first time, asks to enable `appengine.googleapis.com`
+	- what're the oauth client ID/secret needed?
+- <https://cloud.google.com/iap/docs/authenticate-users-google-accounts>
+
+## Audit logs
+
+<https://cloud.google.com/iap/docs/audit-log-howto>
+
+- <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "Cloud Identity-Aware Proxy API", enable all 3
+- TODO: figure out where things show up
+
+# See who the user is inside the app
+
+TODO: <https://cloud.google.com/iap/docs/identity-howto>
+
 # TODO
 
-- IAP
 - Terraform automation
 - CI with GH actions (only to a dev project)
-- Copy things to GCS
+- Copy things to a private GCS bucket
