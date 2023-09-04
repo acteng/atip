@@ -10,12 +10,12 @@
 	- note the region is fixed, and there's only one GAE app per project
 
 - to deploy
-	- first `npm run build`, doing the build locally
 	- `gcloud app --project=atip-test-1 deploy --quiet`
 
 
 
 - https://cloud.google.com/appengine/docs/standard/nodejs/runtime for reference
+- https://cloud.google.com/appengine/docs/standard/nodejs/running-custom-build-step
 
 
 
