@@ -24,7 +24,9 @@
   onMount(() => {
     map = new Map({
       container: mapContainer,
-      style: `https://api.maptiler.com/maps/${style}/style.json?key=MZEJTanw3WpxRvt7qDfo`,
+      style: `https://api.maptiler.com/maps/${style}/style.json?key=${
+        import.meta.env.VITE_MAPTILER_API_KEY
+      }`,
       hash: true,
     });
     map.addControl(new ScaleControl({}));

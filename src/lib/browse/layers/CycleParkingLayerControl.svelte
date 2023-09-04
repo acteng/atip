@@ -17,7 +17,7 @@
   overwritePmtilesSource(
     $map,
     name,
-    `https://atip.uk/layers/v1/${name}.pmtiles`
+    `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.pmtiles`
   );
 
   overwriteCircleLayer($map, {
