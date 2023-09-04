@@ -1,0 +1,3 @@
+# Test this: gcloud meta list-files-for-upload
+.gcloudignore
+node_modules/

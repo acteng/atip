@@ -1,4 +1,0 @@
-# To test this, run: gcloud meta list-files-for-upload
-
-#!include:.gitignore
-.git
