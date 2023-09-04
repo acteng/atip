@@ -1,70 +1,73 @@
-# Manually deploy to GAE
+# GCP deployment
 
-- `gcloud projects create atip-test-1`, just a few seconds
-	- cloud build API gets included by default
-- manually link the billing account: <https://console.cloud.google.com/billing/linkedaccount?project=atip-test-1>
-	- without this, `gcloud app --project=atip-test-1 describe` and similar will look like a permissions error
+## Part 1: Deploy to GAE
 
-- `gcloud app --project=atip-test-1 create --region=europe-west`, few seconds
-	- note the region is fixed, and there's only one GAE app per project
+1.  First manually set up gcloud and a billing account
+2.  `gcloud projects create atip-test-1` (few seconds)
+3.  Manually link the billing account: <https://console.cloud.google.com/billing/linkedaccount?project=atip-test-1>
+	- Without this, `gcloud app --project=atip-test-1 describe` will look like a permissions error
+4.  `gcloud app --project=atip-test-1 create --region=europe-west` (few seconds)
+	- Note the region is fixed, and there's only one GAE app per project
 
-- to deploy
-	- Set up the thing to deploy: `npm run build && cd server && rm -rf dist && cp -R ../dist .`
-		- (GH actions will be able to do this; all the dependencies are already there)
-		- to test the result locally: `npm run start`
-	- `gcloud app --project=atip-test-1 deploy --quiet`, about 90s
+To deploy:
 
-- to try the result: `gcloud app browse --project=atip-test-1` or <https://atip-test-1.ew.r.appspot.com/>
+1.  Set up the thing to deploy: `npm run build && cd server && rm -rf dist && cp -R ../dist .`
+	- (GH actions will be able to do this; all the dependencies are already there. Otherwise we have to figure out how to get wasm-pack and such working in the build env)
+	- To test the result locally: `npm run start`
+2.  `gcloud app --project=atip-test-1 deploy --quiet` (60 - 90s)
+3.  Try the result: `gcloud app browse --project=atip-test-1` or <https://atip-test-1.ew.r.appspot.com/>
 
-- useful debugging
-	- <https://console.cloud.google.com/cloud-build/builds;region=europe-west1?project=atip-test-1>
-	- `gcloud app --project=atip-test-1 logs read`
+Useful debugging:
 
-## References
+- <https://console.cloud.google.com/cloud-build/builds;region=europe-west1?project=atip-test-1>
+- `gcloud app --project=atip-test-1 logs read`
+
+### TODO
+
+Automated setup. <https://cloud.google.com/docs/terraform/resource-management/export> may be promising.
+
+### References
 
 - <https://cloud.google.com/appengine/docs/standard/nodejs/runtime>
-- <https://cloud.google.com/appengine/docs/standard/nodejs/running-custom-build-step>
 
-# Setting up IAP
+## Part 2: Protect with IAP
 
-- `gcloud services --project=atip-test-1 enable iap.googleapis.com`, few seconds
-- Go to <https://console.cloud.google.com/apis/credentials/consent?project=atip-test-1> and manually configure the oauth consent screen
-	- No automation? <https://issuetracker.google.com/issues/35907249?pli=1>
+1.  `gcloud services --project=atip-test-1 enable iap.googleapis.com` (few seconds)
+2.  Go to <https://console.cloud.google.com/apis/credentials/consent?project=atip-test-1> and manually configure the oauth consent screen
 	- Choose "External" (unless everyone internal can be part of our cloud org?)
-	- App name = ATIP test
-	- email = dabreegster@gmail.com
-	- no logo
-	- no app domains or authorized domains
-	- scopes: .../auth/userinfo.email (see email)
+	- Pick an app name, email
+	- No logo, app domains, authorized domains
+	- scopes: .../auth/userinfo.email (just checking their email?)
 	- test users: xyz@dft.gov.uk, not activetravelengland.gov.uk
-		- these aren't added as principals to IAP, so what are these?
-- Go to <https://console.cloud.google.com/security/iap?project=atip-test-1> and enable IAP (it'll have an oauth misconfigured error)
-- On that same page, manually add principals
+		- These aren't added as principals to IAP, so what are these used for?
+3.  Go to <https://console.cloud.google.com/security/iap?project=atip-test-1> and enable IAP (it'll have an oauth misconfigured error)
+4.  On that same page, manually add principals with "IAP-secured Web App User" role
 	- Propagation delay is a few minutes
 
-TODO: Try entire dft.gov.uk domain
+### TODO
 
-## Automation
-
-- How to add someone with gcloud? Per <https://cloud.google.com/iap/docs/managing-access>, probably something to set the IAM policy with roles/iap.httpsResourceAccessor
+- Automate oauth consent screen setup? <https://issuetracker.google.com/issues/35907249?pli=1>
+- Publish the app
+- Figure out if the oauth consent screen test users are relevnt or not
+- Try the entire dft.gov.uk domain
+- How to add someone with gcloud? Per <https://cloud.google.com/iap/docs/managing-access>, probably something to set the IAM policy with `roles/iap.httpsResourceAccessor`
 - `gcloud iap --project=atip-test-1 web enable --resource-type=app-engine`
 	- first time, asks to enable `appengine.googleapis.com`
-	- what're the oauth client ID/secret needed?
-- <https://cloud.google.com/iap/docs/authenticate-users-google-accounts>
+	- What're the oauth client ID/secret needed?
 
-## Audit logs
+## Part 3: Configure audit logs
 
-<https://cloud.google.com/iap/docs/audit-log-howto>
+Go to <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "Cloud Identity-Aware Proxy API", enable all 3.
 
-- <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "Cloud Identity-Aware Proxy API", enable all 3
-- TODO: figure out where things show up
+### TODO
 
-# See who the user is inside the app
+- Automation
+- Figure out where audit logs show up
 
-TODO: <https://cloud.google.com/iap/docs/identity-howto>
+## TODO
 
-# TODO
-
+- See who the user is inside the app
+	- <https://cloud.google.com/iap/docs/identity-howto>
 - Terraform automation
 - CI with GH actions (only to a dev project)
 - Copy things to a private GCS bucket
