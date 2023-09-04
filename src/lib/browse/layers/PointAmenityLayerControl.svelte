@@ -24,7 +24,11 @@
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  overwriteSource($map, name, `https://atip.uk/layers/v1/${name}.geojson`);
+  overwriteSource(
+    $map,
+    name,
+    `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.geojson`
+  );
 
   overwriteCircleLayer($map, {
     id: name,

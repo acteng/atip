@@ -53,8 +53,9 @@
 
     let map = new Map({
       container: "map",
-      style:
-        "https://api.maptiler.com/maps/streets/style.json?key=MZEJTanw3WpxRvt7qDfo",
+      style: `https://api.maptiler.com/maps/streets/style.json?key=${
+        import.meta.env.VITE_MAPTILER_API_KEY
+      }`,
     });
     // Use map within onMount, so it's guaranteed to exist
     loadedMap = map;

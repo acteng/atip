@@ -47,8 +47,12 @@
   // app's version. The version of the code deployed has to match the data, and
   // it's simplest to increment the number here for new incompatible data
   // releases. The two data releases may also be changed independently.
-  let routeSnapperUrl = `https://atip.uk/route-snappers/v2.1/${authorityName}.bin.gz`;
-  let routeInfoUrl = `https://atip.uk/route-info/v2/${authorityName}.bin.gz`;
+  let routeSnapperUrl = `${
+    import.meta.env.VITE_RESOURCE_BASE
+  }/route-snappers/v2.1/${authorityName}.bin.gz`;
+  let routeInfoUrl = `${
+    import.meta.env.VITE_RESOURCE_BASE
+  }/route-info/v2/${authorityName}.bin.gz`;
 
   function toggleAbout() {
     showAbout = !showAbout;
