@@ -6,6 +6,7 @@
   import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
   import SchemeCard from "lib/browse/SchemeCard.svelte";
+  import LoadRemoteSchemeData from "lib/browse/LoadRemoteSchemeData.svelte";
   import authorityNamesList from "../../assets/authority_names.json";
   import "../style/main.css";
   import {
@@ -92,6 +93,9 @@
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
     </div>
+    {#if import.meta.env.VITE_ON_GCP}
+      <LoadRemoteSchemeData {loadFile} />
+    {/if}
     <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />
     <ErrorMessage {errorMessage} />
 

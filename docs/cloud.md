@@ -11,7 +11,7 @@
 
 To deploy:
 
-1.  Set up the thing to deploy: `npm run build && cd server && rm -rf dist && cp -R ../dist .`
+1.  Set up the thing to deploy: `VITE_ON_GCP=true npm run build && cd server && rm -rf dist && cp -R ../dist .`
 	- (GH actions will be able to do this; all the dependencies are already there. Otherwise we have to figure out how to get wasm-pack and such working in the build env)
 	- To test the result locally: `npm run start`
 2.  `gcloud app --project=atip-test-1 deploy --quiet` (60 - 90s)
@@ -67,7 +67,7 @@ Go to <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "C
 ## Part 4: Setup a GCS bucket
 
 1.  `gcloud storage --project=atip-test-1 buckets create gs://atip-test-1 --location=EUROPE-WEST2 --uniform-bucket-level-access`
-2.  Upload some example file: `gsutil cp README.md gs://atip-test-1/`
+2.  Generate fake scheme data and upload it: `npm run generate-random-schemes && gsutil cp random_schemes.geojson gs://atip-test-1/`
 
 ### TODO
 
