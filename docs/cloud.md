@@ -64,10 +64,31 @@ Go to <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "C
 - Automation
 - Figure out where audit logs show up
 
+## Part 4: Setup a GCS bucket
+
+1.  `gcloud storage --project=atip-test-1 buckets create gs://atip-test-1 --location=EUROPE-WEST2 --uniform-bucket-level-access`
+2.  Upload some example file: `gsutil cp README.md gs://atip-test-1/`
+
+### TODO
+
+- Serve files!
+	- Start with easy route snapper files and GeoJSON
+	- pmtiles will need CORS
+- Serving options
+	- ideally: some direct GCS URL that enforces the same IAP auth
+	- some LB in front of GCS, then glued to IAP
+	- make Express proxy the requests to GCS
+	- insecure worst case: public bucket with an obfuscated URL
+- Optimize [bucket location](https://cloud.google.com/storage/docs/locations) for serving
+- Consider using the GAE [default bucket](https://cloud.google.com/appengine/docs/standard/using-cloud-storage?tab=node.js)?
+
 ## TODO
 
 - See who the user is inside the app
 	- <https://cloud.google.com/iap/docs/identity-howto>
 - Terraform automation
 - CI with GH actions (only to a dev project)
-- Copy things to a private GCS bucket
+- Unblocked by this
+	- More basemaps
+	- Load criticals and scheme data
+	- Regional engagement contact list
