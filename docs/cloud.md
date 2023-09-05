@@ -44,13 +44,20 @@ Automated setup. <https://cloud.google.com/docs/terraform/resource-management/ex
 4.  On that same page, manually add principals with "IAP-secured Web App User" role
 	- Propagation delay is a few minutes
 
+To get the current auth list:
+
+`gcloud iap --project=atip-test-1 web get-iam-policy --resource-type=app-engine`
+
+To add someone:
+
+`gcloud iap --project=atip-test-1 web add-iam-policy-binding --resource-type=app-engine --member=user:foo@bar.com --role=roles/iap.httpsResourceAccessor`
+
 ### TODO
 
 - Automate oauth consent screen setup? <https://issuetracker.google.com/issues/35907249?pli=1>
 - Publish the app
-- Figure out if the oauth consent screen test users are relevnt or not
+- Figure out if the oauth consent screen test users are relevant or not (seemingly not)
 - Try the entire dft.gov.uk domain
-- How to add someone with gcloud? Per <https://cloud.google.com/iap/docs/managing-access>, probably something to set the IAM policy with `roles/iap.httpsResourceAccessor`
 - `gcloud iap --project=atip-test-1 web enable --resource-type=app-engine`
 	- first time, asks to enable `appengine.googleapis.com`
 	- What're the oauth client ID/secret needed?
@@ -77,8 +84,13 @@ Go to <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "C
 - Serving options
 	- ideally: some direct GCS URL that enforces the same IAP auth
 	- some LB in front of GCS, then glued to IAP
+		- [this won't work for backend buckets?](https://cloud.google.com/iap/docs/load-balancer-howto)
 	- make Express proxy the requests to GCS
+		- add the GAE service account as a storage.objectViewer on the bucket first
+		- <https://github.com/alexbakerdev/GCS-Reverse-Proxy> as reference
 	- insecure worst case: public bucket with an obfuscated URL
+	- [signed URLs](https://cloud.google.com/storage/docs/access-control/signed-urls)
+	- [cookie based auth](https://cloud.google.com/storage/docs/collaboration#browser)
 - Optimize [bucket location](https://cloud.google.com/storage/docs/locations) for serving
 - Consider using the GAE [default bucket](https://cloud.google.com/appengine/docs/standard/using-cloud-storage?tab=node.js)?
 
