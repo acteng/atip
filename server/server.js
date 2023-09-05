@@ -1,5 +1,6 @@
 // TODO Hook up TS, fmt, etc
 import express from "express";
+// API reference: https://googleapis.dev/nodejs/storage/latest/
 import { Storage } from "@google-cloud/storage";
 
 // TODO Magic auth here. Locally, it finds my gcloud credentials. On App
@@ -41,7 +42,7 @@ app.get("/data/*", async (req, resp) => {
 
 let port = process.env.PORT || 8080;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
 
 // GCS middleware references:

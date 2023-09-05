@@ -75,6 +75,7 @@ Go to <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "C
 
 1.  `gcloud storage --project=atip-test-1 buckets create gs://atip-test-1 --location=EUROPE-WEST2 --uniform-bucket-level-access`
 2.  Generate fake scheme data and upload it: `npm run generate-random-schemes && gsutil cp random_schemes.geojson gs://atip-test-1/`
+3.  Sync current public layers to GCS: `mkdir layers; cd layers; aws s3 sync s3://atip.uk/layers .; gsutil cp -m -r v1 gs://atip-test-1/layers/`
 
 ### TODO
 
