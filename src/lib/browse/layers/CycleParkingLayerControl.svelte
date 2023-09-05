@@ -25,7 +25,7 @@
     source: name,
     sourceLayer: name,
     color,
-    radius: 5,
+    radius: ["interpolate", ["linear"], ["zoom"], 1, 2, 8, 3, 13, 10],
   });
 
   let show = false;

@@ -31,9 +31,9 @@
     sourceLayer: name,
     color: makeColorRamp(["get", "motor_vehicles_2022"], limits, colorScale),
     opacity: 0.9,
-    radius: 15,
+    radius: ["interpolate", ["linear"], ["zoom"], 1, 2, 8, 3, 13, 15],
     strokeColor: "black",
-    strokeWidth: 3,
+    strokeWidth: 0.1,
   });
 
   let show = false;
