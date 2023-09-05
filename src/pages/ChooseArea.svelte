@@ -3,22 +3,22 @@
   import type { FeatureCollection } from "geojson";
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
-  import { Map, type MapGeoJSONFeature } from "maplibre-gl";
-  import { onMount } from "svelte";
   import {
     DefaultButton,
     ErrorMessage,
     FormElement,
     Radio,
     SecondaryButton,
-  } from "../lib/govuk";
+  } from "lib/govuk";
+  import { Map, type MapGeoJSONFeature } from "maplibre-gl";
+  import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { FileInput, InteractiveLayer } from "../lib/common";
-  import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
-  import { bbox, hoveredToggle } from "../lib/maplibre";
-  import About from "../lib/sidebar/About.svelte";
-  import { map as mapStore } from "../stores";
-  import type { Schema } from "../types";
+  import { FileInput, InteractiveLayer } from "lib/common";
+  import { getAuthoritiesGeoJson } from "lib/common/data_getter";
+  import { bbox, hoveredToggle } from "lib/maplibre";
+  import About from "lib/sidebar/About.svelte";
+  import { map as mapStore } from "stores";
+  import type { Schema } from "types";
 
   let showAbout = false;
   const params = new URLSearchParams(window.location.search);

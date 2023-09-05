@@ -1,18 +1,18 @@
 <script lang="ts">
-  import type { GeoJSONSource, MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "../../../stores";
-  import { CollapsibleCard, ColorLegend, InteractiveLayer } from "../../common";
+  import { CollapsibleCard, ColorLegend, InteractiveLayer } from "lib/common";
   import {
     Checkbox,
     CheckboxGroup,
     ErrorMessage,
     FormElement,
-  } from "../../govuk";
+  } from "lib/govuk";
   import {
     cleanupSource,
     emptyGeojson,
     overwriteCircleLayer,
-  } from "../../maplibre";
+  } from "lib/maplibre";
+  import type { GeoJSONSource, MapGeoJSONFeature } from "maplibre-gl";
+  import { map } from "stores";
   import { parseCriticalIssuesExcel } from "../data";
 
   let fileInput: HTMLInputElement;

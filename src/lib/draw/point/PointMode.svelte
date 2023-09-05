@@ -1,12 +1,7 @@
 <script lang="ts">
   import type { Point } from "geojson";
-  import {
-    currentMode,
-    formOpen,
-    gjScheme,
-    newFeatureId,
-  } from "../../../stores";
-  import type { Feature, Mode } from "../../../types";
+  import { currentMode, formOpen, gjScheme, newFeatureId } from "stores";
+  import type { Feature, Mode } from "types";
   import type { EventHandler } from "../event_handler";
   import type { PointTool } from "./point_tool";
   import PointControls from "./PointControls.svelte";

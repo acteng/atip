@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SecondaryButton } from "../govuk";
+  import { SecondaryButton } from "lib/govuk";
 
   export let title: string;
   export let open = false;

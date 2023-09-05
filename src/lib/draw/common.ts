@@ -1,8 +1,8 @@
 import type { LineString, Polygon } from "geojson";
+import type { FeatureWithProps } from "lib/maplibre";
+import { currentMode, formOpen, gjScheme, newFeatureId } from "stores";
 import { get } from "svelte/store";
-import { currentMode, formOpen, gjScheme, newFeatureId } from "../../stores";
-import type { FeatureUnion, Mode } from "../../types";
-import type { FeatureWithProps } from "../maplibre/utils";
+import type { FeatureUnion, Mode } from "types";
 
 interface Tool {
   addEventListenerSuccess(

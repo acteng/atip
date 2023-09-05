@@ -1,11 +1,5 @@
 <script lang="ts">
-  import type {
-    DataDrivenPropertyValueSpecification,
-    FilterSpecification,
-    GeoJSONSource,
-  } from "maplibre-gl";
-  import { circleRadius, colors, lineWidth } from "../../colors";
-  import { gjScheme, map } from "../../stores";
+  import { circleRadius, colors, lineWidth } from "colors";
   import {
     isLine,
     isPoint,
@@ -14,7 +8,13 @@
     overwriteLineLayer,
     overwritePolygonLayer,
     overwriteSource,
-  } from "../maplibre";
+  } from "lib/maplibre";
+  import type {
+    DataDrivenPropertyValueSpecification,
+    FilterSpecification,
+    GeoJSONSource,
+  } from "maplibre-gl";
+  import { gjScheme, map } from "stores";
 
   export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
 

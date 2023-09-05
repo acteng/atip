@@ -1,6 +1,6 @@
 import type { FeatureCollection } from "geojson";
+import { setPrecision } from "lib/maplibre";
 import readXlsxFile from "read-excel-file";
-import { setPrecision } from "../maplibre";
 
 // This must be filled out in the input file
 interface SchemeData {

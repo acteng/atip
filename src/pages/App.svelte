@@ -4,8 +4,7 @@
   import "../style/main.css";
   import * as Comlink from "comlink";
   import type { FeatureCollection, Polygon } from "geojson";
-  import { onMount } from "svelte";
-  import BoundaryLayer from "../lib/BoundaryLayer.svelte";
+  import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
     BaselayerSwitcher,
     CollapsibleCard,
@@ -13,24 +12,25 @@
     Legend,
     MapLibreMap,
     ZoomOutMap,
-  } from "../lib/common";
-  import { getAuthoritiesGeoJson } from "../lib/common/data_getter";
-  import HoverLayer from "../lib/draw/HoverLayer.svelte";
-  import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
-  import Toolbox from "../lib/draw/Toolbox.svelte";
-  import { SecondaryButton } from "../lib/govuk";
-  import ContextualLayers from "../lib/layers/ContextualLayers.svelte";
-  import About from "../lib/sidebar/About.svelte";
-  import EntireScheme from "../lib/sidebar/EntireScheme.svelte";
-  import Instructions from "../lib/sidebar/Instructions.svelte";
-  import InterventionList from "../lib/sidebar/InterventionList.svelte";
+  } from "lib/common";
+  import { getAuthoritiesGeoJson } from "lib/common/data_getter";
+  import HoverLayer from "lib/draw/HoverLayer.svelte";
+  import InterventionLayer from "lib/draw/InterventionLayer.svelte";
+  import Toolbox from "lib/draw/Toolbox.svelte";
+  import { SecondaryButton } from "lib/govuk";
+  import ContextualLayers from "lib/layers/ContextualLayers.svelte";
+  import About from "lib/sidebar/About.svelte";
+  import EntireScheme from "lib/sidebar/EntireScheme.svelte";
+  import Instructions from "lib/sidebar/Instructions.svelte";
+  import InterventionList from "lib/sidebar/InterventionList.svelte";
   import {
     colorInterventionsBySchema,
     schemaLegend,
     schemaTitle,
-  } from "../schemas";
-  import { routeInfo } from "../stores";
-  import type { Schema } from "../types";
+  } from "schemas";
+  import { routeInfo } from "stores";
+  import { onMount } from "svelte";
+  import type { Schema } from "types";
   import { type RouteInfo } from "../worker";
   import workerWrapper from "../worker?worker";
 

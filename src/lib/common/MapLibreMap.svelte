@@ -7,7 +7,7 @@
   } from "maplibre-gl";
   import { onDestroy, onMount, setContext } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { map as mapStore } from "../../stores";
+  import { map as mapStore } from "stores";
 
   export let style: string;
   export let startBounds: LngLatBoundsLike | null = null;

@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { ColorLegend, HelpButton, InteractiveLayer } from "lib/common";
+  import { Checkbox } from "lib/govuk";
+  import { overwriteCircleLayer, overwriteSource } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "../../../stores";
-  import { ColorLegend, HelpButton, InteractiveLayer } from "../../common";
-  import { Checkbox } from "../../govuk";
-  import { overwriteCircleLayer, overwriteSource } from "../../maplibre";
+  import { map } from "stores";
   import { colors } from "../colors";
 
   // This name is used for multiple things:

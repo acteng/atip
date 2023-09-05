@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
-  import { constructMatchExpression } from "../../maplibre";
+  import { constructMatchExpression } from "lib/maplibre";
   import Layer from "./Layer.svelte";
 
   export let gj: GeoJSON;

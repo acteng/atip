@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { LineString } from "geojson";
+  import type { FeatureWithProps } from "lib/maplibre";
   import init from "route-snapper";
+  import { currentMode, map } from "stores";
   import { onMount } from "svelte";
-  import { currentMode, map } from "../../../stores";
-  import type { Mode } from "../../../types";
-  import type { FeatureWithProps } from "../../maplibre";
+  import type { Mode } from "types";
   import { handleUnsavedFeature, setupEventListeners } from "../common";
   import type { EventHandler } from "../event_handler";
   import { RouteTool } from "./route_tool";

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Mode } from "../../types";
-  import StreetViewController from "../common/StreetViewController.svelte";
+  import { StreetViewController } from "lib/common";
+  import type { Mode } from "types";
   import type { EventHandler } from "./event_handler";
 
   export let eventHandler: EventHandler;

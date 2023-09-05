@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { circleRadius } from "../../../colors";
-  import { ExternalLink } from "../../common";
+  import { circleRadius } from "colors";
+  import { ExternalLink } from "lib/common";
   import PointAmenityLayerControl from "./PointAmenityLayerControl.svelte";
 
   const name = "railway_stations";

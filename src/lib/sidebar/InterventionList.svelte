@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { deleteIntervention, formOpen, gjScheme } from "../../stores";
-  import type { FeatureUnion, Schema } from "../../types";
-  import ATF4Form from "../forms/ATF4Form.svelte";
-  import CriticalsForm from "../forms/CriticalsForm.svelte";
-  import FormV1 from "../forms/FormV1.svelte";
-  import FormV2 from "../forms/FormV2.svelte";
-  import PlanningForm from "../forms/PlanningForm.svelte";
-  import { SecondaryButton, WarningButton } from "../govuk";
+  import ATF4Form from "lib/forms/ATF4Form.svelte";
+  import CriticalsForm from "lib/forms/CriticalsForm.svelte";
+  import FormV1 from "lib/forms/FormV1.svelte";
+  import FormV2 from "lib/forms/FormV2.svelte";
+  import PlanningForm from "lib/forms/PlanningForm.svelte";
+  import { SecondaryButton, WarningButton } from "lib/govuk";
+  import { deleteIntervention, formOpen, gjScheme } from "stores";
+  import type { FeatureUnion, Schema } from "types";
   import AccordionItem from "./AccordionItem.svelte";
 
   export let schema: Schema;
