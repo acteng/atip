@@ -6,17 +6,17 @@
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
-  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
-  import splitIcon from "../../../../assets/split_route.svg";
-  import { currentMode, gjScheme, map, newFeatureId } from "../../../stores";
-  import type { Mode, Feature as OurFeature } from "../../../types";
-  import { CollapsibleCard } from "../../common";
+  import { CollapsibleCard } from "lib/common";
   import {
     emptyGeojson,
     overwriteCircleLayer,
     overwriteSource,
     setPrecision,
-  } from "../../maplibre";
+  } from "lib/maplibre";
+  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
+  import { currentMode, gjScheme, map, newFeatureId } from "stores";
+  import type { Mode, Feature as OurFeature } from "types";
+  import splitIcon from "../../../../assets/split_route.svg";
   import type { EventHandler } from "../event_handler";
 
   const thisMode = "split-route";

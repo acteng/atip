@@ -4,8 +4,8 @@
     type MapGeoJSONFeature,
     type MapLayerMouseEvent,
   } from "maplibre-gl";
+  import { interactiveMapLayersEnabled, map } from "stores";
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
-  import { interactiveMapLayersEnabled, map } from "../../stores";
 
   const dispatch = createEventDispatcher<{
     click: MapGeoJSONFeature;

@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { gjScheme, map } from "../../stores";
-  import type { FeatureUnion } from "../../types";
-  import { CollapsibleCard } from "../common";
+  import { CollapsibleCard } from "lib/common";
   import {
     Checkbox,
     CheckboxGroup,
     FormElement,
     SecondaryButton,
     Select,
-  } from "../govuk";
+  } from "lib/govuk";
+  import { gjScheme, map } from "stores";
+  import { onMount } from "svelte";
+  import type { FeatureUnion } from "types";
   import { type Scheme } from "./data";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
 

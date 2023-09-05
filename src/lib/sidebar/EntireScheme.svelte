@@ -1,7 +1,13 @@
 <script lang="ts">
   import length from "@turf/length";
-  import { onMount } from "svelte";
-  import { schemaPluralNoun } from "../../schemas";
+  import { ConfirmationModal, FileInput } from "lib/common";
+  import {
+    ErrorMessage,
+    SecondaryButton,
+    TextInput,
+    WarningButton,
+  } from "lib/govuk";
+  import { schemaPluralNoun } from "schemas";
   import {
     formOpen,
     gjScheme,
@@ -9,15 +15,9 @@
     mapHover,
     openFromSidebar,
     sidebarHover,
-  } from "../../stores";
-  import type { Schema, Scheme } from "../../types";
-  import { ConfirmationModal, FileInput } from "../common";
-  import {
-    ErrorMessage,
-    SecondaryButton,
-    TextInput,
-    WarningButton,
-  } from "../govuk";
+  } from "stores";
+  import { onMount } from "svelte";
+  import type { Schema, Scheme } from "types";
 
   export let authorityName: string;
   export let schema: Schema;

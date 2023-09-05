@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { currentMode, map } from "stores";
   import { onDestroy } from "svelte";
   import { get } from "svelte/store";
+  import type { Mode, Schema } from "types";
   import editAttributesIcon from "../../../assets/edit_attributes.svg";
   import editGeometryIcon from "../../../assets/edit_geometry.svg";
   import pointIcon from "../../../assets/point.svg";
@@ -9,8 +11,6 @@
   import routeIcon from "../../../assets/route.svg";
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
-  import { currentMode, map } from "../../stores";
-  import type { Mode, Schema } from "../../types";
   import AttributeMode from "./AttributeMode.svelte";
   import { DocumentEvents, EventHandler, MapEvents } from "./event_handler";
   import GeometryMode from "./GeometryMode.svelte";

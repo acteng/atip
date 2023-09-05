@@ -2,28 +2,28 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
+  import { processInput, type Scheme } from "lib/browse/data";
+  import Filters from "lib/browse/Filters.svelte";
+  import LayerControls from "lib/browse/LayerControls.svelte";
+  import SchemeCard from "lib/browse/SchemeCard.svelte";
   import authorityNamesList from "../../assets/authority_names.json";
-  import { processInput, type Scheme } from "../lib/browse/data";
-  import Filters from "../lib/browse/Filters.svelte";
-  import LayerControls from "../lib/browse/LayerControls.svelte";
-  import SchemeCard from "../lib/browse/SchemeCard.svelte";
   import "../style/main.css";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { onDestroy, onMount } from "svelte";
   import {
     FileInput,
     InteractiveLayer,
     Layout,
     MapLibreMap,
     ZoomOutMap,
-  } from "../lib/common";
-  import PmTiles from "../lib/common/PmTiles.svelte";
-  import InterventionLayer from "../lib/draw/InterventionLayer.svelte";
-  import { ErrorMessage } from "../lib/govuk";
-  import { emptyGeojson, prettyPrintMeters } from "../lib/maplibre";
-  import { colorInterventionsBySchema } from "../schemas";
-  import { gjScheme } from "../stores";
-  import type { Scheme as GjScheme } from "../types";
+  } from "lib/common";
+  import PmTiles from "lib/common/PmTiles.svelte";
+  import InterventionLayer from "lib/draw/InterventionLayer.svelte";
+  import { ErrorMessage } from "lib/govuk";
+  import { emptyGeojson, prettyPrintMeters } from "lib/maplibre";
+  import type { MapGeoJSONFeature } from "maplibre-gl";
+  import { colorInterventionsBySchema } from "schemas";
+  import { gjScheme } from "stores";
+  import { onDestroy, onMount } from "svelte";
+  import type { Scheme as GjScheme } from "types";
 
   // TODO Remove after the input data is fixed to plumb correct authority names.
   let authorityNames: Set<string> = new Set(authorityNamesList);

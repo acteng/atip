@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Feature, LineString } from "geojson";
-  import { gjScheme, routeInfo } from "../../stores";
-  import { FormElement, Radio, SecondaryButton, TextArea } from "../govuk";
-  import { prettyPrintMeters } from "../maplibre";
+  import { FormElement, Radio, SecondaryButton, TextArea } from "lib/govuk";
+  import { prettyPrintMeters } from "lib/maplibre";
+  import { gjScheme, routeInfo } from "stores";
   import RouteInfoLayers from "./RouteInfoLayers.svelte";
 
   export let id: number;

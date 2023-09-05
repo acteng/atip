@@ -1,12 +1,7 @@
 <script lang="ts">
-  import { slide } from "svelte/transition";
   // TODO Make this more generic by taking some of these as props too or forwarding events
-  import {
-    formOpen,
-    mapHover,
-    openFromSidebar,
-    sidebarHover,
-  } from "../../stores.js";
+  import { formOpen, mapHover, openFromSidebar, sidebarHover } from "stores";
+  import { slide } from "svelte/transition";
 
   export let id: number;
   export let label: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FormElement } from "../govuk";
+  import { FormElement } from "lib/govuk";
 
   export let label: string;
   // A unique (per page) ID

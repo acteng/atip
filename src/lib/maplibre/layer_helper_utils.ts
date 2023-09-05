@@ -1,5 +1,5 @@
+import { map as mapStore } from "stores";
 import { get } from "svelte/store";
-import { map as mapStore } from "../../stores";
 import { LayerHelper } from "./layer_helper";
 
 // Each MapTiler basemap style uses different layer IDs for roads and paths

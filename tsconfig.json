@@ -18,7 +18,8 @@
     "strict": true,
     /* Necessary for Playwright tests */
     "allowImportingTsExtensions": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "baseUrl": "./src"
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "tests/**/*"]
 }

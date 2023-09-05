@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
+  import { SecondaryButton } from "lib/govuk";
+  import { bbox } from "lib/maplibre";
+  import { map } from "stores";
   import icon from "../../../assets/zoom_out_map.svg";
-  import { map } from "../../stores";
-  import { SecondaryButton } from "../govuk";
-  import { bbox } from "../maplibre";
 
   export let boundaryGeojson: GeoJSON;
 

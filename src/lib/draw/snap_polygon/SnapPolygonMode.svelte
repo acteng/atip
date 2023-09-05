@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import { currentMode } from "../../../stores";
-  import type { Mode } from "../../../types";
-  import type { FeatureWithProps } from "../../maplibre";
+  import type { FeatureWithProps } from "lib/maplibre";
+  import { currentMode } from "stores";
+  import type { Mode } from "types";
   import { handleUnsavedFeature, setupEventListeners } from "../common";
   import type { EventHandler } from "../event_handler";
   import type { RouteTool } from "../route/route_tool";

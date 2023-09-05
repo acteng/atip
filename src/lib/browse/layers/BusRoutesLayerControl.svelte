@@ -1,18 +1,18 @@
 <script lang="ts">
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "../../../stores";
   import {
     ColorLegend,
     ExternalLink,
     HelpButton,
     InteractiveLayer,
-  } from "../../common";
-  import { Checkbox } from "../../govuk";
+  } from "lib/common";
+  import { Checkbox } from "lib/govuk";
   import {
     hoveredToggle,
     overwriteLineLayer,
     overwritePmtilesSource,
-  } from "../../maplibre";
+  } from "lib/maplibre";
+  import type { MapGeoJSONFeature } from "maplibre-gl";
+  import { map } from "stores";
   import { colors } from "../colors";
 
   let name = "bus_routes";

@@ -2,10 +2,10 @@
   // This component can only be created once routeInfo is ready
 
   import type { GeoJSON, LineString } from "geojson";
+  import { HelpButton } from "lib/common";
+  import { gjScheme, routeInfo } from "stores";
   import { onMount } from "svelte";
-  import { gjScheme, routeInfo } from "../../stores";
-  import type { Feature } from "../../types";
-  import { HelpButton } from "../common";
+  import type { Feature } from "types";
   import IntersectionMarkings from "./lane_details/IntersectionMarkings.svelte";
   import IntersectionPolygons from "./lane_details/IntersectionPolygons.svelte";
   import LaneMarkings from "./lane_details/LaneMarkings.svelte";

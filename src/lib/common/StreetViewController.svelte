@@ -1,13 +1,11 @@
 <script lang="ts">
+  import { colors } from "colors";
+  import { CollapsibleCard, ExternalLink } from "lib/common";
+  import { Radio, SecondaryButton } from "lib/govuk";
+  import { getRoadLayerHelpers } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
+  import { map, userSettings } from "stores";
   import cameraCursorUrl from "../../../assets/camera_cursor.svg?url";
-  import { colors } from "../../colors";
-  import { map, userSettings } from "../../stores";
-  import { Radio } from "../govuk";
-  import SecondaryButton from "../govuk/SecondaryButton.svelte";
-  import { getRoadLayerHelpers } from "../maplibre";
-  import { ExternalLink } from "./";
-  import CollapsibleCard from "./CollapsibleCard.svelte";
 
   export let displayEnableButton: boolean;
   export let isInactive: boolean;

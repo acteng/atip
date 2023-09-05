@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { FeatureCollection } from "geojson";
-  import { gjScheme, map } from "../../stores";
-  import { CollapsibleCard } from "../common";
-  import { SecondaryButton } from "../govuk";
-  import { bbox } from "../maplibre";
+  import { CollapsibleCard } from "lib/common";
+  import { SecondaryButton } from "lib/govuk";
+  import { bbox } from "lib/maplibre";
+  import { gjScheme, map } from "stores";
   import type { Scheme } from "./data";
 
   export let scheme: Scheme;

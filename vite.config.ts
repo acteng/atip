@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import wasmPack from "vite-plugin-wasm-pack";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   build: {
@@ -13,5 +14,5 @@ export default defineConfig({
       },
     },
   },
-  plugins: [svelte(), wasmPack(["./route_info"], ["route-snapper"])],
+  plugins: [svelte(), tsconfigPaths(), wasmPack(["./route_info"], ["route-snapper"])],
 });

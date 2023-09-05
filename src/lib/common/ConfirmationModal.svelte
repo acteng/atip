@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { Modal } from "lib/common";
+  import { SecondaryButton, WarningButton } from "lib/govuk";
   import { createEventDispatcher } from "svelte";
-  import { SecondaryButton, WarningButton } from "../govuk";
-  import Modal from "./Modal.svelte";
 
   const dispatch = createEventDispatcher();
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ExternalLink, Modal } from "../common";
+  import { ExternalLink, Modal } from "lib/common";
 
   export let open: boolean;
 </script>
