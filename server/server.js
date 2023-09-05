@@ -2,7 +2,9 @@
 import express from "express";
 import { Storage } from "@google-cloud/storage";
 
-// TODO auth plumbing here
+// TODO Magic auth here. Locally, it finds my gcloud credentials. On App
+// Engine, it seems to use the service account, which already has access to the
+// bucket, without changing IAM...
 let storage = new Storage();
 let bucket = "atip-test-1";
 

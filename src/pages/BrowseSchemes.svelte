@@ -5,8 +5,8 @@
   import { processInput, type Scheme } from "lib/browse/data";
   import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
-  import SchemeCard from "lib/browse/SchemeCard.svelte";
   import LoadRemoteSchemeData from "lib/browse/LoadRemoteSchemeData.svelte";
+  import SchemeCard from "lib/browse/SchemeCard.svelte";
   import authorityNamesList from "../../assets/authority_names.json";
   import "../style/main.css";
   import {
