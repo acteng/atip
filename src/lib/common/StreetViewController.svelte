@@ -2,7 +2,7 @@
   import { colors } from "colors";
   import { CollapsibleCard, ExternalLink } from "lib/common";
   import { Radio, SecondaryButton } from "lib/govuk";
-  import { getRoadLayerHelpers } from "lib/maplibre";
+  import { getRoadLayerHelpers, LayerHelper } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, userSettings } from "stores";
   import cameraCursorUrl from "../../../assets/camera_cursor.svg?url";

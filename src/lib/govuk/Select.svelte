@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { errorMessage, FormElement } from "lib/govuk";
+  import { ErrorMessage, FormElement } from "lib/govuk";
 
   export let label: string;
   // A unique (per page) ID
