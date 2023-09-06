@@ -14,6 +14,9 @@ export default defineConfig({
         nested3: resolve(__dirname, "critical_entry.html"),
       },
     },
+    /* To debug production builds:
+    sourcemap: true,
+    minify: false,*/
   },
   plugins: [svelte(), tsconfigPaths(), wasmPack(["./route_info"], ["route-snapper"])],
 });
