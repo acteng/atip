@@ -32,6 +32,9 @@ app.get("/data/*", async (req, resp) => {
   // TODO Handle everything needed for pmtiles... HTTP range requests, at minimum
 
   try {
+    if (path.endsWith(".geojson")) {
+      resp.type("application/geo+json");
+    }
     let stream = storage.bucket(bucket).file(path).createReadStream();
     stream.pipe(resp);
   } catch (err) {
@@ -50,3 +53,5 @@ app.listen(port, () => {
 // https://www.npmjs.com/package/express-http-proxy
 // https://stackoverflow.com/questions/32976838/express-caching-image-stream-from-google-cloud-storage
 // https://stackoverflow.com/questions/40849631/serve-static-files-from-google-cloud-storage-through-express-middleware
+// https://caddyserver.com/docs/json/storage/gcs/
+// https://gist.github.com/manuelroth/8c03fe64bb2926e7f96e688c6bb1353c

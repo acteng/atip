@@ -33,15 +33,17 @@
 
   let show = true;
   $: {
-    for (let layer of [
-      "interventions-polygons",
-      "interventions-polygon-outlines",
-      "interventions-lines",
-      "interventions-lines-endpoints",
-      "interventions-points",
-    ]) {
-      if ($map.getLayer(layer)) {
-        $map.setLayoutProperty(layer, "visibility", show ? "visible" : "none");
+    if ($map) {
+      for (let layer of [
+        "interventions-polygons",
+        "interventions-polygon-outlines",
+        "interventions-lines",
+        "interventions-lines-endpoints",
+        "interventions-points",
+      ]) {
+        if ($map.getLayer(layer)) {
+          $map.setLayoutProperty(layer, "visibility", show ? "visible" : "none");
+        }
       }
     }
   }
