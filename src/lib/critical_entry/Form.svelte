@@ -35,6 +35,7 @@
   let locationDescriptionError = "";
   let notesError = "";
   let modalOpen = false;
+  let excelRow = "";
 
   let designStages = listToChoices([
     "Baseline",
@@ -127,7 +128,8 @@
     ) {
       return;
     }
-    navigator.clipboard.writeText(getExcelRow());
+    excelRow = getExcelRow();
+    navigator.clipboard.writeText(excelRow);
     modalOpen = true;
   }
 
@@ -204,7 +206,7 @@
     <p><b>You have to manually fill out the first ID column!</b></p>
     <TextArea
       label="The new row has already been copied to your clipboard. If it didn't work, copy from below"
-      value={getExcelRow()}
+      value={excelRow}
     />
     <div class="govuk-button-group">
       <SecondaryButton on:click={() => (modalOpen = false)}>
