@@ -1,6 +1,11 @@
 <script lang="ts">
+  import {
+    Checkbox,
+    CheckboxGroup,
+    ErrorMessage,
+    FormElement,
+  } from "lib/govuk";
   import type { LngLat } from "maplibre-gl";
-  import { Checkbox, CheckboxGroup, ErrorMessage, FormElement } from "../govuk";
 
   export let locationDescription: string;
   export let locationDescriptionError: string;

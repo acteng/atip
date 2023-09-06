@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { LngLat } from "maplibre-gl";
-  import { Modal } from "../common";
+  import { Modal } from "lib/common";
   import {
     DefaultButton,
     ErrorMessage,
@@ -9,8 +8,9 @@
     Select,
     TextArea,
     WarningButton,
-  } from "../govuk";
-  import { setPrecision } from "../maplibre";
+  } from "lib/govuk";
+  import { setPrecision } from "lib/maplibre";
+  import type { LngLat } from "maplibre-gl";
   import LocationDescription from "./LocationDescription.svelte";
 
   export let pt: LngLat;

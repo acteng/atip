@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Marker, type LngLat, type MapMouseEvent } from "maplibre-gl";
+  import { map } from "stores";
   import { onDestroy, onMount } from "svelte";
-  import { map } from "../../stores";
 
   export let enableAdding: boolean;
 
