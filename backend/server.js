@@ -81,3 +81,4 @@ app.listen(port, () => {
 // https://stackoverflow.com/questions/40849631/serve-static-files-from-google-cloud-storage-through-express-middleware
 // https://caddyserver.com/docs/json/storage/gcs/
 // https://gist.github.com/manuelroth/8c03fe64bb2926e7f96e688c6bb1353c
+// https://github.com/search?q=res.status%28206%29&type=code&ref=advsearch
