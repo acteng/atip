@@ -1,4 +1,8 @@
-# GCP deployment
+# ATIP backend on GCP
+
+This package is a backend to serve ATIP on App Engine. See [architecture](../docs/architecture.md) for details. It's a separate package from the ATIP frontend in the rest of this repo, and could logically be split into a separate git repo if useful.
+
+This document describes deployment. It's WIP right now!
 
 ## Part 1: Deploy to GAE
 
@@ -11,7 +15,7 @@
 
 To deploy:
 
-1.  Set up the thing to deploy: `VITE_ON_GCP=true npm run build && cd server && rm -rf dist && cp -R ../dist .`
+1.  Set up the thing to deploy: `VITE_ON_GCP=true npm run build && cd backend && rm -rf dist && cp -R ../dist .`
 	- (GH actions will be able to do this; all the dependencies are already there. Otherwise we have to figure out how to get wasm-pack and such working in the build env)
 	- To test the result locally: `npm run start`
 2.  `gcloud app --project=atip-test-1 deploy --quiet` (60 - 90s)
@@ -86,7 +90,7 @@ Go to <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "C
 	- ideally: some direct GCS URL that enforces the same IAP auth
 	- some LB in front of GCS, then glued to IAP
 		- [this won't work for backend buckets?](https://cloud.google.com/iap/docs/load-balancer-howto)
-	- make Express proxy the requests to GCS
+	- **make Express proxy the requests to GCS**
 		- add the GAE service account as a storage.objectViewer on the bucket first
 		- <https://github.com/alexbakerdev/GCS-Reverse-Proxy> as reference
 	- insecure worst case: public bucket with an obfuscated URL
@@ -95,10 +99,12 @@ Go to <https://console.cloud.google.com/iam-admin/audit?project=atip-test-1>, "C
 - Optimize [bucket location](https://cloud.google.com/storage/docs/locations) for serving
 - Consider using the GAE [default bucket](https://cloud.google.com/appengine/docs/standard/using-cloud-storage?tab=node.js)?
 
+## Part 5: Detect the logged-in user
+
+<https://cloud.google.com/iap/docs/identity-howto>
+
 ## TODO
 
-- See who the user is inside the app
-	- <https://cloud.google.com/iap/docs/identity-howto>
 - Terraform automation
 - CI with GH actions (only to a dev project)
 - Unblocked by this

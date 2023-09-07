@@ -9,7 +9,7 @@
     "wasm": "wasm-pack build --dev --target web ./route_info",
     "wasm-release": "wasm-pack build --release --target web ./route_info",
     "preview": "vite preview",
-    "fmt": "npx prettier --write *.html tests/* src/* server/*js",
+    "fmt": "npx prettier --write *.html tests/* src/*",
     "test": "npx playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "generate-schema-ts": "for x in v2 planning criticals atf4; do npx ts-node --project tsconfig_tsnode.json --esm src/lib/forms/generate_ts.ts src/schemas/$x.json > src/schemas/$x.ts; done",
