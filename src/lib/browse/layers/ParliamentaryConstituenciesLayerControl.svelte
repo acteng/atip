@@ -31,7 +31,7 @@
     source: name,
     sourceLayer: name,
     color,
-    opacity: hoveredToggle(0.5, 0.1),
+    opacity: hoveredToggle(0.5, 0.0),
   });
   overwriteLineLayer($map, {
     id: outlineLayer,
