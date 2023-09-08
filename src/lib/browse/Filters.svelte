@@ -42,7 +42,11 @@
         "interventions-points",
       ]) {
         if ($map.getLayer(layer)) {
-          $map.setLayoutProperty(layer, "visibility", show ? "visible" : "none");
+          $map.setLayoutProperty(
+            layer,
+            "visibility",
+            show ? "visible" : "none"
+          );
         }
       }
     }

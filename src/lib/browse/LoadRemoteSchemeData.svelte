@@ -6,8 +6,7 @@
 
   onMount(async () => {
     let resp = await fetch(
-      //`${import.meta.env.VITE_RESOURCE_BASE}/random_schemes.geojson`,
-      `https://atip-test-1.ew.r.appspot.com/data/random_schemes.geojson`,
+      `${import.meta.env.VITE_RESOURCE_BASE}/random_schemes.geojson`
     );
     let text = await resp.text();
     loadFile(text);
