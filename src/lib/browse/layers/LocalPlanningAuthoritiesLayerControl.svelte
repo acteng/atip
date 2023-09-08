@@ -31,7 +31,7 @@
     source: name,
     sourceLayer: name,
     color,
-    opacity: hoveredToggle(0.5, 0.1),
+    opacity: hoveredToggle(0.5, 0.0),
   });
   overwriteLineLayer($map, {
     id: outlineLayer,
@@ -82,8 +82,8 @@
       </p>
       <p>
         <strong>
-          Note there are overlapping LPAs near Northhamptonshire, shown in a
-          darker shade. Only one authority name is shown when hovering. Use <ExternalLink
+          Note there are overlapping LPAs near Northhamptonshire. Only one
+          authority name is shown when hovering. Use <ExternalLink
             href="https://www.planning.data.gov.uk/map/?dataset=local-planning-authority"
           >
             this map
