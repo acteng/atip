@@ -27,17 +27,16 @@ Names and regions should match above.
 
 1.  `gcloud storage --project=atip-test-2 buckets create gs://atip-test-2 --location=EUROPE-WEST2 --uniform-bucket-level-access`
 2.  Generate fake scheme data and upload it: `npm run generate-random-schemes && gsutil cp random_schemes.geojson gs://atip-test-2/`
-3.  Sync current public layers to GCS. This only works if you have S3 access (aka Dustin). Skip these otherwise, or download another way. This might take a few minutes, depending on your connection: `aws s3 sync s3://atip.uk/layers layers; gsutil cp -m -r layers gs://atip-test-2/layers/`
+3.  Sync current public layers to GCS. This only works if you have S3 access (aka Dustin). Skip these otherwise, or download another way. This might take a few minutes, depending on your connection: `aws s3 sync s3://atip.uk/layers layers; gsutil -m cp -r ./layers gs://atip-test-2/`
 
 ### Deploy
 
-1.  If needed, `cd backend; npm i`
-2.  Update `bucket` in `server.js`
+1.  Update `bucket` in `backend/server.js`
 2.  Create the files to deploy: `VITE_ON_GCP="true" VITE_RESOURCE_BASE="https://atip-test-2.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
 	- Note we could make Cloud Build do this, but we'd have to get `wasm-pack` and other things set up there first
 	- GH Actions will eventually trigger CI deployments for our test environment, and we've already done the work of configuring that build environment
 3.  `gcloud app --project=atip-test-2 deploy --quiet` (takes a minute or two)
-4.  Try the result: `gcloud app browse --project=atip-test-2` or <https://atip-test-2.ew.r.appspot.com/>
+4.  Try the result: `gcloud app browse --project=atip-test-2` or <https://atip-test-2.ew.r.appspot.com/browse.html>
 
 Useful debugging:
 
@@ -47,11 +46,12 @@ Useful debugging:
 ### Protect with IAP
 
 1.  `gcloud services --project=atip-test-2 enable iap.googleapis.com`
-2.  Go to <https://console.cloud.google.com/apis/credentials/consent?project=atip-test-2> and manually configure the oauth consent screen
+2.  `gcloud services --project=atip-test-2 enable cloudresourcemanager.googleapis.com`
+3.  Go to <https://console.cloud.google.com/apis/credentials/consent?project=atip-test-2> and manually configure the oauth consent screen
 	- Choose "External" (unless everyone internal can be part of our cloud org?)
 	- Pick an app name, email
 	- No logo, app domains, authorized domains, scopes, or test users
-3.  Go to <https://console.cloud.google.com/security/iap?project=atip-test-2> and enable IAP (it'll have an oauth misconfigured error)
+4.  Go to <https://console.cloud.google.com/security/iap?project=atip-test-2> and enable IAP (it'll have an oauth misconfigured error)
 
 Nobody should have access by default. To get the current auth list:
 
