@@ -77,6 +77,7 @@ After changing this, there's seemingly a propagation delay of about a minute. Yo
 - Consider using the [default storage bucket with GAE](https://cloud.google.com/appengine/docs/standard/using-cloud-storage?tab=node.js#default_bucket), even though we don't need/want write permissions
 - [Detect the logged-in user](<https://cloud.google.com/iap/docs/identity-howto>)
 - Set up GH actions CI with (only to a test project; we never want to do this for prod)
+- Fix CORS errors that happen with IAP
 
 Unblocked by this:
 	- More basemaps
