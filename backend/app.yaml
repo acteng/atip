@@ -1,1 +1,3 @@
 runtime: nodejs18
+env_variables:
+  GCS_BUCKET: "atip-test-2"

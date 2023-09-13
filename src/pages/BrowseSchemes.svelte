@@ -93,7 +93,7 @@
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
     </div>
-    {#if import.meta.env.VITE_ON_GCP == "true"}
+    {#if import.meta.env.VITE_ON_GCP === "true"}
       <LoadRemoteSchemeData {loadFile} />
     {/if}
     <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />

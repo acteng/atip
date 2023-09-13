@@ -31,7 +31,7 @@ Names and regions should match above.
 
 ### Deploy
 
-1.  Update `bucket` in `backend/server.js`
+1.  Update `GCS_BUCKET` in `backend/app.yaml`
 2.  Create the files to deploy: `VITE_ON_GCP="true" VITE_RESOURCE_BASE="https://atip-test-2.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
 	- Note we could make Cloud Build do this, but we'd have to get `wasm-pack` and other things set up there first
 	- GH Actions will eventually trigger CI deployments for our test environment, and we've already done the work of configuring that build environment
