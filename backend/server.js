@@ -7,7 +7,9 @@ import express from "express";
 // This automatically finds gcloud credentials when running locally or the
 // service account on GAE 
 let storage = new Storage();
-let bucket = "atip-test-2";
+// TODO Upfront check the bucket is accessible and has some expected files, so
+// we could failfail for a bad deployment
+let bucket = process.env.GCS_BUCKET;
 
 let app = express();
 
