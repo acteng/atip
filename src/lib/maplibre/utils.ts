@@ -319,6 +319,7 @@ const layerZorder = [
   "bus_routes",
   "railway_stations",
   "cycle_parking",
+  "crossings",
   "cycle_paths",
   "vehicle_counts",
 

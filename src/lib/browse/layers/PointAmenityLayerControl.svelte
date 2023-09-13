@@ -12,23 +12,27 @@
   // - The layer name, for layerZorder
   // - A color name in colors.ts
   export let name: string;
-  // Uncapitalized
-  export let singularNoun: string;
   // Capitalized
   export let pluralNoun: string;
 
   export let circleRadius: number;
+
+  export let url: string;
+
+  export let tooltip: (feature: MapGeoJSONFeature) => string;
+
+  const originalOnClick = (e: CustomEvent<MapGeoJSONFeature>) => {};
+
+  export let onClick = originalOnClick; 
+
+  $: clickable = onClick !== originalOnClick;
 
   // The caller must also fill in the default slot with the contents of a help modal
 
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  overwriteSource(
-    $map,
-    name,
-    `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.geojson`
-  );
+  overwriteSource($map, name, url);
 
   overwriteCircleLayer($map, {
     id: name,
@@ -38,11 +42,6 @@
     // TODO Outline?
   });
   let show = false;
-
-  function tooltip(feature: MapGeoJSONFeature): string {
-    let name = feature.properties.name ?? `Unnamed ${singularNoun}`;
-    return `<p>${name}</p>`;
-  }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -53,4 +52,4 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<InteractiveLayer layer={name} {tooltip} {show} {clickable} on:click={onClick} />
