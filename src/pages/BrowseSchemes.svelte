@@ -6,6 +6,7 @@
   import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
   import LoadRemoteSchemeData from "lib/browse/LoadRemoteSchemeData.svelte";
+  import LoggedIn from "lib/browse/LoggedIn.svelte";
   import SchemeCard from "lib/browse/SchemeCard.svelte";
   import authorityNamesList from "../../assets/authority_names.json";
   import "../style/main.css";
@@ -95,6 +96,7 @@
     </div>
     {#if import.meta.env.VITE_ON_GCP === "true"}
       <LoadRemoteSchemeData {loadFile} />
+      <LoggedIn />
     {/if}
     <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />
     <ErrorMessage {errorMessage} />
