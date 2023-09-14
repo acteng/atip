@@ -18,6 +18,7 @@
   import LocalPlanningAuthoritiesLayerControl from "./layers/LocalPlanningAuthoritiesLayerControl.svelte";
   import MrnLayerControl from "./layers/MrnLayerControl.svelte";
   import ParliamentaryConstituenciesLayerControl from "./layers/ParliamentaryConstituenciesLayerControl.svelte";
+  import PctLayerControl from "./layers/PctLayerControl.svelte";
   import RailwayStationsLayerControl from "./layers/RailwayStationsLayerControl.svelte";
   import SchoolsLayerControl from "./layers/SchoolsLayerControl.svelte";
   import SportsSpacesLayerControl from "./layers/SportsSpacesLayerControl.svelte";
@@ -69,6 +70,7 @@
   </CollapsibleCard>
   <CollapsibleCard label="Other">
     <VehicleCountsLayerControl />
+    <PctLayerControl />
   </CollapsibleCard>
   <StreetViewController
     bind:this={streetViewController}
