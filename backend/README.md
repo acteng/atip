@@ -32,11 +32,12 @@ Names and regions should match above.
 ### Deploy
 
 1.  Update `GCS_BUCKET` in `backend/app.yaml`
-2.  Create the files to deploy: `VITE_ON_GCP="true" VITE_RESOURCE_BASE="https://atip-test-2.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
+2.  Run `gcloud projects describe atip-test-2 | grep projectNumber` and use the result to update `PROJECT_NUMBER` in `backend/app.yaml`
+3.  Create the files to deploy: `VITE_ON_GCP="true" VITE_RESOURCE_BASE="https://atip-test-2.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
 	- Note we could make Cloud Build do this, but we'd have to get `wasm-pack` and other things set up there first
 	- GH Actions will eventually trigger CI deployments for our test environment, and we've already done the work of configuring that build environment
-3.  `gcloud app --project=atip-test-2 deploy --quiet` (takes a minute or two)
-4.  Try the result: `gcloud app browse --project=atip-test-2` or <https://atip-test-2.ew.r.appspot.com/browse.html>
+4.  `gcloud app --project=atip-test-2 deploy --quiet` (takes a minute or two)
+5.  Try the result: `gcloud app browse --project=atip-test-2` or <https://atip-test-2.ew.r.appspot.com/browse.html>
 
 Useful debugging:
 

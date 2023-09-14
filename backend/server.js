@@ -3,15 +3,21 @@
 // API reference: https://googleapis.dev/nodejs/storage/latest/
 import { Storage } from "@google-cloud/storage";
 import express from "express";
+import { OAuth2Client } from "google-auth-library";
 
 // This automatically finds gcloud credentials when running locally or the
-// service account on GAE 
+// service account on GAE
 let storage = new Storage();
 // TODO Upfront check the bucket is accessible and has some expected files, so
 // we could failfail for a bad deployment
 let bucket = process.env.GCS_BUCKET;
+let oauthClient = new OAuth2Client();
+
+let expectedAudience = `/projects/${process.env.PROJECT_NUMBER}/apps/${process.env.GOOGLE_CLOUD_PROJECT}`;
 
 let app = express();
+
+app.use(checkIap);
 
 // Serve the ATIP frontend, which is just statically built HTML, CSS, JS, WASM
 // files bundled in the App Engine deployment directly.
@@ -66,6 +72,36 @@ app.get("/data/*", async (req, resp) => {
     resp.status(500).send(err);
   }
 });
+
+// See https://cloud.google.com/iap/docs/signed-headers-howto
+async function checkIap(req, resp, next) {
+  let iapJwt = req.header("x-goog-iap-jwt-assertion");
+  if (!iapJwt) {
+    resp.status(401).send("Missing x-goog-iap-jwt-assertion header");
+    return;
+  }
+
+  try {
+    // TODO Can we cache this between requests?
+    let iapPublicKeys = await oauthClient.getIapPublicKeys();
+    let ticket = await oauthClient.verifySignedJwtWithCertsAsync(
+      iapJwt,
+      iapPublicKeys.pubkeys,
+      expectedAudience,
+      ["https://cloud.google.com/iap"]
+    );
+    // Plumb back the email to display in Svelte using session cookies
+    // NOTE! This shouldn't be considered secure; the user can modify it. Only
+    // use it for client-side display. Always use this IAP token to determine
+    // who the user is for permissions.
+    resp.cookie("email", ticket.payload.email);
+
+    next();
+  } catch (err) {
+    console.log(`IAP auth broke: ${err}`);
+    resp.status(401).send(err);
+  }
+}
 
 let port = process.env.PORT || 8080;
 app.listen(port, () => {
