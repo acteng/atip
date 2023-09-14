@@ -2,6 +2,7 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
+  import AppVersion from "lib/browse/AppVersion.svelte";
   import { processInput, type Scheme } from "lib/browse/data";
   import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
@@ -94,6 +95,7 @@
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$gjScheme} />
     </div>
+    <AppVersion />
     {#if import.meta.env.VITE_ON_GCP === "true"}
       <LoadRemoteSchemeData {loadFile} />
       <LoggedIn />
