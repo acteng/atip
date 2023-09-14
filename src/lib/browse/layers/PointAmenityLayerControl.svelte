@@ -2,9 +2,9 @@
   import { ColorLegend, HelpButton, InteractiveLayer } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { overwriteCircleLayer, overwriteSource } from "lib/maplibre";
+  import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
   import { colors } from "../colors";
-    import type { MapGeoJSONFeature } from "maplibre-gl";
 
   // This name is used for multiple things:
   // - The name of a .geojson file
@@ -20,6 +20,12 @@
   export let url: string;
 
   export let tooltip: (feature: MapGeoJSONFeature) => string;
+
+  const originalOnClick = (e: CustomEvent<MapGeoJSONFeature>) => {};
+
+  export let onClick = originalOnClick; 
+
+  $: clickable = onClick !== originalOnClick;
 
   // The caller must also fill in the default slot with the contents of a help modal
 
@@ -46,4 +52,4 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<InteractiveLayer layer={name} {tooltip} {show} {clickable} on:click={onClick} />
