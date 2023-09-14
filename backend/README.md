@@ -8,16 +8,18 @@ This section is a WIP right now; only use the result for testing! Don't upload a
 
 Unless other specified, each command below should only take a few seconds to run.
 
+Note the URLs won't work; you have to manually replace `$PROJECT`.
+
 ### Set up the GCP project
 
 1. [Install gcloud](https://cloud.google.com/sdk/docs/install)
 2. [Hook up gcloud to your GCP account](https://cloud.google.com/sdk/docs/initializing)
-3. Pick a project ID (`atip-test-2` in everything below)
-4. Create it: `gcloud projects create atip-test-2`
-4.  Manually link the billing account: <https://console.cloud.google.com/billing/linkedaccount?project=atip-test-2>
+3. Pick a project ID (which'll also be used as the GCS bucket name) and set it as a shell variable: `PROJECT=atip-test-2`
+4. Create it: `gcloud projects create $PROJECT`
+4.  Manually link the billing account: <https://console.cloud.google.com/billing/linkedaccount?project=$PROJECT>
 	- You may need to configure a billing account first for your GCP account
-	- Without this, `gcloud app --project=atip-test-2 describe` gives a permissions error
-5.  Set up App Engine: `gcloud app --project=atip-test-2 create --region=europe-west`
+	- Without this, `gcloud app --project=$PROJECT describe` gives a permissions error
+5.  Set up App Engine: `gcloud app --project=$PROJECT create --region=europe-west`
 	- Note there's only one GAE app per project, unlike most other GCP services
 	- And the region is immutable once you set it for the project!
 
@@ -25,42 +27,42 @@ Unless other specified, each command below should only take a few seconds to run
 
 Names and regions should match above.
 
-1.  `gcloud storage --project=atip-test-2 buckets create gs://atip-test-2 --location=EUROPE-WEST2 --uniform-bucket-level-access`
-2.  Generate fake scheme data and upload it: `npm run generate-random-schemes && gsutil cp random_schemes.geojson gs://atip-test-2/`
-3.  Sync current public layers to GCS. This only works if you have S3 access (aka Dustin). Skip these otherwise, or download another way. This might take a few minutes, depending on your connection: `aws s3 sync s3://atip.uk/layers layers; gsutil -m cp -r ./layers gs://atip-test-2/`
+1.  `gcloud storage --project=$PROJECT buckets create gs://$PROJECT --location=EUROPE-WEST2 --uniform-bucket-level-access`
+2.  Generate fake scheme data and upload it: `npm run generate-random-schemes && gsutil cp random_schemes.geojson gs://$PROJECT/`
+3.  Sync current public layers to GCS. This only works if you have S3 access (aka Dustin). Skip these otherwise, or download another way. This might take a few minutes, depending on your connection: `aws s3 sync s3://atip.uk/layers layers; gsutil -m cp -r ./layers gs://$PROJECT/`
 
 ### Deploy
 
 1.  Update `GCS_BUCKET` in `backend/app.yaml`
-2.  Run `gcloud projects describe atip-test-2 | grep projectNumber` and use the result to update `PROJECT_NUMBER` in `backend/app.yaml`
-3.  Create the files to deploy: `VITE_ON_GCP="true" VITE_RESOURCE_BASE="https://atip-test-2.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
+2.  Run `gcloud projects describe $PROJECT | grep projectNumber` and use the result to update `PROJECT_NUMBER` in `backend/app.yaml`
+3.  Create the files to deploy: `VITE_ON_GCP="true" VITE_RESOURCE_BASE="https://$PROJECT.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
 	- Note we could make Cloud Build do this, but we'd have to get `wasm-pack` and other things set up there first
 	- GH Actions will eventually trigger CI deployments for our test environment, and we've already done the work of configuring that build environment
-4.  `gcloud app --project=atip-test-2 deploy --quiet` (takes a minute or two)
-5.  Try the result: `gcloud app browse --project=atip-test-2` or <https://atip-test-2.ew.r.appspot.com/browse.html>
+4.  `gcloud app --project=$PROJECT deploy --quiet` (takes a minute or two)
+5.  Try the result: `gcloud app browse --project=$PROJECT` or <https://$PROJECT.ew.r.appspot.com/browse.html>
 
 Useful debugging:
 
-- <https://console.cloud.google.com/cloud-build/builds;region=europe-west1?project=atip-test-2>
-- `gcloud app --project=atip-test-2 logs read`
+- <https://console.cloud.google.com/cloud-build/builds;region=europe-west1?project=$PROJECT>
+- `gcloud app --project=$PROJECT logs read`
 
 ### Protect with IAP
 
-1.  `gcloud services --project=atip-test-2 enable iap.googleapis.com`
-2.  `gcloud services --project=atip-test-2 enable cloudresourcemanager.googleapis.com`
-3.  Go to <https://console.cloud.google.com/apis/credentials/consent?project=atip-test-2> and manually configure the oauth consent screen
+1.  `gcloud services --project=$PROJECT enable iap.googleapis.com`
+2.  `gcloud services --project=$PROJECT enable cloudresourcemanager.googleapis.com`
+3.  Go to <https://console.cloud.google.com/apis/credentials/consent?project=$PROJECT> and manually configure the oauth consent screen
 	- Choose "External" (unless everyone internal can be part of our cloud org?)
 	- Pick an app name, email
 	- No logo, app domains, authorized domains, scopes, or test users
-4.  Go to <https://console.cloud.google.com/security/iap?project=atip-test-2> and enable IAP (it'll have an oauth misconfigured error)
+4.  Go to <https://console.cloud.google.com/security/iap?project=$PROJECT> and enable IAP (it'll have an oauth misconfigured error)
 
 Nobody should have access by default. To get the current auth list:
 
-`gcloud iap --project=atip-test-2 web get-iam-policy --resource-type=app-engine`
+`gcloud iap --project=$PROJECT web get-iam-policy --resource-type=app-engine`
 
 To add someone:
 
-`gcloud iap --project=atip-test-2 web add-iam-policy-binding --resource-type=app-engine --member=user:foo@bar.com --role=roles/iap.httpsResourceAccessor`
+`gcloud iap --project=$PROJECT web add-iam-policy-binding --resource-type=app-engine --member=user:foo@bar.com --role=roles/iap.httpsResourceAccessor`
 
 After changing this, there's seemingly a propagation delay of about a minute. You might also need to Ctrl+Shift+R or clear your browser cache.
 
@@ -69,12 +71,12 @@ After changing this, there's seemingly a propagation delay of about a minute. Yo
 - Automated setup
 	- Terraform
 	- Oauth consent screen setup? <https://issuetracker.google.com/issues/35907249?pli=1>
-	- Automate IAP setup? `gcloud iap --project=atip-test-2 web enable --resource-type=app-engine` needs some unknown oauth client ID/secret
+	- Automate IAP setup? `gcloud iap --project=$PROJECT web enable --resource-type=app-engine` needs some unknown oauth client ID/secret
 - In the real project
 	- Publish the GAE app
 	- Optimize [bucket location](https://cloud.google.com/storage/docs/locations) for serving
 - Enable audit logs
-	- Go to <https://console.cloud.google.com/iam-admin/audit?project=atip-test-2>, "Cloud Identity-Aware Proxy API", enable all 3.
+	- Go to <https://console.cloud.google.com/iam-admin/audit?project=$PROJECT>, "Cloud Identity-Aware Proxy API", enable all 3.
 - Consider using the [default storage bucket with GAE](https://cloud.google.com/appengine/docs/standard/using-cloud-storage?tab=node.js#default_bucket), even though we don't need/want write permissions
 - [Detect the logged-in user](<https://cloud.google.com/iap/docs/identity-howto>)
 - Set up GH actions CI with (only to a test project; we never want to do this for prod)
