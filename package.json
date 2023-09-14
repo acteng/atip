@@ -21,6 +21,7 @@
     "@playwright/test": "^1.35.1",
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
     "@tsconfig/svelte": "^4.0.1",
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "^20.3.2",
     "playwright": "^1.35.1",
     "prettier": "2.8.8",
