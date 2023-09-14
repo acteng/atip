@@ -1,16 +1,24 @@
 <script lang="ts">
   import { circleRadius } from "colors";
   import { ExternalLink } from "lib/common";
+  import type { MapGeoJSONFeature } from "maplibre-gl";
   import PointAmenityLayerControl from "./PointAmenityLayerControl.svelte";
 
   const name = "railway_stations";
+  const url = `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.geojson`;
+
+  function tooltip(feature: MapGeoJSONFeature): string {
+    let name = feature.properties.name ?? "Unnamed railway station";
+    return `<p>${name}</p>`;
+  }
 </script>
 
 <PointAmenityLayerControl
   {name}
-  singularNoun="railway station"
   pluralNoun="Railway stations"
   {circleRadius}
+  {url}
+  {tooltip}
 >
   <p>
     This shows <ExternalLink
