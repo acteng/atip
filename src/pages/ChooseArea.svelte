@@ -13,8 +13,11 @@
   import { Map, type MapGeoJSONFeature } from "maplibre-gl";
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { FileInput, InteractiveLayer } from "lib/common";
-  import { getAuthoritiesGeoJson } from "lib/common/data_getter";
+  import {
+    FileInput,
+    getAuthoritiesGeoJson,
+    InteractiveLayer,
+  } from "lib/common";
   import { bbox, hoveredToggle } from "lib/maplibre";
   import About from "lib/sidebar/About.svelte";
   import { map as mapStore } from "stores";
