@@ -18,7 +18,7 @@
 
     return (
       result +
-      `. Information can be found by clicking on the crossing here.`
+      `. More information can be found by clicking.`
     );
   }
 
