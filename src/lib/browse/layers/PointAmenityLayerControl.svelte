@@ -23,7 +23,7 @@
 
   const originalOnClick = (e: CustomEvent<MapGeoJSONFeature>) => {};
 
-  export let onClick = originalOnClick; 
+  export let onClick = originalOnClick;
 
   $: clickable = onClick !== originalOnClick;
 
@@ -52,4 +52,10 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} {clickable} on:click={onClick} />
+<InteractiveLayer
+  layer={name}
+  {tooltip}
+  {show}
+  {clickable}
+  on:click={onClick}
+/>

@@ -16,10 +16,7 @@
       initialTooltipSentences.get(crossingTypeString);
     if (initialTooltipSentence) result = initialTooltipSentence;
 
-    return (
-      result +
-      `. More information can be found by clicking.`
-    );
+    return result + `. More information can be found by clicking.`;
   }
 
   const initialTooltipSentences: Map<string, string> = new Map<string, string>([
