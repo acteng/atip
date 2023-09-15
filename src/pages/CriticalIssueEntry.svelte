@@ -4,7 +4,13 @@
   import "../style/main.css";
   import type { LngLat } from "maplibre-gl";
   import { onMount } from "svelte";
-  import { Layout, MapLibreMap, StreetViewController } from "../lib/common";
+  import {
+    appVersion,
+    Layout,
+    LoggedIn,
+    MapLibreMap,
+    StreetViewController,
+  } from "../lib/common";
   import BaselayerSwitcher from "../lib/critical_entry/BaselayerSwitcher.svelte";
   import Form from "../lib/critical_entry/Form.svelte";
   import Pin from "../lib/critical_entry/Pin.svelte";
@@ -30,6 +36,8 @@
 <Layout sidebarWidth="35rem">
   <div slot="sidebar" class="govuk-prose">
     <h1>Critical issue entry</h1>
+    <p>App version: {appVersion()}</p>
+    <LoggedIn />
     {#if markerPosition}
       <Form pt={markerPosition} />
     {:else}

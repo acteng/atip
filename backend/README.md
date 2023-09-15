@@ -35,7 +35,7 @@ Names and regions should match above.
 
 1.  Update `GCS_BUCKET` in `backend/app.yaml`
 2.  Run `gcloud projects describe $PROJECT | grep projectNumber` and use the result to update `PROJECT_NUMBER` in `backend/app.yaml`
-3.  Create the files to deploy: `VITE_ON_GCP="true" VITE_RESOURCE_BASE="https://$PROJECT.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
+3.  Create the files to deploy: `VITE_RESOURCE_BASE="https://$PROJECT.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
 	- Note we could make Cloud Build do this, but we'd have to get `wasm-pack` and other things set up there first
 	- GH Actions will eventually trigger CI deployments for our test environment, and we've already done the work of configuring that build environment
 4.  `gcloud app --project=$PROJECT deploy --quiet` (takes a minute or two)

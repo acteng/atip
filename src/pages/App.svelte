@@ -6,14 +6,16 @@
   import type { FeatureCollection, Polygon } from "geojson";
   import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
+    appVersion,
     BaselayerSwitcher,
     CollapsibleCard,
+    getAuthoritiesGeoJson,
     Layout,
     Legend,
+    LoggedIn,
     MapLibreMap,
     ZoomOutMap,
   } from "lib/common";
-  import { getAuthoritiesGeoJson } from "lib/common/data_getter";
   import HoverLayer from "lib/draw/HoverLayer.svelte";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
   import Toolbox from "lib/draw/Toolbox.svelte";
@@ -115,6 +117,8 @@
         Instructions
       </SecondaryButton>
     </div>
+    <p>App version: {appVersion()}</p>
+    <LoggedIn />
     <p>{schemaTitle(schema)} mode</p>
     <div style="display: flex; justify-content: space-between">
       <h1>{authorityName}</h1>

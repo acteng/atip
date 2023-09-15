@@ -1,3 +1,6 @@
+import type { FeatureCollection, Polygon } from "geojson";
+import authoritiesUrl from "../../../assets/authorities.geojson?url";
+
 export { default as BaselayerSwitcher } from "./BaselayerSwitcher.svelte";
 export { default as CollapsibleCard } from "./CollapsibleCard.svelte";
 export { default as ColorLegend } from "./ColorLegend.svelte";
@@ -9,7 +12,34 @@ export { default as HelpButton } from "./HelpButton.svelte";
 export { default as InteractiveLayer } from "./InteractiveLayer.svelte";
 export { default as Layout } from "./Layout.svelte";
 export { default as Legend } from "./Legend.svelte";
+export { default as LoggedIn } from "./LoggedIn.svelte";
 export { default as MapLibreMap } from "./MapLibreMap.svelte";
 export { default as Modal } from "./Modal.svelte";
 export { default as StreetViewController } from "./StreetViewController.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
+
+export async function getAuthoritiesGeoJson(): Promise<
+  FeatureCollection<Polygon>
+> {
+  const resp = await fetch(authoritiesUrl);
+  return await resp.json();
+}
+
+export function appVersion(): string {
+  if (window.location.hostname == "localhost") {
+    return "Local development";
+  } else if (window.location.hostname == "acteng.github.io") {
+    let parts = window.location.pathname.split("/");
+    if (parts.length == 3 && parts[0] == "" && parts[1] == "atip") {
+      return "Current development (public)";
+    }
+    if (parts.length == 4 && parts[0] == "" && parts[1] == "atip") {
+      return `Development branch: ${parts[2]}`;
+    }
+  } else if (window.location.hostname.endsWith(".appspot.com")) {
+    // TODO Include a git commit, build timestamp, or similar
+    return "Test (on GCP)";
+  }
+
+  return "Unknown";
+}
