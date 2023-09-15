@@ -1,8 +1,10 @@
 <script lang="ts">
   import { circleRadius } from "colors";
   import { ExternalLink } from "lib/common";
+  import { overwriteCircleLayer, overwritePmtilesSource } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import crossingsUrl from "../../../../assets/crossings.geojson?url";
+  import { map } from "stores";
+  import { colors } from "../colors";
   import PointAmenityLayerControl from "./PointAmenityLayerControl.svelte";
 
   const name = "crossings";
@@ -32,6 +34,22 @@
     ],
   ]);
 
+  overwritePmtilesSource(
+    $map,
+    name,
+    `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.pmtiles`
+  );
+  let color = colors[name];
+
+  overwriteCircleLayer($map, {
+    id: name,
+    source: name,
+    sourceLayer: name,
+    color: color,
+    radius: circleRadius / 2,
+    // TODO Outline?
+  });
+
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
     window.open(
       `http://openstreetmap.org/node/${e.detail.properties.osm_id}`,
@@ -44,7 +62,6 @@
   {name}
   pluralNoun="Crossings"
   {circleRadius}
-  url={crossingsUrl}
   {tooltip}
   {onClick}
 >

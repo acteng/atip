@@ -1,9 +1,7 @@
 <script lang="ts">
   import { ColorLegend, HelpButton, InteractiveLayer } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { overwriteCircleLayer, overwriteSource } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
   import { colors } from "../colors";
 
   // This name is used for multiple things:
@@ -17,8 +15,6 @@
 
   export let circleRadius: number;
 
-  export let url: string;
-
   export let tooltip: (feature: MapGeoJSONFeature) => string;
 
   const originalOnClick = (e: CustomEvent<MapGeoJSONFeature>) => {};
@@ -31,16 +27,6 @@
 
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
-
-  overwriteSource($map, name, url);
-
-  overwriteCircleLayer($map, {
-    id: name,
-    source: name,
-    color: color,
-    radius: circleRadius / 2,
-    // TODO Outline?
-  });
   let show = false;
 </script>
 
