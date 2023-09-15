@@ -74,9 +74,9 @@
   <span slot="right">
     <HelpButton>
       <p>
-        The PCT shows roads where more cycling levels are predicted to increase,
-        given different assumptions about investments. The layer shows counts
-        for commuting to work or school.
+        The PCT shows roads where cycling levels are predicted to increase,
+        given different assumptions about investments. The layer shows daily
+        counts for commuting to work or school.
       </p>
       <p>
         See <ExternalLink href="https://www.pct.bike">
