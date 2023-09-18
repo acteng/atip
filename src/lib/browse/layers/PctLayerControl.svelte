@@ -74,9 +74,9 @@
   <span slot="right">
     <HelpButton>
       <p>
-        The PCT shows roads where cycling levels are predicted to increase,
-        given different assumptions about investments. The layer shows daily
-        counts for commuting to work or school.
+        The PCT shows major links on the transport network on which there is high
+        latent demand for cycling under scenarios of change, based on the 'fastest'
+        routes from CycleStreets. Counts approximate daily rush hour traffic levels.
       </p>
       <p>
         See <ExternalLink href="https://www.pct.bike">
