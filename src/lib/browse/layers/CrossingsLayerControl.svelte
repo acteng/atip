@@ -10,7 +10,7 @@
   const name = "crossings";
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    const crossingTypeString: string = feature.properties["crossing"];
+    const crossingTypeString = feature.properties.crossing;
     if (crossingTypeString === "no")
       return "Location where crossing is impossible/illegal but where there is a clear desire line to cross.";
     let result = "Crossing with the following features.";
@@ -18,7 +18,7 @@
       initialTooltipSentences.get(crossingTypeString);
     if (initialTooltipSentence) result = initialTooltipSentence;
 
-    return result + `. More information can be found by clicking.`;
+    return `<p>${result}. Click for details.</p>`;
   }
 
   const initialTooltipSentences: Map<string, string> = new Map<string, string>([
