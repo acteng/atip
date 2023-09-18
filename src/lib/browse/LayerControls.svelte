@@ -10,6 +10,7 @@
   import CensusOutputAreaLayerControl from "./layers/CensusOutputAreaLayerControl.svelte";
   import CombinedAuthoritiesLayerControl from "./layers/CombinedAuthoritiesLayerControl.svelte";
   import CriticalIssuesLayerControl from "./layers/CriticalIssuesLayerControl.svelte";
+  import CrossingsLayerControl from "./layers/CrossingsLayerControl.svelte";
   import CycleParkingLayerControl from "./layers/CycleParkingLayerControl.svelte";
   import CyclePathsLayerControl from "./layers/CyclePathsLayerControl.svelte";
   import HospitalsLayerControl from "./layers/HospitalsLayerControl.svelte";
@@ -52,6 +53,7 @@
       <MrnLayerControl />
       <BusRoutesLayerControl />
       <CycleParkingLayerControl />
+      <CrossingsLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Boundaries">
