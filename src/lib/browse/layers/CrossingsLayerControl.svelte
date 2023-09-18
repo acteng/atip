@@ -18,7 +18,7 @@
     const crossingType = feature.properties.crossing;
     let description =
       descriptions.get(crossingType) ??
-      `Crossing with unknown type (${crossingType}).`;
+      `Crossing with unknown type (${crossingType})`;
     return `<p>${description}. Click for details.</p>`;
   }
 
