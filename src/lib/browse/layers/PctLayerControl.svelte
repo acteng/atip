@@ -74,9 +74,14 @@
   <span slot="right">
     <HelpButton>
       <p>
-        The PCT shows major links on the transport network on which there is high
-        latent demand for cycling under scenarios of change, based on the 'fastest'
-        routes from CycleStreets. Counts approximate daily rush hour traffic levels.
+        The PCT shows major links on the transport network on which there is
+        high latent demand for cycling under scenarios of change, based on the
+        "fastest" routes from CycleStreets. Counts approximate daily rush hour
+        traffic levels.
+      </p>
+      <p>
+        Note this layer uses 2011 census data and outdated OpenStreetMap data.
+        Please use this layer with caution.
       </p>
       <p>
         See <ExternalLink href="https://www.pct.bike">
