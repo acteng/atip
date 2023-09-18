@@ -15,18 +15,18 @@
   let show = false;
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    const crossingTypeString = feature.properties.crossing;
-    if (crossingTypeString === "no")
-      return "Location where crossing is impossible/illegal but where there is a clear desire line to cross.";
-    let result = "Crossing with the following features.";
-    const initialTooltipSentence =
-      initialTooltipSentences.get(crossingTypeString);
-    if (initialTooltipSentence) result = initialTooltipSentence;
-
-    return `<p>${result}. Click for details.</p>`;
+    const crossingType = feature.properties.crossing;
+    let description =
+      descriptions.get(crossingType) ??
+      `Crossing with unknown type (${crossingType}).`;
+    return `<p>${description}. Click for details.</p>`;
   }
 
-  const initialTooltipSentences: Map<string, string> = new Map<string, string>([
+  const descriptions: Map<string, string> = new Map([
+    [
+      "no",
+      "Location where crossing is impossible/illegal but where there is a clear desire line to cross.",
+    ],
     ["traffic_signals", "Signalised crossing"],
     ["marked", "Crossing with no traffic signals"],
     ["uncontrolled", "Crossing with no traffic signals"],
