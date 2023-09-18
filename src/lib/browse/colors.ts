@@ -1,3 +1,5 @@
+import { type DataDrivenPropertyValueSpecification } from "maplibre-gl";
+
 // These are specific to the browse page
 export const colors = {
   schools: "#007DBB",
@@ -36,3 +38,17 @@ export const colors = {
   atf3: "#FF62DC",
   atf4: "#FFD833",
 };
+
+// For dense line layers, make individual lines easily distinguished when
+// zoomed in, but not too thick when zoomed out.
+export const denseLineWidth: DataDrivenPropertyValueSpecification<number> = [
+  "interpolate",
+  ["exponential", 1.6],
+  ["zoom"],
+  3,
+  1.0,
+  7,
+  2.0,
+  18,
+  20.0,
+];

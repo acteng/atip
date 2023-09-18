@@ -14,7 +14,7 @@
   } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors } from "../colors";
+  import { colors, denseLineWidth } from "../colors";
 
   let name = "cycle_paths";
 
@@ -45,17 +45,7 @@
       },
       "red"
     ),
-    width: [
-      "interpolate",
-      ["exponential", 1.6],
-      ["zoom"],
-      3,
-      1.0,
-      7,
-      2.0,
-      18,
-      20.0,
-    ],
+    width: denseLineWidth,
     opacity: hoveredToggle(0.5, 1.0),
   });
 
