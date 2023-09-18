@@ -19,7 +19,7 @@
     let description =
       descriptions.get(crossingType) ??
       `Crossing with unknown type (${crossingType}).`;
-    return `<p>${description}. Click for details.</p>`;
+    return `<p>${description} Click for details.</p>`;
   }
 
   const descriptions: Map<string, string> = new Map([
@@ -27,15 +27,15 @@
       "no",
       "Location where crossing is impossible/illegal but where there is a clear desire line to cross.",
     ],
-    ["traffic_signals", "Signalised crossing"],
-    ["marked", "Crossing with no traffic signals"],
-    ["uncontrolled", "Crossing with no traffic signals"],
-    ["unmarked", "Crossing with no markings or signals"],
-    ["zebra", "Zebra crossing"],
-    ["island", "Crossing with an island"],
+    ["traffic_signals", "Signalised crossing."],
+    ["marked", "Crossing with no traffic signals."],
+    ["uncontrolled", "Crossing with no traffic signals."],
+    ["unmarked", "Crossing with no markings or signals."],
+    ["zebra", "Zebra crossing."],
+    ["island", "Crossing with an island."],
     [
       "informal",
-      "Informal crossing with an obvious desire line, but no official infrastructure to support it",
+      "Informal crossing with an obvious desire line, but no official infrastructure to support it.",
     ],
   ]);
 
