@@ -14,9 +14,11 @@
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
   import {
+    appVersion,
     FileInput,
     getAuthoritiesGeoJson,
     InteractiveLayer,
+    LoggedIn,
   } from "lib/common";
   import { bbox, hoveredToggle } from "lib/maplibre";
   import About from "lib/sidebar/About.svelte";
@@ -143,6 +145,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half left">
     <h1 class="govuk-heading-l">Welcome to ATIP v2</h1>
+    <p>App version: {appVersion()}</p>
+    <LoggedIn />
     <SecondaryButton on:click={() => (showAbout = !showAbout)}>
       About
     </SecondaryButton>
