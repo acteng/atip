@@ -6,7 +6,7 @@
   let email = Cookies.get("email");
 </script>
 
-{#if appVersion() == "Test (on GCP)"}
+{#if appVersion() == "Private (development)"}
   {#if email}
     <p>Logged in as {email}</p>
   {:else}

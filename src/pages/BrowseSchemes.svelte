@@ -98,7 +98,7 @@
     </div>
     <AppVersion />
     <LoggedIn />
-    {#if appVersion() == "Test (on GCP)"}
+    {#if appVersion() == "Private (development)"}
       <LoadRemoteSchemeData {loadFile} />
     {/if}
     <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />

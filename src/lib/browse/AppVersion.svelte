@@ -7,7 +7,7 @@
 <p>
   App version: {version}
   <HelpButton>
-    {#if version == "Test (on GCP)"}
+    {#if version == "Private (development)"}
       <p>
         The scheme data shown is fake. Load the real data from a file below.
         We're working to put real scheme data here.

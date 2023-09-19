@@ -31,14 +31,14 @@ export function appVersion(): string {
   } else if (window.location.hostname == "acteng.github.io") {
     let parts = window.location.pathname.split("/");
     if (parts.length == 3 && parts[0] == "" && parts[1] == "atip") {
-      return "Current development (public)";
+      return "Public (development)";
     }
     if (parts.length == 4 && parts[0] == "" && parts[1] == "atip") {
-      return `Development branch: ${parts[2]}`;
+      return `Public (dev branch: ${parts[2]})`;
     }
   } else if (window.location.hostname.endsWith(".appspot.com")) {
     // TODO Include a git commit, build timestamp, or similar
-    return "Test (on GCP)";
+    return "Private (development)";
   }
 
   return "Unknown";
