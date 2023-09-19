@@ -18,14 +18,14 @@
     const crossingType = feature.properties.crossing;
     let description =
       descriptions.get(crossingType) ??
-      `Crossing with unknown type (${crossingType}).`;
+      `Crossing with unknown type (${crossingType})`;
     return `<p>${description}. Click for details.</p>`;
   }
 
   const descriptions: Map<string, string> = new Map([
     [
       "no",
-      "Location where crossing is impossible/illegal but where there is a clear desire line to cross.",
+      "Location where crossing is impossible/illegal but where there is a clear desire line to cross",
     ],
     ["traffic_signals", "Signalised crossing"],
     ["marked", "Crossing with no traffic signals"],
