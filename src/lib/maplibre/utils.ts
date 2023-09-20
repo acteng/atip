@@ -17,8 +17,6 @@ import type {
   StyleSpecification,
 } from "maplibre-gl";
 
-// TODO
-
 // Some methods take optional params. It's an error to pass in null or undefined, so use default values from
 // https://github.com/maplibre/maplibre-style-spec/blob/main/src/reference/v8.json.
 const defaultColor = "#000000";
