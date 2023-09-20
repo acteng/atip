@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Select } from "lib/govuk";
+  import { getStyleChoices } from "lib/maplibre";
 
   // TODO Be specific about "streets" | "hybrid", but then we need actual error
   // handling when we parse it from URL params
@@ -18,11 +19,7 @@
 <Select
   label="Basemap"
   id="basemap"
-  choices={[
-    ["streets", "Streets"],
-    ["hybrid", "Satellite"],
-    ["dataviz", "Dataviz"],
-  ]}
+  choices={getStyleChoices()}
   bind:value={style}
   on:change={changeStyle}
 />

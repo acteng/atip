@@ -8,12 +8,16 @@ import type {
   Point,
   Position,
 } from "geojson";
+import { appVersion } from "lib/common";
 import type {
   DataDrivenPropertyValueSpecification,
   FilterSpecification,
   LayerSpecification,
   Map,
+  StyleSpecification,
 } from "maplibre-gl";
+
+// TODO
 
 // Some methods take optional params. It's an error to pass in null or undefined, so use default values from
 // https://github.com/maplibre/maplibre-style-spec/blob/main/src/reference/v8.json.
@@ -287,6 +291,63 @@ export function prettyPrintMeters(x: number): string {
   return (x / 1000.0).toFixed(1) + "km";
 }
 
+export function getStyleChoices(): [string, string][] {
+  let choices: [string, string][] = [
+    ["streets", "Streets"],
+    ["hybrid", "Satellite"],
+    ["dataviz", "Dataviz"],
+  ];
+  if (appVersion() == "Private (development)") {
+    choices.push(["Road", "OS Road"]);
+    choices.push(["Light", "OS Light"]);
+    choices.push(["Outdoor", "OS Outdoor"]);
+  }
+  return choices;
+}
+
+export async function getStyleSpecification(
+  style: string
+): Promise<string | StyleSpecification> {
+  // MapTiler vector styles
+  if (style == "streets" || style == "hybrid" || style == "dataviz") {
+    return `https://api.maptiler.com/maps/${style}/style.json?key=${
+      import.meta.env.VITE_MAPTILER_API_KEY
+    }`;
+  }
+
+  let resp = await fetch(
+    `${import.meta.env.VITE_RESOURCE_BASE}/private_layers/api_keys.json`
+  );
+  let apiKeys = await resp.json();
+
+  // OS Raster styles
+  return {
+    version: 8,
+    sources: {
+      "raster-tiles": {
+        type: "raster",
+        tiles: [
+          `https://api.os.uk/maps/raster/v1/zxy/${style}_3857/{z}/{x}/{y}.png?key=${apiKeys.ordnance_survey}`,
+        ],
+        tileSize: 256,
+        attribution:
+          "Contains OS data &copy; Crown copyright and database rights 2023",
+      },
+    },
+    layers: [
+      {
+        id: "os-maps-zxy",
+        type: "raster",
+        source: "raster-tiles",
+      },
+    ],
+    // Raster basemaps don't include glyphs; use the MapTiler ones
+    glyphs: `https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${
+      import.meta.env.VITE_MAPTILER_API_KEY
+    }`,
+  };
+}
+
 // Properties are guaranteed to exist
 export type FeatureWithProps<G extends Geometry> = Feature<G> & {
   properties: { [name: string]: any };
@@ -368,7 +429,8 @@ const layerZorder = [
   "route-polygons",
 
   // Draw most things beneath text road labels. These IDs come from the
-  // MapTiler basemap, and there are different ones for each basemap.
+  // MapTiler basemap, and there are different ones for each basemap. Note for
+  // OS raster basemaps, we draw everything on top of the rasters.
   "road_label",
   "Road labels",
 

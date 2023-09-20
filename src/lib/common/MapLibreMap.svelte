@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getStyleSpecification } from "lib/maplibre";
   import {
     Map,
     NavigationControl,
@@ -21,12 +22,10 @@
   let setCamera = !window.location.hash;
   setContext("setCamera", setCamera);
 
-  onMount(() => {
+  onMount(async () => {
     map = new Map({
       container: mapContainer,
-      style: `https://api.maptiler.com/maps/${style}/style.json?key=${
-        import.meta.env.VITE_MAPTILER_API_KEY
-      }`,
+      style: await getStyleSpecification(style),
       hash: true,
     });
     map.addControl(new ScaleControl({}));
