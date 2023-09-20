@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    appVersion,
     BaselayerSwitcher,
     CollapsibleCard,
     StreetViewController,
@@ -21,6 +22,8 @@
   import ParliamentaryConstituenciesLayerControl from "./layers/ParliamentaryConstituenciesLayerControl.svelte";
   import PctLayerControl from "./layers/PctLayerControl.svelte";
   import RailwayStationsLayerControl from "./layers/RailwayStationsLayerControl.svelte";
+  import RoadSpeedsLayerControl from "./layers/RoadSpeedsLayerControl.svelte";
+  import RoadWidthsLayerControl from "./layers/RoadWidthsLayerControl.svelte";
   import SchoolsLayerControl from "./layers/SchoolsLayerControl.svelte";
   import SportsSpacesLayerControl from "./layers/SportsSpacesLayerControl.svelte";
   import VehicleCountsLayerControl from "./layers/VehicleCountsLayerControl.svelte";
@@ -73,6 +76,10 @@
   <CollapsibleCard label="Other">
     <VehicleCountsLayerControl />
     <PctLayerControl />
+    {#if appVersion() == "Private (development)"}
+      <RoadWidthsLayerControl />
+      <RoadSpeedsLayerControl />
+    {/if}
   </CollapsibleCard>
   <StreetViewController
     bind:this={streetViewController}
