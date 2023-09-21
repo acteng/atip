@@ -34,6 +34,7 @@ function streetsLayers() {
 
 const satelliteLayers = ["Path", "Road", "Tunnel"];
 
+// OS raster layers don't have anything we can use
 const roadLayerIds = datavizLayers.concat(streetsLayers(), satelliteLayers);
 
 // If the basemap style changes dynamically, be careful about saving this.

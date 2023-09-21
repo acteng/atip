@@ -20,6 +20,9 @@
     initAll();
   });
 
+  let defaultStyle =
+    appVersion() == "Private (development)" ? "Road" : "dataviz";
+
   let markerPosition: LngLat | null = null;
   let streetviewOff = true;
 
@@ -45,10 +48,10 @@
     {/if}
   </div>
   <div slot="main">
-    <MapLibreMap style="dataviz" startBounds={[-5.96, 49.89, 2.31, 55.94]}>
+    <MapLibreMap style={defaultStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Pin bind:markerPosition enableAdding={streetviewOff} />
       <div class="top-right">
-        <BaselayerSwitcher disabled={!streetviewOff} />
+        <BaselayerSwitcher style={defaultStyle} disabled={!streetviewOff} />
         <StreetViewController
           bind:this={streetViewController}
           displayEnableButton
