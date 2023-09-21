@@ -5,6 +5,7 @@
     ExternalLink,
     HelpButton,
     InteractiveLayer,
+    publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { overwriteCircleLayer, overwriteSource } from "lib/maplibre";
@@ -13,7 +14,7 @@
   import { colors } from "../colors";
 
   const name = "railway_stations";
-  const url = `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.geojson`;
+  const url = `${publicResourceBaseUrl()}/v1/${name}.geojson`;
   let show = false;
 
   overwriteSource($map, name, url);

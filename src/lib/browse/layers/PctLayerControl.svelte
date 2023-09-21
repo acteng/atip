@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { ExternalLink, HelpButton, InteractiveLayer } from "lib/common";
+  import {
+    ExternalLink,
+    HelpButton,
+    InteractiveLayer,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox, Radio, Select } from "lib/govuk";
   import {
     hoveredToggle,
@@ -25,7 +30,7 @@
     overwritePmtilesSource(
       $map,
       name,
-      `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.pmtiles`
+      `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
     );
     overwriteLineLayer($map, {
       id: name,

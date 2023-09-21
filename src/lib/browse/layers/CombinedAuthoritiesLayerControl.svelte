@@ -4,6 +4,7 @@
     ExternalLink,
     HelpButton,
     InteractiveLayer,
+    publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
@@ -20,11 +21,7 @@
   let color = colors.combined_authorities;
   let outlineLayer = `${name}-outline`;
 
-  overwriteSource(
-    $map,
-    name,
-    `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.geojson`
-  );
+  overwriteSource($map, name, `${publicResourceBaseUrl()}/v1/${name}.geojson`);
 
   overwritePolygonLayer($map, {
     id: name,

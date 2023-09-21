@@ -52,7 +52,8 @@ To run locally you'll need:
   - If you're modifying the Rust code, a handy command is `npm run wasm && npm run dev`
 - `npm run generate-schema-ts` to rebuild TS definitions from changes to `src/schemas/*.json`
 - `npm run setup-govuk` to rerun Sass and generate GOV.UK styles
-- `npm run dev` to run Atip locally (N.B. you need to run all the above commands before running this command)
+- `npm run dev` to run ATIP locally (N.B. you need to run all the above commands before running this command)
+  - To mimic GCP deployment and see private layers locally, follow instructions in `.env` and run `VITE_RESOURCE_BASE="" VITE_MIMIC_GCP_LOCALLY="true" npm run dev`
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
 

@@ -4,6 +4,7 @@
     ExternalLink,
     HelpButton,
     InteractiveLayer,
+    publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { overwriteCircleLayer, overwritePmtilesSource } from "lib/maplibre";
@@ -42,7 +43,7 @@
   overwritePmtilesSource(
     $map,
     name,
-    `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.pmtiles`
+    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
   );
   let color = colors[name];
 

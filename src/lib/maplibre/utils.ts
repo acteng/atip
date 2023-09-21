@@ -8,7 +8,7 @@ import type {
   Point,
   Position,
 } from "geojson";
-import { appVersion } from "lib/common";
+import { appVersion, privateResourceBaseUrl } from "lib/common";
 import type {
   DataDrivenPropertyValueSpecification,
   FilterSpecification,
@@ -313,9 +313,7 @@ export async function getStyleSpecification(
     }`;
   }
 
-  let resp = await fetch(
-    `${import.meta.env.VITE_RESOURCE_BASE}/private_layers/api_keys.json`
-  );
+  let resp = await fetch(`${privateResourceBaseUrl()}/api_keys.json`);
   let apiKeys = await resp.json();
 
   // OS Raster styles
