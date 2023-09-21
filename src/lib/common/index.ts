@@ -26,6 +26,11 @@ export async function getAuthoritiesGeoJson(): Promise<
 }
 
 export function appVersion(): string {
+  // See .env for overrides.
+  if (import.meta.env.VITE_MIMIC_GCP_LOCALLY === "true") {
+    return "Private (development)";
+  }
+
   if (window.location.hostname == "localhost") {
     return "Local development";
   } else if (window.location.hostname == "acteng.github.io") {
@@ -42,4 +47,19 @@ export function appVersion(): string {
   }
 
   return "Unknown";
+}
+
+// See .env
+export function publicResourceBaseUrl(): string {
+  if (import.meta.env.VITE_RESOURCE_BASE) {
+    return `${import.meta.env.VITE_RESOURCE_BASE}/layers`;
+  }
+  return "/layers";
+}
+
+export function privateResourceBaseUrl(): string {
+  if (import.meta.env.VITE_RESOURCE_BASE) {
+    return `${import.meta.env.VITE_RESOURCE_BASE}/private_layers`;
+  }
+  return "/private_layers";
 }

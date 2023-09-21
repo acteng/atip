@@ -4,6 +4,7 @@
     ExternalLink,
     HelpButton,
     InteractiveLayer,
+    publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
@@ -23,7 +24,7 @@
   overwritePmtilesSource(
     $map,
     name,
-    `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.pmtiles`
+    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
   );
 
   overwritePolygonLayer($map, {

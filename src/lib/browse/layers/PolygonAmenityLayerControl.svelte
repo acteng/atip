@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { ColorLegend, HelpButton, InteractiveLayer } from "lib/common";
+  import {
+    ColorLegend,
+    HelpButton,
+    InteractiveLayer,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
     hoveredToggle,
@@ -29,7 +34,7 @@
   overwritePmtilesSource(
     $map,
     name,
-    `${import.meta.env.VITE_RESOURCE_BASE}/layers/v1/${name}.pmtiles`
+    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
   );
 
   overwritePolygonLayer($map, {

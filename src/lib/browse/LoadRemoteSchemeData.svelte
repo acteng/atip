@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { privateResourceBaseUrl } from "lib/common";
   import { onMount } from "svelte";
 
   // TODO Loading message
@@ -6,7 +7,7 @@
 
   onMount(async () => {
     let resp = await fetch(
-      `${import.meta.env.VITE_RESOURCE_BASE}/random_schemes.geojson`
+      `${privateResourceBaseUrl()}/v1/random_schemes.geojson`
     );
     let text = await resp.text();
     loadFile(text);

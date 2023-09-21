@@ -11,3 +11,5 @@ src/style/main.css
 src/style/main.css.map
 .sass-cache/
 public/assets
+public/layers
+public/private_layers
