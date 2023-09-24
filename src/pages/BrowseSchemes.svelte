@@ -18,7 +18,6 @@
     MapLibreMap,
     ZoomOutMap,
   } from "lib/common";
-  import PmTiles from "lib/common/PmTiles.svelte";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
   import { ErrorMessage } from "lib/govuk";
   import { emptyGeojson, prettyPrintMeters } from "lib/maplibre";
@@ -116,7 +115,6 @@
     </ul>
   </div>
   <div slot="main">
-    <PmTiles />
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <InterventionLayer
         colorInterventions={colorInterventionsBySchema("v1")}

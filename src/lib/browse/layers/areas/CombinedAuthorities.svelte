@@ -3,59 +3,30 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
-    InteractiveLayer,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import {
-    hoveredToggle,
-    overwriteLineLayer,
-    overwritePolygonLayer,
-    overwriteSource,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
+  import {
+    FillLayer,
+    GeoJSON,
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    type LayerClickInfo,
+  } from "svelte-maplibre";
 
   let name = "combined_authorities";
   let color = colors.combined_authorities;
   let outlineLayer = `${name}-outline`;
 
-  overwriteSource($map, name, `${publicResourceBaseUrl()}/v1/${name}.geojson`);
-
-  overwritePolygonLayer($map, {
-    id: name,
-    source: name,
-    color,
-    opacity: hoveredToggle(0.5, 0.0),
-  });
-  overwriteLineLayer($map, {
-    id: outlineLayer,
-    source: name,
-    color,
-    width: 2.5,
-  });
-
   let show = false;
-  // InteractiveLayer manages the polygon layer, but we also need to control the outline
-  $: {
-    if ($map.getLayer(outlineLayer)) {
-      $map.setLayoutProperty(
-        outlineLayer,
-        "visibility",
-        show ? "visible" : "none"
-      );
-    }
-  }
+  $: visibility = show ? "visible" : "none";
 
-  function tooltip(feature: MapGeoJSONFeature): string {
-    return `<p>${feature.properties.name}</p>`;
-  }
-
-  function onClick(e: CustomEvent<MapGeoJSONFeature>) {
+  function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
-      `https://www.ons.gov.uk/visualisations/areas/${e.detail.properties.CAUTH22CD}`,
+      `https://www.ons.gov.uk/visualisations/areas/${e.detail.features[0].properties.CAUTH22CD}`,
       "_blank"
     );
   }
@@ -78,4 +49,32 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable on:click={onClick} />
+<GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>
+  <FillLayer
+    id={name}
+    paint={{
+      "fill-color": color,
+      "fill-opacity": hoverStateFilter(0.0, 0.5),
+    }}
+    layout={{
+      visibility,
+    }}
+    manageHoverState
+    on:click={onClick}
+    hoverCursor="pointer"
+  >
+    <Popup openOn="hover" let:features>
+      <p>{features[0].properties.name}</p>
+    </Popup>
+  </FillLayer>
+  <LineLayer
+    id={outlineLayer}
+    paint={{
+      "line-color": color,
+      "line-width": 2.5,
+    }}
+    layout={{
+      visibility,
+    }}
+  />
+</GeoJSON>

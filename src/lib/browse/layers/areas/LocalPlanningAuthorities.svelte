@@ -3,18 +3,17 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
-    InteractiveLayer,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
-    hoveredToggle,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    VectorTileSource,
+    FillLayer,
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    type LayerClickInfo,
+  } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
 
@@ -22,44 +21,11 @@
   let color = colors.local_planning_authorities;
   let outlineLayer = `${name}-outline`;
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwritePolygonLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    color,
-    opacity: hoveredToggle(0.5, 0.0),
-  });
-  overwriteLineLayer($map, {
-    id: outlineLayer,
-    source: name,
-    sourceLayer: name,
-    color,
-    width: 2.5,
-  });
-
   let show = false;
-  // InteractiveLayer manages the polygon layer, but we also need to control the outline
-  $: {
-    if ($map.getLayer(outlineLayer)) {
-      $map.setLayoutProperty(
-        outlineLayer,
-        "visibility",
-        show ? "visible" : "none"
-      );
-    }
-  }
+  $: visibility = show ? "visible" : "none";
 
-  // TODO Note there are overlapping features. InteractiveLayer only plumbs
-  // back one result, so the tooltip may be incomplete.
-  function tooltip(feature: MapGeoJSONFeature): string {
-    return `<p>${feature.properties.name}</p>`;
-  }
+  // TODO Note there are overlapping features, so the tooltip may be incomplete
+  // -- but can't we fix that now?
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -104,4 +70,34 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <FillLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "fill-color": color,
+      "fill-opacity": hoverStateFilter(0.0, 0.5),
+    }}
+    layout={{
+      visibility,
+    }}
+    manageHoverState
+  >
+    <Popup openOn="hover" let:features>
+      <p>{features[0].properties.name}</p>
+    </Popup>
+  </FillLayer>
+  <LineLayer
+    id={outlineLayer}
+    sourceLayer={name}
+    paint={{
+      "line-color": color,
+      "line-width": 2.5,
+    }}
+    layout={{
+      visibility,
+    }}
+  />
+</VectorTileSource>

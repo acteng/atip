@@ -6,23 +6,24 @@
     ScaleControl,
     type LayerSpecification,
     type LngLatBoundsLike,
-    type SourceSpecification,
+    type StyleSpecification,
   } from "maplibre-gl";
-  import { onDestroy, onMount, setContext } from "svelte";
-  import "maplibre-gl/dist/maplibre-gl.css";
   import { map as mapStore } from "stores";
+  import { onMount } from "svelte";
+  import { MapLibre } from "svelte-maplibre";
 
   export let style: string;
   export let startBounds: LngLatBoundsLike | null = null;
 
+  let styleSpec: string | StyleSpecification | null = null;
+
   let map: Map;
-  let mapContainer: HTMLDivElement;
   let loaded = false;
 
-  // Before creating the map, check if there's a hash, because one will get set below
-  // TODO Supposed to use a phantom type, not a string, as the key
-  let setCamera = !window.location.hash;
-  setContext("setCamera", setCamera);
+  $: if (loaded) {
+    // TODO Get rid of mapStore entirely, eventually?
+    mapStore.set(map);
+  }
 
   // Adapted from https://github.com/dimfeld/svelte-maplibre/pull/60. We'll get
   // this for free after migrating to svelte-maplibre.
@@ -35,51 +36,21 @@
     | undefined = undefined;
 
   onMount(async () => {
-    map = new Map({
-      container: mapContainer,
-      style: await getStyleSpecification(style),
-      hash: true,
-    });
-    map.addControl(new ScaleControl({}));
+    styleSpec = await getStyleSpecification(style);
+
+    /*map.addControl(new ScaleControl({}));
     map.addControl(
       new NavigationControl({ visualizePitch: true }),
       "bottom-right"
-    );
+    );*/
 
-    map.on("load", () => {
+    /*map.on("load", () => {
       loaded = true;
       if (setCamera && startBounds) {
         map.fitBounds(startBounds, { animate: false });
       }
       mapStore.set(map);
-    });
-
-    const resizeObserver = new ResizeObserver(() => {
-      map.resize();
-    });
-    resizeObserver.observe(mapContainer);
-
-    map.on("style.load", () => {
-      const mapStyle = map.getStyle();
-      lastStyleLayerIds = mapStyle.layers.map((l) => l.id);
-      lastStyleSourceIds = Object.keys(mapStyle.sources);
-      if (sourcesToReAddAfterStyleChange) {
-        for (const [id, source] of Object.entries(
-          sourcesToReAddAfterStyleChange
-        )) {
-          map.addSource(id, source);
-        }
-      }
-      if (layersToReAddAfterStyleChange) {
-        for (const layer of layersToReAddAfterStyleChange) {
-          map.addLayer(layer);
-        }
-      }
-    });
-  });
-
-  onDestroy(() => {
-    map.remove();
+    });*/
   });
 
   async function changeStyle(newStyle: string) {
@@ -111,9 +82,19 @@
   $: changeStyle(style);
 </script>
 
-<div class="map" bind:this={mapContainer}>
-  {#if loaded}
-    <slot />
+<div class="map">
+  {#if styleSpec}
+    <MapLibre
+      style={styleSpec}
+      standardControls
+      bounds={startBounds}
+      bind:loaded
+      bind:map
+    >
+      {#if loaded}
+        <slot />
+      {/if}
+    </MapLibre>
   {/if}
 </div>
 
