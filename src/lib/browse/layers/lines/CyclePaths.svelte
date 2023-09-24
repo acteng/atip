@@ -1,19 +1,19 @@
 <script lang="ts">
+  import type { Feature } from "geojson";
   import {
     ColorLegend,
     HelpButton,
-    InteractiveLayer,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { constructMatchExpression } from "lib/maplibre";
   import {
-    constructMatchExpression,
-    hoveredToggle,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    VectorTileSource,
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    type LayerClickInfo,
+  } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
 
@@ -26,33 +26,10 @@
     ["Shared-use (unsegregated)", colors.cycle_paths.shared_use_unsegregated],
   ];
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwriteLineLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    color: constructMatchExpression(
-      ["get", "kind"],
-      {
-        track: colors.cycle_paths.track,
-        lane: colors.cycle_paths.lane,
-        shared_use_segregated: colors.cycle_paths.shared_use_segregated,
-        shared_use_unsegregated: colors.cycle_paths.shared_use_unsegregated,
-      },
-      "red"
-    ),
-    width: denseLineWidth,
-    opacity: hoveredToggle(0.5, 1.0),
-  });
-
   let show = false;
+  $: visibility = show ? "visible" : "none";
 
-  function tooltip(feature: MapGeoJSONFeature): string {
+  function tooltip(feature: Feature): [string, string, string] {
     // @ts-ignore Write types for the feature properties
     let kind = {
       track: "Separated track",
@@ -70,16 +47,12 @@
       feature.properties.width == "unknown"
         ? "unknown"
         : `${feature.properties.width} meters`;
-
-    let x = `<h2>${kind}</h2>`;
-    x += `<p>Direction: <b>${direction} ${feature.properties.direction}</b></p>`;
-    x += `<p>Width: <b>${width}</b></p>`;
-    return x;
+    return [kind, `${direction} ${feature.properties.direction}`, width];
   }
 
-  function onClick(e: CustomEvent<MapGeoJSONFeature>) {
+  function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
-      `http://openstreetmap.org/way/${e.detail.properties.osm_id}`,
+      `http://openstreetmap.org/way/${e.detail.features[0].properties.osm_id}`,
       "_blank"
     );
   }
@@ -132,4 +105,41 @@
   {/each}
 {/if}
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable on:click={onClick} />
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <LineLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "line-color": constructMatchExpression(
+        ["get", "kind"],
+        {
+          track: colors.cycle_paths.track,
+          lane: colors.cycle_paths.lane,
+          shared_use_segregated: colors.cycle_paths.shared_use_segregated,
+          shared_use_unsegregated: colors.cycle_paths.shared_use_unsegregated,
+        },
+        "red"
+      ),
+      "line-width": denseLineWidth,
+      "line-opacity": hoverStateFilter(1.0, 0.5),
+    }}
+    layout={{
+      visibility,
+    }}
+    hoverCursor="pointer"
+    on:click={onClick}
+  >
+    <Popup openOn="hover" let:features>
+      {@const [kind, direction, width] = tooltip(features[0])}
+      <h2>{kind}</h2>
+      <p>
+        Direction: <b>{@html direction}</b>
+      </p>
+      <p>
+        Width: <b>{width}</b>
+      </p>
+    </Popup>
+  </LineLayer>
+</VectorTileSource>

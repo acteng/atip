@@ -3,18 +3,17 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
-    InteractiveLayer,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
-    hoveredToggle,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    FillLayer,
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    type LayerClickInfo,
+  VectorTileSource,
+  } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
 
@@ -22,46 +21,12 @@
   let color = colors.parliamentary_constituencies;
   let outlineLayer = `${name}-outline`;
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwritePolygonLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    color,
-    opacity: hoveredToggle(0.5, 0.0),
-  });
-  overwriteLineLayer($map, {
-    id: outlineLayer,
-    source: name,
-    sourceLayer: name,
-    color,
-    width: 5,
-  });
-
   let show = false;
-  // InteractiveLayer manages the polygon layer, but we also need to control the outline
-  $: {
-    if ($map.getLayer(outlineLayer)) {
-      $map.setLayoutProperty(
-        outlineLayer,
-        "visibility",
-        show ? "visible" : "none"
-      );
-    }
-  }
+  $: visibility = show ? "visible" : "none";
 
-  function tooltip(feature: MapGeoJSONFeature): string {
-    return `<p>${feature.properties.Name}</p>`;
-  }
-
-  function onClick(e: CustomEvent<MapGeoJSONFeature>) {
+  function onClick(e: CustomEvent<LayerClickInfo>) {
     // There are common suffixes that don't work with the search
-    let name = e.detail.properties.Name;
+    let name = e.detail.features[0].properties.Name;
     name = name.replace(/ Boro Const$/, "");
     name = name.replace(/ Co Const$/, "");
     name = encodeURIComponent(name);
@@ -91,4 +56,36 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable on:click={onClick} />
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <FillLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "fill-color": color,
+      "fill-opacity": hoverStateFilter(0.0, 0.5),
+    }}
+    layout={{
+      visibility,
+    }}
+    manageHoverState
+    on:click={onClick}
+    hoverCursor="pointer"
+  >
+    <Popup openOn="hover" let:features>
+      <p>{features[0].properties.Name}</p>
+    </Popup>
+  </FillLayer>
+  <LineLayer
+    id={outlineLayer}
+    sourceLayer={name}
+    paint={{
+      "line-color": color,
+      "line-width": 5,
+    }}
+    layout={{
+      visibility,
+    }}
+  />
+</VectorTileSource>

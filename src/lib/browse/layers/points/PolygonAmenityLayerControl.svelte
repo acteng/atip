@@ -1,18 +1,15 @@
 <script lang="ts">
-  import {
-    ColorLegend,
-    HelpButton,
-    InteractiveLayer,
-    publicResourceBaseUrl,
-  } from "lib/common";
+  import type { Feature } from "geojson";
+  import { ColorLegend, HelpButton, publicResourceBaseUrl } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
-    hoveredToggle,
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    VectorTileSource,
+    FillLayer,
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    type LayerClickInfo,
+  } from "svelte-maplibre";
   import { colors } from "../../colors";
 
   // This name is used for multiple things:
@@ -31,25 +28,11 @@
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwritePolygonLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    color,
-    opacity: hoveredToggle(1.0, 0.7),
-  });
-
   let show = false;
+  $: visibility = show ? "visible" : "none";
 
-  function tooltip(feature: MapGeoJSONFeature): string {
-    let name = feature.properties.name ?? `Unnamed ${singularNoun}`;
-    return `<p>${name}</p>`;
+  function tooltip(feature: Feature): string {
+    return feature.properties.name ?? `Unnamed ${singularNoun}`;
   }
 </script>
 
@@ -61,4 +44,23 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <FillLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "fill-color": color,
+      "fill-opacity": hoverStateFilter(0.7, 1.0),
+    }}
+    layout={{
+      visibility,
+    }}
+    manageHoverState
+  >
+    <Popup openOn="hover" let:features>
+      <p>{tooltip(features[0])}</p>
+    </Popup>
+  </FillLayer>
+</VectorTileSource>

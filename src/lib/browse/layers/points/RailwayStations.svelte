@@ -1,37 +1,25 @@
 <script lang="ts">
   import { circleRadius } from "colors";
+  import type { Feature } from "geojson";
   import {
     ColorLegend,
     ExternalLink,
     HelpButton,
-    InteractiveLayer,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { overwriteCircleLayer, overwriteSource } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+  import { CircleLayer, GeoJSON, Popup } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
 
-  const name = "railway_stations";
-  const url = `${publicResourceBaseUrl()}/v1/${name}.geojson`;
+  let name = "railway_stations";
+  let color = colors.railway_stations;
+
   let show = false;
+  $: visibility = show ? "visible" : "none";
 
-  overwriteSource($map, name, url);
-  let color = colors[name];
-
-  overwriteCircleLayer($map, {
-    id: name,
-    source: name,
-    color: color,
-    radius: circleRadius / 2,
-    // TODO Outline?
-  });
-
-  function tooltip(feature: MapGeoJSONFeature): string {
-    let name = feature.properties.name ?? "Unnamed railway station";
-    return `<p>${name}</p>`;
+  function tooltip(feature: Feature): string {
+    return feature.properties.name ?? "Unnamed railway station";
   }
 </script>
 
@@ -52,4 +40,19 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>
+  <CircleLayer
+    id={name}
+    paint={{
+      "circle-color": color,
+      "circle-radius": circleRadius / 2,
+    }}
+    layout={{
+      visibility,
+    }}
+  >
+    <Popup openOn="hover" let:features>
+      <p>{tooltip(features[0])}</p>
+    </Popup>
+  </CircleLayer>
+</GeoJSON>
