@@ -10,7 +10,7 @@
   import { overwriteCircleLayer, overwritePmtilesSource } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors } from "../colors";
+  import { colors } from "../../colors";
 
   const name = "crossings";
   let show = false;

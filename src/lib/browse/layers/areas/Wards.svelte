@@ -15,10 +15,10 @@
   } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors } from "../colors";
+  import { colors } from "../../colors";
 
-  let name = "local_planning_authorities";
-  let color = colors.local_planning_authorities;
+  let name = "wards";
+  let color = colors.wards;
   let outlineLayer = `${name}-outline`;
 
   overwritePmtilesSource(
@@ -54,49 +54,28 @@
     }
   }
 
-  // TODO Note there are overlapping features. InteractiveLayer only plumbs
-  // back one result, so the tooltip may be incomplete.
   function tooltip(feature: MapGeoJSONFeature): string {
     return `<p>${feature.properties.name}</p>`;
+  }
+
+  function onClick(e: CustomEvent<MapGeoJSONFeature>) {
+    let name = encodeURIComponent(e.detail.properties.name);
+    // Help people find the councillor for this area
+    window.open(`https://www.google.com/search?q=${name}+councillor`, "_blank");
   }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
-  Local Planning Authorities
+  Wards
   <span slot="right">
     <HelpButton>
       <p>
-        LPAs may be a <ExternalLink
-          href="https://www.planning.data.gov.uk/dataset/local-authority"
+        Data from <ExternalLink
+          href="https://geoportal.statistics.gov.uk/datasets/ons::wards-may-2023-boundaries-uk-bgc/explore"
         >
-          local authority
-        </ExternalLink>, <ExternalLink
-          href="https://www.planning.data.gov.uk/dataset/national-park-authority"
-        >
-          national park authorit
-        </ExternalLink>y, or <ExternalLink
-          href="https://www.planning.data.gov.uk/dataset/development-corporation"
-        >
-          development corporation
-        </ExternalLink>.
-      </p>
-      <p>
-        <strong>
-          Note there are overlapping LPAs near Northhamptonshire. Only one
-          authority name is shown when hovering. Use <ExternalLink
-            href="https://www.planning.data.gov.uk/map/?dataset=local-planning-authority"
-          >
-            this map
-          </ExternalLink> to get more details.
-        </strong>
-      </p>
-      <p>
-        Data from ONS Geography via <ExternalLink
-          href="https://www.planning.data.gov.uk/dataset/local-planning-authority"
-        >
-          planning.data.gov.uk
-        </ExternalLink>, as of November 2022.
+          ONS Geography
+        </ExternalLink>, as of May 2023.
       </p>
       <p>
         License: <ExternalLink
@@ -110,4 +89,4 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<InteractiveLayer layer={name} {tooltip} {show} clickable on:click={onClick} />

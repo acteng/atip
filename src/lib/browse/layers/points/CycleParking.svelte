@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { circleRadius } from "colors";
   import {
     ColorLegend,
     ExternalLink,
@@ -8,45 +7,49 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { overwriteCircleLayer, overwriteSource } from "lib/maplibre";
+  import { overwriteCircleLayer, overwritePmtilesSource } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors } from "../colors";
+  import { colors } from "../../colors";
 
-  const name = "railway_stations";
-  const url = `${publicResourceBaseUrl()}/v1/${name}.geojson`;
-  let show = false;
+  let name = "cycle_parking";
+  let color = colors.cycle_parking;
 
-  overwriteSource($map, name, url);
-  let color = colors[name];
+  overwritePmtilesSource(
+    $map,
+    name,
+    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
+  );
 
   overwriteCircleLayer($map, {
     id: name,
     source: name,
-    color: color,
-    radius: circleRadius / 2,
-    // TODO Outline?
+    sourceLayer: name,
+    color,
+    radius: ["interpolate", ["linear"], ["zoom"], 1, 2, 8, 3, 13, 10],
   });
 
+  let show = false;
+
   function tooltip(feature: MapGeoJSONFeature): string {
-    let name = feature.properties.name ?? "Unnamed railway station";
-    return `<p>${name}</p>`;
+    let capacity = feature.properties.capacity ?? "unknown";
+    return `<p>Capacity: ${capacity}</p>`;
   }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
-  Railway Stations
+  Cycle parking
   <span slot="right">
     <HelpButton>
       <p>
-        This shows <ExternalLink
-          href="https://wiki.openstreetmap.org/wiki/Tag:railway%3Dstation"
+        Cycle parking, according to <ExternalLink
+          href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking"
         >
-          railway station
-        </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
+          OpenStreetMap
+        </ExternalLink> (as of 9 August 2023). The type of parking, public/private
+        access, and whether it's covered are not shown.
       </p>
-
       <p>
         License: <ExternalLink href="https://www.openstreetmap.org/copyright">
           Open Data Commons Open Database License

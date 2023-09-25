@@ -7,13 +7,17 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { overwriteCircleLayer, overwritePmtilesSource } from "lib/maplibre";
+  import {
+    hoveredToggle,
+    overwriteLineLayer,
+    overwritePmtilesSource,
+  } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors } from "../colors";
+  import { colors } from "../../colors";
 
-  let name = "cycle_parking";
-  let color = colors.cycle_parking;
+  let name = "mrn";
+  let color = colors.mrn;
 
   overwritePmtilesSource(
     $map,
@@ -21,38 +25,40 @@
     `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
   );
 
-  overwriteCircleLayer($map, {
+  overwriteLineLayer($map, {
     id: name,
     source: name,
     sourceLayer: name,
     color,
-    radius: ["interpolate", ["linear"], ["zoom"], 1, 2, 8, 3, 13, 10],
+    width: 7,
+    opacity: hoveredToggle(0.5, 1.0),
   });
 
   let show = false;
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    let capacity = feature.properties.capacity ?? "unknown";
-    return `<p>Capacity: ${capacity}</p>`;
+    let name = feature.properties.name ?? `Unknown MRN road`;
+    return `<p>${name}</p>`;
   }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
-  Cycle parking
+  Major Road Network
   <span slot="right">
     <HelpButton>
       <p>
-        Cycle parking, according to <ExternalLink
-          href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking"
+        Data from the <ExternalLink
+          href="https://maps.dft.gov.uk/major-road-network/index.html"
         >
-          OpenStreetMap
-        </ExternalLink> (as of 9 August 2023). The type of parking, public/private
-        access, and whether it's covered are not shown.
+          Major Road Network
+        </ExternalLink>, as of September 2021.
       </p>
       <p>
-        License: <ExternalLink href="https://www.openstreetmap.org/copyright">
-          Open Data Commons Open Database License
+        License: <ExternalLink
+          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+        >
+          Open Government License
         </ExternalLink>
       </p>
     </HelpButton>

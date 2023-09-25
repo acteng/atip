@@ -10,30 +10,36 @@
   import {
     hoveredToggle,
     overwriteLineLayer,
+    overwritePmtilesSource,
     overwritePolygonLayer,
-    overwriteSource,
   } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors } from "../colors";
+  import { colors } from "../../colors";
 
-  let name = "local_authority_districts";
-  let color = colors.local_authority_districts;
+  let name = "parliamentary_constituencies";
+  let color = colors.parliamentary_constituencies;
   let outlineLayer = `${name}-outline`;
 
-  overwriteSource($map, name, `${publicResourceBaseUrl()}/v1/${name}.geojson`);
+  overwritePmtilesSource(
+    $map,
+    name,
+    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
+  );
 
   overwritePolygonLayer($map, {
     id: name,
     source: name,
+    sourceLayer: name,
     color,
     opacity: hoveredToggle(0.5, 0.0),
   });
   overwriteLineLayer($map, {
     id: outlineLayer,
     source: name,
+    sourceLayer: name,
     color,
-    width: 2.5,
+    width: 5,
   });
 
   let show = false;
@@ -49,12 +55,19 @@
   }
 
   function tooltip(feature: MapGeoJSONFeature): string {
-    return `<p>${feature.properties.name}</p>`;
+    return `<p>${feature.properties.Name}</p>`;
   }
 
   function onClick(e: CustomEvent<MapGeoJSONFeature>) {
+    // There are common suffixes that don't work with the search
+    let name = e.detail.properties.Name;
+    name = name.replace(/ Boro Const$/, "");
+    name = name.replace(/ Co Const$/, "");
+    name = encodeURIComponent(name);
+
+    // Help people find the MP for this area
     window.open(
-      `https://www.ons.gov.uk/visualisations/areas/${e.detail.properties.LAD23CD}`,
+      `https://members.parliament.uk/members/Commons?SearchText=${name}`,
       "_blank"
     );
   }
@@ -62,14 +75,14 @@
 
 <Checkbox id={name} bind:checked={show}>
   <ColorLegend {color} />
-  Local Authority Districts
+  Parliamentary constituencies
   <span slot="right">
     <HelpButton>
       <p>
         Data from <ExternalLink
-          href="https://geoportal.statistics.gov.uk/datasets/ons::local-authority-districts-may-2023-boundaries-uk-buc/explore"
+          href="https://www.ordnancesurvey.co.uk/products/boundary-line"
         >
-          ONS Geography
+          Ordnance Survey Boundary-Line
         </ExternalLink>, as of May 2023.
       </p>
       <p>
@@ -77,8 +90,7 @@
           href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
         >
           Open Government License
-        </ExternalLink>. Contains OS data &copy; Crown copyright and database
-        right 2023.
+        </ExternalLink>
       </p>
     </HelpButton>
   </span>

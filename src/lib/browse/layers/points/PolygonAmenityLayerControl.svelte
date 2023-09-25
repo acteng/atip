@@ -13,7 +13,7 @@
   } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors } from "../colors";
+  import { colors } from "../../colors";
 
   // This name is used for multiple things:
   // - The name of a .pmtiles file
