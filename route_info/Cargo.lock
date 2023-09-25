@@ -745,8 +745,6 @@ dependencies = [
  "geom",
  "log",
  "osm2streets",
- "petgraph",
- "serde",
  "serde-wasm-bindgen",
  "wasm-bindgen",
  "web-sys",
