@@ -15,6 +15,7 @@
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
   import { colors } from "../../colors";
+  import OsmLicense from "../OsmLicense.svelte";
 
   let name = "bus_routes";
 
@@ -66,11 +67,7 @@
         </ExternalLink>, and doesn't include which routes are run or the
         frequency of service.
       </p>
-      <p>
-        License: <ExternalLink href="https://www.openstreetmap.org/copyright">
-          Open Data Commons Open Database License
-        </ExternalLink>
-      </p>
+      <OsmLicense />
     </HelpButton>
   </span>
 </Checkbox>

@@ -11,6 +11,7 @@
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
   import { colors } from "../../colors";
+  import OsmLicense from "../OsmLicense.svelte";
 
   let name = "cycle_parking";
   let color = colors.cycle_parking;
@@ -50,11 +51,7 @@
         </ExternalLink> (as of 9 August 2023). The type of parking, public/private
         access, and whether it's covered are not shown.
       </p>
-      <p>
-        License: <ExternalLink href="https://www.openstreetmap.org/copyright">
-          Open Data Commons Open Database License
-        </ExternalLink>
-      </p>
+      <OsmLicense />
     </HelpButton>
   </span>
 </Checkbox>

@@ -12,6 +12,7 @@
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
   import { colors } from "../../colors";
+  import OsmLicense from "../OsmLicense.svelte";
 
   const name = "railway_stations";
   const url = `${publicResourceBaseUrl()}/v1/${name}.geojson`;
@@ -46,12 +47,7 @@
           railway station
         </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
       </p>
-
-      <p>
-        License: <ExternalLink href="https://www.openstreetmap.org/copyright">
-          Open Data Commons Open Database License
-        </ExternalLink>
-      </p>
+      <OsmLicense />
     </HelpButton>
   </span>
 </Checkbox>

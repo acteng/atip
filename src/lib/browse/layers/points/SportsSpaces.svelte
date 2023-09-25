@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ExternalLink } from "lib/common";
+  import OsmLicense from "../OsmLicense.svelte";
   import PolygonAmenityLayerControl from "./PolygonAmenityLayerControl.svelte";
 </script>
 
@@ -19,10 +20,5 @@
       sports centres
     </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
   </p>
-
-  <p>
-    License: <ExternalLink href="https://www.openstreetmap.org/copyright">
-      Open Data Commons Open Database License
-    </ExternalLink>
-  </p>
+  <OsmLicense />
 </PolygonAmenityLayerControl>

@@ -16,6 +16,7 @@
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
   import { colors } from "../../colors";
+  import OsOglLicense from "../OsOglLicense.svelte";
 
   let name = "parliamentary_constituencies";
   let color = colors.parliamentary_constituencies;
@@ -85,13 +86,7 @@
           Ordnance Survey Boundary-Line
         </ExternalLink>, as of May 2023.
       </p>
-      <p>
-        License: <ExternalLink
-          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-        >
-          Open Government License
-        </ExternalLink>
-      </p>
+      <OsOglLicense />
     </HelpButton>
   </span>
 </Checkbox>

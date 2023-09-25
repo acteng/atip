@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     ColorLegend,
-    ExternalLink,
     HelpButton,
     InteractiveLayer,
     publicResourceBaseUrl,
@@ -16,6 +15,7 @@
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
   import { colors, denseLineWidth } from "../../colors";
+  import OsmLicense from "../OsmLicense.svelte";
 
   let name = "cycle_paths";
 
@@ -119,11 +119,7 @@
         OpenStreetMap data. Please do report issues with the classification or
         data.
       </p>
-      <p>
-        License: <ExternalLink href="https://www.openstreetmap.org/copyright">
-          Open Data Commons Open Database License
-        </ExternalLink>
-      </p>
+      <OsmLicense />
     </HelpButton>
   </span>
 </Checkbox>

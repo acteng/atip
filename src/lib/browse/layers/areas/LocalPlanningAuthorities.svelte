@@ -16,6 +16,7 @@
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
   import { colors } from "../../colors";
+  import OsOglLicense from "../OsOglLicense.svelte";
 
   let name = "local_planning_authorities";
   let color = colors.local_planning_authorities;
@@ -98,14 +99,7 @@
           planning.data.gov.uk
         </ExternalLink>, as of November 2022.
       </p>
-      <p>
-        License: <ExternalLink
-          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-        >
-          Open Government License
-        </ExternalLink>. Contains OS data &copy; Crown copyright and database
-        right 2023.
-      </p>
+      <OsOglLicense />
     </HelpButton>
   </span>
 </Checkbox>

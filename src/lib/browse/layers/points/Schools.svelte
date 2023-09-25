@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ExternalLink } from "lib/common";
+  import OsmLicense from "../OsmLicense.svelte";
   import PolygonAmenityLayerControl from "./PolygonAmenityLayerControl.svelte";
 </script>
 
@@ -16,9 +17,5 @@
     </ExternalLink> from OpenStreetMap (as of 9 August 2023). It doesn't include
     kindergartens, colleges, universities, or other training schools.
   </p>
-  <p>
-    License: <ExternalLink href="https://www.openstreetmap.org/copyright">
-      Open Data Commons Open Database License
-    </ExternalLink>
-  </p>
+  <OsmLicense />
 </PolygonAmenityLayerControl>
