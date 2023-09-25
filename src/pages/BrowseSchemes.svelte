@@ -1,7 +1,6 @@
 <script lang="ts">
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
-  import "../style/main.css";
   import AppVersion from "lib/browse/AppVersion.svelte";
   import { processInput, type Scheme } from "lib/browse/data";
   import Filters from "lib/browse/Filters.svelte";
@@ -25,7 +24,7 @@
   import { emptyGeojson, prettyPrintMeters } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { colorInterventionsBySchema } from "schemas";
-  import { gjScheme } from "stores";
+  import { gjScheme, mapStyle } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Scheme as GjScheme } from "types";
 
@@ -38,7 +37,7 @@
   });
 
   const params = new URLSearchParams(window.location.search);
-  let style: string = params.get("style") || "dataviz";
+  mapStyle.set(params.get("style") || "dataviz");
   let errorMessage = "";
 
   let schemes: Map<string, Scheme> = new Map();
@@ -118,7 +117,7 @@
   </div>
   <div slot="main">
     <PmTiles />
-    <MapLibreMap {style} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
+    <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <InterventionLayer
         colorInterventions={colorInterventionsBySchema("v1")}
       />
@@ -138,7 +137,7 @@
         clickable={false}
       />
       <div class="top-right">
-        <LayerControls {style} />
+        <LayerControls />
       </div>
     </MapLibreMap>
   </div>
