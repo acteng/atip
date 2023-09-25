@@ -15,6 +15,7 @@
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
   import { colors } from "../../colors";
+  import OsOglLicense from "../OsOglLicense.svelte";
 
   let name = "mrn";
   let color = colors.mrn;
@@ -54,13 +55,7 @@
           Major Road Network
         </ExternalLink>, as of September 2021.
       </p>
-      <p>
-        License: <ExternalLink
-          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-        >
-          Open Government License
-        </ExternalLink>
-      </p>
+      <OsOglLicense />
     </HelpButton>
   </span>
 </Checkbox>
