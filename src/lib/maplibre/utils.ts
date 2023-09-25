@@ -414,14 +414,6 @@ const layerZorder = [
 
   "draw-street-view",
 
-  "speed-limits",
-
-  "lane-polygons-layer",
-  "intersection-polygons-layer",
-  "lane-markings-layer",
-  "intersection-markings-layer",
-
-  // When editing a route, draw it over contextual layers like speed limits
   "route-points",
   "route-lines",
   "route-polygons",

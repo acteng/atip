@@ -20,7 +20,6 @@
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
   import Toolbox from "lib/draw/Toolbox.svelte";
   import { SecondaryButton } from "lib/govuk";
-  import ContextualLayers from "lib/layers/ContextualLayers.svelte";
   import About from "lib/sidebar/About.svelte";
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
@@ -140,7 +139,6 @@
         <CollapsibleCard label="Layers">
           <Legend rows={schemaLegend(schema)} />
           <BaselayerSwitcher {style} />
-          <ContextualLayers />
         </CollapsibleCard>
       </div>
     </MapLibreMap>

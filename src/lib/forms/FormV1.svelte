@@ -3,7 +3,6 @@
   import { FormElement, Radio, SecondaryButton, TextArea } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
   import { gjScheme, routeInfo } from "stores";
-  import RouteInfoLayers from "./RouteInfoLayers.svelte";
 
   export let id: number;
   export let name: string;
@@ -52,5 +51,4 @@
 
 {#if length_meters}
   <p>Length: {prettyPrintMeters(length_meters)}</p>
-  <RouteInfoLayers {id} />
 {/if}
