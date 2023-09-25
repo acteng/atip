@@ -13,7 +13,7 @@
   } from "lib/maplibre";
   import type { GeoJSONSource, MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { parseCriticalIssuesExcel } from "../data";
+  import { parseCriticalIssuesExcel } from "../../data";
 
   let fileInput: HTMLInputElement;
 

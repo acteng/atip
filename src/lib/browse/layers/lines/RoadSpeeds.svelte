@@ -14,8 +14,8 @@
   } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors, denseLineWidth } from "../colors";
-  import SequentialLegend from "./SequentialLegend.svelte";
+  import { colors, denseLineWidth } from "../../colors";
+  import SequentialLegend from "../SequentialLegend.svelte";
 
   let name = "road_speeds";
   let colorScale = colors.sequential_low_to_high;

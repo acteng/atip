@@ -13,8 +13,8 @@
   } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors } from "../colors";
-  import SequentialLegend from "./SequentialLegend.svelte";
+  import { colors } from "../../colors";
+  import SequentialLegend from "../SequentialLegend.svelte";
 
   let name = "vehicle_counts";
 

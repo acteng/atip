@@ -15,7 +15,7 @@
   } from "lib/maplibre";
   import type { MapGeoJSONFeature } from "maplibre-gl";
   import { map } from "stores";
-  import { colors, denseLineWidth } from "../colors";
+  import { colors, denseLineWidth } from "../../colors";
 
   let name = "cycle_paths";
 
