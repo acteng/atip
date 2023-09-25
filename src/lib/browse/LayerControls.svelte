@@ -30,8 +30,6 @@
   import SportsSpacesLayerControl from "./layers/points/SportsSpaces.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
 
-  export let style: string;
-
   let streetViewController: StreetViewController;
 
   function onKeydown(e: KeyboardEvent) {
@@ -90,7 +88,7 @@
     />
     <LineMeasureController />
   </CollapsibleCard>
-  <BaselayerSwitcher {style} />
+  <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />
 </CollapsibleCard>
 
 <svelte:window on:keydown={onKeydown} />

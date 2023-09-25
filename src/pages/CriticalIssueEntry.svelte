@@ -3,15 +3,16 @@
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import type { LngLat } from "maplibre-gl";
+  import { mapStyle } from "stores";
   import { onMount } from "svelte";
   import {
     appVersion,
+    BaselayerSwitcher,
     Layout,
     LoggedIn,
     MapLibreMap,
     StreetViewController,
   } from "../lib/common";
-  import BaselayerSwitcher from "../lib/critical_entry/BaselayerSwitcher.svelte";
   import Form from "../lib/critical_entry/Form.svelte";
   import Pin from "../lib/critical_entry/Pin.svelte";
 
@@ -20,8 +21,10 @@
     initAll();
   });
 
+  const params = new URLSearchParams(window.location.search);
   let defaultStyle =
     appVersion() == "Private (development)" ? "Road" : "dataviz";
+  mapStyle.set(params.get("style") || defaultStyle);
 
   let markerPosition: LngLat | null = null;
   let streetviewOff = true;
@@ -48,10 +51,10 @@
     {/if}
   </div>
   <div slot="main">
-    <MapLibreMap style={defaultStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
+    <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Pin bind:markerPosition enableAdding={streetviewOff} />
       <div class="top-right">
-        <BaselayerSwitcher style={defaultStyle} disabled={!streetviewOff} />
+        <BaselayerSwitcher disabled={!streetviewOff} />
         <StreetViewController
           bind:this={streetViewController}
           displayEnableButton

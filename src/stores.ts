@@ -15,6 +15,8 @@ import { type RouteInfo } from "./worker";
 // mounted before this is populated.
 export const map: Writable<Map> = writable(null);
 
+export const mapStyle: Writable<string> = writable("dataviz");
+
 // A global singleton, with a RouteInfo web worker. It's null before it's loaded.
 export const routeInfo: Writable<Remote<RouteInfo> | null> = writable(null);
 

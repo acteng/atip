@@ -29,7 +29,7 @@
     schemaLegend,
     schemaTitle,
   } from "schemas";
-  import { routeInfo } from "stores";
+  import { mapStyle, routeInfo } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
   import { type RouteInfo } from "../worker";
@@ -41,8 +41,9 @@
   const params = new URLSearchParams(window.location.search);
   // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
-  let style: string = params.get("style") || "streets";
   let schema: Schema = (params.get("schema") as Schema) || "v1";
+
+  mapStyle.set(params.get("style") || "streets");
 
   // The version numbers here are arbitrary, not necessarily related to the
   // app's version. The version of the code deployed has to match the data, and
@@ -128,7 +129,7 @@
     <InterventionList {schema} />
   </div>
   <div slot="main">
-    <MapLibreMap {style}>
+    <MapLibreMap style={$mapStyle}>
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer
         colorInterventions={colorInterventionsBySchema(schema)}
@@ -138,7 +139,7 @@
       <div class="top-left">
         <CollapsibleCard label="Layers">
           <Legend rows={schemaLegend(schema)} />
-          <BaselayerSwitcher {style} />
+          <BaselayerSwitcher />
         </CollapsibleCard>
       </div>
     </MapLibreMap>
