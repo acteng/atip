@@ -5,6 +5,7 @@
 
   let marker: Marker | null = null;
   export let markerPosition: LngLat;
+  export let markerPositionUpdated: () => any;
 
   onMount(() => {
     // TODO If the user toggles streetview, this cursor is lost
@@ -14,10 +15,10 @@
     marker.on("dragstart", () => {
       $map.getCanvas().style.cursor = "grabbing";
     });
-    marker.on("dragend", () => {
+    marker.on("drag", () => {
       $map.getCanvas().style.cursor = "inherit";
-      if(marker?.getLngLat().distanceTo(markerPosition) === 0) console.log("unmoved")
       markerPosition = marker!.getLngLat();
+      markerPositionUpdated();
     });
   });
   onDestroy(() => {

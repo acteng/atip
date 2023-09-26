@@ -64,6 +64,11 @@
   function disableMeasurement() {
     isInactive = true;
     $map.off("click", handleMapClickEvent);
+    waypoints = [];
+    if ($map.getSource("route")) {
+      $map.removeLayer("route");
+      $map.removeSource("route");
+    }
   }
 
   function keyDown(keyDownEvent: KeyboardEvent) {
@@ -85,7 +90,6 @@
   }
 
   function addLinestringToMap() {
-    console.log($map.getLayer("route"));
     if (!$map.getSource("route")) {
       $map.addSource("route", {
         type: "geojson",
@@ -106,6 +110,7 @@
         },
       });
     } else {
+      // @ts-ignore setData not happy for some reason
       $map.getSource("route")?.setData(linestring);
     }
   }
@@ -142,7 +147,10 @@
     </ul>
   </CollapsibleCard>
   {#each waypoints as waypoint (waypoint.id)}
-    <Pin bind:markerPosition={waypoint.lngLat} />
+    <Pin
+      bind:markerPosition={waypoint.lngLat}
+      markerPositionUpdated={waypointsUpdated}
+    />
   {/each}
 {/if}
 <svelte:window on:keydown={keyDown} on:keyup={keyUp} />
