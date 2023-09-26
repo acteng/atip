@@ -1,5 +1,6 @@
 <script lang="ts">
   import { lineString, type Feature, type LineString } from "@turf/helpers";
+  import length from "@turf/length";
   import Pin from "lib/critical_entry/Pin.svelte";
   import { SecondaryButton } from "lib/govuk";
   import { LngLat, MapMouseEvent } from "maplibre-gl";
@@ -8,7 +9,7 @@
 
   let isInactive = true;
   let waypoints: any[] = [];
-  let linestring: Feature<LineString> | undefined = undefined;
+  let lineToMeasure: Feature<LineString> | undefined = undefined;
   let isShiftDown = false;
   let nextId = 0;
 
@@ -85,7 +86,9 @@
     const waypointsAsPosition = waypoints.map((waypoint) => {
       return [waypoint.lngLat.lng, waypoint.lngLat.lat];
     });
-    linestring = lineString(waypointsAsPosition);
+    lineToMeasure = lineString(waypointsAsPosition, {});
+    if (lineToMeasure.properties)
+      lineToMeasure.properties.length = length(lineToMeasure) * 1000;
     addLinestringToMap();
   }
 
@@ -93,7 +96,7 @@
     if (!$map.getSource("route")) {
       $map.addSource("route", {
         type: "geojson",
-        data: linestring,
+        data: lineToMeasure,
       });
 
       $map.addLayer({
@@ -111,7 +114,7 @@
       });
     } else {
       // @ts-ignore setData not happy for some reason
-      $map.getSource("route")?.setData(linestring);
+      $map.getSource("route")?.setData(lineToMeasure);
     }
   }
 </script>
@@ -126,6 +129,9 @@
   </SecondaryButton>
 {/if}
 {#if !isInactive}
+  {#if lineToMeasure}
+    <p>Length: {lineToMeasure.properties?.length}m</p>
+  {/if}
   <CollapsibleCard label="Help">
     <ul>
       <li>
