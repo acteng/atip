@@ -1,6 +1,7 @@
 <script lang="ts">
   import { lineString, type Feature, type LineString } from "@turf/helpers";
   import length from "@turf/length";
+  import { colors } from "colors";
   import Pin from "lib/critical_entry/Pin.svelte";
   import { SecondaryButton } from "lib/govuk";
   import { LngLat, MapMouseEvent } from "maplibre-gl";
@@ -12,6 +13,7 @@
   let lineToMeasure: Feature<LineString> | undefined = undefined;
   let isShiftDown = false;
   let nextId = 0;
+  const layerName = "measurement-line";
 
   function handleMapClickEvent(e: MapMouseEvent) {
     if (isInactive) {
@@ -66,10 +68,7 @@
     isInactive = true;
     $map.off("click", handleMapClickEvent);
     waypoints = [];
-    if ($map.getSource("route")) {
-      $map.removeLayer("route");
-      $map.removeSource("route");
-    }
+    removeLineFromMap();
   }
 
   function keyDown(keyDownEvent: KeyboardEvent) {
@@ -81,7 +80,10 @@
   }
 
   function waypointsUpdated() {
-    if (waypoints.length < 2) return;
+    if (waypoints.length < 2) {
+      removeLineFromMap();
+      return;
+    }
 
     const waypointsAsPosition = waypoints.map((waypoint) => {
       return [waypoint.lngLat.lng, waypoint.lngLat.lat];
@@ -89,32 +91,35 @@
     lineToMeasure = lineString(waypointsAsPosition, {});
     if (lineToMeasure.properties)
       lineToMeasure.properties.length = length(lineToMeasure) * 1000;
-    addLinestringToMap();
+    updateLinestring();
   }
 
-  function addLinestringToMap() {
-    if (!$map.getSource("route")) {
-      $map.addSource("route", {
+  function removeLineFromMap() {
+    if ($map.getSource(layerName)) {
+      $map.removeLayer(layerName);
+      $map.removeSource(layerName);
+    }
+  }
+
+  function updateLinestring() {
+    if (!$map.getSource(layerName)) {
+      $map.addSource(layerName, {
         type: "geojson",
         data: lineToMeasure,
       });
 
       $map.addLayer({
-        id: "route",
+        id: layerName,
         type: "line",
-        source: "route",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
+        source: layerName,
         paint: {
-          "line-color": "#888",
-          "line-width": 8,
+          "line-color": colors.measuringLine,
+          "line-width": 5,
         },
       });
     } else {
       // @ts-ignore setData not happy for some reason
-      $map.getSource("route")?.setData(lineToMeasure);
+      $map.getSource(layerName)?.setData(lineToMeasure);
     }
   }
 </script>
