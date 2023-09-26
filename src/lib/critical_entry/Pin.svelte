@@ -18,7 +18,7 @@
       $map.getCanvas().style.cursor = "inherit";
       markerPosition = marker!.getLngLat();
     });
-    marker.on("dblclick", () => {
+    marker.on("click", () => {
       console.log("you clicked me");
     });
   });

@@ -3,12 +3,12 @@
   import { SecondaryButton } from "lib/govuk";
   import { LngLat, MapMouseEvent } from "maplibre-gl";
   import { map } from "stores";
-  import { onDestroy, onMount } from "svelte";
   import { CollapsibleCard } from ".";
 
   let isInactive = true;
-  let waypoints: LngLat[] = [];
+  let waypoints: any[] = [];
   let isShiftDown = false;
+  let nextId = 0;
 
   function handleMapClickEvent(e: MapMouseEvent) {
     if (isInactive) {
@@ -16,11 +16,13 @@
     }
 
     if (!isShiftDown) {
-      waypoints.push(e.lngLat);
+      waypoints.push({
+        id: nextId++,
+        lngLat: e.lngLat,
+      });
       waypoints = waypoints;
     }
     if (isShiftDown && waypoints.length > 0) {
-      console.log("removing?");
       findAndRemoveNeareastWaypoint(e.lngLat);
     }
   }
@@ -30,33 +32,23 @@
     let currentShortestDistance = maxLngLatDistance;
     let waypointToRemove: LngLat | undefined = undefined;
 
-    console.log(`clickLocation ${clickLocation.lat}, ${clickLocation.lng}`);
-    console.log(waypoints)
-    
-
     waypoints.forEach((waypoint) => {
-      if (currentShortestDistance >= clickLocation.distanceTo(waypoint)) {
-        waypointToRemove = waypoint;
-        currentShortestDistance = clickLocation.distanceTo(waypoint);
-        console.log(
-          `waypoint ${waypoint}, ${clickLocation.distanceTo(
-            waypoint
-          )}, prev shorted ${currentShortestDistance}`
-        );
+      const waypointLngLat = waypoint.lngLat;
+      if (currentShortestDistance >= clickLocation.distanceTo(waypointLngLat)) {
+        waypointToRemove = waypointLngLat;
+        currentShortestDistance = clickLocation.distanceTo(waypointLngLat);
       }
     });
 
-    console.log(waypointToRemove)
     if (waypointToRemove) {
       waypoints = waypoints.filter((waypoint) => {
+        const waypointLngLat = waypoint.lngLat;
         return (
-          waypoint.lng != waypointToRemove?.lng ||
-          waypoint.lat != waypointToRemove?.lat
+          waypointLngLat.lng != waypointToRemove?.lng ||
+          waypointLngLat.lat != waypointToRemove?.lat
         );
       });
     }
-    console.log(waypoints);
-    waypoints = waypoints;
   }
 
   function enableMeasurement() {
@@ -76,16 +68,6 @@
   function keyUp(keyUpEvent: KeyboardEvent) {
     if (keyUpEvent.key === "Shift") isShiftDown = false;
   }
-
-  onMount(() => {
-    document.addEventListener("keydown", keyDown);
-    document.addEventListener("keyup", keyUp);
-  });
-
-  onDestroy(() => {
-    document.removeEventListener("keydown", keyDown);
-    document.removeEventListener("keyup", keyUp);
-  });
 </script>
 
 {#if isInactive}
@@ -109,7 +91,7 @@
         an existing waypoint to move it
       </li>
       <li>
-        <b>Double click</b>
+        <b>Hold shift and click on</b>
         an existing waypoint to delete it
       </li>
       <li>
@@ -118,7 +100,8 @@
       </li>
     </ul>
   </CollapsibleCard>
-  {#each waypoints as waypoint}
-    <Pin bind:markerPosition={waypoint} />
+  {#each waypoints as waypoint (waypoint.id)}
+    <Pin bind:markerPosition={waypoint.lngLat} />
   {/each}
 {/if}
+<svelte:window on:keydown={keyDown} on:keyup={keyUp} />
