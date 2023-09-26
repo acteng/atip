@@ -2,7 +2,8 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
-  import type { LngLat } from "maplibre-gl";
+  import type { LngLat, MapMouseEvent } from "maplibre-gl";
+  import { map } from "stores";
   import { onMount } from "svelte";
   import {
     appVersion,
@@ -18,12 +19,15 @@
   onMount(() => {
     // For govuk components. Must happen here.
     initAll();
+    $map.on("click", (e: MapMouseEvent) => {
+      markerPosition = e.lngLat;
+    });
   });
 
   let defaultStyle =
     appVersion() == "Private (development)" ? "Road" : "dataviz";
 
-  let markerPosition: LngLat | null = null;
+  let markerPosition: LngLat;
   let streetviewOff = true;
 
   let streetViewController: StreetViewController;
@@ -49,7 +53,9 @@
   </div>
   <div slot="main">
     <MapLibreMap style={defaultStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
-      <Pin bind:markerPosition enableAdding={streetviewOff} />
+      {#if markerPosition}
+        <Pin bind:markerPosition markerPositionUpdated={() => {}} />
+      {/if}
       <div class="top-right">
         <BaselayerSwitcher style={defaultStyle} disabled={!streetviewOff} />
         <StreetViewController
