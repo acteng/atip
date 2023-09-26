@@ -8,7 +8,6 @@
   export let markerPositionUpdated: () => any;
 
   onMount(() => {
-    // TODO If the user toggles streetview, this cursor is lost
     marker = new Marker({ draggable: true })
       .setLngLat(markerPosition)
       .addTo($map);
