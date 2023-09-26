@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { lineString, type Feature, type LineString } from "@turf/helpers";
   import Pin from "lib/critical_entry/Pin.svelte";
   import { SecondaryButton } from "lib/govuk";
   import { LngLat, MapMouseEvent } from "maplibre-gl";
@@ -7,6 +8,7 @@
 
   let isInactive = true;
   let waypoints: any[] = [];
+  let linestring: Feature<LineString> | undefined = undefined;
   let isShiftDown = false;
   let nextId = 0;
 
@@ -21,9 +23,12 @@
         lngLat: e.lngLat,
       });
       waypoints = waypoints;
+      waypointsUpdated();
     }
     if (isShiftDown && waypoints.length > 0) {
       findAndRemoveNeareastWaypoint(e.lngLat);
+
+      waypointsUpdated();
     }
   }
 
@@ -67,6 +72,42 @@
 
   function keyUp(keyUpEvent: KeyboardEvent) {
     if (keyUpEvent.key === "Shift") isShiftDown = false;
+  }
+
+  function waypointsUpdated() {
+    if (waypoints.length < 2) return;
+
+    const waypointsAsPosition = waypoints.map((waypoint) => {
+      return [waypoint.lngLat.lng, waypoint.lngLat.lat];
+    });
+    linestring = lineString(waypointsAsPosition);
+    addLinestringToMap();
+  }
+
+  function addLinestringToMap() {
+    console.log($map.getLayer("route"));
+    if (!$map.getSource("route")) {
+      $map.addSource("route", {
+        type: "geojson",
+        data: linestring,
+      });
+
+      $map.addLayer({
+        id: "route",
+        type: "line",
+        source: "route",
+        layout: {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        paint: {
+          "line-color": "#888",
+          "line-width": 8,
+        },
+      });
+    } else {
+      $map.getSource("route")?.setData(linestring);
+    }
   }
 </script>
 

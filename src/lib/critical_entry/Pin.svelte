@@ -16,10 +16,8 @@
     });
     marker.on("dragend", () => {
       $map.getCanvas().style.cursor = "inherit";
+      if(marker?.getLngLat().distanceTo(markerPosition) === 0) console.log("unmoved")
       markerPosition = marker!.getLngLat();
-    });
-    marker.on("click", () => {
-      console.log("you clicked me");
     });
   });
   onDestroy(() => {
