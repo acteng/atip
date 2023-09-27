@@ -1,11 +1,18 @@
 <script lang="ts">
-  import { lineString, type Feature, type LineString } from "@turf/helpers";
+  import {
+    lineString,
+    type Feature,
+    type LineString,
+  } from "@turf/helpers";
   import length from "@turf/length";
   import { colors } from "colors";
+  import type { GeoJSON, GeoJsonProperties } from "geojson";
   import Pin from "lib/critical_entry/Pin.svelte";
   import { SecondaryButton } from "lib/govuk";
-  import { LngLat, MapMouseEvent } from "maplibre-gl";
+  import { emptyGeojson, overwriteLineLayer, overwriteSource } from "lib/maplibre";
+  import { GeoJSONSource, LngLat, MapMouseEvent } from "maplibre-gl";
   import { map } from "stores";
+  import { onDestroy, onMount } from "svelte";
   import { CollapsibleCard } from ".";
 
   let isInactive = true;
@@ -61,22 +68,27 @@
 
   function enableMeasurement() {
     isInactive = false;
-    $map.on("click", handleMapClickEvent);
   }
 
   function disableMeasurement() {
     isInactive = true;
-    $map.off("click", handleMapClickEvent);
     waypoints = [];
     removeLineFromMap();
   }
 
   function keyDown(keyDownEvent: KeyboardEvent) {
-    if (keyDownEvent.key === "Shift") isShiftDown = true;
+    if (keyDownEvent.key === "Shift") {
+      isShiftDown = true;
+    }
+    if (keyDownEvent.key === "Escape") {
+      disableMeasurement();
+    }
   }
 
   function keyUp(keyUpEvent: KeyboardEvent) {
-    if (keyUpEvent.key === "Shift") isShiftDown = false;
+    if (keyUpEvent.key === "Shift") {
+      isShiftDown = false;
+    }
   }
 
   function waypointsUpdated() {
@@ -89,39 +101,47 @@
       return [waypoint.lngLat.lng, waypoint.lngLat.lat];
     });
     lineToMeasure = lineString(waypointsAsPosition, {});
-    if (lineToMeasure.properties)
-      lineToMeasure.properties.length = length(lineToMeasure) * 1000;
+    if (lineToMeasure.properties) {
+      lineToMeasure.properties.length = (length(lineToMeasure) * 1000).toFixed(
+        2
+      );
+    }
     updateLinestring();
   }
 
   function removeLineFromMap() {
-    if ($map.getSource(layerName)) {
-      $map.removeLayer(layerName);
-      $map.removeSource(layerName);
+    if ($map.getSource(layerName)) {($map.getSource(layerName) as GeoJSONSource).setData(
+        emptyGeojson()
+      );
+
+      lineToMeasure = undefined;
     }
   }
 
   function updateLinestring() {
     if (!$map.getSource(layerName)) {
-      $map.addSource(layerName, {
-        type: "geojson",
-        data: lineToMeasure,
-      });
+      overwriteSource($map, layerName, (lineToMeasure as GeoJSON));
 
-      $map.addLayer({
+      overwriteLineLayer($map, {
         id: layerName,
-        type: "line",
         source: layerName,
-        paint: {
-          "line-color": colors.measuringLine,
-          "line-width": 5,
-        },
+        color: colors.measuringLine,
+        width: 5,
       });
     } else {
-      // @ts-ignore setData not happy for some reason
-      $map.getSource(layerName)?.setData(lineToMeasure);
+      ($map.getSource(layerName) as GeoJSONSource).setData(
+        lineToMeasure as Feature<LineString, GeoJsonProperties>
+      );
     }
   }
+
+  onMount(() => {
+    $map.on("click", handleMapClickEvent);
+  });
+
+  onDestroy(() => {
+    $map.off("click", handleMapClickEvent);
+  });
 </script>
 
 {#if isInactive}
@@ -134,7 +154,7 @@
   </SecondaryButton>
 {/if}
 {#if !isInactive}
-  {#if lineToMeasure}
+  {#if lineToMeasure && lineToMeasure.properties?.length}
     <p>Length: {lineToMeasure.properties?.length}m</p>
   {/if}
   <CollapsibleCard label="Help">
@@ -144,7 +164,7 @@
         on the map to place a new waypoint
       </li>
       <li>
-        <b>Click & Drag</b>
+        <b>Click and Drag</b>
         an existing waypoint to move it
       </li>
       <li>
