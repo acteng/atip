@@ -91,6 +91,7 @@
     }
   }
 
+  // TODO: this callback being used by the draggable pin is quite smelly, we should aim to have this be more reactive but I don't know how just yet
   function waypointsUpdated() {
     if (waypoints.length < 2) {
       removeLineFromMap();
