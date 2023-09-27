@@ -15,9 +15,11 @@
       $map.getCanvas().style.cursor = "grabbing";
     });
     marker.on("drag", () => {
-      $map.getCanvas().style.cursor = "inherit";
       markerPosition = marker!.getLngLat();
       markerPositionUpdated();
+    });
+    marker.on("dragend", () => {
+      $map.getCanvas().style.cursor = "inherit";
     });
   });
   onDestroy(() => {
