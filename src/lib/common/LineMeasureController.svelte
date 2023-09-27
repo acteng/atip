@@ -1,15 +1,15 @@
 <script lang="ts">
-  import {
-    lineString,
-    type Feature,
-    type LineString,
-  } from "@turf/helpers";
+  import { lineString, type Feature, type LineString } from "@turf/helpers";
   import length from "@turf/length";
   import { colors } from "colors";
   import type { GeoJSON, GeoJsonProperties } from "geojson";
-  import Pin from "lib/critical_entry/Pin.svelte";
+  import DraggablePin from "lib/common/DraggablePin.svelte";
   import { SecondaryButton } from "lib/govuk";
-  import { emptyGeojson, overwriteLineLayer, overwriteSource } from "lib/maplibre";
+  import {
+    emptyGeojson,
+    overwriteLineLayer,
+    overwriteSource,
+  } from "lib/maplibre";
   import { GeoJSONSource, LngLat, MapMouseEvent } from "maplibre-gl";
   import { map } from "stores";
   import { onDestroy, onMount } from "svelte";
@@ -110,9 +110,8 @@
   }
 
   function removeLineFromMap() {
-    if ($map.getSource(layerName)) {($map.getSource(layerName) as GeoJSONSource).setData(
-        emptyGeojson()
-      );
+    if ($map.getSource(layerName)) {
+      ($map.getSource(layerName) as GeoJSONSource).setData(emptyGeojson());
 
       lineToMeasure = undefined;
     }
@@ -120,7 +119,7 @@
 
   function updateLinestring() {
     if (!$map.getSource(layerName)) {
-      overwriteSource($map, layerName, (lineToMeasure as GeoJSON));
+      overwriteSource($map, layerName, lineToMeasure as GeoJSON);
 
       overwriteLineLayer($map, {
         id: layerName,
@@ -178,7 +177,7 @@
     </ul>
   </CollapsibleCard>
   {#each waypoints as waypoint (waypoint.id)}
-    <Pin
+    <DraggablePin
       bind:markerPosition={waypoint.lngLat}
       markerPositionUpdated={waypointsUpdated}
     />
