@@ -290,17 +290,21 @@ export function prettyPrintMeters(x: number): string {
 }
 
 export function getStyleChoices(): [string, string][] {
-  let choices: [string, string][] = [
-    ["streets", "Streets"],
-    ["hybrid", "Satellite"],
-    ["dataviz", "Dataviz"],
-  ];
+  let choices: [string, string][] = [];
+
   if (appVersion() == "Private (development)") {
-    choices.push(["Road", "OS Road"]);
-    choices.push(["Light", "OS Light"]);
-    choices.push(["Outdoor", "OS Outdoor"]);
+    choices = choices.concat([
+      ["Road", "OS Road"],
+      ["Light", "OS Light"],
+      ["Outdoor", "OS Outdoor"],
+      ["bluesky", "Bluesky Satellite (12.5cm)"],
+    ]);
   }
-  return choices;
+  return choices.concat([
+    ["streets", "MapTiler Streets"],
+    ["hybrid", "MapTiler Satellite"],
+    ["dataviz", "MapTiler Dataviz"],
+  ]);
 }
 
 export async function getStyleSpecification(
@@ -316,23 +320,31 @@ export async function getStyleSpecification(
   let resp = await fetch(`${privateResourceBaseUrl()}/api_keys.json`);
   let apiKeys = await resp.json();
 
-  // OS Raster styles
+  let tiles;
+  let attribution;
+  if (style == "bluesky") {
+    // TODO Consider adding as an extra source underneath labels, or mixed with some opacity
+    tiles = `https://ogc.apps.midgard.airbusds-cint.com/apgb/wmts/rest/apgb:AP-12CM5-GB-LATEST/default/EPSG-3857/EPSG:3857:{z}/{y}/{x}?GUID=${apiKeys.bluesky}&format=image/png&TRANSPARENT=FALSE,`;
+    attribution = "Bluesky";
+  } else {
+    tiles = `https://api.os.uk/maps/raster/v1/zxy/${style}_3857/{z}/{x}/{y}.png?key=${apiKeys.ordnance_survey}`;
+    attribution =
+      "Contains OS data &copy; Crown copyright and database rights 2023";
+  }
+
   return {
     version: 8,
     sources: {
       "raster-tiles": {
         type: "raster",
-        tiles: [
-          `https://api.os.uk/maps/raster/v1/zxy/${style}_3857/{z}/{x}/{y}.png?key=${apiKeys.ordnance_survey}`,
-        ],
+        tiles: [tiles],
         tileSize: 256,
-        attribution:
-          "Contains OS data &copy; Crown copyright and database rights 2023",
+        attribution,
       },
     },
     layers: [
       {
-        id: "os-maps-zxy",
+        id: "raster-basemap",
         type: "raster",
         source: "raster-tiles",
       },
