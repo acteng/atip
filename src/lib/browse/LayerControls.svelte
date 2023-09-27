@@ -5,6 +5,7 @@
     CollapsibleCard,
     StreetViewController,
   } from "lib/common";
+  import LineMeasureController from "lib/common/LineMeasureController.svelte";
   import { CheckboxGroup } from "lib/govuk";
   import { interactiveMapLayersEnabled } from "stores";
   import CensusOutputAreaLayerControl from "./layers/areas/CensusOutputAreas.svelte";
@@ -81,11 +82,14 @@
       <RoadSpeedsLayerControl />
     {/if}
   </CollapsibleCard>
-  <StreetViewController
-    bind:this={streetViewController}
-    displayEnableButton
-    bind:isInactive={$interactiveMapLayersEnabled}
-  />
+  <CollapsibleCard label="Tools">
+    <StreetViewController
+      bind:this={streetViewController}
+      displayEnableButton
+      bind:isInactive={$interactiveMapLayersEnabled}
+    />
+    <LineMeasureController />
+  </CollapsibleCard>
   <BaselayerSwitcher {style} />
 </CollapsibleCard>
 

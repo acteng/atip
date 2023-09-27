@@ -424,4 +424,5 @@ const layerZorder = [
 
   // Draw the inverted boundary fade on top of basemap labels
   "boundary",
+  "measurement-line",
 ];
