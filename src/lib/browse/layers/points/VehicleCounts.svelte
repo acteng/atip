@@ -24,7 +24,7 @@
   let show = false;
 
   function tooltip(feature: Feature): [string, string, string, string] {
-    let props = feature.properties;
+    let props = feature.properties!;
     return [
       props.location,
       props.motor_vehicles_2022.toLocaleString(),
@@ -35,7 +35,9 @@
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
-      `https://roadtraffic.dft.gov.uk/manualcountpoints/${e.detail.features[0].properties.count_point}`,
+      `https://roadtraffic.dft.gov.uk/manualcountpoints/${
+        e.detail.features[0].properties!.count_point
+      }`,
       "_blank"
     );
   }

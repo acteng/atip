@@ -36,7 +36,7 @@
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    let oa = e.detail.features[0].properties["OA21CD"];
+    let oa = e.detail.features[0].properties!["OA21CD"];
     if (
       colorBy == "percent_households_with_car" ||
       colorBy == "average_cars_per_household"

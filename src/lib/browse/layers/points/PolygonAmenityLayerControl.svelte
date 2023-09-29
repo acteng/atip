@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Feature } from "geojson";
   import { ColorLegend, HelpButton, publicResourceBaseUrl } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
@@ -27,10 +26,6 @@
   let color = colors[name];
 
   let show = false;
-
-  function tooltip(feature: Feature): string {
-    return feature.properties.name ?? `Unnamed ${singularNoun}`;
-  }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -57,7 +52,7 @@
     manageHoverState
   >
     <Popup openOn="hover" let:features>
-      <p>{tooltip(features[0])}</p>
+      <p>{features[0].properties.name ?? `Unnamed ${singularNoun}`}</p>
     </Popup>
   </FillLayer>
 </VectorTileSource>

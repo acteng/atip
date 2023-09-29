@@ -25,7 +25,7 @@
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     // There are common suffixes that don't work with the search
-    let name = e.detail.features[0].properties.Name;
+    let name = e.detail.features[0].properties!.Name;
     name = name.replace(/ Boro Const$/, "");
     name = name.replace(/ Co Const$/, "");
     name = encodeURIComponent(name);

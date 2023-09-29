@@ -40,7 +40,7 @@
 
   function clickCluster(e: CustomEvent<LayerClickInfo>) {
     ($map.getSource(source) as GeoJSONSource).getClusterExpansionZoom(
-      e.detail.features[0].properties.cluster_id,
+      e.detail.features[0].properties!.cluster_id,
       (err, zoom) => {
         if (!err) {
           $map.easeTo({

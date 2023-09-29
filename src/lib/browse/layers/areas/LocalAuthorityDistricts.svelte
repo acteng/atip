@@ -25,7 +25,9 @@
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
-      `https://www.ons.gov.uk/visualisations/areas/${e.detail.features[0].properties.LAD23CD}`,
+      `https://www.ons.gov.uk/visualisations/areas/${
+        e.detail.features[0].properties!.LAD23CD
+      }`,
       "_blank"
     );
   }

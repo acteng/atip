@@ -11,7 +11,7 @@ import type {
 import { appVersion, privateResourceBaseUrl } from "lib/common";
 import type {
   DataDrivenPropertyValueSpecification,
-  FilterSpecification,
+  ExpressionSpecification,
   LayerSpecification,
   Map,
   StyleSpecification,
@@ -23,9 +23,9 @@ const defaultColor = "#000000";
 const defaultFilter = true;
 const defaultOpacity = 1;
 
-export const isPolygon: FilterSpecification = ["==", "$type", "Polygon"];
-export const isLine: FilterSpecification = ["==", "$type", "LineString"];
-export const isPoint: FilterSpecification = ["==", "$type", "Point"];
+export const isPolygon: ExpressionSpecification = ["==", "$type", "Polygon"];
+export const isLine: ExpressionSpecification = ["==", "$type", "LineString"];
+export const isPoint: ExpressionSpecification = ["==", "$type", "Point"];
 
 // This sets up a GeoJSON source. MapLibre's API isn't idempotent; you can't
 // overwrite an existing source or layer. This complicates Vite's hot-reload
@@ -104,7 +104,7 @@ export function overwritePolygonLayer(
   params: {
     id: string;
     source: string;
-    filter?: FilterSpecification;
+    filter?: ExpressionSpecification;
     // For vector (non GeoJSON) sources
     sourceLayer?: string;
     color: DataDrivenPropertyValueSpecification<string>;
@@ -132,7 +132,7 @@ export function overwriteCircleLayer(
   params: {
     id: string;
     source: string;
-    filter?: FilterSpecification;
+    filter?: ExpressionSpecification;
     // For vector (non GeoJSON) sources
     sourceLayer?: string;
     color?: DataDrivenPropertyValueSpecification<string>;
@@ -166,7 +166,7 @@ export function overwriteLineLayer(
   params: {
     id: string;
     source: string;
-    filter?: FilterSpecification;
+    filter?: ExpressionSpecification;
     // For vector (non GeoJSON) sources
     sourceLayer?: string;
     color: DataDrivenPropertyValueSpecification<string>;
