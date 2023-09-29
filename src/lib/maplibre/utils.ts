@@ -347,6 +347,37 @@ export async function getStyleSpecification(
   };
 }
 
+// Returns all the input features, additionally with a new point for every
+// LineString endpoint, with an endpoint=true property.
+export function addLineStringEndpoints(
+  input: FeatureCollection
+): FeatureCollection {
+  let copy = JSON.parse(JSON.stringify(input));
+  // Add points for the ends of every LineString
+  let endpoints = [];
+  for (let f of copy.features) {
+    if (f.geometry.type == "LineString" && !f.properties.hide_while_editing) {
+      for (let pt of [
+        f.geometry.coordinates[0],
+        f.geometry.coordinates[f.geometry.coordinates.length - 1],
+      ]) {
+        endpoints.push({
+          type: "Feature",
+          properties: {
+            endpoint: true,
+          },
+          geometry: {
+            type: "Point",
+            coordinates: pt,
+          },
+        });
+      }
+    }
+  }
+  copy.features = copy.features.concat(endpoints);
+  return copy;
+}
+
 // Properties are guaranteed to exist
 export type FeatureWithProps<G extends Geometry> = Feature<G> & {
   properties: { [name: string]: any };

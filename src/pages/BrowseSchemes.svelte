@@ -9,22 +9,18 @@
   import SchemeCard from "lib/browse/SchemeCard.svelte";
   import authorityNamesList from "../../assets/authority_names.json";
   import "../style/main.css";
+  import InterventionLayer from "lib/browse/InterventionLayer.svelte";
   import {
     appVersion,
     FileInput,
-    InteractiveLayer,
     Layout,
     LoggedIn,
     MapLibreMap,
     ZoomOutMap,
   } from "lib/common";
-  import InterventionLayer from "lib/draw/InterventionLayer.svelte";
   import { ErrorMessage } from "lib/govuk";
-  import { emptyGeojson, prettyPrintMeters } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { colorInterventionsBySchema } from "schemas";
   import { gjScheme, mapStyle } from "stores";
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import type { Scheme as GjScheme } from "types";
 
   // TODO Remove after the input data is fixed to plumb correct authority names.
@@ -42,49 +38,16 @@
   let schemes: Map<string, Scheme> = new Map();
   let schemesToBeShown: Set<string> = new Set();
   let filterText = "";
-
-  onDestroy(() => {
-    gjScheme.set(emptyGeojson() as GjScheme);
-  });
+  let showSchemes = true;
 
   function loadFile(text: string) {
     try {
-      let gj = JSON.parse(text);
-      schemes = processInput(gj);
-      gjScheme.set(gj);
+      gjScheme.set(JSON.parse(text));
+      schemes = processInput($gjScheme as GjScheme);
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
     }
-  }
-
-  function tooltip(feature: MapGeoJSONFeature): string {
-    let props = feature.properties;
-    // TODO Move into a Svelte component, so we don't have to awkwardly build up HTML like this
-    var html = `<div style="max-width: 30vw;">`;
-    html += `<h2>${highlightFilter(props.name)} (${
-      props.intervention_type
-    })</h2>`;
-    html += `<p>Scheme reference: ${props.scheme_reference}</p>`;
-    if (props.length_meters) {
-      html += `<p>Length: ${prettyPrintMeters(props.length_meters)}</p>`;
-    }
-    if (props.description) {
-      html += `<p>${highlightFilter(props.description)}</p>`;
-    }
-    html += `</div>`;
-    return html;
-  }
-
-  // When the user is filtering name/description by freeform text, highlight the matching pieces.
-  function highlightFilter(input: string): string {
-    if (!filterText) {
-      return input;
-    }
-    return input.replace(
-      new RegExp(filterText, "gi"),
-      (match) => `<mark>${match}</mark>`
-    );
   }
 </script>
 
@@ -103,7 +66,12 @@
     <ErrorMessage {errorMessage} />
 
     {#if schemes.size > 0}
-      <Filters {schemes} bind:schemesToBeShown bind:filterText />
+      <Filters
+        {schemes}
+        bind:schemesToBeShown
+        bind:filterText
+        bind:show={showSchemes}
+      />
     {/if}
 
     <ul>
@@ -116,24 +84,7 @@
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
-      <InterventionLayer
-        colorInterventions={colorInterventionsBySchema("v1")}
-      />
-      <InteractiveLayer
-        layer="interventions-points"
-        {tooltip}
-        clickable={false}
-      />
-      <InteractiveLayer
-        layer="interventions-lines"
-        {tooltip}
-        clickable={false}
-      />
-      <InteractiveLayer
-        layer="interventions-polygons"
-        {tooltip}
-        clickable={false}
-      />
+      <InterventionLayer {filterText} {showSchemes} />
       <div class="top-right">
         <LayerControls />
       </div>

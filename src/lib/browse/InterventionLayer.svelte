@@ -6,17 +6,27 @@
     isPoint,
     isPolygon,
   } from "lib/maplibre";
-  import type {
-    DataDrivenPropertyValueSpecification,
-    FilterSpecification,
-  } from "maplibre-gl";
+  import type { FilterSpecification } from "maplibre-gl";
+  import { colorInterventionsBySchema } from "schemas";
   import { gjScheme } from "stores";
-  import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
+  import {
+    CircleLayer,
+    FillLayer,
+    GeoJSON,
+    LineLayer,
+    Popup,
+  } from "svelte-maplibre";
+  import type { Scheme as GjScheme } from "types";
+  import InterventionPopup from "./InterventionPopup.svelte";
 
-  export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
+  export let showSchemes: boolean;
+  export let filterText: string;
+
+  let colorInterventions = colorInterventionsBySchema("v1");
 
   $: gj = addLineStringEndpoints($gjScheme);
 
+  // TODO Abusing this property for filtering
   const hideWhileEditing: FilterSpecification = [
     "!=",
     "hide_while_editing",
@@ -33,7 +43,14 @@
       "circle-color": colorInterventions,
       "circle-radius": circleRadius,
     }}
-  />
+    layout={{
+      visibility: showSchemes ? "visible" : "none",
+    }}
+  >
+    <Popup openOn="hover" let:features>
+      <InterventionPopup feature={features[0]} {filterText} />
+    </Popup>
+  </CircleLayer>
 
   <LineLayer
     id="interventions-lines"
@@ -42,7 +59,14 @@
       "line-color": colorInterventions,
       "line-width": lineWidth,
     }}
-  />
+    layout={{
+      visibility: showSchemes ? "visible" : "none",
+    }}
+  >
+    <Popup openOn="hover" let:features>
+      <InterventionPopup feature={features[0]} {filterText} />
+    </Popup>
+  </LineLayer>
   <CircleLayer
     id="interventions-lines-endpoints"
     filter={["==", "endpoint", true]}
@@ -51,6 +75,9 @@
       "circle-opacity": 0,
       "circle-stroke-color": colors.lineEndpointColor,
       "circle-stroke-width": 2.0,
+    }}
+    layout={{
+      visibility: showSchemes ? "visible" : "none",
     }}
   />
 
@@ -61,7 +88,14 @@
       "fill-color": colorInterventions,
       "fill-opacity": 0.2,
     }}
-  />
+    layout={{
+      visibility: showSchemes ? "visible" : "none",
+    }}
+  >
+    <Popup openOn="hover" let:features>
+      <InterventionPopup feature={features[0]} {filterText} />
+    </Popup>
+  </FillLayer>
   <LineLayer
     id="interventions-polygons-outlines"
     filter={["all", isPolygon, hideWhileEditing]}
@@ -69,6 +103,9 @@
       "line-color": colorInterventions,
       "line-opacity": 0.5,
       "line-width": 0.7 * lineWidth,
+    }}
+    layout={{
+      visibility: showSchemes ? "visible" : "none",
     }}
   />
 </GeoJSON>

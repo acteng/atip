@@ -25,24 +25,22 @@
   let show = false;
 
   function tooltip(feature: Feature): [string, string, string] {
+    let props = feature.properties!;
     // @ts-ignore Write types for the feature properties
     let kind = {
       track: "Separated track",
       lane: "Unprotected lane",
       shared_use_segregated: "Shared-use (segregated)",
       shared_use_unsegregated: "Shared-use (unsegregated)",
-    }[feature.properties.kind];
+    }[props.kind];
     // @ts-ignore Write types for the feature properties
     let direction = {
       "one-way": "&uarr;",
       "two-way": "&#8597;",
       unknown: "",
-    }[feature.properties.direction];
-    let width =
-      feature.properties.width == "unknown"
-        ? "unknown"
-        : `${feature.properties.width} meters`;
-    return [kind, `${direction} ${feature.properties.direction}`, width];
+    }[props.direction];
+    let width = props.width == "unknown" ? "unknown" : `${props.width} meters`;
+    return [kind, `${direction} ${props.direction}`, width];
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
