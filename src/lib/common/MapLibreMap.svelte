@@ -2,15 +2,12 @@
   import { getStyleSpecification } from "lib/maplibre";
   import {
     Map,
-    NavigationControl,
-    ScaleControl,
-    type LayerSpecification,
     type LngLatBoundsLike,
     type StyleSpecification,
   } from "maplibre-gl";
   import { map as mapStore } from "stores";
   import { onMount } from "svelte";
-  import { MapLibre } from "svelte-maplibre";
+  import { MapLibre, NavigationControl, ScaleControl } from "svelte-maplibre";
 
   export let style: string;
   export let startBounds: LngLatBoundsLike | null = null;
@@ -27,12 +24,6 @@
 
   onMount(async () => {
     styleSpec = await getStyleSpecification(style);
-    /*map.addControl(new ScaleControl({}));
-    map.addControl(
-      new NavigationControl({ visualizePitch: true }),
-      "bottom-right"
-    );*/
-
     /*map.on("load", () => {
       loaded = true;
       if (setCamera && startBounds) {
@@ -55,14 +46,10 @@
 
 <div class="map">
   {#if styleSpec}
-    <MapLibre
-      style={styleSpec}
-      standardControls
-      bounds={startBounds}
-      bind:loaded
-      bind:map
-    >
+    <MapLibre style={styleSpec} bounds={startBounds} bind:loaded bind:map>
       {#if loaded}
+        <ScaleControl />
+        <NavigationControl position="bottom-right" visualizePitch />
         <slot />
       {/if}
     </MapLibre>

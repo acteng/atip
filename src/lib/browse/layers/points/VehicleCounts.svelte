@@ -22,7 +22,6 @@
   let describeLimits = ["", "40k", "80k", "120k", "160k", ""];
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   function tooltip(feature: Feature): [string, string, string, string] {
     let props = feature.properties;
@@ -99,7 +98,7 @@
       "circle-stroke-width": 0.1,
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     on:click={onClick}
   >

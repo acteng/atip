@@ -11,7 +11,6 @@
     LineLayer,
     Popup,
     VectorTileSource,
-    type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
@@ -20,7 +19,6 @@
   let color = colors.mrn;
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -52,7 +50,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   >
     <Popup openOn="hover" let:features>

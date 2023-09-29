@@ -22,7 +22,6 @@
   let outlineLayer = `${name}-outline`;
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     // There are common suffixes that don't work with the search
@@ -67,7 +66,7 @@
       "fill-opacity": hoverStateFilter(0.0, 0.5),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     manageHoverState
     on:click={onClick}
@@ -85,7 +84,7 @@
       "line-width": 5,
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   />
 </VectorTileSource>

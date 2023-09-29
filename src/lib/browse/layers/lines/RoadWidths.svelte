@@ -16,7 +16,6 @@
   let limits = [0, 5, 10, 15, 20, 100];
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -58,7 +57,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   >
     <Popup openOn="hover" let:features>

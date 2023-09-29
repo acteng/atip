@@ -22,9 +22,6 @@
   let scenario = "baseline";
 
   let show = false;
-  $: visibilityCommute =
-    show && tripPurpose == nameCommute ? "visible" : "none";
-  $: visibilitySchool = show && tripPurpose == nameSchool ? "visible" : "none";
 
   // TODO Awkward to do in a Svelte component?
   function tooltip(feature: Feature): string {
@@ -111,7 +108,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: visibilityCommute,
+      visibility: show && tripPurpose == nameCommute ? "visible" : "none",
     }}
   >
     <Popup openOn="hover" let:features>
@@ -131,7 +128,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: visibilitySchool,
+      visibility: show && tripPurpose == nameSchool ? "visible" : "none",
     }}
   >
     <Popup openOn="hover" let:features>

@@ -8,7 +8,7 @@
   import type { Feature, LineString, Point, Position } from "geojson";
   import { CollapsibleCard } from "lib/common";
   import { emptyGeojson, setPrecision } from "lib/maplibre";
-  import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
+  import type { MapMouseEvent } from "maplibre-gl";
   import { currentMode, gjScheme, map, newFeatureId } from "stores";
   import { CircleLayer, GeoJSON } from "svelte-maplibre";
   import type { Mode, Feature as OurFeature } from "types";

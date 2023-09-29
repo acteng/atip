@@ -18,7 +18,6 @@
   let showSpeed = "indicative_mph";
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   let times = {
     mf4to7: "Monday-Friday 4-7am",
@@ -89,7 +88,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   >
     <Popup openOn="hover" let:features>

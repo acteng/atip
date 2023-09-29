@@ -7,6 +7,7 @@
     FormElement,
   } from "lib/govuk";
   import { emptyGeojson } from "lib/maplibre";
+  import type { GeoJSONSource } from "maplibre-gl";
   import { map } from "stores";
   import {
     CircleLayer,
@@ -22,7 +23,6 @@
   let source = "criticals";
   let color = "red";
   let show = true;
-  $: visibility = show ? "visible" : "none";
   let numberIssues = 0;
   let errorMessage = "";
 
@@ -92,7 +92,9 @@
       // 20 pixels for clusters with < 15 points, 30 pixels for < 30 points, and 40 pixels for more
       "circle-radius": ["step", ["get", "point_count"], 20, 15, 30, 30, 40],
     }}
-    layout={{ visibility }}
+    layout={{
+      visibility: show ? "visible" : "none",
+    }}
     hoverCursor="pointer"
     on:click={clickCluster}
   />
@@ -100,7 +102,7 @@
     applyToClusters
     layout={{
       "text-field": "{point_count_abbreviated}",
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   />
   <CircleLayer
@@ -113,7 +115,9 @@
       "circle-stroke-color": "black",
       "circle-stroke-width": 3,
     }}
-    layout={{ visibility }}
+    layout={{
+      visibility: show ? "visible" : "none",
+    }}
   >
     <Popup openOn="click" let:features>
       {@const props = features[0].properties}

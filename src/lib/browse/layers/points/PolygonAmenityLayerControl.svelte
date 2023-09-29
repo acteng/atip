@@ -5,10 +5,8 @@
   import {
     FillLayer,
     hoverStateFilter,
-    LineLayer,
     Popup,
     VectorTileSource,
-    type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
 
@@ -29,7 +27,6 @@
   let color = colors[name];
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   function tooltip(feature: Feature): string {
     return feature.properties.name ?? `Unnamed ${singularNoun}`;
@@ -55,7 +52,7 @@
       "fill-opacity": hoverStateFilter(0.7, 1.0),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     manageHoverState
   >

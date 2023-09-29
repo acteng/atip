@@ -7,12 +7,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import {
-    CircleLayer,
-    Popup,
-    VectorTileSource,
-    type LayerClickInfo,
-  } from "svelte-maplibre";
+  import { CircleLayer, Popup, VectorTileSource } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
 
@@ -20,7 +15,6 @@
   let color = colors.cycle_parking;
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   function tooltip(feature: Feature): string {
     let capacity = feature.properties.capacity ?? "unknown";
@@ -67,7 +61,7 @@
       ],
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     manageHoverState
   >

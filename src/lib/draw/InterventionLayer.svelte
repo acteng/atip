@@ -6,7 +6,7 @@
     DataDrivenPropertyValueSpecification,
     FilterSpecification,
   } from "maplibre-gl";
-  import { gjScheme, map } from "stores";
+  import { gjScheme } from "stores";
   import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
 
   export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
