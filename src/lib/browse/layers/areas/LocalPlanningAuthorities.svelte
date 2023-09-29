@@ -3,6 +3,7 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
+    Popup,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
@@ -10,7 +11,6 @@
     FillLayer,
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
@@ -83,8 +83,8 @@
     }}
     manageHoverState
   >
-    <Popup openOn="hover" let:features>
-      <p>{features[0].properties.name}</p>
+    <Popup let:props>
+      <p>{props.name}</p>
     </Popup>
   </FillLayer>
   <LineLayer

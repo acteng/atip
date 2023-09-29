@@ -3,6 +3,7 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
+    Popup,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
@@ -11,7 +12,6 @@
     GeoJSON,
     hoverStateFilter,
     LineLayer,
-    Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
@@ -64,8 +64,8 @@
     on:click={onClick}
     hoverCursor="pointer"
   >
-    <Popup openOn="hover" let:features>
-      <p>{features[0].properties.name}</p>
+    <Popup let:props>
+      <p>{props.name}</p>
     </Popup>
   </FillLayer>
   <LineLayer

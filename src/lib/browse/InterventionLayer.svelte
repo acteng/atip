@@ -1,5 +1,6 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
+  import { Popup } from "lib/common";
   import {
     addLineStringEndpoints,
     isLine,
@@ -9,14 +10,7 @@
   import type { FilterSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema } from "schemas";
   import { gjScheme } from "stores";
-  import {
-    CircleLayer,
-    FillLayer,
-    GeoJSON,
-    LineLayer,
-    Popup,
-  } from "svelte-maplibre";
-  import type { Scheme as GjScheme } from "types";
+  import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
   import InterventionPopup from "./InterventionPopup.svelte";
 
   export let showSchemes: boolean;
@@ -47,8 +41,8 @@
       visibility: showSchemes ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      <InterventionPopup feature={features[0]} {filterText} />
+    <Popup let:props>
+      <InterventionPopup {props} {filterText} />
     </Popup>
   </CircleLayer>
 
@@ -63,8 +57,8 @@
       visibility: showSchemes ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      <InterventionPopup feature={features[0]} {filterText} />
+    <Popup let:props>
+      <InterventionPopup {props} {filterText} />
     </Popup>
   </LineLayer>
   <CircleLayer
@@ -92,8 +86,8 @@
       visibility: showSchemes ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      <InterventionPopup feature={features[0]} {filterText} />
+    <Popup let:props>
+      <InterventionPopup {props} {filterText} />
     </Popup>
   </FillLayer>
   <LineLayer

@@ -1,12 +1,15 @@
 <script lang="ts">
-  import type { Feature } from "geojson";
-  import { ColorLegend, HelpButton, publicResourceBaseUrl } from "lib/common";
+  import {
+    ColorLegend,
+    HelpButton,
+    Popup,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { constructMatchExpression } from "lib/maplibre";
   import {
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
     type LayerClickInfo,
   } from "svelte-maplibre";
@@ -24,8 +27,7 @@
 
   let show = false;
 
-  function tooltip(feature: Feature): [string, string, string] {
-    let props = feature.properties!;
+  function tooltip(props: { [name: string]: any }): [string, string, string] {
     // @ts-ignore Write types for the feature properties
     let kind = {
       track: "Separated track",
@@ -124,8 +126,8 @@
     hoverCursor="pointer"
     on:click={onClick}
   >
-    <Popup openOn="hover" let:features>
-      {@const [kind, direction, width] = tooltip(features[0])}
+    <Popup let:props>
+      {@const [kind, direction, width] = tooltip(props)}
       <h2>{kind}</h2>
       <p>
         Direction: <b>{@html direction}</b>

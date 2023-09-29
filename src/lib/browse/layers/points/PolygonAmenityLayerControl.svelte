@@ -1,10 +1,14 @@
 <script lang="ts">
-  import { ColorLegend, HelpButton, publicResourceBaseUrl } from "lib/common";
+  import {
+    ColorLegend,
+    HelpButton,
+    Popup,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
     FillLayer,
     hoverStateFilter,
-    Popup,
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
@@ -51,8 +55,8 @@
     }}
     manageHoverState
   >
-    <Popup openOn="hover" let:features>
-      <p>{features[0].properties.name ?? `Unnamed ${singularNoun}`}</p>
+    <Popup let:props>
+      <p>{props.name ?? `Unnamed ${singularNoun}`}</p>
     </Popup>
   </FillLayer>
 </VectorTileSource>

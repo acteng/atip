@@ -1,12 +1,16 @@
 <script lang="ts">
-  import { ExternalLink, HelpButton, publicResourceBaseUrl } from "lib/common";
+  import {
+    ExternalLink,
+    HelpButton,
+    Popup,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { makeColorRamp } from "lib/maplibre";
   import {
     FillLayer,
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
@@ -67,8 +71,7 @@
     }}
     manageHoverState
   >
-    <Popup openOn="hover" let:features>
-      {@const props = features[0].properties}
+    <Popup let:props>
       <p>
         {props.LSOA11CD} has an IMD score of
         <b>{props.score}</b>

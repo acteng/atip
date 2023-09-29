@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CollapsibleCard, ColorLegend } from "lib/common";
+  import { CollapsibleCard, ColorLegend, Popup } from "lib/common";
   import {
     Checkbox,
     CheckboxGroup,
@@ -12,7 +12,6 @@
   import {
     CircleLayer,
     GeoJSON,
-    Popup,
     SymbolLayer,
     type LayerClickInfo,
   } from "svelte-maplibre";
@@ -119,8 +118,7 @@
       visibility: show ? "visible" : "none",
     }}
   >
-    <Popup openOn="click" let:features>
-      {@const props = features[0].properties}
+    <Popup let:props>
       <div style="max-width: 30vw;">
         <h2>{props.critical_type}</h2>
         <p>

@@ -13,6 +13,7 @@ export { default as InteractiveLayer } from "./InteractiveLayer.svelte";
 export { default as Layout } from "./Layout.svelte";
 export { default as Legend } from "./Legend.svelte";
 export { default as LoggedIn } from "./LoggedIn.svelte";
+export { default as Popup } from "./Popup.svelte";
 export { default as MapLibreMap } from "./MapLibreMap.svelte";
 export { default as Modal } from "./Modal.svelte";
 export { default as StreetViewController } from "./StreetViewController.svelte";

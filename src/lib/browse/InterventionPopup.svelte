@@ -1,11 +1,8 @@
 <script lang="ts">
-  import type { Feature } from "geojson";
   import { prettyPrintMeters } from "lib/maplibre";
 
-  export let feature: Feature;
+  export let props: { [name: string]: any };
   export let filterText: string;
-
-  let props = feature.properties!;
 
   // When the user is filtering name/description by freeform text, highlight the matching pieces.
   function highlightFilter(input: string): string {

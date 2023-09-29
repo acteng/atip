@@ -3,10 +3,11 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
+    Popup,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { CircleLayer, Popup, VectorTileSource } from "svelte-maplibre";
+  import { CircleLayer, VectorTileSource } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
 
@@ -59,10 +60,9 @@
     }}
     manageHoverState
   >
-    <Popup openOn="hover" let:features>
-      {@const capacity = features[0].properties.capacity ?? "unknown"}
+    <Popup let:props>
       <p>
-        Capacity: <b>{capacity}</b>
+        Capacity: <b>{props.capacity ?? "unknown"}</b>
       </p>
     </Popup>
   </CircleLayer>

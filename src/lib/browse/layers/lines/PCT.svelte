@@ -1,12 +1,15 @@
 <script lang="ts">
-  import type { Feature } from "geojson";
-  import { ExternalLink, HelpButton, publicResourceBaseUrl } from "lib/common";
+  import {
+    ExternalLink,
+    HelpButton,
+    Popup,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox, Radio, Select } from "lib/govuk";
   import { makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
@@ -24,10 +27,10 @@
   let show = false;
 
   // TODO Awkward to do in a Svelte component?
-  function tooltip(feature: Feature): string {
-    let baseline = feature.properties!.baseline;
-    let gov_target = feature.properties!.gov_target;
-    let go_dutch = feature.properties!.go_dutch;
+  function tooltip(props: { [name: string]: any }): string {
+    let baseline = props.baseline;
+    let gov_target = props.gov_target;
+    let go_dutch = props.go_dutch;
 
     let x = `<h2>Trip purpose: ${
       tripPurpose == nameCommute ? "commuting" : "school"
@@ -111,8 +114,8 @@
       visibility: show && tripPurpose == nameCommute ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      {@html tooltip(features[0])}
+    <Popup let:props>
+      {@html tooltip(props)}
     </Popup>
   </LineLayer>
 </VectorTileSource>
@@ -131,8 +134,8 @@
       visibility: show && tripPurpose == nameSchool ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      {@html tooltip(features[0])}
+    <Popup let:props>
+      {@html tooltip(props)}
     </Popup>
   </LineLayer>
 </VectorTileSource>
