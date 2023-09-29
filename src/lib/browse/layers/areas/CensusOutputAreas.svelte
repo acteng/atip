@@ -209,7 +209,7 @@
         <p>
           Households in {oa} have an average of
           <b>{value}</b>
-           cars
+          cars
         </p>
       {:else}
         <p>
