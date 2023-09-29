@@ -1,6 +1,5 @@
 <script lang="ts">
   import { circleRadius } from "colors";
-  import type { Feature } from "geojson";
   import {
     ColorLegend,
     ExternalLink,
@@ -16,10 +15,6 @@
   let color = colors.railway_stations;
 
   let show = false;
-
-  function tooltip(feature: Feature): string {
-    return feature.properties.name ?? "Unnamed railway station";
-  }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -51,7 +46,7 @@
     }}
   >
     <Popup openOn="hover" let:features>
-      <p>{tooltip(features[0])}</p>
+      <p>{features[0].properties.name ?? "Unnamed railway station"}</p>
     </Popup>
   </CircleLayer>
 </GeoJSON>

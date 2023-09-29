@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Feature } from "geojson";
   import {
     ColorLegend,
     ExternalLink,
@@ -15,11 +14,6 @@
   let color = colors.cycle_parking;
 
   let show = false;
-
-  function tooltip(feature: Feature): string {
-    let capacity = feature.properties.capacity ?? "unknown";
-    return `Capacity: ${capacity}`;
-  }
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -66,7 +60,10 @@
     manageHoverState
   >
     <Popup openOn="hover" let:features>
-      <p>{tooltip(features[0])}</p>
+      {@const capacity = features[0].properties.capacity ?? "unknown"}
+      <p>
+        Capacity: <b>{capacity}</b>
+      </p>
     </Popup>
   </CircleLayer>
 </VectorTileSource>

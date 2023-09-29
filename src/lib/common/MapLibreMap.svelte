@@ -10,7 +10,7 @@
   import { MapLibre, NavigationControl, ScaleControl } from "svelte-maplibre";
 
   export let style: string;
-  export let startBounds: LngLatBoundsLike | null = null;
+  export let startBounds: LngLatBoundsLike | undefined = undefined;
 
   let styleSpec: string | StyleSpecification | null = null;
 

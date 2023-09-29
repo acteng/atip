@@ -39,7 +39,7 @@
       ],
     ]);
 
-    const crossingType = feature.properties.crossing;
+    const crossingType = feature.properties!.crossing;
     let description =
       descriptions.get(crossingType) ??
       `Crossing with unknown type (${crossingType})`;
@@ -48,7 +48,9 @@
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
-      `http://openstreetmap.org/node/${e.detail.features[0].properties.osm_id}`,
+      `http://openstreetmap.org/node/${
+        e.detail.features[0].properties!.osm_id
+      }`,
       "_blank"
     );
   }

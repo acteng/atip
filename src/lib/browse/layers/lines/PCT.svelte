@@ -25,9 +25,9 @@
 
   // TODO Awkward to do in a Svelte component?
   function tooltip(feature: Feature): string {
-    let baseline = feature.properties.baseline;
-    let gov_target = feature.properties.gov_target;
-    let go_dutch = feature.properties.go_dutch;
+    let baseline = feature.properties!.baseline;
+    let gov_target = feature.properties!.gov_target;
+    let go_dutch = feature.properties!.go_dutch;
 
     let x = `<h2>Trip purpose: ${
       tripPurpose == nameCommute ? "commuting" : "school"

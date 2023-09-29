@@ -24,7 +24,7 @@
   let show = false;
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    let name = encodeURIComponent(e.detail.features[0].properties.name);
+    let name = encodeURIComponent(e.detail.features[0].properties!.name);
     // Help people find the councillor for this area
     window.open(`https://www.google.com/search?q=${name}+councillor`, "_blank");
   }
