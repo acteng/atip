@@ -1,20 +1,14 @@
 <script lang="ts">
-  import {
-    ExternalLink,
-    HelpButton,
-    InteractiveLayer,
-    publicResourceBaseUrl,
-  } from "lib/common";
+  import { ExternalLink, HelpButton, publicResourceBaseUrl } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { makeColorRamp } from "lib/maplibre";
   import {
-    hoveredToggle,
-    makeColorRamp,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    FillLayer,
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    VectorTileSource,
+  } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
@@ -28,6 +22,7 @@
   let showAverageCars = false;
   let showPopulationDensity = false;
   let colorBy = "";
+  $: visibility = colorBy != "" ? "visible" : "none";
   $: {
     if (showHouseholdsWithCar) {
       colorBy = "percent_households_with_car";
@@ -38,55 +33,10 @@
     } else {
       colorBy = "";
     }
-    if (colorBy) {
-      $map.setPaintProperty(
-        name,
-        "fill-color",
-        makeColorRamp(["get", colorBy], makeLimits(), colorScale)
-      );
-      // InteractiveLayer manages the polygon layer, but we also need to control the outline
-      $map.setLayoutProperty(outlineLayer, "visibility", "visible");
-    } else {
-      $map.setLayoutProperty(outlineLayer, "visibility", "none");
-    }
   }
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwritePolygonLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    // Initially set to a dummy value
-    color: "black",
-    opacity: hoveredToggle(0.5, 0.7),
-  });
-  overwriteLineLayer($map, {
-    id: outlineLayer,
-    source: name,
-    sourceLayer: name,
-    color: "black",
-    width: 0.5,
-  });
-
-  function tooltip(feature: MapGeoJSONFeature): string {
-    let oa = feature.properties["OA21CD"];
-    let value = feature.properties[colorBy];
-    if (colorBy == "percent_households_with_car") {
-      return `<p>${value}% of households in ${oa} have 1 or more cars</p>`;
-    } else if (colorBy == "average_cars_per_household") {
-      return `<p>Households in ${oa} have an average of ${value} cars</p>`;
-    } else {
-      return `<p>There are ${value.toLocaleString()} people per square kilometre in ${oa}</p>`;
-    }
-  }
-
-  function onClick(e: CustomEvent<MapGeoJSONFeature>) {
-    let oa = e.detail.properties["OA21CD"];
+  function onClick(e: CustomEvent<LayerClickInfo>) {
+    let oa = e.detail.features[0].properties["OA21CD"];
     if (
       colorBy == "percent_households_with_car" ||
       colorBy == "average_cars_per_household"
@@ -230,10 +180,53 @@
   />
 {/if}
 
-<InteractiveLayer
-  layer={name}
-  {tooltip}
-  show={colorBy != ""}
-  clickable
-  on:click={onClick}
-/>
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <FillLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "fill-color": makeColorRamp(["get", colorBy], makeLimits(), colorScale),
+      "fill-opacity": hoverStateFilter(0.5, 0.7),
+    }}
+    layout={{
+      visibility,
+    }}
+    manageHoverState
+    hoverCursor="pointer"
+    on:click={onClick}
+  >
+    <Popup openOn="hover" let:features>
+      {@const oa = features[0].properties["OA21CD"]}
+      {@const value = features[0].properties[colorBy]}
+      {#if colorBy == "percent_households_with_car"}
+        <p>
+          <b>{value}%</b>
+          of households in {oa} have 1 or more cars
+        </p>
+      {:else if colorBy == "average_cars_per_household"}
+        <p>
+          Households in {oa} have an average of
+          <b>{value}</b>
+           cars
+        </p>
+      {:else}
+        <p>
+          There are <b>{value.toLocaleString()}</b>
+          people per square kilometre in {oa}
+        </p>
+      {/if}
+    </Popup>
+  </FillLayer>
+  <LineLayer
+    id={outlineLayer}
+    paint={{
+      "line-color": "black",
+      "line-width": 0.5,
+    }}
+    layout={{
+      visibility,
+    }}
+  />
+</VectorTileSource>

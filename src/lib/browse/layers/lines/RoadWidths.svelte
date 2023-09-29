@@ -64,11 +64,11 @@
     <Popup openOn="hover" let:features>
       <p>
         Average width: <b>{features[0].properties.average}</b>
-         meters
+        meters
       </p>
       <p>
         Minimum width: <b>{features[0].properties.minimum}</b>
-         meters
+        meters
       </p>
     </Popup>
   </LineLayer>
