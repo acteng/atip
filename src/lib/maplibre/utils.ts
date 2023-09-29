@@ -40,15 +40,6 @@ export function overwriteSource(map: Map, id: string, data: GeoJSON | string) {
   });
 }
 
-// Like overwriteSource, but for PMTiles data hosted at a URL.
-export function overwritePmtilesSource(map: Map, id: string, url: string) {
-  cleanupSource(map, id);
-  map.addSource(id, {
-    type: "vector",
-    url: `pmtiles://${url}`,
-  });
-}
-
 export function cleanupSource(map: Map, id: string) {
   if (map.getSource(id)) {
     // First remove all layers using this source
