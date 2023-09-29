@@ -53,6 +53,7 @@
 >
   <FillLayer
     id={name}
+    sourceLayer={name}
     paint={{
       // Decile 1 is the most deprived, but we want to invert for the color scale
       "fill-color": makeColorRamp(
