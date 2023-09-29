@@ -1,19 +1,13 @@
 <script lang="ts">
-  import {
-    ExternalLink,
-    HelpButton,
-    InteractiveLayer,
-    privateResourceBaseUrl,
-  } from "lib/common";
+  import { ExternalLink, HelpButton, privateResourceBaseUrl } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { makeColorRamp } from "lib/maplibre";
   import {
-    hoveredToggle,
-    makeColorRamp,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    VectorTileSource,
+  } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
 
@@ -21,29 +15,8 @@
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 5, 10, 15, 20, 100];
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${privateResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwriteLineLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    color: makeColorRamp(["get", "average"], limits, colorScale),
-    // TODO Try showing the actual width, in meters and not pixels
-    width: denseLineWidth,
-    opacity: hoveredToggle(0.5, 1.0),
-  });
-
   let show = false;
-
-  function tooltip(feature: MapGeoJSONFeature): string {
-    let x = `<p>Average width: ${feature.properties.average} meters</p>`;
-    x += `<p>Minimum width: ${feature.properties.minimum} meters</p>`;
-    return x;
-  }
+  $: visibility = show ? "visible" : "none";
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -72,4 +45,31 @@
   <SequentialLegend {colorScale} {limits} />
 {/if}
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<VectorTileSource
+  url={`pmtiles://${privateResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <LineLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "line-color": makeColorRamp(["get", "average"], limits, colorScale),
+      // TODO Try showing the actual width, in meters and not pixels
+      "line-width": denseLineWidth,
+      "line-opacity": hoverStateFilter(1.0, 0.5),
+    }}
+    layout={{
+      visibility,
+    }}
+  >
+    <Popup openOn="hover" let:features>
+      <p>
+        Average width: <b>{features[0].properties.average}</b>
+         meters
+      </p>
+      <p>
+        Minimum width: <b>{features[0].properties.minimum}</b>
+         meters
+      </p>
+    </Popup>
+  </LineLayer>
+</VectorTileSource>

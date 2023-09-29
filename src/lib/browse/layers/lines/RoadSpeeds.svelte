@@ -1,19 +1,13 @@
 <script lang="ts">
-  import {
-    ExternalLink,
-    HelpButton,
-    InteractiveLayer,
-    privateResourceBaseUrl,
-  } from "lib/common";
+  import { ExternalLink, HelpButton, privateResourceBaseUrl } from "lib/common";
   import { Checkbox, Radio } from "lib/govuk";
+  import { makeColorRamp } from "lib/maplibre";
   import {
-    hoveredToggle,
-    makeColorRamp,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    VectorTileSource,
+  } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
 
@@ -23,53 +17,25 @@
 
   let showSpeed = "indicative_mph";
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${privateResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwriteLineLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    color: makeColorRamp(["get", showSpeed], limits, colorScale),
-    width: denseLineWidth,
-    opacity: hoveredToggle(0.5, 1.0),
-  });
-
   let show = false;
+  $: visibility = show ? "visible" : "none";
 
-  function tooltip(feature: MapGeoJSONFeature): string {
-    // @ts-ignore Trusting the input data has the correct form
-    let time = {
-      mf4to7: "Monday-Friday 4-7am",
-      mf7to9: "Monday-Friday 7-9am",
-      mf9to12: "Monday-Friday 9am-12pm",
-      mf12to14: "Monday-Friday 12-2pm",
-      mf14to16: "Monday-Friday 2-4pm",
-      mf16to19: "Monday-Friday 4-7pm",
-      mf19to22: "Monday-Friday 7-10pm",
-      mf22to4: "Monday-Friday 10pm-4am",
-      ss4to7: "Saturday-Sunday 4-7am",
-      ss7to10: "Saturday-Sunday 7-10am",
-      ss10to14: "Saturday-Sunday 10am-2pm",
-      ss14to19: "Saturday-Sunday 2-7pm",
-      ss19to22: "Saturday-Sunday 7-10pm",
-      ss22to4: "Saturday-Sunday 10pm-4am",
-    }[feature.properties.highest_description];
-    let x = `<p>Posted speed limit: ${feature.properties.indicative_mph} mph</p>`;
-    x += `<p>Highest average speed: ${feature.properties.highest_mph} mph (during ${time})</p>`;
-    return x;
-  }
-
-  function changeStyle() {
-    $map.setPaintProperty(
-      name,
-      "line-color",
-      makeColorRamp(["get", showSpeed], limits, colorScale)
-    );
-  }
+  let times = {
+    mf4to7: "Monday-Friday 4-7am",
+    mf7to9: "Monday-Friday 7-9am",
+    mf9to12: "Monday-Friday 9am-12pm",
+    mf12to14: "Monday-Friday 12-2pm",
+    mf14to16: "Monday-Friday 2-4pm",
+    mf16to19: "Monday-Friday 4-7pm",
+    mf19to22: "Monday-Friday 7-10pm",
+    mf22to4: "Monday-Friday 10pm-4am",
+    ss4to7: "Saturday-Sunday 4-7am",
+    ss7to10: "Saturday-Sunday 7-10am",
+    ss10to14: "Saturday-Sunday 10am-2pm",
+    ss14to19: "Saturday-Sunday 2-7pm",
+    ss19to22: "Saturday-Sunday 7-10pm",
+    ss22to4: "Saturday-Sunday 10pm-4am",
+  };
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -107,9 +73,32 @@
       ["highest_mph", "Highest measured average speed"],
     ]}
     bind:value={showSpeed}
-    on:change={changeStyle}
     inlineSmall
   />
 {/if}
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<VectorTileSource
+  url={`pmtiles://${privateResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <LineLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "line-color": makeColorRamp(["get", showSpeed], limits, colorScale),
+      "line-width": denseLineWidth,
+      "line-opacity": hoverStateFilter(1.0, 0.5),
+    }}
+    layout={{
+      visibility,
+    }}
+  >
+    <Popup openOn="hover" let:features>
+      <p>Posted speed limit: {features[0].properties.indicative_mph} mph</p>
+      <p>
+        Highest average speed: {features[0].properties.highest_mph} mph (during {times[
+          features[0].properties.highest_description
+        ]})
+      </p>
+    </Popup>
+  </LineLayer>
+</VectorTileSource>
