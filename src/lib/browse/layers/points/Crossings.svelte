@@ -94,6 +94,7 @@
     layout={{
       visibility: show ? "visible" : "none",
     }}
+    hoverCursor="pointer"
     on:click={onClick}
   >
     <Popup let:props>
