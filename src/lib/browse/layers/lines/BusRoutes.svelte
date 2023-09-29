@@ -3,13 +3,13 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
+    Popup,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
@@ -62,8 +62,8 @@
       visibility: show ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      {#if features[0].properties.has_bus_lane}
+    <Popup let:props>
+      {#if props.has_bus_lane}
         <p>
           At least one bus route crosses here, with a bus lane in one or more
           directions

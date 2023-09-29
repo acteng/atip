@@ -3,13 +3,13 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
+    Popup,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
@@ -53,9 +53,8 @@
       visibility: show ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      {@const name = features[0].properties.name ?? "Unknown MRN road"}
-      <p>{name}</p>
+    <Popup let:props>
+      <p>{props.name ?? "Unknown MRN road"}</p>
     </Popup>
   </LineLayer>
 </VectorTileSource>

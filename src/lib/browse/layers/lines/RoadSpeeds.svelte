@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { ExternalLink, HelpButton, privateResourceBaseUrl } from "lib/common";
+  import {
+    ExternalLink,
+    HelpButton,
+    Popup,
+    privateResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox, Radio } from "lib/govuk";
   import { makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
@@ -91,11 +95,11 @@
       visibility: show ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      <p>Posted speed limit: {features[0].properties.indicative_mph} mph</p>
+    <Popup let:props>
+      <p>Posted speed limit: {props.indicative_mph} mph</p>
       <p>
-        Highest average speed: {features[0].properties.highest_mph} mph (during {times[
-          features[0].properties.highest_description
+        Highest average speed: {props.highest_mph} mph (during {times[
+          props.highest_description
         ]})
       </p>
     </Popup>

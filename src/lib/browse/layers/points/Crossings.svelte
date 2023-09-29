@@ -1,15 +1,14 @@
 <script lang="ts">
-  import type { Feature } from "geojson";
   import {
     ColorLegend,
     ExternalLink,
     HelpButton,
+    Popup,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
     CircleLayer,
-    Popup,
     VectorTileSource,
     type LayerClickInfo,
   } from "svelte-maplibre";
@@ -21,7 +20,7 @@
 
   let show = false;
 
-  function tooltip(feature: Feature): string {
+  function tooltip(props: { [name: string]: any }): string {
     const descriptions: Map<string, string> = new Map([
       [
         "no",
@@ -39,11 +38,10 @@
       ],
     ]);
 
-    const crossingType = feature.properties!.crossing;
-    let description =
-      descriptions.get(crossingType) ??
-      `Crossing with unknown type (${crossingType})`;
-    return `${description}. Click for details.`;
+    return (
+      descriptions.get(props.crossing) ??
+      `Unknown crossing type (${props.crossing})`
+    );
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
@@ -98,8 +96,8 @@
     }}
     on:click={onClick}
   >
-    <Popup openOn="hover" let:features>
-      <p>{tooltip(features[0])}</p>
+    <Popup let:props>
+      <p>{tooltip(props)}</p>
     </Popup>
   </CircleLayer>
 </VectorTileSource>

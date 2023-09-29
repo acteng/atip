@@ -1,11 +1,14 @@
 <script lang="ts">
-  import type { Feature } from "geojson";
-  import { ExternalLink, HelpButton, publicResourceBaseUrl } from "lib/common";
+  import {
+    ExternalLink,
+    HelpButton,
+    Popup,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { makeColorRamp } from "lib/maplibre";
   import {
     CircleLayer,
-    Popup,
     VectorTileSource,
     type LayerClickInfo,
   } from "svelte-maplibre";
@@ -23,8 +26,9 @@
 
   let show = false;
 
-  function tooltip(feature: Feature): [string, string, string, string] {
-    let props = feature.properties!;
+  function tooltip(props: {
+    [name: string]: any;
+  }): [string, string, string, string] {
     return [
       props.location,
       props.motor_vehicles_2022.toLocaleString(),
@@ -104,8 +108,8 @@
     }}
     on:click={onClick}
   >
-    <Popup openOn="hover" let:features>
-      {@const [countLocation, vehicles, cycles, method] = tooltip(features[0])}
+    <Popup let:props>
+      {@const [countLocation, vehicles, cycles, method] = tooltip(props)}
       <h2>{countLocation}</h2>
       <p>
         Total motor vehicles (2022 AADF): <b>{vehicles}</b>

@@ -4,10 +4,11 @@
     ColorLegend,
     ExternalLink,
     HelpButton,
+    Popup,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { CircleLayer, GeoJSON, Popup } from "svelte-maplibre";
+  import { CircleLayer, GeoJSON } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
 
@@ -45,8 +46,8 @@
       visibility: show ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
-      <p>{features[0].properties.name ?? "Unnamed railway station"}</p>
+    <Popup let:props>
+      <p>{props.name ?? "Unnamed railway station"}</p>
     </Popup>
   </CircleLayer>
 </GeoJSON>

@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { ExternalLink, HelpButton, privateResourceBaseUrl } from "lib/common";
+  import {
+    ExternalLink,
+    HelpButton,
+    Popup,
+    privateResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
@@ -60,13 +64,13 @@
       visibility: show ? "visible" : "none",
     }}
   >
-    <Popup openOn="hover" let:features>
+    <Popup let:props>
       <p>
-        Average width: <b>{features[0].properties.average}</b>
+        Average width: <b>{props.average}</b>
         meters
       </p>
       <p>
-        Minimum width: <b>{features[0].properties.minimum}</b>
+        Minimum width: <b>{props.minimum}</b>
         meters
       </p>
     </Popup>

@@ -1,12 +1,16 @@
 <script lang="ts">
-  import { ExternalLink, HelpButton, publicResourceBaseUrl } from "lib/common";
+  import {
+    ExternalLink,
+    HelpButton,
+    Popup,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { makeColorRamp } from "lib/maplibre";
   import {
     FillLayer,
     hoverStateFilter,
     LineLayer,
-    Popup,
     VectorTileSource,
     type LayerClickInfo,
   } from "svelte-maplibre";
@@ -197,9 +201,9 @@
     hoverCursor="pointer"
     on:click={onClick}
   >
-    <Popup openOn="hover" let:features>
-      {@const oa = features[0].properties["OA21CD"]}
-      {@const value = features[0].properties[colorBy]}
+    <Popup let:props>
+      {@const oa = props["OA21CD"]}
+      {@const value = props[colorBy]}
       {#if colorBy == "percent_households_with_car"}
         <p>
           <b>{value}%</b>
