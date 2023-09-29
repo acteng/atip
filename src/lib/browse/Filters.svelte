@@ -7,7 +7,7 @@
     SecondaryButton,
     Select,
   } from "lib/govuk";
-  import { gjScheme, map } from "stores";
+  import { gjScheme } from "stores";
   import { onMount } from "svelte";
   import type { FeatureUnion } from "types";
   import { type Scheme } from "./data";
@@ -22,6 +22,8 @@
   // Read-only, so callers can highlight search terms
   export let filterText = "";
 
+  export let show = true;
+
   // Dropdown filters
   let authorities: [string, string][] = [];
   let filterAuthority = "";
@@ -30,27 +32,6 @@
 
   // Stats about filtered schemes
   let counts = { area: 0, route: 0, crossing: 0, other: 0 };
-
-  let show = true;
-  $: {
-    if ($map) {
-      for (let layer of [
-        "interventions-polygons",
-        "interventions-polygon-outlines",
-        "interventions-lines",
-        "interventions-lines-endpoints",
-        "interventions-points",
-      ]) {
-        if ($map.getLayer(layer)) {
-          $map.setLayoutProperty(
-            layer,
-            "visibility",
-            show ? "visible" : "none"
-          );
-        }
-      }
-    }
-  }
 
   onMount(() => {
     let set1: Set<string> = new Set();

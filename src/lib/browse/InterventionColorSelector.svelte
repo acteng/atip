@@ -27,6 +27,7 @@
       ];
     }
 
+    // TODO Plumb instead of setting
     $map.setPaintProperty("interventions-points", "circle-color", color);
     $map.setPaintProperty("interventions-lines", "line-color", color);
     $map.setPaintProperty("interventions-polygons", "fill-color", color);
