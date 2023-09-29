@@ -7,7 +7,6 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
   import {
     CircleLayer,
     Popup,
@@ -21,7 +20,6 @@
   let color = colors.crossings;
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   function tooltip(feature: Feature): string {
     const descriptions: Map<string, string> = new Map([
@@ -94,7 +92,7 @@
       ],
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     on:click={onClick}
   >

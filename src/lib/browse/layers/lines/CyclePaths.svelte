@@ -23,7 +23,6 @@
   ];
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   function tooltip(feature: Feature): [string, string, string] {
     // @ts-ignore Write types for the feature properties
@@ -122,7 +121,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     hoverCursor="pointer"
     on:click={onClick}

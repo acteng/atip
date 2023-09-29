@@ -16,7 +16,6 @@
   let color = colors.railway_stations;
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   function tooltip(feature: Feature): string {
     return feature.properties.name ?? "Unnamed railway station";
@@ -48,7 +47,7 @@
       "circle-radius": circleRadius / 2,
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   >
     <Popup openOn="hover" let:features>

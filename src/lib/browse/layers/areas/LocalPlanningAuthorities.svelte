@@ -12,7 +12,6 @@
     LineLayer,
     Popup,
     VectorTileSource,
-    type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
@@ -22,7 +21,6 @@
   let outlineLayer = `${name}-outline`;
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   // TODO Note there are overlapping features, so the tooltip may be incomplete
   // -- but can't we fix that now?
@@ -81,7 +79,7 @@
       "fill-opacity": hoverStateFilter(0.0, 0.5),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     manageHoverState
   >
@@ -97,7 +95,7 @@
       "line-width": 2.5,
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   />
 </VectorTileSource>

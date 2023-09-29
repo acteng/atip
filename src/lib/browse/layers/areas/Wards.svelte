@@ -22,7 +22,6 @@
   let outlineLayer = `${name}-outline`;
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     let name = encodeURIComponent(e.detail.features[0].properties.name);
@@ -59,7 +58,7 @@
       "fill-opacity": hoverStateFilter(0.0, 0.5),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     manageHoverState
     on:click={onClick}
@@ -77,7 +76,7 @@
       "line-width": 2.5,
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   />
 </VectorTileSource>

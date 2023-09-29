@@ -8,6 +8,7 @@
     LineLayer,
     Popup,
     VectorTileSource,
+    type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
@@ -22,7 +23,6 @@
   let showAverageCars = false;
   let showPopulationDensity = false;
   let colorBy = "";
-  $: visibility = colorBy != "" ? "visible" : "none";
   $: {
     if (showHouseholdsWithCar) {
       colorBy = "percent_households_with_car";
@@ -191,7 +191,7 @@
       "fill-opacity": hoverStateFilter(0.5, 0.7),
     }}
     layout={{
-      visibility,
+      visibility: colorBy != "" ? "visible" : "none",
     }}
     manageHoverState
     hoverCursor="pointer"
@@ -226,7 +226,7 @@
       "line-width": 0.5,
     }}
     layout={{
-      visibility,
+      visibility: colorBy != "" ? "visible" : "none",
     }}
   />
 </VectorTileSource>

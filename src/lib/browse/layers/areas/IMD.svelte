@@ -21,7 +21,6 @@
   let limits = [0, 2, 4, 6, 8, 10];
 
   let show = false;
-  $: visibility = show ? "visible" : "none";
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -64,7 +63,7 @@
       "fill-opacity": hoverStateFilter(0.5, 0.7),
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
     manageHoverState
   >
@@ -87,7 +86,7 @@
       "line-width": 0.5,
     }}
     layout={{
-      visibility,
+      visibility: show ? "visible" : "none",
     }}
   />
 </VectorTileSource>
