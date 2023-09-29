@@ -1,40 +1,30 @@
 <script lang="ts">
+  import type { Feature } from "geojson";
   import {
     ColorLegend,
     ExternalLink,
     HelpButton,
-    InteractiveLayer,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { overwriteCircleLayer, overwritePmtilesSource } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+  import {
+    CircleLayer,
+    Popup,
+    VectorTileSource,
+    type LayerClickInfo,
+  } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
 
   let name = "cycle_parking";
   let color = colors.cycle_parking;
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwriteCircleLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    color,
-    radius: ["interpolate", ["linear"], ["zoom"], 1, 2, 8, 3, 13, 10],
-  });
-
   let show = false;
+  $: visibility = show ? "visible" : "none";
 
-  function tooltip(feature: MapGeoJSONFeature): string {
+  function tooltip(feature: Feature): string {
     let capacity = feature.properties.capacity ?? "unknown";
-    return `<p>Capacity: ${capacity}</p>`;
+    return `Capacity: ${capacity}`;
   }
 </script>
 
@@ -56,4 +46,33 @@
   </span>
 </Checkbox>
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <CircleLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "circle-color": color,
+      "circle-radius": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        1,
+        2,
+        8,
+        3,
+        13,
+        10,
+      ],
+    }}
+    layout={{
+      visibility,
+    }}
+    manageHoverState
+  >
+    <Popup openOn="hover" let:features>
+      <p>{tooltip(features[0])}</p>
+    </Popup>
+  </CircleLayer>
+</VectorTileSource>

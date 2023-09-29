@@ -1,18 +1,14 @@
 <script lang="ts">
-  import {
-    ExternalLink,
-    HelpButton,
-    InteractiveLayer,
-    publicResourceBaseUrl,
-  } from "lib/common";
+  import type { Feature } from "geojson";
+  import { ExternalLink, HelpButton, publicResourceBaseUrl } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { makeColorRamp } from "lib/maplibre";
   import {
-    makeColorRamp,
-    overwriteCircleLayer,
-    overwritePmtilesSource,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    CircleLayer,
+    Popup,
+    VectorTileSource,
+    type LayerClickInfo,
+  } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
@@ -25,36 +21,22 @@
   // Remove some because there's not much width
   let describeLimits = ["", "40k", "80k", "120k", "160k", ""];
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwriteCircleLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    color: makeColorRamp(["get", "motor_vehicles_2022"], limits, colorScale),
-    opacity: 0.9,
-    radius: ["interpolate", ["linear"], ["zoom"], 1, 2, 8, 3, 13, 15],
-    strokeColor: "black",
-    strokeWidth: 0.1,
-  });
-
   let show = false;
+  $: visibility = show ? "visible" : "none";
 
-  function tooltip(feature: MapGeoJSONFeature): string {
-    let x = `<h2>${feature.properties.location}</h2>`;
-    x += `<p>Total motor vehicles (2022 AADF): <b>${feature.properties.motor_vehicles_2022.toLocaleString()}</b></p>`;
-    x += `<p>Total pedal cycles (2022 AADF): <b>${feature.properties.pedal_cycles_2022.toLocaleString()}</b></p>`;
-    x += `<p>Count method: <b>${feature.properties.method}</b></p>`;
-    return x;
+  function tooltip(feature: Feature): [string, string, string, string] {
+    let props = feature.properties;
+    return [
+      props.location,
+      props.motor_vehicles_2022.toLocaleString(),
+      props.pedal_cycles_2022.toLocaleString(),
+      props.method,
+    ];
   }
 
-  function onClick(e: CustomEvent<MapGeoJSONFeature>) {
+  function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
-      `https://roadtraffic.dft.gov.uk/manualcountpoints/${e.detail.properties.count_point}`,
+      `https://roadtraffic.dft.gov.uk/manualcountpoints/${e.detail.features[0].properties.count_point}`,
       "_blank"
     );
   }
@@ -89,4 +71,50 @@
   <SequentialLegend {colorScale} limits={describeLimits} />
 {/if}
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable on:click={onClick} />
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <CircleLayer
+    id={name}
+    sourceLayer={name}
+    paint={{
+      "circle-color": makeColorRamp(
+        ["get", "motor_vehicles_2022"],
+        limits,
+        colorScale
+      ),
+      "circle-opacity": 0.9,
+      "circle-radius": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        1,
+        2,
+        8,
+        3,
+        13,
+        15,
+      ],
+      "circle-stroke-color": "black",
+      "circle-stroke-width": 0.1,
+    }}
+    layout={{
+      visibility,
+    }}
+    on:click={onClick}
+  >
+    <Popup openOn="hover" let:features>
+      {@const [countLocation, vehicles, cycles, method] = tooltip(features[0])}
+      <h2>{countLocation}</h2>
+      <p>
+        Total motor vehicles (2022 AADF): <b>{vehicles}</b>
+      </p>
+      <p>
+        Total pedal cycles (2022 AADF): <b>{cycles}</b>
+      </p>
+      <p>
+        Count method: <b>{method}</b>
+      </p>
+    </Popup>
+  </CircleLayer>
+</VectorTileSource>

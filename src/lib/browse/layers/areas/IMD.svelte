@@ -1,20 +1,14 @@
 <script lang="ts">
-  import {
-    ExternalLink,
-    HelpButton,
-    InteractiveLayer,
-    publicResourceBaseUrl,
-  } from "lib/common";
+  import { ExternalLink, HelpButton, publicResourceBaseUrl } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { makeColorRamp } from "lib/maplibre";
   import {
-    hoveredToggle,
-    makeColorRamp,
-    overwriteLineLayer,
-    overwritePmtilesSource,
-    overwritePolygonLayer,
-  } from "lib/maplibre";
-  import type { MapGeoJSONFeature } from "maplibre-gl";
-  import { map } from "stores";
+    FillLayer,
+    hoverStateFilter,
+    LineLayer,
+    Popup,
+    VectorTileSource,
+  } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
@@ -26,46 +20,8 @@
   // The deciles are [1, 10]. The 5 colors cover two each.
   let limits = [0, 2, 4, 6, 8, 10];
 
-  overwritePmtilesSource(
-    $map,
-    name,
-    `${publicResourceBaseUrl()}/v1/${name}.pmtiles`
-  );
-
-  overwritePolygonLayer($map, {
-    id: name,
-    source: name,
-    sourceLayer: name,
-    // Decile 1 is the most deprived, but we want to invert for the color scale
-    color: makeColorRamp(["-", 10, ["get", "decile"]], limits, colorScale),
-    opacity: hoveredToggle(0.5, 0.7),
-  });
-  overwriteLineLayer($map, {
-    id: outlineLayer,
-    source: name,
-    sourceLayer: name,
-    color: "black",
-    width: 0.5,
-  });
-
   let show = false;
-  // InteractiveLayer manages the polygon layer, but we also need to control the outline
-  $: {
-    if ($map.getLayer(outlineLayer)) {
-      $map.setLayoutProperty(
-        outlineLayer,
-        "visibility",
-        show ? "visible" : "none"
-      );
-    }
-  }
-
-  function tooltip(feature: MapGeoJSONFeature): string {
-    return (
-      `<p>${feature.properties.LSOA11CD} has an IMD score of <b>${feature.properties.score}</b></p>` +
-      `<p>Rank: <b>${feature.properties.rank.toLocaleString()}</b> / 32,844 LSOAs</p>`
-    );
-  }
+  $: visibility = show ? "visible" : "none";
 </script>
 
 <Checkbox id={name} bind:checked={show}>
@@ -92,4 +48,45 @@
   <SequentialLegend {colorScale} limits={["Least deprived", "Most deprived"]} />
 {/if}
 
-<InteractiveLayer layer={name} {tooltip} {show} clickable={false} />
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <FillLayer
+    id={name}
+    paint={{
+      // Decile 1 is the most deprived, but we want to invert for the color scale
+      "fill-color": makeColorRamp(
+        ["-", 10, ["get", "decile"]],
+        limits,
+        colorScale
+      ),
+      "fill-opacity": hoverStateFilter(0.5, 0.7),
+    }}
+    layout={{
+      visibility,
+    }}
+    manageHoverState
+  >
+    <Popup openOn="hover" let:features>
+      {@const props = features[0].properties}
+      <p>
+        {props.LSOA11CD} has an IMD score of
+        <b>{props.score}</b>
+      </p>
+      <p>
+        Rank: <b>{props.rank.toLocaleString()}</b>
+        / 32,844 LSOAs
+      </p>
+    </Popup>
+  </FillLayer>
+  <LineLayer
+    id={outlineLayer}
+    paint={{
+      "line-color": "black",
+      "line-width": 0.5,
+    }}
+    layout={{
+      visibility,
+    }}
+  />
+</VectorTileSource>

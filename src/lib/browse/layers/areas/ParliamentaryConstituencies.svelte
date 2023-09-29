@@ -11,8 +11,8 @@
     hoverStateFilter,
     LineLayer,
     Popup,
+    VectorTileSource,
     type LayerClickInfo,
-  VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
