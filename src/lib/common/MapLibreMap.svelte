@@ -24,13 +24,6 @@
 
   onMount(async () => {
     styleSpec = await getStyleSpecification(style);
-    /*map.on("load", () => {
-      loaded = true;
-      if (setCamera && startBounds) {
-        map.fitBounds(startBounds, { animate: false });
-      }
-      mapStore.set(map);
-    });*/
   });
 
   async function changeStyle(newStyle: string) {
@@ -46,7 +39,7 @@
 
 <div class="map">
   {#if styleSpec}
-    <MapLibre style={styleSpec} bounds={startBounds} bind:loaded bind:map>
+    <MapLibre style={styleSpec} bounds={startBounds} center={null} zoom={null} bind:loaded bind:map>
       {#if loaded}
         <ScaleControl />
         <NavigationControl position="bottom-right" visualizePitch />
