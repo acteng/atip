@@ -7,14 +7,10 @@
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
   import { CollapsibleCard } from "lib/common";
-  import {
-    emptyGeojson,
-    overwriteCircleLayer,
-    overwriteSource,
-    setPrecision,
-  } from "lib/maplibre";
+  import { emptyGeojson, setPrecision } from "lib/maplibre";
   import type { GeoJSONSource, MapMouseEvent } from "maplibre-gl";
   import { currentMode, gjScheme, map, newFeatureId } from "stores";
+  import { CircleLayer, GeoJSON } from "svelte-maplibre";
   import type { Mode, Feature as OurFeature } from "types";
   import splitIcon from "../../../../assets/split_route.svg";
   import type { EventHandler } from "../event_handler";
@@ -41,22 +37,13 @@
   // Index into gjScheme of what we're snapped to
   let snappedIndex: number | null = null;
 
-  // Rendering
-  let source = "split-route";
-  overwriteSource($map, source, emptyGeojson());
-  overwriteCircleLayer($map, {
-    id: "draw-split-route",
-    source,
-    color: "black",
-    radius: circleRadiusPixels,
-  });
-
+  let snappedCursorGj = emptyGeojson();
   $: {
     let gj = emptyGeojson();
     if (snappedCursor) {
       gj.features.push(snappedCursor);
     }
-    ($map.getSource(source) as GeoJSONSource).setData(gj);
+    snappedCursorGj = gj;
   }
 
   eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
@@ -271,3 +258,10 @@
     </ul>
   </CollapsibleCard>
 {/if}
+
+<GeoJSON data={snappedCursorGj}>
+  <CircleLayer
+    id="draw-split-route"
+    paint={{ "circle-color": "black", "circle-radius": circleRadiusPixels }}
+  />
+</GeoJSON>

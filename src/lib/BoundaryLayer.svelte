@@ -1,9 +1,10 @@
 <script lang="ts">
   import mask from "@turf/mask";
   import type { FeatureCollection, Polygon } from "geojson";
-  import { bbox, overwritePolygonLayer, overwriteSource } from "lib/maplibre";
+  import { bbox } from "lib/maplibre";
   import { map } from "stores";
   import { getContext } from "svelte";
+  import { FillLayer, GeoJSON } from "svelte-maplibre";
 
   export let boundaryGeojson: FeatureCollection<Polygon>;
 
@@ -15,12 +16,14 @@
       animate: false,
     });
   }
-
-  overwriteSource($map, "boundary", mask(boundaryGeojson));
-  overwritePolygonLayer($map, {
-    id: "boundary",
-    source: "boundary",
-    color: "black",
-    opacity: 0.5,
-  });
 </script>
+
+<GeoJSON data={mask(boundaryGeojson)}>
+  <FillLayer
+    id="boundary"
+    paint={{
+      "fill-color": "black",
+      "fill-opacity": 0.5,
+    }}
+  />
+</GeoJSON>

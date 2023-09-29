@@ -1,29 +1,19 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
-  import {
-    isLine,
-    isPoint,
-    isPolygon,
-    overwriteCircleLayer,
-    overwriteLineLayer,
-    overwritePolygonLayer,
-    overwriteSource,
-  } from "lib/maplibre";
+  import type { FeatureCollection } from "geojson";
+  import { isLine, isPoint, isPolygon } from "lib/maplibre";
   import type {
     DataDrivenPropertyValueSpecification,
     FilterSpecification,
-    GeoJSONSource,
   } from "maplibre-gl";
   import { gjScheme, map } from "stores";
+  import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
 
   export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
 
-  let source = "interventions";
-
-  overwriteSource($map, source, $gjScheme);
-  // Keep the final data synced to what's drawn here
-  $: {
-    let copy = JSON.parse(JSON.stringify($gjScheme));
+  $: gj = renderWithEndpoints($gjScheme);
+  function renderWithEndpoints(input: FeatureCollection): FeatureCollection {
+    let copy = JSON.parse(JSON.stringify(input));
     // Add points for the ends of every LineString
     let endpoints = [];
     for (let f of copy.features) {
@@ -46,8 +36,7 @@
       }
     }
     copy.features = copy.features.concat(endpoints);
-
-    ($map.getSource(source) as GeoJSONSource).setData(copy);
+    return copy;
   }
 
   const hideWhileEditing: FilterSpecification = [
@@ -56,52 +45,52 @@
     true,
   ];
   const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
-
-  overwriteCircleLayer($map, {
-    id: "interventions-points",
-    source,
-    filter: [
-      "all",
-      isPoint,
-      hideWhileEditing,
-      notEndpoint,
-    ] as FilterSpecification,
-    color: colorInterventions,
-    radius: circleRadius,
-    // TODO Outline?
-  });
-
-  overwriteLineLayer($map, {
-    id: "interventions-lines",
-    source,
-    filter: ["all", isLine, hideWhileEditing] as FilterSpecification,
-    color: colorInterventions,
-    width: lineWidth,
-  });
-  // Draw endpoints to emphasize where two LineStrings meet
-  overwriteCircleLayer($map, {
-    id: "interventions-lines-endpoints",
-    source,
-    filter: ["==", "endpoint", true],
-    radius: 0.5 * lineWidth,
-    opacity: 0.0,
-    strokeColor: colors.lineEndpointColor,
-    strokeWidth: 2.0,
-  });
-
-  overwritePolygonLayer($map, {
-    id: "interventions-polygons",
-    source,
-    filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
-    color: colorInterventions,
-    opacity: 0.2,
-  });
-  overwriteLineLayer($map, {
-    id: "interventions-polygon-outlines",
-    source,
-    filter: ["all", isPolygon, hideWhileEditing] as FilterSpecification,
-    color: colorInterventions,
-    opacity: 0.5,
-    width: 0.7 * lineWidth,
-  });
 </script>
+
+<GeoJSON data={gj}>
+  <CircleLayer
+    id="interventions-points"
+    filter={["all", isPoint, hideWhileEditing, notEndpoint]}
+    paint={{
+      "circle-color": colorInterventions,
+      "circle-radius": circleRadius,
+    }}
+  />
+
+  <LineLayer
+    id="interventions-lines"
+    filter={["all", isLine, hideWhileEditing]}
+    paint={{
+      "line-color": colorInterventions,
+      "line-width": lineWidth,
+    }}
+  />
+  <CircleLayer
+    id="interventions-lines-endpoints"
+    filter={["==", "endpoint", true]}
+    paint={{
+      "circle-radius": 0.5 * lineWidth,
+      "circle-opacity": 0,
+      "circle-stroke-color": colors.lineEndpointColor,
+      "circle-stroke-width": 2.0,
+    }}
+  />
+
+  <FillLayer
+    id="interventions-polygons"
+    filter={["all", isPolygon, hideWhileEditing]}
+    paint={{
+      "fill-color": colorInterventions,
+      "fill-opacity": 0.2,
+    }}
+  />
+  <LineLayer
+    id="interventions-polygons-outlines"
+    filter={["all", isPolygon, hideWhileEditing]}
+    paint={{
+      "line-color": colorInterventions,
+      "line-opacity": 0.5,
+      "line-width": 0.7 * lineWidth,
+    }}
+  />
+</GeoJSON>

@@ -1,15 +1,6 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
-  import {
-    emptyGeojson,
-    isLine,
-    isPoint,
-    isPolygon,
-    overwriteCircleLayer,
-    overwriteLineLayer,
-    overwriteSource,
-  } from "lib/maplibre";
-  import type { GeoJSONSource } from "maplibre-gl";
+  import { emptyGeojson, isLine, isPoint, isPolygon } from "lib/maplibre";
   import {
     formOpen,
     gjScheme,
@@ -18,8 +9,10 @@
     mapHover,
     sidebarHover,
   } from "stores";
+  import { CircleLayer, GeoJSON, LineLayer } from "svelte-maplibre";
 
   // Show clickable objects on the map using the cursor
+  // TODO Use svelte-maplibre for this part?
   $: {
     // Don't override what an active tool has set
     if (!$isAToolInUse) {
@@ -27,45 +20,45 @@
     }
   }
 
-  let source = "hover";
-
   // Use a layer that only ever has zero or one features for hovering. I think
   // https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an
   // easier way to do this, but I can't make it work with the draw plugin.
-  overwriteSource($map, source, emptyGeojson());
-
-  overwriteLineLayer($map, {
-    id: "hover-polygons",
-    source,
-    filter: isPolygon,
-    // Outline around the polygons
-    color: colors.hovering,
-    width: 0.5 * lineWidth,
-  });
-  overwriteLineLayer($map, {
-    id: "hover-lines",
-    source,
-    filter: isLine,
-    color: colors.hovering,
-    width: 1.5 * lineWidth,
-  });
-  overwriteCircleLayer($map, {
-    id: "hover-points",
-    source,
-    filter: isPoint,
-    color: colors.hovering,
-    radius: 1.5 * circleRadius,
-  });
+  let gj = emptyGeojson();
 
   // When a form is open, ignore regular map and sidebar interactions
   $: {
     let id = $formOpen || $mapHover || $sidebarHover;
     if (id != null) {
-      ($map.getSource(source) as GeoJSONSource).setData(
-        $gjScheme.features.find((f) => f.id == id)!
-      );
+      gj = $gjScheme.features.find((f) => f.id == id)!;
     } else {
-      ($map.getSource(source) as GeoJSONSource).setData(emptyGeojson());
+      gj = emptyGeojson();
     }
   }
 </script>
+
+<GeoJSON data={gj}>
+  <LineLayer
+    id="hover-polygons"
+    filter={isPolygon}
+    paint={{
+      "line-color": colors.hovering,
+      "line-width": 0.5 * lineWidth,
+    }}
+  />
+  <LineLayer
+    id="hover-lines"
+    filter={isLine}
+    paint={{
+      "line-color": colors.hovering,
+      "line-width": 1.5 * lineWidth,
+    }}
+  />
+  <CircleLayer
+    id="hover-points"
+    filter={isPoint}
+    paint={{
+      "circle-color": colors.hovering,
+      "circle-radius": 1.5 * circleRadius,
+    }}
+  />
+</GeoJSON>
