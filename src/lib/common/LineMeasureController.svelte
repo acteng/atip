@@ -2,17 +2,13 @@
   import { lineString, type Feature, type LineString } from "@turf/helpers";
   import length from "@turf/length";
   import { colors } from "colors";
-  import type { GeoJSON, GeoJsonProperties } from "geojson";
   import DraggablePin from "lib/common/DraggablePin.svelte";
   import { SecondaryButton } from "lib/govuk";
-  import {
-    emptyGeojson,
-    overwriteLineLayer,
-    overwriteSource,
-  } from "lib/maplibre";
-  import { GeoJSONSource, LngLat, MapMouseEvent } from "maplibre-gl";
+  import { emptyGeojson } from "lib/maplibre";
+  import { LngLat, MapMouseEvent } from "maplibre-gl";
   import { map } from "stores";
   import { onDestroy, onMount } from "svelte";
+  import { GeoJSON, LineLayer } from "svelte-maplibre";
   import { CollapsibleCard } from ".";
 
   let isInactive = true;
@@ -20,7 +16,8 @@
   let lineToMeasure: Feature<LineString> | undefined = undefined;
   let isShiftDown = false;
   let nextId = 0;
-  const layerName = "measurement-line";
+
+  let drawGj = emptyGeojson();
 
   function handleMapClickEvent(e: MapMouseEvent) {
     if (isInactive) {
@@ -107,32 +104,12 @@
         2
       );
     }
-    updateLinestring();
+    drawGj = JSON.parse(JSON.stringify(lineToMeasure));
   }
 
   function removeLineFromMap() {
-    if ($map.getSource(layerName)) {
-      ($map.getSource(layerName) as GeoJSONSource).setData(emptyGeojson());
-
-      lineToMeasure = undefined;
-    }
-  }
-
-  function updateLinestring() {
-    if (!$map.getSource(layerName)) {
-      overwriteSource($map, layerName, lineToMeasure as GeoJSON);
-
-      overwriteLineLayer($map, {
-        id: layerName,
-        source: layerName,
-        color: colors.measuringLine,
-        width: 5,
-      });
-    } else {
-      ($map.getSource(layerName) as GeoJSONSource).setData(
-        lineToMeasure as Feature<LineString, GeoJsonProperties>
-      );
-    }
+    lineToMeasure = undefined;
+    drawGj = emptyGeojson();
   }
 
   onMount(() => {
@@ -185,3 +162,10 @@
   {/each}
 {/if}
 <svelte:window on:keydown={keyDown} on:keyup={keyUp} />
+
+<GeoJSON data={drawGj}>
+  <LineLayer
+    id="measurement-line"
+    paint={{ "line-color": colors.measuringLine, "line-width": 5 }}
+  />
+</GeoJSON>
