@@ -1,17 +1,13 @@
 <script lang="ts">
   import type { Feature } from "geojson";
-  import {
-    ColorLegend,
-    HelpButton,
-    publicResourceBaseUrl,
-  } from "lib/common";
+  import { ColorLegend, HelpButton, publicResourceBaseUrl } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import { constructMatchExpression } from "lib/maplibre";
   import {
-    VectorTileSource,
     hoverStateFilter,
     LineLayer,
     Popup,
+    VectorTileSource,
     type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";

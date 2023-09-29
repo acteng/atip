@@ -6,8 +6,6 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { colors } from "../../colors";
-  import OsOglLicense from "../OsOglLicense.svelte";
   import {
     FillLayer,
     GeoJSON,
@@ -16,6 +14,8 @@
     Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
+  import { colors } from "../../colors";
+  import OsOglLicense from "../OsOglLicense.svelte";
 
   let name = "combined_authorities";
   let color = colors.combined_authorities;

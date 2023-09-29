@@ -7,11 +7,11 @@
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
   import {
-    VectorTileSource,
     FillLayer,
     hoverStateFilter,
     LineLayer,
     Popup,
+    VectorTileSource,
     type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
