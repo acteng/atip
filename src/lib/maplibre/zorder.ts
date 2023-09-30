@@ -1,15 +1,21 @@
 import { map as mapStore } from "stores";
 import { get } from "svelte/store";
 
-interface LayerIdProps {
+interface LayerProps {
   id: string;
   beforeId: string | undefined;
+  eventsIfTopMost: boolean;
 }
 
-export function layerId(layerId: string): LayerIdProps {
+// Use this helper for every svelte-maplibre layer component. It sets the layer
+// ID, beforeId (for z-ordering between layers), and defaults to only using the
+// top-most layer for hovering/clicking.
+export function layerId(layerId: string): LayerProps {
   return {
     id: layerId,
     beforeId: getBeforeId(layerId),
+    // TODO Only helps for clicks, not hover popups or the cursor
+    eventsIfTopMost: true,
   };
 }
 
