@@ -70,21 +70,22 @@ const layerZorder = [
   "census_output_areas-outline",
   "imd",
   "imd-outline",
-  // Then smaller optional layers on top
-  "schools",
-  "hospitals",
-  "sports_spaces",
+  // Then optional linear layers
   "mrn",
   "bus_routes",
-  "railway_stations",
-  "cycle_parking",
-  "crossings",
   "cycle_paths",
-  "vehicle_counts",
   "pct_commute",
   "pct_school",
   "road_widths",
   "road_speeds",
+  // Then small point/polygon layers on top
+  "schools",
+  "hospitals",
+  "sports_spaces",
+  "railway_stations",
+  "cycle_parking",
+  "crossings",
+  "vehicle_counts",
 
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top

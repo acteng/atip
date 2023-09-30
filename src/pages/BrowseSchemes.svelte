@@ -21,7 +21,6 @@
   import { ErrorMessage } from "lib/govuk";
   import { gjScheme, mapStyle } from "stores";
   import { onMount } from "svelte";
-  import type { Scheme as GjScheme } from "types";
 
   // TODO Remove after the input data is fixed to plumb correct authority names.
   let authorityNames: Set<string> = new Set(authorityNamesList);
@@ -43,7 +42,8 @@
   function loadFile(text: string) {
     try {
       gjScheme.set(JSON.parse(text));
-      schemes = processInput($gjScheme as GjScheme);
+      // @ts-ignore TODO We're abusing the gjScheme store in the browse page for now
+      schemes = processInput($gjScheme);
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;

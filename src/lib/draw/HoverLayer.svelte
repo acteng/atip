@@ -1,5 +1,6 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
+  import type { GeoJSON as GeoJSONType } from "geojson";
   import {
     emptyGeojson,
     isLine,
@@ -29,7 +30,7 @@
   // Use a layer that only ever has zero or one features for hovering. I think
   // https://docs.mapbox.com/mapbox-gl-js/example/hover-styles/ should be an
   // easier way to do this, but I can't make it work with the draw plugin.
-  let gj = emptyGeojson();
+  let gj: GeoJSONType = emptyGeojson();
 
   // When a form is open, ignore regular map and sidebar interactions
   $: {

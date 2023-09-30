@@ -43,6 +43,7 @@
       (err, zoom) => {
         if (!err) {
           $map.easeTo({
+            // @ts-ignore We know this is a point
             center: e.detail.features[0].geometry.coordinates,
             zoom: zoom as number,
           });
