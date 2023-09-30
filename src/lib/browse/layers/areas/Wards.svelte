@@ -7,6 +7,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { layerId } from "lib/maplibre";
   import {
     FillLayer,
     hoverStateFilter,
@@ -19,7 +20,6 @@
 
   let name = "wards";
   let color = colors.wards;
-  let outlineLayer = `${name}-outline`;
 
   let show = false;
 
@@ -51,7 +51,7 @@
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
   <FillLayer
-    id={name}
+    {...layerId(name)}
     sourceLayer={name}
     paint={{
       "fill-color": color,
@@ -69,7 +69,7 @@
     </Popup>
   </FillLayer>
   <LineLayer
-    id={outlineLayer}
+    {...layerId(`${name}-outline`)}
     sourceLayer={name}
     paint={{
       "line-color": color,

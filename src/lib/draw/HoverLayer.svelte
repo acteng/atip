@@ -1,6 +1,12 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
-  import { emptyGeojson, isLine, isPoint, isPolygon } from "lib/maplibre";
+  import {
+    emptyGeojson,
+    isLine,
+    isPoint,
+    isPolygon,
+    layerId,
+  } from "lib/maplibre";
   import {
     formOpen,
     gjScheme,
@@ -38,7 +44,7 @@
 
 <GeoJSON data={gj}>
   <LineLayer
-    id="hover-polygons"
+    {...layerId("hover-polygons")}
     filter={isPolygon}
     paint={{
       "line-color": colors.hovering,
@@ -46,7 +52,7 @@
     }}
   />
   <LineLayer
-    id="hover-lines"
+    {...layerId("hover-lines")}
     filter={isLine}
     paint={{
       "line-color": colors.hovering,
@@ -54,7 +60,7 @@
     }}
   />
   <CircleLayer
-    id="hover-points"
+    {...layerId("hover-points")}
     filter={isPoint}
     paint={{
       "circle-color": colors.hovering,

@@ -6,7 +6,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox, Radio, Select } from "lib/govuk";
-  import { makeColorRamp } from "lib/maplibre";
+  import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
     LineLayer,
@@ -103,7 +103,7 @@
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${nameCommute}.pmtiles`}
 >
   <LineLayer
-    id={nameCommute}
+    {...layerId(nameCommute)}
     sourceLayer={nameCommute}
     paint={{
       "line-color": makeColorRamp(["get", scenario], limits, colorScale),
@@ -123,7 +123,7 @@
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${nameSchool}.pmtiles`}
 >
   <LineLayer
-    id={nameSchool}
+    {...layerId(nameSchool)}
     sourceLayer={nameSchool}
     paint={{
       "line-color": makeColorRamp(["get", scenario], limits, colorScale),

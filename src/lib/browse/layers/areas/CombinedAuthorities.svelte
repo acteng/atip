@@ -7,6 +7,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { layerId } from "lib/maplibre";
   import {
     FillLayer,
     GeoJSON,
@@ -19,7 +20,6 @@
 
   let name = "combined_authorities";
   let color = colors.combined_authorities;
-  let outlineLayer = `${name}-outline`;
 
   let show = false;
 
@@ -52,7 +52,7 @@
 
 <GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>
   <FillLayer
-    id={name}
+    {...layerId(name)}
     paint={{
       "fill-color": color,
       "fill-opacity": hoverStateFilter(0.0, 0.5),
@@ -69,7 +69,7 @@
     </Popup>
   </FillLayer>
   <LineLayer
-    id={outlineLayer}
+    {...layerId(`${name}-outline`)}
     paint={{
       "line-color": color,
       "line-width": 2.5,

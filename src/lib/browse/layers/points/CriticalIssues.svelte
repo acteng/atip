@@ -6,7 +6,7 @@
     ErrorMessage,
     FormElement,
   } from "lib/govuk";
-  import { emptyGeojson } from "lib/maplibre";
+  import { emptyGeojson, layerId } from "lib/maplibre";
   import type { GeoJSONSource } from "maplibre-gl";
   import { map } from "stores";
   import {
@@ -74,7 +74,6 @@
 </CollapsibleCard>
 
 <GeoJSON
-  id={source}
   data={gj}
   cluster={{
     // TODO Something's weird
@@ -83,7 +82,7 @@
   }}
 >
   <CircleLayer
-    id={`${source}-clusters`}
+    {...layerId(`${source}-clusters`)}
     applyToClusters
     paint={{
       "circle-color": color,
@@ -98,6 +97,7 @@
     on:click={clickCluster}
   />
   <SymbolLayer
+    {...layerId(`${source}-counts`)}
     applyToClusters
     layout={{
       "text-field": "{point_count_abbreviated}",
@@ -105,7 +105,7 @@
     }}
   />
   <CircleLayer
-    id={`${source}-counts`}
+    {...layerId(`${source}-points`)}
     applyToClusters={false}
     paint={{
       "circle-color": color,

@@ -7,6 +7,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { layerId } from "lib/maplibre";
   import {
     hoverStateFilter,
     LineLayer,
@@ -46,7 +47,7 @@
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
   <LineLayer
-    id={name}
+    {...layerId(name)}
     sourceLayer={name}
     paint={{
       "line-color": [

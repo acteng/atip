@@ -8,6 +8,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { layerId } from "lib/maplibre";
   import { CircleLayer, GeoJSON } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
@@ -37,7 +38,7 @@
 
 <GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>
   <CircleLayer
-    id={name}
+    {...layerId(name)}
     paint={{
       "circle-color": color,
       "circle-radius": circleRadius / 2,

@@ -32,7 +32,7 @@
     $map.setPaintProperty("interventions-lines", "line-color", color);
     $map.setPaintProperty("interventions-polygons", "fill-color", color);
     $map.setPaintProperty(
-      "interventions-polygon-outlines",
+      "interventions-polygons-outlines",
       "line-color",
       color
     );
