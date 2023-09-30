@@ -10,20 +10,28 @@
     Radio,
     SecondaryButton,
   } from "lib/govuk";
-  import { Map, type MapGeoJSONFeature } from "maplibre-gl";
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
   import {
     appVersion,
     FileInput,
     getAuthoritiesGeoJson,
-    InteractiveLayer,
     LoggedIn,
+    MapLibreMap,
+    Popup,
   } from "lib/common";
-  import { bbox, hoveredToggle } from "lib/maplibre";
+  import { emptyGeojson } from "lib/maplibre";
   import About from "lib/sidebar/About.svelte";
-  import { map as mapStore } from "stores";
+  import { map } from "stores";
+  import {
+    FillLayer,
+    GeoJSON,
+    hoverStateFilter,
+    type LayerClickInfo,
+  } from "svelte-maplibre";
   import type { Schema } from "types";
+
+  let authoritiesGj = emptyGeojson();
 
   let showAbout = false;
   const params = new URLSearchParams(window.location.search);
@@ -35,60 +43,21 @@
   let authoritySet: Set<string> = new Set();
   $: validEntry = authoritySet.has(inputValue);
 
-  let loadedMap: Map | null = null;
-  let source = "boundary";
-  let layer = "boundary-layer";
-
   let showBoundaries: "TA" | "LAD" = "TA";
-  function changeBoundaries() {
-    loadedMap?.setFilter(layer, ["==", ["get", "level"], showBoundaries]);
-  }
+  // TODO Upstream svelte-maplibre support for this
+  $: $map?.setFilter("boundaries", ["==", ["get", "level"], showBoundaries]);
 
   onMount(async () => {
     // For govuk components. Must happen here.
     initAll();
 
-    const json: FeatureCollection = await getAuthoritiesGeoJson();
-    for (let feature of json.features) {
+    authoritiesGj = await getAuthoritiesGeoJson();
+    for (let feature of authoritiesGj.features) {
       let option = document.createElement("option");
       option.value = feature.properties!.name;
       dataList.appendChild(option);
       authoritySet.add(feature.properties!.name);
     }
-
-    let map = new Map({
-      container: "map",
-      style: `https://api.maptiler.com/maps/streets/style.json?key=${
-        import.meta.env.VITE_MAPTILER_API_KEY
-      }`,
-    });
-    // Use map within onMount, so it's guaranteed to exist
-    loadedMap = map;
-    mapStore.set(loadedMap);
-
-    map.on("load", function () {
-      map.fitBounds(bbox(json), {
-        padding: 20,
-        animate: false,
-      });
-
-      map.addSource(source, {
-        type: "geojson",
-        data: json,
-        generateId: true,
-      });
-      map.addLayer({
-        id: layer,
-        source: source,
-        filter: ["==", ["get", "level"], showBoundaries],
-        type: "fill",
-        paint: {
-          "fill-color": "rgb(200, 100, 240)",
-          "fill-outline-color": "rgb(200, 100, 240)",
-          "fill-opacity": hoveredToggle(0.8, 0.4),
-        },
-      });
-    });
   });
 
   function loadFile(text: string) {
@@ -129,12 +98,10 @@
     return "v1";
   }
 
-  function onClick(e: CustomEvent<MapGeoJSONFeature>) {
-    window.location.href = `scheme.html?authority=${e.detail.properties.name}`;
-  }
-
-  function tooltip(feature: MapGeoJSONFeature): string {
-    return `<p>${feature.properties.name}</p>`;
+  function onClick(e: CustomEvent<LayerClickInfo>) {
+    window.location.href = `scheme.html?authority=${
+      e.detail.features[0].properties!.name
+    }`;
   }
 
   function start() {
@@ -178,7 +145,6 @@
       ]}
       inlineSmall
       bind:value={showBoundaries}
-      on:change={changeBoundaries}
     />
 
     <hr />
@@ -191,11 +157,29 @@
     />
   </div>
   <div class="govuk-grid-column-one-half">
-    <div id="map" />
+    <div id="map">
+      <MapLibreMap style="streets" startBounds={[-5.96, 49.89, 2.31, 55.94]}>
+        <GeoJSON data={authoritiesGj} generateId>
+          <FillLayer
+            id="boundaries"
+            filter={["==", ["get", "level"], showBoundaries]}
+            paint={{
+              "fill-color": "rgb(200, 100, 240)",
+              "fill-outline-color": "rgb(200, 100, 240)",
+              "fill-opacity": hoverStateFilter(0.4, 0.8),
+            }}
+            manageHoverState
+            hoverCursor="pointer"
+            on:click={onClick}
+          >
+            <Popup let:props>
+              <p>{props.name}</p>
+            </Popup>
+          </FillLayer>
+        </GeoJSON>
+      </MapLibreMap>
+    </div>
   </div>
-  {#if loadedMap}
-    <InteractiveLayer {layer} clickable on:click={onClick} {tooltip} />
-  {/if}
 </div>
 <About bind:open={showAbout} />
 
