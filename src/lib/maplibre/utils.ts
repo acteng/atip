@@ -211,20 +211,6 @@ export function constructMatchExpression<OutputType>(
   return x as DataDrivenPropertyValueSpecification<OutputType>;
 }
 
-// Returns hoveredValue when the feature is hovered on, and defaultValue
-// otherwise. Use with InteractiveLayer.
-export function hoveredToggle<Type>(
-  hoveredValue: Type,
-  defaultValue: Type
-): DataDrivenPropertyValueSpecification<Type> {
-  return [
-    "case",
-    ["boolean", ["feature-state", "hover"], false],
-    hoveredValue,
-    defaultValue,
-  ] as DataDrivenPropertyValueSpecification<Type>;
-}
-
 // Helper for https://maplibre.org/maplibre-style-spec/expressions/#step.
 export function makeColorRamp(
   input: DataDrivenPropertyValueSpecification<number>,

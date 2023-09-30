@@ -9,7 +9,6 @@ export { default as DiscreteLegend } from "./DiscreteLegend.svelte";
 export { default as ExternalLink } from "./ExternalLink.svelte";
 export { default as FileInput } from "./FileInput.svelte";
 export { default as HelpButton } from "./HelpButton.svelte";
-export { default as InteractiveLayer } from "./InteractiveLayer.svelte";
 export { default as Layout } from "./Layout.svelte";
 export { default as Legend } from "./Legend.svelte";
 export { default as LoggedIn } from "./LoggedIn.svelte";
