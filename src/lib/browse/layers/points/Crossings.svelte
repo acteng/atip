@@ -22,25 +22,19 @@
   let show = false;
 
   function tooltip(props: { [name: string]: any }): string {
-    const descriptions: Map<string, string> = new Map([
-      [
-        "no",
-        "Location where crossing is impossible/illegal but where there is a clear desire line to cross",
-      ],
-      ["traffic_signals", "Signalised crossing"],
-      ["marked", "Crossing with no traffic signals"],
-      ["uncontrolled", "Crossing with no traffic signals"],
-      ["unmarked", "Crossing with no markings or signals"],
-      ["zebra", "Zebra crossing"],
-      ["island", "Crossing with an island"],
-      [
-        "informal",
+    let descriptions: Record<string, string> = {
+      no: "Location where crossing is impossible/illegal but where there is a clear desire line to cross",
+      traffic_signals: "Signalised crossing",
+      marked: "Crossing with no traffic signals",
+      uncontrolled: "Crossing with no traffic signals",
+      unmarked: "Crossing with no markings or signals",
+      zebra: "Zebra crossing",
+      island: "Crossing with an island",
+      informal:
         "Informal crossing with an obvious desire line, but no official infrastructure to support it",
-      ],
-    ]);
-
+    };
     return (
-      descriptions.get(props.crossing) ??
+      descriptions[props.crossing] ??
       `Unknown crossing type (${props.crossing})`
     );
   }

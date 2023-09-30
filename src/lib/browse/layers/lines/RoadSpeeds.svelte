@@ -23,7 +23,7 @@
 
   let show = false;
 
-  let times = {
+  let times: Record<string, string> = {
     mf4to7: "Monday-Friday 4-7am",
     mf7to9: "Monday-Friday 7-9am",
     mf9to12: "Monday-Friday 9am-12pm",
