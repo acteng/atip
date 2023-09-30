@@ -5,6 +5,7 @@
     isLine,
     isPoint,
     isPolygon,
+    layerId,
   } from "lib/maplibre";
   import type {
     DataDrivenPropertyValueSpecification,
@@ -27,7 +28,7 @@
 
 <GeoJSON data={gj}>
   <CircleLayer
-    id="interventions-points"
+    {...layerId("interventions-points")}
     filter={["all", isPoint, hideWhileEditing, notEndpoint]}
     paint={{
       "circle-color": colorInterventions,
@@ -36,7 +37,7 @@
   />
 
   <LineLayer
-    id="interventions-lines"
+    {...layerId("interventions-lines")}
     filter={["all", isLine, hideWhileEditing]}
     paint={{
       "line-color": colorInterventions,
@@ -44,7 +45,7 @@
     }}
   />
   <CircleLayer
-    id="interventions-lines-endpoints"
+    {...layerId("interventions-lines-endpoints")}
     filter={["==", "endpoint", true]}
     paint={{
       "circle-radius": 0.5 * lineWidth,
@@ -55,7 +56,7 @@
   />
 
   <FillLayer
-    id="interventions-polygons"
+    {...layerId("interventions-polygons")}
     filter={["all", isPolygon, hideWhileEditing]}
     paint={{
       "fill-color": colorInterventions,
@@ -63,7 +64,7 @@
     }}
   />
   <LineLayer
-    id="interventions-polygons-outlines"
+    {...layerId("interventions-polygons-outlines")}
     filter={["all", isPolygon, hideWhileEditing]}
     paint={{
       "line-color": colorInterventions,

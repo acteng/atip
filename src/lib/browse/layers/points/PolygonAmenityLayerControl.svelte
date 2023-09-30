@@ -6,6 +6,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
+  import { layerId } from "lib/maplibre";
   import {
     FillLayer,
     hoverStateFilter,
@@ -44,7 +45,7 @@
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
   <FillLayer
-    id={name}
+    {...layerId(name)}
     sourceLayer={name}
     paint={{
       "fill-color": color,

@@ -6,7 +6,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { makeColorRamp } from "lib/maplibre";
+  import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     FillLayer,
     hoverStateFilter,
@@ -19,7 +19,6 @@
   import SequentialLegend from "../SequentialLegend.svelte";
 
   let name = "census_output_areas";
-  let outlineLayer = `${name}-outline`;
   let colorScale = colors.sequential_low_to_high;
 
   // Mutually exclusive, like a radio button
@@ -188,7 +187,7 @@
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
   <FillLayer
-    id={name}
+    {...layerId(name)}
     sourceLayer={name}
     paint={{
       "fill-color": makeColorRamp(["get", colorBy], makeLimits(), colorScale),
@@ -224,7 +223,7 @@
     </Popup>
   </FillLayer>
   <LineLayer
-    id={outlineLayer}
+    {...layerId(`${name}-outline`)}
     paint={{
       "line-color": "black",
       "line-width": 0.5,

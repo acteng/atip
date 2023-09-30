@@ -6,7 +6,7 @@
     privateResourceBaseUrl,
   } from "lib/common";
   import { Checkbox, Radio } from "lib/govuk";
-  import { makeColorRamp } from "lib/maplibre";
+  import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
     LineLayer,
@@ -84,7 +84,7 @@
   url={`pmtiles://${privateResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
   <LineLayer
-    id={name}
+    {...layerId(name)}
     sourceLayer={name}
     paint={{
       "line-color": makeColorRamp(["get", showSpeed], limits, colorScale),

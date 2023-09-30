@@ -6,7 +6,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { makeColorRamp } from "lib/maplibre";
+  import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     CircleLayer,
     VectorTileSource,
@@ -80,7 +80,7 @@
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
   <CircleLayer
-    id={name}
+    {...layerId(name)}
     sourceLayer={name}
     paint={{
       "circle-color": makeColorRamp(

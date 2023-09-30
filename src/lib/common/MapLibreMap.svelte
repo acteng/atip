@@ -39,7 +39,14 @@
 
 <div class="map">
   {#if styleSpec}
-    <MapLibre style={styleSpec} bounds={startBounds} center={null} zoom={null} bind:loaded bind:map>
+    <MapLibre
+      style={styleSpec}
+      bounds={startBounds}
+      center={null}
+      zoom={null}
+      bind:loaded
+      bind:map
+    >
       {#if loaded}
         <ScaleControl />
         <NavigationControl position="bottom-right" visualizePitch />

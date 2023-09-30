@@ -7,7 +7,7 @@
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
   import { CollapsibleCard } from "lib/common";
-  import { emptyGeojson, setPrecision } from "lib/maplibre";
+  import { emptyGeojson, layerId, setPrecision } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { currentMode, gjScheme, map, newFeatureId } from "stores";
   import { CircleLayer, GeoJSON } from "svelte-maplibre";
@@ -261,7 +261,7 @@
 
 <GeoJSON data={snappedCursorGj}>
   <CircleLayer
-    id="draw-split-route"
+    {...layerId("draw-split-route")}
     paint={{ "circle-color": "black", "circle-radius": circleRadiusPixels }}
   />
 </GeoJSON>

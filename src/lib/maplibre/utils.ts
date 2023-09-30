@@ -16,6 +16,7 @@ import type {
   Map,
   StyleSpecification,
 } from "maplibre-gl";
+import { getBeforeId } from "./zorder";
 
 // Some methods take optional params. It's an error to pass in null or undefined, so use default values from
 // https://github.com/maplibre/maplibre-style-spec/blob/main/src/reference/v8.json.
@@ -61,7 +62,7 @@ export function cleanupSource(map: Map, id: string) {
 // circles, lines, and polygons. The layer.id here MUST be present in
 // layerZorder.
 // TODO It's exported for the LaneDetails Layer helper. Reconsider.
-export function overwriteLayer(
+function overwriteLayer(
   map: Map,
   layer: LayerSpecification & { source: string }
 ) {
@@ -69,33 +70,7 @@ export function overwriteLayer(
     map.removeLayer(layer.id);
   }
 
-  // layerZorder lists all layers in the desired z-order. map.addLayer takes an
-  // optional beforeId, placing the new layer beneath this beforeId. Due to
-  // hot-module reloading and Svelte component initialization being
-  // unpredictable, we might call overwriteLayer in any order, so use beforeId
-  // to guarantee we wind up in the correct order.
-  //
-  // Find the last layer currently in the map that should be on top of this new
-  // layer.
-  let beforeId;
-  let found = false;
-  for (let i = layerZorder.length - 1; i >= 0; i--) {
-    let id = layerZorder[i];
-    if (id == layer.id) {
-      found = true;
-      break;
-    }
-    if (map.getLayer(id)) {
-      beforeId = id;
-    }
-  }
-  // When adding a new layer somewhere, force the programmer to decide where it
-  // should be z-ordered.
-  if (!found) {
-    throw new Error(`Layer ID ${layer.id} not defined in layerZorder`);
-  }
-  // If beforeId isn't set, we'll add the layer on top of everything else.
-
+  let beforeId = getBeforeId(layer.id);
   map.addLayer(layer, beforeId);
 }
 
@@ -382,81 +357,3 @@ export function addLineStringEndpoints(
 export type FeatureWithProps<G extends Geometry> = Feature<G> & {
   properties: { [name: string]: any };
 };
-
-// All layer IDs used with overwriteLayer must be defined here, with later
-// entries drawn on top.
-const layerZorder = [
-  // Display optional layers in the browse page below interventions. Start with
-  // polygons that cover most of the map.
-  "parliamentary_constituencies",
-  "parliamentary_constituencies-outline",
-  "wards",
-  "wards-outline",
-  "combined_authorities",
-  "combined_authorities-outline",
-  "local_authority_districts",
-  "local_authority_districts-outline",
-  "local_planning_authorities",
-  "local_planning_authorities-outline",
-  "census_output_areas",
-  "census_output_areas-outline",
-  "imd",
-  "imd-outline",
-  // Then smaller optional layers on top
-  "schools",
-  "hospitals",
-  "sports_spaces",
-  "mrn",
-  "bus_routes",
-  "railway_stations",
-  "cycle_parking",
-  "crossings",
-  "cycle_paths",
-  "vehicle_counts",
-  "pct_commute",
-  "pct_school",
-  "road_widths",
-  "road_speeds",
-
-  // Polygons are bigger than lines, which're bigger than points. When geometry
-  // overlaps, put the smaller thing on top
-  "interventions-polygons",
-  "interventions-polygon-outlines",
-  // This is an outline, so draw on top
-  "hover-polygons",
-
-  // The hover effect thickens, so draw beneath
-  "hover-lines",
-  "interventions-lines",
-  "interventions-lines-endpoints",
-
-  "hover-points",
-  "interventions-points",
-
-  // Criticals are one layer that should display on top of scheme data
-  "criticals-clusters",
-  "criticals-counts",
-  "criticals-points",
-
-  "edit-polygon-fill",
-  "edit-polygon-lines",
-  "edit-polygon-vertices",
-
-  "draw-split-route",
-
-  "draw-street-view",
-
-  "route-points",
-  "route-lines",
-  "route-polygons",
-
-  // Draw most things beneath text road labels. These IDs come from the
-  // MapTiler basemap, and there are different ones for each basemap. Note for
-  // OS raster basemaps, we draw everything on top of the rasters.
-  "road_label",
-  "Road labels",
-
-  // Draw the inverted boundary fade on top of basemap labels
-  "boundary",
-  "measurement-line",
-];

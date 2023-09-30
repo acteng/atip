@@ -1,7 +1,7 @@
 <script lang="ts">
   import mask from "@turf/mask";
   import type { FeatureCollection, Polygon } from "geojson";
-  import { bbox } from "lib/maplibre";
+  import { bbox, layerId } from "lib/maplibre";
   import { map } from "stores";
   import { getContext } from "svelte";
   import { FillLayer, GeoJSON } from "svelte-maplibre";
@@ -20,7 +20,7 @@
 
 <GeoJSON data={mask(boundaryGeojson)}>
   <FillLayer
-    id="boundary"
+    {...layerId("boundary")}
     paint={{
       "fill-color": "black",
       "fill-opacity": 0.5,

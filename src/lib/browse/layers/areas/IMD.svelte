@@ -6,7 +6,7 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { makeColorRamp } from "lib/maplibre";
+  import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     FillLayer,
     hoverStateFilter,
@@ -18,7 +18,6 @@
   import SequentialLegend from "../SequentialLegend.svelte";
 
   let name = "imd";
-  let outlineLayer = `${name}-outline`;
 
   let colorScale = colors.sequential_low_to_high;
   // The deciles are [1, 10]. The 5 colors cover two each.
@@ -55,7 +54,7 @@
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
   <FillLayer
-    id={name}
+    {...layerId(name)}
     sourceLayer={name}
     paint={{
       // Decile 1 is the most deprived, but we want to invert for the color scale
@@ -83,7 +82,7 @@
     </Popup>
   </FillLayer>
   <LineLayer
-    id={outlineLayer}
+    {...layerId(`${name}-outline`)}
     paint={{
       "line-color": "black",
       "line-width": 0.5,
