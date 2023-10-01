@@ -75,6 +75,7 @@
 </CollapsibleCard>
 
 <GeoJSON
+  id={source}
   data={gj}
   cluster={{
     // TODO Something's weird
