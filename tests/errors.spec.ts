@@ -26,7 +26,7 @@ test("Redirected to homepage with error when incorrect authority given to scheme
 
   await expect(page.getByText("Authority name not found:")).toBeVisible();
   await expect(page.url()).toBe(
-    "http://localhost:8080/?error=Authority%20name%20not%20found:%20Adu"
+    "http://localhost:8080/?error=Authority%20name%20not%20found:%20Adu&style=streets"
   );
 });
 
