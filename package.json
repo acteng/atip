@@ -52,7 +52,7 @@
     "js-cookie": "^3.0.5",
     "maplibre-gl": "^3.3.1",
     "read-excel-file": "^5.6.1",
-    "route-snapper": "^0.1.14",
+    "route-snapper": "^0.1.15",
     "svelte": "^4.0.0",
     "svelte-maplibre": "github:dabreegster/svelte-maplibre#changes_for_atip"
   }
