@@ -7,11 +7,8 @@
   import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
     appVersion,
-    BaselayerSwitcher,
-    CollapsibleCard,
     getAuthoritiesGeoJson,
     Layout,
-    Legend,
     LoggedIn,
     MapLibreMap,
     ZoomOutMap,
@@ -24,11 +21,7 @@
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
   import InterventionList from "lib/sidebar/InterventionList.svelte";
-  import {
-    colorInterventionsBySchema,
-    schemaLegend,
-    schemaTitle,
-  } from "schemas";
+  import { colorInterventionsBySchema, schemaTitle } from "schemas";
   import { mapStyle, routeInfo } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
@@ -136,25 +129,9 @@
       />
       <HoverLayer />
       <Toolbox {routeSnapperUrl} {schema} />
-      <div class="top-left">
-        <CollapsibleCard label="Layers">
-          <Legend rows={schemaLegend(schema)} />
-          <BaselayerSwitcher />
-        </CollapsibleCard>
-      </div>
     </MapLibreMap>
   </div>
 </Layout>
 
 <About bind:open={showAbout} />
 <Instructions bind:open={showInstructions} {schema} />
-
-<style>
-  .top-left {
-    position: absolute;
-    left: 10px;
-    top: 60px;
-    background-color: white;
-    padding: 16px;
-  }
-</style>

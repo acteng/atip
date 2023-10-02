@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { BaselayerSwitcher, Legend } from "lib/common";
+  import { schemaLegend } from "schemas";
   import { currentMode, map } from "stores";
   import { onDestroy } from "svelte";
   import { get } from "svelte/store";
@@ -114,7 +116,7 @@
   });
 </script>
 
-<div class="toolbox govuk-prose">
+<div class="top-right govuk-prose">
   <div>
     <SelectToolButton
       thisMode="edit-attribute"
@@ -238,16 +240,20 @@
       eventHandler={eventHandlers["street-view"]}
     />
   </div>
+  <BaselayerSwitcher />
+  <Legend rows={schemaLegend(schema)} />
 </div>
 
 <style>
-  .toolbox {
+  .top-right {
     position: absolute;
-    top: 10px;
     right: 10px;
-    padding: 10px;
+    top: 10px;
     background-color: white;
-    border: solid 2px black;
+    padding: 16px;
+    /* Leave room at the bottom for some of the map controls */
+    max-height: calc(100vh - 200px);
+    overflow: auto;
     font-size: 1.5em;
     width: 250px;
   }
