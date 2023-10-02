@@ -14,7 +14,6 @@ export function layerId(layerId: string): LayerProps {
   return {
     id: layerId,
     beforeId: getBeforeId(layerId),
-    // TODO Only helps for clicks, not hover popups or the cursor
     eventsIfTopMost: true,
   };
 }

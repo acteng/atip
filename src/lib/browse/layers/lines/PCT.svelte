@@ -26,7 +26,7 @@
 
   let show = false;
 
-  // TODO Awkward to do in a Svelte component?
+  // TODO Don't use a function and @html; do everything in Svelte?
   function tooltip(props: { [name: string]: any }): string {
     let baseline = props.baseline;
     let gov_target = props.gov_target;
