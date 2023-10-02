@@ -11,14 +11,14 @@
   <body>
     <div id="app"></div>
     <script type="module">
-      import App from "./src/pages/App.svelte";
+      import SketchSchemes from "./src/pages/SketchSchemes.svelte";
 
       // For govuk setup. For some reason, the initAll step doesn't work here.
       document.body.className = document.body.className
         ? document.body.className + " js-enabled"
         : "js-enabled";
 
-      new App({
+      new SketchSchemes({
         target: document.getElementById("app"),
       });
     </script>
