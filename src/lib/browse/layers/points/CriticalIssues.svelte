@@ -12,9 +12,9 @@
   import {
     CircleLayer,
     GeoJSON,
+    hoverStateFilter,
     SymbolLayer,
     type LayerClickInfo,
-    hoverStateFilter,
   } from "svelte-maplibre";
   import { parseCriticalIssuesExcel } from "../../data";
 
