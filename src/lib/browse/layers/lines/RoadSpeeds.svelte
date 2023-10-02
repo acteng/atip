@@ -86,6 +86,7 @@
   <LineLayer
     {...layerId(name)}
     sourceLayer={name}
+    manageHoverState
     paint={{
       "line-color": makeColorRamp(["get", showSpeed], limits, colorScale),
       "line-width": denseLineWidth,

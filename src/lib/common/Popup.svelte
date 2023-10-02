@@ -15,7 +15,7 @@
   }
 </script>
 
-<Popup {openOn} let:features>
+<Popup {openOn} openIfTopMost let:features>
   <div class="govuk-prose">
     <slot props={getProperties(features)} />
   </div>

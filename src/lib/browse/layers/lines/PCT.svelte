@@ -125,6 +125,7 @@
   <LineLayer
     {...layerId(nameSchool)}
     sourceLayer={nameSchool}
+    manageHoverState
     paint={{
       "line-color": makeColorRamp(["get", scenario], limits, colorScale),
       "line-width": denseLineWidth,

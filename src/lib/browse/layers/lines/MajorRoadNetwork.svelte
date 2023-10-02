@@ -45,6 +45,7 @@
   <LineLayer
     {...layerId(name)}
     sourceLayer={name}
+    manageHoverState
     paint={{
       "line-color": color,
       "line-width": 7,
