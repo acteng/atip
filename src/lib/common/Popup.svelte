@@ -1,4 +1,7 @@
 <script lang="ts">
+  // Use this component instead of the one from svelte-maplibre, to more
+  // conveniently get the properties of the topmost feature and for govuk
+  // styling.
   import type { Feature } from "geojson";
   import { Popup } from "svelte-maplibre";
 

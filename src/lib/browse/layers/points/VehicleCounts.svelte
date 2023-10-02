@@ -26,17 +26,6 @@
 
   let show = false;
 
-  function tooltip(props: {
-    [name: string]: any;
-  }): [string, string, string, string] {
-    return [
-      props.location,
-      props.motor_vehicles_2022.toLocaleString(),
-      props.pedal_cycles_2022.toLocaleString(),
-      props.method,
-    ];
-  }
-
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
       `https://roadtraffic.dft.gov.uk/manualcountpoints/${
@@ -110,16 +99,19 @@
     on:click={onClick}
   >
     <Popup let:props>
-      {@const [countLocation, vehicles, cycles, method] = tooltip(props)}
-      <h2>{countLocation}</h2>
+      <h2>{props.location}</h2>
       <p>
-        Total motor vehicles (2022 AADF): <b>{vehicles}</b>
+        Total motor vehicles (2022 AADF): <b>
+          {props.motor_vehicles_2022.toLocaleString()}
+        </b>
       </p>
       <p>
-        Total pedal cycles (2022 AADF): <b>{cycles}</b>
+        Total pedal cycles (2022 AADF): <b>
+          {props.pedal_cycles_2022.toLocaleString()}
+        </b>
       </p>
       <p>
-        Count method: <b>{method}</b>
+        Count method: <b>{props.method}</b>
       </p>
     </Popup>
   </CircleLayer>
