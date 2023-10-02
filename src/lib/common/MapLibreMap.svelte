@@ -6,7 +6,7 @@
     type StyleSpecification,
   } from "maplibre-gl";
   import { map as mapStore } from "stores";
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
   import { MapLibre, NavigationControl, ScaleControl } from "svelte-maplibre";
 
   export let style: string;
@@ -16,6 +16,10 @@
 
   let map: Map;
   let loaded = false;
+
+  // Before creating the map, check if there's a hash, because one will get set below
+  // TODO Change BoundaryLayer to not do this?
+  setContext("setCamera", !window.location.hash);
 
   $: if (loaded) {
     // TODO Get rid of mapStore entirely, eventually?
