@@ -14,6 +14,7 @@
     GeoJSON,
     SymbolLayer,
     type LayerClickInfo,
+    hoverStateFilter,
   } from "svelte-maplibre";
   import { parseCriticalIssuesExcel } from "../../data";
 
@@ -78,7 +79,6 @@
   id={source}
   data={gj}
   cluster={{
-    // TODO Something's weird
     radius: 500,
     maxZoom: 14,
   }}
@@ -109,9 +109,10 @@
   <CircleLayer
     {...layerId(`${source}-points`)}
     applyToClusters={false}
+    manageHoverState
     paint={{
       "circle-color": color,
-      "circle-opacity": 0.9,
+      "circle-opacity": hoverStateFilter(0.9, 0.5),
       "circle-radius": 15,
       "circle-stroke-color": "black",
       "circle-stroke-width": 3,
