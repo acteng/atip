@@ -54,6 +54,7 @@
   <LineLayer
     {...layerId(name)}
     sourceLayer={name}
+    manageHoverState
     paint={{
       "line-color": makeColorRamp(["get", "average"], limits, colorScale),
       // TODO Try showing the actual width, in meters and not pixels

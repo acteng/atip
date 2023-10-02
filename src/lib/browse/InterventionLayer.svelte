@@ -11,7 +11,13 @@
   import type { FilterSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema } from "schemas";
   import { gjScheme } from "stores";
-  import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
+  import {
+    CircleLayer,
+    FillLayer,
+    GeoJSON,
+    hoverStateFilter,
+    LineLayer,
+  } from "svelte-maplibre";
   import InterventionPopup from "./InterventionPopup.svelte";
 
   export let showSchemes: boolean;
@@ -34,9 +40,11 @@
   <CircleLayer
     {...layerId("interventions-points")}
     filter={["all", isPoint, hideWhileEditing, notEndpoint]}
+    manageHoverState
     paint={{
       "circle-color": colorInterventions,
       "circle-radius": circleRadius,
+      "circle-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
       visibility: showSchemes ? "visible" : "none",
@@ -50,9 +58,11 @@
   <LineLayer
     {...layerId("interventions-lines")}
     filter={["all", isLine, hideWhileEditing]}
+    manageHoverState
     paint={{
       "line-color": colorInterventions,
       "line-width": lineWidth,
+      "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
       visibility: showSchemes ? "visible" : "none",
@@ -79,9 +89,10 @@
   <FillLayer
     {...layerId("interventions-polygons")}
     filter={["all", isPolygon, hideWhileEditing]}
+    manageHoverState
     paint={{
       "fill-color": colorInterventions,
-      "fill-opacity": 0.2,
+      "fill-opacity": hoverStateFilter(0.2, 0.5),
     }}
     layout={{
       visibility: showSchemes ? "visible" : "none",

@@ -24,6 +24,12 @@ export function layerId(layerId: string): LayerProps {
 // explicitly defined order.
 export function getBeforeId(layerId: string): string | undefined {
   let map = get(mapStore);
+  if (!map) {
+    console.warn(
+      `getBeforeId(${layerId}) called before map is ready. Z-ordering may be incorrect.`
+    );
+    return undefined;
+  }
 
   // Find the last layer currently in the map that should be on top of this new
   // layer.

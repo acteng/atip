@@ -62,6 +62,7 @@
     layout={{
       visibility: show ? "visible" : "none",
     }}
+    manageHoverState
   >
     <Popup let:props>
       {#if props.has_bus_lane}

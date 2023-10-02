@@ -123,6 +123,7 @@
     layout={{
       visibility: show ? "visible" : "none",
     }}
+    manageHoverState
     hoverCursor="pointer"
     on:click={onClick}
   >
