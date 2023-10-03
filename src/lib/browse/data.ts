@@ -1,6 +1,13 @@
 import type { FeatureCollection } from "geojson";
 import { setPrecision } from "lib/maplibre";
 import readXlsxFile from "read-excel-file";
+import type { FeatureUnion } from "types";
+
+export interface AllSchemeGJ {
+  type: "FeatureCollection";
+  features: FeatureUnion[];
+  schemes: { [name: string]: SchemeData };
+}
 
 // This must be filled out in the input file
 interface SchemeData {
@@ -19,9 +26,7 @@ export interface Scheme extends SchemeData {
 // Modifies this GeoJSON in-place, and returns a dictionary of Schemes, keyed
 // (and ordered) by scheme_reference. Each feature (intervention) in the GJ
 // links back to one of these schemes by scheme_reference.
-export function processInput(
-  gj: FeatureCollection & { schemes: { [name: string]: SchemeData } }
-): Map<string, Scheme> {
+export function processInput(gj: AllSchemeGJ): Map<string, Scheme> {
   let schemes = new Map();
 
   // Assume the input has a top-level dictionary keyed by scheme_reference
@@ -42,6 +47,7 @@ export function processInput(
 
     // TODO For easy styling, copy one field from scheme to all its features.
     // As we have more cases like this, revisit what's most performant.
+    // @ts-ignore Extend InterventionProps with scheme_reference and this
     feature.properties!.funding_programme = scheme.funding_programme;
     // Force numeric IDs (skipping 0) for hovering to work
     feature.id = id++;

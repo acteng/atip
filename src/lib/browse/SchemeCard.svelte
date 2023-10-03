@@ -3,9 +3,10 @@
   import { CollapsibleCard } from "lib/common";
   import { SecondaryButton } from "lib/govuk";
   import { bbox } from "lib/maplibre";
-  import { gjScheme, map } from "stores";
-  import type { Scheme } from "./data";
+  import { map } from "stores";
+  import type { AllSchemeGJ, Scheme } from "./data";
 
+  export let schemesGj: AllSchemeGJ;
   export let scheme: Scheme;
   export let authorityNames: Set<string>;
 
@@ -18,7 +19,7 @@
     // TODO Highlight on the map? Or fade everything else?
     let gj: FeatureCollection = {
       type: "FeatureCollection",
-      features: $gjScheme.features.filter(
+      features: schemesGj.features.filter(
         (f) => f.properties.scheme_reference == scheme.scheme_reference
       ),
     };
@@ -28,7 +29,7 @@
   function editScheme() {
     let gj = {
       type: "FeatureCollection",
-      features: $gjScheme.features.filter(
+      features: schemesGj.features.filter(
         (f) => f.properties.scheme_reference == scheme.scheme_reference
       ),
     };

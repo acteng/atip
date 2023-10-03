@@ -10,7 +10,6 @@
   } from "lib/maplibre";
   import type { FilterSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema } from "schemas";
-  import { gjScheme } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -18,14 +17,16 @@
     hoverStateFilter,
     LineLayer,
   } from "svelte-maplibre";
+  import type { AllSchemeGJ } from "./data";
   import InterventionPopup from "./InterventionPopup.svelte";
 
+  export let schemesGj: AllSchemeGJ;
   export let showSchemes: boolean;
   export let filterText: string;
 
   let colorInterventions = colorInterventionsBySchema("v1");
 
-  $: gj = addLineStringEndpoints($gjScheme);
+  $: gj = addLineStringEndpoints(schemesGj);
 
   // TODO Abusing this property for filtering
   const hideWhileEditing: FilterSpecification = [

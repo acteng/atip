@@ -2,7 +2,7 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import AppVersion from "lib/browse/AppVersion.svelte";
-  import { processInput, type Scheme } from "lib/browse/data";
+  import { processInput, type AllSchemeGJ, type Scheme } from "lib/browse/data";
   import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
   import LoadRemoteSchemeData from "lib/browse/LoadRemoteSchemeData.svelte";
@@ -19,21 +19,26 @@
     ZoomOutMap,
   } from "lib/common";
   import { ErrorMessage } from "lib/govuk";
-  import { gjScheme, mapStyle } from "stores";
+  import { mapStyle } from "stores";
   import { onMount } from "svelte";
-
-  // TODO Remove after the input data is fixed to plumb correct authority names.
-  let authorityNames: Set<string> = new Set(authorityNamesList);
 
   onMount(() => {
     // For govuk components. Must happen here.
     initAll();
   });
 
+  // TODO Remove after the input data is fixed to plumb correct authority names.
+  let authorityNames: Set<string> = new Set(authorityNamesList);
+
   const params = new URLSearchParams(window.location.search);
   mapStyle.set(params.get("style") || "dataviz");
   let errorMessage = "";
 
+  let schemesGj: AllSchemeGJ = {
+    type: "FeatureCollection",
+    features: [],
+    schemes: {},
+  };
   let schemes: Map<string, Scheme> = new Map();
   let schemesToBeShown: Set<string> = new Set();
   let filterText = "";
@@ -41,9 +46,8 @@
 
   function loadFile(text: string) {
     try {
-      gjScheme.set(JSON.parse(text));
-      // @ts-ignore TODO We're abusing the gjScheme store in the browse page for now
-      schemes = processInput($gjScheme);
+      schemesGj = JSON.parse(text);
+      schemes = processInput(schemesGj);
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
@@ -55,7 +59,7 @@
   <div slot="sidebar" class="govuk-prose">
     <div style="display: flex; justify-content: space-between">
       <h1>Browse schemes</h1>
-      <ZoomOutMap boundaryGeojson={$gjScheme} />
+      <ZoomOutMap boundaryGeojson={schemesGj} />
     </div>
     <AppVersion />
     <LoggedIn />
@@ -67,6 +71,7 @@
 
     {#if schemes.size > 0}
       <Filters
+        bind:schemesGj
         {schemes}
         bind:schemesToBeShown
         bind:filterText
@@ -77,14 +82,14 @@
     <ul>
       {#each schemes.values() as scheme}
         {#if schemesToBeShown.has(scheme.scheme_reference)}
-          <SchemeCard {scheme} {authorityNames} />
+          <SchemeCard {schemesGj} {scheme} {authorityNames} />
         {/if}
       {/each}
     </ul>
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
-      <InterventionLayer {filterText} {showSchemes} />
+      <InterventionLayer {schemesGj} {filterText} {showSchemes} />
       <div class="top-right">
         <LayerControls />
       </div>

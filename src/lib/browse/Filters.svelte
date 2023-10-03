@@ -7,12 +7,12 @@
     SecondaryButton,
     Select,
   } from "lib/govuk";
-  import { gjScheme } from "stores";
   import { onMount } from "svelte";
   import type { FeatureUnion } from "types";
-  import { type Scheme } from "./data";
+  import type { AllSchemeGJ, Scheme } from "./data";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
 
+  export let schemesGj: AllSchemeGJ;
   // These are immutable; re-create this component if they change
   export let schemes: Map<string, Scheme>;
 
@@ -83,7 +83,7 @@
       return true;
     };
     schemesToBeShown = new Set(
-      $gjScheme.features
+      schemesGj.features
         .filter(filterFeatures)
         .map((f) => f.properties.scheme_reference!)
     );
@@ -106,17 +106,15 @@
       }
       return true;
     };
-    gjScheme.update((gj) => {
-      for (let feature of gj.features) {
-        if (showFeature(feature)) {
-          delete feature.properties.hide_while_editing;
-          counts[feature.properties.intervention_type]++;
-        } else {
-          feature.properties.hide_while_editing = true;
-        }
+    for (let feature of schemesGj.features) {
+      if (showFeature(feature)) {
+        delete feature.properties.hide_while_editing;
+        counts[feature.properties.intervention_type]++;
+      } else {
+        feature.properties.hide_while_editing = true;
       }
-      return gj;
-    });
+    }
+    schemesGj = schemesGj;
     counts = counts;
   }
   $: filtersUpdated(filterText, filterAuthority, filterFundingProgramme);
