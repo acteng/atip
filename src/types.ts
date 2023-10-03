@@ -1,10 +1,9 @@
 import type { LineString, Point, Polygon } from "geojson";
 import type { ATF4Intervention } from "./schemas/atf4";
-import type { CriticalIssue } from "./schemas/criticals";
 import type { Planning } from "./schemas/planning";
 import type { Intervention } from "./schemas/v2";
 
-export type Schema = "v1" | "v2" | "planning" | "criticals" | "atf4";
+export type Schema = "v1" | "v2" | "planning" | "atf4";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
@@ -48,7 +47,6 @@ export interface InterventionProps {
   // TODO Hack. If these're filled out, ignore the schema above.
   planning?: Planning;
   v2?: Intervention;
-  criticals?: CriticalIssue;
   atf4?: ATF4Intervention;
   // An extra field present in input for the browse schemes page only
   scheme_reference?: string;

@@ -8,7 +8,6 @@ export function schemaTitle(schema: Schema): string {
     v1: "Scheme Design",
     v2: "Experimental Scheme Design",
     planning: "Development Planning",
-    criticals: "Critical Issues",
     atf4: "ATF4 Scheme",
   }[schema];
 }
@@ -19,7 +18,6 @@ export function schemaSingularNoun(schema: Schema): string {
     v1: "an intervention",
     v2: "an intervention",
     planning: "a development",
-    criticals: "a critical issue",
     atf4: "an intervention",
   }[schema];
 }
@@ -30,7 +28,6 @@ export function schemaPluralNoun(schema: Schema): string {
     v1: "interventions",
     v2: "interventions",
     planning: "developments",
-    criticals: "critical issues",
     atf4: "interventions",
   }[schema];
 }

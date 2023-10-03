@@ -1,6 +1,5 @@
 <script lang="ts">
   import ATF4Form from "lib/forms/ATF4Form.svelte";
-  import CriticalsForm from "lib/forms/CriticalsForm.svelte";
   import FormV1 from "lib/forms/FormV1.svelte";
   import FormV2 from "lib/forms/FormV2.svelte";
   import PlanningForm from "lib/forms/PlanningForm.svelte";
@@ -24,9 +23,6 @@
         feature.properties.v2?.Crossing?.name ||
         "Untitled intervention"
       );
-    }
-    if (schema == "criticals") {
-      return feature.properties.criticals?.name || "Untitled issue";
     }
     if (schema == "atf4") {
       return feature.properties.atf4?.name || "Untitled intervention";
@@ -84,8 +80,6 @@
       <FormV2 bind:props={feature.properties} />
     {:else if schema == "planning"}
       <PlanningForm bind:props={feature.properties} />
-    {:else if schema == "criticals"}
-      <CriticalsForm bind:props={feature.properties} />
     {:else if schema == "atf4"}
       <ATF4Form bind:props={feature.properties} />
     {/if}
