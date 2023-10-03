@@ -16,7 +16,9 @@ test("other tools work when route tool doesn't load", async ({ page }) => {
   // Other tools should still work
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
-  await page.getByRole("button", { name: "1) Untitled point" }).isVisible();
+  await expect(
+    page.getByRole("button", { name: "1) Untitled point" })
+  ).toBeVisible();
 });
 
 test("Redirected to homepage with error when incorrect authority given to scheme page", async ({

@@ -39,7 +39,9 @@ test("creating a new point opens a form", async () => {
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
 
-  await page.getByRole("button", { name: "1) Untitled point" }).isVisible();
+  await expect(
+    page.getByRole("button", { name: "1) Untitled point" })
+  ).toBeVisible();
   await page.getByLabel("Description").click();
 });
 
@@ -50,7 +52,9 @@ test("creating a new freehand polygon opens a form", async () => {
   await clickMap(page, 400, 600);
   await page.getByRole("button", { name: "Finish" }).click();
 
-  await page.getByRole("button", { name: "1) Untitled area" }).isVisible();
+  await expect(
+    page.getByRole("button", { name: "1) Untitled area" })
+  ).toBeVisible();
   await page.getByLabel("Description").click();
 });
 
@@ -86,7 +90,9 @@ test("creating a new snapped polygon opens a form", async () => {
   await clickMap(page, 400, 600);
   await page.getByRole("button", { name: "Finish" }).click();
 
-  await page.getByRole("button", { name: "1) Untitled area" }).isVisible();
+  await expect(
+    page.getByRole("button", { name: "1) Untitled area" })
+  ).toBeVisible();
   await page.getByLabel("Description").click();
 });
 
@@ -96,17 +102,19 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
   await clickMap(page, 400, 500);
   await page.getByRole("button", { name: "Finish" }).click();
 
-  await page.getByRole("button", { name: "1) Untitled route" }).isVisible();
+  await expect(
+    page.getByRole("button", { name: "1) Untitled route" })
+  ).toBeVisible();
   await page.getByLabel("Description").click();
 
   // This button only works after RouteInfo is loaded. And note because the
   // button is located inside a label, getByRole doesn't seem to work.
   await page.getByText("Auto-fill").click();
-  await page
-    .getByRole("button", {
-      name: "1) Route from ??? and Brighton Road to Emerald Quay and Harbour Way",
+  await expect(
+    page.getByRole("button", {
+      name: "1) Route from ??? and Brighton Road to ???",
     })
-    .isVisible();
+  ).toBeVisible();
 });
 
 test("editing geometry of a polygon works", async () => {
@@ -116,7 +124,9 @@ test("editing geometry of a polygon works", async () => {
   await clickMap(page, 235, 431);
   await clickMap(page, 465, 459);
   await page.getByRole("button", { name: "Finish" }).click();
-  await page.getByRole("button", { name: "1) Untitled area" }).isVisible();
+  await expect(
+    page.getByRole("button", { name: "1) Untitled area" })
+  ).toBeVisible();
   await page.getByLabel("Description").click();
 
   // Click off the polygon to close the form
@@ -148,7 +158,9 @@ test("adding interventions, then deleting one, then adding another", async () =>
   await clickMap(page, 481, 399);
   await page.getByRole("button", { name: "Finish" }).click();
 
-  await page.getByRole("button", { name: "1) Untitled route" }).isVisible();
+  await expect(
+    page.getByRole("button", { name: "1) Untitled route" })
+  ).toBeVisible();
 });
 
 test("add a route and save it", async () => {
