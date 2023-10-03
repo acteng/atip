@@ -44,7 +44,7 @@
   // releases. The two data releases may also be changed independently.
   let routeSnapperUrl = `${
     import.meta.env.VITE_RESOURCE_BASE
-  }/route-snappers/v2.1/${authorityName}.bin.gz`;
+  }/route-snappers/v2.2/${authorityName}.bin.gz`;
   let routeInfoUrl = `${
     import.meta.env.VITE_RESOURCE_BASE
   }/route-info/v2/${authorityName}.bin.gz`;

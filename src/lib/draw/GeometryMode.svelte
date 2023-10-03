@@ -261,6 +261,13 @@
     if (source.properties.waypoints) {
       destination.properties.waypoints = source.properties.waypoints;
     }
+    // Only copy route_name if the user hasn't set it. It's not simple to
+    // distinguish the user manually editing the name from it being auto-filled
+    // previously, so be safe and don't overwrite anything. The user can always
+    // use the auto-fill button explicitly.
+    if (source.properties.route_name && !destination.properties.name) {
+      destination.properties.name = source.properties.route_name;
+    }
   }
 </script>
 
