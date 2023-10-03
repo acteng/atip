@@ -102,13 +102,20 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
   await clickMap(page, 400, 500);
   await page.getByRole("button", { name: "Finish" }).click();
 
+  // The route immediately has a name
   await expect(
-    page.getByRole("button", { name: "1) Untitled route" })
+    page.getByRole("button", {
+      name: "1) Route from ??? and Brighton Road to ???",
+    })
   ).toBeVisible();
-  await page.getByLabel("Description").click();
 
-  // This button only works after RouteInfo is loaded. And note because the
-  // button is located inside a label, getByRole doesn't seem to work.
+  // Change it
+  await page.getByRole("textbox").nth(2).fill("New route name");
+  await expect(
+    page.getByRole("button", { name: "1) New route name" })
+  ).toBeVisible();
+
+  // Then auto-fill to change it back
   await page.getByText("Auto-fill").click();
   await expect(
     page.getByRole("button", {
@@ -151,7 +158,11 @@ test("adding interventions, then deleting one, then adding another", async () =>
   await clickMap(page, 192, 513);
   await page.getByRole("button", { name: "Finish" }).click();
   await page.getByRole("button", { name: "Save" }).click();
-  await page.getByRole("button", { name: "1) Untitled route" }).click();
+  await page
+    .getByRole("button", {
+      name: "1) Route from Old Shoreham Road and Ropetackle to Ullswater Road and Western Road North",
+    })
+    .click();
   await page.getByRole("button", { name: "Delete" }).click();
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 196, 375);
@@ -159,7 +170,9 @@ test("adding interventions, then deleting one, then adding another", async () =>
   await page.getByRole("button", { name: "Finish" }).click();
 
   await expect(
-    page.getByRole("button", { name: "1) Untitled route" })
+    page.getByRole("button", {
+      name: "1) Route from ???, Bowness Avenue, and Western Road to West Avenue and West Way",
+    })
   ).toBeVisible();
 });
 
@@ -168,12 +181,12 @@ test("add a route and save it", async () => {
   await clickMap(page, 522, 468);
   await clickMap(page, 192, 513);
   await page.getByRole("button", { name: "Finish" }).click();
-  // wait to make sure intervention attributes appear
-  await page.getByRole("button", { name: "Save" }).waitFor();
   await page.getByRole("button", { name: "Save" }).click();
 
   await expect(
-    page.getByRole("button", { name: "1) Untitled route" })
+    page.getByRole("button", {
+      name: "1) Route from Old Shoreham Road and Ropetackle to Ullswater Road and Western Road North",
+    })
   ).toBeVisible();
 });
 

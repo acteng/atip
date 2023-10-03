@@ -2,7 +2,7 @@
   import type { LineString } from "geojson";
   import type { FeatureWithProps } from "lib/maplibre";
   import init from "route-snapper";
-  import { currentMode, map } from "stores";
+  import { currentMode, jsRouteSnapper, map } from "stores";
   import { onMount } from "svelte";
   import type { Mode } from "types";
   import { handleUnsavedFeature, setupEventListeners } from "../common";
@@ -53,6 +53,7 @@
         (percentLoaded) => (progress = percentLoaded)
       );
       routeTool = new RouteTool($map, graphBytes, routeToolInitialised);
+      jsRouteSnapper.set(routeTool.inner);
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
       failedToLoadRouteTool = true;

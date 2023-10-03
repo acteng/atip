@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { Feature, LineString } from "geojson";
+  import type { LineString } from "geojson";
   import { FormElement, Radio, SecondaryButton, TextArea } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { gjScheme, routeInfo } from "stores";
+  import { gjScheme, jsRouteSnapper } from "stores";
+  import type { Feature } from "types";
 
   export let id: number;
   export let name: string;
@@ -12,12 +13,14 @@
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
-  async function autoFillName() {
-    let linestring = $gjScheme.features.find(
+  function autoFillName() {
+    let feature = $gjScheme.features.find(
       (f) => f.id == id
     ) as Feature<LineString>;
     try {
-      name = await $routeInfo!.nameForRoute(linestring);
+      name = $jsRouteSnapper!.routeNameForWaypoints(
+        feature.properties.waypoints
+      );
     } catch (e) {
       window.alert(`Couldn't auto-name route: ${e}`);
     }
@@ -28,7 +31,10 @@
   <input type="text" class="govuk-input" bind:value={name} />
   <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
   {#if length_meters}
-    <SecondaryButton on:click={() => autoFillName()} disabled={!$routeInfo}>
+    <SecondaryButton
+      on:click={() => autoFillName()}
+      disabled={!$jsRouteSnapper}
+    >
       Auto-fill
     </SecondaryButton>
   {/if}

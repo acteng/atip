@@ -1,6 +1,7 @@
 import { type Remote } from "comlink";
 import { emptyGeojson } from "lib/maplibre";
 import type { Map } from "maplibre-gl";
+import { JsRouteSnapper } from "route-snapper";
 import { writable, type Writable } from "svelte/store";
 import {
   isStreetViewImagery,
@@ -19,6 +20,9 @@ export const mapStyle: Writable<string> = writable("dataviz");
 
 // A global singleton, with a RouteInfo web worker. It's null before it's loaded.
 export const routeInfo: Writable<Remote<RouteInfo> | null> = writable(null);
+// A global singleton, with the route snapper loaded for the current map. It's
+// null before it's loaded. This must only be used for read-only methods.
+export const jsRouteSnapper: Writable<JsRouteSnapper | null> = writable(null);
 
 // TODO Should we instead store a map from ID to feature?
 export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);

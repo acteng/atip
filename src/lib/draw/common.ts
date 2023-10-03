@@ -27,6 +27,10 @@ export function setupEventListeners(
       gjScheme.update((gj) => {
         feature.id = newFeatureId(gj);
         feature.properties.intervention_type = intervention_type;
+        if (feature.properties.route_name) {
+          feature.properties.name = feature.properties.route_name;
+          delete feature.properties.route_name;
+        }
         gj.features.push(feature as FeatureUnion);
         return gj;
       });
@@ -62,6 +66,10 @@ export function handleUnsavedFeature(
       let feature = unsavedFeature.value!;
       feature.id = newFeatureId(gj);
       feature.properties.intervention_type = intervention_type;
+      if (feature.properties.route_name) {
+        feature.properties.name = feature.properties.route_name;
+        delete feature.properties.route_name;
+      }
       gj.features.push(feature as FeatureUnion);
       return gj;
     });
