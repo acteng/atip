@@ -2,7 +2,6 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
-  import * as Comlink from "comlink";
   import type { FeatureCollection, Polygon } from "geojson";
   import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
@@ -22,11 +21,9 @@
   import Instructions from "lib/sidebar/Instructions.svelte";
   import InterventionList from "lib/sidebar/InterventionList.svelte";
   import { colorInterventionsBySchema, schemaTitle } from "schemas";
-  import { mapStyle, routeInfo } from "stores";
+  import { mapStyle } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
-  import { type RouteInfo } from "../worker";
-  import workerWrapper from "../worker?worker";
 
   let showAbout = false;
   let showInstructions = false;
@@ -41,13 +38,10 @@
   // The version numbers here are arbitrary, not necessarily related to the
   // app's version. The version of the code deployed has to match the data, and
   // it's simplest to increment the number here for new incompatible data
-  // releases. The two data releases may also be changed independently.
+  // releases.
   let routeSnapperUrl = `${
     import.meta.env.VITE_RESOURCE_BASE
   }/route-snappers/v2.2/${authorityName}.bin.gz`;
-  let routeInfoUrl = `${
-    import.meta.env.VITE_RESOURCE_BASE
-  }/route-info/v2/${authorityName}.bin.gz`;
 
   function toggleAbout() {
     showAbout = !showAbout;
@@ -64,27 +58,6 @@
     initAll();
 
     boundaryGeojson = await loadAuthorityBoundary();
-
-    // If you get "import declarations may only appear at top level of a
-    // module", then you need a newer browser.
-    // https://caniuse.com/mdn-api_worker_worker_ecmascript_modules
-    //
-    // In Firefox 112, go to about:config and enable dom.workers.modules.enabled
-    //
-    // Note this should work fine in older browsers when doing 'npm run build'.
-    // It's only a problem during local dev mode.
-    interface WorkerConstructor {
-      new (): RouteInfo;
-    }
-
-    const MyWorker: Comlink.Remote<WorkerConstructor> = Comlink.wrap(
-      new workerWrapper()
-    );
-    // Don't populate the routeInfo store until loadFile is done, so other
-    // places can disable controls until it's ready
-    let info = await new MyWorker();
-    await info.loadFile(routeInfoUrl);
-    routeInfo.set(info);
   });
 
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {

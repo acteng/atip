@@ -42,14 +42,9 @@ These are some resources to learn languages and libraries used in ATIP. Feel fre
 
 ## Installation
 
-To run locally you'll need:
-[npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and
-[wasm-pack](https://github.com/rustwasm/wasm-pack) ([quick-start](https://rustwasm.github.io/wasm-pack/book/quickstart.html)). Wasm pack depends on [Rust](https://www.rust-lang.org/tools/install) and gcc. Rust is covered in the wasm quick start guide but gcc can be installed using `apt install build-essential` for Ubuntu, at least.
+To run locally you'll need [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
 - `npm install` to install dependencies
-- `npm run wasm` to rebuild the `route_info` Rust library quickly (or
-  `wasm-release` to build slowly but run quickly)
-  - If you're modifying the Rust code, a handy command is `npm run wasm && npm run dev`
 - `npm run generate-schema-ts` to rebuild TS definitions from changes to `src/schemas/*.json`
 - `npm run setup-govuk` to rerun Sass and generate GOV.UK styles
 - `npm run dev` to run ATIP locally (N.B. you need to run all the above commands before running this command)
@@ -57,8 +52,8 @@ To run locally you'll need:
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
 
-Upon first setup, you'll need to `npm run wasm`, `npm run generate-schema-ts`,
-`npm run setup-govuk` to get all mandatory files for running.
+Upon first setup, you'll need to `npm run generate-schema-ts` and `npm run
+setup-govuk` to get all mandatory files for running.
 
 If you're using Firefox locally to develop and get "import declarations may
 only appear at top level" errors, upgrade to at least Firefox 112, go to
@@ -75,9 +70,9 @@ Once you've installed these you can:
 
 1. Open VSCode
 2. Press F1 to open input command at top of window
-3.  Run `Dev Containers: Open Folder in Container`, and select the `atip` folder
+3. Run `Dev Containers: Open Folder in Container`, and select the `atip` folder
 4. Press the plus on the top right of the terminal subwindow at the bottom of VSCode (by default) to open a terminal in your docker container
-5. Run `npm install`, `npm run wasm`, then `npm run dev` and you should have ATIP running on your docker image, VS Code should prompt you with a link to open it in your browser
+5. Run `npm install`, `npm run dev`, and then you should have ATIP running on your docker image. VS Code should prompt you with a link to open it in your browser.
 
 ### Monkey-patching dependencies
 

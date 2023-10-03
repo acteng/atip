@@ -18,5 +18,5 @@ export default defineConfig({
     sourcemap: true,
     minify: false,*/
   },
-  plugins: [svelte(), tsconfigPaths(), wasmPack(["./route_info"], ["route-snapper"])],
+  plugins: [svelte(), tsconfigPaths(), wasmPack([], ["route-snapper"])],
 });
