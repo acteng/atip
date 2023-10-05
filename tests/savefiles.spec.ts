@@ -106,5 +106,41 @@ test("loading a file from the homepage goes to the correct page", async () => {
     .click();
   await expect(page.getByText("Length: 450 m")).toBeVisible();
 });
+
+test("loading a file produced by another tool shows fixable errors", async () => {
+  await page
+    .getByLabel("Load from GeoJSON")
+    .setInputFiles("tests/data/external_data.geojson");
+  page.on("dialog", (dialog) => dialog.accept());
+  await expect(
+    page.getByText("There's a problem with 2 interventions below")
+  ).toBeVisible();
+
+  // Fix the first problem
+  await page.getByRole("button", { name: "1) Untitled undefined" }).click();
+  await expect(page.getByText("No name")).toBeVisible();
+  await page.getByRole("textbox").nth(2).fill("Square area");
+  await expect(page.getByText("No intervention type")).toBeVisible();
+  await page.getByText("Area", { exact: true }).click();
+  await expect(
+    page.getByText("There's a problem with one intervention below")
+  ).toBeVisible();
+
+  // Fix the second problem
+  await page.getByRole("button", { name: "2) Untitled invalid" }).click();
+  await expect(page.getByText("No name")).toBeVisible();
+  await page.getByRole("textbox").nth(2).fill("Weird route");
+  await expect(page.getByText("No intervention type")).toBeVisible();
+  await page.getByText("Route", { exact: true }).click();
+  await expect(page.getByText("Extra GeoJSON properties: extra")).toBeVisible();
+  await page
+    .getByRole("button", { name: "Handle extra GeoJSON properties" })
+    .click();
+  await page.getByRole("button", { name: "Remove these properties" }).click();
+  await expect(
+    page.getByText("There's a problem with one intervention below")
+  ).not.toBeVisible();
+});
+
 // TODO Test schema detection
 // TODO Test loading broken files from the homepage

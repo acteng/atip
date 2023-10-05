@@ -121,6 +121,7 @@
     try {
       // TODO Should we prompt before deleting the current scheme?
       gjScheme.set(backfill(JSON.parse(text)));
+      errorMessage = "";
     } catch (err) {
       errorMessage = `Couldn't load scheme from a file: ${err}`;
     }
