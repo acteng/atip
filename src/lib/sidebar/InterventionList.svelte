@@ -40,7 +40,7 @@
   >
     <ErrorMessage errorMessage={warning} />
     {#if schema == "v1"}
-      <UnexpectedProperties id={feature.id} props={structuredClone(feature)} />
+      <UnexpectedProperties id={feature.id} props={feature.properties} />
       <FormV1
         id={feature.id}
         bind:name={feature.properties.name}
