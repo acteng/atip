@@ -106,6 +106,7 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
     "intervention_type",
     "length_meters",
     "waypoints",
+    "hide_while_editing",
   ]) {
     delete copy[key];
   }
