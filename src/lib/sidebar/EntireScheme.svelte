@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ConfirmationModal, FileInput } from "lib/common";
+  import { FileInput, Modal } from "lib/common";
   import {
     ErrorMessage,
     SecondaryButton,
@@ -65,14 +65,6 @@
         JSON.stringify(geojsonToSave())
       );
     }
-  }
-
-  function openClearAllDialogue() {
-    displayClearAllConfirmation = true;
-  }
-
-  function cancelClearAll() {
-    displayClearAllConfirmation = false;
   }
 
   function clearAll() {
@@ -157,19 +149,24 @@
 <div style="display: flex; justify-content: space-between">
   <p>{$gjScheme.features.length} {schemaPluralNoun(schema)}</p>
   <WarningButton
-    on:click={openClearAllDialogue}
+    on:click={() => (displayClearAllConfirmation = true)}
     disabled={$gjScheme.features.length == 0 || $isAToolInUse}
   >
     Clear all
   </WarningButton>
 </div>
-<ConfirmationModal
+<Modal
+  title="Would you like to clear your work?"
   bind:open={displayClearAllConfirmation}
-  title={"Would you like to clear your work?"}
-  message={"This will delete all your drawn interventions."}
-  on:cancelAction={cancelClearAll}
-  on:confirmAction={clearAll}
-/>
+>
+  <p>This will delete all your drawn interventions.</p>
+  <div class="govuk-button-group">
+    <WarningButton on:click={clearAll}>Clear all work</WarningButton>
+    <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
+      Cancel
+    </SecondaryButton>
+  </div>
+</Modal>
 {#if numErrors == 1}
   <ErrorMessage errorMessage="There's a problem with one intervention below" />
 {:else if numErrors > 0}

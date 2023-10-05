@@ -8,6 +8,7 @@
   import type { Schema } from "types";
   import AccordionItem from "./AccordionItem.svelte";
   import { interventionName, interventionWarning } from "./scheme_data";
+  import UnexpectedProperties from "./UnexpectedProperties.svelte";
 
   export let schema: Schema;
 
@@ -39,6 +40,7 @@
   >
     <ErrorMessage errorMessage={warning} />
     {#if schema == "v1"}
+      <UnexpectedProperties id={feature.id} props={structuredClone(feature)} />
       <FormV1
         id={feature.id}
         bind:name={feature.properties.name}
