@@ -66,12 +66,50 @@ export function interventionWarning(
   schema: Schema,
   feature: FeatureUnion
 ): string | null {
+  // Only worry about one schema for now.
   if (schema != "v1") {
     return null;
   }
+
   if (!feature.properties.name) {
     return "No name";
   }
+  // Blank description is fine
+
+  if (
+    !new Set(["route", "area", "crossing", "other"]).has(
+      feature.properties.intervention_type
+    )
+  ) {
+    return "No intervention type";
+  }
+
+  let unexpectedProperties = getUnexpectedProperties(
+    structuredClone(feature.properties)
+  );
+  if (unexpectedProperties) {
+    return `Extra GeoJSON properties: ${Object.keys(unexpectedProperties).join(
+      ", "
+    )}`;
+  }
 
   return null;
+}
+
+export function getUnexpectedProperties(props: {
+  [name: string]: any;
+}): { [name: string]: any } | null {
+  for (let key of [
+    "name",
+    "description",
+    "intervention_type",
+    "length_meters",
+    "waypoints",
+  ]) {
+    delete props[key];
+  }
+  if (Object.entries(props).length == 0) {
+    return null;
+  }
+  return props;
 }
