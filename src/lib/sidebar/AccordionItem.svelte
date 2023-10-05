@@ -1,10 +1,12 @@
 <script lang="ts">
   // TODO Make this more generic by taking some of these as props too or forwarding events
+  import { WarningIcon } from "lib/common";
   import { formOpen, mapHover, openFromSidebar, sidebarHover } from "stores";
   import { slide } from "svelte/transition";
 
   export let id: number;
   export let label: string;
+  export let warning: string | null;
 
   $: isOpen = $formOpen == id;
   const toggle = () => {
@@ -54,6 +56,9 @@
   >
     <path d="M9 5l7 7-7 7" />
   </svg>
+  {#if warning}
+    <WarningIcon text={warning} />
+  {/if}
   {label}
 </button>
 {#if isOpen}

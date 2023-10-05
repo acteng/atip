@@ -3,11 +3,11 @@
   import FormV1 from "lib/forms/FormV1.svelte";
   import FormV2 from "lib/forms/FormV2.svelte";
   import PlanningForm from "lib/forms/PlanningForm.svelte";
-  import { SecondaryButton, WarningButton } from "lib/govuk";
+  import { ErrorMessage, SecondaryButton, WarningButton } from "lib/govuk";
   import { deleteIntervention, formOpen, gjScheme } from "stores";
   import type { Schema } from "types";
   import AccordionItem from "./AccordionItem.svelte";
-  import { interventionName } from "./scheme_data";
+  import { interventionName, interventionWarning } from "./scheme_data";
 
   export let schema: Schema;
 
@@ -31,10 +31,13 @@
 <svelte:window on:keydown={onKeydown} />
 
 {#each $gjScheme.features as feature, i (feature.id)}
+  {@const warning = interventionWarning(schema, feature)}
   <AccordionItem
     id={feature.id}
     label={i + 1 + ") " + interventionName(schema, feature)}
+    {warning}
   >
+    <ErrorMessage errorMessage={warning} />
     {#if schema == "v1"}
       <FormV1
         id={feature.id}

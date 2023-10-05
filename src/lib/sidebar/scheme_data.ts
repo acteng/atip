@@ -61,3 +61,17 @@ export function interventionName(
   }
   return `Untitled ${noun}`;
 }
+
+export function interventionWarning(
+  schema: Schema,
+  feature: FeatureUnion
+): string | null {
+  if (schema != "v1") {
+    return null;
+  }
+  if (!feature.properties.name) {
+    return "No name";
+  }
+
+  return null;
+}

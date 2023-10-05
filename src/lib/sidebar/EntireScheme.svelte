@@ -17,7 +17,7 @@
   } from "stores";
   import { onMount } from "svelte";
   import type { Schema, Scheme } from "types";
-  import { backfill } from "./scheme_data";
+  import { backfill, interventionWarning } from "./scheme_data";
 
   export let authorityName: string;
   export let schema: Schema;
@@ -133,6 +133,10 @@
       errorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
+
+  $: numErrors = $gjScheme.features.filter(
+    (f) => interventionWarning(schema, f) != null
+  ).length;
 </script>
 
 <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
@@ -166,6 +170,13 @@
   on:cancelAction={cancelClearAll}
   on:confirmAction={clearAll}
 />
+{#if numErrors == 1}
+  <ErrorMessage errorMessage="There's a problem with one intervention below" />
+{:else if numErrors > 0}
+  <ErrorMessage
+    errorMessage="There's a problem with {numErrors} interventions below"
+  />
+{/if}
 
 {#if $isAToolInUse}
   <p>
