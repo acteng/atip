@@ -16,6 +16,7 @@ export { default as Popup } from "./Popup.svelte";
 export { default as MapLibreMap } from "./MapLibreMap.svelte";
 export { default as Modal } from "./Modal.svelte";
 export { default as StreetViewController } from "./StreetViewController.svelte";
+export { default as WarningIcon } from "./WarningIcon.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
 
 export async function getAuthoritiesGeoJson(): Promise<
