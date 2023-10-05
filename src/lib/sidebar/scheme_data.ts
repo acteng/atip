@@ -84,10 +84,8 @@ export function interventionWarning(
     return "No intervention type";
   }
 
-  let unexpectedProperties = getUnexpectedProperties(
-    structuredClone(feature.properties)
-  );
-  if (unexpectedProperties) {
+  let unexpectedProperties = getUnexpectedProperties(feature.properties);
+  if (Object.entries(unexpectedProperties).length > 0) {
     return `Extra GeoJSON properties: ${Object.keys(unexpectedProperties).join(
       ", "
     )}`;
@@ -96,9 +94,12 @@ export function interventionWarning(
   return null;
 }
 
-export function getUnexpectedProperties(props: {
+// Returns a copy of the input, with expected properties removed. Only
+// unexpected ones remain.
+export function getUnexpectedProperties(props: { [name: string]: any }): {
   [name: string]: any;
-}): { [name: string]: any } | null {
+} {
+  let copy = structuredClone(props);
   for (let key of [
     "name",
     "description",
@@ -106,10 +107,7 @@ export function getUnexpectedProperties(props: {
     "length_meters",
     "waypoints",
   ]) {
-    delete props[key];
+    delete copy[key];
   }
-  if (Object.entries(props).length == 0) {
-    return null;
-  }
-  return props;
+  return copy;
 }

@@ -7,7 +7,7 @@
   export let id: number;
   export let props: { [name: string]: any };
 
-  let unexpected = getUnexpectedProperties(props) ?? {};
+  $: unexpected = getUnexpectedProperties(props);
   let open = false;
 
   function removeExtraProperties() {
@@ -23,7 +23,7 @@
   }
 </script>
 
-{#if unexpected}
+{#if Object.entries(unexpected).length > 0}
   <SecondaryButton on:click={() => (open = true)}>
     Handle extra GeoJSON properties
   </SecondaryButton>
