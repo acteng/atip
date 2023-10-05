@@ -33,7 +33,7 @@ export const clearExistingInterventions = async (page: Page) => {
   const clearAllLocator = page.getByRole("button", { name: "Clear all" });
   if (!(await clearAllLocator.isDisabled())) {
     await clearAllLocator.click();
-    await page.getByRole("button", { name: "Confirm" }).click();
+    await page.getByRole("button", { name: "Clear all work" }).click();
   }
 
   if (!(await editAttributesLocator.isDisabled())) {
