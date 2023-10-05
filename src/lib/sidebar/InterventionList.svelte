@@ -5,44 +5,11 @@
   import PlanningForm from "lib/forms/PlanningForm.svelte";
   import { SecondaryButton, WarningButton } from "lib/govuk";
   import { deleteIntervention, formOpen, gjScheme } from "stores";
-  import type { FeatureUnion, Schema } from "types";
+  import type { Schema } from "types";
   import AccordionItem from "./AccordionItem.svelte";
+  import { interventionName } from "./scheme_data";
 
   export let schema: Schema;
-
-  function interventionName(feature: FeatureUnion): string {
-    if (schema == "planning") {
-      return feature.properties.planning?.name || "Untitled polygon";
-    }
-    if (schema == "v2") {
-      // TODO Revisit auto-generated enum types
-      return (
-        // @ts-ignore
-        feature.properties.v2?.Route?.name ||
-        // @ts-ignore
-        feature.properties.v2?.Crossing?.name ||
-        "Untitled intervention"
-      );
-    }
-    if (schema == "atf4") {
-      return feature.properties.atf4?.name || "Untitled intervention";
-    }
-
-    if (feature.properties.name) {
-      return feature.properties.name;
-    }
-    var noun: string = feature.properties.intervention_type;
-    if (noun == "other") {
-      if (feature.geometry.type == "Point") {
-        noun = "point";
-      } else if (feature.geometry.type == "LineString") {
-        noun = "line";
-      } else {
-        noun = "polygon";
-      }
-    }
-    return `Untitled ${noun}`;
-  }
 
   function onKeydown(e: KeyboardEvent) {
     if (e.key == "Delete") {
@@ -66,7 +33,7 @@
 {#each $gjScheme.features as feature, i (feature.id)}
   <AccordionItem
     id={feature.id}
-    label={i + 1 + ") " + interventionName(feature)}
+    label={i + 1 + ") " + interventionName(schema, feature)}
   >
     {#if schema == "v1"}
       <FormV1
