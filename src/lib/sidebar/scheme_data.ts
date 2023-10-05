@@ -99,7 +99,7 @@ export function interventionWarning(
 export function getUnexpectedProperties(props: { [name: string]: any }): {
   [name: string]: any;
 } {
-  let copy = structuredClone(props);
+  let copy = JSON.parse(JSON.stringify(props));
   for (let key of [
     "name",
     "description",
