@@ -12,16 +12,14 @@
 
   onMount(() => {
     $map.on("click", onClick);
-    $map.on("dragstart", onDragStart);
-    //$map.on("drag", onDrag);
-    $map.on("dragend", onDragEnd);
+    $map.on("mousedown", onMouseDown);
+    $map.on("mouseup", onMouseUp);
     $map.on("mousemove", onMouseMove);
   });
   onDestroy(() => {
     $map.off("click", onClick);
-    $map.off("dragstart", onDragStart);
-    //$map.off("drag", onDrag);
-    $map.off("dragend", onDragEnd);
+    $map.off("mousedown", onMouseDown);
+    $map.off("mouseup", onMouseUp);
     $map.off("mousemove", onMouseMove);
   });
 
@@ -53,54 +51,40 @@
     }
 
     if (hovering == null) {
+      // Add a new point
       points.push(e.lngLat);
       points = points;
     } else {
+      // Remove a point
       points.splice(hovering, 1);
       points = points;
     }
   }
 
-  function onDragStart() {
+  function onMouseDown(e: MapMouseEvent) {
     if (!active) {
       return;
     }
 
     console.log(`STARTING TO DRAG`);
+    e.preventDefault();
 
     dragging = true;
     $map.getCanvas().style.cursor = "grab";
-    $map.dragPan.disable();
+    //$map.dragPan.disable();
   }
 
-  // TODO Wat, this is just total bogus, doesnt match docs?
-  function onDrag(e: MapMouseEvent) {
+  function onMouseUp() {
     if (!active) {
       return;
     }
 
-    console.log(`got a drag while hovering ${hovering} and at ${e.lngLat}`);
-
-    /*if (dragging) {
-      console.log(`dragging ${hovering} to ${e.lngLat}`);
-      window.x = e;
-      points[hovering!] = e.lngLat;
-      points = points;
-    } else {
-      console.log(`ondrag when we're not dragging, how?!`);
-    }*/
-  }
-
-  function onDragEnd() {
-    if (!active) {
-      return;
+    if (dragging) {
+      console.log(`STOPPING THE DRAG`);
+      dragging = false;
+      $map.getCanvas().style.cursor = "pointer";
+      //$map.dragPan.enable();
     }
-
-    console.log(`STOPPING THE DRAG`);
-
-    dragging = false;
-    $map.getCanvas().style.cursor = "pointer";
-    $map.dragPan.enable();
   }
 
   function onMouseMove(e: MapMouseEvent) {
@@ -110,8 +94,8 @@
 
     console.log(`moved to ${e.lngLat.toArray()} whilst dragging ${dragging} and hovering ${hovering}`);
 
-    // TODO easier?
     if (dragging) {
+      console.log(`dragging ${hovering} to ${e.lngLat}`);
       points[hovering!] = e.lngLat;
       points = points;
     } else {
@@ -136,6 +120,8 @@
     }}
     manageHoverState
   >
+    {#if !dragging}
     <Popup><p>Drag to remove or click to remove</p></Popup>
+    {/if}
   </CircleLayer>
 </GeoJSON>
