@@ -117,6 +117,8 @@ const layerZorder = [
   "draw-split-route",
 
   "draw-street-view",
+  "line-tool-line",
+  "line-tool-endpoints",
 
   "route-points",
   "route-lines",
@@ -130,5 +132,4 @@ const layerZorder = [
 
   // Draw the inverted boundary fade on top of basemap labels
   "boundary",
-  "measurement-line",
 ];
