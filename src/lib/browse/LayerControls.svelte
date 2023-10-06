@@ -3,8 +3,8 @@
     appVersion,
     BaselayerSwitcher,
     CollapsibleCard,
-    StreetViewController,
     MeasureTool,
+    StreetViewController,
   } from "lib/common";
   import { CheckboxGroup } from "lib/govuk";
   import { interactiveMapLayersEnabled } from "stores";

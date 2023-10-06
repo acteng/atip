@@ -1,20 +1,18 @@
 <script lang="ts">
   // TODO dashed line
-  import PointWorld from "./PointWorld.svelte";
+  import type { FeatureCollection } from "geojson";
   import { SecondaryButton } from "lib/govuk";
-  import { map } from "stores";
-  import { GeoJSON, LineLayer } from "svelte-maplibre";
   import { emptyGeojson, layerId } from "lib/maplibre";
   import type { LngLat } from "maplibre-gl";
-  import type { FeatureCollection } from "geojson";
+  import { map } from "stores";
+  import { GeoJSON, LineLayer } from "svelte-maplibre";
+  import PointWorld from "./PointWorld.svelte";
 
   let active = false;
   let waypoints: LngLat[] = [];
 
   $: lineGj = calculateLineGj(waypoints);
   function calculateLineGj(waypoints: LngLat[]): FeatureCollection {
-    console.log(waypoints);
-
     let gj = emptyGeojson();
     if (waypoints.length > 1) {
       gj.features.push({
@@ -23,7 +21,7 @@
         geometry: {
           type: "LineString",
           coordinates: waypoints.map((pt) => pt.toArray()),
-        }
+        },
       });
     }
     return gj;

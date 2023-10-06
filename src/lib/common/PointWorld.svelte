@@ -1,14 +1,18 @@
 <script lang="ts">
-  import { Popup } from "lib/common";
-  import { map } from "stores";
-  import { onMount, onDestroy } from "svelte";
-  import { hoverStateFilter, GeoJSON, CircleLayer } from "svelte-maplibre";
-  import { emptyGeojson, layerId } from "lib/maplibre";
-  import type { LngLat, MapMouseEvent } from "maplibre-gl";
   import type { FeatureCollection } from "geojson";
+  import { Popup } from "lib/common";
+  import { layerId } from "lib/maplibre";
+  import type { LngLat, MapMouseEvent } from "maplibre-gl";
+  import { map } from "stores";
+  import { onDestroy, onMount } from "svelte";
+  import { CircleLayer, GeoJSON, hoverStateFilter } from "svelte-maplibre";
 
   export let active: boolean;
   export let points: LngLat[];
+
+  // Index into points
+  let hovering: number | null = null;
+  let dragging = false;
 
   onMount(() => {
     $map.on("click", onClick);
@@ -23,27 +27,20 @@
     $map.off("mousemove", onMouseMove);
   });
 
-  $: gj = calculateGj(points);
-  function calculateGj(points: LngLat[]): FeatureCollection {
-    let gj = emptyGeojson();
-    // TODO Map
-    for (let pt of points) {
-      gj.features.push({
+  $: gj = {
+    type: "FeatureCollection",
+    features: points.map((pt, idx) => {
+      return {
         type: "Feature",
-        id: gj.features.length,
+        id: idx,
         properties: {},
         geometry: {
           type: "Point",
           coordinates: pt.toArray(),
-        }
-      });
-    }
-    return gj;
-  }
-
-  // Index into points
-  let hovering: number | null = null;
-  let dragging = false;
+        },
+      };
+    }),
+  };
 
   function onClick(e: MapMouseEvent) {
     if (!active) {
@@ -66,12 +63,9 @@
       return;
     }
 
-    console.log(`STARTING TO DRAG`);
     e.preventDefault();
-
     dragging = true;
     $map.getCanvas().style.cursor = "grab";
-    //$map.dragPan.disable();
   }
 
   function onMouseUp() {
@@ -80,10 +74,8 @@
     }
 
     if (dragging) {
-      console.log(`STOPPING THE DRAG`);
       dragging = false;
       $map.getCanvas().style.cursor = "pointer";
-      //$map.dragPan.enable();
     }
   }
 
@@ -92,15 +84,14 @@
       return;
     }
 
-    console.log(`moved to ${e.lngLat.toArray()} whilst dragging ${dragging} and hovering ${hovering}`);
-
     if (dragging) {
-      console.log(`dragging ${hovering} to ${e.lngLat}`);
       points[hovering!] = e.lngLat;
       points = points;
     } else {
       hovering = null;
-      for (let f of $map.queryRenderedFeatures(e.point, { layers: ["line-tool-endpoints"] })) {
+      for (let f of $map.queryRenderedFeatures(e.point, {
+        layers: ["line-tool-endpoints"],
+      })) {
         hovering = f.id as number;
         $map.getCanvas().style.cursor = "pointer";
         break;
@@ -114,14 +105,14 @@
     {...layerId("line-tool-endpoints")}
     paint={{
       "circle-color": "red",
-      "circle-radius": 5,
+      "circle-radius": 15,
       "circle-stroke-color": "black",
       "circle-stroke-width": hoverStateFilter(1, 3),
     }}
     manageHoverState
   >
     {#if !dragging}
-    <Popup><p>Drag to remove or click to remove</p></Popup>
+      <Popup><p>Drag to remove or click to remove</p></Popup>
     {/if}
   </CircleLayer>
 </GeoJSON>
