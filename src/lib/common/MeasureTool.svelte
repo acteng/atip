@@ -1,9 +1,10 @@
 <script lang="ts">
+  // TODO dashed line
   import { Popup } from "lib/common";
   import { SecondaryButton } from "lib/govuk";
   import { map } from "stores";
   import { onMount, onDestroy } from "svelte";
-  import { type LayerClickInfo, hoverStateFilter, GeoJSON, CircleLayer, LineLayer } from "svelte-maplibre";
+  import { type LayerClickInfo, hoverStateFilter, GeoJSON, CircleLayer, LineLayer, MarkerLayer } from "svelte-maplibre";
   import { emptyGeojson, layerId } from "lib/maplibre";
   import type { LngLat, MapMouseEvent } from "maplibre-gl";
   import type { FeatureCollection } from "geojson";
@@ -18,9 +19,10 @@
     $map.off("click", addWaypoint);
   });
 
-  $: gj = calculateGeojson(waypoints);
-  function calculateGeojson(waypoints: LngLat[]): FeatureCollection {
+  $: markerGj = calculateMarkerGj(waypoints);
+  function calculateMarkerGj(waypoints: LngLat[]): FeatureCollection {
     let gj = emptyGeojson();
+    // TODO Map
     for (let waypt of waypoints) {
       gj.features.push({
         type: "Feature",
@@ -32,6 +34,11 @@
         }
       });
     }
+    return gj;
+  }
+  $: lineGj = calculateLineGj(waypoints);
+  function calculateLineGj(waypoints: LngLat[]): FeatureCollection {
+    let gj = emptyGeojson();
     if (waypoints.length > 1) {
       gj.features.push({
         type: "Feature",
@@ -68,7 +75,7 @@
     console.log(JSON.stringify(waypoints));
   }
 
-  function removeWaypoint(e: CustomEvent<LayerClickInfo>) {
+  /*function removeWaypoint(e: CustomEvent<LayerClickInfo>) {
     //console.log(e.detail.features);
     let idx = (e.detail.features[0].id as number) - 1;
     console.log(`removing ${idx}. before:`);
@@ -77,24 +84,16 @@
     waypoints = waypoints;
     console.log(`... now its`);
     console.log(JSON.stringify(waypoints));
-  }
+  }*/
 </script>
 
-<GeoJSON data={gj}>
-  <CircleLayer
-    {...layerId("line-tool-endpoints")}
-    paint={{
-      "circle-color": "red",
-      "circle-radius": 5,
-      "circle-stroke-color": "black",
-      "circle-stroke-width": hoverStateFilter(1, 3),
-    }}
-    manageHoverState
-    hoverCursor="grab"
-    on:click={removeWaypoint}
-  >
+<GeoJSON data={markerGj}>
+  <MarkerLayer draggable>
+    XX
     <Popup><p>Drag to remove or click to remove</p></Popup>
-  </CircleLayer>
+  </MarkerLayer>
+</GeoJSON>
+<GeoJSON data={lineGj}>
   <LineLayer
     {...layerId("line-tool-line")}
     paint={{ "line-color": "cyan", "line-width": 5 }}
