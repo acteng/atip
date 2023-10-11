@@ -40,6 +40,8 @@ export function processInput(gj: AllSchemeGJ): Map<string, Scheme> {
     });
   }
 
+  gj.features = gj.features.filter((f) => keepFeature(f));
+
   let id = 1;
   for (let feature of gj.features) {
     let scheme = schemes.get(feature.properties!.scheme_reference);
@@ -54,6 +56,28 @@ export function processInput(gj: AllSchemeGJ): Map<string, Scheme> {
   }
 
   return schemes;
+}
+
+// These should ideally be fixed during upstream data validation processes.
+function keepFeature(feature: FeatureUnion): boolean {
+  // Manually filter out some large areas that describe a boundary or
+  // non-specific location of interventions. They make it harder to
+  // interact with smaller, more specific interventions.
+  let hugeAreas = [
+    "eb0ad8ed183c137da4bae66afa944da9",
+    "0a568f07241be96f0a70aa73a0de80c8",
+    "6c4a5d57176eaeb3296eba790f869909",
+    "475e9a43749ce09c7edaaffa0ae57a2f",
+    "117b783cb2916a1bb4262960e523acc5",
+    "7a600e6342b226aa0983c8dfed19254f",
+    "84cc5eb1b52a4e49188058373e587ff0",
+  ];
+
+  if (hugeAreas.includes(feature.properties.id)) {
+    return false;
+  }
+
+  return true;
 }
 
 interface CriticalRow {
