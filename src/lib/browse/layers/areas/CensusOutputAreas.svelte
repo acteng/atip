@@ -196,6 +196,7 @@
     layout={{
       visibility: colorBy != "" ? "visible" : "none",
     }}
+    eventsIfTopMost
     manageHoverState
     hoverCursor="pointer"
     on:click={onClick}

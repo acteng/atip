@@ -46,6 +46,7 @@
     {...layerId(name)}
     sourceLayer={name}
     manageHoverState
+    eventsIfTopMost
     paint={{
       "line-color": color,
       "line-width": 7,

@@ -87,6 +87,7 @@
     {...layerId(name)}
     sourceLayer={name}
     manageHoverState
+    eventsIfTopMost
     paint={{
       "line-color": makeColorRamp(["get", showSpeed], limits, colorScale),
       "line-width": denseLineWidth,

@@ -110,6 +110,7 @@
     {...layerId(`${source}-points`)}
     applyToClusters={false}
     manageHoverState
+    eventsIfTopMost
     paint={{
       "circle-color": color,
       "circle-opacity": hoverStateFilter(0.9, 0.5),
