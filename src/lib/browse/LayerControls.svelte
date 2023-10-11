@@ -3,9 +3,9 @@
     appVersion,
     BaselayerSwitcher,
     CollapsibleCard,
+    LineMeasureController,
     StreetViewController,
   } from "lib/common";
-  import LineMeasureController from "lib/common/LineMeasureController.svelte";
   import { CheckboxGroup } from "lib/govuk";
   import { interactiveMapLayersEnabled } from "stores";
   import CensusOutputAreaLayerControl from "./layers/areas/CensusOutputAreas.svelte";
