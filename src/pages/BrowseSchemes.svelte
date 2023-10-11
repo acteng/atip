@@ -13,6 +13,7 @@
   import {
     appVersion,
     FileInput,
+    Geocoder,
     Layout,
     LoggedIn,
     MapLibreMap,
@@ -89,6 +90,7 @@
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
+      <Geocoder />
       <InterventionLayer {schemesGj} {filterText} {showSchemes} />
       <div class="top-right">
         <LayerControls />
