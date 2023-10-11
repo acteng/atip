@@ -63,6 +63,7 @@
       visibility: show ? "visible" : "none",
     }}
     manageHoverState
+    eventsIfTopMost
   >
     <Popup let:props>
       {#if props.has_bus_lane}

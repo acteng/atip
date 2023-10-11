@@ -42,6 +42,7 @@
     {...layerId("interventions-points")}
     filter={["all", isPoint, hideWhileEditing, notEndpoint]}
     manageHoverState
+    eventsIfTopMost
     paint={{
       "circle-color": colorInterventions,
       "circle-radius": circleRadius,
@@ -60,6 +61,7 @@
     {...layerId("interventions-lines")}
     filter={["all", isLine, hideWhileEditing]}
     manageHoverState
+    eventsIfTopMost
     paint={{
       "line-color": colorInterventions,
       "line-width": lineWidth,
@@ -91,6 +93,7 @@
     {...layerId("interventions-polygons")}
     filter={["all", isPolygon, hideWhileEditing]}
     manageHoverState
+    eventsIfTopMost
     paint={{
       "fill-color": colorInterventions,
       "fill-opacity": hoverStateFilter(0.2, 0.5),

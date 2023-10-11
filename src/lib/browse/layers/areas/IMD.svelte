@@ -69,6 +69,7 @@
       visibility: show ? "visible" : "none",
     }}
     manageHoverState
+    eventsIfTopMost
   >
     <Popup let:props>
       <p>

@@ -61,6 +61,7 @@
       visibility: show ? "visible" : "none",
     }}
     manageHoverState
+    eventsIfTopMost
     on:click={onClick}
     hoverCursor="pointer"
   >

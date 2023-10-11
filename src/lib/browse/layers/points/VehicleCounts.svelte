@@ -96,6 +96,7 @@
       visibility: show ? "visible" : "none",
     }}
     hoverCursor="pointer"
+    eventsIfTopMost
     on:click={onClick}
   >
     <Popup let:props>

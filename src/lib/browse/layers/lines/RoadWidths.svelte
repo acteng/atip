@@ -55,6 +55,7 @@
     {...layerId(name)}
     sourceLayer={name}
     manageHoverState
+    eventsIfTopMost
     paint={{
       "line-color": makeColorRamp(["get", "average"], limits, colorScale),
       // TODO Try showing the actual width, in meters and not pixels
