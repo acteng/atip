@@ -73,6 +73,9 @@ function keepFeature(feature: FeatureUnion): boolean {
     "84cc5eb1b52a4e49188058373e587ff0",
   ];
 
+  // @ts-ignore The id field is present in the current input data, but it's not
+  // part of our intended schema or used elsewhere, so InterventionProps
+  // deliberately does not include it. Only use it here.
   if (hugeAreas.includes(feature.properties.id)) {
     return false;
   }
