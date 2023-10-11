@@ -6,6 +6,7 @@
   import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
     appVersion,
+    Geocoder,
     getAuthoritiesGeoJson,
     Layout,
     LoggedIn,
@@ -96,6 +97,7 @@
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle}>
+      <Geocoder />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer
         colorInterventions={colorInterventionsBySchema(schema)}

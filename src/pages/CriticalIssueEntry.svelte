@@ -8,7 +8,9 @@
   import {
     appVersion,
     BaselayerSwitcher,
+    Geocoder,
     Layout,
+    LineMeasureController,
     LoggedIn,
     MapLibreMap,
     StreetViewController,
@@ -52,6 +54,7 @@
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
+      <Geocoder />
       <Pin bind:markerPosition enableAdding={streetviewOff} />
       <div class="top-right">
         <BaselayerSwitcher disabled={!streetviewOff} />
@@ -60,6 +63,7 @@
           displayEnableButton
           bind:isInactive={streetviewOff}
         />
+        <div><LineMeasureController /></div>
       </div>
     </MapLibreMap>
   </div>
