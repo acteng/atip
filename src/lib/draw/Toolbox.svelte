@@ -16,6 +16,7 @@
   import { PolygonTool } from "./polygon/polygon_tool";
   import PolygonMode from "./polygon/PolygonMode.svelte";
   import { RouteTool } from "./route/route_tool";
+  import RouteSnapperLoader from "./RouteSnapperLoader.svelte";
 
   export let routeSnapperUrl: string;
   export let schema: Schema;
@@ -23,7 +24,6 @@
   // Create and manage these here, then pass down to modes as needed.
   let pointTool = new PointTool($map);
   let polygonTool = new PolygonTool($map);
-  // TODO Create this here too?
   let routeTool: RouteTool | null = null;
 
   onDestroy(() => {
@@ -34,16 +34,32 @@
 </script>
 
 <div class="top-right govuk-prose">
+  <RouteSnapperLoader url={routeSnapperUrl} bind:routeTool />
+
   {#if $mode2.mode == "list"}
     <SecondaryButton on:click={() => mode2.set({ mode: "new-point" })}>
       <img src={pointIcon} alt="New point" />
       New point
     </SecondaryButton>
     <SecondaryButton
+      on:click={() => mode2.set({ mode: "new-route" })}
+      disabled={!routeTool}
+    >
+      <img src={routeIcon} alt="New route" />
+      New route
+    </SecondaryButton>
+    <SecondaryButton
       on:click={() => mode2.set({ mode: "new-freehand-polygon" })}
     >
       <img src={polygonFreehandIcon} alt="New polygon (freehand)" />
       New polygon (freehand)
+    </SecondaryButton>
+    <SecondaryButton
+      on:click={() => mode2.set({ mode: "new-snapped-polygon" })}
+      disabled={!routeTool}
+    >
+      <img src={polygonSnappedIcon} alt="New polygon (snapped)" />
+      New polygon (snapped)
     </SecondaryButton>
   {:else if $mode2.mode == "edit-form"}
     <SecondaryButton on:click={() => mode2.set({ mode: "list" })}>
@@ -54,8 +70,12 @@
     </WarningButton>
   {:else if $mode2.mode == "new-point"}
     <PointMode {pointTool} />
+  {:else if $mode2.mode == "new-route"}
+    TODO
   {:else if $mode2.mode == "new-freehand-polygon"}
     <PolygonMode {polygonTool} />
+  {:else if $mode2.mode == "new-snapped-polygon"}
+    TODO
   {:else}
     <h1>TODO</h1>
   {/if}
