@@ -12,7 +12,7 @@
     DataDrivenPropertyValueSpecification,
     FilterSpecification,
   } from "maplibre-gl";
-  import { gjScheme, mode2 } from "stores";
+  import { gjScheme, mode } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -36,15 +36,15 @@
   ];
   const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
 
-  $: clickable = $mode2.mode == "list";
+  $: clickable = $mode.mode == "list";
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    if ($mode2.mode != "list") {
+    if ($mode.mode != "list") {
       return;
     }
     // TODO Possible to be missing?
     if (e.detail.features[0]) {
-      mode2.set({ mode: "edit-form", id: e.detail.features[0].id as number });
+      mode.set({ mode: "edit-form", id: e.detail.features[0].id as number });
     }
   }
 </script>

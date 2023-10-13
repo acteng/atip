@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { LineString } from "geojson";
   import { DefaultButton, SecondaryButton } from "lib/govuk";
-  import { gjScheme, mode2, newFeatureId } from "stores";
+  import { gjScheme, mode, newFeatureId } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import type { RouteTool } from "./route_tool";
@@ -30,11 +30,11 @@
       return gj;
     });
 
-    mode2.set({ mode: "edit-form", id: feature.id });
+    mode.set({ mode: "edit-form", id: feature.id });
   }
 
   function onFailure() {
-    mode2.set({ mode: "list" });
+    mode.set({ mode: "list" });
   }
 </script>
 

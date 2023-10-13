@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { editGeometryControls, mode2 } from "stores";
+  import { editGeometryControls, mode } from "stores";
   import type { Schema } from "types";
   import PointControls from "../draw/point/PointControls.svelte";
   import PolygonControls from "../draw/polygon/PolygonControls.svelte";
@@ -11,11 +11,11 @@
   export let schema: Schema;
 </script>
 
-{#if $mode2.mode == "list"}
+{#if $mode.mode == "list"}
   <ListMode {schema} />
-{:else if $mode2.mode == "edit-form"}
-  <EditForm {schema} id={$mode2.id} />
-{:else if $mode2.mode == "edit-geometry"}
+{:else if $mode.mode == "edit-form"}
+  <EditForm {schema} id={$mode.id} />
+{:else if $mode.mode == "edit-geometry"}
   {#if $editGeometryControls == "point"}
     <PointControls editingExisting />
   {:else if $editGeometryControls == "route"}
@@ -25,15 +25,15 @@
   {:else if $editGeometryControls == "snapped-polygon"}
     <SnapPolygonControls />
   {/if}
-{:else if $mode2.mode == "new-point"}
+{:else if $mode.mode == "new-point"}
   <PointControls editingExisting={false} />
-{:else if $mode2.mode == "new-route"}
+{:else if $mode.mode == "new-route"}
   <RouteControls extendRoute />
-{:else if $mode2.mode == "new-freehand-polygon"}
+{:else if $mode.mode == "new-freehand-polygon"}
   <PolygonControls />
-{:else if $mode2.mode == "new-snapped-polygon"}
+{:else if $mode.mode == "new-snapped-polygon"}
   <SnapPolygonControls />
-{:else if $mode2.mode == "split-route"}
+{:else if $mode.mode == "split-route"}
   <ul>
     <li>
       <b>Click</b>
@@ -47,5 +47,5 @@
     </li>
   </ul>
 {:else}
-  <h1>TODO bug: {JSON.stringify($mode2)}</h1>
+  <h1>TODO bug: {JSON.stringify($mode)}</h1>
 {/if}

@@ -5,7 +5,6 @@ import { RouteTool } from "./lib/draw/route/route_tool";
 import {
   isStreetViewImagery,
   type Mode,
-  type Mode2,
   type Scheme,
   type UserSettings,
 } from "./types";
@@ -27,16 +26,9 @@ export const editGeometryControls: Writable<string | null> = writable(null);
 // TODO Should we instead store a map from ID to feature?
 export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);
 
-// The optional ID of a feature whose form is open on the sidebar.
-// TODO Can we make a type for feature ID?
-export const formOpen: Writable<number | null> = writable(null);
-
 // The optional ID of a feature currently hovered from the map or sidebar.
 export const mapHover: Writable<number | null> = writable(null);
 export const sidebarHover: Writable<number | null> = writable(null);
-
-// These act as event dispatchers, but are easier to plumb around.
-export const openFromSidebar: Writable<number | null> = writable(null);
 
 export const userSettings: Writable<UserSettings> = writable(
   loadUserSettings()
@@ -45,13 +37,9 @@ userSettings.subscribe((value) =>
   window.localStorage.setItem("userSettings", JSON.stringify(value))
 );
 
-// TODO Remove
-export const currentMode: Writable<Mode> = writable("edit-attribute");
-// This is used to represent whether a tool is in use for the purpose of disabling buttons such as clear all
-export const isAToolInUse: Writable<boolean> = writable(false);
+export const mode: Writable<Mode> = writable({ mode: "list" });
 
-export const mode2: Writable<Mode2> = writable({ mode: "list" });
-
+// For browse page
 export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
 
 // All feature IDs must:
@@ -87,11 +75,9 @@ export function deleteIntervention(id: number) {
     gj.features = gj.features.filter((f) => f.id != id);
     return gj;
   });
-  formOpen.set(null);
   mapHover.set(null);
   sidebarHover.set(null);
-  openFromSidebar.set(null);
-  mode2.set({ mode: "list" });
+  mode.set({ mode: "list" });
 }
 
 function loadUserSettings(): UserSettings {

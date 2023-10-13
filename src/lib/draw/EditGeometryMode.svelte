@@ -2,7 +2,7 @@
   import type { LineString, Point, Polygon } from "geojson";
   import { DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { editGeometryControls, gjScheme, mode2 } from "stores";
+  import { editGeometryControls, gjScheme, mode } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature, FeatureUnion } from "types";
   import type { PointTool } from "./point/point_tool";
@@ -100,7 +100,7 @@
       return gj;
     });
 
-    mode2.set({ mode: "edit-form", id });
+    mode.set({ mode: "edit-form", id });
   }
 
   function onUpdate(feature) {
@@ -117,7 +117,7 @@
       return gj;
     });
 
-    mode2.set({ mode: "edit-form", id });
+    mode.set({ mode: "edit-form", id });
   }
 
   // Copy geometry and properties from source to destination
@@ -146,12 +146,12 @@
   }
 
   function finish() {
-    mode2.set({ mode: "edit-form", id });
+    mode.set({ mode: "edit-form", id });
   }
 
   function cancel() {
     unsavedFeature = null;
-    mode2.set({ mode: "edit-form", id });
+    mode.set({ mode: "edit-form", id });
   }
 </script>
 

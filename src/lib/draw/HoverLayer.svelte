@@ -8,31 +8,15 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
-  import {
-    formOpen,
-    gjScheme,
-    isAToolInUse,
-    map,
-    mapHover,
-    sidebarHover,
-  } from "stores";
+  import { gjScheme, mapHover, sidebarHover } from "stores";
   import { CircleLayer, GeoJSON, LineLayer } from "svelte-maplibre";
-
-  // Show clickable objects on the map using the cursor
-  // TODO Use svelte-maplibre for this part?
-  $: {
-    // Don't override what an active tool has set
-    if (!$isAToolInUse) {
-      $map.getCanvas().style.cursor = $mapHover ? "pointer" : "inherit";
-    }
-  }
 
   // Use a layer that only ever has zero or one features for hovering.
   let gj: GeoJSONType = emptyGeojson();
 
   // When a form is open, ignore regular map and sidebar interactions
   $: {
-    let id = $formOpen || $mapHover || $sidebarHover;
+    let id = $mapHover || $sidebarHover;
     if (id != null) {
       gj = $gjScheme.features.find((f) => f.id == id)!;
     } else {

@@ -2,7 +2,7 @@
   import { WarningIcon } from "lib/common";
   import { SecondaryButton } from "lib/govuk";
   import { bbox } from "lib/maplibre";
-  import { gjScheme, map, mode2 } from "stores";
+  import { gjScheme, map, mode } from "stores";
   import type { Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
 
@@ -26,7 +26,7 @@
       });
     }
 
-    mode2.set({ mode: "edit-form", id });
+    mode.set({ mode: "edit-form", id });
   }
 </script>
 
