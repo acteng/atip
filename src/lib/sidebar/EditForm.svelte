@@ -3,8 +3,8 @@
   import FormV1 from "lib/forms/FormV1.svelte";
   import FormV2 from "lib/forms/FormV2.svelte";
   import PlanningForm from "lib/forms/PlanningForm.svelte";
-  import { ErrorMessage, SecondaryButton, WarningButton } from "lib/govuk";
-  import { deleteIntervention, gjScheme, mode2 } from "stores";
+  import { ErrorMessage } from "lib/govuk";
+  import { deleteIntervention, gjScheme } from "stores";
   import type { Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
@@ -51,14 +51,3 @@
 {:else if schema == "atf4"}
   <ATF4Form bind:props={feature.properties} />
 {/if}
-
-<br />
-<br />
-<div style="display: flex; justify-content: space-between">
-  <WarningButton on:click={() => deleteIntervention(feature.id)}>
-    Delete
-  </WarningButton>
-  <SecondaryButton on:click={() => mode2.set({ mode: "list" })}>
-    Save
-  </SecondaryButton>
-</div>
