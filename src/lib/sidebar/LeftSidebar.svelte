@@ -5,6 +5,7 @@
   import PolygonControls from "../draw/polygon/PolygonControls.svelte";
   import RouteControls from "../draw/route/RouteControls.svelte";
   import SnapPolygonControls from "../draw/snap_polygon/SnapPolygonControls.svelte";
+  import StreetViewControls from "../draw/StreetViewControls.svelte";
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
 
@@ -46,6 +47,6 @@
       to cancel
     </li>
   </ul>
-{:else}
-  <h1>TODO bug: {JSON.stringify($mode)}</h1>
+{:else if $mode.mode == "streetview"}
+  <StreetViewControls />
 {/if}
