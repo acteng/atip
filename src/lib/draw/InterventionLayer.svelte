@@ -38,6 +38,17 @@
 
   $: clickable = $mode.mode == "list";
 
+  let color;
+  $: {
+    if ($mode.mode == "edit-form") {
+      color = ["case", ["==", ["id"], $mode.id], colorInterventions, "grey"];
+    } else if ($mode.mode == "edit-geometry") {
+      color = "grey";
+    } else {
+      color = colorInterventions;
+    }
+  }
+
   function onClick(e: CustomEvent<LayerClickInfo>) {
     if ($mode.mode != "list") {
       return;
@@ -54,7 +65,7 @@
     {...layerId("interventions-points")}
     filter={["all", isPoint, hideWhileEditing, notEndpoint]}
     paint={{
-      "circle-color": colorInterventions,
+      "circle-color": color,
       "circle-radius": circleRadius,
     }}
     hoverCursor={clickable ? "pointer" : undefined}
@@ -70,7 +81,7 @@
     {...layerId("interventions-lines")}
     filter={["all", isLine, hideWhileEditing]}
     paint={{
-      "line-color": colorInterventions,
+      "line-color": color,
       "line-width": lineWidth,
     }}
     hoverCursor={clickable ? "pointer" : undefined}
@@ -96,7 +107,7 @@
     {...layerId("interventions-polygons")}
     filter={["all", isPolygon, hideWhileEditing]}
     paint={{
-      "fill-color": colorInterventions,
+      "fill-color": color,
       "fill-opacity": 0.2,
     }}
     hoverCursor={clickable ? "pointer" : undefined}
@@ -111,7 +122,7 @@
     {...layerId("interventions-polygons-outlines")}
     filter={["all", isPolygon, hideWhileEditing]}
     paint={{
-      "line-color": colorInterventions,
+      "line-color": color,
       "line-opacity": 0.5,
       "line-width": 0.7 * lineWidth,
     }}
