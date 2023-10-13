@@ -20,9 +20,9 @@
   import About from "lib/sidebar/About.svelte";
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
-  import InterventionList from "lib/sidebar/InterventionList.svelte";
+  import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
   import { colorInterventionsBySchema, schemaTitle } from "schemas";
-  import { mapStyle } from "stores";
+  import { mapStyle, mode2 } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
 
@@ -75,25 +75,27 @@
 
 <Layout>
   <div slot="sidebar" class="govuk-prose">
-    <div class="govuk-button-group">
-      <SecondaryButton on:click={() => (window.location.href = "index.html")}>
-        Home
-      </SecondaryButton>
-      <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
-      <SecondaryButton on:click={toggleInstructions}>
-        Instructions
-      </SecondaryButton>
-    </div>
-    <p>App version: {appVersion()}</p>
-    <LoggedIn />
-    <p>{schemaTitle(schema)} mode</p>
-    <div style="display: flex; justify-content: space-between">
-      <h1>{authorityName}</h1>
-      <ZoomOutMap {boundaryGeojson} />
-    </div>
+    {#if $mode2.mode == "list"}
+      <div class="govuk-button-group">
+        <SecondaryButton on:click={() => (window.location.href = "index.html")}>
+          Home
+        </SecondaryButton>
+        <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
+        <SecondaryButton on:click={toggleInstructions}>
+          Instructions
+        </SecondaryButton>
+      </div>
+      <p>App version: {appVersion()}</p>
+      <LoggedIn />
+      <p>{schemaTitle(schema)} mode</p>
+      <div style="display: flex; justify-content: space-between">
+        <h1>{authorityName}</h1>
+        <ZoomOutMap {boundaryGeojson} />
+      </div>
+    {/if}
     <EntireScheme {authorityName} {schema} />
     <hr />
-    <InterventionList {schema} />
+    <LeftSidebar {schema} />
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle}>

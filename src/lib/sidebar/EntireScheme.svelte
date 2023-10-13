@@ -10,8 +10,8 @@
   import {
     formOpen,
     gjScheme,
-    isAToolInUse,
     mapHover,
+    mode2,
     openFromSidebar,
     sidebarHover,
   } from "stores";
@@ -132,53 +132,45 @@
   ).length;
 </script>
 
-<TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
+{#if $mode2.mode == "list"}
+  <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
 
-<ErrorMessage {errorMessage} />
+  <ErrorMessage {errorMessage} />
 
-<FileInput
-  label="Load from GeoJSON"
-  id="load-geojson"
-  disabled={$isAToolInUse}
-  {loadFile}
-/>
+  <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
-<SecondaryButton on:click={exportToGeojson} disabled={$isAToolInUse}>
-  Export to GeoJSON
-</SecondaryButton>
+  <SecondaryButton on:click={exportToGeojson}>
+    Export to GeoJSON
+  </SecondaryButton>
 
-<div style="display: flex; justify-content: space-between">
-  <p>{$gjScheme.features.length} {schemaPluralNoun(schema)}</p>
-  <WarningButton
-    on:click={() => (displayClearAllConfirmation = true)}
-    disabled={$gjScheme.features.length == 0 || $isAToolInUse}
-  >
-    Clear all
-  </WarningButton>
-</div>
-<Modal
-  title="Would you like to clear your work?"
-  bind:open={displayClearAllConfirmation}
->
-  <p>This will delete all your drawn interventions.</p>
-  <div class="govuk-button-group">
-    <WarningButton on:click={clearAll}>Clear all work</WarningButton>
-    <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
-      Cancel
-    </SecondaryButton>
+  <div style="display: flex; justify-content: space-between">
+    <p>{$gjScheme.features.length} {schemaPluralNoun(schema)}</p>
+    <WarningButton
+      on:click={() => (displayClearAllConfirmation = true)}
+      disabled={$gjScheme.features.length == 0}
+    >
+      Clear all
+    </WarningButton>
   </div>
-</Modal>
-{#if numErrors == 1}
-  <ErrorMessage errorMessage="There's a problem with one intervention below" />
-{:else if numErrors > 0}
-  <ErrorMessage
-    errorMessage="There's a problem with {numErrors} interventions below"
-  />
-{/if}
-
-{#if $isAToolInUse}
-  <p>
-    Finish drawing on the map and/or select "Edit attributes" to use these
-    options.
-  </p>
+  <Modal
+    title="Would you like to clear your work?"
+    bind:open={displayClearAllConfirmation}
+  >
+    <p>This will delete all your drawn interventions.</p>
+    <div class="govuk-button-group">
+      <WarningButton on:click={clearAll}>Clear all work</WarningButton>
+      <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
+        Cancel
+      </SecondaryButton>
+    </div>
+  </Modal>
+  {#if numErrors == 1}
+    <ErrorMessage
+      errorMessage="There's a problem with one intervention below"
+    />
+  {:else if numErrors > 0}
+    <ErrorMessage
+      errorMessage="There's a problem with {numErrors} interventions below"
+    />
+  {/if}
 {/if}

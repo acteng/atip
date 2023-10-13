@@ -74,6 +74,7 @@ export function isStreetViewImagery(x: string): x is "google" | "bing" {
   return x == "google" || x == "bing";
 }
 
+// TODO Remove
 export type Mode =
   | "edit-attribute"
   | "edit-geometry"
@@ -83,3 +84,22 @@ export type Mode =
   | "snap-polygon"
   | "split-route"
   | "street-view";
+
+export type Mode2 =
+  | {
+      mode: "list";
+    }
+  | {
+      mode: "edit-form";
+      id: number;
+    }
+  | {
+      mode: "edit-geometry";
+      id: number;
+    }
+  | { mode: "new-point" }
+  | { mode: "new-freehand-polygon" }
+  | { mode: "new-snapped-polygon" }
+  | { mode: "new-route" }
+  | { mode: "split-route" }
+  | { mode: "streetview" };
