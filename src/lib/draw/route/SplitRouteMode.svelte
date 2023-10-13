@@ -6,32 +6,33 @@
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
-  import { CollapsibleCard } from "lib/common";
   import { emptyGeojson, layerId, setPrecision } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { currentMode, gjScheme, map, newFeatureId } from "stores";
+  import { gjScheme, map, mode2, newFeatureId } from "stores";
+  import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON } from "svelte-maplibre";
-  import type { Mode, Feature as OurFeature } from "types";
+  import type { Feature as OurFeature } from "types";
   import splitIcon from "../../../../assets/split_route.svg";
-  import type { EventHandler } from "../event_handler";
-
-  const thisMode = "split-route";
 
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;
 
-  export let changeMode: (m: Mode) => void;
-  export let eventHandler: EventHandler;
-
-  export function start() {
+  onMount(() => {
     // Use a fallback icon in case the image fails
     $map.getCanvas().style.cursor = `url(${splitIcon}), crosshair`;
-  }
-  export function stop() {
+
+    $map.on("mousemove", onMouseMove);
+    $map.on("click", onClick);
+    // TODO use svelte:window
+    document.addEventListener("keydown", onKeyDown);
+  });
+  onDestroy(() => {
     $map.getCanvas().style.cursor = "inherit";
-    snappedCursor = null;
-    snappedIndex = null;
-  }
+
+    $map.off("mousemove", onMouseMove);
+    $map.off("click", onClick);
+    document.removeEventListener("keydown", onKeyDown);
+  });
 
   let snappedCursor: Feature<Point> | null = null;
   // Index into gjScheme of what we're snapped to
@@ -46,7 +47,7 @@
     snappedCursorGj = gj;
   }
 
-  eventHandler.mapHandlers.mousemove = (e: MapMouseEvent) => {
+  function onMouseMove(e: MapMouseEvent) {
     snappedCursor = null;
     snappedIndex = null;
 
@@ -83,12 +84,12 @@
       snappedCursor = cursorFeature(candidates[0][1]);
       snappedIndex = candidates[0][0];
     }
-  };
+  }
 
-  eventHandler.mapHandlers.click = () => {
+  function onClick() {
     if (snappedIndex == null) {
       // We clicked the map, stop the tool
-      changeMode("edit-attribute");
+      mode2.set({ mode: "list" });
     } else {
       // TODO Can we avoid using ! everywhere here?
       let result = lineSplit(
@@ -139,15 +140,15 @@
       snappedCursor = null;
       snappedIndex = null;
     }
-  };
+  }
 
   // The escape key isn't registered at all for keypress, so use keydown
-  eventHandler.documentHandlers.keydown = (e: KeyboardEvent) => {
+  function onKeyDown(e: KeyboardEvent) {
     if (e.key == "Escape") {
-      changeMode("edit-attribute");
+      mode2.set({ mode: "list" });
       e.preventDefault();
     }
-  };
+  }
 
   function cursorFeature(pt: number[]): Feature<Point> {
     return {
@@ -241,23 +242,6 @@
     return length(sliced, { units: "kilometers" }) * 1000.0;
   }
 </script>
-
-{#if $currentMode == thisMode}
-  <CollapsibleCard label="Help">
-    <ul>
-      <li>
-        <b>Click</b>
-        on a route to split it
-      </li>
-      <li>
-        <b>Click</b>
-        on the map or press
-        <b>Escape</b>
-        to cancel
-      </li>
-    </ul>
-  </CollapsibleCard>
-{/if}
 
 <GeoJSON data={snappedCursorGj}>
   <CircleLayer

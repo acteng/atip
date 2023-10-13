@@ -6,12 +6,8 @@
   import { onDestroy, onMount } from "svelte";
   import type { Feature, FeatureUnion } from "types";
   import type { PointTool } from "./point/point_tool";
-  import PointControls from "./point/PointControls.svelte";
   import type { PolygonTool } from "./polygon/polygon_tool";
-  import PolygonControls from "./polygon/PolygonControls.svelte";
   import type { RouteTool } from "./route/route_tool";
-  import RouteControls from "./route/RouteControls.svelte";
-  import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
 
   export let id: number;
   export let pointTool: PointTool;

@@ -19,6 +19,7 @@
   import { RouteTool } from "./route/route_tool";
   import RouteMode from "./route/RouteMode.svelte";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
+  import SplitRouteMode from "./route/SplitRouteMode.svelte";
   import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
 
   export let routeSnapperUrl: string;
@@ -64,6 +65,10 @@
       <img src={polygonSnappedIcon} alt="New polygon (snapped)" />
       New polygon (snapped)
     </SecondaryButton>
+    <SecondaryButton on:click={() => mode2.set({ mode: "split-route" })}>
+      <img src={splitRouteIcon} alt="Split route" />
+      Split route
+    </SecondaryButton>
   {:else if $mode2.mode == "edit-form"}
     <div>
       <SecondaryButton on:click={() => mode2.set({ mode: "list" })}>
@@ -92,6 +97,8 @@
     <PolygonMode {polygonTool} />
   {:else if $mode2.mode == "new-snapped-polygon"}
     <SnapPolygonMode {routeTool} />
+  {:else if $mode2.mode == "split-route"}
+    <SplitRouteMode />
   {:else}
     <h1>TODO</h1>
   {/if}
