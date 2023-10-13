@@ -6,7 +6,7 @@
   import type { Feature } from "types";
   import type { RouteTool } from "./route_tool";
 
-  export let routeTool: routeTool;
+  export let routeTool: RouteTool;
 
   onMount(() => {
     routeTool.startRoute();

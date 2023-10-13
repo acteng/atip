@@ -1,10 +1,5 @@
 <script lang="ts">
-  import {
-    Checkbox,
-    CheckboxGroup,
-    DefaultButton,
-    SecondaryButton,
-  } from "lib/govuk";
+  import { Checkbox, CheckboxGroup } from "lib/govuk";
   import { routeTool, userSettings } from "stores";
 
   // Start with this enabled or disabled, based on whether we're drawing a new
@@ -12,7 +7,7 @@
   export let extendRoute: boolean;
 
   // TODO When editing, we should save in the route and use the previous value
-  $: $routeTool.setRouteConfig({
+  $: $routeTool!.setRouteConfig({
     avoid_doubling_back: $userSettings.avoidDoublingBack,
     extend_route: extendRoute,
   });
