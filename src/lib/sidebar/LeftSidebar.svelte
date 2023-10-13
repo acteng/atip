@@ -1,6 +1,8 @@
 <script lang="ts">
   import { mode2 } from "stores";
   import type { Schema } from "types";
+  import PointControls from "../draw/point/PointControls.svelte";
+  import PolygonControls from "../draw/polygon/PolygonControls.svelte";
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
 
@@ -12,13 +14,9 @@
 {:else if $mode2.mode == "edit-form"}
   <EditForm {schema} id={$mode2.id} />
 {:else if $mode2.mode == "new-point"}
-  <ul>
-    <li>Click to add a new point</li>
-    <li>
-      Press <b>Escape</b>
-      to cancel
-    </li>
-  </ul>
+  <PointControls editingExisting={false} />
+{:else if $mode2.mode == "new-freehand-polygon"}
+  <PolygonControls />
 {:else}
   <h1>TODO bug: {JSON.stringify($mode2)}</h1>
 {/if}

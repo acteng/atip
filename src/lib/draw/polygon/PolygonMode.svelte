@@ -1,42 +1,38 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import type { FeatureWithProps } from "lib/maplibre";
-  import { currentMode } from "stores";
-  import type { Mode } from "types";
-  import { handleUnsavedFeature, setupEventListeners } from "../common";
-  import type { EventHandler } from "../event_handler";
+  import { DefaultButton, SecondaryButton } from "lib/govuk";
+  import { gjScheme, mode2, newFeatureId } from "stores";
+  import { onDestroy, onMount } from "svelte";
+  import type { Feature } from "types";
   import type { PolygonTool } from "./polygon_tool";
-  import PolygonControls from "./PolygonControls.svelte";
 
-  const thisMode = "free-polygon";
-
-  export let changeMode: (m: Mode) => void;
   export let polygonTool: PolygonTool;
-  export let eventHandler: EventHandler;
 
-  // While the new feature is being drawn, remember its last valid version
-  let unsavedFeature: { value: FeatureWithProps<Polygon> | null } = {
-    value: null,
-  };
-
-  export function start() {
-    polygonTool.setHandlers(eventHandler);
+  onMount(() => {
     polygonTool.startNew();
-  }
-  export function stop() {
+    polygonTool.addEventListenerSuccess(onSuccess);
+    polygonTool.addEventListenerFailure(onFailure);
+  });
+  onDestroy(() => {
     polygonTool.stop();
-    handleUnsavedFeature(unsavedFeature, "area");
+    polygonTool.clearEventListeners();
+  });
+
+  function onSuccess(feature) {
+    gjScheme.update((gj) => {
+      feature.id = newFeatureId(gj);
+      feature.properties.intervention_type = "area";
+      gj.features.push(feature as Feature<Polygon>);
+      return gj;
+    });
+
+    mode2.set({ mode: "edit-form", id: feature.id });
   }
 
-  setupEventListeners(
-    polygonTool,
-    unsavedFeature,
-    "area",
-    thisMode,
-    changeMode
-  );
+  function onFailure() {
+    mode2.set({ mode: "list" });
+  }
 </script>
 
-{#if $currentMode == thisMode}
-  <PolygonControls {polygonTool} />
-{/if}
+<DefaultButton on:click={() => polygonTool.finish()}>Finish</DefaultButton>
+<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>

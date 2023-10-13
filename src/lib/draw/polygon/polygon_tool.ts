@@ -20,7 +20,6 @@ import type {
   MapLayerMouseEvent,
   MapMouseEvent,
 } from "maplibre-gl";
-import { isAToolInUse } from "stores";
 import type { EventHandler } from "../event_handler";
 
 const source = "edit-polygon-mode";
@@ -37,6 +36,7 @@ export class PolygonTool {
   hover: "polygon" | number | null;
   dragFrom: Position | null;
 
+  // TODO Inconsistent ordering with point tool
   constructor(map: Map) {
     this.map = map;
     this.active = false;
@@ -80,6 +80,29 @@ export class PolygonTool {
       radius: circleRadius,
       opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
     });
+
+    this.map.on("mousemove", this.onMouseMove);
+    this.map.on("click", this.onClick);
+    this.map.on("dblclick", this.onDoubleClick);
+    this.map.on("mousedown", this.onMouseDown);
+    this.map.on("mouseup", this.onMouseUp);
+    document.addEventListener("keypress", this.onKeypress);
+    document.addEventListener("keydown", this.onKeyDown);
+  }
+
+  tearDown() {
+    this.map.removeLayer("edit-polygon-vertices");
+    this.map.removeLayer("edit-polygon-fill");
+    this.map.removeLayer("edit-polygon-lines");
+    this.map.removeSource(source);
+
+    this.map.off("mousemove", this.onMouseMove);
+    this.map.off("click", this.onClick);
+    this.map.off("dblclick", this.onDoubleClick);
+    this.map.off("mousedown", this.onMouseDown);
+    this.map.off("mouseup", this.onMouseUp);
+    document.removeEventListener("keypress", this.onKeypress);
+    document.removeEventListener("keydown", this.onKeyDown);
   }
 
   // Either a success or failure event will happen, depending on current state
@@ -212,16 +235,6 @@ export class PolygonTool {
     }
   };
 
-  setHandlers = (eventHandler: EventHandler) => {
-    eventHandler.mapHandlers.mousemove = this.onMouseMove;
-    eventHandler.mapHandlers.click = this.onClick;
-    eventHandler.mapHandlers.dblclick = this.onDoubleClick;
-    eventHandler.mapHandlers.mousedown = this.onMouseDown;
-    eventHandler.mapHandlers.mouseup = this.onMouseUp;
-    eventHandler.documentHandlers.keypress = this.onKeypress;
-    eventHandler.documentHandlers.keydown = this.onKeyDown;
-  };
-
   addEventListenerSuccess(callback: (f: FeatureWithProps<Polygon>) => void) {
     this.eventListenersSuccess.push(callback);
   }
@@ -231,22 +244,20 @@ export class PolygonTool {
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
   }
-
-  tearDown() {
-    this.map.removeLayer("edit-polygon-vertices");
-    this.map.removeLayer("edit-polygon-fill");
-    this.map.removeLayer("edit-polygon-lines");
-    this.map.removeSource(source);
+  clearEventListeners() {
+    this.eventListenersSuccess = [];
+    this.eventListenersUpdated = [];
+    this.eventListenersFailure = [];
   }
 
   startNew() {
-    this.setActivity(true);
+    this.active = true;
     // Otherwise, double clicking to finish breaks
     this.map.doubleClickZoom.disable();
   }
 
   editExisting(feature: Feature<Polygon>) {
-    this.setActivity(true);
+    this.active = true;
     this.map.doubleClickZoom.disable();
     this.points = JSON.parse(JSON.stringify(feature.geometry.coordinates[0]));
     this.points.pop();
@@ -254,17 +265,12 @@ export class PolygonTool {
     // TODO recalculateHovering, but we need to know where the mouse is
   }
 
-  setActivity(isActive: boolean) {
-    this.active = isActive;
-    isAToolInUse.set(isActive);
-  }
-
   stop() {
     this.map.getCanvas().style.cursor = "inherit";
     this.map.doubleClickZoom.enable();
     this.points = [];
     this.cursor = null;
-    this.setActivity(false);
+    this.active = false;
     this.hover = null;
     this.dragFrom = null;
     this.redraw();
