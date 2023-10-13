@@ -2,7 +2,7 @@
   import { BaselayerSwitcher, Legend } from "lib/common";
   import { SecondaryButton, WarningButton } from "lib/govuk";
   import { schemaLegend } from "schemas";
-  import { deleteIntervention, map, mode2 } from "stores";
+  import { deleteIntervention, map, mode } from "stores";
   import { onDestroy } from "svelte";
   import type { Schema } from "types";
   import pointIcon from "../../../assets/point.svg";
@@ -40,64 +40,64 @@
 <div class="top-right govuk-prose">
   <RouteSnapperLoader url={routeSnapperUrl} bind:routeTool />
 
-  {#if $mode2.mode == "list"}
-    <SecondaryButton on:click={() => mode2.set({ mode: "new-point" })}>
+  {#if $mode.mode == "list"}
+    <SecondaryButton on:click={() => mode.set({ mode: "new-point" })}>
       <img src={pointIcon} alt="New point" />
       New point
     </SecondaryButton>
     <SecondaryButton
-      on:click={() => mode2.set({ mode: "new-route" })}
+      on:click={() => mode.set({ mode: "new-route" })}
       disabled={!routeTool}
     >
       <img src={routeIcon} alt="New route" />
       New route
     </SecondaryButton>
     <SecondaryButton
-      on:click={() => mode2.set({ mode: "new-freehand-polygon" })}
+      on:click={() => mode.set({ mode: "new-freehand-polygon" })}
     >
       <img src={polygonFreehandIcon} alt="New polygon (freehand)" />
       New polygon (freehand)
     </SecondaryButton>
     <SecondaryButton
-      on:click={() => mode2.set({ mode: "new-snapped-polygon" })}
+      on:click={() => mode.set({ mode: "new-snapped-polygon" })}
       disabled={!routeTool}
     >
       <img src={polygonSnappedIcon} alt="New polygon (snapped)" />
       New polygon (snapped)
     </SecondaryButton>
-    <SecondaryButton on:click={() => mode2.set({ mode: "split-route" })}>
+    <SecondaryButton on:click={() => mode.set({ mode: "split-route" })}>
       <img src={splitRouteIcon} alt="Split route" />
       Split route
     </SecondaryButton>
-  {:else if $mode2.mode == "edit-form"}
+  {:else if $mode.mode == "edit-form"}
     <div>
-      <SecondaryButton on:click={() => mode2.set({ mode: "list" })}>
+      <SecondaryButton on:click={() => mode.set({ mode: "list" })}>
         Save / back
       </SecondaryButton>
     </div>
     <div>
       <SecondaryButton
-        on:click={() => mode2.set({ mode: "edit-geometry", id: $mode2.id })}
+        on:click={() => mode.set({ mode: "edit-geometry", id: $mode.id })}
       >
         Edit geometry
       </SecondaryButton>
     </div>
     <div>
-      <WarningButton on:click={() => deleteIntervention($mode2.id)}>
+      <WarningButton on:click={() => deleteIntervention($mode.id)}>
         Delete
       </WarningButton>
     </div>
-  {:else if $mode2.mode == "edit-geometry"}
-    <EditGeometryMode id={$mode2.id} {pointTool} {polygonTool} {routeTool} />
-  {:else if $mode2.mode == "new-point"}
+  {:else if $mode.mode == "edit-geometry"}
+    <EditGeometryMode id={$mode.id} {pointTool} {polygonTool} {routeTool} />
+  {:else if $mode.mode == "new-point"}
     <PointMode {pointTool} />
-  {:else if $mode2.mode == "new-route"}
+  {:else if $mode.mode == "new-route"}
     <RouteMode {routeTool} />
-  {:else if $mode2.mode == "new-freehand-polygon"}
+  {:else if $mode.mode == "new-freehand-polygon"}
     <PolygonMode {polygonTool} />
-  {:else if $mode2.mode == "new-snapped-polygon"}
+  {:else if $mode.mode == "new-snapped-polygon"}
     <SnapPolygonMode {routeTool} />
-  {:else if $mode2.mode == "split-route"}
+  {:else if $mode.mode == "split-route"}
     <SplitRouteMode />
   {:else}
     <h1>TODO</h1>

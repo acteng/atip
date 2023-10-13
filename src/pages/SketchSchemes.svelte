@@ -22,7 +22,7 @@
   import Instructions from "lib/sidebar/Instructions.svelte";
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
   import { colorInterventionsBySchema, schemaTitle } from "schemas";
-  import { mapStyle, mode2 } from "stores";
+  import { mapStyle, mode } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
 
@@ -75,7 +75,7 @@
 
 <Layout>
   <div slot="sidebar" class="govuk-prose">
-    {#if $mode2.mode == "list"}
+    {#if $mode.mode == "list"}
       <div class="govuk-button-group">
         <SecondaryButton on:click={() => (window.location.href = "index.html")}>
           Home

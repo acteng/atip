@@ -8,7 +8,7 @@
   import type { Feature, LineString, Point, Position } from "geojson";
   import { emptyGeojson, layerId, setPrecision } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { gjScheme, map, mode2, newFeatureId } from "stores";
+  import { gjScheme, map, mode, newFeatureId } from "stores";
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON } from "svelte-maplibre";
   import type { Feature as OurFeature } from "types";
@@ -89,7 +89,7 @@
   function onClick() {
     if (snappedIndex == null) {
       // We clicked the map, stop the tool
-      mode2.set({ mode: "list" });
+      mode.set({ mode: "list" });
     } else {
       // TODO Can we avoid using ! everywhere here?
       let result = lineSplit(
@@ -145,7 +145,7 @@
   // The escape key isn't registered at all for keypress, so use keydown
   function onKeyDown(e: KeyboardEvent) {
     if (e.key == "Escape") {
-      mode2.set({ mode: "list" });
+      mode.set({ mode: "list" });
       e.preventDefault();
     }
   }

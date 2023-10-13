@@ -7,14 +7,7 @@
     WarningButton,
   } from "lib/govuk";
   import { schemaPluralNoun } from "schemas";
-  import {
-    formOpen,
-    gjScheme,
-    mapHover,
-    mode2,
-    openFromSidebar,
-    sidebarHover,
-  } from "stores";
+  import { gjScheme, mapHover, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
   import type { Schema, Scheme } from "types";
   import { backfill, interventionWarning } from "./scheme_data";
@@ -76,10 +69,8 @@
       gj.features = [];
       return gj;
     });
-    formOpen.set(null);
     mapHover.set(null);
     sidebarHover.set(null);
-    openFromSidebar.set(null);
   }
 
   // Remove the hide_while_editing property hack
@@ -132,7 +123,7 @@
   ).length;
 </script>
 
-{#if $mode2.mode == "list"}
+{#if $mode.mode == "list"}
   <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
 
   <ErrorMessage {errorMessage} />
