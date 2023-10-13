@@ -15,7 +15,7 @@
   } from "lib/common";
   import HoverLayer from "lib/draw/HoverLayer.svelte";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
-  import Toolbox from "lib/draw/Toolbox.svelte";
+  import NewToolbox from "lib/draw/NewToolbox.svelte";
   import { SecondaryButton } from "lib/govuk";
   import About from "lib/sidebar/About.svelte";
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
@@ -102,10 +102,11 @@
       <Geocoder />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer
+        {schema}
         colorInterventions={colorInterventionsBySchema(schema)}
       />
       <HoverLayer />
-      <Toolbox {routeSnapperUrl} {schema} />
+      <NewToolbox {routeSnapperUrl} {schema} />
     </MapLibreMap>
   </div>
 </Layout>

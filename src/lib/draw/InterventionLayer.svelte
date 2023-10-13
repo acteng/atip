@@ -7,23 +7,46 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
+  import { interventionName } from "lib/sidebar/scheme_data";
   import type {
     DataDrivenPropertyValueSpecification,
     FilterSpecification,
   } from "maplibre-gl";
-  import { gjScheme } from "stores";
-  import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
+  import { gjScheme, mode2 } from "stores";
+  import {
+    CircleLayer,
+    FillLayer,
+    GeoJSON,
+    LineLayer,
+    Popup,
+    type LayerClickInfo,
+  } from "svelte-maplibre";
+  import type { Schema } from "types";
 
+  export let schema: Schema;
   export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
 
   $: gj = addLineStringEndpoints($gjScheme);
 
+  // TODO Maybe have a separate component for different modes.
   const hideWhileEditing: FilterSpecification = [
     "!=",
     "hide_while_editing",
     true,
   ];
   const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
+
+  $: clickable = $mode2.mode == "list";
+
+  function onClick(e: CustomEvent<LayerClickInfo>) {
+    if ($mode2.mode != "list") {
+      return;
+    }
+    // TODO Possible to be missing?
+    if (e.detail.features[0]) {
+      mode2.set({ mode: "edit-form", id: e.detail.features[0].id as number });
+    }
+  }
 </script>
 
 <GeoJSON data={gj}>
@@ -34,7 +57,14 @@
       "circle-color": colorInterventions,
       "circle-radius": circleRadius,
     }}
-  />
+    hoverCursor={clickable ? "pointer" : undefined}
+    on:click={onClick}
+    manageHoverState={clickable}
+  >
+    {#if clickable}
+      <Popup let:features>{interventionName(schema, features[0])}</Popup>
+    {/if}
+  </CircleLayer>
 
   <LineLayer
     {...layerId("interventions-lines")}
@@ -43,7 +73,14 @@
       "line-color": colorInterventions,
       "line-width": lineWidth,
     }}
-  />
+    hoverCursor={clickable ? "pointer" : undefined}
+    on:click={onClick}
+    manageHoverState={clickable}
+  >
+    {#if clickable}
+      <Popup let:features>{interventionName(schema, features[0])}</Popup>
+    {/if}
+  </LineLayer>
   <CircleLayer
     {...layerId("interventions-lines-endpoints")}
     filter={["==", "endpoint", true]}
@@ -62,7 +99,14 @@
       "fill-color": colorInterventions,
       "fill-opacity": 0.2,
     }}
-  />
+    hoverCursor={clickable ? "pointer" : undefined}
+    on:click={onClick}
+    manageHoverState={clickable}
+  >
+    {#if clickable}
+      <Popup let:features>{interventionName(schema, features[0])}</Popup>
+    {/if}
+  </FillLayer>
   <LineLayer
     {...layerId("interventions-polygons-outlines")}
     filter={["all", isPolygon, hideWhileEditing]}
