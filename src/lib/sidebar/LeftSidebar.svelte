@@ -33,6 +33,19 @@
   <PolygonControls />
 {:else if $mode2.mode == "new-snapped-polygon"}
   <SnapPolygonControls />
+{:else if $mode2.mode == "split-route"}
+  <ul>
+    <li>
+      <b>Click</b>
+      on a route to split it
+    </li>
+    <li>
+      <b>Click</b>
+      on the map or press
+      <b>Escape</b>
+      to cancel
+    </li>
+  </ul>
 {:else}
   <h1>TODO bug: {JSON.stringify($mode2)}</h1>
 {/if}
