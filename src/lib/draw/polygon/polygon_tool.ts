@@ -20,7 +20,6 @@ import type {
   MapLayerMouseEvent,
   MapMouseEvent,
 } from "maplibre-gl";
-import type { EventHandler } from "../event_handler";
 
 const source = "edit-polygon-mode";
 
