@@ -2,7 +2,7 @@
   import type { LineString } from "geojson";
   import { FormElement, Radio, SecondaryButton, TextArea } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { gjScheme, jsRouteSnapper } from "stores";
+  import { gjScheme, routeTool } from "stores";
   import type { Feature } from "types";
 
   export let id: number;
@@ -18,7 +18,7 @@
       (f) => f.id == id
     ) as Feature<LineString>;
     try {
-      name = $jsRouteSnapper!.routeNameForWaypoints(
+      name = $routeTool!.inner.routeNameForWaypoints(
         feature.properties.waypoints
       );
     } catch (e) {
@@ -31,10 +31,7 @@
   <input type="text" class="govuk-input" bind:value={name} />
   <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
   {#if length_meters}
-    <SecondaryButton
-      on:click={() => autoFillName()}
-      disabled={!$jsRouteSnapper}
-    >
+    <SecondaryButton on:click={() => autoFillName()} disabled={!$routeTool}>
       Auto-fill
     </SecondaryButton>
   {/if}

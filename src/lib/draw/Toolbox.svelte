@@ -16,7 +16,8 @@
   import { PolygonTool } from "./polygon/polygon_tool";
   import PolygonMode from "./polygon/PolygonMode.svelte";
   import { RouteTool } from "./route/route_tool";
-  import RouteSnapperLoader from "./RouteSnapperLoader.svelte";
+  import RouteMode from "./route/RouteMode.svelte";
+  import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
 
   export let routeSnapperUrl: string;
   export let schema: Schema;
@@ -71,7 +72,7 @@
   {:else if $mode2.mode == "new-point"}
     <PointMode {pointTool} />
   {:else if $mode2.mode == "new-route"}
-    TODO
+    <RouteMode {routeTool} />
   {:else if $mode2.mode == "new-freehand-polygon"}
     <PolygonMode {polygonTool} />
   {:else if $mode2.mode == "new-snapped-polygon"}

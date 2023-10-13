@@ -1,137 +1,42 @@
 <script lang="ts">
   import type { LineString } from "geojson";
-  import type { FeatureWithProps } from "lib/maplibre";
-  import init from "route-snapper";
-  import { currentMode, jsRouteSnapper, map } from "stores";
-  import { onMount } from "svelte";
-  import type { Mode } from "types";
-  import { handleUnsavedFeature, setupEventListeners } from "../common";
-  import type { EventHandler } from "../event_handler";
-  import { RouteTool } from "./route_tool";
-  import RouteControls from "./RouteControls.svelte";
+  import { DefaultButton, SecondaryButton } from "lib/govuk";
+  import { gjScheme, mode2, newFeatureId } from "stores";
+  import { onDestroy, onMount } from "svelte";
+  import type { Feature } from "types";
+  import type { RouteTool } from "./route_tool";
 
-  const thisMode = "route";
+  export let routeTool: routeTool;
 
-  export let changeMode: (m: Mode) => void;
-  export let url: string;
-
-  export let routeTool: RouteTool;
-  export let eventHandler: EventHandler;
-
-  let progress: number = 0;
-  let routeToolReady = false;
-  $: downloadComplete = progress >= 100;
-  let failedToLoadRouteTool = false;
-
-  // While the new feature is being drawn, remember its last valid version
-  let unsavedFeature: { value: FeatureWithProps<LineString> | null } = {
-    value: null,
-  };
-
-  // These're for drawing a new route, NOT for editing an existing.
-  // GeometryMode manages the latter.
-  export function start() {
-    // When we enter this mode by clicking the button from edit-geometry, we
-    // call routeTool.stop(). Re-activate it if so.
-    if (!routeTool.isActive()) {
-      routeTool.setHandlers(eventHandler);
-      routeTool.startRoute();
-    }
-  }
-  export function stop() {
-    routeTool?.stop();
-    handleUnsavedFeature(unsavedFeature, "route");
-  }
-
-  onMount(async () => {
-    await init();
-
-    console.log(`Grabbing ${url}`);
-    try {
-      const graphBytes = await fetchWithProgress(
-        url,
-        (percentLoaded) => (progress = percentLoaded)
-      );
-      routeTool = new RouteTool($map, graphBytes, routeToolInitialised);
-      jsRouteSnapper.set(routeTool.inner);
-    } catch (err) {
-      console.log(`Route tool broke: ${err}`);
-      failedToLoadRouteTool = true;
-
-      return;
-    }
-
-    setupEventListeners(
-      routeTool,
-      unsavedFeature,
-      "route",
-      thisMode,
-      changeMode
-    );
+  onMount(() => {
+    routeTool.startRoute();
+    routeTool.addEventListenerSuccess(onSuccess);
+    routeTool.addEventListenerFailure(onFailure);
+  });
+  onDestroy(() => {
+    routeTool.stop();
+    routeTool.clearEventListeners();
   });
 
-  // This requires the server to send back a Content-Length header. The actual
-  // bytes received may exceed this length (when the file is compressed), which
-  // means setProgress may get percentages over 100.
-  async function fetchWithProgress(
-    url: string,
-    setProgress: (percent: number) => void
-  ) {
-    const response = await fetch(url);
-    // TODO Handle error cases better
-    const reader = response.body!.getReader();
-
-    let lengthHeader = response.headers.get("Content-Length");
-    if (!lengthHeader) {
-      throw new Error(`No Content-Length header from ${url}`);
-    }
-    const contentLength = parseInt(lengthHeader);
-
-    let receivedLength = 0;
-    let chunks = [];
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        break;
+  function onSuccess(feature) {
+    gjScheme.update((gj) => {
+      feature.id = newFeatureId(gj);
+      feature.properties.intervention_type = "route";
+      if (feature.properties.route_name) {
+        feature.properties.name = feature.properties.route_name;
+        delete feature.properties.route_name;
       }
+      gj.features.push(feature as Feature<LineString>);
+      return gj;
+    });
 
-      chunks.push(value);
-      receivedLength += value.length;
-
-      const percent = (100.0 * receivedLength) / contentLength;
-      setProgress(percent);
-    }
-
-    let allChunks = new Uint8Array(receivedLength);
-    let position = 0;
-    for (let chunk of chunks) {
-      allChunks.set(chunk, position);
-      position += chunk.length;
-    }
-
-    return allChunks;
+    mode2.set({ mode: "edit-form", id: feature.id });
   }
 
-  function routeToolInitialised() {
-    progress = 100;
-    routeToolReady = true;
+  function onFailure() {
+    mode2.set({ mode: "list" });
   }
 </script>
 
-{#if !routeToolReady && !failedToLoadRouteTool && !downloadComplete}
-  <label for="route-loading">Route tool loading</label>
-  <progress id="route-loading" value={progress} />
-{:else if downloadComplete && !routeToolReady && !failedToLoadRouteTool}
-  <label for="route-unpacking">Route data unpacking</label>
-  <progress id="route-unpacking" />
-{:else if failedToLoadRouteTool}
-  <p>Failed to load</p>
-{:else if $currentMode == thisMode}
-  <RouteControls {routeTool} extendRoute />
-{/if}
-
-<style>
-  progress {
-    width: 100%;
-  }
-</style>
+<DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>
+<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
