@@ -12,6 +12,7 @@
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
   import { PointTool } from "./point/point_tool";
+  import PointMode from "./point/PointMode.svelte";
   import { PolygonTool } from "./polygon/polygon_tool";
   import { RouteTool } from "./route/route_tool";
 
@@ -25,6 +26,7 @@
   let routeTool: RouteTool | null = null;
 
   onDestroy(() => {
+    pointTool?.tearDown();
     polygonTool?.tearDown();
     routeTool?.tearDown();
   });
@@ -49,6 +51,8 @@
     <WarningButton on:click={() => deleteIntervention($mode2.id)}>
       Delete
     </WarningButton>
+  {:else if $mode2.mode == "new-point"}
+    <PointMode {pointTool} />
   {:else}
     <h1>TODO</h1>
   {/if}

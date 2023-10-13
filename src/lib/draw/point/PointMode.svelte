@@ -1,46 +1,37 @@
 <script lang="ts">
   import type { Point } from "geojson";
-  import { currentMode, formOpen, gjScheme, newFeatureId } from "stores";
-  import type { Feature, Mode } from "types";
-  import type { EventHandler } from "../event_handler";
+  import { SecondaryButton } from "lib/govuk";
+  import { gjScheme, mode2, newFeatureId } from "stores";
+  import { onDestroy, onMount } from "svelte";
+  import type { Feature } from "types";
   import type { PointTool } from "./point_tool";
-  import PointControls from "./PointControls.svelte";
 
-  const thisMode = "point";
-
-  export let changeMode: (m: Mode) => void;
   export let pointTool: PointTool;
-  export let eventHandler: EventHandler;
 
-  export function start() {
-    pointTool.setHandlers(eventHandler);
+  onMount(() => {
     pointTool.start();
-  }
-  export function stop() {
+    pointTool.addEventListenerSuccess(onSuccess);
+    pointTool.addEventListenerFailure(onFailure);
+  });
+  onDestroy(() => {
     pointTool.stop();
+    pointTool.clearEventListeners();
+  });
+
+  function onSuccess(feature) {
+    gjScheme.update((gj) => {
+      feature.id = newFeatureId(gj);
+      feature.properties.intervention_type = "other";
+      gj.features.push(feature as Feature<Point>);
+      return gj;
+    });
+
+    mode2.set({ mode: "edit-form", id: feature.id });
   }
 
-  pointTool.addEventListenerSuccess((feature) => {
-    if ($currentMode == thisMode) {
-      gjScheme.update((gj) => {
-        feature.id = newFeatureId(gj);
-        feature.properties.intervention_type = "other";
-        gj.features.push(feature as Feature<Point>);
-        return gj;
-      });
-
-      changeMode("edit-attribute");
-      formOpen.set(feature.id as number);
-    }
-  });
-
-  pointTool.addEventListenerFailure(() => {
-    if ($currentMode == thisMode) {
-      changeMode("edit-attribute");
-    }
-  });
+  function onFailure() {
+    mode2.set({ mode: "list" });
+  }
 </script>
 
-{#if $currentMode == thisMode}
-  <PointControls {pointTool} editingExisting={false} />
-{/if}
+<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
