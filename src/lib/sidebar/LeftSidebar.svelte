@@ -3,6 +3,7 @@
   import type { Schema } from "types";
   import PointControls from "../draw/point/PointControls.svelte";
   import PolygonControls from "../draw/polygon/PolygonControls.svelte";
+  import RouteControls from "../draw/route/RouteControls.svelte";
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
 
@@ -15,8 +16,12 @@
   <EditForm {schema} id={$mode2.id} />
 {:else if $mode2.mode == "new-point"}
   <PointControls editingExisting={false} />
+{:else if $mode2.mode == "new-route"}
+  <RouteControls extendRoute />
 {:else if $mode2.mode == "new-freehand-polygon"}
   <PolygonControls />
+{:else if $mode2.mode == "new-snapped-polygon"}
+  TODO
 {:else}
   <h1>TODO bug: {JSON.stringify($mode2)}</h1>
 {/if}

@@ -13,8 +13,6 @@ import {
 } from "lib/maplibre";
 import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
 import { JsRouteSnapper } from "route-snapper";
-import { isAToolInUse } from "stores";
-import type { EventHandler } from "../event_handler";
 
 const source = "route-snapper";
 
@@ -33,11 +31,7 @@ export class RouteTool {
   ) => void)[];
   eventListenersFailure: (() => void)[];
 
-  constructor(
-    map: Map,
-    graphBytes: Uint8Array,
-    initialisedCallback: () => void
-  ) {
+  constructor(map: Map, graphBytes: Uint8Array) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(graphBytes);
@@ -81,7 +75,32 @@ export class RouteTool {
       color: "black",
       opacity: 0.5,
     });
-    initialisedCallback();
+
+    this.map.on("mousemove", this.onMouseMove);
+    this.map.on("click", this.onClick);
+    this.map.on("dblclick", this.onDoubleClick);
+    this.map.on("dragstart", this.onDragStart);
+    this.map.on("mouseup", this.onMouseUp);
+    document.addEventListener("keypress", this.onKeypress);
+    document.addEventListener("keydown", this.onKeyDown);
+    document.addEventListener("keyup", this.onKeyUp);
+  }
+
+  tearDown() {
+    // TODO Will these throw if they're not there?
+    this.map.removeLayer("route-points");
+    this.map.removeLayer("route-lines");
+    this.map.removeLayer("route-polygons");
+    this.map.removeSource("route-snapper");
+
+    this.map.off("mousemove", this.onMouseMove);
+    this.map.off("click", this.onClick);
+    this.map.off("dblclick", this.onDoubleClick);
+    this.map.off("dragstart", this.onDragStart);
+    this.map.off("mouseup", this.onMouseUp);
+    document.removeEventListener("keypress", this.onKeypress);
+    document.removeEventListener("keydown", this.onKeyDown);
+    document.removeEventListener("keyup", this.onKeyUp);
   }
 
   onMouseMove = (e: MapMouseEvent) => {
@@ -187,7 +206,7 @@ export class RouteTool {
       return;
     }
 
-    this.setActivity(true);
+    this.active = true;
 
     // Otherwise, shift+click breaks
     this.map.boxZoom.disable();
@@ -204,19 +223,14 @@ export class RouteTool {
     }
 
     this.inner.setAreaMode();
-    this.setActivity(true);
+    this.active = true;
     this.map.boxZoom.disable();
     this.map.doubleClickZoom.disable();
   }
 
-  setActivity(isActive: boolean) {
-    this.active = isActive;
-    isAToolInUse.set(isActive);
-  }
-
   // Deactivate the tool, clearing all state. No events are fired for eventListenersFailure.
   stop() {
-    this.setActivity(false);
+    this.active = false;
     this.inner.clearState();
     this.redraw();
     this.map.boxZoom.enable();
@@ -275,15 +289,6 @@ export class RouteTool {
     this.redraw();
   }
 
-  // Destroy resources attached to the map.
-  tearDown() {
-    // TODO Will these throw if they're not there?
-    this.map.removeLayer("route-points");
-    this.map.removeLayer("route-lines");
-    this.map.removeLayer("route-polygons");
-    this.map.removeSource("route-snapper");
-  }
-
   addEventListenerSuccess(
     callback: (f: FeatureWithProps<LineString | Polygon>) => void
   ) {
@@ -296,6 +301,11 @@ export class RouteTool {
   }
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
+  }
+  clearEventListeners() {
+    this.eventListenersSuccess = [];
+    this.eventListenersUpdated = [];
+    this.eventListenersFailure = [];
   }
 
   isActive(): boolean {
@@ -331,17 +341,6 @@ export class RouteTool {
     this.inner.setRouteConfig(config);
     this.redraw();
   }
-
-  setHandlers = (eventHandler: EventHandler) => {
-    eventHandler.mapHandlers.mousemove = this.onMouseMove;
-    eventHandler.mapHandlers.click = this.onClick;
-    eventHandler.mapHandlers.dblclick = this.onDoubleClick;
-    eventHandler.mapHandlers.dragstart = this.onDragStart;
-    eventHandler.mapHandlers.mouseup = this.onMouseUp;
-    eventHandler.documentHandlers.keypress = this.onKeyPress;
-    eventHandler.documentHandlers.keydown = this.onKeyDown;
-    eventHandler.documentHandlers.keyup = this.onKeyUp;
-  };
 
   private redraw() {
     (this.map.getSource(source) as GeoJSONSource).setData(

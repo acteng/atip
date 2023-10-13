@@ -1,8 +1,8 @@
 <script lang="ts">
   import init from "route-snapper";
-  import { jsRouteSnapper, map } from "stores";
+  import { map, routeTool as routeToolStore } from "stores";
   import { onMount } from "svelte";
-  import { RouteTool } from "./route/route_tool";
+  import { RouteTool } from "./route_tool";
 
   export let url: string;
 
@@ -20,8 +20,10 @@
     console.log(`Grabbing ${url}`);
     try {
       const graphBytes = await fetchWithProgress(url);
-      routeTool = new RouteTool($map, graphBytes, routeToolInitialised);
-      jsRouteSnapper.set(routeTool.inner);
+      routeTool = new RouteTool($map, graphBytes);
+      routeToolStore.set(routeTool);
+      progress = 100;
+      routeToolReady = true;
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
       failedToLoadRouteTool = true;
@@ -64,11 +66,6 @@
     }
 
     return allChunks;
-  }
-
-  function routeToolInitialised() {
-    progress = 100;
-    routeToolReady = true;
   }
 </script>
 
