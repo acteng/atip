@@ -163,7 +163,7 @@ export class RouteTool {
     }
   };
 
-  onKeyPress = (e: KeyboardEvent) => {
+  onKeypress = (e: KeyboardEvent) => {
     if (!this.active) {
       return;
     }

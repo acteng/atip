@@ -1,37 +1,38 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import type { FeatureWithProps } from "lib/maplibre";
-  import { currentMode } from "stores";
-  import type { Mode } from "types";
-  import { handleUnsavedFeature, setupEventListeners } from "../common";
-  import type { EventHandler } from "../event_handler";
+  import { DefaultButton, SecondaryButton } from "lib/govuk";
+  import { gjScheme, mode2, newFeatureId } from "stores";
+  import { onDestroy, onMount } from "svelte";
+  import type { Feature } from "types";
   import type { RouteTool } from "../route/route_tool";
-  import SnapPolygonControls from "./SnapPolygonControls.svelte";
 
-  const thisMode = "snap-polygon";
-
-  export let changeMode: (m: Mode) => void;
   export let routeTool: RouteTool;
-  export let eventHandler: EventHandler;
 
-  // While the new feature is being drawn, remember its last valid version
-  let unsavedFeature: { value: FeatureWithProps<Polygon> | null } = {
-    value: null,
-  };
-
-  export function start() {
-    routeTool.setHandlers(eventHandler);
+  onMount(() => {
     routeTool.startArea();
-  }
-
-  export function stop() {
+    routeTool.addEventListenerSuccess(onSuccess);
+    routeTool.addEventListenerFailure(onFailure);
+  });
+  onDestroy(() => {
     routeTool.stop();
-    handleUnsavedFeature(unsavedFeature, "area");
+    routeTool.clearEventListeners();
+  });
+
+  function onSuccess(feature) {
+    gjScheme.update((gj) => {
+      feature.id = newFeatureId(gj);
+      feature.properties.intervention_type = "area";
+      gj.features.push(feature as Feature<Polygon>);
+      return gj;
+    });
+
+    mode2.set({ mode: "edit-form", id: feature.id });
   }
 
-  setupEventListeners(routeTool, unsavedFeature, "area", thisMode, changeMode);
+  function onFailure() {
+    mode2.set({ mode: "list" });
+  }
 </script>
 
-{#if $currentMode == thisMode}
-  <SnapPolygonControls {routeTool} />
-{/if}
+<DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>
+<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>

@@ -4,6 +4,7 @@
   import PointControls from "../draw/point/PointControls.svelte";
   import PolygonControls from "../draw/polygon/PolygonControls.svelte";
   import RouteControls from "../draw/route/RouteControls.svelte";
+  import SnapPolygonControls from "../draw/snap_polygon/SnapPolygonControls.svelte";
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
 
@@ -21,7 +22,7 @@
 {:else if $mode2.mode == "new-freehand-polygon"}
   <PolygonControls />
 {:else if $mode2.mode == "new-snapped-polygon"}
-  TODO
+  <SnapPolygonControls />
 {:else}
   <h1>TODO bug: {JSON.stringify($mode2)}</h1>
 {/if}

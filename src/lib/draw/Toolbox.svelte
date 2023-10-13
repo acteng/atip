@@ -18,6 +18,7 @@
   import { RouteTool } from "./route/route_tool";
   import RouteMode from "./route/RouteMode.svelte";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
+  import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
 
   export let routeSnapperUrl: string;
   export let schema: Schema;
@@ -76,7 +77,7 @@
   {:else if $mode2.mode == "new-freehand-polygon"}
     <PolygonMode {polygonTool} />
   {:else if $mode2.mode == "new-snapped-polygon"}
-    TODO
+    <SnapPolygonMode {routeTool} />
   {:else}
     <h1>TODO</h1>
   {/if}
