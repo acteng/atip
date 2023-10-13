@@ -1,8 +1,6 @@
 import type { Point } from "geojson";
 import { pointFeature, type FeatureWithProps } from "lib/maplibre";
 import type { Map, MapMouseEvent } from "maplibre-gl";
-import { isAToolInUse } from "stores";
-import type { EventHandler } from "../event_handler";
 
 // Note this uses the geojson FeatureWithProps, not our specialization in types.ts
 export class PointTool {
@@ -38,18 +36,22 @@ export class PointTool {
     }
   };
 
-  setHandlers = (eventHandler: EventHandler) => {
-    eventHandler.mapHandlers.mousemove = this.onMouseMove;
-    eventHandler.mapHandlers.click = this.onClick;
-    eventHandler.documentHandlers.keydown = this.onKeyDown;
-  };
-
   constructor(map: Map) {
     this.map = map;
     this.active = false;
     this.eventListenersSuccess = [];
     this.eventListenersFailure = [];
     this.cursor = null;
+
+    this.map.on("mousemove", this.onMouseMove);
+    this.map.on("click", this.onClick);
+    document.addEventListener("keydown", this.onKeyDown);
+  }
+
+  tearDown() {
+    this.map.off("mousemove", this.onMouseMove);
+    this.map.off("click", this.onClick);
+    document.removeEventListener("keydown", this.onKeyDown);
   }
 
   // This stops the tool and fires a failure event
@@ -66,12 +68,16 @@ export class PointTool {
   addEventListenerFailure(callback: () => void) {
     this.eventListenersFailure.push(callback);
   }
+  clearEventListeners() {
+    this.eventListenersSuccess = [];
+    this.eventListenersFailure = [];
+  }
 
   // Note there's no way to "edit an existing point." Just call this for a new
   // or existing point; the state just depends on the cursor anyway.
   start() {
     this.map.getCanvas().style.cursor = "crosshair";
-    this.setActivity(true);
+    this.active = true;
     // TODO Figure out where the cursor is and immediately draw? To be useful,
     // the user has to move their mouse anyway; it doesn't matter much
   }
@@ -79,11 +85,6 @@ export class PointTool {
   stop() {
     this.map.getCanvas().style.cursor = "inherit";
     this.cursor = null;
-    this.setActivity(false);
-  }
-
-  setActivity(isActive: boolean) {
-    this.active = isActive;
-    isAToolInUse.set(isActive);
+    this.active = false;
   }
 }
