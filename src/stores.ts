@@ -5,6 +5,7 @@ import { writable, type Writable } from "svelte/store";
 import {
   isStreetViewImagery,
   type Mode,
+  type Mode2,
   type Scheme,
   type UserSettings,
 } from "./types";
@@ -40,9 +41,13 @@ export const userSettings: Writable<UserSettings> = writable(
 userSettings.subscribe((value) =>
   window.localStorage.setItem("userSettings", JSON.stringify(value))
 );
+
+// TODO Remove
 export const currentMode: Writable<Mode> = writable("edit-attribute");
 // This is used to represent whether a tool is in use for the purpose of disabling buttons such as clear all
 export const isAToolInUse: Writable<boolean> = writable(false);
+
+export const mode2: Writable<Mode2> = writable({ mode: "list" });
 
 export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
 
@@ -83,6 +88,7 @@ export function deleteIntervention(id: number) {
   mapHover.set(null);
   sidebarHover.set(null);
   openFromSidebar.set(null);
+  mode2.set({ mode: "list" });
 }
 
 function loadUserSettings(): UserSettings {
