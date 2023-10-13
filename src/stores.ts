@@ -21,6 +21,9 @@ export const mapStyle: Writable<string> = writable("dataviz");
 // null before it's loaded.
 export const routeTool: Writable<RouteTool | null> = writable(null);
 
+// TODO Rather a hack, so EditGeometryMode can influence LeftSidebar
+export const editGeometryControls: Writable<string | null> = writable(null);
+
 // TODO Should we instead store a map from ID to feature?
 export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);
 

@@ -11,6 +11,7 @@
   import routeIcon from "../../../assets/route.svg";
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
+  import EditGeometryMode from "./EditGeometryMode.svelte";
   import { PointTool } from "./point/point_tool";
   import PointMode from "./point/PointMode.svelte";
   import { PolygonTool } from "./polygon/polygon_tool";
@@ -64,12 +65,25 @@
       New polygon (snapped)
     </SecondaryButton>
   {:else if $mode2.mode == "edit-form"}
-    <SecondaryButton on:click={() => mode2.set({ mode: "list" })}>
-      Save / back
-    </SecondaryButton>
-    <WarningButton on:click={() => deleteIntervention($mode2.id)}>
-      Delete
-    </WarningButton>
+    <div>
+      <SecondaryButton on:click={() => mode2.set({ mode: "list" })}>
+        Save / back
+      </SecondaryButton>
+    </div>
+    <div>
+      <SecondaryButton
+        on:click={() => mode2.set({ mode: "edit-geometry", id: $mode2.id })}
+      >
+        Edit geometry
+      </SecondaryButton>
+    </div>
+    <div>
+      <WarningButton on:click={() => deleteIntervention($mode2.id)}>
+        Delete
+      </WarningButton>
+    </div>
+  {:else if $mode2.mode == "edit-geometry"}
+    <EditGeometryMode id={$mode2.id} {pointTool} {polygonTool} {routeTool} />
   {:else if $mode2.mode == "new-point"}
     <PointMode {pointTool} />
   {:else if $mode2.mode == "new-route"}

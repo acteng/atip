@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { mode2 } from "stores";
+  import { editGeometryControls, mode2 } from "stores";
   import type { Schema } from "types";
   import PointControls from "../draw/point/PointControls.svelte";
   import PolygonControls from "../draw/polygon/PolygonControls.svelte";
@@ -15,6 +15,16 @@
   <ListMode {schema} />
 {:else if $mode2.mode == "edit-form"}
   <EditForm {schema} id={$mode2.id} />
+{:else if $mode2.mode == "edit-geometry"}
+  {#if $editGeometryControls == "point"}
+    <PointControls editingExisting />
+  {:else if $editGeometryControls == "route"}
+    <RouteControls extendRoute={false} />
+  {:else if $editGeometryControls == "freehand-polygon"}
+    <PolygonControls />
+  {:else if $editGeometryControls == "snapped-polygon"}
+    <SnapPolygonControls />
+  {/if}
 {:else if $mode2.mode == "new-point"}
   <PointControls editingExisting={false} />
 {:else if $mode2.mode == "new-route"}
