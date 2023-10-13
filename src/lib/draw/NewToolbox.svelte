@@ -14,6 +14,7 @@
   import { PointTool } from "./point/point_tool";
   import PointMode from "./point/PointMode.svelte";
   import { PolygonTool } from "./polygon/polygon_tool";
+  import PolygonMode from "./polygon/PolygonMode.svelte";
   import { RouteTool } from "./route/route_tool";
 
   export let routeSnapperUrl: string;
@@ -53,6 +54,8 @@
     </WarningButton>
   {:else if $mode2.mode == "new-point"}
     <PointMode {pointTool} />
+  {:else if $mode2.mode == "new-freehand-polygon"}
+    <PolygonMode {polygonTool} />
   {:else}
     <h1>TODO</h1>
   {/if}
