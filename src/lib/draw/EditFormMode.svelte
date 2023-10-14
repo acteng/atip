@@ -1,7 +1,10 @@
 <script lang="ts">
   import { DefaultButton, SecondaryButton, WarningButton } from "lib/govuk";
+  import type { MapMouseEvent } from "maplibre-gl";
   import { deleteIntervention, map, mode } from "stores";
   import { onDestroy, onMount } from "svelte";
+
+  export let id: number;
 
   onMount(() => {
     $map.on("click", onClick);
@@ -10,7 +13,7 @@
     $map.off("click", onClick);
   });
 
-  function onClick(e) {
+  function onClick(e: MapMouseEvent) {
     // As long as we didn't click the feature we're editing, exit this mode
     for (let f of $map.queryRenderedFeatures(e.point, {
       layers: [
@@ -19,7 +22,7 @@
         "interventions-polygons",
       ],
     })) {
-      if (f.id == $mode.id) {
+      if (f.id == id) {
         return;
       }
     }
@@ -29,12 +32,8 @@
 
 <DefaultButton on:click={() => mode.set({ mode: "list" })}>Save</DefaultButton>
 
-<SecondaryButton
-  on:click={() => mode.set({ mode: "edit-geometry", id: $mode.id })}
->
+<SecondaryButton on:click={() => mode.set({ mode: "edit-geometry", id })}>
   Edit geometry
 </SecondaryButton>
 
-<WarningButton on:click={() => deleteIntervention($mode.id)}>
-  Delete
-</WarningButton>
+<WarningButton on:click={() => deleteIntervention(id)}>Delete</WarningButton>

@@ -6,7 +6,6 @@
     TextInput,
     WarningButton,
   } from "lib/govuk";
-  import { schemaPluralNoun } from "schemas";
   import { gjScheme, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
   import type { Schema, Scheme } from "types";

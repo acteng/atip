@@ -12,6 +12,12 @@
   import { interventionName } from "./scheme_data";
 
   export let schema: Schema;
+
+  function editGeometryTitle(): string {
+    // @ts-ignore Flow analysis doesn't understand the current mode
+    let feature = $gjScheme.features.find((f) => f.id == $mode.id)!;
+    return `Editing ${interventionName(schema, feature)}`;
+  }
 </script>
 
 {#if $mode.mode == "list"}
@@ -19,12 +25,7 @@
 {:else if $mode.mode == "edit-form"}
   <EditForm {schema} id={$mode.id} />
 {:else if $mode.mode == "edit-geometry"}
-  <h2>
-    Editing {interventionName(
-      schema,
-      $gjScheme.features.find((f) => f.id == $mode.id)
-    )}
-  </h2>
+  <h2>{editGeometryTitle()}</h2>
   {#if $editGeometryControls == "point"}
     <PointControls editingExisting />
   {:else if $editGeometryControls == "route"}

@@ -99,7 +99,7 @@
       <Geocoder position="bottom-left" />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer {schema} />
-      <Toolbox {routeSnapperUrl} {schema} />
+      <Toolbox {routeSnapperUrl} />
     </MapLibreMap>
   </div>
 </div>

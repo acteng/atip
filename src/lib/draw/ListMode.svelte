@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SecondaryButton } from "lib/govuk";
-  import { deleteIntervention, map, mode } from "stores";
+  import { mode } from "stores";
   import pointIcon from "../../../assets/point.svg";
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
   import polygonSnappedIcon from "../../../assets/polygon_snapped.svg";
