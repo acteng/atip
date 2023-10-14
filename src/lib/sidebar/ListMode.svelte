@@ -4,6 +4,7 @@
   import { bbox } from "lib/maplibre";
   import { schemaLegend } from "schemas";
   import { gjScheme, map, mode, sidebarHover } from "stores";
+  import { onDestroy } from "svelte";
   import type { Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
 
@@ -38,6 +39,10 @@
       return current;
     });
   }
+
+  onDestroy(() => {
+    sidebarHover.set(null);
+  });
 </script>
 
 {#each $gjScheme.features as feature, i (feature.id)}
