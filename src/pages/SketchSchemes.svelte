@@ -8,7 +8,6 @@
     appVersion,
     Geocoder,
     getAuthoritiesGeoJson,
-    Layout,
     LoggedIn,
     MapLibreMap,
     ZoomOutMap,
@@ -73,8 +72,8 @@
   }
 </script>
 
-<Layout>
-  <div slot="sidebar" class="govuk-prose">
+<div class="overall-layout">
+  <div class="sidebar govuk-prose">
     {#if $mode.mode == "list"}
       <div class="govuk-button-group">
         <SecondaryButton on:click={() => (window.location.href = "index.html")}>
@@ -96,7 +95,7 @@
     <EntireScheme {authorityName} {schema} />
     <LeftSidebar {schema} />
   </div>
-  <div slot="main">
+  <div class="main">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="bottom-left" />
       <BoundaryLayer {boundaryGeojson} />
@@ -105,7 +104,37 @@
       <Toolbox {routeSnapperUrl} {schema} />
     </MapLibreMap>
   </div>
-</Layout>
+</div>
 
 <About bind:open={showAbout} />
 <Instructions bind:open={showInstructions} {schema} />
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  .overall-layout {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  .sidebar {
+    width: 25rem;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  .main {
+    flex-grow: 1;
+    display: flex;
+  }
+</style>
