@@ -11,9 +11,6 @@
     avoid_doubling_back: $userSettings.avoidDoublingBack,
     extend_route: extendRoute,
   });
-
-  // TODO Show if shift is held or not
-  // TODO Disable finish when the route is invalid
 </script>
 
 <ul>

@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { BaselayerSwitcher, Legend } from "lib/common";
+  import { BaselayerSwitcher } from "lib/common";
   import { SecondaryButton } from "lib/govuk";
-  import { schemaLegend } from "schemas";
   import { deleteIntervention, map, mode } from "stores";
   import { onDestroy } from "svelte";
   import type { Schema } from "types";
@@ -95,7 +94,6 @@
 
   <hr />
   <BaselayerSwitcher />
-  <Legend rows={schemaLegend(schema)} />
 </div>
 
 <style>

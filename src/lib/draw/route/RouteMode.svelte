@@ -36,7 +36,35 @@
   function onFailure() {
     mode.set({ mode: "list" });
   }
+
+  // TODO It'd be nice to wire up reactivity to RouteTool directly.
+  let snapping = true;
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.key == "Shift") {
+      snapping = false;
+    }
+  }
+  function onKeyUp(e: KeyboardEvent) {
+    if (e.key == "Shift") {
+      snapping = true;
+    }
+  }
 </script>
 
-<DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>
-<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
+<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
+
+{#if snapping}
+  <p>
+    Snapping to existing roads. Press <b>Shift</b>
+     to draw anywhere
+  </p>
+{:else}
+  <p>
+    Drawing points anywhere. Release <b>Shift</b>
+     to snap to roads
+  </p>
+{/if}
+<div>
+  <DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>
+</div>
+<div><SecondaryButton on:click={onFailure}>Cancel</SecondaryButton></div>
