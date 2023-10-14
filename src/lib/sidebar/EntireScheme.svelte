@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileInput, Modal } from "lib/common";
+  import { CollapsibleCard, FileInput, Modal } from "lib/common";
   import {
     ErrorMessage,
     SecondaryButton,
@@ -123,37 +123,40 @@
 </script>
 
 {#if $mode.mode == "list"}
-  <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
+  <CollapsibleCard label={$gjScheme.scheme_name ?? "Untitled scheme"}>
+    <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
 
-  <ErrorMessage {errorMessage} />
+    <ErrorMessage {errorMessage} />
 
-  <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
+    <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
-  <SecondaryButton on:click={exportToGeojson}>
-    Export to GeoJSON
-  </SecondaryButton>
+    <SecondaryButton on:click={exportToGeojson}>
+      Export to GeoJSON
+    </SecondaryButton>
 
-  <div style="display: flex; justify-content: space-between">
-    <p>{$gjScheme.features.length} {schemaPluralNoun(schema)}</p>
-    <WarningButton
-      on:click={() => (displayClearAllConfirmation = true)}
-      disabled={$gjScheme.features.length == 0}
-    >
-      Clear all
-    </WarningButton>
-  </div>
-  <Modal
-    title="Would you like to clear your work?"
-    bind:open={displayClearAllConfirmation}
-  >
-    <p>This will delete all your drawn interventions.</p>
-    <div class="govuk-button-group">
-      <WarningButton on:click={clearAll}>Clear all work</WarningButton>
-      <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
-        Cancel
-      </SecondaryButton>
+    <div>
+      <WarningButton
+        on:click={() => (displayClearAllConfirmation = true)}
+        disabled={$gjScheme.features.length == 0}
+      >
+        Start new scheme
+      </WarningButton>
     </div>
-  </Modal>
+    <Modal
+      title="Would you like to clear your work?"
+      bind:open={displayClearAllConfirmation}
+      displayEscapeButton={false}
+    >
+      <p>This will delete all your drawn interventions.</p>
+      <div class="govuk-button-group">
+        <WarningButton on:click={clearAll}>Clear all work</WarningButton>
+        <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
+          Cancel
+        </SecondaryButton>
+      </div>
+    </Modal>
+  </CollapsibleCard>
+
   {#if numErrors == 1}
     <ErrorMessage
       errorMessage="There's a problem with one intervention below"

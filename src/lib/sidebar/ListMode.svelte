@@ -40,8 +40,6 @@
   }
 </script>
 
-<hr />
-
 {#each $gjScheme.features as feature, i (feature.id)}
   {@const warning = interventionWarning(schema, feature)}
   <div>
