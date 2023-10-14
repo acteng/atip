@@ -1,6 +1,6 @@
 <script lang="ts">
   import { BaselayerSwitcher, Legend } from "lib/common";
-  import { SecondaryButton, WarningButton } from "lib/govuk";
+  import { SecondaryButton } from "lib/govuk";
   import { schemaLegend } from "schemas";
   import { deleteIntervention, map, mode } from "stores";
   import { onDestroy } from "svelte";
@@ -11,6 +11,7 @@
   import routeIcon from "../../../assets/route.svg";
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
+  import EditFormMode from "./EditFormMode.svelte";
   import EditGeometryMode from "./EditGeometryMode.svelte";
   import { PointTool } from "./point/point_tool";
   import PointMode from "./point/PointMode.svelte";
@@ -75,23 +76,7 @@
       StreetView
     </SecondaryButton>
   {:else if $mode.mode == "edit-form"}
-    <div>
-      <SecondaryButton on:click={() => mode.set({ mode: "list" })}>
-        Save / back
-      </SecondaryButton>
-    </div>
-    <div>
-      <SecondaryButton
-        on:click={() => mode.set({ mode: "edit-geometry", id: $mode.id })}
-      >
-        Edit geometry
-      </SecondaryButton>
-    </div>
-    <div>
-      <WarningButton on:click={() => deleteIntervention($mode.id)}>
-        Delete
-      </WarningButton>
-    </div>
+    <EditFormMode />
   {:else if $mode.mode == "edit-geometry"}
     <EditGeometryMode id={$mode.id} {pointTool} {polygonTool} {routeTool} />
   {:else if $mode.mode == "new-point"}
