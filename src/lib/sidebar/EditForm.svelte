@@ -4,7 +4,7 @@
   import FormV2 from "lib/forms/FormV2.svelte";
   import PlanningForm from "lib/forms/PlanningForm.svelte";
   import { ErrorMessage } from "lib/govuk";
-  import { deleteIntervention, gjScheme } from "stores";
+  import { deleteIntervention, gjScheme, mode } from "stores";
   import type { Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
@@ -17,6 +17,11 @@
   $: warning = interventionWarning(schema, feature);
 
   function onKeydown(e: KeyboardEvent) {
+    if (e.key == "Escape") {
+      mode.set({ mode: "list" });
+      return;
+    }
+
     if (e.key == "Delete") {
       const tag = (e.target as HTMLElement).tagName;
       // Let the delete key work in forms

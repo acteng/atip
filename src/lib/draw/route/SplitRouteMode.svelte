@@ -24,15 +24,12 @@
 
     $map.on("mousemove", onMouseMove);
     $map.on("click", onClick);
-    // TODO use svelte:window
-    document.addEventListener("keydown", onKeyDown);
   });
   onDestroy(() => {
     $map.getCanvas().style.cursor = "inherit";
 
     $map.off("mousemove", onMouseMove);
     $map.off("click", onClick);
-    document.removeEventListener("keydown", onKeyDown);
   });
 
   let snappedCursor: Feature<Point> | null = null;
@@ -243,6 +240,8 @@
     return length(sliced, { units: "kilometers" }) * 1000.0;
   }
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <GeoJSON data={snappedCursorGj}>
   <CircleLayer

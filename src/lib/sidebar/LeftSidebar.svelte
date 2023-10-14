@@ -1,6 +1,6 @@
 <script lang="ts">
   import { BaselayerSwitcher } from "lib/common";
-  import { editGeometryControls, mode } from "stores";
+  import { editGeometryControls, gjScheme, mode } from "stores";
   import type { Schema } from "types";
   import PointControls from "../draw/point/PointControls.svelte";
   import PolygonControls from "../draw/polygon/PolygonControls.svelte";
@@ -9,6 +9,7 @@
   import StreetViewControls from "../draw/StreetViewControls.svelte";
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
+  import { interventionName } from "./scheme_data";
 
   export let schema: Schema;
 </script>
@@ -18,6 +19,12 @@
 {:else if $mode.mode == "edit-form"}
   <EditForm {schema} id={$mode.id} />
 {:else if $mode.mode == "edit-geometry"}
+  <h2>
+    Editing {interventionName(
+      schema,
+      $gjScheme.features.find((f) => f.id == $mode.id)
+    )}
+  </h2>
   {#if $editGeometryControls == "point"}
     <PointControls editingExisting />
   {:else if $editGeometryControls == "route"}
@@ -28,14 +35,19 @@
     <SnapPolygonControls />
   {/if}
 {:else if $mode.mode == "new-point"}
+  <h2>New point</h2>
   <PointControls editingExisting={false} />
 {:else if $mode.mode == "new-route"}
+  <h2>New route</h2>
   <RouteControls extendRoute />
 {:else if $mode.mode == "new-freehand-polygon"}
+  <h2>New polygon (freehand)</h2>
   <PolygonControls />
 {:else if $mode.mode == "new-snapped-polygon"}
+  <h2>New polygon (snapped)</h2>
   <SnapPolygonControls />
 {:else if $mode.mode == "split-route"}
+  <h2>Split route</h2>
   <ul>
     <li>
       <b>Click</b>
@@ -49,6 +61,7 @@
     </li>
   </ul>
 {:else if $mode.mode == "streetview"}
+  <h2>StreetView</h2>
   <StreetViewControls />
 {/if}
 
