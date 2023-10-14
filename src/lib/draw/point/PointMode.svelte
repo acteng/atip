@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Point } from "geojson";
   import { SecondaryButton } from "lib/govuk";
+  import type { FeatureWithProps } from "lib/maplibre";
   import { gjScheme, mode, newFeatureId } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
@@ -18,7 +19,7 @@
     pointTool.clearEventListeners();
   });
 
-  function onSuccess(feature) {
+  function onSuccess(feature: FeatureWithProps<Point>) {
     gjScheme.update((gj) => {
       feature.id = newFeatureId(gj);
       feature.properties.intervention_type = "other";
@@ -26,7 +27,7 @@
       return gj;
     });
 
-    mode.set({ mode: "edit-form", id: feature.id });
+    mode.set({ mode: "edit-form", id: feature.id as number });
   }
 
   function onFailure() {

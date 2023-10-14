@@ -91,7 +91,9 @@
     });
   });
 
-  function onSuccess(editedFeature) {
+  function onSuccess(
+    editedFeature: FeatureWithProps<Point | Polygon | LineString>
+  ) {
     gjScheme.update((gj) => {
       let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
       // TODO Should be guaranteed
@@ -103,7 +105,7 @@
     mode.set({ mode: "edit-form", id });
   }
 
-  function onUpdate(feature) {
+  function onUpdate(feature: FeatureWithProps<Polygon | LineString>) {
     // Just remember the update; don't apply it yet
     unsavedFeature = feature;
   }

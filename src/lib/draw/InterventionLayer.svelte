@@ -1,6 +1,6 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
-  import { Popup } from "lib/common";
+  import type { Feature } from "geojson";
   import {
     addLineStringEndpoints,
     isLine,
@@ -9,7 +9,10 @@
     layerId,
   } from "lib/maplibre";
   import { interventionName } from "lib/sidebar/scheme_data";
-  import type { FilterSpecification } from "maplibre-gl";
+  import type {
+    DataDrivenPropertyValueSpecification,
+    FilterSpecification,
+  } from "maplibre-gl";
   import { colorInterventionsBySchema } from "schemas";
   import { gjScheme, mode } from "stores";
   import {
@@ -17,9 +20,10 @@
     FillLayer,
     GeoJSON,
     LineLayer,
+    Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { Schema } from "types";
+  import type { FeatureUnion, Schema } from "types";
 
   export let schema: Schema;
 
@@ -35,11 +39,12 @@
 
   $: clickable = $mode.mode == "list";
 
-  let color;
+  let color: DataDrivenPropertyValueSpecification<string>;
   $: {
     let colorInterventions = colorInterventionsBySchema(schema);
     let fadeColor = "grey";
     if ($mode.mode == "edit-form") {
+      // @ts-ignore Can't figure out the problem
       color = ["case", ["==", ["id"], $mode.id], colorInterventions, fadeColor];
     } else if ($mode.mode == "list") {
       color = colorInterventions;
@@ -47,6 +52,7 @@
       color = [
         "case",
         ["==", "intervention_type", "route"],
+        // @ts-ignore Can't figure out the problem
         colorInterventions,
         fadeColor,
       ];
@@ -64,6 +70,14 @@
       mode.set({ mode: "edit-form", id: e.detail.features[0].id as number });
     }
   }
+
+  function tooltip(features: Feature[] | null): string {
+    if (features) {
+      return interventionName(schema, features[0] as FeatureUnion);
+    }
+    // TODO Improve upstream, this should be impossible
+    return "Tooltip bug";
+  }
 </script>
 
 <GeoJSON data={gj}>
@@ -79,7 +93,9 @@
     manageHoverState={clickable}
   >
     {#if clickable}
-      <Popup let:feature><p>{interventionName(schema, feature)}</p></Popup>
+      <Popup openOn="hover" openIfTopMost let:features>
+        <div class="govuk-prose"><p>{tooltip(features)}</p></div>
+      </Popup>
     {/if}
   </CircleLayer>
 
@@ -95,7 +111,9 @@
     manageHoverState={clickable}
   >
     {#if clickable}
-      <Popup let:feature><p>{interventionName(schema, feature)}</p></Popup>
+      <Popup openOn="hover" openIfTopMost let:features>
+        <div class="govuk-prose"><p>{tooltip(features)}</p></div>
+      </Popup>
     {/if}
   </LineLayer>
   <CircleLayer
@@ -121,7 +139,9 @@
     manageHoverState={clickable}
   >
     {#if clickable}
-      <Popup let:feature><p>{interventionName(schema, feature)}</p></Popup>
+      <Popup openOn="hover" openIfTopMost let:features>
+        <div class="govuk-prose"><p>{tooltip(features)}</p></div>
+      </Popup>
     {/if}
   </FillLayer>
   <LineLayer

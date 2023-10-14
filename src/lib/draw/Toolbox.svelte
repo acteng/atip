@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { SecondaryButton } from "lib/govuk";
-  import { deleteIntervention, map, mode } from "stores";
+  import { map, mode } from "stores";
   import { onDestroy } from "svelte";
-  import type { Schema } from "types";
   import EditFormMode from "./EditFormMode.svelte";
   import EditGeometryMode from "./EditGeometryMode.svelte";
   import ListMode from "./ListMode.svelte";
@@ -18,7 +16,6 @@
   import StreetViewMode from "./StreetViewMode.svelte";
 
   export let routeSnapperUrl: string;
-  export let schema: Schema;
 
   // Create and manage these here, then pass down to modes as needed.
   let pointTool = new PointTool($map);
@@ -30,25 +27,35 @@
     polygonTool?.tearDown();
     routeTool?.tearDown();
   });
+
+  // Can't use TS in Svelte markup
+  function mustHaveRouteTool(): RouteTool {
+    return routeTool!;
+  }
 </script>
 
 <div class="top govuk-prose">
   <RouteSnapperLoader url={routeSnapperUrl} bind:routeTool />
 
   {#if $mode.mode == "list"}
-    <ListMode {routeTool} />
+    <ListMode routeTool={mustHaveRouteTool()} />
   {:else if $mode.mode == "edit-form"}
-    <EditFormMode />
+    <EditFormMode id={$mode.id} />
   {:else if $mode.mode == "edit-geometry"}
-    <EditGeometryMode id={$mode.id} {pointTool} {polygonTool} {routeTool} />
+    <EditGeometryMode
+      id={$mode.id}
+      {pointTool}
+      {polygonTool}
+      routeTool={mustHaveRouteTool()}
+    />
   {:else if $mode.mode == "new-point"}
     <PointMode {pointTool} />
   {:else if $mode.mode == "new-route"}
-    <RouteMode {routeTool} />
+    <RouteMode routeTool={mustHaveRouteTool()} />
   {:else if $mode.mode == "new-freehand-polygon"}
     <PolygonMode {polygonTool} />
   {:else if $mode.mode == "new-snapped-polygon"}
-    <SnapPolygonMode {routeTool} />
+    <SnapPolygonMode routeTool={mustHaveRouteTool()} />
   {:else if $mode.mode == "split-route"}
     <SplitRouteMode />
   {:else if $mode.mode == "streetview"}

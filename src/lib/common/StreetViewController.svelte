@@ -1,7 +1,6 @@
 <script lang="ts">
   import { colors } from "colors";
-  import { CollapsibleCard, ExternalLink } from "lib/common";
-  import { Radio, SecondaryButton } from "lib/govuk";
+  import { SecondaryButton } from "lib/govuk";
   import { getRoadLayerHelpers, LayerHelper } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, userSettings } from "stores";
@@ -63,4 +62,3 @@
     </SecondaryButton>
   {/if}
 {/if}
-{#if !isInactive}{/if}

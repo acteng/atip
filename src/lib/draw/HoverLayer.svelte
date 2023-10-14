@@ -1,6 +1,5 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
-  import type { GeoJSON as GeoJSONType } from "geojson";
   import {
     emptyGeojson,
     isLine,
