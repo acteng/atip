@@ -98,7 +98,7 @@
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle}>
-      <Geocoder />
+      <Geocoder position="bottom-left" />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer {schema} />
       <HoverLayer />

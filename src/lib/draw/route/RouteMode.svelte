@@ -53,6 +53,9 @@
 
 <svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
 
+<DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>
+<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
+
 {#if snapping}
   <p>
     Snapping to existing roads. Press <b>Shift</b>
@@ -64,7 +67,3 @@
     to snap to roads
   </p>
 {/if}
-<div>
-  <DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>
-</div>
-<div><SecondaryButton on:click={onFailure}>Cancel</SecondaryButton></div>

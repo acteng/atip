@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { BaselayerSwitcher } from "lib/common";
   import { SecondaryButton } from "lib/govuk";
   import { deleteIntervention, map, mode } from "stores";
   import { onDestroy } from "svelte";
@@ -38,7 +37,7 @@
   });
 </script>
 
-<div class="top-right govuk-prose">
+<div class="top govuk-prose">
   <RouteSnapperLoader url={routeSnapperUrl} bind:routeTool />
 
   {#if $mode.mode == "list"}
@@ -91,22 +90,19 @@
   {:else if $mode.mode == "streetview"}
     <StreetViewMode />
   {/if}
-
-  <hr />
-  <BaselayerSwitcher />
 </div>
 
 <style>
-  .top-right {
+  .top {
     position: absolute;
-    right: 10px;
     top: 10px;
+    right: 10px;
+    width: 90%;
     background-color: white;
+    border: 1px solid black;
     padding: 16px;
-    /* Leave room at the bottom for some of the map controls */
-    max-height: calc(100vh - 200px);
-    overflow: auto;
-    font-size: 1.5em;
-    width: 250px;
+
+    display: flex;
+    justify-content: space-between;
   }
 </style>

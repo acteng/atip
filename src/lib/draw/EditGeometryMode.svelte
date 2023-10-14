@@ -155,5 +155,5 @@
   }
 </script>
 
-<div><DefaultButton on:click={finish}>Finish</DefaultButton></div>
-<div><SecondaryButton on:click={cancel}>Cancel</SecondaryButton></div>
+<DefaultButton on:click={finish}>Finish</DefaultButton>
+<SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
