@@ -8,19 +8,18 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
-  import { gjScheme, sidebarHover } from "stores";
+  import { gjScheme, mode, sidebarHover } from "stores";
   import { CircleLayer, GeoJSON, LineLayer } from "svelte-maplibre";
 
   // Use a layer that only ever has zero or one features for hovering.
   let gj: GeoJSONType = emptyGeojson();
 
-  // When a form is open, ignore regular map and sidebar interactions
   $: {
-    let id = $sidebarHover;
-    if (id != null) {
-      gj = $gjScheme.features.find((f) => f.id == id)!;
-    } else {
+    let id = $mode.mode == "list" ? $sidebarHover : null;
+    if (id == null) {
       gj = emptyGeojson();
+    } else {
+      gj = $gjScheme.features.find((f) => f.id == id)!;
     }
   }
 </script>

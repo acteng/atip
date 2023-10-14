@@ -4,6 +4,8 @@
   data-module="govuk-button"
   {...$$props}
   on:click
+  on:mouseenter
+  on:mouseleave
 >
   <slot />
 </button>
