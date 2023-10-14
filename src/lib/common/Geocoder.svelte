@@ -6,6 +6,8 @@
   import { map } from "stores";
   import { onMount } from "svelte";
 
+  export let position: "top-left" | "bottom-left" = "top-left";
+
   let mapController: MapController;
 
   // TODO HMR is broken
@@ -18,7 +20,7 @@
 </script>
 
 {#if mapController}
-  <div>
+  <div class={position}>
     <GeocodingControl
       {mapController}
       apiKey={import.meta.env.VITE_MAPTILER_API_KEY}
@@ -28,9 +30,15 @@
 {/if}
 
 <style>
-  div {
+  .top-left {
     position: absolute;
     top: 20px;
     left: 50px;
+  }
+
+  .bottom-left {
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
   }
 </style>

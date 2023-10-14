@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { BaselayerSwitcher } from "lib/common";
   import { editGeometryControls, mode } from "stores";
   import type { Schema } from "types";
   import PointControls from "../draw/point/PointControls.svelte";
@@ -50,3 +51,6 @@
 {:else if $mode.mode == "streetview"}
   <StreetViewControls />
 {/if}
+
+<hr />
+<BaselayerSwitcher />

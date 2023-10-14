@@ -27,20 +27,16 @@
   }
 </script>
 
-<div>
-  <SecondaryButton on:click={() => mode.set({ mode: "list" })}>
-    Save / back
-  </SecondaryButton>
-</div>
-<div>
-  <SecondaryButton
-    on:click={() => mode.set({ mode: "edit-geometry", id: $mode.id })}
-  >
-    Edit geometry
-  </SecondaryButton>
-</div>
-<div>
-  <WarningButton on:click={() => deleteIntervention($mode.id)}>
-    Delete
-  </WarningButton>
-</div>
+<SecondaryButton on:click={() => mode.set({ mode: "list" })}>
+  Save / back
+</SecondaryButton>
+
+<SecondaryButton
+  on:click={() => mode.set({ mode: "edit-geometry", id: $mode.id })}
+>
+  Edit geometry
+</SecondaryButton>
+
+<WarningButton on:click={() => deleteIntervention($mode.id)}>
+  Delete
+</WarningButton>

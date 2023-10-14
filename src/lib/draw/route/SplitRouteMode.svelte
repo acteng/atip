@@ -6,6 +6,7 @@
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
+  import { DefaultButton } from "lib/govuk";
   import { emptyGeojson, layerId, setPrecision } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { gjScheme, map, mode, newFeatureId } from "stores";
@@ -249,3 +250,7 @@
     paint={{ "circle-color": "black", "circle-radius": circleRadiusPixels }}
   />
 </GeoJSON>
+
+<DefaultButton on:click={() => mode.set({ mode: "list" })}>
+  Finish
+</DefaultButton>
