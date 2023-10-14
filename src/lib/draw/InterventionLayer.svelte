@@ -38,12 +38,20 @@
   let color;
   $: {
     let colorInterventions = colorInterventionsBySchema(schema);
+    let fadeColor = "grey";
     if ($mode.mode == "edit-form") {
-      color = ["case", ["==", ["id"], $mode.id], colorInterventions, "grey"];
-    } else if ($mode.mode == "edit-geometry") {
-      color = "grey";
-    } else {
+      color = ["case", ["==", ["id"], $mode.id], colorInterventions, fadeColor];
+    } else if ($mode.mode == "list") {
       color = colorInterventions;
+    } else if ($mode.mode == "split-route") {
+      color = [
+        "case",
+        ["==", "intervention_type", "route"],
+        colorInterventions,
+        fadeColor,
+      ];
+    } else {
+      color = fadeColor;
     }
   }
 
