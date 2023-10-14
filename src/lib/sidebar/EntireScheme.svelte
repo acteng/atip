@@ -7,7 +7,7 @@
     WarningButton,
   } from "lib/govuk";
   import { schemaPluralNoun } from "schemas";
-  import { gjScheme, mapHover, mode, sidebarHover } from "stores";
+  import { gjScheme, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
   import type { Schema, Scheme } from "types";
   import { backfill, interventionWarning } from "./scheme_data";
@@ -69,7 +69,6 @@
       gj.features = [];
       return gj;
     });
-    mapHover.set(null);
     sidebarHover.set(null);
   }
 

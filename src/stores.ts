@@ -26,8 +26,7 @@ export const editGeometryControls: Writable<string | null> = writable(null);
 // TODO Should we instead store a map from ID to feature?
 export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);
 
-// The optional ID of a feature currently hovered from the map or sidebar.
-export const mapHover: Writable<number | null> = writable(null);
+// The optional ID of a feature currently hovered from the sidebar.
 export const sidebarHover: Writable<number | null> = writable(null);
 
 export const userSettings: Writable<UserSettings> = writable(
@@ -75,7 +74,6 @@ export function deleteIntervention(id: number) {
     gj.features = gj.features.filter((f) => f.id != id);
     return gj;
   });
-  mapHover.set(null);
   sidebarHover.set(null);
   mode.set({ mode: "list" });
 }

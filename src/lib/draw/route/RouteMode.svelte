@@ -56,12 +56,12 @@
 {#if snapping}
   <p>
     Snapping to existing roads. Press <b>Shift</b>
-     to draw anywhere
+    to draw anywhere
   </p>
 {:else}
   <p>
     Drawing points anywhere. Release <b>Shift</b>
-     to snap to roads
+    to snap to roads
   </p>
 {/if}
 <div>
