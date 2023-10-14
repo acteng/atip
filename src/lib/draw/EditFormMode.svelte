@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SecondaryButton, WarningButton } from "lib/govuk";
+  import { DefaultButton, SecondaryButton, WarningButton } from "lib/govuk";
   import { deleteIntervention, map, mode } from "stores";
   import { onDestroy, onMount } from "svelte";
 
@@ -27,9 +27,7 @@
   }
 </script>
 
-<SecondaryButton on:click={() => mode.set({ mode: "list" })}>
-  Save / back
-</SecondaryButton>
+<DefaultButton on:click={() => mode.set({ mode: "list" })}>Save</DefaultButton>
 
 <SecondaryButton
   on:click={() => mode.set({ mode: "edit-geometry", id: $mode.id })}

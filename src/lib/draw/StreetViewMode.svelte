@@ -41,7 +41,15 @@
       );
     }
   }
+
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.key == "Escape") {
+      mode.set({ mode: "list" });
+    }
+  }
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <DefaultButton on:click={() => mode.set({ mode: "list" })}>
   Finish
