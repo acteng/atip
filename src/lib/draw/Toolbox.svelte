@@ -3,14 +3,9 @@
   import { deleteIntervention, map, mode } from "stores";
   import { onDestroy } from "svelte";
   import type { Schema } from "types";
-  import pointIcon from "../../../assets/point.svg";
-  import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
-  import polygonSnappedIcon from "../../../assets/polygon_snapped.svg";
-  import routeIcon from "../../../assets/route.svg";
-  import splitRouteIcon from "../../../assets/split_route.svg";
-  import streetViewIcon from "../../../assets/street_view.svg";
   import EditFormMode from "./EditFormMode.svelte";
   import EditGeometryMode from "./EditGeometryMode.svelte";
+  import ListMode from "./ListMode.svelte";
   import { PointTool } from "./point/point_tool";
   import PointMode from "./point/PointMode.svelte";
   import { PolygonTool } from "./polygon/polygon_tool";
@@ -41,38 +36,7 @@
   <RouteSnapperLoader url={routeSnapperUrl} bind:routeTool />
 
   {#if $mode.mode == "list"}
-    <SecondaryButton on:click={() => mode.set({ mode: "new-point" })}>
-      <img src={pointIcon} alt="New point" />
-      New point
-    </SecondaryButton>
-    <SecondaryButton
-      on:click={() => mode.set({ mode: "new-route" })}
-      disabled={!routeTool}
-    >
-      <img src={routeIcon} alt="New route" />
-      New route
-    </SecondaryButton>
-    <SecondaryButton
-      on:click={() => mode.set({ mode: "new-freehand-polygon" })}
-    >
-      <img src={polygonFreehandIcon} alt="New polygon (freehand)" />
-      New polygon (freehand)
-    </SecondaryButton>
-    <SecondaryButton
-      on:click={() => mode.set({ mode: "new-snapped-polygon" })}
-      disabled={!routeTool}
-    >
-      <img src={polygonSnappedIcon} alt="New polygon (snapped)" />
-      New polygon (snapped)
-    </SecondaryButton>
-    <SecondaryButton on:click={() => mode.set({ mode: "split-route" })}>
-      <img src={splitRouteIcon} alt="Split route" />
-      Split route
-    </SecondaryButton>
-    <SecondaryButton on:click={() => mode.set({ mode: "streetview" })}>
-      <img src={streetViewIcon} alt="StreetView" />
-      StreetView
-    </SecondaryButton>
+    <ListMode {routeTool} />
   {:else if $mode.mode == "edit-form"}
     <EditFormMode />
   {:else if $mode.mode == "edit-geometry"}

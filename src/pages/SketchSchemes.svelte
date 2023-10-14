@@ -12,7 +12,6 @@
     MapLibreMap,
     ZoomOutMap,
   } from "lib/common";
-  import HoverLayer from "lib/draw/HoverLayer.svelte";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
   import Toolbox from "lib/draw/Toolbox.svelte";
   import { SecondaryButton } from "lib/govuk";
@@ -100,7 +99,6 @@
       <Geocoder position="bottom-left" />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer {schema} />
-      <HoverLayer />
       <Toolbox {routeSnapperUrl} {schema} />
     </MapLibreMap>
   </div>
