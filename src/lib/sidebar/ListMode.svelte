@@ -3,7 +3,7 @@
   import { SecondaryButton } from "lib/govuk";
   import { bbox } from "lib/maplibre";
   import { schemaLegend } from "schemas";
-  import { gjScheme, map, mode } from "stores";
+  import { gjScheme, map, mode, sidebarHover } from "stores";
   import type { Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
 
@@ -29,6 +29,15 @@
 
     mode.set({ mode: "edit-form", id });
   }
+
+  function unhover(id: number) {
+    sidebarHover.update((current) => {
+      if (current == id) {
+        return null;
+      }
+      return current;
+    });
+  }
 </script>
 
 <hr />
@@ -36,7 +45,11 @@
 {#each $gjScheme.features as feature, i (feature.id)}
   {@const warning = interventionWarning(schema, feature)}
   <div>
-    <SecondaryButton on:click={() => edit(feature.id)}>
+    <SecondaryButton
+      on:click={() => edit(feature.id)}
+      on:mouseenter={() => sidebarHover.set(feature.id)}
+      on:mouseleave={() => unhover(feature.id)}
+    >
       {#if warning}
         <WarningIcon text={warning} />
       {/if}
