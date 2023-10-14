@@ -1,5 +1,6 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
+  import { Popup } from "lib/common";
   import {
     addLineStringEndpoints,
     isLine,
@@ -8,23 +9,19 @@
     layerId,
   } from "lib/maplibre";
   import { interventionName } from "lib/sidebar/scheme_data";
-  import type {
-    DataDrivenPropertyValueSpecification,
-    FilterSpecification,
-  } from "maplibre-gl";
+  import type { FilterSpecification } from "maplibre-gl";
+  import { colorInterventionsBySchema } from "schemas";
   import { gjScheme, mode } from "stores";
   import {
     CircleLayer,
     FillLayer,
     GeoJSON,
     LineLayer,
-    Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
   import type { Schema } from "types";
 
   export let schema: Schema;
-  export let colorInterventions: DataDrivenPropertyValueSpecification<string>;
 
   $: gj = addLineStringEndpoints($gjScheme);
 
@@ -40,6 +37,7 @@
 
   let color;
   $: {
+    let colorInterventions = colorInterventionsBySchema(schema);
     if ($mode.mode == "edit-form") {
       color = ["case", ["==", ["id"], $mode.id], colorInterventions, "grey"];
     } else if ($mode.mode == "edit-geometry") {
@@ -73,7 +71,7 @@
     manageHoverState={clickable}
   >
     {#if clickable}
-      <Popup let:features>{interventionName(schema, features[0])}</Popup>
+      <Popup let:feature><p>{interventionName(schema, feature)}</p></Popup>
     {/if}
   </CircleLayer>
 
@@ -89,7 +87,7 @@
     manageHoverState={clickable}
   >
     {#if clickable}
-      <Popup let:features>{interventionName(schema, features[0])}</Popup>
+      <Popup let:feature><p>{interventionName(schema, feature)}</p></Popup>
     {/if}
   </LineLayer>
   <CircleLayer
@@ -115,7 +113,7 @@
     manageHoverState={clickable}
   >
     {#if clickable}
-      <Popup let:features>{interventionName(schema, features[0])}</Popup>
+      <Popup let:feature><p>{interventionName(schema, feature)}</p></Popup>
     {/if}
   </FillLayer>
   <LineLayer

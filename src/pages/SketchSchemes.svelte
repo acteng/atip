@@ -21,7 +21,7 @@
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
-  import { colorInterventionsBySchema, schemaTitle } from "schemas";
+  import { schemaTitle } from "schemas";
   import { mapStyle, mode } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
@@ -100,10 +100,7 @@
     <MapLibreMap style={$mapStyle}>
       <Geocoder />
       <BoundaryLayer {boundaryGeojson} />
-      <InterventionLayer
-        {schema}
-        colorInterventions={colorInterventionsBySchema(schema)}
-      />
+      <InterventionLayer {schema} />
       <HoverLayer />
       <Toolbox {routeSnapperUrl} {schema} />
     </MapLibreMap>
