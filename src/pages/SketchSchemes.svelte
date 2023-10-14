@@ -94,7 +94,6 @@
       </div>
     {/if}
     <EntireScheme {authorityName} {schema} />
-    <hr />
     <LeftSidebar {schema} />
   </div>
   <div slot="main">
