@@ -1,6 +1,6 @@
 <script lang="ts">
   import { colors } from "colors";
-  import { DefaultButton } from "lib/govuk";
+  import { DefaultButton, Radio } from "lib/govuk";
   import { getRoadLayerHelpers, LayerHelper } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, mode, userSettings } from "stores";
@@ -54,3 +54,14 @@
 <DefaultButton on:click={() => mode.set({ mode: "list" })}>
   Finish
 </DefaultButton>
+
+<Radio
+  legend="Source"
+  id="streetViewImagery"
+  choices={[
+    ["google", "Google Street View"],
+    ["bing", "Bing Streetside"],
+  ]}
+  bind:value={$userSettings.streetViewImagery}
+  inlineSmall
+/>
