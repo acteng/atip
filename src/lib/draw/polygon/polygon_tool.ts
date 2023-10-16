@@ -265,7 +265,6 @@ export class PolygonTool {
   }
 
   stop() {
-    this.map.getCanvas().style.cursor = "inherit";
     this.map.doubleClickZoom.enable();
     this.points = [];
     this.cursor = null;
@@ -273,6 +272,7 @@ export class PolygonTool {
     this.hover = null;
     this.dragFrom = null;
     this.redraw();
+    this.map.getCanvas().style.cursor = "inherit";
   }
 
   private redraw() {
