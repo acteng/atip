@@ -111,7 +111,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half left">
-    <h1 class="govuk-heading-l">Welcome to ATIP v2</h1>
+    <h1 class="govuk-heading-l">Welcome to ATIP Scheme Sketcher v2</h1>
     <p>App version: {appVersion()}</p>
     <LoggedIn />
     <SecondaryButton on:click={() => (showAbout = !showAbout)}>

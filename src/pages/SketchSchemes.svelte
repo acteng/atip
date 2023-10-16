@@ -19,7 +19,6 @@
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
-  import { schemaTitle } from "schemas";
   import { mapStyle, mode } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
@@ -74,22 +73,21 @@
 <div class="overall-layout">
   <div class="sidebar govuk-prose">
     {#if $mode.mode == "list"}
+      <h2>ATIP Scheme Sketcher</h2>
+      <p>App version: {appVersion()}</p>
+      <div style="display: flex; justify-content: space-between">
+        <p>{authorityName}</p>
+        <a href="index.html">Change area</a>
+        <ZoomOutMap {boundaryGeojson} />
+      </div>
+
       <div class="govuk-button-group">
-        <SecondaryButton on:click={() => (window.location.href = "index.html")}>
-          Home
-        </SecondaryButton>
         <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
         <SecondaryButton on:click={toggleInstructions}>
           Instructions
         </SecondaryButton>
       </div>
-      <p>App version: {appVersion()}</p>
       <LoggedIn />
-      <p>{schemaTitle(schema)} mode</p>
-      <div style="display: flex; justify-content: space-between">
-        <h1>{authorityName}</h1>
-        <ZoomOutMap {boundaryGeojson} />
-      </div>
     {/if}
     <EntireScheme {authorityName} {schema} />
     <LeftSidebar {schema} />

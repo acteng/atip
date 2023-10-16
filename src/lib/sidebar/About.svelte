@@ -7,7 +7,7 @@
 <Modal title="About the Active Travel Infrastructure Platform" bind:open>
   <div class="govuk-prose">
     <p>
-      ATIP v2 is an
+      ATIP Scheme Sketcher v2 is an
       <ExternalLink href="https://github.com/acteng/atip">
         open source project
       </ExternalLink> supported by Active Travel England and developed by:
@@ -22,10 +22,17 @@
         </ExternalLink>: lead developer, from The Alan Turing Institute
       </li>
       <li>
+        <ExternalLink href="https://github.com/Pete-Y-CS">
+          Peter York
+        </ExternalLink>
+      </li>
+      <li>
         With UX help from
         <ExternalLink href="https://www.linkedin.com/in/madison-wang-841977bb/">
           Madison Wang
-        </ExternalLink> and CSS help from
+        </ExternalLink> and <ExternalLink href="https://github.com/stuartlynn">
+          Stuart Lynn
+        </ExternalLink>, and CSS help from
         <ExternalLink href="https://github.com/BudgieInWA">
           Ben Ritter
         </ExternalLink>
@@ -43,6 +50,9 @@
       </ExternalLink>
       contributors,
       <ExternalLink href="https://maplibre.org/">MapLibre</ExternalLink>,
+      <ExternalLink href="https://github.com/dimfeld/svelte-maplibre/">
+        svelte-maplibre
+      </ExternalLink>,
       <ExternalLink href="https://georust.org/">GeoRust</ExternalLink>,
       <ExternalLink href="https://github.com/a-b-street/osm2streets">
         osm2streets
