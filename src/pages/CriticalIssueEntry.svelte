@@ -13,7 +13,7 @@
     LineMeasureController,
     LoggedIn,
     MapLibreMap,
-    StreetViewController,
+    StreetViewTool,
   } from "../lib/common";
   import Form from "../lib/critical_entry/Form.svelte";
   import Pin from "../lib/critical_entry/Pin.svelte";
@@ -29,16 +29,7 @@
   mapStyle.set(params.get("style") || defaultStyle);
 
   let markerPosition: LngLat | null = null;
-  let streetviewOff = true;
-
-  let streetViewController: StreetViewController;
-
-  function onKeydown(e: KeyboardEvent) {
-    if (!streetviewOff && e.key == "Escape") {
-      streetViewController.disableStreetView();
-      e.preventDefault();
-    }
-  }
+  let streetviewEnabled = false;
 </script>
 
 <Layout sidebarWidth="35rem">
@@ -55,21 +46,15 @@
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Geocoder />
-      <Pin bind:markerPosition enableAdding={streetviewOff} />
+      <Pin bind:markerPosition enableAdding={!streetviewEnabled} />
       <div class="top-right">
-        <BaselayerSwitcher disabled={!streetviewOff} />
-        <StreetViewController
-          bind:this={streetViewController}
-          displayEnableButton
-          bind:isInactive={streetviewOff}
-        />
+        <BaselayerSwitcher disabled={streetviewEnabled} />
+        <StreetViewTool bind:enabled={streetviewEnabled} />
         <div><LineMeasureController /></div>
       </div>
     </MapLibreMap>
   </div>
 </Layout>
-
-<svelte:window on:keydown={onKeydown} />
 
 <style>
   .top-right {

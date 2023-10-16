@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { BaselayerSwitcher } from "lib/common";
+  import { BaselayerSwitcher, StreetViewHelp } from "lib/common";
   import { editGeometryControls, gjScheme, mode } from "stores";
   import type { Schema } from "types";
   import PointControls from "../draw/point/PointControls.svelte";
@@ -9,7 +9,6 @@
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
   import { interventionName } from "./scheme_data";
-  import StreetViewMode from "./StreetViewMode.svelte";
 
   export let schema: Schema;
 
@@ -63,7 +62,7 @@
   </ul>
 {:else if $mode.mode == "streetview"}
   <h2>StreetView</h2>
-  <StreetViewMode />
+  <StreetViewHelp />
 {/if}
 
 <hr />
