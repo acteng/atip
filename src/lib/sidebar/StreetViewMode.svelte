@@ -1,18 +1,6 @@
 <script lang="ts">
   import { ExternalLink } from "lib/common";
-  import { Radio } from "lib/govuk";
-  import { userSettings } from "stores";
 </script>
-
-<Radio
-  legend="Source"
-  id="streetViewImagery"
-  choices={[
-    ["google", "Google Street View"],
-    ["bing", "Bing Streetside"],
-  ]}
-  bind:value={$userSettings.streetViewImagery}
-/>
 
 <ul>
   <li>

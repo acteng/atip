@@ -6,10 +6,10 @@
   import PolygonControls from "../draw/polygon/PolygonControls.svelte";
   import RouteControls from "../draw/route/RouteControls.svelte";
   import SnapPolygonControls from "../draw/snap_polygon/SnapPolygonControls.svelte";
-  import StreetViewControls from "../draw/StreetViewControls.svelte";
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
   import { interventionName } from "./scheme_data";
+  import StreetViewMode from "./StreetViewMode.svelte";
 
   export let schema: Schema;
 
@@ -63,7 +63,7 @@
   </ul>
 {:else if $mode.mode == "streetview"}
   <h2>StreetView</h2>
-  <StreetViewControls />
+  <StreetViewMode />
 {/if}
 
 <hr />
