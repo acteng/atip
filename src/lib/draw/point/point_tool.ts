@@ -31,7 +31,7 @@ export class PointTool {
       return;
     }
     if (e.key == "Escape") {
-      e.preventDefault();
+      e.stopPropagation();
       this.cancel();
     }
   };

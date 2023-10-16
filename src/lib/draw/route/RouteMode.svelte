@@ -42,11 +42,13 @@
   let snapping = true;
   function onKeyDown(e: KeyboardEvent) {
     if (e.key == "Shift") {
+      e.stopPropagation();
       snapping = false;
     }
   }
   function onKeyUp(e: KeyboardEvent) {
     if (e.key == "Shift") {
+      e.stopPropagation();
       snapping = true;
     }
   }

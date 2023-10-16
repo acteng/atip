@@ -61,6 +61,7 @@
 
   function onKeyDown(e: KeyboardEvent) {
     if (enabled && e.key == "Escape") {
+      e.stopPropagation();
       enabled = false;
     }
   }

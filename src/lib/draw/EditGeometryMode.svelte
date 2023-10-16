@@ -15,7 +15,8 @@
   export let routeTool: RouteTool;
 
   // As a feature is being edited, store the latest version
-  let unsavedFeature: FeatureWithProps<LineString | Polygon> | null = null;
+  let unsavedFeature: FeatureWithProps<Point | LineString | Polygon> | null =
+    null;
 
   onMount(() => {
     let maybeFeature: FeatureUnion | null = null;
