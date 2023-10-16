@@ -10,7 +10,10 @@
 
   export let schema: Schema;
 
-  function edit(id: number) {
+  function edit(e: MouseEvent, id: number) {
+    // Use <a> for buttons. Disable the href behavior.
+    e.preventDefault();
+
     // When the user starts editing something from the sidebar, warp to what's
     // being edited. (Don't do this when clicking the object on the map.)
     let feature = $gjScheme.features.find((f) => f.id == id)!;
@@ -45,20 +48,23 @@
   });
 </script>
 
-{#each $gjScheme.features as feature, i (feature.id)}
-  {@const warning = interventionWarning(schema, feature)}
-  <div>
-    <SecondaryButton
-      on:click={() => edit(feature.id)}
-      on:mouseenter={() => sidebarHover.set(feature.id)}
-      on:mouseleave={() => unhover(feature.id)}
-    >
-      {#if warning}
-        <WarningIcon text={warning} />
-      {/if}
-      {i + 1}) {interventionName(schema, feature)}
-    </SecondaryButton>
-  </div>
-{/each}
+<ol class="govuk-list govuk-list--number">
+  {#each $gjScheme.features as feature (feature.id)}
+    {@const warning = interventionWarning(schema, feature)}
+    <li>
+      <a
+        href="#"
+        on:click={(e) => edit(e, feature.id)}
+        on:mouseenter={() => sidebarHover.set(feature.id)}
+        on:mouseleave={() => unhover(feature.id)}
+      >
+        {#if warning}
+          <WarningIcon text={warning} />
+        {/if}
+        {interventionName(schema, feature)}
+      </a>
+    </li>
+  {/each}
+</ol>
 
 <Legend rows={schemaLegend(schema)} />
