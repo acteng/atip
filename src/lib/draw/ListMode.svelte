@@ -1,6 +1,7 @@
 <script lang="ts">
   import { SecondaryButton } from "lib/govuk";
-  import { mode } from "stores";
+  import { map, mode } from "stores";
+  import { onDestroy } from "svelte";
   import pointIcon from "../../../assets/point.svg";
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
   import polygonSnappedIcon from "../../../assets/polygon_snapped.svg";
@@ -11,6 +12,10 @@
   import { RouteTool } from "./route/route_tool";
 
   export let routeTool: RouteTool | null = null;
+
+  onDestroy(() => {
+    $map.getCanvas().style.cursor = "inherit";
+  });
 </script>
 
 <HoverLayer />
