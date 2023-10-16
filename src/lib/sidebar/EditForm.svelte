@@ -18,6 +18,7 @@
 
   function onKeydown(e: KeyboardEvent) {
     if (e.key == "Escape") {
+      e.stopPropagation();
       mode.set({ mode: "list" });
       return;
     }
@@ -28,10 +29,9 @@
       if (tag == "INPUT" || tag == "TEXTAREA") {
         return;
       }
-      e.preventDefault();
+      e.stopPropagation();
 
       deleteIntervention(id);
-      // TODO Back to list
     }
   }
 </script>

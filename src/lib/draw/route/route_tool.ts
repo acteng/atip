@@ -168,7 +168,7 @@ export class RouteTool {
       return;
     }
     if (e.key == "Enter") {
-      e.preventDefault();
+      e.stopPropagation();
       this.finish();
     }
   };
@@ -178,11 +178,11 @@ export class RouteTool {
       return;
     }
     if (e.key == "Shift") {
-      e.preventDefault();
+      e.stopPropagation();
       this.inner.setSnapMode(false);
       this.redraw();
     } else if (e.key == "Escape") {
-      e.preventDefault();
+      e.stopPropagation();
       this.cancel();
     }
   };
@@ -192,7 +192,7 @@ export class RouteTool {
       return;
     }
     if (e.key == "Shift") {
-      e.preventDefault();
+      e.stopPropagation();
       this.inner.setSnapMode(true);
       this.redraw();
     }

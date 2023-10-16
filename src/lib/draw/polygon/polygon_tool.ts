@@ -219,7 +219,7 @@ export class PolygonTool {
       return;
     }
     if (e.key == "Enter") {
-      e.preventDefault();
+      e.stopPropagation();
       this.finish();
     }
   };
@@ -229,7 +229,7 @@ export class PolygonTool {
       return;
     }
     if (e.key == "Escape") {
-      e.preventDefault();
+      e.stopPropagation();
       this.cancel();
     }
   };

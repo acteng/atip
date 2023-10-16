@@ -143,8 +143,8 @@
   // The escape key isn't registered at all for keypress, so use keydown
   function onKeyDown(e: KeyboardEvent) {
     if (e.key == "Escape") {
+      e.stopPropagation();
       mode.set({ mode: "list" });
-      e.preventDefault();
     }
   }
 

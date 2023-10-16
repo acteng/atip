@@ -73,17 +73,20 @@
     removeLineFromMap();
   }
 
-  function keyDown(keyDownEvent: KeyboardEvent) {
-    if (keyDownEvent.key === "Shift") {
+  function keyDown(e: KeyboardEvent) {
+    if (e.key === "Shift") {
+      e.stopPropagation();
       isShiftDown = true;
     }
-    if (keyDownEvent.key === "Escape") {
+    if (e.key === "Escape") {
+      e.stopPropagation();
       disableMeasurement();
     }
   }
 
-  function keyUp(keyUpEvent: KeyboardEvent) {
-    if (keyUpEvent.key === "Shift") {
+  function keyUp(e: KeyboardEvent) {
+    if (e.key === "Shift") {
+      e.stopPropagation();
       isShiftDown = false;
     }
   }
