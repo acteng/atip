@@ -4,7 +4,7 @@
     BaselayerSwitcher,
     CollapsibleCard,
     LineMeasureController,
-    StreetViewController,
+    StreetViewTool,
   } from "lib/common";
   import { CheckboxGroup } from "lib/govuk";
   import { interactiveMapLayersEnabled } from "stores";
@@ -30,14 +30,9 @@
   import SportsSpacesLayerControl from "./layers/points/SportsSpaces.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
 
-  let streetViewController: StreetViewController;
-
-  function onKeydown(e: KeyboardEvent) {
-    if (!$interactiveMapLayersEnabled && e.key == "Escape") {
-      streetViewController.disableStreetView();
-      e.preventDefault();
-    }
-  }
+  // Workaround for https://github.com/sveltejs/svelte/issues/7630
+  $: streetviewEnabled = !$interactiveMapLayersEnabled;
+  $: interactiveMapLayersEnabled.set(!streetviewEnabled);
 </script>
 
 <CollapsibleCard label="Layers" open>
@@ -81,14 +76,8 @@
     {/if}
   </CollapsibleCard>
   <CollapsibleCard label="Tools">
-    <StreetViewController
-      bind:this={streetViewController}
-      displayEnableButton
-      bind:isInactive={$interactiveMapLayersEnabled}
-    />
+    <StreetViewTool bind:enabled={streetviewEnabled} />
     <LineMeasureController />
   </CollapsibleCard>
   <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />
 </CollapsibleCard>
-
-<svelte:window on:keydown={onKeydown} />
