@@ -57,7 +57,6 @@
       editGeometryControls.set("point");
     }
   });
-  // TODO Discuss the state transition. Everything will go to edit-form.
   onDestroy(() => {
     editGeometryControls.set(null);
 
@@ -81,9 +80,8 @@
       // Show the feature again
       delete featureToBeUpdated.properties.hide_while_editing;
 
-      // If there are unsaved edits to the feature, copy them over. If the
-      // user explicitly canceled, then a failure callback would've run.
-      // TODO Think through this again -- when's it happen?
+      // Apply any updates to the feature. Failure / cancel cases will clear
+      // out unsavedFeature.
       if (unsavedFeature) {
         updateFeature(featureToBeUpdated, unsavedFeature);
       }
@@ -91,17 +89,9 @@
     });
   });
 
-  function onSuccess(
-    editedFeature: FeatureWithProps<Point | Polygon | LineString>
-  ) {
-    gjScheme.update((gj) => {
-      let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
-      // TODO Should be guaranteed
-      updateFeature(featureToBeUpdated, editedFeature);
-      delete featureToBeUpdated.properties.hide_while_editing;
-      return gj;
-    });
-
+  function onSuccess(feature: FeatureWithProps<Point | Polygon | LineString>) {
+    // Let onDestroy apply the update
+    unsavedFeature = feature;
     mode.set({ mode: "edit-form", id });
   }
 
@@ -111,14 +101,8 @@
   }
 
   function onFailure() {
-    // Throw away any updates
-    // TODO Refactor these, or think through how they could get called
-    gjScheme.update((gj) => {
-      let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
-      delete featureToBeUpdated.properties.hide_while_editing;
-      return gj;
-    });
-
+    // User canceled in the tool, so throw away unsaved updates
+    unsavedFeature = null;
     mode.set({ mode: "edit-form", id });
   }
 
