@@ -1,59 +1,17 @@
 <script lang="ts">
-  import { colors } from "colors";
+  import { StreetViewTool } from "lib/common";
   import { DefaultButton, Radio } from "lib/govuk";
-  import { getRoadLayerHelpers, LayerHelper } from "lib/maplibre";
-  import type { MapMouseEvent } from "maplibre-gl";
-  import { map, mode, userSettings } from "stores";
-  import { onDestroy, onMount } from "svelte";
-  import cameraCursorUrl from "../../../assets/camera_cursor.svg?url";
+  import { mode, userSettings } from "stores";
 
-  let roadLayerHelpers: LayerHelper[] = [];
-
-  onMount(() => {
-    $map.on("click", onClick);
-    $map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
-    // Create these as late as possible, so changes to basemap layers are used
-    roadLayerHelpers = getRoadLayerHelpers();
-    for (let helper of roadLayerHelpers) {
-      helper.setProperty($map, "line-color", colors.streetview);
-    }
-  });
-  onDestroy(() => {
-    $map.off("click", onClick);
-    $map.getCanvas().style.cursor = "inherit";
-    for (let helper of roadLayerHelpers) {
-      helper.returnToDefaultPaintValues($map);
-    }
-  });
-
-  function onClick(e: MapMouseEvent) {
-    let lon = e.lngLat.lng;
-    let lat = e.lngLat.lat;
-    if ($userSettings.streetViewImagery == "google") {
-      window.open(
-        `http://maps.google.com/maps?q=&layer=c&cbll=${lat},${lon}&cbp=11,0,0,0,0`,
-        "_blank"
-      );
-    } else if ($userSettings.streetViewImagery == "bing") {
-      window.open(
-        `https://www.bing.com/maps?cp=${lat}~${lon}&style=x`,
-        "_blank"
-      );
-    }
-  }
-
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key == "Escape") {
-      mode.set({ mode: "list" });
-    }
+  let enabled = true;
+  $: if (!enabled) {
+    mode.set({ mode: "list" });
   }
 </script>
 
-<svelte:window on:keydown={onKeyDown} />
+<StreetViewTool bind:enabled showControls={false} />
 
-<DefaultButton on:click={() => mode.set({ mode: "list" })}>
-  Finish
-</DefaultButton>
+<DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
 
 <Radio
   legend="Source"
