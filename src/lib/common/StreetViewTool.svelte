@@ -10,6 +10,7 @@
   import StreetViewHelp from "./StreetViewHelp.svelte";
 
   export let enabled: boolean;
+  export let showControls = true;
 
   let roadLayerHelpers: LayerHelper[] = [];
 
@@ -67,26 +68,28 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-{#if enabled}
-  <SecondaryButton on:click={() => (enabled = false)}>
-    Disable Street View
-  </SecondaryButton>
+{#if showControls}
+  {#if enabled}
+    <SecondaryButton on:click={() => (enabled = false)}>
+      Disable Street View
+    </SecondaryButton>
 
-  <Radio
-    legend="Source"
-    id="streetViewImagery"
-    choices={[
-      ["google", "Google Street View"],
-      ["bing", "Bing Streetside"],
-    ]}
-    bind:value={$userSettings.streetViewImagery}
-  />
+    <Radio
+      legend="Source"
+      id="streetViewImagery"
+      choices={[
+        ["google", "Google Street View"],
+        ["bing", "Bing Streetside"],
+      ]}
+      bind:value={$userSettings.streetViewImagery}
+    />
 
-  <CollapsibleCard label="Help">
-    <StreetViewHelp />
-  </CollapsibleCard>
-{:else}
-  <SecondaryButton on:click={() => (enabled = true)}>
-    Enable Street View
-  </SecondaryButton>
+    <CollapsibleCard label="Help">
+      <StreetViewHelp />
+    </CollapsibleCard>
+  {:else}
+    <SecondaryButton on:click={() => (enabled = true)}>
+      Enable Street View
+    </SecondaryButton>
+  {/if}
 {/if}
