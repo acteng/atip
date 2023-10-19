@@ -74,11 +74,6 @@
 
     gjScheme.update((gj) => {
       let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
-      if (!featureToBeUpdated) {
-        // Should be impossible
-        window.alert("Something broke; your edits were lost");
-        return gj;
-      }
 
       // Show the feature again
       delete featureToBeUpdated.properties.hide_while_editing;
