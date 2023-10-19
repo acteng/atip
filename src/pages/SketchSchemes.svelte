@@ -13,8 +13,8 @@
     ZoomOutMap,
   } from "lib/common";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
-  import ListMode from "lib/draw/ListMode.svelte";
   import SplitRouteMode from "lib/draw/route/SplitRouteMode.svelte";
+  import Toolbox from "lib/draw/Toolbox.svelte";
   import { ButtonGroup, SecondaryButton } from "lib/govuk";
   import About from "lib/sidebar/About.svelte";
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
@@ -99,7 +99,7 @@
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer {schema} />
       {#if $mode.mode == "list"}
-        <ListMode />
+        <Toolbox {schema} />
       {:else if $mode.mode == "split-route"}
         <SplitRouteMode />
       {/if}
