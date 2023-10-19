@@ -1,18 +1,21 @@
 <script lang="ts">
   import type { LineString, Point, Polygon } from "geojson";
-  import { DefaultButton, SecondaryButton } from "lib/govuk";
+  import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { editGeometryControls, gjScheme, mode } from "stores";
+  import { interventionName } from "lib/sidebar/scheme_data";
+  import { gjScheme, mode, pointTool, polygonTool, routeTool } from "stores";
   import { onDestroy, onMount } from "svelte";
-  import type { Feature, FeatureUnion } from "types";
-  import type { PointTool } from "./point/point_tool";
-  import type { PolygonTool } from "./polygon/polygon_tool";
-  import type { RouteTool } from "./route/route_tool";
+  import type { Feature, FeatureUnion, Schema } from "types";
+  import PointControls from "./point/PointControls.svelte";
+  import PolygonControls from "./polygon/PolygonControls.svelte";
+  import RouteControls from "./route/RouteControls.svelte";
+  import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
 
+  export let schema: Schema;
   export let id: number;
-  export let pointTool: PointTool;
-  export let polygonTool: PolygonTool;
-  export let routeTool: RouteTool;
+
+  let name = "";
+  let controls = "";
 
   // As a feature is being edited, store the latest version
   let unsavedFeature: FeatureWithProps<Point | LineString | Polygon> | null =
@@ -27,48 +30,47 @@
       return gj;
     });
     let feature = maybeFeature!;
+    name = interventionName(schema, feature);
 
     if (feature.geometry.type == "LineString") {
-      routeTool.editExistingRoute(feature as Feature<LineString>);
-      routeTool.addEventListenerSuccess(onSuccess);
-      routeTool.addEventListenerUpdated(onUpdate);
-      routeTool.addEventListenerFailure(onFailure);
-      editGeometryControls.set("route");
+      $routeTool?.editExistingRoute(feature as Feature<LineString>);
+      $routeTool?.addEventListenerSuccess(onSuccess);
+      $routeTool?.addEventListenerUpdated(onUpdate);
+      $routeTool?.addEventListenerFailure(onFailure);
+      controls = "route";
     } else if (feature.geometry.type == "Polygon") {
       if (feature.properties.waypoints) {
-        routeTool.editExistingArea(feature as Feature<Polygon>);
-        routeTool.addEventListenerSuccess(onSuccess);
-        routeTool.addEventListenerUpdated(onUpdate);
-        routeTool.addEventListenerFailure(onFailure);
-        editGeometryControls.set("snapped-polygon");
+        $routeTool?.editExistingArea(feature as Feature<Polygon>);
+        $routeTool?.addEventListenerSuccess(onSuccess);
+        $routeTool?.addEventListenerUpdated(onUpdate);
+        $routeTool?.addEventListenerFailure(onFailure);
+        controls = "snapped-polygon";
       } else {
-        polygonTool.editExisting(feature as Feature<Polygon>);
-        polygonTool.addEventListenerSuccess(onSuccess);
-        polygonTool.addEventListenerUpdated(onUpdate);
-        polygonTool.addEventListenerFailure(onFailure);
-        editGeometryControls.set("freehand-polygon");
+        $polygonTool?.editExisting(feature as Feature<Polygon>);
+        $polygonTool?.addEventListenerSuccess(onSuccess);
+        $polygonTool?.addEventListenerUpdated(onUpdate);
+        $polygonTool?.addEventListenerFailure(onFailure);
+        controls = "freehand-polygon";
       }
     } else if (feature.geometry.type == "Point") {
       // No need to pass in the existing feature.geometry; it's the same as
       // where the cursor is anyway
-      pointTool.start();
-      pointTool.addEventListenerSuccess(onSuccess);
+      $pointTool?.start();
+      $pointTool?.addEventListenerSuccess(onSuccess);
       // No auto-save for updates
-      pointTool.addEventListenerFailure(onFailure);
-      editGeometryControls.set("point");
+      $pointTool?.addEventListenerFailure(onFailure);
+      controls = "point";
     }
   });
   onDestroy(() => {
-    editGeometryControls.set(null);
+    $pointTool?.stop();
+    $pointTool?.clearEventListeners();
 
-    pointTool.stop();
-    pointTool.clearEventListeners();
+    $routeTool?.stop();
+    $routeTool?.clearEventListeners();
 
-    routeTool.stop();
-    routeTool.clearEventListeners();
-
-    polygonTool.stop();
-    polygonTool.clearEventListeners();
+    $polygonTool?.stop();
+    $polygonTool?.clearEventListeners();
 
     gjScheme.update((gj) => {
       let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
@@ -142,5 +144,19 @@
   }
 </script>
 
-<DefaultButton on:click={finish}>Finish</DefaultButton>
-<SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
+<h2>Editing {name}</h2>
+
+<ButtonGroup>
+  <DefaultButton on:click={finish}>Finish</DefaultButton>
+  <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
+</ButtonGroup>
+
+{#if controls == "point"}
+  <PointControls editingExisting />
+{:else if controls == "route"}
+  <RouteControls extendRoute={false} />
+{:else if controls == "freehand-polygon"}
+  <PolygonControls />
+{:else if controls == "snapped-polygon"}
+  <SnapPolygonControls />
+{/if}

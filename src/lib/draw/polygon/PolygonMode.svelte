@@ -1,22 +1,20 @@
 <script lang="ts">
   import type { Polygon } from "geojson";
-  import { DefaultButton, SecondaryButton } from "lib/govuk";
+  import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { gjScheme, mode, newFeatureId } from "stores";
+  import { gjScheme, mode, newFeatureId, polygonTool } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
-  import type { PolygonTool } from "./polygon_tool";
-
-  export let polygonTool: PolygonTool;
+  import PolygonControls from "./PolygonControls.svelte";
 
   onMount(() => {
-    polygonTool.startNew();
-    polygonTool.addEventListenerSuccess(onSuccess);
-    polygonTool.addEventListenerFailure(onFailure);
+    $polygonTool!.startNew();
+    $polygonTool!.addEventListenerSuccess(onSuccess);
+    $polygonTool!.addEventListenerFailure(onFailure);
   });
   onDestroy(() => {
-    polygonTool.stop();
-    polygonTool.clearEventListeners();
+    $polygonTool!.stop();
+    $polygonTool!.clearEventListeners();
   });
 
   function onSuccess(feature: FeatureWithProps<Polygon>) {
@@ -35,5 +33,9 @@
   }
 </script>
 
-<DefaultButton on:click={() => polygonTool.finish()}>Finish</DefaultButton>
-<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
+<ButtonGroup>
+  <DefaultButton on:click={() => $polygonTool.finish()}>Finish</DefaultButton>
+  <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
+</ButtonGroup>
+
+<PolygonControls />

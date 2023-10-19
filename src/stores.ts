@@ -1,6 +1,8 @@
 import { emptyGeojson } from "lib/maplibre";
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
+import { PointTool } from "./lib/draw/point/point_tool";
+import { PolygonTool } from "./lib/draw/polygon/polygon_tool";
 import { RouteTool } from "./lib/draw/route/route_tool";
 import {
   isStreetViewImagery,
@@ -16,12 +18,11 @@ export const map: Writable<Map> = writable(null);
 
 export const mapStyle: Writable<string> = writable("dataviz");
 
+export const pointTool: Writable<PointTool | null> = writable(null);
+export const polygonTool: Writable<PolygonTool | null> = writable(null);
 // A global singleton, with the route tool loaded for the current map. It's
 // null before it's loaded.
 export const routeTool: Writable<RouteTool | null> = writable(null);
-
-// TODO Rather a hack, so EditGeometryMode can influence LeftSidebar
-export const editGeometryControls: Writable<string | null> = writable(null);
 
 // TODO Should we instead store a map from ID to feature?
 export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);

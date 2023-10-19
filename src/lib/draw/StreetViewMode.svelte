@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { StreetViewTool } from "lib/common";
+  import { StreetViewHelp, StreetViewTool } from "lib/common";
   import { DefaultButton, Radio } from "lib/govuk";
   import { mode, userSettings } from "stores";
 
@@ -23,3 +23,5 @@
   bind:value={$userSettings.streetViewImagery}
   inlineSmall
 />
+
+<StreetViewHelp />

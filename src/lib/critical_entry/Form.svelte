@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Modal } from "lib/common";
   import {
+    ButtonGroup,
     DefaultButton,
     ErrorMessage,
     FormElement,
@@ -208,11 +209,11 @@
       label="The new row has already been copied to your clipboard. If it didn't work, copy from below"
       value={excelRow}
     />
-    <div class="govuk-button-group">
+    <ButtonGroup>
       <SecondaryButton on:click={() => (modalOpen = false)}>
         Keep editing this issue
       </SecondaryButton>
       <WarningButton on:click={reset}>Done! Enter a new critical</WarningButton>
-    </div>
+    </ButtonGroup>
   </div>
 </Modal>

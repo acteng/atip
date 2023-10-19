@@ -4,6 +4,7 @@
   import FormV2 from "lib/forms/FormV2.svelte";
   import PlanningForm from "lib/forms/PlanningForm.svelte";
   import {
+    ButtonGroup,
     DefaultButton,
     ErrorMessage,
     SecondaryButton,
@@ -70,7 +71,7 @@
 
 <h2>Editing {interventionName(schema, feature)}</h2>
 
-<div class="govuk-button-group">
+<ButtonGroup>
   <DefaultButton on:click={() => mode.set({ mode: "list" })}>
     Save
   </DefaultButton>
@@ -78,7 +79,7 @@
     Edit geometry
   </SecondaryButton>
   <WarningButton on:click={() => deleteIntervention(id)}>Delete</WarningButton>
-</div>
+</ButtonGroup>
 
 <ErrorMessage errorMessage={warning} />
 {#if schema == "v1"}

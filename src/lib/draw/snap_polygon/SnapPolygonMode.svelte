@@ -1,22 +1,20 @@
 <script lang="ts">
   import type { LineString, Polygon } from "geojson";
-  import { DefaultButton, SecondaryButton } from "lib/govuk";
+  import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { gjScheme, mode, newFeatureId } from "stores";
+  import { gjScheme, mode, newFeatureId, routeTool } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
-  import type { RouteTool } from "../route/route_tool";
-
-  export let routeTool: RouteTool;
+  import SnapPolygonControls from "./SnapPolygonControls.svelte";
 
   onMount(() => {
-    routeTool.startArea();
-    routeTool.addEventListenerSuccess(onSuccess);
-    routeTool.addEventListenerFailure(onFailure);
+    $routeTool!.startArea();
+    $routeTool!.addEventListenerSuccess(onSuccess);
+    $routeTool!.addEventListenerFailure(onFailure);
   });
   onDestroy(() => {
-    routeTool.stop();
-    routeTool.clearEventListeners();
+    $routeTool!.stop();
+    $routeTool!.clearEventListeners();
   });
 
   function onSuccess(feature: FeatureWithProps<LineString | Polygon>) {
@@ -35,5 +33,9 @@
   }
 </script>
 
-<DefaultButton on:click={() => routeTool.finish()}>Finish</DefaultButton>
-<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
+<ButtonGroup>
+  <DefaultButton on:click={() => $routeTool.finish()}>Finish</DefaultButton>
+  <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
+</ButtonGroup>
+
+<SnapPolygonControls />

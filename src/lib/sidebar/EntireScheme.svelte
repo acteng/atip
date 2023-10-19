@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CollapsibleCard, FileInput, Modal } from "lib/common";
   import {
+    ButtonGroup,
     ErrorMessage,
     SecondaryButton,
     TextInput,
@@ -147,12 +148,12 @@
       displayEscapeButton={false}
     >
       <p>This will delete all your drawn interventions.</p>
-      <div class="govuk-button-group">
+      <ButtonGroup>
         <WarningButton on:click={clearAll}>Clear all work</WarningButton>
         <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
           Cancel
         </SecondaryButton>
-      </div>
+      </ButtonGroup>
     </Modal>
   </CollapsibleCard>
 
