@@ -13,7 +13,7 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import { deleteIntervention, gjScheme, map, mode } from "stores";
   import { onDestroy, onMount } from "svelte";
-  import type { Schema } from "types";
+  import type { Feature, Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
 
@@ -23,6 +23,12 @@
 
   let feature = $gjScheme.features.find((f) => f.id == id)!;
   $: warning = interventionWarning(schema, feature);
+
+  // Because of how properties are bound individually, updates to $gjScheme aren't seen. Force them.
+  function featureUpdated(feature: Feature) {
+    $gjScheme = $gjScheme;
+  }
+  $: featureUpdated(feature);
 
   onMount(() => {
     $map.on("click", onClick);
