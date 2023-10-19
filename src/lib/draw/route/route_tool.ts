@@ -178,7 +178,7 @@ export class RouteTool {
       return;
     }
     if (e.key == "Shift") {
-      e.stopPropagation();
+      // Don't stop propagation, so RouteControls can see this
       this.inner.setSnapMode(false);
       this.redraw();
     } else if (e.key == "Escape") {
@@ -192,7 +192,7 @@ export class RouteTool {
       return;
     }
     if (e.key == "Shift") {
-      e.stopPropagation();
+      // Don't stop propagation, so RouteControls can see this
       this.inner.setSnapMode(true);
       this.redraw();
     }
