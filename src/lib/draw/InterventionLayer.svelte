@@ -14,7 +14,7 @@
     FilterSpecification,
   } from "maplibre-gl";
   import { colorInterventionsBySchema } from "schemas";
-  import { gjScheme, mode } from "stores";
+  import { gjScheme, map, mode } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -67,6 +67,8 @@
     }
     // TODO Possible to be missing?
     if (e.detail.features[0]) {
+      // We just clicked a feature, so the cursor would've been different
+      $map.getCanvas().style.cursor = "inherit";
       mode.set({ mode: "edit-form", id: e.detail.features[0].id as number });
     }
   }
