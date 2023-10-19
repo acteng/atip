@@ -1,6 +1,5 @@
 <script lang="ts">
   import { Legend, WarningIcon } from "lib/common";
-  import { SecondaryButton } from "lib/govuk";
   import { bbox } from "lib/maplibre";
   import { schemaLegend } from "schemas";
   import { gjScheme, map, mode, sidebarHover } from "stores";
@@ -52,6 +51,7 @@
   {#each $gjScheme.features as feature (feature.id)}
     {@const warning = interventionWarning(schema, feature)}
     <li>
+      <!-- svelte-ignore a11y-invalid-attribute -->
       <a
         href="#"
         on:click={(e) => edit(e, feature.id)}
