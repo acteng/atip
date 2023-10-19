@@ -1,4 +1,7 @@
 <script lang="ts">
+  // Note this component has to embedded underneath <Map> for the <GeoJSON>
+  // component to work. This is an exception to how LeftSidebar manages most
+  // modes.
   import { point } from "@turf/helpers";
   import length from "@turf/length";
   import lineSlice from "@turf/line-slice";
@@ -6,7 +9,6 @@
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
-  import { DefaultButton } from "lib/govuk";
   import { emptyGeojson, layerId, setPrecision } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { gjScheme, map, mode, newFeatureId } from "stores";
@@ -249,20 +251,3 @@
     paint={{ "circle-color": "black", "circle-radius": circleRadiusPixels }}
   />
 </GeoJSON>
-
-<DefaultButton on:click={() => mode.set({ mode: "list" })}>
-  Finish
-</DefaultButton>
-
-<ul>
-  <li>
-    <b>Click</b>
-    on a route to split it
-  </li>
-  <li>
-    <b>Click</b>
-    on the map or press
-    <b>Escape</b>
-    to cancel
-  </li>
-</ul>
