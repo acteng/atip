@@ -1,5 +1,6 @@
 <script lang="ts">
   import { BaselayerSwitcher } from "lib/common";
+  import { DefaultButton } from "lib/govuk";
   import { map, mode, pointTool, polygonTool, routeTool } from "stores";
   import { onDestroy } from "svelte";
   import type { Schema } from "types";
@@ -10,7 +11,6 @@
   import PolygonMode from "../draw/polygon/PolygonMode.svelte";
   import RouteMode from "../draw/route/RouteMode.svelte";
   import RouteSnapperLoader from "../draw/route/RouteSnapperLoader.svelte";
-  import SplitRouteMode from "../draw/route/SplitRouteMode.svelte";
   import SnapPolygonMode from "../draw/snap_polygon/SnapPolygonMode.svelte";
   import StreetViewMode from "../draw/StreetViewMode.svelte";
   import EditForm from "./EditForm.svelte";
@@ -59,7 +59,22 @@
   <SnapPolygonMode />
 {:else if $mode.mode == "split-route"}
   <h2>Split route</h2>
-  <SplitRouteMode />
+  <DefaultButton on:click={() => mode.set({ mode: "list" })}>
+    Finish
+  </DefaultButton>
+
+  <ul>
+    <li>
+      <b>Click</b>
+      on a route to split it
+    </li>
+    <li>
+      <b>Click</b>
+      on the map or press
+      <b>Escape</b>
+      to cancel
+    </li>
+  </ul>
 {:else if $mode.mode == "streetview"}
   <h2>StreetView</h2>
   <StreetViewMode />
