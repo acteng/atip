@@ -13,7 +13,7 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import { deleteIntervention, gjScheme, map, mode } from "stores";
   import { onDestroy, onMount } from "svelte";
-  import type { Feature, Schema } from "types";
+  import type { FeatureUnion, Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
 
@@ -25,7 +25,7 @@
   $: warning = interventionWarning(schema, feature);
 
   // Because of how properties are bound individually, updates to $gjScheme aren't seen. Force them.
-  function featureUpdated(feature: Feature) {
+  function featureUpdated(feature: FeatureUnion) {
     $gjScheme = $gjScheme;
   }
   $: featureUpdated(feature);
@@ -103,10 +103,7 @@
   <UnexpectedProperties id={feature.id} props={feature.properties} />
   <FormV1
     id={feature.id}
-    bind:name={feature.properties.name}
-    bind:intervention_type={feature.properties.intervention_type}
-    bind:description={feature.properties.description}
-    length_meters={feature.properties.length_meters}
+    bind:props={feature.properties}
   />
 {:else if schema == "v2"}
   <FormV2 bind:props={feature.properties} />
