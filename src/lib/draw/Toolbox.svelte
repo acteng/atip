@@ -1,7 +1,6 @@
 <script lang="ts">
   import { map, mode } from "stores";
   import { onDestroy } from "svelte";
-  import EditFormMode from "./EditFormMode.svelte";
   import EditGeometryMode from "./EditGeometryMode.svelte";
   import ListMode from "./ListMode.svelte";
   import { PointTool } from "./point/point_tool";
@@ -34,34 +33,34 @@
   }
 </script>
 
-<div class="top govuk-prose">
-  <RouteSnapperLoader url={routeSnapperUrl} bind:routeTool />
+{#if $mode.mode != "edit-form"}
+  <div class="top govuk-prose">
+    <RouteSnapperLoader url={routeSnapperUrl} bind:routeTool />
 
-  {#if $mode.mode == "list"}
-    <ListMode routeTool={mustHaveRouteTool()} />
-  {:else if $mode.mode == "edit-form"}
-    <EditFormMode id={$mode.id} />
-  {:else if $mode.mode == "edit-geometry"}
-    <EditGeometryMode
-      id={$mode.id}
-      {pointTool}
-      {polygonTool}
-      routeTool={mustHaveRouteTool()}
-    />
-  {:else if $mode.mode == "new-point"}
-    <PointMode {pointTool} />
-  {:else if $mode.mode == "new-route"}
-    <RouteMode routeTool={mustHaveRouteTool()} />
-  {:else if $mode.mode == "new-freehand-polygon"}
-    <PolygonMode {polygonTool} />
-  {:else if $mode.mode == "new-snapped-polygon"}
-    <SnapPolygonMode routeTool={mustHaveRouteTool()} />
-  {:else if $mode.mode == "split-route"}
-    <SplitRouteMode />
-  {:else if $mode.mode == "streetview"}
-    <StreetViewMode />
-  {/if}
-</div>
+    {#if $mode.mode == "list"}
+      <ListMode routeTool={mustHaveRouteTool()} />
+    {:else if $mode.mode == "edit-geometry"}
+      <EditGeometryMode
+        id={$mode.id}
+        {pointTool}
+        {polygonTool}
+        routeTool={mustHaveRouteTool()}
+      />
+    {:else if $mode.mode == "new-point"}
+      <PointMode {pointTool} />
+    {:else if $mode.mode == "new-route"}
+      <RouteMode routeTool={mustHaveRouteTool()} />
+    {:else if $mode.mode == "new-freehand-polygon"}
+      <PolygonMode {polygonTool} />
+    {:else if $mode.mode == "new-snapped-polygon"}
+      <SnapPolygonMode routeTool={mustHaveRouteTool()} />
+    {:else if $mode.mode == "split-route"}
+      <SplitRouteMode />
+    {:else if $mode.mode == "streetview"}
+      <StreetViewMode />
+    {/if}
+  </div>
+{/if}
 
 <style>
   .top {

@@ -3,8 +3,15 @@
   import FormV1 from "lib/forms/FormV1.svelte";
   import FormV2 from "lib/forms/FormV2.svelte";
   import PlanningForm from "lib/forms/PlanningForm.svelte";
-  import { ErrorMessage } from "lib/govuk";
-  import { deleteIntervention, gjScheme, mode } from "stores";
+  import {
+    DefaultButton,
+    ErrorMessage,
+    SecondaryButton,
+    WarningButton,
+  } from "lib/govuk";
+  import type { MapMouseEvent } from "maplibre-gl";
+  import { deleteIntervention, gjScheme, map, mode } from "stores";
+  import { onDestroy, onMount } from "svelte";
   import type { Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
@@ -15,6 +22,29 @@
 
   let feature = $gjScheme.features.find((f) => f.id == id)!;
   $: warning = interventionWarning(schema, feature);
+
+  onMount(() => {
+    $map.on("click", onClick);
+  });
+  onDestroy(() => {
+    $map.off("click", onClick);
+  });
+
+  function onClick(e: MapMouseEvent) {
+    // As long as we didn't click the feature we're editing, exit this mode
+    for (let f of $map.queryRenderedFeatures(e.point, {
+      layers: [
+        "interventions-points",
+        "interventions-lines",
+        "interventions-polygons",
+      ],
+    })) {
+      if (f.id == id) {
+        return;
+      }
+    }
+    mode.set({ mode: "list" });
+  }
 
   function onKeydown(e: KeyboardEvent) {
     if (e.key == "Escape") {
@@ -39,6 +69,17 @@
 <svelte:window on:keydown={onKeydown} />
 
 <h2>Editing {interventionName(schema, feature)}</h2>
+
+<div class="govuk-button-group">
+  <DefaultButton on:click={() => mode.set({ mode: "list" })}>
+    Save
+  </DefaultButton>
+  <SecondaryButton on:click={() => mode.set({ mode: "edit-geometry", id })}>
+    Edit geometry
+  </SecondaryButton>
+  <WarningButton on:click={() => deleteIntervention(id)}>Delete</WarningButton>
+</div>
+
 <ErrorMessage errorMessage={warning} />
 {#if schema == "v1"}
   <UnexpectedProperties id={feature.id} props={feature.properties} />
