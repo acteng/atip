@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ErrorMessage } from "lib/govuk";
   import init from "route-snapper";
   import { map, routeTool as routeToolStore } from "stores";
   import { onMount } from "svelte";
@@ -76,7 +77,7 @@
   <label for="route-unpacking">Route data unpacking</label>
   <progress id="route-unpacking" />
 {:else if failedToLoadRouteTool}
-  <p>Failed to load</p>
+  <ErrorMessage errorMessage="Failed to load route snapper" />
 {/if}
 
 <style>

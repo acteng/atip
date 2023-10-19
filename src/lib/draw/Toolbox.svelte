@@ -37,28 +37,30 @@
   <div class="top govuk-prose">
     <RouteSnapperLoader url={routeSnapperUrl} bind:routeTool />
 
-    {#if $mode.mode == "list"}
-      <ListMode routeTool={mustHaveRouteTool()} />
-    {:else if $mode.mode == "edit-geometry"}
-      <EditGeometryMode
-        id={$mode.id}
-        {pointTool}
-        {polygonTool}
-        routeTool={mustHaveRouteTool()}
-      />
-    {:else if $mode.mode == "new-point"}
-      <PointMode {pointTool} />
-    {:else if $mode.mode == "new-route"}
-      <RouteMode routeTool={mustHaveRouteTool()} />
-    {:else if $mode.mode == "new-freehand-polygon"}
-      <PolygonMode {polygonTool} />
-    {:else if $mode.mode == "new-snapped-polygon"}
-      <SnapPolygonMode routeTool={mustHaveRouteTool()} />
-    {:else if $mode.mode == "split-route"}
-      <SplitRouteMode />
-    {:else if $mode.mode == "streetview"}
-      <StreetViewMode />
-    {/if}
+    <div style="display: flex; justify-content: space-between;">
+      {#if $mode.mode == "list"}
+        <ListMode routeTool={mustHaveRouteTool()} />
+      {:else if $mode.mode == "edit-geometry"}
+        <EditGeometryMode
+          id={$mode.id}
+          {pointTool}
+          {polygonTool}
+          routeTool={mustHaveRouteTool()}
+        />
+      {:else if $mode.mode == "new-point"}
+        <PointMode {pointTool} />
+      {:else if $mode.mode == "new-route"}
+        <RouteMode routeTool={mustHaveRouteTool()} />
+      {:else if $mode.mode == "new-freehand-polygon"}
+        <PolygonMode {polygonTool} />
+      {:else if $mode.mode == "new-snapped-polygon"}
+        <SnapPolygonMode routeTool={mustHaveRouteTool()} />
+      {:else if $mode.mode == "split-route"}
+        <SplitRouteMode />
+      {:else if $mode.mode == "streetview"}
+        <StreetViewMode />
+      {/if}
+    </div>
   </div>
 {/if}
 
@@ -71,8 +73,5 @@
     background-color: white;
     border: 1px solid black;
     padding: 16px;
-
-    display: flex;
-    justify-content: space-between;
   }
 </style>
