@@ -64,6 +64,17 @@
 
       deleteIntervention(id);
     }
+
+    if (e.key == "e") {
+      const tag = (e.target as HTMLElement).tagName;
+      // Don't interrupt forms
+      if (tag == "INPUT" || tag == "TEXTAREA") {
+        return;
+      }
+      e.stopPropagation();
+
+      mode.set({ mode: "edit-geometry", id });
+    }
   }
 </script>
 
