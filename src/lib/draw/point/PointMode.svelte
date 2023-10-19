@@ -2,21 +2,19 @@
   import type { Point } from "geojson";
   import { SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { gjScheme, mode, newFeatureId } from "stores";
+  import { gjScheme, mode, newFeatureId, pointTool } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
-  import type { PointTool } from "./point_tool";
-
-  export let pointTool: PointTool;
+  import PointControls from "./PointControls.svelte";
 
   onMount(() => {
-    pointTool.start();
-    pointTool.addEventListenerSuccess(onSuccess);
-    pointTool.addEventListenerFailure(onFailure);
+    $pointTool!.start();
+    $pointTool!.addEventListenerSuccess(onSuccess);
+    $pointTool!.addEventListenerFailure(onFailure);
   });
   onDestroy(() => {
-    pointTool.stop();
-    pointTool.clearEventListeners();
+    $pointTool!.stop();
+    $pointTool!.clearEventListeners();
   });
 
   function onSuccess(feature: FeatureWithProps<Point>) {
@@ -36,3 +34,5 @@
 </script>
 
 <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
+
+<PointControls editingExisting={false} />

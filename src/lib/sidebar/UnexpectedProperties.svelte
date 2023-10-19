@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Modal } from "lib/common";
-  import { SecondaryButton, WarningButton } from "lib/govuk";
+  import { ButtonGroup, SecondaryButton, WarningButton } from "lib/govuk";
   import { gjScheme } from "stores";
   import { getUnexpectedProperties } from "./scheme_data";
 
@@ -42,10 +42,10 @@
       </li>
     {/each}
   </ul>
-  <div class="govuk-button-group">
+  <ButtonGroup>
     <WarningButton on:click={removeExtraProperties}>
       Remove these properties
     </WarningButton>
     <SecondaryButton on:click={() => (open = false)}>Cancel</SecondaryButton>
-  </div>
+  </ButtonGroup>
 </Modal>

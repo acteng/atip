@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { FeatureCollection } from "geojson";
   import { CollapsibleCard } from "lib/common";
-  import { SecondaryButton } from "lib/govuk";
+  import { ButtonGroup, SecondaryButton } from "lib/govuk";
   import { bbox } from "lib/maplibre";
   import { map } from "stores";
   import type { AllSchemeGJ, Scheme } from "./data";
@@ -51,7 +51,7 @@
   <p>Authority or region: {scheme.authority_or_region}</p>
   <p>Capital scheme ID: {scheme.capital_scheme_id}</p>
   <p>Funding programme: {scheme.funding_programme}</p>
-  <div class="govuk-button-group">
+  <ButtonGroup>
     <SecondaryButton on:click={showScheme}>Show on map</SecondaryButton>
     <SecondaryButton
       on:click={editScheme}
@@ -60,5 +60,5 @@
     >
       Edit scheme locally
     </SecondaryButton>
-  </div>
+  </ButtonGroup>
 </CollapsibleCard>

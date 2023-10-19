@@ -1,3 +1,4 @@
+export { default as ButtonGroup } from "./ButtonGroup.svelte";
 export { default as CheckboxGroup } from "./CheckboxGroup.svelte";
 export { default as Checkbox } from "./Checkbox.svelte";
 export { default as DefaultButton } from "./DefaultButton.svelte";

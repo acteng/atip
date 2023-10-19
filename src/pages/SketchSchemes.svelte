@@ -13,8 +13,8 @@
     ZoomOutMap,
   } from "lib/common";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
-  import Toolbox from "lib/draw/Toolbox.svelte";
-  import { SecondaryButton } from "lib/govuk";
+  import ListMode from "lib/draw/ListMode.svelte";
+  import { ButtonGroup, SecondaryButton } from "lib/govuk";
   import About from "lib/sidebar/About.svelte";
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
@@ -81,23 +81,25 @@
         <ZoomOutMap {boundaryGeojson} />
       </div>
 
-      <div class="govuk-button-group">
+      <ButtonGroup>
         <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
         <SecondaryButton on:click={toggleInstructions}>
           Instructions
         </SecondaryButton>
-      </div>
+      </ButtonGroup>
       <LoggedIn />
     {/if}
     <EntireScheme {authorityName} {schema} />
-    <LeftSidebar {schema} />
+    <LeftSidebar {routeSnapperUrl} {schema} />
   </div>
   <div class="main">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="bottom-left" />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer {schema} />
-      <Toolbox {routeSnapperUrl} />
+      {#if $mode.mode == "list"}
+        <ListMode />
+      {/if}
     </MapLibreMap>
   </div>
 </div>
