@@ -31,10 +31,14 @@
   function onFailure() {
     mode.set({ mode: "list" });
   }
+
+  function finish() {
+    $polygonTool!.finish();
+  }
 </script>
 
 <ButtonGroup>
-  <DefaultButton on:click={() => $polygonTool.finish()}>Finish</DefaultButton>
+  <DefaultButton on:click={finish}>Finish</DefaultButton>
   <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
 </ButtonGroup>
 
