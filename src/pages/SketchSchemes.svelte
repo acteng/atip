@@ -108,7 +108,7 @@
 </div>
 
 <About bind:open={showAbout} />
-<Instructions bind:open={showInstructions} {schema} />
+<Instructions bind:open={showInstructions} />
 
 <style>
   * {
