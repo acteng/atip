@@ -101,10 +101,7 @@
 <ErrorMessage errorMessage={warning} />
 {#if schema == "v1"}
   <UnexpectedProperties id={feature.id} props={feature.properties} />
-  <FormV1
-    id={feature.id}
-    bind:props={feature.properties}
-  />
+  <FormV1 id={feature.id} bind:props={feature.properties} />
 {:else if schema == "v2"}
   <FormV2 bind:props={feature.properties} />
 {:else if schema == "planning"}
