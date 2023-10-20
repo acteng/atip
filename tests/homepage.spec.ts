@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("front page has welcome text", async ({ page }) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: "Welcome to ATIP v2" })
+    page.getByRole("heading", { name: "Welcome to ATIP Scheme Sketcher v2" })
   ).toBeVisible();
 });
 

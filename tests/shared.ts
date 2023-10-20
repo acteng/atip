@@ -1,50 +1,40 @@
-import { type Browser, type Page } from "playwright";
+import { expect, type Browser, type Page } from "@playwright/test";
 
-export const loadInitialPageFromBrowser = async (
+export async function loadInitialPageFromBrowser(
   browser: Browser
-): Promise<Page> => {
-  const page: Page = await browser.newPage();
-  await gotoInitialPage(page);
-  return page;
-};
-
-export const gotoInitialPage = async (page: Page): Promise<void> => {
+): Promise<Page> {
+  let page = await browser.newPage();
   await page.goto("/scheme.html?authority=Adur");
   await checkPageLoaded(page);
-};
+  return page;
+}
 
-export const checkPageLoaded = async (page: Page): Promise<void> => {
-  // wait for the map to load and interventions panel to appear
-  await page
-    .getByText("Click an intervention to fill out its attributes")
-    .waitFor();
-  // wait for router snapper to load so we can use route tool
-  await page.getByText("Route tool loading...").waitFor({ state: "hidden" });
-};
+export async function checkPageLoaded(page: Page) {
+  // Wait for the map to load by looking for controls
+  await expect(page.getByRole("button", { name: "Zoom in" })).toBeVisible();
+  // Wait for the route snapper to load
+  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
+}
 
-export const clearExistingInterventions = async (page: Page) => {
-  const editAttributesLocator = page.getByRole("button", {
-    name: "Edit attributes",
-  });
-  if (!(await editAttributesLocator.isDisabled())) {
-    await editAttributesLocator.click();
-  }
+export async function clearExistingInterventions(page: Page) {
+  // We may be in any mode. The escape key always exits. The deepest possible state is editing geometry, so press escape twice to get back to editing the form, then the main mode.
+  await page.keyboard.down("Escape");
+  await page.keyboard.down("Escape");
 
-  const clearAllLocator = page.getByRole("button", { name: "Clear all" });
-  if (!(await clearAllLocator.isDisabled())) {
-    await clearAllLocator.click();
+  await page.getByText("Untitled scheme").click();
+  let clearButton = page.getByRole("button", { name: "Start new scheme" });
+  if (await clearButton.isEnabled()) {
+    await clearButton.click();
     await page.getByRole("button", { name: "Clear all work" }).click();
   }
-
-  if (!(await editAttributesLocator.isDisabled())) {
-    await editAttributesLocator.click();
-  }
+  // Close the panel
+  await page.getByText("Untitled scheme").click();
 
   // Reset the viewport between tests, since many tests click the map in specific places
   await page
     .getByRole("button", { name: "Zoom to show entire boundary" })
     .click();
-};
+}
 
 export async function clickMap(page: Page, x: number, y: number) {
   await page.getByRole("region", { name: "Map" }).click({
