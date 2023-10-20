@@ -2,6 +2,7 @@ import { readFile } from "fs/promises";
 import { expect, test, type Page } from "@playwright/test";
 import type { FeatureCollection } from "geojson";
 import {
+  checkPageLoaded,
   clearExistingInterventions,
   loadInitialPageFromBrowser,
 } from "./shared.js";
@@ -28,8 +29,8 @@ test("loading a file with length displays the length", async () => {
 
   page.on("dialog", (dialog) => dialog.accept());
   await page
-    .getByRole("button", {
-      name: "1) Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
+    .getByRole("link", {
+      name: "Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
     })
     .click();
   await expect(page.getByText("Length: 450 m")).toBeVisible();
@@ -53,8 +54,8 @@ test("loading a file without length displays the length", async () => {
   });
 
   await page
-    .getByRole("button", {
-      name: "1) Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
+    .getByRole("link", {
+      name: "Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
     })
     .click();
   await expect(page.getByText("Length: 450 m")).toBeVisible();
@@ -74,7 +75,12 @@ test("loading a file with null properties displays the length", async () => {
   });
 
   // We don't attempt to classify intervention_type for non-ATIP inputs
-  await page.getByRole("button", { name: "1) Untitled line" }).click();
+  await page
+    .getByRole("link", {
+      name: "Untitled line",
+    })
+    .click();
+  await expect(page.getByText("Length: 450 m")).toBeVisible();
 });
 
 test("the previous file from local storage is loaded by default", async () => {
@@ -89,7 +95,7 @@ test("the previous file from local storage is loaded by default", async () => {
 
   await page.reload();
 
-  await page.getByRole("button", { name: "1) Untitled point" }).click();
+  await page.getByRole("link", { name: "Untitled point" }).click();
 });
 
 test("loading a file from the homepage goes to the correct page", async () => {
@@ -99,9 +105,10 @@ test("loading a file from the homepage goes to the correct page", async () => {
     .setInputFiles("tests/data/Adur.json");
 
   await expect(page).toHaveURL(/scheme.html\?authority=Adur/);
+  await checkPageLoaded(page);
   await page
-    .getByRole("button", {
-      name: "1) Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
+    .getByRole("link", {
+      name: "Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
     })
     .click();
   await expect(page.getByText("Length: 450 m")).toBeVisible();
@@ -117,19 +124,20 @@ test("loading a file produced by another tool shows fixable errors", async () =>
   ).toBeVisible();
 
   // Fix the first problem
-  await page.getByRole("button", { name: "1) Untitled undefined" }).click();
+  await page.getByRole("link", { name: "Untitled undefined" }).click();
   await expect(page.getByText("No name")).toBeVisible();
-  await page.getByRole("textbox").nth(2).fill("Square area");
+  await page.locator('input[type="text"]').fill("Square area");
   await expect(page.getByText("No intervention type")).toBeVisible();
   await page.getByText("Area", { exact: true }).click();
+  await page.getByRole("button", { name: "Save" }).click();
   await expect(
     page.getByText("There's a problem with one intervention below")
   ).toBeVisible();
 
   // Fix the second problem
-  await page.getByRole("button", { name: "2) Untitled invalid" }).click();
+  await page.getByRole("link", { name: "Untitled invalid" }).click();
   await expect(page.getByText("No name")).toBeVisible();
-  await page.getByRole("textbox").nth(2).fill("Weird route");
+  await page.locator('input[type="text"]').fill("Weird route");
   await expect(page.getByText("No intervention type")).toBeVisible();
   await page.getByText("Route", { exact: true }).click();
   await expect(page.getByText("Extra GeoJSON properties: extra")).toBeVisible();
@@ -137,6 +145,7 @@ test("loading a file produced by another tool shows fixable errors", async () =>
     .getByRole("button", { name: "Handle extra GeoJSON properties" })
     .click();
   await page.getByRole("button", { name: "Remove these properties" }).click();
+  await page.getByRole("button", { name: "Save" }).click();
   await expect(
     page.getByText("There's a problem with one intervention below")
   ).not.toBeVisible();

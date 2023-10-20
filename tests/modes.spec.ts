@@ -15,33 +15,11 @@ test.beforeEach(async () => {
   await clearExistingInterventions(page);
 });
 
-test("clearing all is disabled while a feature is in use", async () => {
-  await page.getByRole("button", { name: "New point" }).click();
-  expect(
-    await page.getByRole("button", { name: "Clear all" }).isDisabled()
-  ).toBe(true);
-});
-
-test("clearing all resets to nothing being selected", async () => {
-  await page.getByRole("button", { name: "New point" }).click();
-  await clickMap(page, 500, 500);
-
-  await expect(
-    page.getByText("Edit attributes to the left, or click an intervention")
-  ).toBeVisible();
-
-  await clearExistingInterventions(page);
-
-  await expectNeutralAttributeMode();
-});
-
 test("creating a new point opens a form", async () => {
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
 
-  await expect(
-    page.getByRole("button", { name: "1) Untitled point" })
-  ).toBeVisible();
+  await expect(page.getByText("No name")).toBeVisible();
   await page.getByLabel("Description").click();
 });
 
@@ -52,22 +30,7 @@ test("creating a new freehand polygon opens a form", async () => {
   await clickMap(page, 400, 600);
   await page.getByRole("button", { name: "Finish" }).click();
 
-  await expect(
-    page.getByRole("button", { name: "1) Untitled area" })
-  ).toBeVisible();
-  await page.getByLabel("Description").click();
-});
-
-test("creating a new freehand polygon and switching modes doesn't lose changes", async () => {
-  await page.getByRole("button", { name: "New polygon (freehand)" }).click();
-  await clickMap(page, 500, 500);
-  await clickMap(page, 400, 500);
-  await clickMap(page, 400, 600);
-
-  // Switch modes without finishing
-  await page.getByRole("button", { name: "New point" }).click();
-
-  await page.getByRole("button", { name: "1) Untitled area" }).click();
+  await expect(page.getByText("No name")).toBeVisible();
   await page.getByLabel("Description").click();
 });
 
@@ -78,10 +41,12 @@ test("creating a new freehand polygon and canceling doesn't save anything", asyn
   await clickMap(page, 400, 600);
 
   await page.getByRole("button", { name: "Cancel" }).click();
-  await expect(page.getByText("0 interventions")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Untitled area" })
+  ).not.toBeVisible();
 });
 
-// TODO Repeat switching modes and canceling for other draw tools
+// TODO Repeat canceling for other draw tools
 
 test("creating a new snapped polygon opens a form", async () => {
   await page.getByRole("button", { name: "New polygon (snapped)" }).click();
@@ -90,9 +55,7 @@ test("creating a new snapped polygon opens a form", async () => {
   await clickMap(page, 400, 600);
   await page.getByRole("button", { name: "Finish" }).click();
 
-  await expect(
-    page.getByRole("button", { name: "1) Untitled area" })
-  ).toBeVisible();
+  await expect(page.getByText("No name")).toBeVisible();
   await page.getByLabel("Description").click();
 });
 
@@ -104,23 +67,17 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
 
   // The route immediately has a name
   await expect(
-    page.getByRole("button", {
-      name: "1) Route from ??? and Brighton Road to ???",
-    })
+    page.getByText("Editing Route from ??? and Brighton Road to ???")
   ).toBeVisible();
 
   // Change it
-  await page.getByRole("textbox").nth(2).fill("New route name");
-  await expect(
-    page.getByRole("button", { name: "1) New route name" })
-  ).toBeVisible();
+  await page.locator('input[type="text"]').fill("New route name");
+  await expect(page.getByText("Editing New route name")).toBeVisible();
 
   // Then auto-fill to change it back
   await page.getByText("Auto-fill").click();
   await expect(
-    page.getByRole("button", {
-      name: "1) Route from ??? and Brighton Road to ???",
-    })
+    page.getByText("Editing Route from ??? and Brighton Road to ???")
   ).toBeVisible();
 });
 
@@ -131,9 +88,7 @@ test("editing geometry of a polygon works", async () => {
   await clickMap(page, 235, 431);
   await clickMap(page, 465, 459);
   await page.getByRole("button", { name: "Finish" }).click();
-  await expect(
-    page.getByRole("button", { name: "1) Untitled area" })
-  ).toBeVisible();
+  await expect(page.getByText("Editing Untitled area")).toBeVisible();
   await page.getByLabel("Description").click();
 
   // Click off the polygon to close the form
@@ -159,8 +114,8 @@ test("adding interventions, then deleting one, then adding another", async () =>
   await page.getByRole("button", { name: "Finish" }).click();
   await page.getByRole("button", { name: "Save" }).click();
   await page
-    .getByRole("button", {
-      name: "1) Route from Old Shoreham Road and Ropetackle to Ullswater Road and Western Road North",
+    .getByRole("link", {
+      name: "Route from Old Shoreham Road and Ropetackle to Ullswater Road and Western Road North",
     })
     .click();
   await page.getByRole("button", { name: "Delete" }).click();
@@ -168,10 +123,11 @@ test("adding interventions, then deleting one, then adding another", async () =>
   await clickMap(page, 196, 375);
   await clickMap(page, 481, 399);
   await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Save" }).click();
 
   await expect(
-    page.getByRole("button", {
-      name: "1) Route from ???, Bowness Avenue, and Western Road to West Avenue and West Way",
+    page.getByRole("link", {
+      name: "Route from ???, Bowness Avenue, and Western Road to West Avenue and West Way",
     })
   ).toBeVisible();
 });
@@ -184,38 +140,32 @@ test("add a route and save it", async () => {
   await page.getByRole("button", { name: "Save" }).click();
 
   await expect(
-    page.getByRole("button", {
-      name: "1) Route from Old Shoreham Road and Ropetackle to Ullswater Road and Western Road North",
+    page.getByRole("link", {
+      name: "Route from Old Shoreham Road and Ropetackle to Ullswater Road and Western Road North",
     })
   ).toBeVisible();
 });
 
 test("escape key works from every mode", async () => {
-  // We start in edit attrbute mode
-  await expectNeutralAttributeMode();
+  // We start in list mode
+  await expectListMode();
   // Pressing escape from there shouldn't do anything
   await page.keyboard.down("Escape");
-  await expectNeutralAttributeMode();
+  await expectListMode();
 
-  // From each tool, make sure escape goes back to attribute mode
+  // From each tool, make sure escape goes back to list mode
   for (let mode of [
     "New point",
     "New polygon (freehand)",
     "New polygon (snapped)",
     "New route",
     "Split route",
-    "Street View",
+    "StreetView",
   ]) {
     await page.getByRole("button", { name: mode }).click();
     await page.keyboard.down("Escape");
-    await expectNeutralAttributeMode();
+    await expectListMode();
   }
-
-  // Edit geometry is different -- escape there should return to this mode, not attribute mode
-  await page.getByRole("button", { name: "Edit geometry" }).click();
-  await expectEditGeometryMode();
-  await page.keyboard.down("Escape");
-  await expectEditGeometryMode();
 });
 
 test("edit a point, then cancel", async () => {
@@ -223,12 +173,11 @@ test("edit a point, then cancel", async () => {
   await clickMap(page, 500, 500);
 
   await page.getByRole("button", { name: "Edit geometry" }).click();
-  await clickMap(page, 500, 500);
   // This button indicates the mode is working
   await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
 
   await page.keyboard.down("Escape");
-  await expectEditGeometryMode();
+  await expect(page.getByText("Editing Untitled point")).toBeVisible();
 });
 
 test("edit a freehand polygon, then cancel", async () => {
@@ -244,7 +193,7 @@ test("edit a freehand polygon, then cancel", async () => {
   await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
 
   await page.keyboard.down("Escape");
-  await expectEditGeometryMode();
+  await expect(page.getByText("Editing Untitled area")).toBeVisible();
 });
 
 test("edit a snapped polygon, then cancel", async () => {
@@ -260,7 +209,7 @@ test("edit a snapped polygon, then cancel", async () => {
   await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
 
   await page.keyboard.down("Escape");
-  await expectEditGeometryMode();
+  await expect(page.getByText("Editing Untitled area")).toBeVisible();
 });
 
 // TODO Edit each type of object without saving, and verify the edits are
@@ -279,7 +228,9 @@ test("edit a route, then cancel", async () => {
   await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
 
   await page.keyboard.down("Escape");
-  await expectEditGeometryMode();
+  await expect(
+    page.getByText("Editing Route from ??? and Brighton Road to ???")
+  ).toBeVisible();
 });
 
 test("the viewport changes only once when opening a form", async () => {
@@ -294,7 +245,7 @@ test("the viewport changes only once when opening a form", async () => {
   await page.getByRole("button", { name: "Save" }).click();
 
   // Open the form from the sidebar. The viewport should change
-  await page.getByRole("button", { name: "1) Untitled point" }).click();
+  await page.getByRole("link", { name: "Untitled point" }).click();
   // The zoom effect is set to happen over 500ms, so wait a bit
   await page.waitForTimeout(700);
   let pointViewport = new URL(page.url()).hash;
@@ -315,31 +266,9 @@ test("the viewport changes only once when opening a form", async () => {
   expect(new URL(page.url()).hash).toEqual(customViewport);
 });
 
-test("switching between modes saves, doesn't save anything if no actions taken", async () => {
-  await page.getByRole("button", { name: "New polygon (snapped)" }).click();
-  await clickMap(page, 500, 500);
-  await clickMap(page, 400, 500);
-  await clickMap(page, 400, 600);
-
-  await page.getByRole("button", { name: "New route" }).click();
+// Assert the page is in the main list mode.
+async function expectListMode() {
   await expect(
-    page.getByRole("button", { name: "1) Untitled area" })
-  ).toBeVisible();
-
-  await page.getByRole("button", { name: "New polygon (snapped)" }).click();
-  await expect(page.getByText("1 interventions")).toBeVisible();
-});
-
-// Assert the page is in attribute mode with nothing selected.
-async function expectNeutralAttributeMode() {
-  await expect(
-    page.getByText("Click an intervention to fill out its attributes")
-  ).toBeVisible();
-}
-
-// Assert the page is in edit geometry mode with nothing selected.
-async function expectEditGeometryMode() {
-  await expect(
-    page.getByText("Click an intervention to edit its geometry")
+    page.getByRole("heading", { name: "ATIP Scheme Sketcher" })
   ).toBeVisible();
 }
