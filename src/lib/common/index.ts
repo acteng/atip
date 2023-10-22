@@ -1,4 +1,7 @@
+import area from "@turf/area";
+import booleanContains from "@turf/boolean-contains";
 import type { FeatureCollection, Polygon } from "geojson";
+import type { Scheme } from "types";
 import authoritiesUrl from "../../../assets/authorities.geojson?url";
 
 export { default as Alpha } from "./Alpha.svelte";
@@ -31,9 +34,43 @@ export async function getAuthoritiesGeoJson(): Promise<
   // For convenience, fill out a derived property combining level and name, to
   // make a unique key.
   for (let f of gj.features) {
-	  f.properties.full_name = `${f.properties.level}_${f.properties.name}`;
+    f.properties.full_name = `${f.properties.level}_${f.properties.name}`;
   }
   return gj;
+}
+
+// Find the name of the smallest authority boundary completely containing the scheme.
+export function findSmallestAuthority(
+  gj: Scheme,
+  authorities: FeatureCollection<Polygon>
+): string | null {
+  // First sort authorities by area.
+  // TODO OK to mutate in here? And how expensive is this?
+  authorities.features.sort((a, b) => area(a) - area(b));
+  let f = authorities.features.find((authority) =>
+    allFeaturesContainedByPolygon(gj.features, authority)
+  );
+  if (f) {
+    return f.properties.full_name;
+  }
+  return null;
+}
+
+function allFeaturesContainedByPolygon(
+  features: FeatureCollection,
+  boundary: Feature<Polygon>
+): boolean {
+  for (let f of features) {
+    // TODO Can't handle MultiPolygons. Fix the data upstream?
+    if (boundary.geometry.type == "MultiPolygon") {
+      return false;
+    }
+
+    if (!booleanContains(boundary, f)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 export function appVersion(): string {
