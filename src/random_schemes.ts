@@ -33,7 +33,7 @@ function main() {
     let scheme_reference = `ATE${count}`;
     count++;
     gj.schemes[scheme_reference] = {
-      authority_or_region: authority.properties.name,
+      authority_or_region: `${authority.properties.level}_${authority.properties.name}`,
       capital_scheme_id: count,
       funding_programme: pickRandom(["ATF2", "ATF3", "ATF4"]),
     };

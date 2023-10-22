@@ -40,7 +40,7 @@
   // releases.
   let routeSnapperUrl = `${
     import.meta.env.VITE_RESOURCE_BASE
-  }/route-snappers/v2.2/${authorityName}.bin.gz`;
+  }/route-snappers/v2.3/${authorityName}.bin.gz`;
 
   function toggleAbout() {
     showAbout = !showAbout;
@@ -62,12 +62,25 @@
   async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
     let geojson = await getAuthoritiesGeoJson();
     geojson.features = geojson.features.filter(
-      (feature) => feature.properties?.name == authorityName
+      (feature) => feature.properties!.full_name == authorityName
     );
     if (geojson.features.length === 0) {
       window.location.href = `/?error=Authority name not found: ${authorityName}`;
     }
     return geojson;
+  }
+
+  function authorityDescription(): string {
+    let parts = authorityName.split("_");
+    if (parts.length == 2) {
+      if (parts[0] == "LAD") {
+        return `${parts[1]} (LAD)`;
+      } else if (parts[0] == "TA") {
+        return `${parts[1]} (Transport Authority)`;
+      }
+    }
+    // Unexpected input, just return it
+    return authorityName;
   }
 </script>
 
@@ -77,7 +90,7 @@
       <h2>ATIP Scheme Sketcher</h2>
       <p>App version: {appVersion()}</p>
       <div style="display: flex; justify-content: space-between">
-        <p>{authorityName}</p>
+        <p>{authorityDescription()}</p>
         <a href="index.html">Change area</a>
         <ZoomOutMap {boundaryGeojson} />
       </div>
