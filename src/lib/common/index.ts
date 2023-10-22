@@ -21,11 +21,18 @@ export { default as StreetViewTool } from "./StreetViewTool.svelte";
 export { default as WarningIcon } from "./WarningIcon.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
 
+// TODO Specific types for the properties
 export async function getAuthoritiesGeoJson(): Promise<
   FeatureCollection<Polygon>
 > {
   const resp = await fetch(authoritiesUrl);
-  return await resp.json();
+  let gj = await resp.json();
+  // For convenience, fill out a derived property combining level and name, to
+  // make a unique key.
+  for (let f of gj.features) {
+	  f.properties.full_name = `${f.properties.level}_${f.properties.name}`;
+  }
+  return gj;
 }
 
 export function appVersion(): string {

@@ -25,6 +25,7 @@
   import { map } from "stores";
   import {
     FillLayer,
+    LineLayer,
     GeoJSON,
     hoverStateFilter,
     type LayerClickInfo,
@@ -46,6 +47,7 @@
   let showBoundaries: "TA" | "LAD" = "TA";
   // TODO Upstream svelte-maplibre support for this
   $: $map?.setFilter("boundaries", ["==", ["get", "level"], showBoundaries]);
+  $: $map?.setFilter("boundaries-outline", ["==", ["get", "level"], showBoundaries]);
 
   onMount(async () => {
     // For govuk components. Must happen here.
@@ -54,9 +56,10 @@
     authoritiesGj = await getAuthoritiesGeoJson();
     for (let feature of authoritiesGj.features) {
       let option = document.createElement("option");
-      option.value = feature.properties!.name;
+      option.value = feature.properties!.full_name;
+      option.label = `${feature.properties.name} (${feature.properties.level})`;
       dataList.appendChild(option);
-      authoritySet.add(feature.properties!.name);
+      authoritySet.add(feature.properties!.full_name);
     }
   });
 
@@ -69,6 +72,7 @@
         );
       }
       if (!authoritySet.has(gj.authority)) {
+        // TODO Backfill without level
         throw new Error(`Unknown authority ${gj.authority}`);
       }
 
@@ -99,9 +103,7 @@
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    window.location.href = `scheme.html?authority=${
-      e.detail.features[0].properties!.name
-    }`;
+    window.location.href = `scheme.html?authority=${e.detail.features[0].properties!.full_name}`;
   }
 
   function start() {
@@ -166,16 +168,25 @@
             paint={{
               "fill-color": "rgb(200, 100, 240)",
               "fill-outline-color": "rgb(200, 100, 240)",
-              "fill-opacity": hoverStateFilter(0.4, 0.8),
+              "fill-opacity": hoverStateFilter(0.0, 0.5),
             }}
             manageHoverState
             hoverCursor="pointer"
             on:click={onClick}
           >
             <Popup let:props>
-              <p>{props.name}</p>
+              <p>{props.name} ({props.level})</p>
             </Popup>
           </FillLayer>
+          <LineLayer
+            id="boundaries-outline"
+            filter={["==", ["get", "level"], showBoundaries]}
+            paint={{
+              "line-color": "rgb(200, 100, 240)",
+              "line-width": 2.5,
+            }}
+            manageHoverState
+          />
         </GeoJSON>
       </MapLibreMap>
     </div>
