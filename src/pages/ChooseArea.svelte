@@ -15,6 +15,7 @@
   import {
     appVersion,
     FileInput,
+    findSmallestAuthority,
     getAuthoritiesGeoJson,
     LoggedIn,
     MapLibreMap,
@@ -25,9 +26,9 @@
   import { map } from "stores";
   import {
     FillLayer,
-    LineLayer,
     GeoJSON,
     hoverStateFilter,
+    LineLayer,
     type LayerClickInfo,
   } from "svelte-maplibre";
   import type { Schema } from "types";
@@ -47,7 +48,11 @@
   let showBoundaries: "TA" | "LAD" = "TA";
   // TODO Upstream svelte-maplibre support for this
   $: $map?.setFilter("boundaries", ["==", ["get", "level"], showBoundaries]);
-  $: $map?.setFilter("boundaries-outline", ["==", ["get", "level"], showBoundaries]);
+  $: $map?.setFilter("boundaries-outline", [
+    "==",
+    ["get", "level"],
+    showBoundaries,
+  ]);
 
   onMount(async () => {
     // For govuk components. Must happen here.
@@ -66,15 +71,20 @@
   function loadFile(text: string) {
     try {
       let gj = JSON.parse(text);
-      if (!gj.authority) {
+
+      let smallestAuthority = findSmallestAuthority(gj, authoritiesGj);
+      if (!smallestAuthority) {
         throw new Error(
-          `File doesn't have an authority set; is it an ATIP file?`
+          "Can't figure out the authority boundary that fully contains this scheme"
         );
       }
-      if (!authoritySet.has(gj.authority)) {
-        // TODO Backfill without level
-        throw new Error(`Unknown authority ${gj.authority}`);
+      // TODO Just warn?
+      if (gj.authority && gj.authority != smallestAuthority) {
+        throw new Error(
+          `File has authority set to ${gj.authority}, but the smallest matching boundary is ${smallestAuthority}`
+        );
       }
+      gj.authority = smallestAuthority;
 
       let filename = gj.authority;
       let schema = detectSchema(gj);
@@ -103,7 +113,9 @@
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    window.location.href = `scheme.html?authority=${e.detail.features[0].properties!.full_name}`;
+    window.location.href = `scheme.html?authority=${
+      e.detail.features[0].properties!.full_name
+    }`;
   }
 
   function start() {
