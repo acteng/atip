@@ -4,7 +4,7 @@ import { checkPageLoaded, loadInitialPageFromBrowser } from "./shared.js";
 test("changed settings are preserved across refresh", async ({ browser }) => {
   test.slow();
   let page = await loadInitialPageFromBrowser(browser);
-  await page.goto("/scheme.html?authority=Adur");
+  await page.goto("/scheme.html?authority=LAD_Adur");
   await page.getByRole("button", { name: "New route" }).click();
   let expectedToBeChecked = false;
 

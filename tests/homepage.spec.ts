@@ -13,10 +13,10 @@ test("choosing a local authority and clicking start changes the url", async ({
   await page.goto("/");
   await page
     .getByTestId("transport-authority")
-    .fill("West Yorkshire Combined Authority");
+    .fill("TA_West Yorkshire Combined Authority");
   await page.getByRole("button", { name: "Start" }).click();
   await expect(page).toHaveURL(
-    /.*scheme.html\?authority=West%20Yorkshire%20Combined%20Authority/
+    /.*scheme.html\?authority=TA_West%20Yorkshire%20Combined%20Authority/
   );
 });
 
@@ -28,5 +28,5 @@ test("Uploading a valid atip geojson redirects to the appropriate authority sche
     .getByLabel("Or upload an ATIP GeoJSON file")
     .setInputFiles("tests/data/Adur.json");
 
-  await expect(page).toHaveURL(/.*scheme.html\?authority=Adur/);
+  await expect(page).toHaveURL(/.*scheme.html\?authority=LAD_Adur/);
 });

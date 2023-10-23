@@ -27,6 +27,15 @@ function main() {
   let authorities = JSON.parse(
     fs.readFileSync("assets/authorities.geojson", { encoding: "utf8" })
   );
+  // Hack around MultiPolygon boundaries
+  for (let f of authorities.features) {
+    if (f.geometry.type == "MultiPolygon") {
+      f.geometry = {
+        type: "Polygon",
+        coordinates: f.geometry.coordinates[0],
+      };
+    }
+  }
 
   let count = 0;
   for (let authority of authorities.features) {
