@@ -2,6 +2,7 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
+  import type { AuthorityBoundaries } from "boundaries";
   import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
     appVersion,
@@ -21,7 +22,7 @@
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
   import { mapStyle, mode } from "stores";
   import { onMount } from "svelte";
-  import type { AuthorityBoundaries, Schema } from "types";
+  import type { Schema } from "types";
 
   let showAbout = false;
   let showInstructions = false;
