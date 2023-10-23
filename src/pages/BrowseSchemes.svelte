@@ -7,7 +7,6 @@
   import LayerControls from "lib/browse/LayerControls.svelte";
   import LoadRemoteSchemeData from "lib/browse/LoadRemoteSchemeData.svelte";
   import SchemeCard from "lib/browse/SchemeCard.svelte";
-  import authorityNamesList from "../../assets/authority_names.json";
   import "../style/main.css";
   import InterventionLayer from "lib/browse/InterventionLayer.svelte";
   import {
@@ -27,9 +26,6 @@
     // For govuk components. Must happen here.
     initAll();
   });
-
-  // TODO Remove after the input data is fixed to plumb correct authority names.
-  let authorityNames: Set<string> = new Set(authorityNamesList);
 
   const params = new URLSearchParams(window.location.search);
   mapStyle.set(params.get("style") || "dataviz");
@@ -83,7 +79,7 @@
     <ul>
       {#each schemes.values() as scheme}
         {#if schemesToBeShown.has(scheme.scheme_reference)}
-          <SchemeCard {schemesGj} {scheme} {authorityNames} />
+          <SchemeCard {schemesGj} {scheme} />
         {/if}
       {/each}
     </ul>

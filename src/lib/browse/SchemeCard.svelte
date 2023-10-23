@@ -8,12 +8,6 @@
 
   export let schemesGj: AllSchemeGJ;
   export let scheme: Scheme;
-  export let authorityNames: Set<string>;
-
-  let disableEdit = !authorityNames.has(scheme.authority_or_region);
-  let editTooltip = disableEdit
-    ? "This scheme doesn't have an authority specified correctly, so you can't edit this scheme. We're working to fix this problem."
-    : undefined;
 
   function showScheme() {
     // TODO Highlight on the map? Or fade everything else?
@@ -53,12 +47,6 @@
   <p>Funding programme: {scheme.funding_programme}</p>
   <ButtonGroup>
     <SecondaryButton on:click={showScheme}>Show on map</SecondaryButton>
-    <SecondaryButton
-      on:click={editScheme}
-      disabled={disableEdit}
-      title={editTooltip}
-    >
-      Edit scheme locally
-    </SecondaryButton>
+    <SecondaryButton on:click={editScheme}>Edit scheme locally</SecondaryButton>
   </ButtonGroup>
 </CollapsibleCard>
