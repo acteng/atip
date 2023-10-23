@@ -21,7 +21,6 @@
     MapLibreMap,
     Popup,
   } from "lib/common";
-  import { emptyGeojson } from "lib/maplibre";
   import About from "lib/sidebar/About.svelte";
   import { map } from "stores";
   import {
@@ -31,9 +30,12 @@
     LineLayer,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { Schema } from "types";
+  import type { AuthorityBoundaries, Schema } from "types";
 
-  let authoritiesGj = emptyGeojson();
+  let authoritiesGj: AuthorityBoundaries = {
+    type: "FeatureCollection",
+    features: [],
+  };
 
   let showAbout = false;
   const params = new URLSearchParams(window.location.search);
@@ -61,10 +63,10 @@
     authoritiesGj = await getAuthoritiesGeoJson();
     for (let feature of authoritiesGj.features) {
       let option = document.createElement("option");
-      option.value = feature.properties!.full_name;
+      option.value = feature.properties.full_name;
       option.label = `${feature.properties.name} (${feature.properties.level})`;
       dataList.appendChild(option);
-      authoritySet.add(feature.properties!.full_name);
+      authoritySet.add(feature.properties.full_name);
     }
   });
 

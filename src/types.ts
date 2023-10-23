@@ -1,4 +1,4 @@
-import type { LineString, Point, Polygon } from "geojson";
+import type { LineString, MultiPolygon, Point, Polygon } from "geojson";
 import type { ATF4Intervention } from "./schemas/atf4";
 import type { Planning } from "./schemas/planning";
 import type { Intervention } from "./schemas/v2";
@@ -92,3 +92,22 @@ export type Mode =
   | { mode: "new-route" }
   | { mode: "split-route" }
   | { mode: "streetview" };
+
+// The type for assets/authorities.geojson
+export type AuthorityBoundaries = {
+  type: "FeatureCollection";
+  features: Array<
+    AuthorityBoundaryFeature<Polygon> | AuthorityBoundaryFeature<MultiPolygon>
+  >;
+};
+
+export interface AuthorityBoundaryFeature<G extends Polygon | MultiPolygon> {
+  type: "Feature";
+  geometry: G;
+  properties: {
+    level: "TA" | "LAD";
+    name: string;
+    // Derived from the above
+    full_name: string;
+  };
+}

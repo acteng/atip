@@ -2,7 +2,6 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
-  import type { FeatureCollection, Polygon } from "geojson";
   import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
     appVersion,
@@ -22,7 +21,7 @@
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
   import { mapStyle, mode } from "stores";
   import { onMount } from "svelte";
-  import type { Schema } from "types";
+  import type { AuthorityBoundaries, Schema } from "types";
 
   let showAbout = false;
   let showInstructions = false;
@@ -51,7 +50,7 @@
     showAbout = false;
   }
 
-  let boundaryGeojson: FeatureCollection<Polygon>;
+  let boundaryGeojson: AuthorityBoundaries;
   onMount(async () => {
     // For govuk components. Must happen here.
     initAll();
@@ -59,10 +58,10 @@
     boundaryGeojson = await loadAuthorityBoundary();
   });
 
-  async function loadAuthorityBoundary(): Promise<FeatureCollection<Polygon>> {
+  async function loadAuthorityBoundary(): Promise<AuthorityBoundaries> {
     let geojson = await getAuthoritiesGeoJson();
     geojson.features = geojson.features.filter(
-      (feature) => feature.properties!.full_name == authorityName
+      (feature) => feature.properties.full_name == authorityName
     );
     if (geojson.features.length === 0) {
       window.location.href = `/?error=Authority name not found: ${authorityName}`;

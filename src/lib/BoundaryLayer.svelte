@@ -1,12 +1,12 @@
 <script lang="ts">
   import mask from "@turf/mask";
-  import type { FeatureCollection, Polygon } from "geojson";
+  import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
   import { bbox, layerId } from "lib/maplibre";
   import { map } from "stores";
   import { getContext } from "svelte";
   import { FillLayer, GeoJSON } from "svelte-maplibre";
 
-  export let boundaryGeojson: FeatureCollection<Polygon>;
+  export let boundaryGeojson: FeatureCollection<Polygon | MultiPolygon>;
 
   const setCamera = getContext("setCamera");
 
