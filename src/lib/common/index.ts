@@ -1,7 +1,7 @@
 import area from "@turf/area";
 import booleanContains from "@turf/boolean-contains";
-import type { FeatureCollection, Polygon } from "geojson";
-import type { Scheme } from "types";
+import type { Feature, MultiPolygon, Polygon } from "geojson";
+import type { AuthorityBoundaries, FeatureUnion, Scheme } from "types";
 import authoritiesUrl from "../../../assets/authorities.geojson?url";
 
 export { default as BaselayerSwitcher } from "./BaselayerSwitcher.svelte";
@@ -24,11 +24,8 @@ export { default as StreetViewTool } from "./StreetViewTool.svelte";
 export { default as WarningIcon } from "./WarningIcon.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
 
-// TODO Specific types for the properties
-export async function getAuthoritiesGeoJson(): Promise<
-  FeatureCollection<Polygon>
-> {
-  const resp = await fetch(authoritiesUrl);
+export async function getAuthoritiesGeoJson(): Promise<AuthorityBoundaries> {
+  let resp = await fetch(authoritiesUrl);
   let gj = await resp.json();
   // For convenience, fill out a derived property combining level and name, to
   // make a unique key.
@@ -41,7 +38,7 @@ export async function getAuthoritiesGeoJson(): Promise<
 // Find the name of the smallest authority boundary completely containing the scheme.
 export function findSmallestAuthority(
   gj: Scheme,
-  authorities: FeatureCollection<Polygon>
+  authorities: AuthorityBoundaries
 ): string | null {
   // First sort authorities by area.
   // TODO OK to mutate in here? And how expensive is this?
@@ -56,8 +53,8 @@ export function findSmallestAuthority(
 }
 
 function allFeaturesContainedByPolygon(
-  features: FeatureCollection,
-  boundary: Feature<Polygon>
+  features: FeatureUnion[],
+  boundary: Feature<Polygon | MultiPolygon>
 ): boolean {
   for (let f of features) {
     // TODO Can't handle MultiPolygons. Fix the data upstream?
