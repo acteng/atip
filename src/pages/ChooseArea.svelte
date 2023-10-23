@@ -12,10 +12,10 @@
   } from "lib/govuk";
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
+  import { findSmallestAuthority, type AuthorityBoundaries } from "boundaries";
   import {
     appVersion,
     FileInput,
-    findSmallestAuthority,
     getAuthoritiesGeoJson,
     LoggedIn,
     MapLibreMap,
@@ -30,7 +30,7 @@
     LineLayer,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { AuthorityBoundaries, Schema } from "types";
+  import type { Schema } from "types";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",
