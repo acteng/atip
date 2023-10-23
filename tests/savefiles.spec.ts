@@ -104,7 +104,7 @@ test("loading a file from the homepage goes to the correct page", async () => {
     .getByLabel("Or upload an ATIP GeoJSON file")
     .setInputFiles("tests/data/Adur.json");
 
-  await expect(page).toHaveURL(/scheme.html\?authority=Adur/);
+  await expect(page).toHaveURL(/scheme.html\?authority=LAD_Adur/);
   await checkPageLoaded(page);
   await page
     .getByRole("link", {

@@ -4,7 +4,7 @@ export async function loadInitialPageFromBrowser(
   browser: Browser
 ): Promise<Page> {
   let page = await browser.newPage();
-  await page.goto("/scheme.html?authority=Adur");
+  await page.goto("/scheme.html?authority=LAD_Adur");
   await checkPageLoaded(page);
   return page;
 }

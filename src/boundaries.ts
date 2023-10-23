@@ -10,6 +10,7 @@ import type {
 // The type for assets/authorities.geojson
 export type AuthorityBoundaries = {
   type: "FeatureCollection";
+  // Sorted by area ascending
   features: Array<
     AuthorityBoundaryFeature<Polygon> | AuthorityBoundaryFeature<MultiPolygon>
   >;
@@ -26,11 +27,13 @@ interface AuthorityBoundaryFeature<G extends Polygon | MultiPolygon> {
   };
 }
 
+// After loading assets/authorities.geojson, use this to establish the
+// invariants of AuthorityBoundaries.
 export function fixBoundaries(gj: FeatureCollection): AuthorityBoundaries {
   for (let f of gj.features) {
     f.properties!.full_name = `${f.properties!.level}_${f.properties!.name}`;
   }
-  // This is fast (about 2ms)
+  // Sort so that findSmallestAuthority works. Note this only takes about 2ms.
   gj.features.sort((a, b) => area(a) - area(b));
   return gj as AuthorityBoundaries;
 }

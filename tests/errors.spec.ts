@@ -3,12 +3,14 @@ import { clickMap } from "./shared.js";
 
 // This is separate from modes.spec.ts to avoid the common beforeAll
 test("other tools work when route tool doesn't load", async ({ page }) => {
-  await page.route("https://atip.uk/route-snappers/v2.2/Adur.bin.gz", (route) =>
-    route.fulfill({
-      status: 404,
-    })
+  await page.route(
+    "https://atip.uk/route-snappers/v2.3/LAD_Adur.bin.gz",
+    (route) =>
+      route.fulfill({
+        status: 404,
+      })
   );
-  await page.goto("/scheme.html?authority=Adur");
+  await page.goto("/scheme.html?authority=LAD_Adur");
 
   await expect(page.getByText("Failed to load route snapper")).toBeVisible();
 
@@ -26,20 +28,20 @@ test("Redirected to homepage with error when incorrect authority given to scheme
   await page.goto("/scheme.html?authority=Adu");
 
   await expect(page.getByText("Authority name not found:")).toBeVisible();
-  await expect(page.url()).toBe(
-    "http://localhost:8080/?error=Authority+name+not+found%3A+Adu&style=streets"
+  await expect(page).toHaveURL(
+    /.*\?error=Authority\+name\+not\+found%3A\+Adu&style=streets/
   );
 });
 
-test("Upload invalid geojson to select authority page", async ({ page }) => {
+test("Upload file with invalid boundary", async ({ page }) => {
   await page.goto("/");
   await page
     .getByLabel("Or upload an ATIP GeoJSON file")
-    .setInputFiles("tests/data/Adu.json");
+    .setInputFiles("tests/data/out_of_bounds.geojson");
 
   await expect(
     page.getByText(
-      "Couldn't load scheme from a file: Error: Unknown authority Adu"
+      "Couldn't load scheme from a file: Error: Can't figure out the authority boundary that fully contains this scheme"
     )
   ).toBeVisible();
 });

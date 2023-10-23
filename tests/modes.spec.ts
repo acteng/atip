@@ -67,7 +67,7 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
 
   // The route immediately has a name
   await expect(
-    page.getByText("Editing Route from ??? and Brighton Road to ???")
+    page.getByText("Editing Route from ??? and Beach Green to ???")
   ).toBeVisible();
 
   // Change it
@@ -77,7 +77,7 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
   // Then auto-fill to change it back
   await page.getByText("Auto-fill").click();
   await expect(
-    page.getByText("Editing Route from ??? and Brighton Road to ???")
+    page.getByText("Editing Route from ??? and Beach Green to ???")
   ).toBeVisible();
 });
 
@@ -115,7 +115,7 @@ test("adding interventions, then deleting one, then adding another", async () =>
   await page.getByRole("button", { name: "Save" }).click();
   await page
     .getByRole("link", {
-      name: "Route from Old Shoreham Road and Ropetackle to Ullswater Road and Western Road North",
+      name: "Route from High Street and West Street to ??? and Silverdale Drive",
     })
     .click();
   await page.getByRole("button", { name: "Delete" }).click();
@@ -127,21 +127,7 @@ test("adding interventions, then deleting one, then adding another", async () =>
 
   await expect(
     page.getByRole("link", {
-      name: "Route from ???, Bowness Avenue, and Western Road to West Avenue and West Way",
-    })
-  ).toBeVisible();
-});
-
-test("add a route and save it", async () => {
-  await page.getByRole("button", { name: "New route" }).click();
-  await clickMap(page, 522, 468);
-  await clickMap(page, 192, 513);
-  await page.getByRole("button", { name: "Finish" }).click();
-  await page.getByRole("button", { name: "Save" }).click();
-
-  await expect(
-    page.getByRole("link", {
-      name: "Route from Old Shoreham Road and Ropetackle to Ullswater Road and Western Road North",
+      name: "Route from Burnside Crescent and Carnforth Road to ??? and Brighton Road",
     })
   ).toBeVisible();
 });
@@ -229,7 +215,7 @@ test("edit a route, then cancel", async () => {
 
   await page.keyboard.down("Escape");
   await expect(
-    page.getByText("Editing Route from ??? and Brighton Road to ???")
+    page.getByText("Editing Route from ??? and Beach Green to ???")
   ).toBeVisible();
 });
 

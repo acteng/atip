@@ -74,18 +74,14 @@
     try {
       let gj = JSON.parse(text);
 
-      let smallestAuthority = findSmallestAuthority(gj, authoritiesGj);
+      let smallestAuthority = findSmallestAuthority(gj.features, authoritiesGj);
       if (!smallestAuthority) {
         throw new Error(
           "Can't figure out the authority boundary that fully contains this scheme"
         );
       }
-      // TODO Just warn?
-      if (gj.authority && gj.authority != smallestAuthority) {
-        throw new Error(
-          `File has authority set to ${gj.authority}, but the smallest matching boundary is ${smallestAuthority}`
-        );
-      }
+      // Ignore the authority that the file has set; always use the calculated boundary
+      // TODO Will that ever be annoying? Keep the pre-set value if it's valid?
       gj.authority = smallestAuthority;
 
       let filename = gj.authority;
