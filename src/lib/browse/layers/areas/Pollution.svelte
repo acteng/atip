@@ -9,7 +9,7 @@
 
   let pollutant = "PM25_viridis";
 
-  function url(pollutant: string): string {
+  function tilesUrl(pollutant: string): string {
     let params = new URLSearchParams({
       request: "GetMap",
       version: "1.3.0",
@@ -30,10 +30,25 @@
     // Don't escape the {} in the bbox, so specify it manually below
     return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2021/${pollutant}/MapServer/WMSServer?bbox={bbox-epsg-3857}&${params}`;
   }
-  $: tiles = [url(pollutant)];
 
-  // legend
-  //"https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2021/NOx_viridis/MapServer/WMSServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=21"
+  // TODO Refactor
+  function legendUrl(pollutant: string): string {
+    let params = new URLSearchParams({
+      request: "GetLegendGraphic",
+      version: "1.3.0",
+      format: "image/png",
+      // Not plural here
+      layer: {
+        // The year
+        NOx_viridis: "21",
+        // Still the year, but off by one
+        PM25_viridis: "20",
+        // The year
+        PM10_viridis: "21",
+      }[pollutant],
+    }).toString();
+    return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2021/${pollutant}/MapServer/WMSServer?${params}`;
+  }
 </script>
 
 <Checkbox id="pollution" bind:checked={show}>
@@ -57,9 +72,11 @@
     ]}
     bind:value={pollutant}
   />
+
+  <img src={legendUrl(pollutant)} />
 {/if}
 
-<RasterTileSource {tiles} tileSize={256}>
+<RasterTileSource tiles={[tilesUrl(pollutant)]} tileSize={256}>
   <RasterLayer
     {...layerId("pollution")}
     paint={{
