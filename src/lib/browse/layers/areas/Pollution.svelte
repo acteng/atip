@@ -6,6 +6,7 @@
   import OsOglLicense from "../OsOglLicense.svelte";
 
   let show = false;
+  let opacity = 50;
 
   let pollutant = "PM25_viridis";
 
@@ -73,6 +74,13 @@
     bind:value={pollutant}
   />
 
+  <div>
+    <label>
+      Opacity
+      <input type="range" min="0" max="100" bind:value={opacity} />
+    </label>
+  </div>
+
   <img src={legendUrl(pollutant)} />
 {/if}
 
@@ -80,7 +88,7 @@
   <RasterLayer
     {...layerId("pollution")}
     paint={{
-      "raster-opacity": 0.5,
+      "raster-opacity": opacity / 100.0,
     }}
     layout={{
       visibility: show ? "visible" : "none",
