@@ -73,6 +73,7 @@ const layerZorder = [
   "census_output_areas-outline",
   "imd",
   "imd-outline",
+  "pollution",
   // Then optional linear layers
   "mrn",
   "bus_routes",
