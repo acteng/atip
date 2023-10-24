@@ -10,6 +10,26 @@
 
   let pollutant = "PM25_viridis";
 
+  // TODO Corrected for natural sources or not?
+
+  // TODO Combo em, also with a title?
+  $: urlBase = {
+    NOx_viridis: "aq_amb_2021",
+    NOxRoads_viridis: "aq_amb_2022",
+    PM25_viridis: "aq_amb_2021",
+    PM25Roads_viridis: "aq_amb_2022",
+    PM10_viridis: "aq_amb_2021",
+    PM10Roads_viridis: "aq_amb_2022",
+  }[pollutant];
+  $: yearLayer = {
+    NOx_viridis: "21",
+    NOxRoads_viridis: "22",
+    PM25_viridis: "20",
+    PM25Roads_viridis: "14",
+    PM10_viridis: "21",
+    PM10Roads_viridis: "21",
+  }[pollutant];
+
   function tilesUrl(pollutant: string): string {
     let params = new URLSearchParams({
       request: "GetMap",
@@ -19,17 +39,10 @@
       width: "256",
       height: "256",
       styles: "",
-      layers: {
-        // The year
-        NOx_viridis: "21",
-        // Still the year, but off by one
-        PM25_viridis: "20",
-        // The year
-        PM10_viridis: "21",
-      }[pollutant],
+      layers: yearLayer,
     }).toString();
     // Don't escape the {} in the bbox, so specify it manually below
-    return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2021/${pollutant}/MapServer/WMSServer?bbox={bbox-epsg-3857}&${params}`;
+    return `https://ukair.maps.rcdo.co.uk/ukairserver/services/${urlBase}/${pollutant}/MapServer/WMSServer?bbox={bbox-epsg-3857}&${params}`;
   }
 
   // TODO Refactor
@@ -39,16 +52,9 @@
       version: "1.3.0",
       format: "image/png",
       // Not plural here
-      layer: {
-        // The year
-        NOx_viridis: "21",
-        // Still the year, but off by one
-        PM25_viridis: "20",
-        // The year
-        PM10_viridis: "21",
-      }[pollutant],
+      layer: yearLayer,
     }).toString();
-    return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2021/${pollutant}/MapServer/WMSServer?${params}`;
+    return `https://ukair.maps.rcdo.co.uk/ukairserver/services/${urlBase}/${pollutant}/MapServer/WMSServer?${params}`;
   }
 </script>
 
@@ -67,9 +73,15 @@
     label="Pollutant"
     id="pollutant"
     choices={[
-      ["NOx_viridis", "NO2 (Nitrogen dioxide)"],
-      ["PM25_viridis", "PM2.5 (Particulate matter < 2.5 microns)"],
-      ["PM10_viridis", "PM10 (Particulate matter < 10 microns)"],
+      ["NOx_viridis", "Background NOx (Oxides of nitrogen)"],
+      ["NOxRoads_viridis", "Roadside NOx (Oxides of nitrogen)"],
+      ["PM25_viridis", "Background PM2.5 (Particulate matter < 2.5 microns)"],
+      [
+        "PM25Roads_viridis",
+        "Roadside PM2.5 (Particulate matter < 2.5 microns)",
+      ],
+      ["PM10_viridis", "Background PM10 (Particulate matter < 10 microns)"],
+      ["PM10Roads_viridis", "Roadside PM10 (Particulate matter < 10 microns)"],
     ]}
     bind:value={pollutant}
   />
