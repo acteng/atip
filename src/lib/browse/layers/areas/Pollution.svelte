@@ -19,6 +19,8 @@
     NOxRoads_viridis: ["22", "Data for 2022"],
     PM25Roads_viridis: ["14", "Data for 2022"],
     PM10Roads_viridis: ["22", "Data for 2022"],
+    // TODO This one is disabled by leaving it out of the dropdown. The WMS
+    // server uses HTTP, not HTTPS, and doesn't work when deployed.
     Noise: [
       "NoiseE:RD_LQ16_R3",
       "Annual average noise level for the 16-hour period between 0700-2300 (dB)",
@@ -104,7 +106,6 @@
       ["PM25Roads_viridis", "Roadside PM2.5"],
       ["PM10Roads_viridis", "Roadside PM10"],
       ["NOxRoads_viridis", "Roadside NOx"],
-      ["Noise", "Noise pollution"],
     ]}
     bind:value={pollutant}
   />
