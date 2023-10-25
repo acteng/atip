@@ -1,6 +1,6 @@
 <script lang="ts">
   import Cookies from "js-cookie";
-  import { appVersion } from "lib/common";
+  import { Alpha, appVersion } from "lib/common";
   import { ErrorMessage } from "lib/govuk";
 
   let email = Cookies.get("email");
@@ -15,3 +15,5 @@
     />
   {/if}
 {/if}
+
+<Alpha />

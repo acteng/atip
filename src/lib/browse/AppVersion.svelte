@@ -14,11 +14,5 @@
       </p>
     {/if}
     <p>Note the ATF scheme data has not been validated.</p>
-    <p>
-      Please contact <a href="mailto:dcarlino@turing.ac.uk">Dustin</a>
-      and
-      <a href="mailto:Peter.York@activetravelengland.gov.uk">Pete</a>
-      about any problems, ideas, or feedback for this site.
-    </p>
   </HelpButton>
 </p>
