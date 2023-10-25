@@ -68,6 +68,27 @@ To add someone:
 
 After changing this, there's seemingly a propagation delay of about a minute. You might also need to Ctrl+Shift+R or clear your browser cache.
 
+### Automatically deploy from GH Actions
+
+For the test environment, we can automatically deploy App Engine for every push to the `main` branch of the Github repo. One-time setup steps to create a service account with permission to deploy, and a [service account JSON key](https://github.com/google-github-actions/auth#authenticating-via-service-account-key-json):
+
+```
+gcloud services --project=$PROJECT enable appengine.googleapis.com
+
+gcloud iam service-accounts --project=$PROJECT create gh-builder-service-account
+
+# See https://github.com/google-github-actions/deploy-appengine for reference
+for role in roles/appengine.appAdmin roles/storage.admin roles/cloudbuild.builds.editor roles/iam.serviceAccountUser; do
+	gcloud projects add-iam-policy-binding $PROJECT --member="serviceAccount:gh-builder-v2@$PROJECT.iam.gserviceaccount.com" --role=$role;
+done
+
+gcloud iam service-accounts keys create private_key --iam-account=gh-builder-v2@$PROJECT.iam.gserviceaccount.com
+```
+
+You then need to set the `GCP_DEV_CREDENTIALS` secret in Github. Go to <https://github.com/acteng/atip/settings/secrets/actions> and create/edit it as needed. The contents are the `private_key` file created by the last command, but you need to format it as a one-liner. If you have [jq](https://jqlang.github.io/jq/)`, you can just do `cat private_key | jq - c` and copy that.
+
+**Remove the private_key file after creating the Github secret, and make sure it's never made public**
+
 ## TODO
 
 - Automated setup
