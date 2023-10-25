@@ -18,7 +18,13 @@
     PM25Roads_viridis: ["aq_amb_2022", "14", "2022"],
     PM10Roads_viridis: ["aq_amb_2022", "22", "2022"],
   }[pollutant];
-  $: wmsUrl = `https://ukair.maps.rcdo.co.uk/ukairserver/services/${info[0]}/${pollutant}/MapServer/WMSServer`;
+  $: wmsUrl = `https://ukair.maps.rcdo.co.uk/ukairserver/services/${
+    info![0]
+  }/${pollutant}/MapServer/WMSServer`;
+
+  function year(): string {
+    return info![2];
+  }
 
   function tilesUrl(wmsUrl: string): string {
     let params = new URLSearchParams({
@@ -29,7 +35,7 @@
       width: "256",
       height: "256",
       styles: "",
-      layers: info[1],
+      layers: info![1],
     }).toString();
     // Don't escape the {} in the bbox, so specify it manually below
     return `${wmsUrl}?bbox={bbox-epsg-3857}&${params}`;
@@ -40,7 +46,7 @@
       request: "GetLegendGraphic",
       version: "1.3.0",
       format: "image/png",
-      layer: info[1],
+      layer: info![1],
     }).toString();
     return `${wmsUrl}?${params}`;
   }
@@ -56,8 +62,7 @@
         DEFRA
       </ExternalLink>. The measurements are annual means, in units of &micro;gm
       <sup>3</sup>
-      . Note the particulate matter layers are not corrected for natural
-      sources.
+      . Note the particulate matter layers are not corrected for natural sources.
       <OsOglLicense />
     </HelpButton>
   </span>
@@ -78,7 +83,7 @@
     bind:value={pollutant}
   />
   <p>
-    Data for {info[2]}
+    Data for {year()}
   </p>
 
   <div>
