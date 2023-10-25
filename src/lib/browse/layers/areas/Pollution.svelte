@@ -10,17 +10,16 @@
   let opacity = 50;
   let pollutant = "PM25_viridis";
 
-  // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services and QGIS
-  // ... except for noise
+  // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services
+  // and QGIS, or http://www.extrium.co.uk/noiseviewer.html for the noise layer
   $: info = {
-    NOx_viridis: ["aq_amb_2022", "22", "Data for 2022"],
-    PM25_viridis: ["aq_amb_2022", "21", "Data for 2022"],
-    PM10_viridis: ["aq_amb_2022", "22", "Data for 2022"],
-    NOxRoads_viridis: ["aq_amb_2022", "22", "Data for 2022"],
-    PM25Roads_viridis: ["aq_amb_2022", "14", "Data for 2022"],
-    PM10Roads_viridis: ["aq_amb_2022", "22", "Data for 2022"],
+    NOx_viridis: ["22", "Data for 2022"],
+    PM25_viridis: ["21", "Data for 2022"],
+    PM10_viridis: ["22", "Data for 2022"],
+    NOxRoads_viridis: ["22", "Data for 2022"],
+    PM25Roads_viridis: ["14", "Data for 2022"],
+    PM10Roads_viridis: ["22", "Data for 2022"],
     Noise: [
-      "",
       "NoiseE:RD_LQ16_R3",
       "Annual average noise level for the 16-hour period between 0700-2300 (dB)",
     ],
@@ -30,14 +29,12 @@
     if (pollutant == "Noise") {
       return `http://wms.extrium.co.uk/geoserver/NoiseE/wms`;
     } else {
-      return `https://ukair.maps.rcdo.co.uk/ukairserver/services/${
-        info![0]
-      }/${pollutant}/MapServer/WMSServer`;
+      return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2022/${pollutant}/MapServer/WMSServer`;
     }
   }
 
   function title(pollutant: string): string {
-    return info![2];
+    return info![1];
   }
 
   function tilesUrl(pollutant: string): string {
@@ -49,7 +46,7 @@
       width: "256",
       height: "256",
       styles: "",
-      layers: info![1],
+      layers: info![0],
     }).toString();
     // Don't escape the {} in the bbox, so specify it manually below
     return `${wmsUrl()}?bbox={bbox-epsg-3857}&${params}`;
@@ -60,7 +57,7 @@
       request: "GetLegendGraphic",
       version: "1.3.0",
       format: "image/png",
-      layer: info![1],
+      layer: info![0],
     }).toString();
     return `${wmsUrl()}?${params}`;
   }
