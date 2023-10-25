@@ -9,19 +9,16 @@
   let opacity = 50;
   let pollutant = "PM25_viridis";
 
-  // TODO Corrected for natural sources or not?
-
-  // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services
+  // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services and QGIS
   $: info = {
-    NOx_viridis: ["aq_amb_2021", "21"],
-    PM25_viridis: ["aq_amb_2021", "20"],
-    PM10_viridis: ["aq_amb_2021", "21"],
-    NOxRoads_viridis: ["aq_amb_2022", "22"],
-    PM25Roads_viridis: ["aq_amb_2022", "14"],
-    PM10Roads_viridis: ["aq_amb_2022", "21"],
+    NOx_viridis: ["aq_amb_2022", "22", "2022"],
+    PM25_viridis: ["aq_amb_2022", "21", "2022"], // TODO really?
+    PM10_viridis: ["aq_amb_2022", "22", "2022"],
+    NOxRoads_viridis: ["aq_amb_2022", "22", "2022"],
+    PM25Roads_viridis: ["aq_amb_2022", "14", "2022"],
+    PM10Roads_viridis: ["aq_amb_2022", "22", "2022"],
   }[pollutant];
   $: wmsUrl = `https://ukair.maps.rcdo.co.uk/ukairserver/services/${info[0]}/${pollutant}/MapServer/WMSServer`;
-  $: yearLayer = info[1];
 
   function tilesUrl(wmsUrl: string): string {
     let params = new URLSearchParams({
@@ -32,7 +29,7 @@
       width: "256",
       height: "256",
       styles: "",
-      layers: yearLayer,
+      layers: info[1],
     }).toString();
     // Don't escape the {} in the bbox, so specify it manually below
     return `${wmsUrl}?bbox={bbox-epsg-3857}&${params}`;
@@ -43,8 +40,7 @@
       request: "GetLegendGraphic",
       version: "1.3.0",
       format: "image/png",
-      // Not plural here
-      layer: yearLayer,
+      layer: info[1],
     }).toString();
     return `${wmsUrl}?${params}`;
   }
@@ -54,7 +50,14 @@
   Pollution
   <span slot="right">
     <HelpButton>
-      <p>TODO</p>
+      These layers show air quality data from <ExternalLink
+        href="https://uk-air.defra.gov.uk/data/wms-services"
+      >
+        DEFRA
+      </ExternalLink>. The measurements are annual means, in units of &micro;gm
+      <sup>3</sup>
+      . Note the particulate matter layers are not corrected for natural
+      sources.
       <OsOglLicense />
     </HelpButton>
   </span>
@@ -68,16 +71,15 @@
       ["PM25_viridis", "Background PM2.5"],
       ["PM10_viridis", "Background PM10"],
       ["NOx_viridis", "Background NOx"],
-      [
-        "PM25Roads_viridis",
-        "Roadside PM2.5"
-      ],
+      ["PM25Roads_viridis", "Roadside PM2.5"],
       ["PM10Roads_viridis", "Roadside PM10"],
       ["NOxRoads_viridis", "Roadside NOx"],
     ]}
     bind:value={pollutant}
   />
-  <p>Data for <b>{yearLayer}</b></p>
+  <p>
+    Data for {info[2]}
+  </p>
 
   <div>
     <label>
@@ -86,7 +88,11 @@
     </label>
   </div>
 
-  <img src={legendUrl(wmsUrl)} width={150} alt={`Legend for ${pollutant} layer`} />
+  <img
+    src={legendUrl(wmsUrl)}
+    width={150}
+    alt={`Legend for ${pollutant} layer`}
+  />
 {/if}
 
 <RasterTileSource tiles={[tilesUrl(wmsUrl)]} tileSize={256}>
