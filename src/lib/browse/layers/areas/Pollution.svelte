@@ -4,29 +4,43 @@
   import { layerId } from "lib/maplibre";
   import { RasterLayer, RasterTileSource } from "svelte-maplibre";
   import OsOglLicense from "../OsOglLicense.svelte";
+  import SequentialLegend from "../SequentialLegend.svelte";
 
   let show = false;
   let opacity = 50;
   let pollutant = "PM25_viridis";
 
   // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services and QGIS
+  // ... except for noise
   $: info = {
-    NOx_viridis: ["aq_amb_2022", "22", "2022"],
-    PM25_viridis: ["aq_amb_2022", "21", "2022"], // TODO really?
-    PM10_viridis: ["aq_amb_2022", "22", "2022"],
-    NOxRoads_viridis: ["aq_amb_2022", "22", "2022"],
-    PM25Roads_viridis: ["aq_amb_2022", "14", "2022"],
-    PM10Roads_viridis: ["aq_amb_2022", "22", "2022"],
+    NOx_viridis: ["aq_amb_2022", "22", "Data for 2022"],
+    PM25_viridis: ["aq_amb_2022", "21", "Data for 2022"],
+    PM10_viridis: ["aq_amb_2022", "22", "Data for 2022"],
+    NOxRoads_viridis: ["aq_amb_2022", "22", "Data for 2022"],
+    PM25Roads_viridis: ["aq_amb_2022", "14", "Data for 2022"],
+    PM10Roads_viridis: ["aq_amb_2022", "22", "Data for 2022"],
+    Noise: [
+      "",
+      "NoiseE:RD_LQ16_R3",
+      "Annual average noise level for the 16-hour period between 0700-2300 (dB)",
+    ],
   }[pollutant];
-  $: wmsUrl = `https://ukair.maps.rcdo.co.uk/ukairserver/services/${
-    info![0]
-  }/${pollutant}/MapServer/WMSServer`;
 
-  function year(): string {
+  function wmsUrl(): string {
+    if (pollutant == "Noise") {
+      return `http://wms.extrium.co.uk/geoserver/NoiseE/wms`;
+    } else {
+      return `https://ukair.maps.rcdo.co.uk/ukairserver/services/${
+        info![0]
+      }/${pollutant}/MapServer/WMSServer`;
+    }
+  }
+
+  function title(pollutant: string): string {
     return info![2];
   }
 
-  function tilesUrl(wmsUrl: string): string {
+  function tilesUrl(pollutant: string): string {
     let params = new URLSearchParams({
       request: "GetMap",
       version: "1.3.0",
@@ -38,17 +52,17 @@
       layers: info![1],
     }).toString();
     // Don't escape the {} in the bbox, so specify it manually below
-    return `${wmsUrl}?bbox={bbox-epsg-3857}&${params}`;
+    return `${wmsUrl()}?bbox={bbox-epsg-3857}&${params}`;
   }
 
-  function legendUrl(wmsUrl: string): string {
+  function legendUrl(pollutant: string): string {
     let params = new URLSearchParams({
       request: "GetLegendGraphic",
       version: "1.3.0",
       format: "image/png",
       layer: info![1],
     }).toString();
-    return `${wmsUrl}?${params}`;
+    return `${wmsUrl()}?${params}`;
   }
 </script>
 
@@ -56,13 +70,27 @@
   Pollution
   <span slot="right">
     <HelpButton>
-      These layers show air quality data from <ExternalLink
-        href="https://uk-air.defra.gov.uk/data/wms-services"
-      >
-        DEFRA
-      </ExternalLink>. The measurements are annual means, in units of &micro;gm
-      <sup>3</sup>
-      . Note the particulate matter layers are not corrected for natural sources.
+      <p>
+        Most layers show air quality data from <ExternalLink
+          href="https://uk-air.defra.gov.uk/data/wms-services"
+        >
+          DEFRA
+        </ExternalLink>. The measurements are annual means, in units of
+        &micro;gm
+        <sup>3</sup>
+        . Note the particulate matter layers are not corrected for natural sources.
+      </p>
+      <p>
+        The noise layer is from <ExternalLink
+          href="http://www.extrium.co.uk/noiseviewer.html"
+        >
+          Extrium
+        </ExternalLink>, using 2017 data. See their <ExternalLink
+          href="http://www.extrium.co.uk/noiseviewer/FAQs.pdf"
+        >
+          FAQ
+        </ExternalLink>.
+      </p>
       <OsOglLicense />
     </HelpButton>
   </span>
@@ -79,12 +107,11 @@
       ["PM25Roads_viridis", "Roadside PM2.5"],
       ["PM10Roads_viridis", "Roadside PM10"],
       ["NOxRoads_viridis", "Roadside NOx"],
+      ["Noise", "Noise pollution"],
     ]}
     bind:value={pollutant}
   />
-  <p>
-    Data for {year()}
-  </p>
+  <p>{title(pollutant)}</p>
 
   <div>
     <label>
@@ -93,14 +120,21 @@
     </label>
   </div>
 
-  <img
-    src={legendUrl(wmsUrl)}
-    width={150}
-    alt={`Legend for ${pollutant} layer`}
-  />
+  {#if pollutant == "Noise"}
+    <SequentialLegend
+      colorScale={["#FF6600", "#FF3333", "#990033", "#AD9AD6", "#0000E0"]}
+      limits={["55", "60", "65", "70", "75", ">"]}
+    />
+  {:else}
+    <img
+      src={legendUrl(pollutant)}
+      width={150}
+      alt={`Legend for ${pollutant} layer`}
+    />
+  {/if}
 {/if}
 
-<RasterTileSource tiles={[tilesUrl(wmsUrl)]} tileSize={256}>
+<RasterTileSource tiles={[tilesUrl(pollutant)]} tileSize={256}>
   <RasterLayer
     {...layerId("pollution")}
     paint={{
