@@ -14,6 +14,7 @@
   import LocalAuthorityDistrictsLayerControl from "./layers/areas/LocalAuthorityDistricts.svelte";
   import LocalPlanningAuthoritiesLayerControl from "./layers/areas/LocalPlanningAuthorities.svelte";
   import ParliamentaryConstituenciesLayerControl from "./layers/areas/ParliamentaryConstituencies.svelte";
+  import PollutionLayerControl from "./layers/areas/Pollution.svelte";
   import WardsLayerControl from "./layers/areas/Wards.svelte";
   import BusRoutesLayerControl from "./layers/lines/BusRoutes.svelte";
   import CyclePathsLayerControl from "./layers/lines/CyclePaths.svelte";
@@ -74,6 +75,7 @@
       <RoadWidthsLayerControl />
       <RoadSpeedsLayerControl />
     {/if}
+    <PollutionLayerControl />
   </CollapsibleCard>
   <CollapsibleCard label="Tools">
     <StreetViewTool bind:enabled={streetviewEnabled} />
