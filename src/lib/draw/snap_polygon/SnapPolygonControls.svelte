@@ -1,7 +1,7 @@
 <ul>
   <li>
     <b>Click</b>
-    green points on the transport network to create snapped routes
+    the map to add points
   </li>
   <li>
     <b>Click and drag</b>
@@ -9,7 +9,7 @@
   </li>
   <li>
     <b>Click</b>
-    a red waypoint to delete it
+    a waypoint to delete it
   </li>
   <li>
     Press <b>Enter</b>
