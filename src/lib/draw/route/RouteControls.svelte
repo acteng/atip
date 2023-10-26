@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Checkbox, CheckboxGroup } from "lib/govuk";
-  import { routeTool, userSettings } from "stores";
+  import { routeTool, routeToolSnapMode, userSettings } from "stores";
 
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
@@ -11,33 +11,16 @@
     avoid_doubling_back: $userSettings.avoidDoublingBack,
     extend_route: extendRoute,
   });
-
-  // TODO It'd be nice to wire up reactivity to RouteTool directly.
-  let snapping = true;
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key == "Shift") {
-      // Don't stop propagation, so RouteTool can see this
-      snapping = false;
-    }
-  }
-  function onKeyUp(e: KeyboardEvent) {
-    if (e.key == "Shift") {
-      // Don't stop propagation, so RouteTool can see this
-      snapping = true;
-    }
-  }
 </script>
 
-<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
-
-{#if snapping}
-  <p>
-    Snapping to existing roads. Press <b>Shift</b>
+{#if $routeToolSnapMode}
+  <p style="background: red; color: white; padding: 8px;">
+    Snapping to existing roads. Press <b>s</b>
     to draw anywhere
   </p>
 {:else}
-  <p>
-    Drawing points anywhere. Release <b>Shift</b>
+  <p style="background: blue; color: white; padding: 8px;">
+    Drawing points anywhere. Press <b>s</b>
     to snap to roads
   </p>
 {/if}
@@ -45,11 +28,11 @@
 <ul>
   <li>
     <b>Click</b>
-    green points on the transport network to create snapped routes
+    the map to add points
   </li>
   <li>
-    Hold <b>Shift</b>
-    to draw a point anywhere
+    Press <b>s</b>
+    to switch between snapping points to existing roads and drawing anywhere
   </li>
   <li>
     <b>Click and drag</b>
@@ -57,7 +40,7 @@
   </li>
   <li>
     <b>Click</b>
-    a red waypoint to delete it
+    a waypoint to delete it
   </li>
   <li>
     Press <b>Enter</b>

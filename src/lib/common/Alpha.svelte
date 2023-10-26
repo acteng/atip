@@ -7,7 +7,7 @@
       </a>
       and
       <a href="mailto:Peter.York@activetravelengland.gov.uk">Pete</a>
-       with any feedback.
+      with any feedback.
     </span>
   </p>
 </div>

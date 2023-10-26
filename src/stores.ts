@@ -23,6 +23,9 @@ export const polygonTool: Writable<PolygonTool | null> = writable(null);
 // A global singleton, with the route tool loaded for the current map. It's
 // null before it's loaded.
 export const routeTool: Writable<RouteTool | null> = writable(null);
+// This is used to plumb state from inside RouteTool in a way that Svelte
+// components can use reactively.
+export const routeToolSnapMode: Writable<boolean> = writable(true);
 
 // TODO Should we instead store a map from ID to feature?
 export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);

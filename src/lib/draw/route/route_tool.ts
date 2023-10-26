@@ -13,6 +13,7 @@ import {
 } from "lib/maplibre";
 import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
 import { JsRouteSnapper } from "route-snapper";
+import { type Writable } from "svelte/store";
 
 const source = "route-snapper";
 
@@ -30,8 +31,9 @@ export class RouteTool {
     f: FeatureWithProps<LineString | Polygon>
   ) => void)[];
   eventListenersFailure: (() => void)[];
+  snapMode: Writable<boolean>;
 
-  constructor(map: Map, graphBytes: Uint8Array) {
+  constructor(map: Map, graphBytes: Uint8Array, snapMode: Writable<boolean>) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(graphBytes);
@@ -40,6 +42,7 @@ export class RouteTool {
     this.eventListenersSuccess = [];
     this.eventListenersUpdated = [];
     this.eventListenersFailure = [];
+    this.snapMode = snapMode;
 
     // Rendering
     overwriteSource(map, source, emptyGeojson());
@@ -50,14 +53,15 @@ export class RouteTool {
       color: constructMatchExpression(
         ["get", "type"],
         {
-          hovered: "green",
-          important: "red",
+          "snapped-waypoint": "red",
+          "free-waypoint": "blue",
         },
         "black"
       ),
+      opacity: ["case", ["has", "hovered"], 0.5, 1.0],
       radius: constructMatchExpression(
         ["get", "type"],
-        { unimportant: circleRadiusPixels / 2.0 },
+        { node: circleRadiusPixels / 2.0 },
         circleRadiusPixels
       ),
     });
@@ -65,7 +69,7 @@ export class RouteTool {
       id: "route-lines",
       source,
       filter: isLine,
-      color: "black",
+      color: ["case", ["get", "snapped"], "red", "blue"],
       width: 2.5,
     });
     overwritePolygonLayer(map, {
@@ -81,9 +85,8 @@ export class RouteTool {
     this.map.on("dblclick", this.onDoubleClick);
     this.map.on("dragstart", this.onDragStart);
     this.map.on("mouseup", this.onMouseUp);
-    document.addEventListener("keypress", this.onKeypress);
     document.addEventListener("keydown", this.onKeyDown);
-    document.addEventListener("keyup", this.onKeyUp);
+    document.addEventListener("keypress", this.onKeyPress);
   }
 
   tearDown() {
@@ -98,9 +101,8 @@ export class RouteTool {
     this.map.off("dblclick", this.onDoubleClick);
     this.map.off("dragstart", this.onDragStart);
     this.map.off("mouseup", this.onMouseUp);
-    document.removeEventListener("keypress", this.onKeypress);
     document.removeEventListener("keydown", this.onKeyDown);
-    document.removeEventListener("keyup", this.onKeyUp);
+    document.removeEventListener("keypress", this.onKeyPress);
   }
 
   onMouseMove = (e: MapMouseEvent) => {
@@ -163,37 +165,26 @@ export class RouteTool {
     }
   };
 
-  onKeypress = (e: KeyboardEvent) => {
+  onKeyDown = (e: KeyboardEvent) => {
+    if (!this.active) {
+      return;
+    }
+    if (e.key == "Escape") {
+      e.stopPropagation();
+      this.cancel();
+    }
+  };
+
+  onKeyPress = (e: KeyboardEvent) => {
     if (!this.active) {
       return;
     }
     if (e.key == "Enter") {
       e.stopPropagation();
       this.finish();
-    }
-  };
-
-  onKeyDown = (e: KeyboardEvent) => {
-    if (!this.active) {
-      return;
-    }
-    if (e.key == "Shift") {
-      // Don't stop propagation, so RouteControls can see this
-      this.inner.setSnapMode(false);
-      this.redraw();
-    } else if (e.key == "Escape") {
+    } else if (e.key == "s") {
       e.stopPropagation();
-      this.cancel();
-    }
-  };
-
-  onKeyUp = (e: KeyboardEvent) => {
-    if (!this.active) {
-      return;
-    }
-    if (e.key == "Shift") {
-      // Don't stop propagation, so RouteControls can see this
-      this.inner.setSnapMode(true);
+      this.inner.toggleSnapMode();
       this.redraw();
     }
   };
@@ -343,9 +334,10 @@ export class RouteTool {
   }
 
   private redraw() {
-    (this.map.getSource(source) as GeoJSONSource).setData(
-      JSON.parse(this.inner.renderGeojson())
-    );
+    let gj = JSON.parse(this.inner.renderGeojson());
+    (this.map.getSource(source) as GeoJSONSource).setData(gj);
+    this.map.getCanvas().style.cursor = gj.cursor;
+    this.snapMode.set(gj.snap_mode);
   }
 
   private dataUpdated() {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ErrorMessage } from "lib/govuk";
   import init from "route-snapper";
-  import { map, routeTool } from "stores";
+  import { map, routeTool, routeToolSnapMode } from "stores";
   import { onMount } from "svelte";
   import { RouteTool } from "./route_tool";
 
@@ -18,7 +18,7 @@
     console.log(`Grabbing ${url}`);
     try {
       const graphBytes = await fetchWithProgress(url);
-      routeTool.set(new RouteTool($map, graphBytes));
+      routeTool.set(new RouteTool($map, graphBytes, routeToolSnapMode));
       progress = 100;
       routeToolReady = true;
     } catch (err) {
