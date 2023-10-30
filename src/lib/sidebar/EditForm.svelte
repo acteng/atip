@@ -2,6 +2,7 @@
   import ATF4Form from "lib/forms/ATF4Form.svelte";
   import FormV1 from "lib/forms/FormV1.svelte";
   import FormV2 from "lib/forms/FormV2.svelte";
+  import PipelineForm from "lib/forms/PipelineForm.svelte";
   import PlanningForm from "lib/forms/PlanningForm.svelte";
   import {
     ButtonGroup,
@@ -108,4 +109,6 @@
   <PlanningForm bind:props={feature.properties} />
 {:else if schema == "atf4"}
   <ATF4Form bind:props={feature.properties} />
+{:else if schema == "pipeline"}
+  <PipelineForm id={feature.id} bind:props={feature.properties} />
 {/if}

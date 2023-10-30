@@ -9,6 +9,8 @@ export function schemaTitle(schema: Schema): string {
     v2: "Experimental Scheme Design",
     planning: "Development Planning",
     atf4: "ATF4 Scheme",
+    // TODO What do we want to call this?
+    pipeline: "Pipeline Scheme",
   }[schema];
 }
 
@@ -19,6 +21,7 @@ export function schemaSingularNoun(schema: Schema): string {
     v2: "an intervention",
     planning: "a development",
     atf4: "an intervention",
+    pipeline: "an intervention",
   }[schema];
 }
 
@@ -29,6 +32,7 @@ export function schemaPluralNoun(schema: Schema): string {
     v2: "interventions",
     planning: "developments",
     atf4: "interventions",
+    pipeline: "interventions",
   }[schema];
 }
 
