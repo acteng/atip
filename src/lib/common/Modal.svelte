@@ -34,6 +34,7 @@
 <style>
   .background {
     position: fixed;
+    /* TODO The geocoder is still on top */
     z-index: 10;
     left: 0;
     top: 0;
@@ -54,6 +55,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    max-height: 80%;
     overflow: scroll;
   }
 
