@@ -7,6 +7,6 @@
 </script>
 
 <div class="govuk-form-group">
-  <label class="govuk-label" for={id}>{label}</label>
+  <label class="govuk-label govuk-label--m" for={id}>{label}</label>
   <slot />
 </div>
