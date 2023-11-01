@@ -91,7 +91,7 @@
     if (geojson["scheme_name"]) {
       filename += "_" + geojson["scheme_name"];
     }
-    filename += ".txt";
+    filename += ".geojson";
     downloadGeneratedFile(filename, JSON.stringify(geojson, null, "  "));
   }
 
