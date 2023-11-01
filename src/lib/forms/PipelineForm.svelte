@@ -15,8 +15,12 @@
   export let props: InterventionProps;
 
   props.pipeline ||= {
+    atf4_type: "",
+    accuracy: "",
     is_alternative: false,
   };
+  // Guaranteed to exist
+  let pipelineProps = props.pipeline;
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -48,7 +52,7 @@
 <ATF4Type
   label="Type"
   id={"atf4-type-" + id}
-  bind:value={props.pipeline.atf4_type}
+  bind:value={pipelineProps.atf4_type}
 />
 
 <Radio
@@ -60,9 +64,9 @@
     ["low", "Low"],
   ]}
   inlineSmall
-  bind:value={props.pipeline.accuracy}
+  bind:value={pipelineProps.accuracy}
 />
 
-<Checkbox id={"alternative-" + id} bind:checked={props.pipeline.is_alternative}>
+<Checkbox id={"alternative-" + id} bind:checked={pipelineProps.is_alternative}>
   Is this an alternative route and not the default option?
 </Checkbox>

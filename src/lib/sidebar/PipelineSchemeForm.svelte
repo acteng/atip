@@ -10,7 +10,17 @@
   import { gjScheme } from "stores";
   import ATF4Type from "../forms/ATF4Type.svelte";
 
-  $gjScheme.pipeline ||= {};
+  $gjScheme.pipeline ||= {
+    scheme_type: "",
+    status: "",
+    timescale: "",
+    atf4_lead_type: "",
+    scheme_description: "",
+    funding_source: "",
+    funded: false,
+  };
+  // Guaranteed to exist
+  let pipelineProps = $gjScheme.pipeline;
 
   let showModal = false;
 
@@ -34,13 +44,14 @@
       ["intersection", "Intersection/junction scheme"],
     ]}
     inlineSmall
-    bind:value={$gjScheme.pipeline.scheme_type}
+    required
+    bind:value={pipelineProps.scheme_type}
   />
 
   <ATF4Type
     label="Type of the main intervention"
     id="atf4-lead-type"
-    bind:value={$gjScheme.pipeline.atf4_lead_type}
+    bind:value={pipelineProps.atf4_lead_type}
   />
 
   <fieldset class="govuk-fieldset">
@@ -56,7 +67,8 @@
         ["completed", "Completed"],
       ]}
       inlineSmall
-      bind:value={$gjScheme.pipeline.status}
+      required
+      bind:value={pipelineProps.status}
     />
 
     <Radio
@@ -68,7 +80,8 @@
         ["long", "Long (6-10 years)"],
       ]}
       inlineSmall
-      bind:value={$gjScheme.pipeline.timescale}
+      required
+      bind:value={pipelineProps.timescale}
     />
     <div>
       <label>
@@ -77,7 +90,7 @@
           type="number"
           min="2023"
           max="2100"
-          bind:value={$gjScheme.pipeline.timescale_year}
+          bind:value={pipelineProps.timescale_year}
         />
       </label>
     </div>
@@ -85,7 +98,7 @@
 
   <TextArea
     label="Scheme description"
-    bind:value={$gjScheme.pipeline.scheme_description}
+    bind:value={pipelineProps.scheme_description}
   />
 
   <fieldset class="govuk-fieldset">
@@ -94,11 +107,7 @@
     <div>
       <label>
         GBP funded
-        <input
-          type="number"
-          min="0"
-          bind:value={$gjScheme.pipeline.budget_funded}
-        />
+        <input type="number" min="0" bind:value={pipelineProps.budget_funded} />
       </label>
     </div>
     <div>
@@ -107,7 +116,7 @@
         <input
           type="number"
           min="0"
-          bind:value={$gjScheme.pipeline.budget_unfunded}
+          bind:value={pipelineProps.budget_unfunded}
         />
       </label>
     </div>
@@ -124,10 +133,10 @@
         repeat("LUF"),
       ]}
       inlineSmall
-      bind:value={$gjScheme.pipeline.funding_source}
+      bind:value={pipelineProps.funding_source}
     />
 
-    <Checkbox id="scheme-funded" bind:checked={$gjScheme.pipeline.funded}>
+    <Checkbox id="scheme-funded" bind:checked={pipelineProps.funded}>
       Is the scheme fully funded?
     </Checkbox>
   </fieldset>
@@ -139,7 +148,7 @@
         type="number"
         min="2010"
         max="2100"
-        bind:value={$gjScheme.pipeline.source_data_year}
+        bind:value={pipelineProps.source_data_year}
       />
     </label>
   </div>

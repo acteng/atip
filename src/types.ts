@@ -17,46 +17,46 @@ export interface Scheme {
   pipeline?: PipelineScheme;
 }
 
+// Every field is optional in this type, to match the reality of starting with
+// a blank form. Mandatory fields are marked in the form UI. Optional string
+// types are encoded as "".
 export interface PipelineScheme {
-  // Mandatory fields first
-  // TODO Not sure about the last one
-  // TODO Allow unknown?
+  // TODO "intersection" is unclear
   scheme_type:
     | "cycling route"
     | "walking route"
     | "shared-use route"
     | "area-based scheme"
-    | "intersection";
+    | "intersection"
+    | "";
   // TODO Check with DB schema
-  status: "planned" | "in development" | "in construction" | "completed";
-  timescale: "short" | "medium" | "long";
+  status: "planned" | "in development" | "in construction" | "completed" | "";
+  timescale: "short" | "medium" | "long" | "";
 
-  // Optional fields
-  atf4_lead_type?: ATF4Type;
-  scheme_description?: string;
+  atf4_lead_type: ATF4Type | "";
+  scheme_description: string;
 
   // GBP
   budget_funded?: number;
   budget_unfunded?: number;
 
   timescale_year?: number;
-  funding_source?: "ATF2" | "ATF3" | "ATF4" | "ATF4e" | "CRSTS" | "LUF";
+  funding_source: "ATF2" | "ATF3" | "ATF4" | "ATF4e" | "CRSTS" | "LUF" | "";
   // TODO What about partially? How's this overlap with budget?
-  funded?: boolean;
+  funded: boolean;
 
   source_data_year?: number;
 }
 
-// TODO Abbreviate and use a mapping to describe fully?
 export type ATF4Type =
   | "New segregated cycling facility"
   | "New junction treatment"
   | "New permanent footway"
-  | "New shared use (walking and cycling) facilities"
-  | "Improvements to make an existing walking/cycle route safer"
-  | "Area-wide traffic management (including by TROs - both permanent and experimental)"
-  | "Bus priority measures that also enable active travel (for example, bus gates)"
-  | "Provision of secure cycle parking facilities"
+  | "New shared use facilities"
+  | "Improvements to existing route"
+  | "Area-wide traffic management"
+  | "Bus priority measures"
+  | "Secure cycle parking"
   | "New road crossings"
   | "Restriction or reduction of car parking availability"
   | "School streets";
@@ -102,8 +102,8 @@ export interface InterventionProps {
 }
 
 export interface PipelineIntervention {
-  atf4_type?: ATF4Type;
-  accuracy?: "high" | "medium" | "low";
+  atf4_type: ATF4Type | "";
+  accuracy: "high" | "medium" | "low" | "";
   is_alternative: boolean;
 
   // TODO new / existing / upgrade existing?

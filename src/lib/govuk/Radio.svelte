@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ErrorMessage from "./ErrorMessage.svelte";
+
   // A label for the entire group of radio buttons
   export let legend: string;
   // A unique (per page) ID of the radio group
@@ -7,14 +9,21 @@
   export let choices: [string, string][];
   // Lay out radio buttons horizontally and decrease font size
   export let inlineSmall = false;
+  // Show an error if no option is chosen
+  export let required = false;
 
   // The current value
   export let value: string;
+
+  $: errorMessage = required && value == "" ? "Required" : "";
 </script>
 
 <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend">{legend}</legend>
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      {legend}
+    </legend>
+    <ErrorMessage {errorMessage} />
     <div
       class="govuk-radios"
       class:govuk-radios--inline={inlineSmall}

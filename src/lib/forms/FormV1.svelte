@@ -38,6 +38,7 @@
     ["other", "Other"],
   ]}
   inlineSmall
+  required
   bind:value={props.intervention_type}
 />
 

@@ -4,7 +4,7 @@
 
   export let label: string;
   export let id: string;
-  export let value: ATF4Type;
+  export let value: ATF4Type | "";
 
   // Keep in sync with intervention_type_short in scheme_data
   // TODO That has more than the 11...
