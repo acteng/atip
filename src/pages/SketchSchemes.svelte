@@ -91,7 +91,7 @@
       <p>App version: {appVersion()}</p>
       <div style="display: flex; justify-content: space-between">
         <p>{authorityDescription()}</p>
-        <a href="index.html">Change area</a>
+        <a href={`index.html?schema=${schema}`}>Change area</a>
         <ZoomOutMap {boundaryGeojson} />
       </div>
 
