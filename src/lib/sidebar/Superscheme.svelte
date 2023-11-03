@@ -1,0 +1,162 @@
+<script lang="ts">
+  import { CollapsibleCard, FileInput, Modal } from "lib/common";
+  import {
+    ButtonGroup,
+    ErrorMessage,
+    SecondaryButton,
+    TextInput,
+    WarningButton,
+  } from "lib/govuk";
+  import { gjScheme, mode, sidebarHover } from "stores";
+  import { onMount } from "svelte";
+  import type { Scheme } from "types";
+  import { backfillSuperscheme } from "./scheme_data";
+
+  export let authorityName: string;
+  let errorMessage = "";
+
+  let baseFilename = authorityName;
+  let loaded = false;
+  let displayClearAllConfirmation = false;
+
+  onMount(async () => {
+    // Start by loading from a URL. If that's not specified, load from local storage.
+    let params = new URLSearchParams(window.location.search);
+    let loadUrl = params.get("geojsonUrl");
+    let loadLocal = window.localStorage.getItem(baseFilename);
+
+    if (loadUrl) {
+      console.log(`Loading GeoJSON from ${loadUrl}`);
+      try {
+        let resp = await fetch(loadUrl);
+        let body = await resp.text();
+        gjScheme.set(backfillSuperscheme(JSON.parse(body), authorityName));
+      } catch (err) {
+        console.log(`Failed to load from URL: ${err}`);
+      }
+    } else if (loadLocal) {
+      try {
+        gjScheme.set(backfillSuperscheme(JSON.parse(loadLocal), authorityName));
+      } catch (err) {
+        console.log(`Failed to load from local storage: ${err}`);
+      }
+    } else {
+      gjScheme.set(
+        backfillSuperscheme(
+          {
+            type: "FeatureCollection",
+            features: [],
+          },
+          authorityName
+        )
+      );
+    }
+    loaded = true;
+  });
+
+  // Set up local storage sync. Don't run before onMount above is done with the initial load.
+  $: {
+    if (loaded && $gjScheme) {
+      console.log(`GJ changed, saving to local storage`);
+      window.localStorage.setItem(
+        baseFilename,
+        JSON.stringify(geojsonToSave())
+      );
+    }
+  }
+
+  function clearAll() {
+    displayClearAllConfirmation = false;
+
+    gjScheme.update((gj: any) => {
+      delete gj.scheme_name;
+      gj.features = [];
+      gj.subschemes = [{ id: 0, name: "Untitled Subscheme" }];
+      return gj;
+    });
+    sidebarHover.set(null);
+  }
+
+  // Remove the hide_while_editing property hack
+  function geojsonToSave(): Scheme {
+    const copy = JSON.parse(JSON.stringify($gjScheme));
+    for (let feature of copy.features) {
+      delete feature.properties.hide_while_editing;
+    }
+    return copy;
+  }
+
+  function exportToGeojson() {
+    let geojson = geojsonToSave();
+    var filename = baseFilename;
+    geojson.authority = authorityName;
+    // we could probably be more sophisticated here and set version more centrally
+    geojson.origin = "atip-v2";
+    // Include the scheme name if it's set
+    if (geojson["scheme_name"]) {
+      filename += "_" + geojson["scheme_name"];
+    }
+    filename += ".txt";
+    downloadGeneratedFile(filename, JSON.stringify(geojson, null, "  "));
+  }
+
+  function downloadGeneratedFile(filename: string, textInput: string) {
+    var element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput)
+    );
+    element.setAttribute("download", filename);
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  function loadFile(text: string) {
+    try {
+      // TODO Should we prompt before deleting the current scheme?
+      gjScheme.set(backfillSuperscheme(JSON.parse(text)));
+      errorMessage = "";
+    } catch (err) {
+      errorMessage = `Couldn't load scheme from a file: ${err}`;
+    }
+  }
+</script>
+
+{#if $mode.mode == "list"}
+  <CollapsibleCard
+    label={`Superscheme: ${$gjScheme.scheme_name ?? "Unnamed Scheme"}`}
+  >
+    <TextInput label="Superscheme name" bind:value={$gjScheme.scheme_name} />
+
+    <ErrorMessage {errorMessage} />
+
+    <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
+
+    <SecondaryButton on:click={exportToGeojson}>
+      Export to GeoJSON
+    </SecondaryButton>
+
+    <div>
+      <WarningButton
+        on:click={() => (displayClearAllConfirmation = true)}
+        disabled={$gjScheme.features.length == 0}
+      >
+        Start new scheme
+      </WarningButton>
+    </div>
+    <Modal
+      title="Would you like to clear your work?"
+      bind:open={displayClearAllConfirmation}
+      displayEscapeButton={false}
+    >
+      <p>This will delete all your drawn interventions.</p>
+      <ButtonGroup>
+        <WarningButton on:click={clearAll}>Clear all work</WarningButton>
+        <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
+          Cancel
+        </SecondaryButton>
+      </ButtonGroup>
+    </Modal>
+  </CollapsibleCard>
+{/if}

@@ -12,6 +12,7 @@ export interface Scheme {
   features: FeatureUnion[];
   // Foreign members
   scheme_name?: string;
+  subschemes?: Subscheme[];
   authority?: string;
   origin?: string;
   pipeline?: PipelineScheme;
@@ -114,6 +115,13 @@ export interface Waypoint {
   lon: number;
   lat: number;
   snapped: boolean;
+}
+
+export interface PipelineIntervention {
+  name?: string;
+  schemeId: number;
+  description: string;
+  type: string;
 }
 
 // Remember settings from different tools
