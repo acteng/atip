@@ -23,6 +23,7 @@ export interface Scheme {
 // types are encoded as "".
 export interface PipelineScheme {
   id: number;
+  name: string;
   // TODO "intersection" is unclear
   scheme_type:
     | "cycling route"

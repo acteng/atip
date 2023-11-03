@@ -19,18 +19,15 @@
   export let getSubschemeNameUpdater: Function;
 
   let displayDeleteConfirmation = false;
-  let features: FeatureUnion[] = [];
+  let features: FeatureUnion[] = superscheme.features.filter((feature) => {
+      return feature.properties.pipeline?.schemeId === subscheme.id;
+    });
 
   // @ts-ignore we know subschemes exists because otherwise this wouldn't be rendered
   $: disabledSubschemeDeletion = $gjScheme.subschemes?.length < 2;
 
   let numErrors = 0;
-
-  onMount(async () => {
-    features = superscheme.features.filter((feature) => {
-      return feature.properties.pipelineIntervention?.schemeId === subscheme.id;
-    });
-  });
+    
 
   function deleteSubscheme() {
     displayDeleteConfirmation = false;
@@ -38,7 +35,7 @@
     clonedScheme.features = clonedScheme.features.filter(
       (feature: FeatureUnion) => {
         return (
-          feature.properties.pipelineIntervention?.schemeId !== subscheme.id
+          feature.properties.pipeline?.schemeId !== subscheme.id
         );
       }
     );
