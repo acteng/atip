@@ -59,6 +59,13 @@ export function backfillSuperscheme(
         {
           id: 0,
           name: "Untitled Subscheme",
+          scheme_type: "",
+          status: "",
+          timescale: "",
+          atf4_lead_type: "",
+          scheme_description: "",
+          funding_source: "",
+          funded: false,
         },
       ];
 

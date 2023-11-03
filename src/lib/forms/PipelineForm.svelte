@@ -23,6 +23,9 @@
   const schemeChoices: [string, string][] = mappedChoices ? mappedChoices : [];
 
   props.pipeline ||= {
+    schemeId: 0,
+    description: "",
+    type: "",
     atf4_type: "",
     accuracy: "",
     is_alternative: false,
@@ -61,6 +64,7 @@
 </FormElement>
 
 <Select
+  id="scheme-selector"
   label="Scheme"
   choices={schemeChoices}
   bind:value={selectedSchemeIdString}

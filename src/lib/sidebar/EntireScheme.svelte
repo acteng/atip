@@ -10,7 +10,6 @@
   import { gjScheme, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
   import type { Schema, Scheme } from "types";
-  import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
   import { backfill, interventionWarning } from "./scheme_data";
 
   export let authorityName: string;
@@ -156,9 +155,6 @@
         </SecondaryButton>
       </ButtonGroup>
     </Modal>
-    {#if schema == "pipeline"}
-      <PipelineSchemeForm />
-    {/if}
   </CollapsibleCard>
 
   {#if numErrors == 1}

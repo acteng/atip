@@ -8,7 +8,6 @@
     WarningButton,
   } from "lib/govuk";
   import { gjScheme, mode } from "stores";
-  import { onMount } from "svelte";
   import type { FeatureUnion, Scheme, PipelineScheme } from "types";
   import ListedIntervention from "./ListedIntervention.svelte";
   import { interventionWarning } from "./scheme_data";
@@ -40,7 +39,7 @@
       }
     );
     clonedScheme.subschemes = clonedScheme.subschemes?.filter(
-      (thatSubscheme: Subscheme) => {
+      (thatSubscheme: PipelineScheme) => {
         return thatSubscheme.id !== subscheme.id;
       }
     );

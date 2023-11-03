@@ -7,7 +7,6 @@
     SecondaryButton,
     TextArea,
   } from "lib/govuk";
-  import { gjScheme } from "stores";
   import type { PipelineScheme } from "types";
   import ATF4Type from "../forms/ATF4Type.svelte";
 
