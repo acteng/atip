@@ -93,7 +93,7 @@ test("split route within subscheme", async () => {
   await clickMap(page, 522, 468);
   await clickMap(page, 192, 513);
   await page.getByRole("button", { name: "Finish" }).click();
-  await page.getByLabel("Subscheme Name").selectOption("Unnamed Scheme 1");
+  await page.getByLabel("Scheme name:").selectOption("Unnamed Scheme 1");
   await page.getByRole("button", { name: "Save" }).click();
 
   await page.getByText("Unnamed Scheme 1").click();

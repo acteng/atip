@@ -29,7 +29,7 @@ export async function drawPoint(page: Page, subschemeName?: string) {
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
   if (subschemeName) {
-    await page.getByLabel("Subscheme Name").selectOption(subschemeName);
+    await page.getByLabel("Scheme name:").selectOption(subschemeName);
   }
   await page.getByRole("button", { name: "Save" }).click();
 }

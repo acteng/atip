@@ -65,7 +65,7 @@
 
 <Select
   id="scheme-selector"
-  label="Scheme"
+  label="Scheme name:"
   choices={schemeChoices}
   bind:value={selectedSchemeIdString}
   on:change={schemeSelectionChanged}
