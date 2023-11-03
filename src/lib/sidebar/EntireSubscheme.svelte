@@ -9,11 +9,12 @@
   } from "lib/govuk";
   import { gjScheme, mode } from "stores";
   import { onMount } from "svelte";
-  import type { FeatureUnion, Scheme, Subscheme } from "types";
+  import type { FeatureUnion, Scheme, PipelineScheme } from "types";
   import ListedIntervention from "./ListedIntervention.svelte";
   import { interventionWarning } from "./scheme_data";
+    import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
 
-  export let subscheme: Subscheme;
+  export let subscheme: PipelineScheme;
   export let superscheme: Scheme;
   export let getSubschemeNameUpdater: Function;
 
@@ -57,6 +58,7 @@
       value={subscheme.name}
       on:change={getSubschemeNameUpdater(subscheme.name)}
     />
+    <PipelineSchemeForm {subscheme}/>
     <WarningButton
       disabled={disabledSubschemeDeletion}
       on:click={() => (displayDeleteConfirmation = true)}
