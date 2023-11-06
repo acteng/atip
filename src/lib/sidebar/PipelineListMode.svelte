@@ -51,7 +51,7 @@
 
 {#if $gjScheme.subschemes}
   <h2>Subschemes</h2>
-  <DefaultButton on:click={addSubscheme}>Add Subscheme</DefaultButton>
+  <DefaultButton on:click={addSubscheme}>Add Scheme</DefaultButton>
   {#each $gjScheme.subschemes as subscheme}
     <PipelineSchemeDetails {subscheme} {getSubschemeNameUpdater} />
     <ul style="margin-left: l5px">

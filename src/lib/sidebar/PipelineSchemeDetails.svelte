@@ -21,7 +21,7 @@
 
   let numErrors = 0;
 
-  function deleteSubscheme() {
+  function deleteScheme() {
     displayDeleteConfirmation = false;
     const clonedScheme = JSON.parse(JSON.stringify($gjScheme));
     clonedScheme.features = clonedScheme.features.filter(
@@ -50,10 +50,10 @@
       disabled={disabledSubschemeDeletion}
       on:click={() => (displayDeleteConfirmation = true)}
     >
-      Delete subscheme
+      Delete scheme
     </WarningButton>
     <Modal
-      title="Would you like to delete this subscheme?"
+      title="Would you like to delete this scheme?"
       bind:open={displayDeleteConfirmation}
       displayEscapeButton={false}
     >
@@ -61,10 +61,10 @@
       <ButtonGroup>
         <WarningButton
           on:click={() => {
-            deleteSubscheme();
+            deleteScheme();
           }}
         >
-          Delete this subscheme and related interventions
+          Delete this scheme and related interventions
         </WarningButton>
         <SecondaryButton on:click={() => (displayDeleteConfirmation = false)}>
           Cancel

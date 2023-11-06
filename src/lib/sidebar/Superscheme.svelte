@@ -71,7 +71,7 @@
     gjScheme.update((gj: any) => {
       delete gj.scheme_name;
       gj.features = [];
-      gj.subschemes = [{ id: 0, name: "Untitled Subscheme" }];
+      gj.subschemes = [{ id: 0, name: "Unnamed Scheme" }];
       return gj;
     });
     sidebarHover.set(null);
