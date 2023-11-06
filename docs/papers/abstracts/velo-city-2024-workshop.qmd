@@ -1,0 +1,33 @@
+---
+title: "ATIP: A new open source tool for active travel planning"
+format: gfm
+---
+
+# Abstract (max 300 words)
+
+High quality evidence is key to successful active travel planning.
+Better datasets are needed on every aspect of active travel, including on existing infrastructure, behaviour change and benefits.
+Lack of data on planned infrastructure is a particularly acute problem in many places, preventing understanding of the level of ambition and coherence of the planned pipeline of schemes at local, regional and national levels.
+Even when datasets on plans are available, they tend to be too basic to be useful for meaningful analysis, providing aggregate information on scheme budgets and scheme types, for example.
+Even when detailed plans are available, they tend to be in PDF format, making them difficult to analyse at scale and impossible to ‘put on the map’ and compare with other schemes.
+To tackle these problems, Active Travel England in collaboration with the Alan Turing Institute, is developing the Active Travel Infrastructure Platform (ATIP).
+The session will focus on ATIP’s scheme sketching functionality, which has enabled collection of data on 1000+ schemes nationwide.
+ATIP reduces the burden on local authorities submitting bids, by enabling collaboration: people who know the schemes best can input the data.
+The resulting files are encoded in the open GeoJSON format to reduce friction throughout the process and enable systematic analysis of data provided in a consistent and customisable schema. 
+
+The session will showcase the tool and allow participants to test the tool.
+For the benefit of other organisations looking to collect data on planned infrastructure in new places we will outline how to build on the source code, hosted at https://github.com/acteng/atip.
+The tool provides a powerful foundation for large scale and decentralised surveys of existing and planned interventions and we hope that at least some participants will deploy the underlying open technology to connect regions, cities and communities worldwide.​​​​​​​​​​​​​​​​​​​​​​​​​
+
+# Please select one of the four subthemes that will be mainly addressed in your abstract 
+
+*Connecting people and communities What session format would you prefer*
+
+Workshop
+
+# Please specify how you plan to organise and animate the session 
+
+We will organise the session with a very short presentation of the tool, followed by a hands-on session led by staff from Active Travel England where participants can test the tool and ask questions.
+The practical session will involve participants getting their hands dirty by testing out the tool either on their own or in groups, to sketch new infrastructure based on a real world case study city.
+We will also ask questions of the audience to understand how they might use the tool in their own work and to guide future development of this open tool for use internationally.
+
