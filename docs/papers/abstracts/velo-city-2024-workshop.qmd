@@ -1,6 +1,5 @@
 ---
 title: "ATIP: A new open source tool for active travel planning"
-# format: docx
 format: gfm
 ---
 
