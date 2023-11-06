@@ -3,8 +3,24 @@ import { expect, type Browser, type Page } from "@playwright/test";
 export async function loadInitialPageFromBrowser(
   browser: Browser
 ): Promise<Page> {
+  return loadPageFromBrowser(browser, "/scheme.html?authority=LAD_Adur");
+}
+
+export async function loadPipelineSketchPageFromBrowser(
+  browser: Browser
+): Promise<Page> {
+  return loadPageFromBrowser(
+    browser,
+    "/scheme.html?authority=LAD_Adur&schema=pipeline"
+  );
+}
+
+export async function loadPageFromBrowser(
+  browser: Browser,
+  url: string
+): Promise<Page> {
   let page = await browser.newPage();
-  await page.goto("/scheme.html?authority=LAD_Adur");
+  await page.goto(url);
   await checkPageLoaded(page);
   return page;
 }

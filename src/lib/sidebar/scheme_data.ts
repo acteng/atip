@@ -25,6 +25,53 @@ export function backfill(json: Scheme) {
   return json;
 }
 
+export function backfillSuperscheme(
+  json: Scheme,
+  authorityName?: string
+): Scheme {
+  let idCounter = 1;
+  for (let f of json.features) {
+    // Fix input from other tools where properties may be null
+    f.properties ||= {
+      name: "",
+      description: "",
+      intervention_type: "other",
+    };
+
+    // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
+    if (f.geometry.type == "LineString" && !f.properties.length_meters) {
+      f.properties.length_meters = length(f, { units: "kilometers" }) * 1000.0;
+    }
+
+    // Always overwrite IDs, and follow what newFeatureId requires.
+    f.id = idCounter++;
+  }
+
+  if (!json.scheme_name) {
+    json.scheme_name = authorityName
+      ? `${authorityName} LCWIP`
+      : "Untitled Supserscheme";
+  }
+
+  json.subschemes = json.subschemes
+    ? json.subschemes
+    : [
+        {
+          id: 0,
+          name: "Untitled Subscheme",
+          scheme_type: "",
+          status: "",
+          timescale: "",
+          atf4_lead_type: "",
+          scheme_description: "",
+          funding_source: "",
+          funded: false,
+        },
+      ];
+
+  return json;
+}
+
 export function interventionName(
   schema: Schema,
   feature: FeatureUnion

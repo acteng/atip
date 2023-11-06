@@ -7,20 +7,10 @@
     SecondaryButton,
     TextArea,
   } from "lib/govuk";
-  import { gjScheme } from "stores";
+  import type { PipelineScheme } from "types";
   import ATF4Type from "../forms/ATF4Type.svelte";
 
-  $gjScheme.pipeline ||= {
-    scheme_type: "",
-    status: "",
-    timescale: "",
-    atf4_lead_type: "",
-    scheme_description: "",
-    funding_source: "",
-    funded: false,
-  };
-  // Guaranteed to exist
-  let pipelineProps = $gjScheme.pipeline;
+  export let subscheme: PipelineScheme;
 
   let showModal = false;
 
@@ -45,13 +35,13 @@
     ]}
     inlineSmall
     required
-    bind:value={pipelineProps.scheme_type}
+    bind:value={subscheme.scheme_type}
   />
 
   <ATF4Type
     label="Type of the main intervention"
     id="atf4-lead-type"
-    bind:value={pipelineProps.atf4_lead_type}
+    bind:value={subscheme.atf4_lead_type}
   />
 
   <fieldset class="govuk-fieldset">
@@ -68,7 +58,7 @@
       ]}
       inlineSmall
       required
-      bind:value={pipelineProps.status}
+      bind:value={subscheme.status}
     />
 
     <Radio
@@ -81,7 +71,7 @@
       ]}
       inlineSmall
       required
-      bind:value={pipelineProps.timescale}
+      bind:value={subscheme.timescale}
     />
     <div>
       <label>
@@ -90,7 +80,7 @@
           type="number"
           min="2023"
           max="2100"
-          bind:value={pipelineProps.timescale_year}
+          bind:value={subscheme.timescale_year}
         />
       </label>
     </div>
@@ -98,7 +88,7 @@
 
   <TextArea
     label="Scheme description"
-    bind:value={pipelineProps.scheme_description}
+    bind:value={subscheme.scheme_description}
   />
 
   <fieldset class="govuk-fieldset">
@@ -107,17 +97,13 @@
     <div>
       <label>
         GBP funded
-        <input type="number" min="0" bind:value={pipelineProps.budget_funded} />
+        <input type="number" min="0" bind:value={subscheme.budget_funded} />
       </label>
     </div>
     <div>
       <label>
         GBP unfunded
-        <input
-          type="number"
-          min="0"
-          bind:value={pipelineProps.budget_unfunded}
-        />
+        <input type="number" min="0" bind:value={subscheme.budget_unfunded} />
       </label>
     </div>
 
@@ -133,10 +119,10 @@
         repeat("LUF"),
       ]}
       inlineSmall
-      bind:value={pipelineProps.funding_source}
+      bind:value={subscheme.funding_source}
     />
 
-    <Checkbox id="scheme-funded" bind:checked={pipelineProps.funded}>
+    <Checkbox id="scheme-funded" bind:checked={subscheme.funded}>
       Is the scheme fully funded?
     </Checkbox>
   </fieldset>
@@ -148,7 +134,7 @@
         type="number"
         min="2010"
         max="2100"
-        bind:value={pipelineProps.source_data_year}
+        bind:value={subscheme.source_data_year}
       />
     </label>
   </div>

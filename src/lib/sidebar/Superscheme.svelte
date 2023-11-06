@@ -9,18 +9,13 @@
   } from "lib/govuk";
   import { gjScheme, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
-  import type { Schema, Scheme } from "types";
-  import { backfill, interventionWarning } from "./scheme_data";
+  import type { Scheme } from "types";
+  import { backfillSuperscheme } from "./scheme_data";
 
   export let authorityName: string;
-  export let schema: Schema;
   let errorMessage = "";
 
   let baseFilename = authorityName;
-  if (schema != "v1") {
-    baseFilename += `_${schema}`;
-  }
-
   let loaded = false;
   let displayClearAllConfirmation = false;
 
@@ -35,16 +30,26 @@
       try {
         let resp = await fetch(loadUrl);
         let body = await resp.text();
-        gjScheme.set(backfill(JSON.parse(body)));
+        gjScheme.set(backfillSuperscheme(JSON.parse(body), authorityName));
       } catch (err) {
         console.log(`Failed to load from URL: ${err}`);
       }
     } else if (loadLocal) {
       try {
-        gjScheme.set(backfill(JSON.parse(loadLocal)));
+        gjScheme.set(backfillSuperscheme(JSON.parse(loadLocal), authorityName));
       } catch (err) {
         console.log(`Failed to load from local storage: ${err}`);
       }
+    } else {
+      gjScheme.set(
+        backfillSuperscheme(
+          {
+            type: "FeatureCollection",
+            features: [],
+          },
+          authorityName
+        )
+      );
     }
     loaded = true;
   });
@@ -63,10 +68,10 @@
   function clearAll() {
     displayClearAllConfirmation = false;
 
-    gjScheme.update((gj) => {
-      // Leave origin, authority, and other foreign members alone
+    gjScheme.update((gj: any) => {
       delete gj.scheme_name;
       gj.features = [];
+      gj.subschemes = [{ id: 0, name: "Untitled Subscheme" }];
       return gj;
     });
     sidebarHover.set(null);
@@ -91,7 +96,7 @@
     if (geojson["scheme_name"]) {
       filename += "_" + geojson["scheme_name"];
     }
-    filename += ".geojson";
+    filename += ".txt";
     downloadGeneratedFile(filename, JSON.stringify(geojson, null, "  "));
   }
 
@@ -110,21 +115,19 @@
   function loadFile(text: string) {
     try {
       // TODO Should we prompt before deleting the current scheme?
-      gjScheme.set(backfill(JSON.parse(text)));
+      gjScheme.set(backfillSuperscheme(JSON.parse(text)));
       errorMessage = "";
     } catch (err) {
       errorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
-
-  $: numErrors = $gjScheme.features.filter(
-    (f) => interventionWarning(schema, f) != null
-  ).length;
 </script>
 
 {#if $mode.mode == "list"}
-  <CollapsibleCard label={$gjScheme.scheme_name ?? "Untitled scheme"}>
-    <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
+  <CollapsibleCard
+    label={`Superscheme: ${$gjScheme.scheme_name ?? "Unnamed Scheme"}`}
+  >
+    <TextInput label="Superscheme name" bind:value={$gjScheme.scheme_name} />
 
     <ErrorMessage {errorMessage} />
 
@@ -156,14 +159,4 @@
       </ButtonGroup>
     </Modal>
   </CollapsibleCard>
-
-  {#if numErrors == 1}
-    <ErrorMessage
-      errorMessage="There's a problem with one intervention below"
-    />
-  {:else if numErrors > 0}
-    <ErrorMessage
-      errorMessage="There's a problem with {numErrors} interventions below"
-    />
-  {/if}
 {/if}

@@ -12,6 +12,7 @@ export interface Scheme {
   features: FeatureUnion[];
   // Foreign members
   scheme_name?: string;
+  subschemes?: PipelineScheme[];
   authority?: string;
   origin?: string;
   pipeline?: PipelineScheme;
@@ -21,6 +22,8 @@ export interface Scheme {
 // a blank form. Mandatory fields are marked in the form UI. Optional string
 // types are encoded as "".
 export interface PipelineScheme {
+  id: number;
+  name: string;
   // TODO "intersection" is unclear
   scheme_type:
     | "cycling route"
@@ -114,6 +117,13 @@ export interface Waypoint {
   lon: number;
   lat: number;
   snapped: boolean;
+}
+
+export interface PipelineIntervention {
+  name?: string;
+  schemeId: number;
+  description: string;
+  type: string;
 }
 
 // Remember settings from different tools
