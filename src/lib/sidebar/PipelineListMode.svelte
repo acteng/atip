@@ -2,7 +2,9 @@
   import { DefaultButton } from "lib/govuk";
   import { gjScheme } from "stores";
   import type { Scheme } from "types";
-  import EntireSubscheme from "./EntireSubscheme.svelte";
+  import ListedIntervention from "./ListedIntervention.svelte";
+  import PipelineSchemeDetails from "./PipelineSchemeDetails.svelte";
+  import { interventionWarning } from "./scheme_data";
 
   function addSubscheme() {
     gjScheme.update((gj: any) => {
@@ -49,12 +51,14 @@
 
 {#if $gjScheme.subschemes}
   <h2>Subschemes</h2>
-  <DefaultButton on:click={addSubscheme}>Add Subscheme</DefaultButton>
+  <DefaultButton on:click={addSubscheme}>Add Scheme</DefaultButton>
   {#each $gjScheme.subschemes as subscheme}
-    <EntireSubscheme
-      {subscheme}
-      {getSubschemeNameUpdater}
-      superscheme={$gjScheme}
-    />
+    <PipelineSchemeDetails {subscheme} {getSubschemeNameUpdater} />
+    <ul style="margin-left: l5px">
+      {#each $gjScheme.features.filter((feature) => feature.properties.pipeline?.schemeId === subscheme.id) as feature}
+        {@const warning = interventionWarning("pipeline", feature)}
+        <ListedIntervention {feature} schema="pipeline" {warning} />
+      {/each}
+    </ul>
   {/each}
 {/if}

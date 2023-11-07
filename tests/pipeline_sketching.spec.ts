@@ -26,68 +26,68 @@ test("creating a new freehand polygon and canceling doesn't save anything", asyn
   await clickMap(page, 400, 600);
 
   await page.getByRole("button", { name: "Cancel" }).click();
-  await page.getByText("Untitled Subscheme").click();
+  await page.getByText("Unnamed Scheme").click();
 
   await expect(
-    page.getByRole("button", { name: "Delete subscheme" })
+    page.getByRole("button", { name: "Delete scheme" })
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Untitled area" })
   ).not.toBeVisible();
-  await page.getByText("Untitled Subscheme").click();
+  await page.getByText("Unnamed Scheme").click();
 });
 
-test("deleting the last subscheme", async () => {
-  await page.getByText("Untitled Subscheme").click();
+test("deleting the last scheme", async () => {
+  await page.getByText("Unnamed Scheme").click();
 
   await expect(
-    page.getByRole("button", { name: "Delete subscheme" })
+    page.getByRole("button", { name: "Delete scheme" })
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Delete subscheme" })
+    page.getByRole("button", { name: "Delete scheme" })
   ).not.toBeEnabled();
-  await page.getByText("Untitled Subscheme").click();
+  await page.getByText("Unnamed Scheme").click();
 });
 
-test("deleting an empty subscheme", async () => {
-  await page.getByRole("button", { name: "Add Subscheme" }).click();
+test("deleting an empty scheme", async () => {
+  await page.getByRole("button", { name: "Add scheme" }).click();
   await page.getByText("Unnamed Scheme 1").click();
   await expect(
-    page.getByRole("button", { name: "Delete subscheme" })
+    page.getByRole("button", { name: "Delete scheme" })
   ).toBeVisible();
-  await page.getByRole("button", { name: "Delete subscheme" }).click();
+  await page.getByRole("button", { name: "Delete scheme" }).click();
   await page
     .getByRole("button", {
-      name: "Delete this subscheme and related interventions",
+      name: "Delete this scheme and related interventions",
     })
     .click();
 
   await expect(page.getByText("Unnamed Scheme 1")).not.toBeVisible();
 });
 
-test("deleting a non-empty subscheme", async () => {
-  await page.getByRole("button", { name: "Add Subscheme" }).click();
+test("deleting a non-empty scheme", async () => {
+  await page.getByRole("button", { name: "Add scheme" }).click();
 
   await drawPoint(page);
   await drawPoint(page, "Unnamed Scheme 1");
 
-  await page.getByText("Untitled Subscheme").click();
+  await page.getByText("Unnamed Scheme 1").click();
 
   await expect(
-    page.getByRole("button", { name: "Delete subscheme" })
+    page.getByRole("button", { name: "Delete scheme" })
   ).toBeVisible();
-  await page.getByRole("button", { name: "Delete subscheme" }).click();
+  await page.getByRole("button", { name: "Delete scheme" }).click();
   await page
     .getByRole("button", {
-      name: "Delete this subscheme and related interventions",
+      name: "Delete this scheme and related interventions",
     })
     .click();
 
-  await expect(page.getByText("Untitled Subscheme")).not.toBeVisible();
+  await expect(page.getByText("Unnamed Scheme 1")).not.toBeVisible();
 });
 
-test("split route within subscheme", async () => {
-  await page.getByRole("button", { name: "Add Subscheme" }).click();
+test("split route within scheme", async () => {
+  await page.getByRole("button", { name: "Add scheme" }).click();
 
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 522, 468);
@@ -117,13 +117,12 @@ test("split route within subscheme", async () => {
   await page.getByText("Unnamed Scheme 1").click();
 });
 
-test("renaming a subscheme which contains features", async () => {
-  await page.getByRole("button", { name: "Add Subscheme" }).click();
+test("renaming a scheme which contains features", async () => {
+  await page.getByRole("button", { name: "Add scheme" }).click();
 
   const defaultName = "Unnamed Scheme 1";
   const newName = "Renamed Scheme 1";
 
-  await drawPoint(page);
   await drawPoint(page, defaultName);
 
   await page.getByText(defaultName).click();
@@ -131,8 +130,6 @@ test("renaming a subscheme which contains features", async () => {
   await page.getByRole("textbox").first().fill(newName);
   await page.keyboard.down("Tab");
 
-  await page.getByText(newName).click();
-  await page.getByText(newName).click();
   await expect(
     page.getByRole("link", {
       name: "Untitled point",
