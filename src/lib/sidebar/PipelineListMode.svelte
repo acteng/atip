@@ -57,7 +57,7 @@
     <ul style="margin-left: l5px">
       {#each $gjScheme.features.filter((feature) => feature.properties.pipeline?.schemeId === subscheme.id) as feature}
         {@const warning = interventionWarning("pipeline", feature)}
-        <ListedIntervention {feature} schema={"pipeline"} {warning} />
+        <ListedIntervention {feature} schema="pipeline" {warning} />
       {/each}
     </ul>
   {/each}
