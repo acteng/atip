@@ -50,7 +50,7 @@ export function backfillSuperscheme(
   if (!json.scheme_name) {
     json.scheme_name = authorityName
       ? `${authorityName} LCWIP`
-      : "Unnamed Superscheme";
+      : "Untitled Supserscheme";
   }
 
   json.subschemes = json.subschemes
@@ -58,7 +58,7 @@ export function backfillSuperscheme(
     : [
         {
           id: 0,
-          name: "Unnamed Scheme",
+          name: "Untitled Subscheme",
           scheme_type: "",
           status: "",
           timescale: "",
