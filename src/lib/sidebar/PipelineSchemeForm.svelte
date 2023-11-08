@@ -8,6 +8,7 @@
     Radio,
     SecondaryButton,
     TextArea,
+    TextInput,
   } from "lib/govuk";
   import { gjScheme } from "stores";
   import ATF4Type from "../forms/ATF4Type.svelte";
@@ -34,6 +35,7 @@
 
   // Check for all required values
   $: errorMessage =
+    $gjScheme.scheme_name &&
     $gjScheme.pipeline?.scheme_type &&
     $gjScheme.pipeline?.status &&
     $gjScheme.pipeline?.timescale
@@ -47,26 +49,41 @@
 </SecondaryButton>
 <Modal title="Scheme details" bind:open={showModal}>
   {#if $gjScheme.pipeline}
-    <Radio
-      legend="Scheme type"
-      id="scheme-type"
-      choices={[
-        ["cycling route", "Cycling route"],
-        ["walking route", "Walking route"],
-        ["shared-use route", "Shared-use route"],
-        ["area-based scheme", "Area-based scheme"],
-        ["intersection", "Intersection/junction scheme"],
-      ]}
-      inlineSmall
+    <TextInput
+      label="Scheme name"
       required
-      bind:value={$gjScheme.pipeline.scheme_type}
+      bind:value={$gjScheme.scheme_name}
     />
 
-    <ATF4Type
-      label="Type of the main intervention"
-      id="atf4-lead-type"
-      bind:value={$gjScheme.pipeline.atf4_lead_type}
-    />
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend">Basic information</legend>
+
+      <Radio
+        legend="Scheme type"
+        id="scheme-type"
+        choices={[
+          ["cycling route", "Cycling route"],
+          ["walking route", "Walking route"],
+          ["shared-use route", "Shared-use route"],
+          ["area-based scheme", "Area-based scheme"],
+          ["intersection", "Intersection/junction scheme"],
+        ]}
+        inlineSmall
+        required
+        bind:value={$gjScheme.pipeline.scheme_type}
+      />
+
+      <ATF4Type
+        label="Type of the main intervention"
+        id="atf4-lead-type"
+        bind:value={$gjScheme.pipeline.atf4_lead_type}
+      />
+
+      <TextArea
+        label="Scheme description (150 words max)"
+        bind:value={$gjScheme.pipeline.scheme_description}
+      />
+    </fieldset>
 
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend">Timing and status</legend>
@@ -104,12 +121,23 @@
         max={2100}
         bind:value={$gjScheme.pipeline.timescale_year}
       />
-    </fieldset>
 
-    <TextArea
-      label="Scheme description (150 words max)"
-      bind:value={$gjScheme.pipeline.scheme_description}
-    />
+      <NumberInput
+        label="What year was this scheme most recently published?"
+        width={4}
+        min={2010}
+        max={2100}
+        bind:value={$gjScheme.pipeline.year_published}
+      />
+
+      <NumberInput
+        label="What year was this scheme most recently consulted on?"
+        width={4}
+        min={2010}
+        max={2100}
+        bind:value={$gjScheme.pipeline.year_consulted}
+      />
+    </fieldset>
 
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend">Budget</legend>
@@ -146,14 +174,6 @@
         Is the scheme fully funded?
       </Checkbox>
     </fieldset>
-
-    <NumberInput
-      label="How current is this scheme? Please enter the year of the plan."
-      width={4}
-      min={2010}
-      max={2100}
-      bind:value={$gjScheme.pipeline.source_data_year}
-    />
 
     <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>
   {/if}
