@@ -3,6 +3,7 @@
   import {
     Checkbox,
     DefaultButton,
+    ErrorMessage,
     Radio,
     SecondaryButton,
     TextArea,
@@ -29,8 +30,17 @@
   function repeat(x: string): [string, string] {
     return [x, x];
   }
+
+  // Check for all required values
+  $: errorMessage =
+    $gjScheme.pipeline?.scheme_type &&
+    $gjScheme.pipeline?.status &&
+    $gjScheme.pipeline?.timescale
+      ? ""
+      : "Missing some required data";
 </script>
 
+<ErrorMessage {errorMessage} />
 <SecondaryButton on:click={() => (showModal = true)}>
   Scheme details
 </SecondaryButton>
@@ -100,7 +110,7 @@
     </fieldset>
 
     <TextArea
-      label="Scheme description"
+      label="Scheme description (150 words max)"
       bind:value={$gjScheme.pipeline.scheme_description}
     />
 
