@@ -6,6 +6,7 @@
   import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
     appVersion,
+    defaultSchema,
     Geocoder,
     getAuthoritiesGeoJson,
     LoggedIn,
@@ -31,7 +32,7 @@
   const params = new URLSearchParams(window.location.search);
   // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
-  let schema: Schema = (params.get("schema") as Schema) || "v1";
+  let schema: Schema = (params.get("schema") as Schema) || defaultSchema();
 
   mapStyle.set(params.get("style") || "streets");
 
