@@ -157,10 +157,10 @@
         </SecondaryButton>
       </ButtonGroup>
     </Modal>
-    {#if schema == "pipeline"}
-      <PipelineSchemeForm />
-    {/if}
   </CollapsibleCard>
+  {#if schema == "pipeline"}
+    <PipelineSchemeForm />
+  {/if}
 
   {#if numErrors == 1}
     <ErrorMessage
