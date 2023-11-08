@@ -4,6 +4,7 @@
     Checkbox,
     DefaultButton,
     ErrorMessage,
+    NumberInput,
     Radio,
     SecondaryButton,
     TextArea,
@@ -96,17 +97,13 @@
         required
         bind:value={$gjScheme.pipeline.timescale}
       />
-      <div>
-        <label>
-          Estimated completion year (if known)
-          <input
-            type="number"
-            min="2023"
-            max="2100"
-            bind:value={$gjScheme.pipeline.timescale_year}
-          />
-        </label>
-      </div>
+      <NumberInput
+        label="Estimated completion year (if known)"
+        width={4}
+        min={2010}
+        max={2100}
+        bind:value={$gjScheme.pipeline.timescale_year}
+      />
     </fieldset>
 
     <TextArea
@@ -117,26 +114,18 @@
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend">Budget</legend>
 
-      <div>
-        <label>
-          GBP funded
-          <input
-            type="number"
-            min="0"
-            bind:value={$gjScheme.pipeline.budget_funded}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          GBP unfunded
-          <input
-            type="number"
-            min="0"
-            bind:value={$gjScheme.pipeline.budget_unfunded}
-          />
-        </label>
-      </div>
+      <NumberInput
+        label="GBP funded"
+        width={10}
+        min={0}
+        bind:value={$gjScheme.pipeline.budget_funded}
+      />
+      <NumberInput
+        label="GBP unfunded"
+        width={10}
+        min={0}
+        bind:value={$gjScheme.pipeline.budget_unfunded}
+      />
 
       <Radio
         legend="Funding source"
@@ -158,17 +147,13 @@
       </Checkbox>
     </fieldset>
 
-    <div>
-      <label>
-        How current is this scheme? Please enter the year of the plan.
-        <input
-          type="number"
-          min="2010"
-          max="2100"
-          bind:value={$gjScheme.pipeline.source_data_year}
-        />
-      </label>
-    </div>
+    <NumberInput
+      label="How current is this scheme? Please enter the year of the plan."
+      width={4}
+      min={2010}
+      max={2100}
+      bind:value={$gjScheme.pipeline.source_data_year}
+    />
 
     <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>
   {/if}
