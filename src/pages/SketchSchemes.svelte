@@ -20,7 +20,6 @@
   import EntireScheme from "lib/sidebar/EntireScheme.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
-  import Superscheme from "lib/sidebar/Superscheme.svelte";
   import { mapStyle, mode } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
@@ -104,11 +103,7 @@
       </ButtonGroup>
       <LoggedIn />
     {/if}
-    {#if schema === "pipeline"}
-      <Superscheme {authorityName} />
-    {:else}
-      <EntireScheme {authorityName} {schema} />
-    {/if}
+    <EntireScheme {authorityName} {schema} />
     <LeftSidebar {routeSnapperUrl} {schema} />
   </div>
   <div class="main">
