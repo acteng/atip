@@ -29,23 +29,22 @@ export interface PipelineScheme {
     | "area-based scheme"
     | "intersection"
     | "";
+  atf4_lead_type: ATF4Type | "";
+  scheme_description: string;
+
   // TODO Check with DB schema
   status: "planned" | "in development" | "in construction" | "completed" | "";
   timescale: "short" | "medium" | "long" | "";
-
-  atf4_lead_type: ATF4Type | "";
-  scheme_description: string;
+  timescale_year?: number;
+  year_published?: number;
+  year_consulted?: number;
 
   // GBP
   budget_funded?: number;
   budget_unfunded?: number;
-
-  timescale_year?: number;
   funding_source: "ATF2" | "ATF3" | "ATF4" | "ATF4e" | "CRSTS" | "LUF" | "";
   // TODO What about partially? How's this overlap with budget?
   funded: boolean;
-
-  source_data_year?: number;
 }
 
 export type ATF4Type =
