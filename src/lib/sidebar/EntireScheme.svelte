@@ -67,6 +67,7 @@
     gjScheme.update((gj) => {
       // Leave origin, authority, and other foreign members alone
       delete gj.scheme_name;
+      delete gj.pipeline;
       gj.features = [];
       return gj;
     });

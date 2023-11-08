@@ -19,8 +19,6 @@
     accuracy: "",
     is_alternative: false,
   };
-  // Guaranteed to exist
-  let pipelineProps = props.pipeline;
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -49,24 +47,29 @@
   <p>Length: {prettyPrintMeters(props.length_meters)}</p>
 {/if}
 
-<ATF4Type
-  label="Type"
-  id={"atf4-type-" + id}
-  bind:value={pipelineProps.atf4_type}
-/>
+{#if props.pipeline}
+  <ATF4Type
+    label="Type"
+    id={"atf4-type-" + id}
+    bind:value={props.pipeline.atf4_type}
+  />
 
-<Radio
-  legend="Accuracy of mapped data"
-  id={"accuracy-" + id}
-  choices={[
-    ["high", "High"],
-    ["medium", "Medium"],
-    ["low", "Low"],
-  ]}
-  inlineSmall
-  bind:value={pipelineProps.accuracy}
-/>
+  <Radio
+    legend="Accuracy of mapped data"
+    id={"accuracy-" + id}
+    choices={[
+      ["high", "High"],
+      ["medium", "Medium"],
+      ["low", "Low"],
+    ]}
+    inlineSmall
+    bind:value={props.pipeline.accuracy}
+  />
 
-<Checkbox id={"alternative-" + id} bind:checked={pipelineProps.is_alternative}>
-  Is this an alternative route and not the default option?
-</Checkbox>
+  <Checkbox
+    id={"alternative-" + id}
+    bind:checked={props.pipeline.is_alternative}
+  >
+    Is this an alternative route and not the default option?
+  </Checkbox>
+{/if}
