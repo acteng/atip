@@ -15,6 +15,7 @@
   import { findSmallestAuthority, type AuthorityBoundaries } from "boundaries";
   import {
     appVersion,
+    defaultSchema,
     FileInput,
     getAuthoritiesGeoJson,
     LoggedIn,
@@ -39,7 +40,7 @@
 
   let showAbout = false;
   const params = new URLSearchParams(window.location.search);
-  let schema: Schema = (params.get("schema") as Schema) || "v1";
+  let schema: Schema = (params.get("schema") as Schema) || defaultSchema();
   let pageErrorMessage: string = params.get("error") || "";
   let uploadErrorMessage: string = "";
 
@@ -102,7 +103,7 @@
   function detectSchema(gj: FeatureCollection): Schema {
     if (gj.features.length > 0) {
       let props = gj.features[0].properties;
-      for (let schema of ["planning", "v2", "atf4"]) {
+      for (let schema of ["planning", "v2", "atf4", "pipeline"]) {
         if (props && schema in props) {
           return schema as Schema;
         }

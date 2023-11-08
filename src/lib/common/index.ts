@@ -1,4 +1,5 @@
 import { fixBoundaries, type AuthorityBoundaries } from "boundaries";
+import type { Schema } from "types";
 import authoritiesUrl from "../../../assets/authorities.geojson?url";
 
 export { default as Alpha } from "./Alpha.svelte";
@@ -65,4 +66,16 @@ export function privateResourceBaseUrl(): string {
     return `${import.meta.env.VITE_RESOURCE_BASE}/private_layers`;
   }
   return "/private_layers";
+}
+
+export function defaultSchema(): Schema {
+  // Use the pipeline schema on that semi-permanent branch
+  if (
+    window.location.hostname == "acteng.github.io" &&
+    window.location.pathname.startsWith("/atip/pipeline/")
+  ) {
+    return "pipeline";
+  }
+
+  return "v1";
 }
