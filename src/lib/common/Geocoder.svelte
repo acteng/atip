@@ -6,7 +6,9 @@
   import { map } from "stores";
   import { onMount } from "svelte";
 
-  export let position: "top-left" | "bottom-left" = "top-left";
+  // TODO The position for the sketch page is very awkward, but there's
+  // seemingly no option to make the menu appear above the widget
+  export let position: "top-left" | "below-top-bar" = "top-left";
 
   let mapController: MapController;
 
@@ -36,9 +38,9 @@
     left: 50px;
   }
 
-  .bottom-left {
+  .below-top-bar {
     position: absolute;
-    bottom: 40px;
+    top: 150px;
     left: 10px;
   }
 </style>
