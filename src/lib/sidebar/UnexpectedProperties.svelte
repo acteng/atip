@@ -2,12 +2,14 @@
   import { Modal } from "lib/common";
   import { ButtonGroup, SecondaryButton, WarningButton } from "lib/govuk";
   import { gjScheme } from "stores";
+  import type { Schema } from "types";
   import { getUnexpectedProperties } from "./scheme_data";
 
   export let id: number;
   export let props: { [name: string]: any };
+  export let schema: Schema;
 
-  $: unexpected = getUnexpectedProperties(props);
+  $: unexpected = getUnexpectedProperties(props, schema);
   let open = false;
 
   function removeExtraProperties() {

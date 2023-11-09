@@ -101,7 +101,7 @@
 
 <ErrorMessage errorMessage={warning} />
 {#if schema == "v1"}
-  <UnexpectedProperties id={feature.id} props={feature.properties} />
+  <UnexpectedProperties id={feature.id} props={feature.properties} {schema} />
   <FormV1 id={feature.id} bind:props={feature.properties} />
 {:else if schema == "v2"}
   <FormV2 bind:props={feature.properties} />
@@ -110,5 +110,6 @@
 {:else if schema == "atf4"}
   <ATF4Form bind:props={feature.properties} />
 {:else if schema == "pipeline"}
+  <UnexpectedProperties id={feature.id} props={feature.properties} {schema} />
   <PipelineForm id={feature.id} bind:props={feature.properties} />
 {/if}

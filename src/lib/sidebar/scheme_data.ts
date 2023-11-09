@@ -66,8 +66,8 @@ export function interventionWarning(
   schema: Schema,
   feature: FeatureUnion
 ): string | null {
-  // Only worry about one schema for now.
-  if (schema != "v1") {
+  // Only worry about some schemas for now.
+  if (schema != "v1" && schema != "pipeline") {
     return null;
   }
 
@@ -84,7 +84,10 @@ export function interventionWarning(
     return "No intervention type";
   }
 
-  let unexpectedProperties = getUnexpectedProperties(feature.properties);
+  let unexpectedProperties = getUnexpectedProperties(
+    feature.properties,
+    schema
+  );
   if (Object.entries(unexpectedProperties).length > 0) {
     return `Extra GeoJSON properties: ${Object.keys(unexpectedProperties).join(
       ", "
@@ -96,10 +99,15 @@ export function interventionWarning(
 
 // Returns a copy of the input, with expected properties removed. Only
 // unexpected ones remain.
-export function getUnexpectedProperties(props: { [name: string]: any }): {
+export function getUnexpectedProperties(
+  props: { [name: string]: any },
+  schema: Schema
+): {
   [name: string]: any;
 } {
   let copy = JSON.parse(JSON.stringify(props));
+
+  // For all schemas
   for (let key of [
     "name",
     "description",
@@ -110,5 +118,15 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
   ]) {
     delete copy[key];
   }
+
+  if (schema == "pipeline" && copy.pipeline) {
+    for (let key of ["atf4_type", "accuracy", "is_alternative"]) {
+      delete copy.pipeline[key];
+    }
+    if (Object.entries(copy.pipeline).length == 0) {
+      delete copy.pipeline;
+    }
+  }
+
   return copy;
 }
