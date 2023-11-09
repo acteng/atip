@@ -33,6 +33,13 @@
     return [x, x];
   }
 
+  function onKeyDown(e: KeyboardEvent) {
+    if (showModal && e.key == "Escape") {
+      e.stopPropagation();
+      showModal = false;
+    }
+  }
+
   // Check for all required values
   $: errorMessage =
     $gjScheme.scheme_name &&
@@ -42,6 +49,8 @@
       ? ""
       : "Missing some required data";
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <ErrorMessage {errorMessage} />
 <SecondaryButton on:click={() => (showModal = true)}>

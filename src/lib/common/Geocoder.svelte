@@ -8,7 +8,7 @@
 
   // TODO The position for the sketch page is very awkward, but there's
   // seemingly no option to make the menu appear above the widget
-  export let position: "top-left" | "below-top-bar" = "top-left";
+  export let position: "top-left" | "top-right" = "top-left";
 
   let mapController: MapController;
 
@@ -38,9 +38,9 @@
     left: 50px;
   }
 
-  .below-top-bar {
+  .top-right {
     position: absolute;
     top: 150px;
-    left: 10px;
+    right: 10px;
   }
 </style>

@@ -109,7 +109,7 @@
   </div>
   <div class="main">
     <MapLibreMap style={$mapStyle}>
-      <Geocoder position="below-top-bar" />
+      <Geocoder position="top-right" />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer {schema} />
       {#if $mode.mode == "list"}
