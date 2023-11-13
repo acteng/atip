@@ -7,7 +7,7 @@
     TextArea,
   } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { routeTool } from "stores";
+  import { gjScheme, routeTool } from "stores";
   import type { InterventionProps } from "types";
   import ATF4Type from "./ATF4Type.svelte";
 
@@ -18,7 +18,13 @@
     atf4_type: "",
     accuracy: "",
     is_alternative: false,
+    is_coverage_polygon: false,
   };
+
+  const shouldDisplayCoveragePolygonQuestion: boolean =
+    $gjScheme.features.filter(
+      (feature) => feature.properties.pipeline?.is_coverage_polygon
+    ).length == 0 || props.pipeline.is_coverage_polygon;
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -72,4 +78,13 @@
   >
     Is this an alternative route and not the default option?
   </Checkbox>
+  {#if shouldDisplayCoveragePolygonQuestion}
+    <Checkbox
+      id={"bounding-box-" + id}
+      bind:checked={props.pipeline.is_coverage_polygon}
+    >
+      Is this a polygon to manually denote what the coverage of the scheme/lcwip
+      is?
+    </Checkbox>
+  {/if}
 {/if}

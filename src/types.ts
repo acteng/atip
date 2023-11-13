@@ -104,6 +104,7 @@ export interface PipelineIntervention {
   atf4_type: ATF4Type | "";
   accuracy: "high" | "medium" | "low" | "";
   is_alternative: boolean;
+  is_coverage_polygon: boolean;
 
   // TODO new / existing / upgrade existing?
   // TODO for routes, ltn120 type: fully protected, light segregation, off-carriageway, shared-use, dedicated footpath. minimum width?

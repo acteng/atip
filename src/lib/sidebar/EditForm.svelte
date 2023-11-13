@@ -111,5 +111,5 @@
   <ATF4Form bind:props={feature.properties} />
 {:else if schema == "pipeline"}
   <UnexpectedProperties id={feature.id} props={feature.properties} {schema} />
-  <PipelineForm id={feature.id} bind:props={feature.properties} />
+  <PipelineForm id={feature.id} bind:props={feature.properties } />
 {/if}
