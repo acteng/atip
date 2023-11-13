@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Checkbox, CheckboxGroup } from "lib/govuk";
   import { routeTool, routeToolSnapMode, userSettings } from "stores";
+  import GeocoderControls from "./GeocoderControls.svelte";
 
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
@@ -70,3 +71,5 @@
     Avoid doubling back
   </Checkbox>
 </CheckboxGroup>
+
+<GeocoderControls />

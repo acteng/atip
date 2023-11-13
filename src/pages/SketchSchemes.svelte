@@ -14,6 +14,7 @@
     ZoomOutMap,
   } from "lib/common";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
+  import GeocoderLayer from "lib/draw/route/GeocoderLayer.svelte";
   import SplitRouteMode from "lib/draw/route/SplitRouteMode.svelte";
   import Toolbox from "lib/draw/Toolbox.svelte";
   import { ButtonGroup, SecondaryButton } from "lib/govuk";
@@ -117,6 +118,7 @@
       {:else if $mode.mode == "split-route"}
         <SplitRouteMode />
       {/if}
+      <GeocoderLayer />
     </MapLibreMap>
   </div>
 </div>

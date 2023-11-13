@@ -1,4 +1,4 @@
-import type { LineString, Polygon } from "geojson";
+import type { LineString, Polygon, Position } from "geojson";
 import {
   constructMatchExpression,
   emptyGeojson,
@@ -179,6 +179,11 @@ export class RouteTool {
     if (!this.active) {
       return;
     }
+    // Ignore keypresses if we're not focused on the map
+    if ((e.target as HTMLElement).tagName == "INPUT") {
+      return;
+    }
+
     if (e.key == "Enter") {
       e.stopPropagation();
       this.finish();
@@ -330,6 +335,11 @@ export class RouteTool {
     extend_route: boolean;
   }) {
     this.inner.setRouteConfig(config);
+    this.redraw();
+  }
+
+  addSnappedWaypoint(pt: Position) {
+    this.inner.addSnappedWaypoint(pt[0], pt[1]);
     this.redraw();
   }
 
