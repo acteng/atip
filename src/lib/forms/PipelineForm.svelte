@@ -80,7 +80,7 @@
   </Checkbox>
   {#if shouldDisplayCoveragePolygonQuestion}
     <Checkbox
-      id={"bounding-box-" + id}
+      id={"coverage-polygon-" + id}
       bind:checked={props.pipeline.is_coverage_polygon}
     >
       Is this a polygon to manually denote what the coverage of the scheme/lcwip
