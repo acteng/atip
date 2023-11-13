@@ -120,7 +120,12 @@ export function getUnexpectedProperties(
   }
 
   if (schema == "pipeline" && copy.pipeline) {
-    for (let key of ["atf4_type", "accuracy", "is_alternative", "is_coverage_polygon"]) {
+    for (let key of [
+      "atf4_type",
+      "accuracy",
+      "is_alternative",
+      "is_coverage_polygon",
+    ]) {
       delete copy.pipeline[key];
     }
     if (Object.entries(copy.pipeline).length == 0) {
