@@ -22,9 +22,11 @@
   };
 
   const shouldDisplayCoveragePolygonQuestion: boolean =
-    $gjScheme.features.filter(
+    ($gjScheme.features.filter(
       (feature) => feature.properties.pipeline?.is_coverage_polygon
-    ).length == 0 || props.pipeline.is_coverage_polygon;
+    ).length == 0 ||
+      props.pipeline.is_coverage_polygon) &&
+    props.intervention_type === "area";
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.

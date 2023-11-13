@@ -123,6 +123,7 @@ export interface UserSettings {
 
   // From the Route tool
   avoidDoublingBack: boolean;
+  displayCoveragePolygon: boolean;
 }
 
 export function isStreetViewImagery(x: string): x is "google" | "bing" {

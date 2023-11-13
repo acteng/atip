@@ -4,6 +4,7 @@
   import {
     addLineStringEndpoints,
     isLine,
+    isNotCoveragePolygon,
     isPoint,
     isPolygon,
     layerId,
@@ -131,7 +132,7 @@
 
   <FillLayer
     {...layerId("interventions-polygons")}
-    filter={["all", isPolygon, hideWhileEditing]}
+    filter={["all", isPolygon, hideWhileEditing, isNotCoveragePolygon]}
     paint={{
       "fill-color": color,
       "fill-opacity": 0.2,

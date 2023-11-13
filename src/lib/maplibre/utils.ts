@@ -27,6 +27,11 @@ const defaultOpacity = 1;
 export const isPolygon: ExpressionSpecification = ["==", "$type", "Polygon"];
 export const isLine: ExpressionSpecification = ["==", "$type", "LineString"];
 export const isPoint: ExpressionSpecification = ["==", "$type", "Point"];
+export const isNotCoveragePolygon: ExpressionSpecification = [
+  "==",
+  "$properties.pipeline.is_coverage_polygon",
+  false,
+];
 
 // This sets up a GeoJSON source. MapLibre's API isn't idempotent; you can't
 // overwrite an existing source or layer. This complicates Vite's hot-reload

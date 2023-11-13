@@ -7,7 +7,8 @@
     TextInput,
     WarningButton,
   } from "lib/govuk";
-  import { gjScheme, mode, sidebarHover } from "stores";
+  import Checkbox from "lib/govuk/Checkbox.svelte";
+  import { gjScheme, mode, sidebarHover, userSettings } from "stores";
   import { onMount } from "svelte";
   import type { Schema, Scheme } from "types";
   import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
@@ -127,6 +128,10 @@
 {#if $mode.mode == "list"}
   <CollapsibleCard label={$gjScheme.scheme_name ?? "Untitled scheme"}>
     <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
+    <Checkbox
+      id="show-coverage"
+      bind:checked={$userSettings.displayCoveragePolygon}
+    />
 
     <ErrorMessage {errorMessage} />
 
