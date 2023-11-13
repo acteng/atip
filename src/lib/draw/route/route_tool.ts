@@ -32,8 +32,14 @@ export class RouteTool {
   ) => void)[];
   eventListenersFailure: (() => void)[];
   snapMode: Writable<boolean>;
+  undoLength: Writable<number>;
 
-  constructor(map: Map, graphBytes: Uint8Array, snapMode: Writable<boolean>) {
+  constructor(
+    map: Map,
+    graphBytes: Uint8Array,
+    snapMode: Writable<boolean>,
+    undoLength: Writable<number>
+  ) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(graphBytes);
@@ -43,6 +49,7 @@ export class RouteTool {
     this.eventListenersUpdated = [];
     this.eventListenersFailure = [];
     this.snapMode = snapMode;
+    this.undoLength = undoLength;
 
     // Rendering
     overwriteSource(map, source, emptyGeojson());
@@ -191,6 +198,8 @@ export class RouteTool {
       e.stopPropagation();
       this.inner.toggleSnapMode();
       this.redraw();
+    } else if (e.key == "z" && e.ctrlKey) {
+      this.undo();
     }
   };
 
@@ -343,11 +352,17 @@ export class RouteTool {
     this.redraw();
   }
 
+  undo() {
+    this.inner.undo();
+    this.redraw();
+  }
+
   private redraw() {
     let gj = JSON.parse(this.inner.renderGeojson());
     (this.map.getSource(source) as GeoJSONSource).setData(gj);
     this.map.getCanvas().style.cursor = gj.cursor;
     this.snapMode.set(gj.snap_mode);
+    this.undoLength.set(gj.undo_length);
   }
 
   private dataUpdated() {

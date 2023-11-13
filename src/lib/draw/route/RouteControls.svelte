@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { Checkbox, CheckboxGroup } from "lib/govuk";
-  import { routeTool, routeToolSnapMode, userSettings } from "stores";
+  import { Checkbox, CheckboxGroup, SecondaryButton } from "lib/govuk";
+  import { routeTool, userSettings } from "stores";
   import GeocoderControls from "./GeocoderControls.svelte";
+  import { snapMode, undoLength } from "./stores";
 
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
@@ -12,9 +13,21 @@
     avoid_doubling_back: $userSettings.avoidDoublingBack,
     extend_route: extendRoute,
   });
+
+  function undo() {
+    $routeTool!.undo();
+  }
 </script>
 
-{#if $routeToolSnapMode}
+<SecondaryButton disabled={$undoLength == 0} on:click={undo}>
+  {#if $undoLength == 0}
+    Undo
+  {:else}
+    Undo ({$undoLength})
+  {/if}
+</SecondaryButton>
+
+{#if $snapMode}
   <p style="background: red; color: white; padding: 8px;">
     Snapping to existing roads. Press <b>s</b>
     to draw anywhere
@@ -42,6 +55,10 @@
   <li>
     <b>Click</b>
     a waypoint to delete it
+  </li>
+  <li>
+    Press <b>Control+Z</b>
+    to undo your last change
   </li>
   <li>
     Press <b>Enter</b>
