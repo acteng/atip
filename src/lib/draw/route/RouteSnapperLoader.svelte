@@ -4,7 +4,6 @@
   import { map, routeTool } from "stores";
   import { onMount } from "svelte";
   import { RouteTool } from "./route_tool";
-  import { snapMode, undoLength } from "./stores";
 
   export let url: string;
 
@@ -19,7 +18,7 @@
     console.log(`Grabbing ${url}`);
     try {
       const graphBytes = await fetchWithProgress(url);
-      routeTool.set(new RouteTool($map, graphBytes, snapMode, undoLength));
+      routeTool.set(new RouteTool($map, graphBytes));
       progress = 100;
       routeToolReady = true;
     } catch (err) {

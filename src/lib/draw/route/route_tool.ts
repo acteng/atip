@@ -1,23 +1,9 @@
 import type { LineString, Polygon, Position } from "geojson";
-import {
-  constructMatchExpression,
-  emptyGeojson,
-  isLine,
-  isPoint,
-  isPolygon,
-  overwriteCircleLayer,
-  overwriteLineLayer,
-  overwritePolygonLayer,
-  overwriteSource,
-  type FeatureWithProps,
-} from "lib/maplibre";
-import type { GeoJSONSource, Map, MapMouseEvent } from "maplibre-gl";
+import type { FeatureWithProps } from "lib/maplibre";
+import type { Map, MapMouseEvent } from "maplibre-gl";
 import { JsRouteSnapper } from "route-snapper";
-import { type Writable } from "svelte/store";
+import { routeToolGj, snapMode, undoLength } from "./stores";
 
-const source = "route-snapper";
-
-const circleRadiusPixels = 10;
 const snapDistancePixels = 30;
 
 export class RouteTool {
@@ -31,15 +17,8 @@ export class RouteTool {
     f: FeatureWithProps<LineString | Polygon>
   ) => void)[];
   eventListenersFailure: (() => void)[];
-  snapMode: Writable<boolean>;
-  undoLength: Writable<number>;
 
-  constructor(
-    map: Map,
-    graphBytes: Uint8Array,
-    snapMode: Writable<boolean>,
-    undoLength: Writable<number>
-  ) {
+  constructor(map: Map, graphBytes: Uint8Array) {
     this.map = map;
     console.time("Deserialize and setup JsRouteSnapper");
     this.inner = new JsRouteSnapper(graphBytes);
@@ -48,44 +27,6 @@ export class RouteTool {
     this.eventListenersSuccess = [];
     this.eventListenersUpdated = [];
     this.eventListenersFailure = [];
-    this.snapMode = snapMode;
-    this.undoLength = undoLength;
-
-    // Rendering
-    overwriteSource(map, source, emptyGeojson());
-    overwriteCircleLayer(map, {
-      id: "route-points",
-      source,
-      filter: isPoint,
-      color: constructMatchExpression(
-        ["get", "type"],
-        {
-          "snapped-waypoint": "red",
-          "free-waypoint": "blue",
-        },
-        "black"
-      ),
-      opacity: ["case", ["has", "hovered"], 0.5, 1.0],
-      radius: constructMatchExpression(
-        ["get", "type"],
-        { node: circleRadiusPixels / 2.0 },
-        circleRadiusPixels
-      ),
-    });
-    overwriteLineLayer(map, {
-      id: "route-lines",
-      source,
-      filter: isLine,
-      color: ["case", ["get", "snapped"], "red", "blue"],
-      width: 2.5,
-    });
-    overwritePolygonLayer(map, {
-      id: "route-polygons",
-      source,
-      filter: isPolygon,
-      color: "black",
-      opacity: 0.5,
-    });
 
     this.map.on("mousemove", this.onMouseMove);
     this.map.on("click", this.onClick);
@@ -97,12 +38,6 @@ export class RouteTool {
   }
 
   tearDown() {
-    // TODO Will these throw if they're not there?
-    this.map.removeLayer("route-points");
-    this.map.removeLayer("route-lines");
-    this.map.removeLayer("route-polygons");
-    this.map.removeSource("route-snapper");
-
     this.map.off("mousemove", this.onMouseMove);
     this.map.off("click", this.onClick);
     this.map.off("dblclick", this.onDoubleClick);
@@ -359,10 +294,10 @@ export class RouteTool {
 
   private redraw() {
     let gj = JSON.parse(this.inner.renderGeojson());
-    (this.map.getSource(source) as GeoJSONSource).setData(gj);
+    routeToolGj.set(gj);
     this.map.getCanvas().style.cursor = gj.cursor;
-    this.snapMode.set(gj.snap_mode);
-    this.undoLength.set(gj.undo_length);
+    snapMode.set(gj.snap_mode);
+    undoLength.set(gj.undo_length);
   }
 
   private dataUpdated() {
