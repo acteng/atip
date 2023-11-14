@@ -157,6 +157,7 @@
       "line-width": 0.7 * lineWidth,
     }}
   />
+
   <LineLayer
     {...layerId("interventions-coverage-polygons-outlines")}
     filter={["all", isPolygon, hideWhileEditing, isCoveragePolygon]}
@@ -165,5 +166,14 @@
       "line-opacity": 0.5,
       "line-width": 0.4 * lineWidth,
     }}
-  />
+    hoverCursor={clickable ? "pointer" : undefined}
+    on:click={onClick}
+    manageHoverState={clickable}
+  >
+    {#if clickable}
+      <Popup openOn="hover" openIfTopMost let:features>
+        <div class="govuk-prose"><p>{tooltip(features)}</p></div>
+      </Popup>
+    {/if}
+  </LineLayer>
 </GeoJSON>
