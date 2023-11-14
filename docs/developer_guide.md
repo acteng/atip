@@ -106,9 +106,8 @@ Building each branch is best-effort; failed ones will be skipped. You can see wh
 
 [Hot module replacement](https://vitejs.dev/guide/features.html#hot-module-replacement) means you can edit source code and have just that Svelte component live-reload in the browser, without needing to do anything. It's incredibly useful for rapid iteration, especially for simple things like styling. There are some gotchas to keep it working:
 
-- Use `overwriteSource` and `overwriteLayer` instead of `map.addSource` and `map.addLayer`
-- Within a `.ts` file using classes, use `EventManager` to handle MapLibre and document event handlers. Otherwise as you edit a component, you'll keep running old versions of the callbacks!
-- Within a Svelte component, express event handlers using functions and remember to call `map.off()` within `onDestroy`. Refer to existing components.
+- Use source/layer components from `svelte-maplibre` instead of directly calling `map.addSource` and `map.addLayer`
+- Within a Svelte component or `.ts`, express event handlers using functions and remember to call `map.off()` within `onDestroy`. Refer to existing components.
 - When in doubt, Ctrl+Shift+R to hard refresh and get rid of any possible HMR weirdness
 
 ## Overall app state

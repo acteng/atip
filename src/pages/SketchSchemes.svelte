@@ -14,6 +14,7 @@
     ZoomOutMap,
   } from "lib/common";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
+  import PolygonToolLayer from "lib/draw/polygon/PolygonToolLayer.svelte";
   import RouteSnapperLayer from "lib/draw/route/RouteSnapperLayer.svelte";
   import SplitRouteMode from "lib/draw/route/SplitRouteMode.svelte";
   import Toolbox from "lib/draw/Toolbox.svelte";
@@ -119,6 +120,7 @@
         <SplitRouteMode />
       {/if}
       <RouteSnapperLayer />
+      <PolygonToolLayer />
     </MapLibreMap>
   </div>
 </div>
