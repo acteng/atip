@@ -1,27 +1,13 @@
 import nearestPointOnLine from "@turf/nearest-point-on-line";
-import { circleRadius, colors } from "colors";
 import type { Feature, LineString, Point, Polygon, Position } from "geojson";
 import {
   emptyGeojson,
-  isLine,
-  isPoint,
-  isPolygon,
-  overwriteCircleLayer,
-  overwriteLineLayer,
-  overwritePolygonLayer,
-  overwriteSource,
   pointFeature,
   setPrecision,
   type FeatureWithProps,
 } from "lib/maplibre";
-import type {
-  GeoJSONSource,
-  Map,
-  MapLayerMouseEvent,
-  MapMouseEvent,
-} from "maplibre-gl";
-
-const source = "edit-polygon-mode";
+import type { Map, MapLayerMouseEvent, MapMouseEvent } from "maplibre-gl";
+import { polygonToolGj } from "./stores";
 
 export class PolygonTool {
   map: Map;
@@ -52,34 +38,6 @@ export class PolygonTool {
     this.hover = null;
     this.dragFrom = null;
 
-    // Render
-    overwriteSource(map, source, emptyGeojson());
-
-    overwritePolygonLayer(map, {
-      id: "edit-polygon-fill",
-      source,
-      filter: isPolygon,
-      color: "red",
-      opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
-    });
-    overwriteLineLayer(map, {
-      id: "edit-polygon-lines",
-      source,
-      filter: isLine,
-      // TODO Dashed
-      color: "black",
-      width: 8,
-      opacity: 0.5,
-    });
-    overwriteCircleLayer(map, {
-      id: "edit-polygon-vertices",
-      source,
-      filter: isPoint,
-      color: colors.hovering,
-      radius: circleRadius,
-      opacity: ["case", ["boolean", ["get", "hover"], "false"], 1.0, 0.5],
-    });
-
     this.map.on("mousemove", this.onMouseMove);
     this.map.on("click", this.onClick);
     this.map.on("dblclick", this.onDoubleClick);
@@ -90,11 +48,6 @@ export class PolygonTool {
   }
 
   tearDown() {
-    this.map.removeLayer("edit-polygon-vertices");
-    this.map.removeLayer("edit-polygon-fill");
-    this.map.removeLayer("edit-polygon-lines");
-    this.map.removeSource(source);
-
     this.map.off("mousemove", this.onMouseMove);
     this.map.off("click", this.onClick);
     this.map.off("dblclick", this.onDoubleClick);
@@ -293,7 +246,7 @@ export class PolygonTool {
       gj.features.push(polygon);
     }
 
-    (this.map.getSource(source) as GeoJSONSource).setData(gj);
+    polygonToolGj.set(gj);
     let cursorStyle = "crosshair";
     if (this.hover != null) {
       cursorStyle = this.dragFrom ? "grabbing" : "pointer";

@@ -20,7 +20,7 @@ export function layerId(layerId: string): LayerProps {
 // Svelte component initialization order being unpredictable, callers might add
 // layers in any order. Use beforeId to guarantee the layers wind up in an
 // explicitly defined order.
-export function getBeforeId(layerId: string): string | undefined {
+function getBeforeId(layerId: string): string | undefined {
   let map = get(mapStore);
   if (!map) {
     console.warn(
@@ -52,8 +52,8 @@ export function getBeforeId(layerId: string): string | undefined {
   return beforeId;
 }
 
-// All layer IDs used with overwriteLayer must be defined here, with later
-// entries drawn on top.
+// All layer IDs used with layerId must be defined here, with later entries
+// drawn on top.
 //
 // This list covers all pages. We should maybe split it.
 const layerZorder = [
