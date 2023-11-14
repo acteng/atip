@@ -7,8 +7,7 @@
     TextInput,
     WarningButton,
   } from "lib/govuk";
-  import Checkbox from "lib/govuk/Checkbox.svelte";
-  import { gjScheme, mode, sidebarHover, userSettings } from "stores";
+  import { gjScheme, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
   import type { Schema, Scheme } from "types";
   import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
