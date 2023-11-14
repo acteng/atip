@@ -11,6 +11,7 @@ export function backfill(json: Scheme) {
       name: "",
       description: "",
       intervention_type: "other",
+      is_coverage_polygon: false,
     };
 
     // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
@@ -115,17 +116,13 @@ export function getUnexpectedProperties(
     "length_meters",
     "waypoints",
     "hide_while_editing",
+    "is_coverage_polygon",
   ]) {
     delete copy[key];
   }
 
   if (schema == "pipeline" && copy.pipeline) {
-    for (let key of [
-      "atf4_type",
-      "accuracy",
-      "is_alternative",
-      "is_coverage_polygon",
-    ]) {
+    for (let key of ["atf4_type", "accuracy", "is_alternative"]) {
       delete copy.pipeline[key];
     }
     if (Object.entries(copy.pipeline).length == 0) {

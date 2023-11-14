@@ -28,9 +28,14 @@ export const isPolygon: ExpressionSpecification = ["==", "$type", "Polygon"];
 export const isLine: ExpressionSpecification = ["==", "$type", "LineString"];
 export const isPoint: ExpressionSpecification = ["==", "$type", "Point"];
 export const isNotCoveragePolygon: ExpressionSpecification = [
+  "!=",
+  "is_coverage_polygon",
+  true,
+];
+export const isCoveragePolygon: ExpressionSpecification = [
   "==",
-  "$properties.pipeline.is_coverage_polygon",
-  false,
+  "is_coverage_polygon",
+  true,
 ];
 
 // This sets up a GeoJSON source. MapLibre's API isn't idempotent; you can't

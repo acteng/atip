@@ -93,6 +93,7 @@ const layerZorder = [
 
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top
+  "interventions-coverage-polygons-outlines",
   "interventions-polygons",
   "interventions-polygons-outlines",
   // This is an outline, so draw on top

@@ -3,6 +3,7 @@
   import type { Feature } from "geojson";
   import {
     addLineStringEndpoints,
+    isCoveragePolygon,
     isLine,
     isNotCoveragePolygon,
     isPoint,
@@ -149,11 +150,20 @@
   </FillLayer>
   <LineLayer
     {...layerId("interventions-polygons-outlines")}
-    filter={["all", isPolygon, hideWhileEditing]}
+    filter={["all", isPolygon, hideWhileEditing, isNotCoveragePolygon]}
     paint={{
       "line-color": color,
       "line-opacity": 0.5,
       "line-width": 0.7 * lineWidth,
+    }}
+  />
+  <LineLayer
+    {...layerId("interventions-coverage-polygons-outlines")}
+    filter={["all", isPolygon, hideWhileEditing, isCoveragePolygon]}
+    paint={{
+      "line-color": color,
+      "line-opacity": 0.5,
+      "line-width": 0.4 * lineWidth,
     }}
   />
 </GeoJSON>

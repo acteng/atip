@@ -87,6 +87,8 @@ export interface InterventionProps {
   length_meters?: number;
   // For LineStrings and Polygons only
   waypoints?: Waypoint[];
+  //For polygons only
+  is_coverage_polygon: boolean;
 
   // TODO Hack. If these're filled out, ignore the schema above.
   planning?: Planning;
@@ -104,7 +106,6 @@ export interface PipelineIntervention {
   atf4_type: ATF4Type | "";
   accuracy: "high" | "medium" | "low" | "";
   is_alternative: boolean;
-  is_coverage_polygon: boolean;
 
   // TODO new / existing / upgrade existing?
   // TODO for routes, ltn120 type: fully protected, light segregation, off-carriageway, shared-use, dedicated footpath. minimum width?

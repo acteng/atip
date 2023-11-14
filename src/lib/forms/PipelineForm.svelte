@@ -18,14 +18,13 @@
     atf4_type: "",
     accuracy: "",
     is_alternative: false,
-    is_coverage_polygon: false,
   };
 
   const shouldDisplayCoveragePolygonQuestion: boolean =
     ($gjScheme.features.filter(
-      (feature) => feature.properties.pipeline?.is_coverage_polygon
+      (feature) => feature.properties.is_coverage_polygon
     ).length == 0 ||
-      props.pipeline.is_coverage_polygon) &&
+      props.is_coverage_polygon === true) &&
     props.intervention_type === "area";
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
@@ -83,7 +82,7 @@
   {#if shouldDisplayCoveragePolygonQuestion}
     <Checkbox
       id={"coverage-polygon-" + id}
-      bind:checked={props.pipeline.is_coverage_polygon}
+      bind:checked={props.is_coverage_polygon}
     >
       Is this a polygon to manually denote what the coverage of the scheme/lcwip
       is?
