@@ -21,6 +21,7 @@
     gjScheme.update((gj) => {
       feature.id = newFeatureId(gj);
       feature.properties.intervention_type = "area";
+      feature.properties.is_coverage_polygon = false;
       gj.features.push(feature as Feature<Polygon>);
       return gj;
     });

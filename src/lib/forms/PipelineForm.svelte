@@ -7,7 +7,7 @@
     TextArea,
   } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { routeTool } from "stores";
+  import { gjScheme, routeTool } from "stores";
   import type { InterventionProps } from "types";
   import ATF4Type from "./ATF4Type.svelte";
 
@@ -19,6 +19,15 @@
     accuracy: "",
     is_alternative: false,
   };
+
+  props.is_coverage_polygon ||= false;
+
+  const shouldDisplayCoveragePolygonQuestion: boolean =
+    ($gjScheme.features.filter(
+      (feature) => feature.properties.is_coverage_polygon
+    ).length == 0 ||
+      props.is_coverage_polygon === true) &&
+    props.intervention_type === "area";
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -72,4 +81,13 @@
   >
     Is this an alternative route and not the default option?
   </Checkbox>
+  {#if shouldDisplayCoveragePolygonQuestion && props.is_coverage_polygon !== undefined}
+    <Checkbox
+      id={"coverage-polygon-" + id}
+      bind:checked={props.is_coverage_polygon}
+    >
+      Does this polygon show the coverage of the scheme? (All area considered
+      while making the scheme)
+    </Checkbox>
+  {/if}
 {/if}

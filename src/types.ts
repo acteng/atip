@@ -87,6 +87,8 @@ export interface InterventionProps {
   length_meters?: number;
   // For LineStrings and Polygons only
   waypoints?: Waypoint[];
+  //For polygons only
+  is_coverage_polygon?: boolean;
 
   // TODO Hack. If these're filled out, ignore the schema above.
   planning?: Planning;

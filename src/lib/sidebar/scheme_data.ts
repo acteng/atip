@@ -11,6 +11,7 @@ export function backfill(json: Scheme) {
       name: "",
       description: "",
       intervention_type: "other",
+      is_coverage_polygon: false,
     };
 
     // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
@@ -115,6 +116,7 @@ export function getUnexpectedProperties(
     "length_meters",
     "waypoints",
     "hide_while_editing",
+    "is_coverage_polygon",
   ]) {
     delete copy[key];
   }

@@ -18,6 +18,16 @@ import type {
 export const isPolygon: ExpressionSpecification = ["==", "$type", "Polygon"];
 export const isLine: ExpressionSpecification = ["==", "$type", "LineString"];
 export const isPoint: ExpressionSpecification = ["==", "$type", "Point"];
+export const isNotCoveragePolygon: ExpressionSpecification = [
+  "!=",
+  "is_coverage_polygon",
+  true,
+];
+export const isCoveragePolygon: ExpressionSpecification = [
+  "==",
+  "is_coverage_polygon",
+  true,
+];
 
 export function emptyGeojson(): FeatureCollection {
   return {
