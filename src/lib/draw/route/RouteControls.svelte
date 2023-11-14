@@ -87,6 +87,12 @@
   >
     Avoid doubling back
   </Checkbox>
+  <Checkbox
+    id="routeSnapperTooltips"
+    bind:checked={$userSettings.routeSnapperTooltips}
+  >
+    Show tooltips with street names
+  </Checkbox>
 </CheckboxGroup>
 
 <GeocoderControls />

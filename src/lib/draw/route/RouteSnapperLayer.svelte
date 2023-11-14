@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Feature } from "geojson";
+  import { Popup } from "lib/common";
   import {
     constructMatchExpression,
     isLine,
@@ -7,6 +8,7 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
+  import { userSettings } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -43,7 +45,13 @@
         circleRadiusPixels
       ),
     }}
-  />
+  >
+    <Popup let:props>
+      {#if $userSettings.routeSnapperTooltips && props.name}
+        {props.name}
+      {/if}
+    </Popup>
+  </CircleLayer>
   <LineLayer
     {...layerId("route-lines")}
     filter={isLine}

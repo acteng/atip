@@ -122,6 +122,7 @@ export interface UserSettings {
 
   // From the Route tool
   avoidDoublingBack: boolean;
+  routeSnapperTooltips: boolean;
 }
 
 export function isStreetViewImagery(x: string): x is "google" | "bing" {

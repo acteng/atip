@@ -83,6 +83,7 @@ function loadUserSettings(): UserSettings {
   let settings = {
     streetViewImagery: "google",
     avoidDoublingBack: false,
+    routeSnapperTooltips: false,
   };
 
   // Be paranoid when loading from local storage, and only copy over valid items
@@ -93,6 +94,9 @@ function loadUserSettings(): UserSettings {
     }
     if (typeof x.avoidDoublingBack == "boolean") {
       settings.avoidDoublingBack = x.avoidDoublingBack;
+    }
+    if (typeof x.routeSnapperTooltips == "boolean") {
+      settings.routeSnapperTooltips = x.routeSnapperTooltips;
     }
   } catch (error) {
     console.log(`Couldn't parse userSettings from local storage: ${error}`);
