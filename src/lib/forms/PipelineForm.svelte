@@ -86,8 +86,8 @@
       id={"coverage-polygon-" + id}
       bind:checked={props.is_coverage_polygon}
     >
-      Is this a polygon to manually denote what the coverage of the scheme/lcwip
-      is?
+      Does this polygon show the coverage of the scheme? (All area considered
+      while making the scheme)
     </Checkbox>
   {/if}
 {/if}
