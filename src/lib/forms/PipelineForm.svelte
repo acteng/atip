@@ -20,6 +20,8 @@
     is_alternative: false,
   };
 
+  props.is_coverage_polygon ||= false;
+
   const shouldDisplayCoveragePolygonQuestion: boolean =
     ($gjScheme.features.filter(
       (feature) => feature.properties.is_coverage_polygon
@@ -79,7 +81,7 @@
   >
     Is this an alternative route and not the default option?
   </Checkbox>
-  {#if shouldDisplayCoveragePolygonQuestion}
+  {#if shouldDisplayCoveragePolygonQuestion && props.is_coverage_polygon !== undefined}
     <Checkbox
       id={"coverage-polygon-" + id}
       bind:checked={props.is_coverage_polygon}

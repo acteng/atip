@@ -88,7 +88,7 @@ export interface InterventionProps {
   // For LineStrings and Polygons only
   waypoints?: Waypoint[];
   //For polygons only
-  is_coverage_polygon: boolean;
+  is_coverage_polygon?: boolean;
 
   // TODO Hack. If these're filled out, ignore the schema above.
   planning?: Planning;
@@ -124,7 +124,6 @@ export interface UserSettings {
 
   // From the Route tool
   avoidDoublingBack: boolean;
-  displayCoveragePolygon: boolean;
 }
 
 export function isStreetViewImagery(x: string): x is "google" | "bing" {

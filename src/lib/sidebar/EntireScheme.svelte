@@ -128,10 +128,6 @@
 {#if $mode.mode == "list"}
   <CollapsibleCard label={$gjScheme.scheme_name ?? "Untitled scheme"}>
     <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
-    <Checkbox
-      id="show-coverage"
-      bind:checked={$userSettings.displayCoveragePolygon}
-    />
 
     <ErrorMessage {errorMessage} />
 
