@@ -1,3 +1,21 @@
+<script lang="ts">
+  import { SecondaryButton } from "lib/govuk";
+  import { polygonTool } from "stores";
+  import { undoLength } from "./stores";
+
+  function undo() {
+    $polygonTool!.undo();
+  }
+</script>
+
+<SecondaryButton disabled={$undoLength == 0} on:click={undo}>
+  {#if $undoLength == 0}
+    Undo
+  {:else}
+    Undo ({$undoLength})
+  {/if}
+</SecondaryButton>
+
 <ul>
   <li>
     <b>Click</b>
@@ -10,6 +28,10 @@
   <li>
     <b>Drag</b>
     a vertex or the polygon to move it
+  </li>
+  <li>
+    Press <b>Control+Z</b>
+    to undo your last change
   </li>
   <li>
     Press <b>Enter</b>
