@@ -68,7 +68,7 @@
       (feature) => feature.properties.full_name == authorityName
     );
     if (geojson.features.length === 0) {
-      window.location.href = `/?error=Authority name not found: ${authorityName}`;
+      window.location.href = `index.html?error=Authority name not found: ${authorityName}`;
     }
     return geojson;
   }
