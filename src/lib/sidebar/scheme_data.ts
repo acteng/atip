@@ -5,6 +5,7 @@ import type { FeatureUnion, PipelineScheme, Schema, SchemeCollection, SchemeData
 // some fixes are applied now.
 export function backfill(json: SchemeCollection) {
   let idCounter = 1;
+  console.log("backfilling");
   for (let f of json.features) {
     // Fix input from other tools where properties may be null
     f.properties ||= {
@@ -22,8 +23,8 @@ export function backfill(json: SchemeCollection) {
     // Always overwrite IDs, and follow what newFeatureId requires.
     f.id = idCounter++;
   }
-
-  json.schemes = {
+  console.log(json.schemes);
+  json.schemes = json.schemes || {
     "0": getEmptySchemeData("0"),
   }
 
@@ -139,8 +140,11 @@ export function getUnexpectedProperties(
 
 export function getFirstSchemeOrEmptyScheme(schemeCollection: SchemeCollection): SchemeData {
   if (schemeCollection.schemes != undefined) {
+    console.log(schemeCollection.schemes)
     const schemeReferences = Object.keys(schemeCollection.schemes);
+    console.log(schemeReferences)
     if (schemeReferences.length > 0) {
+      console.log(schemeCollection.schemes[schemeReferences[0]])
       return schemeCollection.schemes[schemeReferences[0]];
     }
   }

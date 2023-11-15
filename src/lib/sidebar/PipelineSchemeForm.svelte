@@ -16,6 +16,7 @@
 
   let showModal = false;
   let scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
+  let originalSchemeName = scheme.scheme_name 
   $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
 
   // This component is only created once, but gjScheme could be cleared
@@ -51,6 +52,11 @@
     scheme.pipeline?.timescale
       ? ""
       : "Missing some required data";
+  function onCompletion() {
+    delete $gjSchemeCollection.schemes[originalSchemeName];
+    $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
+    showModal = false;
+  }
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -187,7 +193,7 @@
       </Checkbox>
     </fieldset>
 
-    <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>
+    <DefaultButton on:click={onCompletion}>Save</DefaultButton>
   {/if}
 </Modal>
 

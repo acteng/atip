@@ -9,9 +9,13 @@
   } from "lib/govuk";
   import { gjSchemeCollection, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
-  import type { Schema, SchemeCollection } from "types";
+  import type { Schema, SchemeCollection, SchemeData } from "types";
   import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
-  import { backfill, getFirstSchemeOrEmptyScheme, interventionWarning } from "./scheme_data";
+  import {
+    backfill,
+    getFirstSchemeOrEmptyScheme,
+    interventionWarning,
+  } from "./scheme_data";
 
   export let authorityName: string;
   export let schema: Schema;
@@ -24,11 +28,7 @@
 
   let loaded = false;
   let displayClearAllConfirmation = false;
-  let scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
-  if(!$gjSchemeCollection.schemes){
-    $gjSchemeCollection.schemes = {};
-  }
-  $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
+  let scheme: SchemeData;
 
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
@@ -53,6 +53,11 @@
       }
     }
     loaded = true;
+    scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
+    if (!$gjSchemeCollection.schemes) {
+      $gjSchemeCollection.schemes = {};
+    }
+    $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
   });
 
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
@@ -129,51 +134,55 @@
   ).length;
 </script>
 
-{#if $mode.mode == "list"}
-  <CollapsibleCard label={scheme.scheme_name ?? "Untitled scheme"}>
-    <TextInput label="Scheme name" bind:value={scheme.scheme_name} />
+{#if scheme}
+  {#if $mode.mode == "list"}
+    <CollapsibleCard label={scheme.scheme_name ?? "Untitled scheme"}>
+      <TextInput label="Scheme name" bind:value={scheme.scheme_name} />
 
-    <ErrorMessage {errorMessage} />
+      <ErrorMessage {errorMessage} />
 
-    <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
+      <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
-    <SecondaryButton on:click={exportToGeojson}>
-      Export to GeoJSON
-    </SecondaryButton>
+      <SecondaryButton on:click={exportToGeojson}>
+        Export to GeoJSON
+      </SecondaryButton>
 
-    <div>
-      <WarningButton
-        on:click={() => (displayClearAllConfirmation = true)}
-        disabled={$gjSchemeCollection.features.length == 0}
+      <div>
+        <WarningButton
+          on:click={() => (displayClearAllConfirmation = true)}
+          disabled={$gjSchemeCollection.features.length == 0}
+        >
+          Start new scheme
+        </WarningButton>
+      </div>
+      <Modal
+        title="Would you like to clear your work?"
+        bind:open={displayClearAllConfirmation}
+        displayEscapeButton={false}
       >
-        Start new scheme
-      </WarningButton>
-    </div>
-    <Modal
-      title="Would you like to clear your work?"
-      bind:open={displayClearAllConfirmation}
-      displayEscapeButton={false}
-    >
-      <p>This will delete all your drawn interventions.</p>
-      <ButtonGroup>
-        <WarningButton on:click={clearAll}>Clear all work</WarningButton>
-        <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
-          Cancel
-        </SecondaryButton>
-      </ButtonGroup>
-    </Modal>
-  </CollapsibleCard>
-  {#if schema == "pipeline"}
-    <PipelineSchemeForm />
-  {/if}
+        <p>This will delete all your drawn interventions.</p>
+        <ButtonGroup>
+          <WarningButton on:click={clearAll}>Clear all work</WarningButton>
+          <SecondaryButton
+            on:click={() => (displayClearAllConfirmation = false)}
+          >
+            Cancel
+          </SecondaryButton>
+        </ButtonGroup>
+      </Modal>
+    </CollapsibleCard>
+    {#if schema == "pipeline"}
+      <PipelineSchemeForm />
+    {/if}
 
-  {#if numErrors == 1}
-    <ErrorMessage
-      errorMessage="There's a problem with one intervention below"
-    />
-  {:else if numErrors > 0}
-    <ErrorMessage
-      errorMessage="There's a problem with {numErrors} interventions below"
-    />
+    {#if numErrors == 1}
+      <ErrorMessage
+        errorMessage="There's a problem with one intervention below"
+      />
+    {:else if numErrors > 0}
+      <ErrorMessage
+        errorMessage="There's a problem with {numErrors} interventions below"
+      />
+    {/if}
   {/if}
 {/if}
