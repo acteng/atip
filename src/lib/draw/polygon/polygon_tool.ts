@@ -7,7 +7,9 @@ import {
   type FeatureWithProps,
 } from "lib/maplibre";
 import type { Map, MapLayerMouseEvent, MapMouseEvent } from "maplibre-gl";
-import { polygonToolGj } from "./stores";
+import { polygonToolGj, undoLength } from "./stores";
+
+const maxPreviousStates = 100;
 
 export class PolygonTool {
   map: Map;
@@ -20,6 +22,8 @@ export class PolygonTool {
   // The number is an index into points
   hover: "polygon" | number | null;
   dragFrom: Position | null;
+  // Storing a full copy of the previous points is sufficient
+  previousStates: Position[][];
 
   // TODO Inconsistent ordering with point tool
   constructor(map: Map) {
@@ -37,6 +41,7 @@ export class PolygonTool {
     // widgetry's World
     this.hover = null;
     this.dragFrom = null;
+    this.previousStates = [];
 
     this.map.on("mousemove", this.onMouseMove);
     this.map.on("click", this.onClick);
@@ -83,6 +88,7 @@ export class PolygonTool {
   }
 
   onMouseMove = (e: MapMouseEvent) => {
+    // Don't call beforeUpdate here; just consider drag as one entire action
     if (this.active && !this.dragFrom) {
       this.recalculateHovering(e);
     } else if (this.active && this.dragFrom) {
@@ -103,6 +109,7 @@ export class PolygonTool {
   };
 
   onClick = (e: MapMouseEvent) => {
+    this.beforeUpdate();
     if (this.active && this.cursor) {
       // Insert the new point in the "middle" of the closest line segment
       let candidates: [number, number][] = [];
@@ -155,6 +162,8 @@ export class PolygonTool {
       e.preventDefault();
       this.cursor = null;
       this.dragFrom = e.lngLat.toArray();
+      // TODO If no drag actually happens, this'll record a useless edit
+      this.beforeUpdate();
       this.redraw();
     }
   };
@@ -174,6 +183,8 @@ export class PolygonTool {
     if (e.key == "Enter") {
       e.stopPropagation();
       this.finish();
+    } else if (e.key == "z" && e.ctrlKey) {
+      this.undo();
     }
   };
 
@@ -224,8 +235,18 @@ export class PolygonTool {
     this.active = false;
     this.hover = null;
     this.dragFrom = null;
+    this.previousStates = [];
     this.redraw();
     this.map.getCanvas().style.cursor = "inherit";
+  }
+
+  undo() {
+    if (this.dragFrom != null || this.previousStates.length == 0) {
+      return;
+    }
+    this.points = this.previousStates.pop()!;
+    this.hover = null;
+    this.redraw();
   }
 
   private redraw() {
@@ -252,6 +273,8 @@ export class PolygonTool {
       cursorStyle = this.dragFrom ? "grabbing" : "pointer";
     }
     this.map.getCanvas().style.cursor = cursorStyle;
+
+    undoLength.set(this.previousStates.length);
   }
 
   // If there's a valid polygon, also passes to eventListenersUpdated
@@ -291,7 +314,7 @@ export class PolygonTool {
   }
 
   // TODO Force the proper winding order that geojson requires
-  polygonFeature(): FeatureWithProps<Polygon> | null {
+  private polygonFeature(): FeatureWithProps<Polygon> | null {
     if (this.points.length < 3) {
       return null;
     }
@@ -307,6 +330,13 @@ export class PolygonTool {
       },
       properties: {},
     };
+  }
+
+  private beforeUpdate() {
+    this.previousStates.push(JSON.parse(JSON.stringify(this.points)));
+    if (this.previousStates.length > maxPreviousStates) {
+      this.previousStates.shift();
+    }
   }
 }
 
