@@ -10,15 +10,18 @@
     TextArea,
     TextInput,
   } from "lib/govuk";
-  import { gjScheme } from "stores";
+  import { gjSchemeCollection } from "stores";
   import ATF4Type from "../forms/ATF4Type.svelte";
+    import { getFirstSchemeOrEmptyScheme } from "./scheme_data";
 
   let showModal = false;
+  let scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
+  $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
 
   // This component is only created once, but gjScheme could be cleared
   // completely multipel times. Set defaults anytime the modal is open.
   $: if (showModal) {
-    $gjScheme.pipeline ||= {
+    scheme.pipeline ||= {
       scheme_type: "",
       status: "",
       timescale: "",
@@ -42,10 +45,10 @@
 
   // Check for all required values
   $: errorMessage =
-    $gjScheme.scheme_name &&
-    $gjScheme.pipeline?.scheme_type &&
-    $gjScheme.pipeline?.status &&
-    $gjScheme.pipeline?.timescale
+    scheme &&
+    scheme.pipeline?.scheme_type &&
+    scheme.pipeline?.status &&
+    scheme.pipeline?.timescale
       ? ""
       : "Missing some required data";
 </script>
@@ -57,11 +60,11 @@
   Scheme details
 </SecondaryButton>
 <Modal title="Scheme details" bind:open={showModal}>
-  {#if $gjScheme.pipeline}
+  {#if scheme.pipeline}
     <TextInput
       label="Scheme name"
       required
-      bind:value={$gjScheme.scheme_name}
+      bind:value={scheme.scheme_name}
     />
 
     <fieldset class="govuk-fieldset">
@@ -79,18 +82,18 @@
         ]}
         inlineSmall
         required
-        bind:value={$gjScheme.pipeline.scheme_type}
+        bind:value={scheme.pipeline.scheme_type}
       />
 
       <ATF4Type
         label="Type of the main intervention"
         id="atf4-lead-type"
-        bind:value={$gjScheme.pipeline.atf4_lead_type}
+        bind:value={scheme.pipeline.atf4_lead_type}
       />
 
       <TextArea
         label="Scheme description (150 words max)"
-        bind:value={$gjScheme.pipeline.scheme_description}
+        bind:value={scheme.pipeline.scheme_description}
       />
     </fieldset>
 
@@ -108,7 +111,7 @@
         ]}
         inlineSmall
         required
-        bind:value={$gjScheme.pipeline.status}
+        bind:value={scheme.pipeline.status}
       />
 
       <Radio
@@ -121,14 +124,14 @@
         ]}
         inlineSmall
         required
-        bind:value={$gjScheme.pipeline.timescale}
+        bind:value={scheme.pipeline.timescale}
       />
       <NumberInput
         label="Estimated completion year (if known)"
         width={4}
         min={2010}
         max={2100}
-        bind:value={$gjScheme.pipeline.timescale_year}
+        bind:value={scheme.pipeline.timescale_year}
       />
 
       <NumberInput
@@ -136,7 +139,7 @@
         width={4}
         min={2010}
         max={2100}
-        bind:value={$gjScheme.pipeline.year_published}
+        bind:value={scheme.pipeline.year_published}
       />
 
       <NumberInput
@@ -144,7 +147,7 @@
         width={4}
         min={2010}
         max={2100}
-        bind:value={$gjScheme.pipeline.year_consulted}
+        bind:value={scheme.pipeline.year_consulted}
       />
     </fieldset>
 
@@ -155,13 +158,13 @@
         label="GBP funded"
         width={10}
         min={0}
-        bind:value={$gjScheme.pipeline.budget_funded}
+        bind:value={scheme.pipeline.budget_funded}
       />
       <NumberInput
         label="GBP unfunded"
         width={10}
         min={0}
-        bind:value={$gjScheme.pipeline.budget_unfunded}
+        bind:value={scheme.pipeline.budget_unfunded}
       />
 
       <Radio
@@ -176,10 +179,10 @@
           repeat("LUF"),
         ]}
         inlineSmall
-        bind:value={$gjScheme.pipeline.funding_source}
+        bind:value={scheme.pipeline.funding_source}
       />
 
-      <Checkbox id="scheme-funded" bind:checked={$gjScheme.pipeline.funded}>
+      <Checkbox id="scheme-funded" bind:checked={scheme.pipeline.funded}>
         Is the scheme fully funded?
       </Checkbox>
     </fieldset>

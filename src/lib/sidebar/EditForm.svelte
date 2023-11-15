@@ -12,7 +12,7 @@
     WarningButton,
   } from "lib/govuk";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { deleteIntervention, gjScheme, map, mode } from "stores";
+  import { deleteIntervention, gjSchemeCollection, map, mode } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { FeatureUnion, Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
@@ -22,12 +22,12 @@
   export let schema: Schema;
   export let id: number;
 
-  let feature = $gjScheme.features.find((f) => f.id == id)!;
+  let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;
   $: warning = interventionWarning(schema, feature);
 
   // Because of how properties are bound individually, updates to $gjScheme aren't seen. Force them.
   function featureUpdated(feature: FeatureUnion) {
-    $gjScheme = $gjScheme;
+    $gjSchemeCollection = $gjSchemeCollection;
   }
   $: featureUpdated(feature);
 

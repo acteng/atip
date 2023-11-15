@@ -16,7 +16,7 @@
     FilterSpecification,
   } from "maplibre-gl";
   import { colorInterventionsBySchema } from "schemas";
-  import { gjScheme, map, mode } from "stores";
+  import { gjSchemeCollection, map, mode } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -29,7 +29,7 @@
 
   export let schema: Schema;
 
-  $: gj = addLineStringEndpoints($gjScheme);
+  $: gj = addLineStringEndpoints($gjSchemeCollection);
 
   // TODO Maybe have a separate component for different modes.
   const hideWhileEditing: FilterSpecification = [

@@ -1,9 +1,9 @@
 import length from "@turf/length";
-import type { FeatureUnion, Schema, Scheme } from "types";
+import type { FeatureUnion, PipelineScheme, Schema, SchemeCollection, SchemeData } from "types";
 
 // TODO This should eventually guarantee the output is a valid Scheme. Only
 // some fixes are applied now.
-export function backfill(json: Scheme) {
+export function backfill(json: SchemeCollection) {
   let idCounter = 1;
   for (let f of json.features) {
     // Fix input from other tools where properties may be null
@@ -21,6 +21,10 @@ export function backfill(json: Scheme) {
 
     // Always overwrite IDs, and follow what newFeatureId requires.
     f.id = idCounter++;
+  }
+
+  json.schemes = {
+    "0": getEmptySchemeData("0"),
   }
 
   return json;
@@ -131,4 +135,32 @@ export function getUnexpectedProperties(
   }
 
   return copy;
+}
+
+export function getFirstSchemeOrEmptyScheme(schemeCollection: SchemeCollection): SchemeData {
+  if (schemeCollection.schemes != undefined) {
+    const schemeReferences = Object.keys(schemeCollection.schemes);
+    if (schemeReferences.length > 0) {
+      return schemeCollection.schemes[schemeReferences[0]];
+    }
+  }
+  return getEmptySchemeData();
+}
+
+function getEmptySchemeData(reference?: string): SchemeData {
+  return {
+    scheme_name: reference || "0",
+  }
+}
+
+function getEmptyPipelineObject(): PipelineScheme {
+  return {
+    scheme_type: "",
+    scheme_description: "",
+    atf4_lead_type: "",
+    status: "",
+    timescale: "",
+    funding_source: "",
+    funded: false,
+  }
 }

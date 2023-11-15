@@ -7,7 +7,7 @@
     TextArea,
   } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { gjScheme, routeTool } from "stores";
+  import { gjSchemeCollection, routeTool } from "stores";
   import type { InterventionProps } from "types";
   import ATF4Type from "./ATF4Type.svelte";
 
@@ -23,7 +23,7 @@
   props.is_coverage_polygon ||= false;
 
   const shouldDisplayCoveragePolygonQuestion: boolean =
-    ($gjScheme.features.filter(
+    ($gjSchemeCollection.features.filter(
       (feature) => feature.properties.is_coverage_polygon
     ).length == 0 ||
       props.is_coverage_polygon === true) &&

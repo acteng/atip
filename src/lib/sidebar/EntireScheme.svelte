@@ -7,11 +7,11 @@
     TextInput,
     WarningButton,
   } from "lib/govuk";
-  import { gjScheme, mode, sidebarHover } from "stores";
+  import { gjSchemeCollection, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
-  import type { Schema, Scheme } from "types";
+  import type { Schema, SchemeCollection } from "types";
   import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
-  import { backfill, interventionWarning } from "./scheme_data";
+  import { backfill, getFirstSchemeOrEmptyScheme, interventionWarning } from "./scheme_data";
 
   export let authorityName: string;
   export let schema: Schema;
@@ -24,6 +24,11 @@
 
   let loaded = false;
   let displayClearAllConfirmation = false;
+  let scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
+  if(!$gjSchemeCollection.schemes){
+    $gjSchemeCollection.schemes = {};
+  }
+  $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
 
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
@@ -36,13 +41,13 @@
       try {
         let resp = await fetch(loadUrl);
         let body = await resp.text();
-        gjScheme.set(backfill(JSON.parse(body)));
+        gjSchemeCollection.set(backfill(JSON.parse(body)));
       } catch (err) {
         console.log(`Failed to load from URL: ${err}`);
       }
     } else if (loadLocal) {
       try {
-        gjScheme.set(backfill(JSON.parse(loadLocal)));
+        gjSchemeCollection.set(backfill(JSON.parse(loadLocal)));
       } catch (err) {
         console.log(`Failed to load from local storage: ${err}`);
       }
@@ -52,7 +57,7 @@
 
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
   $: {
-    if (loaded && $gjScheme) {
+    if (loaded && $gjSchemeCollection) {
       console.log(`GJ changed, saving to local storage`);
       window.localStorage.setItem(
         baseFilename,
@@ -64,10 +69,10 @@
   function clearAll() {
     displayClearAllConfirmation = false;
 
-    gjScheme.update((gj) => {
+    gjSchemeCollection.update((gj) => {
       // Leave origin, authority, and other foreign members alone
-      delete gj.scheme_name;
-      delete gj.pipeline;
+      scheme.scheme_name = "";
+      delete scheme.pipeline;
       gj.features = [];
       return gj;
     });
@@ -75,8 +80,8 @@
   }
 
   // Remove the hide_while_editing property hack
-  function geojsonToSave(): Scheme {
-    const copy = JSON.parse(JSON.stringify($gjScheme));
+  function geojsonToSave(): SchemeCollection {
+    const copy = JSON.parse(JSON.stringify($gjSchemeCollection));
     for (let feature of copy.features) {
       delete feature.properties.hide_while_editing;
     }
@@ -90,8 +95,8 @@
     // we could probably be more sophisticated here and set version more centrally
     geojson.origin = "atip-v2";
     // Include the scheme name if it's set
-    if (geojson["scheme_name"]) {
-      filename += "_" + geojson["scheme_name"];
+    if (Object.keys(geojson.schemes).length > 0) {
+      filename += "_" + scheme.scheme_name;
     }
     filename += ".geojson";
     downloadGeneratedFile(filename, JSON.stringify(geojson, null, "  "));
@@ -112,21 +117,21 @@
   function loadFile(text: string) {
     try {
       // TODO Should we prompt before deleting the current scheme?
-      gjScheme.set(backfill(JSON.parse(text)));
+      gjSchemeCollection.set(backfill(JSON.parse(text)));
       errorMessage = "";
     } catch (err) {
       errorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
 
-  $: numErrors = $gjScheme.features.filter(
+  $: numErrors = $gjSchemeCollection.features.filter(
     (f) => interventionWarning(schema, f) != null
   ).length;
 </script>
 
 {#if $mode.mode == "list"}
-  <CollapsibleCard label={$gjScheme.scheme_name ?? "Untitled scheme"}>
-    <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
+  <CollapsibleCard label={scheme.scheme_name ?? "Untitled scheme"}>
+    <TextInput label="Scheme name" bind:value={scheme.scheme_name} />
 
     <ErrorMessage {errorMessage} />
 
@@ -139,7 +144,7 @@
     <div>
       <WarningButton
         on:click={() => (displayClearAllConfirmation = true)}
-        disabled={$gjScheme.features.length == 0}
+        disabled={$gjSchemeCollection.features.length == 0}
       >
         Start new scheme
       </WarningButton>

@@ -2,7 +2,7 @@
   import { Legend, WarningIcon } from "lib/common";
   import { bbox } from "lib/maplibre";
   import { schemaLegend } from "schemas";
-  import { gjScheme, map, mode, sidebarHover } from "stores";
+  import { gjSchemeCollection, map, mode, sidebarHover } from "stores";
   import { onDestroy } from "svelte";
   import type { Schema } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
@@ -15,7 +15,7 @@
 
     // When the user starts editing something from the sidebar, warp to what's
     // being edited. (Don't do this when clicking the object on the map.)
-    let feature = $gjScheme.features.find((f) => f.id == id)!;
+    let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;
 
     // Padding around a point looks odd; special case it by keeping the current zoom
     if (feature.geometry.type == "Point") {
@@ -48,7 +48,7 @@
 </script>
 
 <ol class="govuk-list govuk-list--number">
-  {#each $gjScheme.features as feature (feature.id)}
+  {#each $gjSchemeCollection.features as feature (feature.id)}
     {@const warning = interventionWarning(schema, feature)}
     <li>
       <!-- svelte-ignore a11y-invalid-attribute -->

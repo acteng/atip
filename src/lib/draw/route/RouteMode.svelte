@@ -2,7 +2,7 @@
   import type { LineString, Polygon } from "geojson";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { gjScheme, mode, newFeatureId, routeTool } from "stores";
+  import { gjSchemeCollection, mode, newFeatureId, routeTool } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import RouteControls from "./RouteControls.svelte";
@@ -18,7 +18,7 @@
   });
 
   function onSuccess(feature: FeatureWithProps<LineString | Polygon>) {
-    gjScheme.update((gj) => {
+    gjSchemeCollection.update((gj) => {
       feature.id = newFeatureId(gj);
       feature.properties.intervention_type = "route";
       if (feature.properties.route_name) {

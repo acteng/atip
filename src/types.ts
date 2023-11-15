@@ -7,14 +7,19 @@ export type Schema = "v1" | "v2" | "planning" | "atf4" | "pipeline";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
-export interface Scheme {
+export interface SchemeCollection {
   type: "FeatureCollection";
   features: FeatureUnion[];
   // Foreign members
-  scheme_name?: string;
   authority?: string;
   origin?: string;
+  schemes: {[refrence: string]: SchemeData}; 
+}
+
+export interface SchemeData {
+  scheme_name: string;
   pipeline?: PipelineScheme;
+  browse?: BrowseSchemeData;
 }
 
 // Every field is optional in this type, to match the reality of starting with
@@ -45,6 +50,13 @@ export interface PipelineScheme {
   funding_source: "ATF2" | "ATF3" | "ATF4" | "ATF4e" | "CRSTS" | "LUF" | "";
   // TODO What about partially? How's this overlap with budget?
   funded: boolean;
+}
+
+export interface BrowseSchemeData {
+  num_features: number;
+  authority_or_region: string;
+  capital_scheme_id: string;
+  funding_programme: string;
 }
 
 export type ATF4Type =
