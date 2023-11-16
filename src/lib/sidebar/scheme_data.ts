@@ -23,10 +23,11 @@ export function backfill(json: SchemeCollection) {
     // Always overwrite IDs, and follow what newFeatureId requires.
     f.id = idCounter++;
   }
-  const uuid = uuidv4();
-  json.schemes = json.schemes || {
-    uuid: getEmptySchemeData(uuid),
-  };
+  if (!json.schemes) {
+    const uuid = uuidv4();
+    json.schemes = {};
+    json.schemes[uuid] = getEmptySchemeData(uuid);
+  }
 
   return json;
 }
@@ -141,18 +142,16 @@ export function getUnexpectedProperties(
 export function getFirstSchemeOrEmptyScheme(
   schemeCollection: SchemeCollection
 ): SchemeData {
-  if (schemeCollection.schemes != undefined) {
-    const schemeReferences = Object.keys(schemeCollection.schemes);
-    if (schemeReferences.length > 0) {
-      return schemeCollection.schemes[schemeReferences[0]];
-    }
+  const schemeReferences = Object.keys(schemeCollection.schemes ?? {});
+  if (schemeReferences.length > 0) {
+    return schemeCollection.schemes[schemeReferences[0]];
   }
   return getEmptySchemeData(uuidv4());
 }
 
 function getEmptySchemeData(reference: string, name?: string): SchemeData {
   return {
-    scheme_name: name || "Unnamed Scheme",
+    scheme_name: name || "Untitled scheme",
     scheme_reference: reference,
   };
 }
