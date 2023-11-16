@@ -12,7 +12,7 @@
   } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
   import ATF4Type from "../forms/ATF4Type.svelte";
-    import { getFirstSchemeOrEmptyScheme } from "./scheme_data";
+  import { getFirstSchemeOrEmptyScheme } from "./scheme_data";
 
   let showModal = false;
   let scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
@@ -66,11 +66,7 @@
 </SecondaryButton>
 <Modal title="Scheme details" bind:open={showModal}>
   {#if scheme.pipeline}
-    <TextInput
-      label="Scheme name"
-      required
-      bind:value={scheme.scheme_name}
-    />
+    <TextInput label="Scheme name" required bind:value={scheme.scheme_name} />
 
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend">Basic information</legend>

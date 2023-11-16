@@ -13,7 +13,7 @@ export interface SchemeCollection {
   // Foreign members
   authority?: string;
   origin?: string;
-  schemes: {[refrence: string]: SchemeData}; 
+  schemes: { [refrence: string]: SchemeData };
 }
 
 export interface SchemeData {

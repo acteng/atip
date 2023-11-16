@@ -1,5 +1,5 @@
 import length from "@turf/length";
-import type { FeatureUnion, PipelineScheme, Schema, SchemeCollection, SchemeData } from "types";
+import type { FeatureUnion, Schema, SchemeCollection, SchemeData } from "types";
 import { v4 as uuidv4 } from "uuid";
 
 // TODO This should eventually guarantee the output is a valid Scheme. Only
@@ -26,7 +26,7 @@ export function backfill(json: SchemeCollection) {
   const uuid = uuidv4();
   json.schemes = json.schemes || {
     uuid: getEmptySchemeData(uuid),
-  }
+  };
 
   return json;
 }
@@ -138,7 +138,9 @@ export function getUnexpectedProperties(
   return copy;
 }
 
-export function getFirstSchemeOrEmptyScheme(schemeCollection: SchemeCollection): SchemeData {
+export function getFirstSchemeOrEmptyScheme(
+  schemeCollection: SchemeCollection
+): SchemeData {
   if (schemeCollection.schemes != undefined) {
     const schemeReferences = Object.keys(schemeCollection.schemes);
     if (schemeReferences.length > 0) {
@@ -152,17 +154,5 @@ function getEmptySchemeData(reference: string, name?: string): SchemeData {
   return {
     scheme_name: name || "Unnamed Scheme",
     scheme_reference: reference,
-  }
-}
-
-function getEmptyPipelineObject(): PipelineScheme {
-  return {
-    scheme_type: "",
-    scheme_description: "",
-    atf4_lead_type: "",
-    status: "",
-    timescale: "",
-    funding_source: "",
-    funded: false,
-  }
+  };
 }

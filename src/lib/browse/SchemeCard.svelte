@@ -4,10 +4,10 @@
   import { ButtonGroup, SecondaryButton } from "lib/govuk";
   import { bbox } from "lib/maplibre";
   import { map } from "stores";
-  import type { AllSchemeGJ, Scheme } from "./data";
+  import type { SchemeCollection, SchemeData } from "types";
 
-  export let schemesGj: AllSchemeGJ;
-  export let scheme: Scheme;
+  export let schemesGj: SchemeCollection;
+  export let scheme: SchemeData;
 
   function showScheme() {
     // TODO Highlight on the map? Or fade everything else?
@@ -27,24 +27,24 @@
         (f) => f.properties.scheme_reference == scheme.scheme_reference
       ),
     };
-    let filename = scheme.authority_or_region;
+    let filename = scheme.browse?.authority_or_region || "unknown authority";
     // Assuming the schema is always v1
 
     // Put the file in local storage, so it'll be loaded from the next page
     window.localStorage.setItem(filename, JSON.stringify(gj));
     window.open(
-      `scheme.html?authority=${scheme.authority_or_region}`,
+      `scheme.html?authority=${scheme.browse?.authority_or_region}`,
       "_blank"
     );
   }
 </script>
 
 <CollapsibleCard
-  label={`${scheme.scheme_reference}: ${scheme.num_features} features`}
+  label={`${scheme.scheme_reference}: ${scheme.browse?.num_features} features`}
 >
-  <p>Authority or region: {scheme.authority_or_region}</p>
-  <p>Capital scheme ID: {scheme.capital_scheme_id}</p>
-  <p>Funding programme: {scheme.funding_programme}</p>
+  <p>Authority or region: {scheme.browse?.authority_or_region}</p>
+  <p>Capital scheme ID: {scheme.browse?.capital_scheme_id}</p>
+  <p>Funding programme: {scheme.browse?.funding_programme}</p>
   <ButtonGroup>
     <SecondaryButton on:click={showScheme}>Show on map</SecondaryButton>
     <SecondaryButton on:click={editScheme}>Edit scheme locally</SecondaryButton>

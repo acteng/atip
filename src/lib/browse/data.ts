@@ -3,17 +3,6 @@ import { setPrecision } from "lib/maplibre";
 import readXlsxFile from "read-excel-file";
 import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
 
-export interface AllSchemeGJ {
-  type: "FeatureCollection";
-  features: FeatureUnion[];
-  schemes: { [name: string]: SchemeData };
-}
-
-
-export interface Scheme extends SchemeData {
-  num_features: number;
-}
-
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
 // Modifies this GeoJSON in-place, and returns a dictionary of Schemes, keyed
 // (and ordered) by scheme_reference. Each feature (intervention) in the GJ
@@ -32,7 +21,10 @@ export function processInput(gj: SchemeCollection): Map<string, SchemeData> {
   for (let feature of gj.features) {
     let scheme: SchemeData = schemes.get(feature.properties!.scheme_reference);
     if (scheme.browse) {
-      scheme.browse.num_features = scheme.browse.num_features !== undefined ? scheme.browse.num_features + 1 : 0;
+      scheme.browse.num_features =
+        scheme.browse.num_features !== undefined
+          ? scheme.browse.num_features + 1
+          : 1;
 
       // TODO For easy styling, copy one field from scheme to all its features.
       // As we have more cases like this, revisit what's most performant.

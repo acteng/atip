@@ -27,7 +27,8 @@ export const routeTool: Writable<RouteTool | null> = writable(null);
 // TODO Should we instead store a map from ID to feature?
 const freshGeojson = emptyGeojson() as SchemeCollection;
 freshGeojson.schemes = {};
-export const gjSchemeCollection: Writable<SchemeCollection> = writable(freshGeojson);
+export const gjSchemeCollection: Writable<SchemeCollection> =
+  writable(freshGeojson);
 
 // The optional ID of a feature currently hovered from the sidebar.
 export const sidebarHover: Writable<number | null> = writable(null);

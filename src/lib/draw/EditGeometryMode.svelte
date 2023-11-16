@@ -3,7 +3,13 @@
   import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
   import { interventionName } from "lib/sidebar/scheme_data";
-  import { gjSchemeCollection, mode, pointTool, polygonTool, routeTool } from "stores";
+  import {
+    gjSchemeCollection,
+    mode,
+    pointTool,
+    polygonTool,
+    routeTool,
+  } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature, FeatureUnion, Schema } from "types";
   import PointControls from "./point/PointControls.svelte";
