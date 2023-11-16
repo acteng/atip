@@ -2,6 +2,7 @@
   import { SecondaryButton } from "lib/govuk";
   import { mode, pointTool, polygonTool, routeTool } from "stores";
   import type { Schema } from "types";
+  import imageIcon from "../../../assets/image.svg";
   import pointIcon from "../../../assets/point.svg";
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
   import polygonSnappedIcon from "../../../assets/polygon_snapped.svg";
@@ -52,6 +53,11 @@
       Split route
     </SecondaryButton>
   {/if}
+  <SecondaryButton on:click={() => mode.set({ mode: "set-image" })}>
+    <!-- svelte-ignore a11y-img-redundant-alt -->
+    <img src={imageIcon} alt="Georeference image" />
+    Georeference image
+  </SecondaryButton>
   <SecondaryButton on:click={() => mode.set({ mode: "streetview" })}>
     <img src={streetViewIcon} alt="StreetView" />
     StreetView
