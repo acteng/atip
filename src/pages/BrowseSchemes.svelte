@@ -21,6 +21,7 @@
   import { ErrorMessage } from "lib/govuk";
   import { mapStyle } from "stores";
   import { onMount } from "svelte";
+    import type { SchemeCollection } from "types";
 
   onMount(() => {
     // For govuk components. Must happen here.
@@ -31,7 +32,7 @@
   mapStyle.set(params.get("style") || "dataviz");
   let errorMessage = "";
 
-  let schemesGj: AllSchemeGJ = {
+  let schemesGj: SchemeCollection = {
     type: "FeatureCollection",
     features: [],
     schemes: {},
