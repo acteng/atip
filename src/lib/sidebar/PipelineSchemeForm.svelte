@@ -15,6 +15,7 @@
   import { getFirstSchemeOrEmptyScheme } from "./scheme_data";
 
   let showModal = false;
+  // TODO: this will only be used until we support multiple schemes being edited in scheme sketcher
   let scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
   $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
 

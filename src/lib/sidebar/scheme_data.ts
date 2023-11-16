@@ -27,6 +27,13 @@ export function backfill(json: SchemeCollection) {
     const uuid = uuidv4();
     json.schemes = {};
     json.schemes[uuid] = getEmptySchemeData(uuid);
+    // @ts-ignore this is to support older ATIP files
+    if (json.scheme_name) {
+      // @ts-ignore this is to support older ATIP files
+      json.schemes[uuid].scheme_name = json.scheme_name;
+      // @ts-ignore this is to support older ATIP files
+      delete json.scheme_name;
+    }
   }
 
   return json;
