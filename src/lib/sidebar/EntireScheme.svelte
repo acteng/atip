@@ -79,7 +79,7 @@
 
     gjSchemeCollection.update((gj) => {
       // Leave origin, authority, and other foreign members alone
-      scheme.scheme_name = "";
+      scheme.scheme_name = "Untitled scheme";
       delete scheme.pipeline;
       gj.features = [];
       return gj;
@@ -137,55 +137,51 @@
   ).length;
 </script>
 
-{#if scheme}
-  {#if $mode.mode == "list"}
-    <CollapsibleCard label={scheme.scheme_name ?? "Untitled scheme"}>
-      <TextInput label="Scheme name" bind:value={scheme.scheme_name} />
+{#if scheme && $mode.mode == "list"}
+  <CollapsibleCard label={scheme.scheme_name ?? "Untitled scheme"}>
+    <TextInput label="Scheme name" bind:value={scheme.scheme_name} />
 
-      <ErrorMessage {errorMessage} />
+    <ErrorMessage {errorMessage} />
 
-      <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
+    <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
 
-      <SecondaryButton on:click={exportToGeojson}>
-        Export to GeoJSON
-      </SecondaryButton>
+    <SecondaryButton on:click={exportToGeojson}>
+      Export to GeoJSON
+    </SecondaryButton>
 
-      <div>
-        <WarningButton
-          on:click={() => (displayClearAllConfirmation = true)}
-          disabled={$gjSchemeCollection.features.length == 0}
-        >
-          Start new scheme
-        </WarningButton>
-      </div>
-      <Modal
-        title="Would you like to clear your work?"
-        bind:open={displayClearAllConfirmation}
-        displayEscapeButton={false}
+    <div>
+      <WarningButton
+        on:click={() => (displayClearAllConfirmation = true)}
+        disabled={$gjSchemeCollection.features.length == 0}
       >
-        <p>This will delete all your drawn interventions.</p>
-        <ButtonGroup>
-          <WarningButton on:click={clearAll}>Clear all work</WarningButton>
-          <SecondaryButton
-            on:click={() => (displayClearAllConfirmation = false)}
-          >
-            Cancel
-          </SecondaryButton>
-        </ButtonGroup>
-      </Modal>
-    </CollapsibleCard>
-    {#if schema == "pipeline"}
-      <PipelineSchemeForm />
-    {/if}
+        Start new scheme
+      </WarningButton>
+    </div>
+    <Modal
+      title="Would you like to clear your work?"
+      bind:open={displayClearAllConfirmation}
+      displayEscapeButton={false}
+    >
+      <p>This will delete all your drawn interventions.</p>
+      <ButtonGroup>
+        <WarningButton on:click={clearAll}>Clear all work</WarningButton>
+        <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
+          Cancel
+        </SecondaryButton>
+      </ButtonGroup>
+    </Modal>
+  </CollapsibleCard>
+  {#if schema == "pipeline"}
+    <PipelineSchemeForm />
+  {/if}
 
-    {#if numErrors == 1}
-      <ErrorMessage
-        errorMessage="There's a problem with one intervention below"
-      />
-    {:else if numErrors > 0}
-      <ErrorMessage
-        errorMessage="There's a problem with {numErrors} interventions below"
-      />
-    {/if}
+  {#if numErrors == 1}
+    <ErrorMessage
+      errorMessage="There's a problem with one intervention below"
+    />
+  {:else if numErrors > 0}
+    <ErrorMessage
+      errorMessage="There's a problem with {numErrors} interventions below"
+    />
   {/if}
 {/if}
