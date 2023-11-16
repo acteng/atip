@@ -16,8 +16,7 @@
 
   let showModal = false;
   let scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
-  let originalSchemeName = scheme.scheme_name 
-  $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
+  $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
 
   // This component is only created once, but gjScheme could be cleared
   // completely multipel times. Set defaults anytime the modal is open.
@@ -53,8 +52,8 @@
       ? ""
       : "Missing some required data";
   function onCompletion() {
-    delete $gjSchemeCollection.schemes[originalSchemeName];
-    $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
+    $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
+    $gjSchemeCollection = $gjSchemeCollection;
     showModal = false;
   }
 </script>

@@ -18,6 +18,7 @@ export interface SchemeCollection {
 
 export interface SchemeData {
   scheme_name: string;
+  scheme_reference: string;
   pipeline?: PipelineScheme;
   browse?: BrowseSchemeData;
 }

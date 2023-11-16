@@ -29,6 +29,9 @@
   let loaded = false;
   let displayClearAllConfirmation = false;
   let scheme: SchemeData;
+  gjSchemeCollection.subscribe((newSchemeCollection) => {
+    scheme = getFirstSchemeOrEmptyScheme(newSchemeCollection);
+  });
 
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
@@ -57,7 +60,7 @@
     if (!$gjSchemeCollection.schemes) {
       $gjSchemeCollection.schemes = {};
     }
-    $gjSchemeCollection.schemes[scheme.scheme_name] = scheme;
+    $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
   });
 
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
