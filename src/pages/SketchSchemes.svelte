@@ -13,6 +13,7 @@
     MapLibreMap,
     ZoomOutMap,
   } from "lib/common";
+  import ImageLayer from "lib/draw/image/ImageLayer.svelte";
   import InterventionLayer from "lib/draw/InterventionLayer.svelte";
   import PolygonToolLayer from "lib/draw/polygon/PolygonToolLayer.svelte";
   import RouteSnapperLayer from "lib/draw/route/RouteSnapperLayer.svelte";
@@ -114,6 +115,7 @@
       <Geocoder position="top-right" />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer {schema} />
+      <ImageLayer />
       {#if $mode.mode == "list"}
         <Toolbox {schema} />
       {:else if $mode.mode == "split-route"}

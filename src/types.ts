@@ -147,4 +147,5 @@ export type Mode =
   | { mode: "new-snapped-polygon" }
   | { mode: "new-route" }
   | { mode: "split-route" }
+  | { mode: "set-image" }
   | { mode: "streetview" };

@@ -5,6 +5,7 @@
   import { onDestroy } from "svelte";
   import type { Schema } from "types";
   import EditGeometryMode from "../draw/EditGeometryMode.svelte";
+  import ImageMode from "../draw/image/ImageMode.svelte";
   import { PointTool } from "../draw/point/point_tool";
   import PointMode from "../draw/point/PointMode.svelte";
   import { PolygonTool } from "../draw/polygon/polygon_tool";
@@ -78,6 +79,9 @@ toolbox, but that gets created and destroyed frequently. -->
       to cancel
     </li>
   </ul>
+{:else if $mode.mode == "set-image"}
+  <h2>Georeference image</h2>
+  <ImageMode />
 {:else if $mode.mode == "streetview"}
   <h2>StreetView</h2>
   <StreetViewMode />
