@@ -36,6 +36,20 @@ test("loading a file with length displays the length", async () => {
   await expect(page.getByText("Length: 299 m")).toBeVisible();
 });
 
+test("loading an old-format file with length displays the length", async () => {
+  await page
+    .getByLabel("Load from GeoJSON")
+    .setInputFiles("tests/data/Adur-Old.json");
+
+  page.on("dialog", (dialog) => dialog.accept());
+  await page
+    .getByRole("link", {
+      name: "Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
+    })
+    .click();
+  await expect(page.getByText("Length: 450 m")).toBeVisible();
+});
+
 // Some people used ATIP before route-snapper started populating a length
 // property. Upload a file with that missing, and make sure it's backfilled.
 test("loading a file without length displays the length", async () => {
@@ -112,6 +126,22 @@ test("loading a file from the homepage goes to the correct page", async () => {
     })
     .click();
   await expect(page.getByText("Length: 299 m")).toBeVisible();
+});
+
+test("loading a old-format file from the homepage goes to the correct page", async () => {
+  await page.goto("/");
+  await page
+    .getByLabel("Or upload an ATIP GeoJSON file")
+    .setInputFiles("tests/data/Adur-Old.json");
+
+  await expect(page).toHaveURL(/scheme.html\?authority=LAD_Adur/);
+  await checkPageLoaded(page);
+  await page
+    .getByRole("link", {
+      name: "Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
+    })
+    .click();
+  await expect(page.getByText("Length: 450 m")).toBeVisible();
 });
 
 test("loading a file produced by another tool shows fixable errors", async () => {
