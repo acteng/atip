@@ -1,7 +1,13 @@
 <script lang="ts">
-  import { FormElement, Radio, SecondaryButton, TextArea } from "lib/govuk";
+  import {
+    FormElement,
+    Radio,
+    SecondaryButton,
+    Select,
+    TextArea,
+  } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { routeTool } from "stores";
+  import { gjSchemeCollection, routeTool } from "stores";
   import type { InterventionProps } from "types";
 
   export let id: number;
@@ -27,6 +33,16 @@
     </SecondaryButton>
   {/if}
 </FormElement>
+
+<Select
+  label="Scheme"
+  id={"scheme-" + id}
+  choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
+    scheme.scheme_reference,
+    scheme.scheme_name ?? "Untitled scheme",
+  ])}
+  bind:value={props.scheme_reference}
+/>
 
 <Radio
   legend="Type"

@@ -95,6 +95,8 @@ export interface Feature<G extends Geometry> {
 export interface InterventionProps {
   // These 3 fields are v1 schema
   intervention_type: "area" | "route" | "crossing" | "other";
+  // A key into SchemeCollection.schemes
+  scheme_reference: string;
   name: string;
   description: string;
 
@@ -102,7 +104,7 @@ export interface InterventionProps {
   length_meters?: number;
   // For LineStrings and Polygons only
   waypoints?: Waypoint[];
-  //For polygons only
+  // For polygons only
   is_coverage_polygon?: boolean;
 
   // TODO Hack. If these're filled out, ignore the schema above.
@@ -110,8 +112,6 @@ export interface InterventionProps {
   v2?: Intervention;
   atf4?: ATF4Intervention;
   pipeline?: PipelineIntervention;
-  // An extra field present in input for the browse schemes page only
-  scheme_reference?: string;
 
   // Temporary state, not meant to be serialized
   hide_while_editing?: boolean;
