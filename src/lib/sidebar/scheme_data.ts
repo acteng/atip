@@ -1,8 +1,13 @@
 import length from "@turf/length";
 import { randomSchemeColor } from "colors";
-import { schema as schemaStore } from "stores";
+import { gjSchemeCollection, schema as schemaStore } from "stores";
 import { get } from "svelte/store";
-import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
+import type {
+  FeatureUnion,
+  PipelineScheme,
+  SchemeCollection,
+  SchemeData,
+} from "types";
 import { v4 as uuidv4 } from "uuid";
 
 // TODO This should eventually guarantee the output is a valid Scheme. Only
@@ -43,6 +48,9 @@ export function backfill(json: SchemeCollection) {
     if (json.scheme_name) {
       // @ts-ignore handling old format
       json.schemes[scheme_reference].scheme_name = json.scheme_name;
+
+      fillBudgetAndTimelineFromSingleSchemeFormat(json, scheme_reference);
+
       // @ts-ignore handling old format
       delete json.scheme_name;
     }
@@ -52,6 +60,9 @@ export function backfill(json: SchemeCollection) {
     if (json.pipeline) {
       // @ts-ignore handling old format
       json.schemes[scheme_reference].pipeline = json.pipeline;
+
+      fillBudgetAndTimelineFromSingleSchemeFormat(json, scheme_reference);
+
       // @ts-ignore handling old format
       delete json.pipeline;
     }
@@ -68,6 +79,29 @@ export function backfill(json: SchemeCollection) {
   }
 
   return json;
+}
+
+function fillBudgetAndTimelineFromSingleSchemeFormat(
+  // Use any to handle old formats
+  json: any,
+  scheme_reference: string
+) {
+  if (json.schemes.pipeline?.status) {
+    json.schemes[scheme_reference].pipeline.scheme_timescale = {
+      status: json.pipeline?.status,
+      timescale: json.pipeline?.timescale,
+      timescale_year: json.pipeline?.timescale_year,
+      year_published: json.pipeline?.year_published,
+      year_consulted: json.pipeline?.year_consulted,
+    };
+
+    json.schemes[scheme_reference].pipeline.scheme_budget = {
+      cost: json.pipeline?.cost,
+      development_funded: json.pipeline?.development_funded ?? false,
+      construction_funded: json.pipeline?.construction_funded ?? false,
+      funding_source: json.pipeline.funding_source ?? "",
+    };
+  }
 }
 
 export function emptyCollection(): SchemeCollection {
@@ -104,11 +138,6 @@ export function interventionName(feature: FeatureUnion): string {
 export function interventionWarning(feature: FeatureUnion): string | null {
   let schema = get(schemaStore);
 
-  // Only worry about some schemas for now.
-  if (schema != "v1" && schema != "pipeline") {
-    return null;
-  }
-
   if (!feature.properties.name) {
     return "No name";
   }
@@ -120,6 +149,12 @@ export function interventionWarning(feature: FeatureUnion): string | null {
     )
   ) {
     return "No intervention type";
+  }
+
+  if (schema == "pipeline") {
+    if (!feature.properties.pipeline?.accuracy) {
+      return "Accuracy not specified";
+    }
   }
 
   let unexpectedProperties = getUnexpectedProperties(feature.properties);
@@ -155,7 +190,14 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
   }
 
   if (schema == "pipeline" && copy.pipeline) {
-    for (let key of ["atf4_type", "accuracy", "is_alternative"]) {
+    // TODO We could recurse into intervention_timescale if needed
+    for (let key of [
+      "atf4_type",
+      "accuracy",
+      "is_alternative",
+      "cost",
+      "intervention_timescale",
+    ]) {
       delete copy.pipeline[key];
     }
     if (Object.entries(copy.pipeline).length == 0) {
@@ -172,4 +214,55 @@ export function getArbitraryScheme(
   schemeCollection: SchemeCollection
 ): SchemeData {
   return Object.values(schemeCollection.schemes)[0];
+}
+
+function getFeaturesFromScheme(schemeReference: string): FeatureUnion[] {
+  return get(gjSchemeCollection).features.filter((feature) => {
+    return feature.properties.scheme_reference === schemeReference;
+  });
+}
+
+export function getMaxTimescale(schemeReference: string): string | undefined {
+  let ordering = {
+    "": 0,
+    short: 1,
+    medium: 2,
+    long: 3,
+  };
+  let max = 0;
+  for (let f of getFeaturesFromScheme(schemeReference)) {
+    let x = ordering[f.properties.pipeline!.intervention_timescale.timescale];
+    max = Math.max(max, x);
+  }
+  return [
+    undefined,
+    "Short (1-3 years)",
+    "Medium (3-6 years)",
+    "Long (6-10 years)",
+  ][max];
+}
+
+export function sumBudgetForScheme(schemeReference: string): number {
+  let sum = 0;
+  for (let f of getFeaturesFromScheme(schemeReference)) {
+    sum += f.properties.pipeline!.cost ?? 0;
+  }
+  return sum;
+}
+
+export function getEmptyPipelineObject(): PipelineScheme {
+  return {
+    scheme_type: "",
+    atf4_lead_type: "",
+    scheme_description: "",
+    scheme_budget: {
+      development_funded: false,
+      construction_funded: false,
+      funding_source: "",
+    },
+    scheme_timescale: {
+      status: "",
+      timescale: "",
+    },
+  };
 }

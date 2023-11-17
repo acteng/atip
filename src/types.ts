@@ -40,18 +40,24 @@ export interface PipelineScheme {
   scheme_description: string;
 
   // TODO Check with DB schema
+  scheme_timescale: PipelineTimescale;
+  scheme_budget: PipelineBudget;
+}
+
+export interface PipelineTimescale {
   status: "planned" | "in development" | "in construction" | "completed" | "";
   timescale: "short" | "medium" | "long" | "";
   timescale_year?: number;
   year_published?: number;
   year_consulted?: number;
+}
 
+export interface PipelineBudget {
   // GBP
-  budget_funded?: number;
-  budget_unfunded?: number;
+  cost?: number;
+  development_funded: boolean;
+  construction_funded: boolean;
   funding_source: "ATF2" | "ATF3" | "ATF4" | "ATF4e" | "CRSTS" | "LUF" | "";
-  // TODO What about partially? How's this overlap with budget?
-  funded: boolean;
 }
 
 export interface BrowseSchemeData {
@@ -118,6 +124,8 @@ export interface PipelineIntervention {
   accuracy: "high" | "medium" | "low" | "";
   is_alternative: boolean;
 
+  intervention_timescale: PipelineTimescale;
+  cost?: number;
   // TODO new / existing / upgrade existing?
   // TODO for routes, ltn120 type: fully protected, light segregation, off-carriageway, shared-use, dedicated footpath. minimum width?
 }
