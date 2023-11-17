@@ -3,6 +3,7 @@
   import type { Feature } from "geojson";
   import {
     addLineStringEndpoints,
+    constructMatchExpression,
     isCoveragePolygon,
     isLine,
     isNotCoveragePolygon,
@@ -15,7 +16,6 @@
     DataDrivenPropertyValueSpecification,
     FilterSpecification,
   } from "maplibre-gl";
-  import { colorInterventionsBySchema } from "schemas";
   import { gjSchemeCollection, map, mode } from "stores";
   import {
     CircleLayer,
@@ -25,7 +25,7 @@
     Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { FeatureUnion, Schema } from "types";
+  import type { FeatureUnion, Schema, SchemeCollection } from "types";
 
   export let schema: Schema;
 
@@ -43,7 +43,6 @@
 
   let color: DataDrivenPropertyValueSpecification<string>;
   $: {
-    let colorInterventions = colorInterventionsBySchema(schema);
     let fadeColor = "grey";
     if ($mode.mode == "edit-form") {
       // @ts-ignore Can't figure out the problem
@@ -61,6 +60,22 @@
     } else {
       color = fadeColor;
     }
+  }
+
+  $: colorInterventions = colorByScheme($gjSchemeCollection);
+  function colorByScheme(
+    gj: SchemeCollection
+  ): DataDrivenPropertyValueSpecification<string> {
+    return constructMatchExpression(
+      ["get", "scheme_reference"],
+      Object.fromEntries(
+        Object.values(gj.schemes).map((scheme) => [
+          scheme.scheme_reference,
+          scheme.color,
+        ])
+      ),
+      "black"
+    );
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {

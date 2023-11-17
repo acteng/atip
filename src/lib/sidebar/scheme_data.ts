@@ -1,4 +1,5 @@
 import length from "@turf/length";
+import { randomSchemeColor } from "colors";
 import type { FeatureUnion, Schema, SchemeCollection, SchemeData } from "types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -32,6 +33,7 @@ export function backfill(json: SchemeCollection) {
     json.schemes = {};
     json.schemes[scheme_reference] = {
       scheme_reference,
+      color: randomSchemeColor(),
     };
 
     // Move over the optional scheme_name from the old place
@@ -58,6 +60,11 @@ export function backfill(json: SchemeCollection) {
     }
   }
 
+  // Ensure every scheme has some color
+  for (let scheme of Object.values(json.schemes)) {
+    scheme.color ||= randomSchemeColor();
+  }
+
   return json;
 }
 
@@ -66,6 +73,7 @@ export function emptyCollection(): SchemeCollection {
   let schemes: { [reference: string]: SchemeData } = {};
   schemes[scheme_reference] = {
     scheme_reference,
+    color: randomSchemeColor(),
   };
   return {
     type: "FeatureCollection",

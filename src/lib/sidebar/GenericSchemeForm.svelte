@@ -36,6 +36,7 @@
 <Modal title="Scheme details" bind:open={showModal}>
   {#if scheme}
     <TextInput label="Scheme name" required bind:value={scheme.scheme_name} />
+
     <DefaultButton on:click={finish}>Save</DefaultButton>
   {/if}
 </Modal>

@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { Legend } from "lib/common";
+  import { randomSchemeColor } from "colors";
   import { ErrorMessage, SecondaryButton } from "lib/govuk";
-  import { schemaLegend } from "schemas";
   import { gjSchemeCollection } from "stores";
   import type { Schema } from "types";
   import { v4 as uuidv4 } from "uuid";
@@ -19,6 +18,7 @@
     let scheme_reference = uuidv4();
     $gjSchemeCollection.schemes[scheme_reference] = {
       scheme_reference,
+      color: randomSchemeColor(),
     };
     $gjSchemeCollection = $gjSchemeCollection;
   }
@@ -37,5 +37,3 @@
     errorMessage="There's a problem with {numErrors} interventions below"
   />
 {/if}
-
-<Legend rows={schemaLegend(schema)} />
