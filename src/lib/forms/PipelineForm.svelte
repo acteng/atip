@@ -6,8 +6,10 @@
     SecondaryButton,
     Select,
     TextArea,
+    NumberInput
   } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
+  import TimescaleSubform from "lib/sidebar/pipeline_forms/TimescaleSubform.svelte";
   import { gjSchemeCollection, routeTool } from "stores";
   import type { InterventionProps } from "types";
   import ATF4Type from "./ATF4Type.svelte";
@@ -19,6 +21,16 @@
     atf4_type: "",
     accuracy: "",
     is_alternative: false,
+    cost: 0,
+    intervention_timescale: {
+      status: "",
+      timescale: "",
+    },
+  };
+
+  props.pipeline.intervention_timescale ||= {
+    status: "",
+    timescale: "",
   };
 
   props.is_coverage_polygon ||= false;
@@ -83,6 +95,7 @@
       ["medium", "Medium"],
       ["low", "Low"],
     ]}
+    required
     inlineSmall
     bind:value={props.pipeline.accuracy}
   />
@@ -102,4 +115,15 @@
       while making the scheme)
     </Checkbox>
   {/if}
+
+  <TimescaleSubform
+    forIntervention
+    bind:timescale={props.pipeline.intervention_timescale}
+  />
+  <NumberInput
+    label="Cost"
+    width={10}
+    min={0}
+    bind:value={props.pipeline.cost}
+  />
 {/if}

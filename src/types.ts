@@ -30,28 +30,35 @@ export interface SchemeData {
 export interface PipelineScheme {
   // TODO "intersection" is unclear
   scheme_type:
-    | "cycling route"
-    | "walking route"
-    | "shared-use route"
-    | "area-based scheme"
-    | "intersection"
-    | "";
+  | "cycling route"
+  | "walking route"
+  | "shared-use route"
+  | "area-based scheme"
+  | "intersection"
+  | "";
   atf4_lead_type: ATF4Type | "";
   scheme_description: string;
 
   // TODO Check with DB schema
+  scheme_timescale: PipelineTimescale;
+  scheme_budget: PipelineBudget;
+}
+
+export interface PipelineTimescale {
   status: "planned" | "in development" | "in construction" | "completed" | "";
   timescale: "short" | "medium" | "long" | "";
   timescale_year?: number;
   year_published?: number;
   year_consulted?: number;
+}
 
+export interface PipelineBudget {
   // GBP
-  budget_funded?: number;
-  budget_unfunded?: number;
+  cost?: number;
+  development_funded: boolean,
+  construction_funded: boolean,
   funding_source: "ATF2" | "ATF3" | "ATF4" | "ATF4e" | "CRSTS" | "LUF" | "";
-  // TODO What about partially? How's this overlap with budget?
-  funded: boolean;
+
 }
 
 export interface BrowseSchemeData {
@@ -118,6 +125,8 @@ export interface PipelineIntervention {
   accuracy: "high" | "medium" | "low" | "";
   is_alternative: boolean;
 
+  intervention_timescale: PipelineTimescale;
+  cost?: number;
   // TODO new / existing / upgrade existing?
   // TODO for routes, ltn120 type: fully protected, light segregation, off-carriageway, shared-use, dedicated footpath. minimum width?
 }
@@ -143,16 +152,16 @@ export function isStreetViewImagery(x: string): x is "google" | "bing" {
 
 export type Mode =
   | {
-      mode: "list";
-    }
+    mode: "list";
+  }
   | {
-      mode: "edit-form";
-      id: number;
-    }
+    mode: "edit-form";
+    id: number;
+  }
   | {
-      mode: "edit-geometry";
-      id: number;
-    }
+    mode: "edit-geometry";
+    id: number;
+  }
   | { mode: "new-point" }
   | { mode: "new-freehand-polygon" }
   | { mode: "new-snapped-polygon" }
