@@ -4,6 +4,7 @@
     FormElement,
     Radio,
     SecondaryButton,
+    Select,
     TextArea,
   } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
@@ -49,6 +50,16 @@
     </SecondaryButton>
   {/if}
 </FormElement>
+
+<Select
+  label="Scheme"
+  id={"scheme-" + id}
+  choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
+    scheme.scheme_reference,
+    scheme.scheme_name ?? "Untitled scheme",
+  ])}
+  bind:value={props.scheme_reference}
+/>
 
 <TextArea label="Description" bind:value={props.description} />
 

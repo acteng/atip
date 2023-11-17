@@ -10,6 +10,8 @@ export function backfill(json: SchemeCollection) {
     // Fix input from other tools where properties may be null
     f.properties ||= {
       name: "",
+      // We'll set this below when json.schemes is missing
+      scheme_reference: "",
       description: "",
       intervention_type: "other",
       is_coverage_polygon: false,
