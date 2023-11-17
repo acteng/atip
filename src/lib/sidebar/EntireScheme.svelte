@@ -9,11 +9,12 @@
   } from "lib/govuk";
   import { gjSchemeCollection, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
-  import type { Schema, SchemeCollection, SchemeData } from "types";
+  import type { Schema, SchemeCollection } from "types";
   import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
   import {
     backfill,
-    getFirstSchemeOrEmptyScheme,
+    emptyCollection,
+    getArbitraryScheme,
     interventionWarning,
   } from "./scheme_data";
 
@@ -21,23 +22,29 @@
   export let schema: Schema;
   let errorMessage = "";
 
-  let baseFilename = authorityName;
+  let filename = authorityName;
   if (schema != "v1") {
-    baseFilename += `_${schema}`;
+    filename += `_${schema}`;
   }
 
   let loaded = false;
   let displayClearAllConfirmation = false;
-  let scheme: SchemeData;
-  gjSchemeCollection.subscribe((newSchemeCollection) => {
-    scheme = getFirstSchemeOrEmptyScheme(newSchemeCollection);
-  });
+
+  // TODO Temporary. The UI will change to manage multiple schemes.
+  let arbitrarySchemeName: string | undefined;
+  $: updateSchemeName(arbitrarySchemeName);
+  function updateSchemeName(scheme_name: string | undefined) {
+    if (scheme_name) {
+      getArbitraryScheme($gjSchemeCollection).scheme_name = scheme_name;
+      $gjSchemeCollection = $gjSchemeCollection;
+    }
+  }
 
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
     let params = new URLSearchParams(window.location.search);
     let loadUrl = params.get("geojsonUrl");
-    let loadLocal = window.localStorage.getItem(baseFilename);
+    let loadLocal = window.localStorage.getItem(filename);
 
     if (loadUrl) {
       console.log(`Loading GeoJSON from ${loadUrl}`);
@@ -56,21 +63,14 @@
       }
     }
     loaded = true;
-    scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
-    if (!$gjSchemeCollection.schemes) {
-      $gjSchemeCollection.schemes = {};
-    }
-    $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
+    arbitrarySchemeName = getArbitraryScheme($gjSchemeCollection).scheme_name;
   });
 
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
   $: {
     if (loaded && $gjSchemeCollection) {
       console.log(`GJ changed, saving to local storage`);
-      window.localStorage.setItem(
-        baseFilename,
-        JSON.stringify(geojsonToSave())
-      );
+      window.localStorage.setItem(filename, JSON.stringify(geojsonToSave()));
     }
   }
 
@@ -78,13 +78,14 @@
     displayClearAllConfirmation = false;
 
     gjSchemeCollection.update((gj) => {
-      // Leave origin, authority, and other foreign members alone
-      scheme.scheme_name = "Untitled scheme";
-      delete scheme.pipeline;
-      gj.features = [];
-      return gj;
+      let newGj = emptyCollection();
+      // Preserve some foreign members
+      newGj.origin = gj.origin;
+      newGj.authority = gj.authority;
+      return newGj;
     });
     sidebarHover.set(null);
+    arbitrarySchemeName = undefined;
   }
 
   // Remove the hide_while_editing property hack
@@ -98,16 +99,16 @@
 
   function exportToGeojson() {
     let geojson = geojsonToSave();
-    var filename = baseFilename;
     geojson.authority = authorityName;
     // we could probably be more sophisticated here and set version more centrally
     geojson.origin = "atip-v2";
-    // Include the scheme name if it's set
-    if (Object.keys(geojson.schemes).length > 0) {
-      filename += "_" + scheme.scheme_name;
-    }
-    filename += ".geojson";
-    downloadGeneratedFile(filename, JSON.stringify(geojson, null, "  "));
+    // Don't include any scheme name in the filename. There could be multiple
+    // schemes in one file, and better for people to get used to consistent
+    // filenames with only authority and schema.
+    downloadGeneratedFile(
+      `${filename}.geojson`,
+      JSON.stringify(geojson, null, "  ")
+    );
   }
 
   function downloadGeneratedFile(filename: string, textInput: string) {
@@ -126,6 +127,7 @@
     try {
       // TODO Should we prompt before deleting the current scheme?
       gjSchemeCollection.set(backfill(JSON.parse(text)));
+      arbitrarySchemeName = getArbitraryScheme($gjSchemeCollection).scheme_name;
       errorMessage = "";
     } catch (err) {
       errorMessage = `Couldn't load scheme from a file: ${err}`;
@@ -137,9 +139,9 @@
   ).length;
 </script>
 
-{#if scheme && $mode.mode == "list"}
-  <CollapsibleCard label={scheme.scheme_name ?? "Untitled scheme"}>
-    <TextInput label="Scheme name" bind:value={scheme.scheme_name} />
+{#if $mode.mode == "list"}
+  <CollapsibleCard label={arbitrarySchemeName ?? "Untitled scheme"}>
+    <TextInput label="Scheme name" bind:value={arbitrarySchemeName} />
 
     <ErrorMessage {errorMessage} />
 

@@ -14,12 +14,13 @@ export interface SchemeCollection {
   authority?: string;
   origin?: string;
   // Keyed by scheme_reference, which doesn't change over the lifetime of the sketch tool
-  schemes: { [refrence: string]: SchemeData };
+  schemes: { [reference: string]: SchemeData };
 }
 
 export interface SchemeData {
-  scheme_name?: string;
+  // The key into SchemeCollection.schemes
   scheme_reference: string;
+  scheme_name?: string;
   pipeline?: PipelineScheme;
   browse?: BrowseSchemeData;
 }

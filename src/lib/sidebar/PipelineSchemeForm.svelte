@@ -12,12 +12,11 @@
   } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
   import ATF4Type from "../forms/ATF4Type.svelte";
-  import { getFirstSchemeOrEmptyScheme } from "./scheme_data";
+  import { getArbitraryScheme } from "./scheme_data";
 
   let showModal = false;
   // TODO: this will only be used until we support multiple schemes being edited in scheme sketcher
-  let scheme = getFirstSchemeOrEmptyScheme($gjSchemeCollection);
-  $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
+  let scheme = getArbitraryScheme($gjSchemeCollection);
 
   // This component is only created once, but gjScheme could be cleared
   // completely multipel times. Set defaults anytime the modal is open.
@@ -40,7 +39,7 @@
   function onKeyDown(e: KeyboardEvent) {
     if (showModal && e.key == "Escape") {
       e.stopPropagation();
-      showModal = false;
+      finish();
     }
   }
 
@@ -52,7 +51,9 @@
     scheme.pipeline?.timescale
       ? ""
       : "Missing some required data";
-  function onCompletion() {
+
+  // No changes in the form are saved until this happens
+  function finish() {
     $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
     $gjSchemeCollection = $gjSchemeCollection;
     showModal = false;
@@ -189,7 +190,7 @@
       </Checkbox>
     </fieldset>
 
-    <DefaultButton on:click={onCompletion}>Save</DefaultButton>
+    <DefaultButton on:click={finish}>Save</DefaultButton>
   {/if}
 </Modal>
 

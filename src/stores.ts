@@ -1,9 +1,9 @@
-import { emptyGeojson } from "lib/maplibre";
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
 import { PointTool } from "./lib/draw/point/point_tool";
 import { PolygonTool } from "./lib/draw/polygon/polygon_tool";
 import { RouteTool } from "./lib/draw/route/route_tool";
+import { emptyCollection } from "./lib/sidebar/scheme_data";
 import {
   isStreetViewImagery,
   type Mode,
@@ -25,10 +25,9 @@ export const polygonTool: Writable<PolygonTool | null> = writable(null);
 export const routeTool: Writable<RouteTool | null> = writable(null);
 
 // TODO Should we instead store a map from ID to feature?
-const freshGeojson = emptyGeojson() as SchemeCollection;
-freshGeojson.schemes = {};
-export const gjSchemeCollection: Writable<SchemeCollection> =
-  writable(freshGeojson);
+export const gjSchemeCollection: Writable<SchemeCollection> = writable(
+  emptyCollection()
+);
 
 // The optional ID of a feature currently hovered from the sidebar.
 export const sidebarHover: Writable<number | null> = writable(null);

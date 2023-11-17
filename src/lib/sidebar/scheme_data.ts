@@ -23,20 +23,53 @@ export function backfill(json: SchemeCollection) {
     // Always overwrite IDs, and follow what newFeatureId requires.
     f.id = idCounter++;
   }
+
   if (!json.schemes) {
-    const uuid = uuidv4();
+    // This file represents a single scheme, from before mid November 2023. Create a single scheme for it
+    let scheme_reference = uuidv4();
     json.schemes = {};
-    json.schemes[uuid] = getEmptySchemeData(uuid);
-    // @ts-ignore this is to support older ATIP files
+    json.schemes[scheme_reference] = {
+      scheme_reference,
+    };
+
+    // Move over the optional scheme_name from the old place
+    // @ts-ignore handling old format
     if (json.scheme_name) {
-      // @ts-ignore this is to support older ATIP files
-      json.schemes[uuid].scheme_name = json.scheme_name;
-      // @ts-ignore this is to support older ATIP files
+      // @ts-ignore handling old format
+      json.schemes[scheme_reference].scheme_name = json.scheme_name;
+      // @ts-ignore handling old format
       delete json.scheme_name;
+    }
+
+    // Some pipeline files have been created; move over attributes.
+    // @ts-ignore handling old format
+    if (json.pipeline) {
+      // @ts-ignore handling old format
+      json.schemes[scheme_reference].pipeline = json.pipeline;
+      // @ts-ignore handling old format
+      delete json.pipeline;
+    }
+
+    // Set scheme_reference for all features
+    for (let f of json.features) {
+      f.properties.scheme_reference = scheme_reference;
     }
   }
 
   return json;
+}
+
+export function emptyCollection(): SchemeCollection {
+  let scheme_reference = uuidv4();
+  let schemes: { [reference: string]: SchemeData } = {};
+  schemes[scheme_reference] = {
+    scheme_reference,
+  };
+  return {
+    type: "FeatureCollection",
+    features: [],
+    schemes,
+  };
 }
 
 export function interventionName(
@@ -146,19 +179,10 @@ export function getUnexpectedProperties(
   return copy;
 }
 
-export function getFirstSchemeOrEmptyScheme(
+// TODO Remove when the UI can manage multiple schemes. This function only
+// makes sense when there's one scheme in the collection.
+export function getArbitraryScheme(
   schemeCollection: SchemeCollection
 ): SchemeData {
-  const schemeReferences = Object.keys(schemeCollection.schemes ?? {});
-  if (schemeReferences.length > 0) {
-    return schemeCollection.schemes[schemeReferences[0]];
-  }
-  return getEmptySchemeData(uuidv4());
-}
-
-function getEmptySchemeData(reference: string, name?: string): SchemeData {
-  return {
-    scheme_name: name || "Untitled scheme",
-    scheme_reference: reference,
-  };
+  return Object.values(schemeCollection.schemes)[0];
 }
