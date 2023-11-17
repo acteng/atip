@@ -52,6 +52,10 @@
 <h3>
   {$gjSchemeCollection.schemes[scheme_reference].scheme_name ??
     "Untitled scheme"}
+  <input
+    type="color"
+    bind:value={$gjSchemeCollection.schemes[scheme_reference].color}
+  />
 </h3>
 {#if schema == "pipeline"}
   <PipelineSchemeForm {scheme_reference} />

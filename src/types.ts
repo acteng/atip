@@ -21,6 +21,8 @@ export interface SchemeData {
   // The key into SchemeCollection.schemes
   scheme_reference: string;
   scheme_name?: string;
+  // For the sketch page; not important
+  color: string;
   pipeline?: PipelineScheme;
   browse?: BrowseSchemeData;
 }
