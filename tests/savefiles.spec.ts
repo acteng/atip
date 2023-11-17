@@ -1,6 +1,5 @@
 import { readFile } from "fs/promises";
 import { expect, test, type Page } from "@playwright/test";
-import type { FeatureCollection } from "geojson";
 import {
   checkPageLoaded,
   clearExistingInterventions,
@@ -8,14 +7,9 @@ import {
 } from "./shared.js";
 
 let page: Page;
-let json: FeatureCollection;
 
 test.beforeAll(async ({ browser }) => {
   page = await loadInitialPageFromBrowser(browser);
-
-  json = JSON.parse(
-    await readFile("tests/data/Adur.json", { encoding: "utf8" })
-  );
 });
 
 test.beforeEach(async () => {
@@ -24,24 +18,25 @@ test.beforeEach(async () => {
 
 test("loading a file with length displays the length", async () => {
   await page
-    .getByLabel("Load from GeoJSON")
-    .setInputFiles("tests/data/Adur.json");
+    .getByLabel("Load GeoJSON file")
+    .setInputFiles("tests/data/LAD_Adur.geojson");
 
   page.on("dialog", (dialog) => dialog.accept());
   await page
     .getByRole("link", {
-      name: "Route from Dankton Gardens and Dankton Lane to Dankton Gardens and Rectory Farm Road",
+      name: "Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
     })
     .click();
-  await expect(page.getByText("Length: 299 m")).toBeVisible();
+  await expect(page.getByText("Length: 450 m")).toBeVisible();
 });
 
-test("loading an old-format file with length displays the length", async () => {
+test("loading a legacy file with one scheme works", async () => {
   await page
-    .getByLabel("Load from GeoJSON")
-    .setInputFiles("tests/data/Adur-Old.json");
+    .getByLabel("Load GeoJSON file")
+    .setInputFiles("tests/data/legacy_schemeless.geojson");
 
   page.on("dialog", (dialog) => dialog.accept());
+  // The file should behave the same as data/LAD_Adur.geojson
   await page
     .getByRole("link", {
       name: "Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
@@ -53,37 +48,42 @@ test("loading an old-format file with length displays the length", async () => {
 // Some people used ATIP before route-snapper started populating a length
 // property. Upload a file with that missing, and make sure it's backfilled.
 test("loading a file without length displays the length", async () => {
+  let json = JSON.parse(
+    await readFile("tests/data/LAD_Adur.geojson", { encoding: "utf8" })
+  );
   // Remove the property from the test data first
   await expect(Math.round(json.features[0].properties!.length_meters)).toBe(
-    299
+    450
   );
-  let copy = JSON.parse(JSON.stringify(json));
-  delete copy.features[0].properties.length_meters;
-  let uploadFile = JSON.stringify(copy);
+  delete json.features[0].properties.length_meters;
+  let uploadFile = JSON.stringify(json);
 
-  await page.getByLabel("Load from GeoJSON").setInputFiles({
-    name: "Adur.json",
+  await page.getByLabel("Load GeoJSON file").setInputFiles({
+    name: "LAD_Adur.geojson",
     mimeType: "application/json",
     buffer: Buffer.from(uploadFile),
   });
 
   await page
     .getByRole("link", {
-      name: "Route from Dankton Gardens and Dankton Lane to Dankton Gardens and Rectory Farm Road",
+      name: "Route from Dankton Lane and West Street to Cokeham Road and Western Road North",
     })
     .click();
-  await expect(page.getByText("Length: 299 m")).toBeVisible();
+  await expect(page.getByText("Length: 450 m")).toBeVisible();
 });
 
 // Handle unusual GeoJSON inputs produced by other tools
 test("loading a file with null properties displays the length", async () => {
+  let json = JSON.parse(
+    await readFile("tests/data/LAD_Adur.geojson", { encoding: "utf8" })
+  );
   // Remove the property from the test data first
-  let copy = JSON.parse(JSON.stringify(json));
-  copy.features[0].properties = null;
-  let uploadFile = JSON.stringify(copy);
+  json.features[0].properties = null;
+  delete json.schemes;
+  let uploadFile = JSON.stringify(json);
 
-  await page.getByLabel("Load from GeoJSON").setInputFiles({
-    name: "Adur.json",
+  await page.getByLabel("Load GeoJSON file").setInputFiles({
+    name: "LAD_Adur.geojson",
     mimeType: "application/json",
     buffer: Buffer.from(uploadFile),
   });
@@ -94,7 +94,7 @@ test("loading a file with null properties displays the length", async () => {
       name: "Untitled line",
     })
     .click();
-  await expect(page.getByText("Length: 299 m")).toBeVisible();
+  await expect(page.getByText("Length: 450 m")).toBeVisible();
 });
 
 test("the previous file from local storage is loaded by default", async () => {
@@ -116,23 +116,7 @@ test("loading a file from the homepage goes to the correct page", async () => {
   await page.goto("/");
   await page
     .getByLabel("Or upload an ATIP GeoJSON file")
-    .setInputFiles("tests/data/Adur.json");
-
-  await expect(page).toHaveURL(/scheme.html\?authority=LAD_Adur/);
-  await checkPageLoaded(page);
-  await page
-    .getByRole("link", {
-      name: "Route from Dankton Gardens and Dankton Lane to Dankton Gardens and Rectory Farm Road",
-    })
-    .click();
-  await expect(page.getByText("Length: 299 m")).toBeVisible();
-});
-
-test("loading a old-format file from the homepage goes to the correct page", async () => {
-  await page.goto("/");
-  await page
-    .getByLabel("Or upload an ATIP GeoJSON file")
-    .setInputFiles("tests/data/Adur-Old.json");
+    .setInputFiles("tests/data/LAD_Adur.geojson");
 
   await expect(page).toHaveURL(/scheme.html\?authority=LAD_Adur/);
   await checkPageLoaded(page);
@@ -146,7 +130,7 @@ test("loading a old-format file from the homepage goes to the correct page", asy
 
 test("loading a file produced by another tool shows fixable errors", async () => {
   await page
-    .getByLabel("Load from GeoJSON")
+    .getByLabel("Load GeoJSON file")
     .setInputFiles("tests/data/external_data.geojson");
   page.on("dialog", (dialog) => dialog.accept());
   await expect(

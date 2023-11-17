@@ -19,7 +19,7 @@ test("Uploading a valid atip geojson redirects to the appropriate authority sche
   await page.goto("/");
   await page
     .getByLabel("Or upload an ATIP GeoJSON file")
-    .setInputFiles("tests/data/Adur.json");
+    .setInputFiles("tests/data/LAD_Adur.geojson");
 
   await expect(page).toHaveURL(/.*scheme.html\?authority=LAD_Adur/);
 });
