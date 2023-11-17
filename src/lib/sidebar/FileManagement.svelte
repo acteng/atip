@@ -4,19 +4,14 @@
     ButtonGroup,
     ErrorMessage,
     SecondaryButton,
-    TextInput,
     WarningButton,
   } from "lib/govuk";
   import { gjSchemeCollection, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
   import type { Schema, SchemeCollection } from "types";
-  import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
-  import {
-    backfill,
-    emptyCollection,
-    getArbitraryScheme,
-    interventionWarning,
-  } from "./scheme_data";
+  import deleteIcon from "../../../assets/delete.svg?url";
+  import saveIcon from "../../../assets/save.svg?url";
+  import { backfill, emptyCollection } from "./scheme_data";
 
   export let authorityName: string;
   export let schema: Schema;
@@ -29,16 +24,6 @@
 
   let loaded = false;
   let displayClearAllConfirmation = false;
-
-  // TODO Temporary. The UI will change to manage multiple schemes.
-  let arbitrarySchemeName: string | undefined;
-  $: updateSchemeName(arbitrarySchemeName);
-  function updateSchemeName(scheme_name: string | undefined) {
-    if (scheme_name) {
-      getArbitraryScheme($gjSchemeCollection).scheme_name = scheme_name;
-      $gjSchemeCollection = $gjSchemeCollection;
-    }
-  }
 
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
@@ -63,7 +48,6 @@
       }
     }
     loaded = true;
-    arbitrarySchemeName = getArbitraryScheme($gjSchemeCollection).scheme_name;
   });
 
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
@@ -85,7 +69,6 @@
       return newGj;
     });
     sidebarHover.set(null);
-    arbitrarySchemeName = undefined;
   }
 
   // Remove the hide_while_editing property hack
@@ -127,38 +110,31 @@
     try {
       // TODO Should we prompt before deleting the current scheme?
       gjSchemeCollection.set(backfill(JSON.parse(text)));
-      arbitrarySchemeName = getArbitraryScheme($gjSchemeCollection).scheme_name;
       errorMessage = "";
     } catch (err) {
       errorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
-
-  $: numErrors = $gjSchemeCollection.features.filter(
-    (f) => interventionWarning(schema, f) != null
-  ).length;
 </script>
 
 {#if $mode.mode == "list"}
-  <CollapsibleCard label={arbitrarySchemeName ?? "Untitled scheme"}>
-    <TextInput label="Scheme name" bind:value={arbitrarySchemeName} />
+  <CollapsibleCard label="Manage files">
+    <FileInput label="Load GeoJSON file" id="load-geojson" {loadFile} />
+
+    <ButtonGroup>
+      <SecondaryButton on:click={exportToGeojson}>
+        <img src={saveIcon} alt="Save as GeoJSON file" />
+        Save
+      </SecondaryButton>
+
+      <WarningButton on:click={() => (displayClearAllConfirmation = true)}>
+        <img src={deleteIcon} alt="Clear all" />
+        Clear all
+      </WarningButton>
+    </ButtonGroup>
 
     <ErrorMessage {errorMessage} />
 
-    <FileInput label="Load from GeoJSON" id="load-geojson" {loadFile} />
-
-    <SecondaryButton on:click={exportToGeojson}>
-      Export to GeoJSON
-    </SecondaryButton>
-
-    <div>
-      <WarningButton
-        on:click={() => (displayClearAllConfirmation = true)}
-        disabled={$gjSchemeCollection.features.length == 0}
-      >
-        Start new scheme
-      </WarningButton>
-    </div>
     <Modal
       title="Would you like to clear your work?"
       bind:open={displayClearAllConfirmation}
@@ -173,17 +149,4 @@
       </ButtonGroup>
     </Modal>
   </CollapsibleCard>
-  {#if schema == "pipeline"}
-    <PipelineSchemeForm />
-  {/if}
-
-  {#if numErrors == 1}
-    <ErrorMessage
-      errorMessage="There's a problem with one intervention below"
-    />
-  {:else if numErrors > 0}
-    <ErrorMessage
-      errorMessage="There's a problem with {numErrors} interventions below"
-    />
-  {/if}
 {/if}
