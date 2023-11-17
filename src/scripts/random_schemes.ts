@@ -7,17 +7,12 @@ import booleanContains from "@turf/boolean-contains";
 import { lineString, point, polygon } from "@turf/helpers";
 import length from "@turf/length";
 import { randomPoint } from "@turf/random";
-import type {
-  Feature,
-  LineString,
-  Polygon,
-  Position,
-} from "geojson";
+import type { Feature, LineString, Polygon, Position } from "geojson";
 
 main();
 
 function main() {
-  let schemes: { [reference: string]: any} = {};
+  let schemes: { [reference: string]: any } = {};
   let gj = {
     type: "FeatureCollection",
     features: [],
@@ -48,7 +43,7 @@ function main() {
         authority_or_region: `${authority.properties.level}_${authority.properties.name}`,
         capital_scheme_id: count.toString(),
         funding_programme: pickRandom(["ATF2", "ATF3", "ATF4"]),
-      }
+      },
     };
 
     // Make a few interventions for every authority
