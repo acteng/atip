@@ -2,6 +2,7 @@
   import type { LineString, Polygon } from "geojson";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
+  import { getArbitraryScheme } from "lib/sidebar/scheme_data";
   import { gjSchemeCollection, mode, newFeatureId, routeTool } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
@@ -20,6 +21,8 @@
   function onSuccess(feature: FeatureWithProps<LineString | Polygon>) {
     gjSchemeCollection.update((gj) => {
       feature.id = newFeatureId(gj);
+      feature.properties.scheme_reference =
+        getArbitraryScheme(gj).scheme_reference;
       feature.properties.intervention_type = "route";
       if (feature.properties.route_name) {
         feature.properties.name = feature.properties.route_name;

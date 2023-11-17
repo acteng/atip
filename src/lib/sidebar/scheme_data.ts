@@ -163,6 +163,7 @@ export function getUnexpectedProperties(
     "waypoints",
     "hide_while_editing",
     "is_coverage_polygon",
+    "scheme_reference",
   ]) {
     delete copy[key];
   }
