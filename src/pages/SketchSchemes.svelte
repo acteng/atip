@@ -21,7 +21,7 @@
   import Toolbox from "lib/draw/Toolbox.svelte";
   import { ButtonGroup, SecondaryButton } from "lib/govuk";
   import About from "lib/sidebar/About.svelte";
-  import EntireScheme from "lib/sidebar/EntireScheme.svelte";
+  import FileManagement from "lib/sidebar/FileManagement.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
   import { mapStyle, mode } from "stores";
@@ -107,7 +107,7 @@
       </ButtonGroup>
       <LoggedIn />
     {/if}
-    <EntireScheme {authorityName} {schema} />
+    <FileManagement {authorityName} {schema} />
     <LeftSidebar {routeSnapperUrl} {schema} />
   </div>
   <div class="main">

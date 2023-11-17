@@ -1,13 +1,20 @@
 <script lang="ts">
   import { Legend, WarningIcon } from "lib/common";
+  import { ErrorMessage } from "lib/govuk";
   import { bbox } from "lib/maplibre";
   import { schemaLegend } from "schemas";
   import { gjSchemeCollection, map, mode, sidebarHover } from "stores";
   import { onDestroy } from "svelte";
   import type { Schema } from "types";
+  import GenericSchemeForm from "./GenericSchemeForm.svelte";
+  import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
   import { interventionName, interventionWarning } from "./scheme_data";
 
   export let schema: Schema;
+
+  $: numErrors = $gjSchemeCollection.features.filter(
+    (f) => interventionWarning(schema, f) != null
+  ).length;
 
   function edit(e: MouseEvent, id: number) {
     // Use <a> for buttons. Disable the href behavior.
@@ -46,6 +53,20 @@
     sidebarHover.set(null);
   });
 </script>
+
+{#if schema == "pipeline"}
+  <PipelineSchemeForm />
+{:else}
+  <GenericSchemeForm />
+{/if}
+
+{#if numErrors == 1}
+  <ErrorMessage errorMessage="There's a problem with one intervention below" />
+{:else if numErrors > 0}
+  <ErrorMessage
+    errorMessage="There's a problem with {numErrors} interventions below"
+  />
+{/if}
 
 <ol class="govuk-list govuk-list--number">
   {#each $gjSchemeCollection.features as feature (feature.id)}
