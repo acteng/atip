@@ -21,14 +21,11 @@ export async function clearExistingInterventions(page: Page) {
   await page.keyboard.down("Escape");
   await page.keyboard.down("Escape");
 
-  await page.getByText("Untitled scheme").click();
-  let clearButton = page.getByRole("button", { name: "Start new scheme" });
-  if (await clearButton.isEnabled()) {
-    await clearButton.click();
-    await page.getByRole("button", { name: "Clear all work" }).click();
-  }
+  await page.getByText("Manage files").click();
+  await page.getByRole("button", { name: "Clear all" }).click();
+  await page.getByRole("button", { name: "Clear all work" }).click();
   // Close the panel
-  await page.getByText("Untitled scheme").click();
+  await page.getByText("Manage files").click();
 
   // Reset the viewport between tests, since many tests click the map in specific places
   await page
