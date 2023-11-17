@@ -1,22 +1,42 @@
 <script lang="ts">
-  import { WarningIcon } from "lib/common";
-  import { ErrorMessage } from "lib/govuk";
+  import { Modal, WarningIcon } from "lib/common";
+  import {
+    ButtonGroup,
+    ErrorMessage,
+    SecondaryButton,
+    Select,
+    WarningButton,
+  } from "lib/govuk";
   import { bbox } from "lib/maplibre";
   import { gjSchemeCollection, map, mode, sidebarHover } from "stores";
   import { onDestroy } from "svelte";
   import type { Schema } from "types";
+  import deleteIcon from "../../../assets/delete.svg?url";
   import GenericSchemeForm from "./GenericSchemeForm.svelte";
   import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
-  import { interventionName, interventionWarning } from "./scheme_data";
+  import {
+    emptyCollection,
+    interventionName,
+    interventionWarning,
+  } from "./scheme_data";
 
   export let schema: Schema;
   export let scheme_reference: string;
+
+  let showDeleteModal = false;
 
   $: numErrors = $gjSchemeCollection.features.filter(
     (f) =>
       f.properties.scheme_reference == scheme_reference &&
       interventionWarning(schema, f) != null
   ).length;
+  $: numFeatures = $gjSchemeCollection.features.filter(
+    (f) => f.properties.scheme_reference == scheme_reference
+  ).length;
+
+  onDestroy(() => {
+    sidebarHover.set(null);
+  });
 
   function edit(e: MouseEvent, id: number) {
     // Use <a> for buttons. Disable the href behavior.
@@ -51,9 +71,42 @@
     });
   }
 
-  onDestroy(() => {
-    sidebarHover.set(null);
-  });
+  function deleteScheme() {
+    gjSchemeCollection.update((gj) => {
+      gj.features = gj.features.filter(
+        (f) => f.properties.scheme_reference != scheme_reference
+      );
+      delete gj.schemes[scheme_reference];
+      if (Object.keys(gj.schemes).length == 0) {
+        gj = emptyCollection();
+      }
+      return gj;
+    });
+    showDeleteModal = false;
+  }
+
+  let moveToScheme = "";
+  function moveFeatures() {
+    if (moveToScheme) {
+      gjSchemeCollection.update((gj) => {
+        for (let f of gj.features) {
+          if (f.properties.scheme_reference == scheme_reference) {
+            f.properties.scheme_reference = moveToScheme;
+          }
+        }
+        return gj;
+      });
+    }
+  }
+
+  function moveSchemeChoices(): [string, string][] {
+    return Object.values($gjSchemeCollection.schemes)
+      .filter((scheme) => scheme.scheme_reference != scheme_reference)
+      .map((scheme) => [
+        scheme.scheme_reference,
+        scheme.scheme_name ?? "Untitled scheme",
+      ]);
+  }
 </script>
 
 <h3>
@@ -63,6 +116,10 @@
     type="color"
     bind:value={$gjSchemeCollection.schemes[scheme_reference].color}
   />
+  <WarningButton on:click={() => (showDeleteModal = true)}>
+    <img src={deleteIcon} alt="Delete scheme" />
+    Delete
+  </WarningButton>
 </h3>
 {#if schema == "pipeline"}
   <PipelineSchemeForm {scheme_reference} />
@@ -97,3 +154,30 @@
     </li>
   {/each}
 </ol>
+
+<Modal
+  title="Delete this scheme?"
+  bind:open={showDeleteModal}
+  displayEscapeButton={false}
+>
+  {#if numFeatures > 0 && moveSchemeChoices().length > 0}
+    <p>
+      Do you want to first move {numFeatures}
+      {numFeatures == 1 ? "intervention" : "interventions"} to another scheme?
+    </p>
+    <Select
+      label="Move interventions to another scheme"
+      id="move-interventions"
+      choices={moveSchemeChoices()}
+      bind:value={moveToScheme}
+      on:change={moveFeatures}
+    />
+  {/if}
+
+  <ButtonGroup>
+    <WarningButton on:click={deleteScheme}>Delete scheme</WarningButton>
+    <SecondaryButton on:click={() => (showDeleteModal = false)}>
+      Cancel
+    </SecondaryButton>
+  </ButtonGroup>
+</Modal>
