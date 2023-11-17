@@ -3,16 +3,14 @@
   import { DefaultButton, SecondaryButton, TextInput } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
   import type { SchemeData } from "types";
-  import { getArbitraryScheme } from "./scheme_data";
+
+  export let scheme_reference: string;
 
   let showModal = false;
   let scheme: SchemeData | null = null;
 
-  // This component is only created once, but gjScheme could be cleared
-  // completely multiple times. Set defaults anytime the modal is open.
   $: if (showModal) {
-    // TODO Change the UI to plumb in the scheme_reference, when we manage multiple
-    scheme = getArbitraryScheme($gjSchemeCollection);
+    scheme = $gjSchemeCollection.schemes[scheme_reference];
   }
 
   function onKeyDown(e: KeyboardEvent) {
