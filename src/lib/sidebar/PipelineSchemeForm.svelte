@@ -11,16 +11,18 @@
     TextInput,
   } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
+  import type { SchemeData } from "types";
   import ATF4Type from "../forms/ATF4Type.svelte";
   import { getArbitraryScheme } from "./scheme_data";
 
   let showModal = false;
-  // TODO: this will only be used until we support multiple schemes being edited in scheme sketcher
-  let scheme = getArbitraryScheme($gjSchemeCollection);
+  let scheme: SchemeData | null = null;
 
   // This component is only created once, but gjScheme could be cleared
-  // completely multipel times. Set defaults anytime the modal is open.
+  // completely multiple times. Set defaults anytime the modal is open.
   $: if (showModal) {
+    // TODO Change the UI to plumb in the scheme_reference, when we manage multiple
+    scheme = getArbitraryScheme($gjSchemeCollection);
     scheme.pipeline ||= {
       scheme_type: "",
       status: "",
@@ -43,6 +45,13 @@
     }
   }
 
+  // No changes in the form are saved until this happens
+  function finish() {
+    $gjSchemeCollection.schemes[scheme!.scheme_reference] = scheme!;
+    $gjSchemeCollection = $gjSchemeCollection;
+    showModal = false;
+  }
+
   // Check for all required values
   $: errorMessage =
     scheme &&
@@ -51,13 +60,6 @@
     scheme.pipeline?.timescale
       ? ""
       : "Missing some required data";
-
-  // No changes in the form are saved until this happens
-  function finish() {
-    $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
-    $gjSchemeCollection = $gjSchemeCollection;
-    showModal = false;
-  }
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -67,7 +69,7 @@
   Scheme details
 </SecondaryButton>
 <Modal title="Scheme details" bind:open={showModal}>
-  {#if scheme.pipeline}
+  {#if scheme && scheme.pipeline}
     <TextInput label="Scheme name" required bind:value={scheme.scheme_name} />
 
     <fieldset class="govuk-fieldset">
