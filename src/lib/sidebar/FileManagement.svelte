@@ -140,7 +140,7 @@
       bind:open={displayClearAllConfirmation}
       displayEscapeButton={false}
     >
-      <p>This will delete all your drawn interventions.</p>
+      <p>This will delete everything for all schemes.</p>
       <ButtonGroup>
         <WarningButton on:click={clearAll}>Clear all work</WarningButton>
         <SecondaryButton on:click={() => (displayClearAllConfirmation = false)}>
