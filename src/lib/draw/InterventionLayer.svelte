@@ -92,7 +92,12 @@
 
   function tooltip(features: Feature[] | null): string {
     if (features) {
-      return interventionName(schema, features[0] as FeatureUnion);
+      let feature = features[0] as FeatureUnion;
+      let name = interventionName(schema, feature);
+      let scheme =
+        $gjSchemeCollection.schemes[feature.properties.scheme_reference]
+          .scheme_name ?? "Untitled scheme";
+      return `${name} (${scheme})`;
     }
     // TODO Improve upstream, this should be impossible
     return "Tooltip bug";
