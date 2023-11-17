@@ -3,7 +3,13 @@
   import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
   import { interventionName } from "lib/sidebar/scheme_data";
-  import { gjScheme, mode, pointTool, polygonTool, routeTool } from "stores";
+  import {
+    gjSchemeCollection,
+    mode,
+    pointTool,
+    polygonTool,
+    routeTool,
+  } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature, FeatureUnion, Schema } from "types";
   import PointControls from "./point/PointControls.svelte";
@@ -23,7 +29,7 @@
 
   onMount(() => {
     let maybeFeature: FeatureUnion | null = null;
-    gjScheme.update((gj) => {
+    gjSchemeCollection.update((gj) => {
       maybeFeature = gj.features.find((f) => f.id == id)!;
       // Hide it from the regular drawing while we're editing
       maybeFeature.properties.hide_while_editing = true;
@@ -72,7 +78,7 @@
     $polygonTool?.stop();
     $polygonTool?.clearEventListeners();
 
-    gjScheme.update((gj) => {
+    gjSchemeCollection.update((gj) => {
       let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
 
       // Show the feature again

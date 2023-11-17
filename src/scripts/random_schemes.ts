@@ -7,21 +7,16 @@ import booleanContains from "@turf/boolean-contains";
 import { lineString, point, polygon } from "@turf/helpers";
 import length from "@turf/length";
 import { randomPoint } from "@turf/random";
-import type {
-  Feature,
-  FeatureCollection,
-  LineString,
-  Polygon,
-  Position,
-} from "geojson";
+import type { Feature, LineString, Polygon, Position } from "geojson";
 
 main();
 
 function main() {
-  let gj: FeatureCollection & { schemes: { [name: string]: any } } = {
+  let schemes: { [reference: string]: any } = {};
+  let gj = {
     type: "FeatureCollection",
     features: [],
-    schemes: {},
+    schemes,
   };
 
   let authorities = JSON.parse(
@@ -42,9 +37,13 @@ function main() {
     let scheme_reference = `ATE${count}`;
     count++;
     gj.schemes[scheme_reference] = {
-      authority_or_region: `${authority.properties.level}_${authority.properties.name}`,
-      capital_scheme_id: count,
-      funding_programme: pickRandom(["ATF2", "ATF3", "ATF4"]),
+      scheme_reference,
+      scheme_name: scheme_reference,
+      browse: {
+        authority_or_region: `${authority.properties.level}_${authority.properties.name}`,
+        capital_scheme_id: count.toString(),
+        funding_programme: pickRandom(["ATF2", "ATF3", "ATF4"]),
+      },
     };
 
     // Make a few interventions for every authority
@@ -70,6 +69,7 @@ function main() {
         "Repair damaged surface",
       ]);
     }
+    // @ts-ignore ts being overzealous, it's okay to have properties in our features
     gj.features.push(pt);
 
     let route = makeLineString(authority.geometry);
@@ -83,6 +83,7 @@ function main() {
       "Shared use with segregation",
       "Stepped cycle-track on the north side only",
     ]);
+    // @ts-ignore ts being overzealous, it's okay to have properties in our features
     gj.features.push(route);
 
     let area = makePolygon(authority.geometry);
@@ -93,6 +94,7 @@ function main() {
       "Lighting improvements",
       "New cycle hangars",
     ]);
+    // @ts-ignore ts being overzealous, it's okay to have properties in our features
     gj.features.push(area);
   }
 

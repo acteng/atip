@@ -2,7 +2,8 @@
   import type { Polygon } from "geojson";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { gjScheme, mode, newFeatureId, polygonTool } from "stores";
+  import { getArbitraryScheme } from "lib/sidebar/scheme_data";
+  import { gjSchemeCollection, mode, newFeatureId, polygonTool } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import PolygonControls from "./PolygonControls.svelte";
@@ -18,8 +19,10 @@
   });
 
   function onSuccess(feature: FeatureWithProps<Polygon>) {
-    gjScheme.update((gj) => {
+    gjSchemeCollection.update((gj) => {
       feature.id = newFeatureId(gj);
+      feature.properties.scheme_reference =
+        getArbitraryScheme(gj).scheme_reference;
       feature.properties.intervention_type = "area";
       feature.properties.is_coverage_polygon = false;
       gj.features.push(feature as Feature<Polygon>);

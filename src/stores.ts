@@ -1,13 +1,13 @@
-import { emptyGeojson } from "lib/maplibre";
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
 import { PointTool } from "./lib/draw/point/point_tool";
 import { PolygonTool } from "./lib/draw/polygon/polygon_tool";
 import { RouteTool } from "./lib/draw/route/route_tool";
+import { emptyCollection } from "./lib/sidebar/scheme_data";
 import {
   isStreetViewImagery,
   type Mode,
-  type Scheme,
+  type SchemeCollection,
   type UserSettings,
 } from "./types";
 
@@ -25,7 +25,9 @@ export const polygonTool: Writable<PolygonTool | null> = writable(null);
 export const routeTool: Writable<RouteTool | null> = writable(null);
 
 // TODO Should we instead store a map from ID to feature?
-export const gjScheme: Writable<Scheme> = writable(emptyGeojson() as Scheme);
+export const gjSchemeCollection: Writable<SchemeCollection> = writable(
+  emptyCollection()
+);
 
 // The optional ID of a feature currently hovered from the sidebar.
 export const sidebarHover: Writable<number | null> = writable(null);
@@ -56,7 +58,7 @@ export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
 // NOTE! If you call this twice in a row in a `gjScheme.update` transaction
 // without adding one of the new features, then this'll return the same ID
 // twice!
-export function newFeatureId(gj: Scheme): number {
+export function newFeatureId(gj: SchemeCollection): number {
   let ids = new Set();
   for (let f of gj.features) {
     ids.add(f.id);
@@ -71,7 +73,7 @@ export function newFeatureId(gj: Scheme): number {
 
 export function deleteIntervention(id: number) {
   console.log(`Deleting intervention ${id}`);
-  gjScheme.update((gj) => {
+  gjSchemeCollection.update((gj) => {
     gj.features = gj.features.filter((f) => f.id != id);
     return gj;
   });

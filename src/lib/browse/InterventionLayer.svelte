@@ -17,10 +17,10 @@
     hoverStateFilter,
     LineLayer,
   } from "svelte-maplibre";
-  import type { AllSchemeGJ } from "./data";
+  import type { SchemeCollection } from "types";
   import InterventionPopup from "./InterventionPopup.svelte";
 
-  export let schemesGj: AllSchemeGJ;
+  export let schemesGj: SchemeCollection;
   export let showSchemes: boolean;
   export let filterText: string;
 

@@ -11,7 +11,7 @@
   import type { Feature, LineString, Point, Position } from "geojson";
   import { emptyGeojson, layerId, setPrecision } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { gjScheme, map, mode, newFeatureId } from "stores";
+  import { gjSchemeCollection, map, mode, newFeatureId } from "stores";
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON } from "svelte-maplibre";
   import type { Feature as OurFeature } from "types";
@@ -61,7 +61,7 @@
 
     // Are we snapped to anything?
     let candidates: [number, Position, number][] = [];
-    for (let [index, f] of $gjScheme.features.entries()) {
+    for (let [index, f] of $gjSchemeCollection.features.entries()) {
       if (f.geometry.type == "LineString") {
         let snapped = nearestPointOnLine(f.geometry, cursor, {
           units: "kilometers",
@@ -93,7 +93,7 @@
     } else {
       // TODO Can we avoid using ! everywhere here?
       let result = lineSplit(
-        $gjScheme.features[snappedIndex!] as Feature<LineString>,
+        $gjSchemeCollection.features[snappedIndex!] as Feature<LineString>,
         snappedCursor!
       );
       if (result.features.length == 2) {
@@ -105,7 +105,7 @@
         piece2.geometry.coordinates =
           piece2.geometry.coordinates.map(setPrecision);
 
-        gjScheme.update((gj) => {
+        gjSchemeCollection.update((gj) => {
           // Keep the old ID for one, assign a new ID to the other
           piece1.id = gj.features[snappedIndex!].id;
           piece2.id = newFeatureId(gj);

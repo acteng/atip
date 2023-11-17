@@ -7,76 +7,90 @@
     TextInput,
     WarningButton,
   } from "lib/govuk";
-  import { gjScheme, mode, sidebarHover } from "stores";
+  import { gjSchemeCollection, mode, sidebarHover } from "stores";
   import { onMount } from "svelte";
-  import type { Schema, Scheme } from "types";
+  import type { Schema, SchemeCollection } from "types";
   import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
-  import { backfill, interventionWarning } from "./scheme_data";
+  import {
+    backfill,
+    emptyCollection,
+    getArbitraryScheme,
+    interventionWarning,
+  } from "./scheme_data";
 
   export let authorityName: string;
   export let schema: Schema;
   let errorMessage = "";
 
-  let baseFilename = authorityName;
+  let filename = authorityName;
   if (schema != "v1") {
-    baseFilename += `_${schema}`;
+    filename += `_${schema}`;
   }
 
   let loaded = false;
   let displayClearAllConfirmation = false;
 
+  // TODO Temporary. The UI will change to manage multiple schemes.
+  let arbitrarySchemeName: string | undefined;
+  $: updateSchemeName(arbitrarySchemeName);
+  function updateSchemeName(scheme_name: string | undefined) {
+    if (scheme_name) {
+      getArbitraryScheme($gjSchemeCollection).scheme_name = scheme_name;
+      $gjSchemeCollection = $gjSchemeCollection;
+    }
+  }
+
   onMount(async () => {
     // Start by loading from a URL. If that's not specified, load from local storage.
     let params = new URLSearchParams(window.location.search);
     let loadUrl = params.get("geojsonUrl");
-    let loadLocal = window.localStorage.getItem(baseFilename);
+    let loadLocal = window.localStorage.getItem(filename);
 
     if (loadUrl) {
       console.log(`Loading GeoJSON from ${loadUrl}`);
       try {
         let resp = await fetch(loadUrl);
         let body = await resp.text();
-        gjScheme.set(backfill(JSON.parse(body)));
+        gjSchemeCollection.set(backfill(JSON.parse(body)));
       } catch (err) {
         console.log(`Failed to load from URL: ${err}`);
       }
     } else if (loadLocal) {
       try {
-        gjScheme.set(backfill(JSON.parse(loadLocal)));
+        gjSchemeCollection.set(backfill(JSON.parse(loadLocal)));
       } catch (err) {
         console.log(`Failed to load from local storage: ${err}`);
       }
     }
     loaded = true;
+    arbitrarySchemeName = getArbitraryScheme($gjSchemeCollection).scheme_name;
   });
 
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
   $: {
-    if (loaded && $gjScheme) {
+    if (loaded && $gjSchemeCollection) {
       console.log(`GJ changed, saving to local storage`);
-      window.localStorage.setItem(
-        baseFilename,
-        JSON.stringify(geojsonToSave())
-      );
+      window.localStorage.setItem(filename, JSON.stringify(geojsonToSave()));
     }
   }
 
   function clearAll() {
     displayClearAllConfirmation = false;
 
-    gjScheme.update((gj) => {
-      // Leave origin, authority, and other foreign members alone
-      delete gj.scheme_name;
-      delete gj.pipeline;
-      gj.features = [];
-      return gj;
+    gjSchemeCollection.update((gj) => {
+      let newGj = emptyCollection();
+      // Preserve some foreign members
+      newGj.origin = gj.origin;
+      newGj.authority = gj.authority;
+      return newGj;
     });
     sidebarHover.set(null);
+    arbitrarySchemeName = undefined;
   }
 
   // Remove the hide_while_editing property hack
-  function geojsonToSave(): Scheme {
-    const copy = JSON.parse(JSON.stringify($gjScheme));
+  function geojsonToSave(): SchemeCollection {
+    const copy = JSON.parse(JSON.stringify($gjSchemeCollection));
     for (let feature of copy.features) {
       delete feature.properties.hide_while_editing;
     }
@@ -85,16 +99,16 @@
 
   function exportToGeojson() {
     let geojson = geojsonToSave();
-    var filename = baseFilename;
     geojson.authority = authorityName;
     // we could probably be more sophisticated here and set version more centrally
     geojson.origin = "atip-v2";
-    // Include the scheme name if it's set
-    if (geojson["scheme_name"]) {
-      filename += "_" + geojson["scheme_name"];
-    }
-    filename += ".geojson";
-    downloadGeneratedFile(filename, JSON.stringify(geojson, null, "  "));
+    // Don't include any scheme name in the filename. There could be multiple
+    // schemes in one file, and better for people to get used to consistent
+    // filenames with only authority and schema.
+    downloadGeneratedFile(
+      `${filename}.geojson`,
+      JSON.stringify(geojson, null, "  ")
+    );
   }
 
   function downloadGeneratedFile(filename: string, textInput: string) {
@@ -112,21 +126,22 @@
   function loadFile(text: string) {
     try {
       // TODO Should we prompt before deleting the current scheme?
-      gjScheme.set(backfill(JSON.parse(text)));
+      gjSchemeCollection.set(backfill(JSON.parse(text)));
+      arbitrarySchemeName = getArbitraryScheme($gjSchemeCollection).scheme_name;
       errorMessage = "";
     } catch (err) {
       errorMessage = `Couldn't load scheme from a file: ${err}`;
     }
   }
 
-  $: numErrors = $gjScheme.features.filter(
+  $: numErrors = $gjSchemeCollection.features.filter(
     (f) => interventionWarning(schema, f) != null
   ).length;
 </script>
 
 {#if $mode.mode == "list"}
-  <CollapsibleCard label={$gjScheme.scheme_name ?? "Untitled scheme"}>
-    <TextInput label="Scheme name" bind:value={$gjScheme.scheme_name} />
+  <CollapsibleCard label={arbitrarySchemeName ?? "Untitled scheme"}>
+    <TextInput label="Scheme name" bind:value={arbitrarySchemeName} />
 
     <ErrorMessage {errorMessage} />
 
@@ -139,7 +154,7 @@
     <div>
       <WarningButton
         on:click={() => (displayClearAllConfirmation = true)}
-        disabled={$gjScheme.features.length == 0}
+        disabled={$gjSchemeCollection.features.length == 0}
       >
         Start new scheme
       </WarningButton>

@@ -2,7 +2,7 @@
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
   import AppVersion from "lib/browse/AppVersion.svelte";
-  import { processInput, type AllSchemeGJ, type Scheme } from "lib/browse/data";
+  import { processInput } from "lib/browse/data";
   import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
   import LoadRemoteSchemeData from "lib/browse/LoadRemoteSchemeData.svelte";
@@ -21,6 +21,7 @@
   import { ErrorMessage } from "lib/govuk";
   import { mapStyle } from "stores";
   import { onMount } from "svelte";
+  import type { SchemeCollection, SchemeData } from "types";
 
   onMount(() => {
     // For govuk components. Must happen here.
@@ -31,12 +32,12 @@
   mapStyle.set(params.get("style") || "dataviz");
   let errorMessage = "";
 
-  let schemesGj: AllSchemeGJ = {
+  let schemesGj: SchemeCollection = {
     type: "FeatureCollection",
     features: [],
     schemes: {},
   };
-  let schemes: Map<string, Scheme> = new Map();
+  let schemes: Map<string, SchemeData> = new Map();
   let schemesToBeShown: Set<string> = new Set();
   let filterText = "";
   let showSchemes = true;

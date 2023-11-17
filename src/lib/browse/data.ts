@@ -1,58 +1,38 @@
 import type { FeatureCollection } from "geojson";
 import { setPrecision } from "lib/maplibre";
 import readXlsxFile from "read-excel-file";
-import type { FeatureUnion } from "types";
-
-export interface AllSchemeGJ {
-  type: "FeatureCollection";
-  features: FeatureUnion[];
-  schemes: { [name: string]: SchemeData };
-}
-
-// This must be filled out in the input file
-interface SchemeData {
-  scheme_reference: string;
-  num_features: number;
-  authority_or_region: string;
-  capital_scheme_id: string;
-  funding_programme: string;
-}
-
-export interface Scheme extends SchemeData {
-  num_features: number;
-}
+import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
 // Modifies this GeoJSON in-place, and returns a dictionary of Schemes, keyed
 // (and ordered) by scheme_reference. Each feature (intervention) in the GJ
 // links back to one of these schemes by scheme_reference.
-export function processInput(gj: AllSchemeGJ): Map<string, Scheme> {
+export function processInput(gj: SchemeCollection): Map<string, SchemeData> {
   let schemes = new Map();
 
   // Assume the input has a top-level dictionary keyed by scheme_reference
   for (let [scheme_reference, scheme] of Object.entries(gj.schemes)) {
-    schemes.set(scheme_reference, {
-      scheme_reference,
-      num_features: 0,
-      authority_or_region: scheme.authority_or_region,
-      capital_scheme_id: scheme.capital_scheme_id,
-      funding_programme: scheme.funding_programme,
-    });
+    schemes.set(scheme_reference, scheme);
   }
 
   gj.features = gj.features.filter((f) => keepFeature(f));
 
   let id = 1;
   for (let feature of gj.features) {
-    let scheme = schemes.get(feature.properties!.scheme_reference);
-    scheme.num_features++;
+    let scheme: SchemeData = schemes.get(feature.properties!.scheme_reference);
+    if (scheme.browse) {
+      scheme.browse.num_features =
+        scheme.browse.num_features !== undefined
+          ? scheme.browse.num_features + 1
+          : 1;
 
-    // TODO For easy styling, copy one field from scheme to all its features.
-    // As we have more cases like this, revisit what's most performant.
-    // @ts-ignore Extend InterventionProps with scheme_reference and this
-    feature.properties!.funding_programme = scheme.funding_programme;
-    // Force numeric IDs (skipping 0) for hovering to work
-    feature.id = id++;
+      // TODO For easy styling, copy one field from scheme to all its features.
+      // As we have more cases like this, revisit what's most performant.
+      // @ts-ignore Extend InterventionProps with scheme_reference and this
+      feature.properties!.funding_programme = scheme.funding_programme;
+      // Force numeric IDs (skipping 0) for hovering to work
+      feature.id = id++;
+    }
   }
 
   return schemes;

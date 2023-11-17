@@ -1,9 +1,10 @@
 import length from "@turf/length";
-import type { FeatureUnion, Schema, Scheme } from "types";
+import type { FeatureUnion, Schema, SchemeCollection, SchemeData } from "types";
+import { v4 as uuidv4 } from "uuid";
 
 // TODO This should eventually guarantee the output is a valid Scheme. Only
 // some fixes are applied now.
-export function backfill(json: Scheme) {
+export function backfill(json: SchemeCollection) {
   let idCounter = 1;
   for (let f of json.features) {
     // Fix input from other tools where properties may be null
@@ -23,7 +24,52 @@ export function backfill(json: Scheme) {
     f.id = idCounter++;
   }
 
+  if (!json.schemes) {
+    // This file represents a single scheme, from before mid November 2023. Create a single scheme for it
+    let scheme_reference = uuidv4();
+    json.schemes = {};
+    json.schemes[scheme_reference] = {
+      scheme_reference,
+    };
+
+    // Move over the optional scheme_name from the old place
+    // @ts-ignore handling old format
+    if (json.scheme_name) {
+      // @ts-ignore handling old format
+      json.schemes[scheme_reference].scheme_name = json.scheme_name;
+      // @ts-ignore handling old format
+      delete json.scheme_name;
+    }
+
+    // Some pipeline files have been created; move over attributes.
+    // @ts-ignore handling old format
+    if (json.pipeline) {
+      // @ts-ignore handling old format
+      json.schemes[scheme_reference].pipeline = json.pipeline;
+      // @ts-ignore handling old format
+      delete json.pipeline;
+    }
+
+    // Set scheme_reference for all features
+    for (let f of json.features) {
+      f.properties.scheme_reference = scheme_reference;
+    }
+  }
+
   return json;
+}
+
+export function emptyCollection(): SchemeCollection {
+  let scheme_reference = uuidv4();
+  let schemes: { [reference: string]: SchemeData } = {};
+  schemes[scheme_reference] = {
+    scheme_reference,
+  };
+  return {
+    type: "FeatureCollection",
+    features: [],
+    schemes,
+  };
 }
 
 export function interventionName(
@@ -117,6 +163,7 @@ export function getUnexpectedProperties(
     "waypoints",
     "hide_while_editing",
     "is_coverage_polygon",
+    "scheme_reference",
   ]) {
     delete copy[key];
   }
@@ -131,4 +178,12 @@ export function getUnexpectedProperties(
   }
 
   return copy;
+}
+
+// TODO Remove when the UI can manage multiple schemes. This function only
+// makes sense when there's one scheme in the collection.
+export function getArbitraryScheme(
+  schemeCollection: SchemeCollection
+): SchemeData {
+  return Object.values(schemeCollection.schemes)[0];
 }

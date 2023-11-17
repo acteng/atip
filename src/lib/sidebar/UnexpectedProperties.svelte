@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Modal } from "lib/common";
   import { ButtonGroup, SecondaryButton, WarningButton } from "lib/govuk";
-  import { gjScheme } from "stores";
+  import { gjSchemeCollection } from "stores";
   import type { Schema } from "types";
   import { getUnexpectedProperties } from "./scheme_data";
 
@@ -14,7 +14,7 @@
 
   function removeExtraProperties() {
     open = false;
-    gjScheme.update((gj) => {
+    gjSchemeCollection.update((gj) => {
       let feature = gj.features.find((f) => f.id == id)!;
       for (let key of Object.keys(unexpected)) {
         // @ts-ignore TS thinks the properties don't have extra properties, but they do

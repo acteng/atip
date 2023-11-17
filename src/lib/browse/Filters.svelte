@@ -8,13 +8,12 @@
     Select,
   } from "lib/govuk";
   import { onMount } from "svelte";
-  import type { FeatureUnion } from "types";
-  import type { AllSchemeGJ, Scheme } from "./data";
+  import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
 
-  export let schemesGj: AllSchemeGJ;
+  export let schemesGj: SchemeCollection;
   // These are immutable; re-create this component if they change
-  export let schemes: Map<string, Scheme>;
+  export let schemes: Map<string, SchemeData>;
 
   // by scheme_reference
   export let schemesToBeShown: Set<string> = new Set();
@@ -37,11 +36,11 @@
     let set1: Set<string> = new Set();
     let set2: Set<string> = new Set();
     for (let x of schemes.values()) {
-      if (x.authority_or_region) {
-        set1.add(x.authority_or_region);
+      if (x.browse?.authority_or_region) {
+        set1.add(x.browse.authority_or_region);
       }
-      if (x.funding_programme) {
-        set2.add(x.funding_programme);
+      if (x.browse?.funding_programme) {
+        set2.add(x.browse.funding_programme);
       }
     }
     authorities = Array.from(set1.entries());
@@ -70,12 +69,15 @@
       }
       if (filterAuthority || filterFundingProgramme) {
         let scheme = schemes.get(feature.properties.scheme_reference!)!;
-        if (filterAuthority && scheme.authority_or_region != filterAuthority) {
+        if (
+          filterAuthority &&
+          scheme.browse?.authority_or_region != filterAuthority
+        ) {
           return false;
         }
         if (
           filterFundingProgramme &&
-          scheme.funding_programme != filterFundingProgramme
+          scheme.browse?.funding_programme != filterFundingProgramme
         ) {
           return false;
         }
