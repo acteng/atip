@@ -87,5 +87,7 @@ toolbox, but that gets created and destroyed frequently. -->
   <StreetViewMode />
 {/if}
 
-<hr />
+{#if $mode.mode != "list"}
+  <hr />
+{/if}
 <BaselayerSwitcher />

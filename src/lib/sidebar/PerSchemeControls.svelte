@@ -1,5 +1,6 @@
 <script lang="ts">
   import { WarningIcon } from "lib/common";
+  import { ErrorMessage } from "lib/govuk";
   import { bbox } from "lib/maplibre";
   import { gjSchemeCollection, map, mode, sidebarHover } from "stores";
   import { onDestroy } from "svelte";
@@ -10,6 +11,12 @@
 
   export let schema: Schema;
   export let scheme_reference: string;
+
+  $: numErrors = $gjSchemeCollection.features.filter(
+    (f) =>
+      f.properties.scheme_reference == scheme_reference &&
+      interventionWarning(schema, f) != null
+  ).length;
 
   function edit(e: MouseEvent, id: number) {
     // Use <a> for buttons. Disable the href behavior.
@@ -61,6 +68,14 @@
   <PipelineSchemeForm {scheme_reference} />
 {:else}
   <GenericSchemeForm {scheme_reference} />
+{/if}
+
+{#if numErrors == 1}
+  <ErrorMessage errorMessage="There's a problem with one intervention below" />
+{:else if numErrors > 0}
+  <ErrorMessage
+    errorMessage="There's a problem with {numErrors} interventions below"
+  />
 {/if}
 
 <ol class="govuk-list govuk-list--number">
