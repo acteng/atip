@@ -59,6 +59,39 @@ export function backfill(json: SchemeCollection) {
     if (json.pipeline) {
       // @ts-ignore handling old format
       json.schemes[scheme_reference].pipeline = json.pipeline;
+
+      // @ts-ignore handling old format
+      json.schemes[scheme_reference].pipeline.scheme_timescale = {
+        // @ts-ignore handling old format
+        status: json.pipeline.status,
+        // @ts-ignore handling old format
+        timescale: json.pipeline.timescale,
+        // @ts-ignore handling old format
+        timescale_year: json.pipeline.timescale_year,
+        // @ts-ignore handling old format
+        year_published: json.pipeline.year_published,
+        // @ts-ignore handling old format
+        year_consulted: json.pipeline.year_consulted,
+      };
+
+      // @ts-ignore handling old format
+      json.schemes[scheme_reference].pipeline.scheme_budget = {
+        // @ts-ignore handling old format
+        cost: json.pipeline.cost,
+        // @ts-ignore handling old format
+        development_funded:
+          json.pipeline.development_funded !== undefined
+            ? json.pipeline.development_funded
+            : false,
+        // @ts-ignore handling old format
+        construction_funded:
+          json.pipeline.construction_funded !== undefined
+            ? json.pipeline.construction_funded
+            : false,
+        // @ts-ignore handling old format
+        funding_source: json.pipeline.funding_source || "",
+      };
+
       // @ts-ignore handling old format
       delete json.pipeline;
     }
@@ -181,53 +214,9 @@ export function getArbitraryScheme(
   return Object.values(schemeCollection.schemes)[0];
 }
 
-export function getRectifiedPipelineSchemeWithSuggestedValues(
-  scheme: SchemeData,
+export function getTimescaleHintValue(
   features: FeatureUnion[]
-): [SchemeData, string | undefined, number | undefined] {
-  let newPipeline = (scheme.pipeline ||= {
-    scheme_type: "",
-    scheme_timescale: { status: "", timescale: "" },
-    atf4_lead_type: "",
-    scheme_description: "",
-    scheme_budget: {
-      funding_source: "",
-      development_funded: false,
-      construction_funded: false,
-    },
-  });
-
-  const schemeFeatures: FeatureUnion[] = features.filter((feature) => {
-    return feature.properties.scheme_reference === scheme?.scheme_reference;
-  });
-  let [schemeTimescale, maxTimescale] = getTimescale(
-    scheme.pipeline.scheme_timescale,
-    schemeFeatures
-  );
-  let [schemeBudget, summedCost] = getBudget(
-    scheme.pipeline.scheme_budget,
-    schemeFeatures
-  );
-  newPipeline.scheme_timescale = schemeTimescale;
-  newPipeline.scheme_budget = schemeBudget;
-
-  scheme.pipeline = newPipeline;
-
-  return [scheme, maxTimescale, summedCost];
-}
-
-function getTimescale(
-  timescaleDetails: any,
-  features: FeatureUnion[]
-): [PipelineTimescale, string | undefined] {
-  const schemeTimescale = {
-    status: timescaleDetails.status || "",
-    timescale: timescaleDetails.timescale,
-    timescale_year: timescaleDetails.timescale_year,
-    year_published: timescaleDetails.year_published,
-    year_consulted: timescaleDetails.year_consulted,
-  };
-
+): string | undefined {
   let maxTimescale;
   if (features.length > 0) {
     maxTimescale =
@@ -235,20 +224,12 @@ function getTimescale(
         ?.intervention_timescale.timescale || "";
   }
 
-  return [schemeTimescale, maxTimescale];
+  return maxTimescale;
 }
 
-function getBudget(
-  budgetDetails: any,
+export function getBudgetHintValue(
   features: FeatureUnion[]
-): [PipelineBudget, number | undefined] {
-  const schemeBudget = {
-    cost: budgetDetails.cost,
-    development_funded: budgetDetails.development_funded,
-    construction_funded: budgetDetails.construction_funded,
-    funding_source: budgetDetails.funding_source || "",
-  };
-
+): number | undefined {
   let summedCost;
   if (features.length > 0) {
     summedCost = features
@@ -258,7 +239,7 @@ function getBudget(
       .reduce((partialSum, a) => partialSum + a, 0);
   }
 
-  return [schemeBudget, summedCost];
+  return summedCost;
 }
 
 function determineMaxTimescale(

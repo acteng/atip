@@ -13,7 +13,7 @@
   import ATF4Type from "../forms/ATF4Type.svelte";
   import BudgetSubform from "./pipeline_forms/BudgetSubform.svelte";
   import TimescaleSubform from "./pipeline_forms/TimescaleSubform.svelte";
-  import { getRectifiedPipelineSchemeWithSuggestedValues } from "./scheme_data";
+  import { getBudgetHintValue, getTimescaleHintValue } from "./scheme_data";
 
   export let scheme_reference: string;
 
@@ -24,19 +24,15 @@
 
   // Lazily set defaults when the modal is opened the first time for a scheme
   $: if (showModal) {
+    scheme = $gjSchemeCollection.schemes[scheme_reference];
     const schemeFeatures: FeatureUnion[] = $gjSchemeCollection.features.filter(
       (feature) => {
         return feature.properties.scheme_reference === scheme?.scheme_reference;
       }
     );
-    const [rectifiedScheme, calculatedTimescale, summedSchemeCost] =
-      getRectifiedPipelineSchemeWithSuggestedValues(
-        $gjSchemeCollection.schemes[scheme_reference],
-        schemeFeatures
-      );
-    scheme = rectifiedScheme;
-    maxTimescale = calculatedTimescale;
-    summedCost = summedSchemeCost;
+
+    maxTimescale = getTimescaleHintValue(schemeFeatures);
+    summedCost = getBudgetHintValue(schemeFeatures);
   }
 
   function onKeyDown(e: KeyboardEvent) {
