@@ -21,7 +21,6 @@
     atf4_type: "",
     accuracy: "",
     is_alternative: false,
-    cost: 0,
     intervention_timescale: {
       status: "",
       timescale: "",

@@ -43,7 +43,7 @@
 
 <FormElement {label} id={label}>
   {#if hint}
-    <p>{hint}</p>
+    <div class="govuk-hint">{hint}</div>
   {/if}
   <ErrorMessage errorMessage={validate(stringValue)} />
   <input

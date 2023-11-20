@@ -26,7 +26,7 @@
       {legend}
     </legend>
     {#if hint}
-      <p>{hint}</p>
+      <div class="govuk-hint">{hint}</div>
     {/if}
     <ErrorMessage {errorMessage} />
     <div
