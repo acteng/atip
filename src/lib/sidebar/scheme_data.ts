@@ -1,6 +1,6 @@
 import length from "@turf/length";
 import { randomSchemeColor } from "colors";
-import { schema as schemaStore } from "stores";
+import { schema as schemaStore, gjSchemeCollection } from "stores";
 import { get } from "svelte/store";
 import type {
   FeatureUnion,
@@ -215,8 +215,9 @@ export function getArbitraryScheme(
 }
 
 export function getTimescaleHintValue(
-  features: FeatureUnion[]
+  schemeReference: string 
 ): string | undefined {
+  const features = getFeaturesFromScheme(schemeReference);
   let maxTimescale;
   if (features.length > 0) {
     maxTimescale =
@@ -227,9 +228,19 @@ export function getTimescaleHintValue(
   return maxTimescale;
 }
 
+function getFeaturesFromScheme(schemeReference: string): FeatureUnion[] {
+ return get(gjSchemeCollection).features.filter(
+  (feature) => {
+    return feature.properties.scheme_reference === schemeReference;
+  }
+);
+}
+
 export function getBudgetHintValue(
-  features: FeatureUnion[]
+  schemeReference: string 
 ): number | undefined {
+  const features = getFeaturesFromScheme(schemeReference);
+
   let summedCost;
   if (features.length > 0) {
     summedCost = features

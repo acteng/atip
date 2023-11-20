@@ -9,11 +9,10 @@
     TextInput,
   } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
-  import type { FeatureUnion, SchemeData } from "types";
+  import type { SchemeData } from "types";
   import ATF4Type from "../forms/ATF4Type.svelte";
   import BudgetSubform from "./pipeline_forms/BudgetSubform.svelte";
   import TimescaleSubform from "./pipeline_forms/TimescaleSubform.svelte";
-  import { getBudgetHintValue, getTimescaleHintValue } from "./scheme_data";
 
   export let scheme_reference: string;
 
@@ -25,14 +24,6 @@
   // Lazily set defaults when the modal is opened the first time for a scheme
   $: if (showModal) {
     scheme = $gjSchemeCollection.schemes[scheme_reference];
-    const schemeFeatures: FeatureUnion[] = $gjSchemeCollection.features.filter(
-      (feature) => {
-        return feature.properties.scheme_reference === scheme?.scheme_reference;
-      }
-    );
-
-    maxTimescale = getTimescaleHintValue(schemeFeatures);
-    summedCost = getBudgetHintValue(schemeFeatures);
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -101,9 +92,9 @@
 
     <TimescaleSubform
       bind:timescale={scheme.pipeline.scheme_timescale}
-      maxTimescaleFromInterventions={maxTimescale}
+      {scheme_reference}
     />
-    <BudgetSubform bind:budget={scheme.pipeline.scheme_budget} {summedCost} />
+    <BudgetSubform bind:budget={scheme.pipeline.scheme_budget} {scheme_reference} />
 
     <DefaultButton on:click={finish}>Save</DefaultButton>
   {/if}

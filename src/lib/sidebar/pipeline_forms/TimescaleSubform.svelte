@@ -1,19 +1,17 @@
 <script lang="ts">
   import { NumberInput, Radio } from "lib/govuk";
   import type { PipelineTimescale } from "types";
+  import { getTimescaleHintValue } from "../scheme_data";
 
   export let timescale: PipelineTimescale;
-  export let maxTimescaleFromInterventions: string | undefined = undefined;
+  export let scheme_reference: string;
   export let forIntervention = false;
 
-  $: timescaleHint = getTimescaleHint(maxTimescaleFromInterventions);
+  let timescaleHint = getTimescaleHint();
 
-  function getTimescaleHint(
-    maxTimescaleFromInterventions: string | undefined
-  ): string | undefined {
-    const index = ["short", "medium", "long"].indexOf(
-      maxTimescaleFromInterventions || ""
-    );
+  function getTimescaleHint(): string | undefined {
+    const timescaleHintValue = getTimescaleHintValue(scheme_reference);
+    const index = ["short", "medium", "long"].indexOf(timescaleHintValue || "");
     if (index === -1) return undefined;
     const humanReadableValues = [
       "Short (1-3 years)",

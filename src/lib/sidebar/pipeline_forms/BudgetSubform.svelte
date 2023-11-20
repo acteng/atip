@@ -1,12 +1,15 @@
 <script lang="ts">
   import { Checkbox, NumberInput, Radio } from "lib/govuk";
   import type { PipelineBudget } from "types";
+    import { getBudgetHintValue } from "../scheme_data";
 
+  export let scheme_reference: string;
   export let budget: PipelineBudget;
-  export let summedCost: number | undefined = undefined;
-  $: costHint = getSummedCostHint(summedCost);
+  $: costHint = getSummedCostHint();
 
-  function getSummedCostHint(summedCost: number | undefined) {
+  function getSummedCostHint() {
+    const summedCost = getBudgetHintValue(scheme_reference)
+    
     if (summedCost === undefined) return undefined;
     return `The sum of costs of interventions in this scheme is: £${summedCost}`;
   }
