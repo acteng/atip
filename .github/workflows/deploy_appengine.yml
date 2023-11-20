@@ -30,7 +30,6 @@ jobs:
         run: |
           npm ci
           npm run setup-govuk
-          npm run generate-schema-ts
           VITE_RESOURCE_BASE="https://${PROJECT_ID}.ew.r.appspot.com/data" npm run build
           cd backend
           rm -rf dist

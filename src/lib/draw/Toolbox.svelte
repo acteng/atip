@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SecondaryButton } from "lib/govuk";
-  import { mode, pointTool, polygonTool, routeTool, schema } from "stores";
+  import { mode, pointTool, polygonTool, routeTool } from "stores";
   import imageIcon from "../../../assets/image.svg";
   import pointIcon from "../../../assets/point.svg";
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
@@ -14,22 +14,20 @@
 <HoverLayer />
 
 <div class="top govuk-prose">
-  {#if $schema != "planning"}
-    <SecondaryButton
-      on:click={() => mode.set({ mode: "new-point" })}
-      disabled={!$pointTool}
-    >
-      <img src={pointIcon} alt="New point" />
-      New point
-    </SecondaryButton>
-    <SecondaryButton
-      on:click={() => mode.set({ mode: "new-route" })}
-      disabled={!$routeTool}
-    >
-      <img src={routeIcon} alt="New route" />
-      New route
-    </SecondaryButton>
-  {/if}
+  <SecondaryButton
+    on:click={() => mode.set({ mode: "new-point" })}
+    disabled={!$pointTool}
+  >
+    <img src={pointIcon} alt="New point" />
+    New point
+  </SecondaryButton>
+  <SecondaryButton
+    on:click={() => mode.set({ mode: "new-route" })}
+    disabled={!$routeTool}
+  >
+    <img src={routeIcon} alt="New route" />
+    New route
+  </SecondaryButton>
   <SecondaryButton
     on:click={() => mode.set({ mode: "new-freehand-polygon" })}
     disabled={!$polygonTool}
@@ -44,12 +42,10 @@
     <img src={polygonSnappedIcon} alt="New polygon (snapped)" />
     New polygon (snapped)
   </SecondaryButton>
-  {#if $schema != "planning"}
-    <SecondaryButton on:click={() => mode.set({ mode: "split-route" })}>
-      <img src={splitRouteIcon} alt="Split route" />
-      Split route
-    </SecondaryButton>
-  {/if}
+  <SecondaryButton on:click={() => mode.set({ mode: "split-route" })}>
+    <img src={splitRouteIcon} alt="Split route" />
+    Split route
+  </SecondaryButton>
   <SecondaryButton on:click={() => mode.set({ mode: "set-image" })}>
     <!-- svelte-ignore a11y-img-redundant-alt -->
     <img src={imageIcon} alt="Georeference image" />
