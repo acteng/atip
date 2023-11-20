@@ -6,7 +6,6 @@
   import BoundaryLayer from "lib/BoundaryLayer.svelte";
   import {
     appVersion,
-    defaultSchema,
     Geocoder,
     getAuthoritiesGeoJson,
     LoggedIn,
@@ -24,7 +23,7 @@
   import FileManagement from "lib/sidebar/FileManagement.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
-  import { mapStyle, mode } from "stores";
+  import { mapStyle, mode, schema } from "stores";
   import { onMount } from "svelte";
   import type { Schema } from "types";
 
@@ -34,7 +33,9 @@
   const params = new URLSearchParams(window.location.search);
   // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
-  let schema: Schema = (params.get("schema") as Schema) || defaultSchema();
+  if (params.get("schema")) {
+    schema.set(params.get("schema") as Schema);
+  }
 
   mapStyle.set(params.get("style") || "streets");
 
@@ -95,7 +96,7 @@
       <p>App version: {appVersion()}</p>
       <div style="display: flex; justify-content: space-between">
         <p>{authorityDescription()}</p>
-        <a href={`index.html?schema=${schema}`}>Change area</a>
+        <a href={`index.html?schema=${$schema}`}>Change area</a>
         <ZoomOutMap {boundaryGeojson} />
       </div>
 
@@ -107,17 +108,17 @@
       </ButtonGroup>
       <LoggedIn />
     {/if}
-    <FileManagement {authorityName} {schema} />
-    <LeftSidebar {routeSnapperUrl} {schema} />
+    <FileManagement {authorityName} />
+    <LeftSidebar {routeSnapperUrl} />
   </div>
   <div class="main">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="top-right" />
       <BoundaryLayer {boundaryGeojson} />
-      <InterventionLayer {schema} />
+      <InterventionLayer />
       <ImageLayer />
       {#if $mode.mode == "list"}
-        <Toolbox {schema} />
+        <Toolbox />
       {:else if $mode.mode == "split-route"}
         <SplitRouteMode />
       {/if}

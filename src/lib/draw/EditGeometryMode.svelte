@@ -11,13 +11,12 @@
     routeTool,
   } from "stores";
   import { onDestroy, onMount } from "svelte";
-  import type { Feature, FeatureUnion, Schema } from "types";
+  import type { Feature, FeatureUnion } from "types";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
 
-  export let schema: Schema;
   export let id: number;
 
   let name = "";
@@ -36,7 +35,7 @@
       return gj;
     });
     let feature = maybeFeature!;
-    name = interventionName(schema, feature);
+    name = interventionName(feature);
 
     if (feature.geometry.type == "LineString") {
       $routeTool?.editExistingRoute(feature as Feature<LineString>);

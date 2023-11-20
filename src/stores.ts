@@ -7,6 +7,7 @@ import { emptyCollection } from "./lib/sidebar/scheme_data";
 import {
   isStreetViewImagery,
   type Mode,
+  type Schema,
   type SchemeCollection,
   type UserSettings,
 } from "./types";
@@ -40,6 +41,8 @@ userSettings.subscribe((value) =>
 );
 
 export const mode: Writable<Mode> = writable({ mode: "list" });
+
+export const schema: Writable<Schema> = writable(defaultSchema());
 
 // For browse page
 export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
@@ -101,4 +104,16 @@ function loadUserSettings(): UserSettings {
   }
   // The cast is necessary, because of streetViewImagery looking like just a string
   return settings as UserSettings;
+}
+
+function defaultSchema(): Schema {
+  // Use the pipeline schema on that semi-permanent branch
+  if (
+    window.location.hostname == "acteng.github.io" &&
+    window.location.pathname.startsWith("/atip/pipeline/")
+  ) {
+    return "pipeline";
+  }
+
+  return "v1";
 }

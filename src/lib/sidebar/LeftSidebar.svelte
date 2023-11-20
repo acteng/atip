@@ -3,7 +3,6 @@
   import { DefaultButton } from "lib/govuk";
   import { map, mode, pointTool, polygonTool, routeTool } from "stores";
   import { onDestroy } from "svelte";
-  import type { Schema } from "types";
   import EditGeometryMode from "../draw/EditGeometryMode.svelte";
   import ImageMode from "../draw/image/ImageMode.svelte";
   import { PointTool } from "../draw/point/point_tool";
@@ -17,7 +16,6 @@
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
 
-  export let schema: Schema;
   export let routeSnapperUrl: string;
 
   $: if ($map && !$pointTool) {
@@ -44,11 +42,11 @@ toolbox, but that gets created and destroyed frequently. -->
 </div>
 
 {#if $mode.mode == "list"}
-  <ListMode {schema} />
+  <ListMode />
 {:else if $mode.mode == "edit-form"}
-  <EditForm {schema} id={$mode.id} />
+  <EditForm id={$mode.id} />
 {:else if $mode.mode == "edit-geometry"}
-  <EditGeometryMode {schema} id={$mode.id} />
+  <EditGeometryMode id={$mode.id} />
 {:else if $mode.mode == "new-point"}
   <h2>New point</h2>
   <PointMode />

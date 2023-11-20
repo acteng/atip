@@ -3,12 +3,9 @@
   import { FileInput } from "lib/common";
   import { ErrorMessage, SecondaryButton } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
-  import type { Schema } from "types";
   import { v4 as uuidv4 } from "uuid";
   import PerSchemeControls from "./PerSchemeControls.svelte";
   import { backfill } from "./scheme_data";
-
-  export let schema: Schema;
 
   function newBlankScheme() {
     let scheme_reference = uuidv4();
@@ -58,6 +55,6 @@
 <hr />
 
 {#each Object.keys($gjSchemeCollection.schemes) as scheme_reference}
-  <PerSchemeControls {schema} {scheme_reference} />
+  <PerSchemeControls {scheme_reference} />
   <hr />
 {/each}

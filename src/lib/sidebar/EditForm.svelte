@@ -12,18 +12,22 @@
     WarningButton,
   } from "lib/govuk";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { deleteIntervention, gjSchemeCollection, map, mode } from "stores";
+  import {
+    deleteIntervention,
+    gjSchemeCollection,
+    map,
+    mode,
+    schema,
+  } from "stores";
   import { onDestroy, onMount } from "svelte";
-  import type { FeatureUnion, Schema } from "types";
+  import type { FeatureUnion } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
 
-  // TODO Should this just be in a store?
-  export let schema: Schema;
   export let id: number;
 
   let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;
-  $: warning = interventionWarning(schema, feature);
+  $: warning = interventionWarning(feature);
 
   // Because of how properties are bound individually, updates to $gjScheme aren't seen. Force them.
   function featureUpdated(feature: FeatureUnion) {
@@ -87,7 +91,7 @@
 
 <svelte:window on:keydown={onKeydown} />
 
-<h2>Editing {interventionName(schema, feature)}</h2>
+<h2>Editing {interventionName(feature)}</h2>
 
 <ButtonGroup>
   <DefaultButton on:click={() => mode.set({ mode: "list" })}>
@@ -100,16 +104,16 @@
 </ButtonGroup>
 
 <ErrorMessage errorMessage={warning} />
-{#if schema == "v1"}
-  <UnexpectedProperties id={feature.id} props={feature.properties} {schema} />
+{#if $schema == "v1"}
+  <UnexpectedProperties id={feature.id} props={feature.properties} />
   <FormV1 id={feature.id} bind:props={feature.properties} />
-{:else if schema == "v2"}
+{:else if $schema == "v2"}
   <FormV2 bind:props={feature.properties} />
-{:else if schema == "planning"}
+{:else if $schema == "planning"}
   <PlanningForm bind:props={feature.properties} />
-{:else if schema == "atf4"}
+{:else if $schema == "atf4"}
   <ATF4Form bind:props={feature.properties} />
-{:else if schema == "pipeline"}
-  <UnexpectedProperties id={feature.id} props={feature.properties} {schema} />
+{:else if $schema == "pipeline"}
+  <UnexpectedProperties id={feature.id} props={feature.properties} />
   <PipelineForm id={feature.id} bind:props={feature.properties} />
 {/if}
