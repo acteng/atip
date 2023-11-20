@@ -10,8 +10,8 @@
   let timescaleHint = getTimescaleHint();
 
   function getTimescaleHint(): string | undefined {
-    if(scheme_reference === undefined) {
-        return;
+    if (scheme_reference === undefined) {
+      return;
     }
     const timescaleHintValue = getTimescaleHintValue(scheme_reference);
     const index = ["short", "medium", "long"].indexOf(timescaleHintValue || "");

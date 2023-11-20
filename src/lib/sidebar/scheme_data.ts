@@ -4,8 +4,6 @@ import { schema as schemaStore, gjSchemeCollection } from "stores";
 import { get } from "svelte/store";
 import type {
   FeatureUnion,
-  PipelineBudget,
-  PipelineTimescale,
   Schema,
   SchemeCollection,
   SchemeData,
@@ -82,15 +80,15 @@ export function backfill(json: SchemeCollection) {
         development_funded:
           // @ts-ignore handling old format
           json.pipeline.development_funded !== undefined
-            // @ts-ignore handling old format
-            ? json.pipeline.development_funded
+            ? // @ts-ignore handling old format
+              json.pipeline.development_funded
             : false,
         // @ts-ignore handling old format
         construction_funded:
           // @ts-ignore handling old format
           json.pipeline.construction_funded !== undefined
-            // @ts-ignore handling old format
-            ? json.pipeline.construction_funded
+            ? // @ts-ignore handling old format
+              json.pipeline.construction_funded
             : false,
         // @ts-ignore handling old format
         funding_source: json.pipeline.funding_source || "",
@@ -233,11 +231,9 @@ export function getTimescaleHintValue(
 }
 
 function getFeaturesFromScheme(schemeReference: string): FeatureUnion[] {
-  return get(gjSchemeCollection).features.filter(
-    (feature) => {
-      return feature.properties.scheme_reference === schemeReference;
-    }
-  );
+  return get(gjSchemeCollection).features.filter((feature) => {
+    return feature.properties.scheme_reference === schemeReference;
+  });
 }
 
 export function getBudgetHintValue(

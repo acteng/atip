@@ -92,7 +92,10 @@
       bind:timescale={scheme.pipeline.scheme_timescale}
       {scheme_reference}
     />
-    <BudgetSubform bind:budget={scheme.pipeline.scheme_budget} {scheme_reference} />
+    <BudgetSubform
+      bind:budget={scheme.pipeline.scheme_budget}
+      {scheme_reference}
+    />
 
     <DefaultButton on:click={finish}>Save</DefaultButton>
   {/if}
