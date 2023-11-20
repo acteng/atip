@@ -18,8 +18,6 @@
 
   let showModal = false;
   let scheme: SchemeData | null = null;
-  let maxTimescale: string | undefined;
-  let summedCost: number | undefined;
 
   // Lazily set defaults when the modal is opened the first time for a scheme
   $: if (showModal) {

@@ -80,12 +80,16 @@ export function backfill(json: SchemeCollection) {
         cost: json.pipeline.cost,
         // @ts-ignore handling old format
         development_funded:
+          // @ts-ignore handling old format
           json.pipeline.development_funded !== undefined
+            // @ts-ignore handling old format
             ? json.pipeline.development_funded
             : false,
         // @ts-ignore handling old format
         construction_funded:
+          // @ts-ignore handling old format
           json.pipeline.construction_funded !== undefined
+            // @ts-ignore handling old format
             ? json.pipeline.construction_funded
             : false,
         // @ts-ignore handling old format
@@ -215,7 +219,7 @@ export function getArbitraryScheme(
 }
 
 export function getTimescaleHintValue(
-  schemeReference: string 
+  schemeReference: string
 ): string | undefined {
   const features = getFeaturesFromScheme(schemeReference);
   let maxTimescale;
@@ -229,15 +233,15 @@ export function getTimescaleHintValue(
 }
 
 function getFeaturesFromScheme(schemeReference: string): FeatureUnion[] {
- return get(gjSchemeCollection).features.filter(
-  (feature) => {
-    return feature.properties.scheme_reference === schemeReference;
-  }
-);
+  return get(gjSchemeCollection).features.filter(
+    (feature) => {
+      return feature.properties.scheme_reference === schemeReference;
+    }
+  );
 }
 
 export function getBudgetHintValue(
-  schemeReference: string 
+  schemeReference: string
 ): number | undefined {
   const features = getFeaturesFromScheme(schemeReference);
 
