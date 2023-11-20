@@ -42,11 +42,12 @@
 </script>
 
 <FormElement label="Name" id={"name-" + id}>
+  <div class="govuk-hint">Use the name from the LCWIP if possible</div>
   <input type="text" class="govuk-input" bind:value={props.name} />
   <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
   {#if props.length_meters}
     <SecondaryButton on:click={() => autoFillName()} disabled={!$routeTool}>
-      Auto-fill
+      Auto-fill with street names
     </SecondaryButton>
   {/if}
 </FormElement>

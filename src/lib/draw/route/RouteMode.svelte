@@ -3,7 +3,13 @@
   import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
   import { getArbitraryScheme } from "lib/sidebar/scheme_data";
-  import { gjSchemeCollection, mode, newFeatureId, routeTool } from "stores";
+  import {
+    gjSchemeCollection,
+    mode,
+    newFeatureId,
+    routeTool,
+    schema,
+  } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import RouteControls from "./RouteControls.svelte";
@@ -25,7 +31,9 @@
         getArbitraryScheme(gj).scheme_reference;
       feature.properties.intervention_type = "route";
       if (feature.properties.route_name) {
-        feature.properties.name = feature.properties.route_name;
+        if ($schema != "pipeline") {
+          feature.properties.name = feature.properties.route_name;
+        }
         delete feature.properties.route_name;
       }
       gj.features.push(feature as Feature<LineString>);

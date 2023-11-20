@@ -9,6 +9,7 @@
     pointTool,
     polygonTool,
     routeTool,
+    schema,
   } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature, FeatureUnion } from "types";
@@ -129,7 +130,11 @@
     // distinguish the user manually editing the name from it being auto-filled
     // previously, so be safe and don't overwrite anything. The user can always
     // use the auto-fill button explicitly.
-    if (source.properties.route_name && !destination.properties.name) {
+    if (
+      source.properties.route_name &&
+      !destination.properties.name &&
+      $schema != "pipeline"
+    ) {
       destination.properties.name = source.properties.route_name;
     }
   }
