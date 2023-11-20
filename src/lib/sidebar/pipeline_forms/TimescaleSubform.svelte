@@ -4,12 +4,15 @@
   import { getTimescaleHintValue } from "../scheme_data";
 
   export let timescale: PipelineTimescale;
-  export let scheme_reference: string;
+  export let scheme_reference: string | undefined = undefined;
   export let forIntervention = false;
 
   let timescaleHint = getTimescaleHint();
 
   function getTimescaleHint(): string | undefined {
+    if(scheme_reference === undefined) {
+        return;
+    }
     const timescaleHintValue = getTimescaleHintValue(scheme_reference);
     const index = ["short", "medium", "long"].indexOf(timescaleHintValue || "");
     if (index === -1) return undefined;
