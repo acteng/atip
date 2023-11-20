@@ -26,7 +26,6 @@
 
 <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend">Timing and status</legend>
-  <p>max time{maxTimescaleFromInterventions}</p>
 
   <Radio
     legend="Status"
