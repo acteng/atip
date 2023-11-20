@@ -40,6 +40,8 @@
     $gjSchemeCollection.schemes[scheme!.scheme_reference] = scheme!;
     $gjSchemeCollection = $gjSchemeCollection;
     showModal = false;
+    // This resets sub-form components, since an #if block below checks this
+    scheme = null;
   }
 
   // Check for all required values

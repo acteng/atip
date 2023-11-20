@@ -209,24 +209,30 @@ export function getArbitraryScheme(
   return Object.values(schemeCollection.schemes)[0];
 }
 
-export function getTimescaleHintValue(
-  schemeReference: string
-): string | undefined {
-  const features = getFeaturesFromScheme(schemeReference);
-  let maxTimescale;
-  if (features.length > 0) {
-    maxTimescale =
-      features.reduce(determineMaxTimescale).properties.pipeline
-        ?.intervention_timescale.timescale || "";
-  }
-
-  return maxTimescale;
-}
-
 function getFeaturesFromScheme(schemeReference: string): FeatureUnion[] {
   return get(gjSchemeCollection).features.filter((feature) => {
     return feature.properties.scheme_reference === schemeReference;
   });
+}
+
+export function getMaxTimescale(schemeReference: string): string | undefined {
+  let ordering = {
+    "": 0,
+    short: 1,
+    medium: 2,
+    long: 3,
+  };
+  let max = 0;
+  for (let f of getFeaturesFromScheme(schemeReference)) {
+    let x = ordering[f.properties.pipeline!.intervention_timescale.timescale];
+    max = Math.max(max, x);
+  }
+  return [
+    undefined,
+    "Short (1-3 years)",
+    "Medium (3-6 years)",
+    "Long (6-10 years)",
+  ][max];
 }
 
 export function getBudgetHintValue(
@@ -244,35 +250,6 @@ export function getBudgetHintValue(
   }
 
   return summedCost;
-}
-
-function determineMaxTimescale(
-  thisFeature: FeatureUnion,
-  thatFeature: FeatureUnion
-): FeatureUnion {
-  const thisTimescale =
-    thisFeature.properties.pipeline?.intervention_timescale.timescale || "";
-  const thatTimescale =
-    thatFeature.properties.pipeline?.intervention_timescale.timescale || "";
-  const permittedStrings = ["short", "medium", "long"];
-  const thisTimescaleIsValid = permittedStrings.indexOf(thisTimescale) !== -1;
-  const thatTimescaleIsValid = permittedStrings.indexOf(thatTimescale) !== -1;
-  const turnToNumber = (timescaleString: string) => {
-    if (timescaleString === "short") return 1;
-    if (timescaleString === "medium") return 2;
-    return 3;
-  };
-
-  if (!thatTimescaleIsValid) {
-    return thisFeature;
-  }
-  if (!thisTimescaleIsValid) {
-    return thatFeature;
-  }
-
-  return turnToNumber(thisTimescale) - turnToNumber(thatTimescale) < 0
-    ? thatFeature
-    : thisFeature;
 }
 
 export function getEmptyPipelineObject(): PipelineScheme {

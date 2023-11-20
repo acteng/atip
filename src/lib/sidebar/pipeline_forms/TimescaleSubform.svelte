@@ -1,27 +1,22 @@
 <script lang="ts">
   import { NumberInput, Radio } from "lib/govuk";
   import type { PipelineTimescale } from "types";
-  import { getTimescaleHintValue } from "../scheme_data";
+  import { getMaxTimescale } from "../scheme_data";
 
   export let timescale: PipelineTimescale;
   export let scheme_reference: string | undefined = undefined;
-  export let forIntervention = false;
 
-  let timescaleHint = getTimescaleHint();
+  let forIntervention = scheme_reference === undefined;
 
-  function getTimescaleHint(): string | undefined {
-    if (scheme_reference === undefined) {
-      return;
+  function timescaleHint(): string | undefined {
+    if (!scheme_reference) {
+      return undefined;
     }
-    const timescaleHintValue = getTimescaleHintValue(scheme_reference);
-    const index = ["short", "medium", "long"].indexOf(timescaleHintValue || "");
-    if (index === -1) return undefined;
-    const humanReadableValues = [
-      "Short (1-3 years)",
-      "Medium (3-6 years)",
-      "Long (6-10 years)",
-    ];
-    return `The longest timescale from interventions in this scheme is: ${humanReadableValues[index]}`;
+    let max = getMaxTimescale(scheme_reference);
+    if (max) {
+      return `The longest timescale from interventions in this scheme is: ${max}`;
+    }
+    return undefined;
   }
 </script>
 
@@ -53,7 +48,7 @@
     inlineSmall
     required={!forIntervention}
     bind:value={timescale.timescale}
-    hint={timescaleHint}
+    hint={timescaleHint()}
   />
   <NumberInput
     label="Estimated completion year (if known)"

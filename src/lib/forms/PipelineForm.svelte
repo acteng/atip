@@ -115,10 +115,7 @@
     </Checkbox>
   {/if}
 
-  <TimescaleSubform
-    forIntervention
-    bind:timescale={props.pipeline.intervention_timescale}
-  />
+  <TimescaleSubform bind:timescale={props.pipeline.intervention_timescale} />
   <NumberInput
     label="Cost"
     width={10}
