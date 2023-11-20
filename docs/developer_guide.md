@@ -45,15 +45,14 @@ These are some resources to learn languages and libraries used in ATIP. Feel fre
 To run locally you'll need [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
 - `npm install` to install dependencies
-- `npm run generate-schema-ts` to rebuild TS definitions from changes to `src/schemas/*.json`
 - `npm run setup-govuk` to rerun Sass and generate GOV.UK styles
 - `npm run dev` to run ATIP locally (N.B. you need to run all the above commands before running this command)
   - To mimic GCP deployment and see private layers locally, follow instructions in `.env` and run `VITE_RESOURCE_BASE="" VITE_MIMIC_GCP_LOCALLY="true" npm run dev`
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
 
-Upon first setup, you'll need to `npm run generate-schema-ts` and `npm run
-setup-govuk` to get all mandatory files for running.
+Upon first setup, you'll need to `npm run setup-govuk` to get all mandatory
+files for running.
 
 If you're using Firefox locally to develop and get "import declarations may
 only appear at top level" errors, upgrade to at least Firefox 112, go to
@@ -118,7 +117,7 @@ Simple state is isolated to a component when possible. Most of the app-wide stat
 - The `gjScheme` store is the source-of-truth GeoJSON for the current data. It's automatically synced to local storage.
   - Feature IDs are unique, numeric, and always start at 1. See `newFeatureId`. They are **not** stable over time; if you load a file or refresh the page and load from local storage, some of the IDs may adjust.
   - Each feature has 3 simple fields -- `name`, `description`, and `intervention_type` (`area`, `route`, `crossing`, `other`). Anything produced by the route tool will also have `length_meters`, `waypoints`.
-  - Depending on the schema in use, the feature has other nested properties like `v2` and `planning`. This is in flux; the v1 fields above may be reorganized.
+  - Depending on the schema in use, the feature has other nested properties like `pipeline`, for other schemas.
   - `InterventionLayer` renders these "finalized" features.
   - When editing geometry of a feature, the `hide_while_editing` property is set. `InterventionLayer` skips drawing these, so something else can draw the actively-being-modified state.
 
@@ -131,9 +130,3 @@ Interactions on the map are split into distinct and exclusive modes. `Toolbox.sv
 Be very careful with [reactive statements](https://svelte.dev/tutorial/reactive-statements) and modifying `mode` directly. Instead, use `changeMode`, which will call the previous mode's `stop()` and the new's `start()`. The modes share some underlying stateful (and not Svelte-friendly) objects (`point_tool`, `polygon_tool`, and `route-snapper`), and managing these objects and listening to events can get tricky, especially in the middle of switching modes. See [this article](https://blog.thoughtspile.tech/2023/04/22/svelte-state/) to understand Svelte reactive statements better.
 
 TODO: Draw the finite state machine for modes
-
-## Schemas
-
-It's helpful to think of ATIP as a somewhat generic data entry system. Per object ("intervention") drawn on the map, the app has a form to collect properties about the object. Multiple schemas are supported -- v1, v2, and planning are some examples.
-
-At the time of writing, v1 is manually implemented in the form of TypeScript types and a Svelte component for the form. v2 is auto-generated from [`src/schemas/v2.json`](https://github.com/acteng/atip/blob/main/src/schemas/v2.json), and there are other schemas defined there. There's a generic Svelte component that can auto-generate a form from this schema, and `npm run generate-schema-ts` auto-generates the TypeScript types. `v2.json` is written in a bespoke format; see code for more details.

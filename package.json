@@ -10,7 +10,6 @@
     "fmt": "npx prettier --write *.html tests/* src/*",
     "test": "npx playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "generate-schema-ts": "for x in v2 planning atf4; do npx ts-node --project tsconfig_tsnode.json --esm src/lib/forms/generate_ts.ts src/schemas/$x.json > src/schemas/$x.ts; done",
     "setup-govuk": "sass src/style/main.sass src/style/main.css; rm -rf public/assets; mkdir -p public/assets; cp -R node_modules/govuk-frontend/govuk/assets/ public/",
     "generate-random-schemes": "npx ts-node --project tsconfig_tsnode.json --esm src/scripts/random_schemes.ts",
     "assign-authority": "npx ts-node --project tsconfig_tsnode.json --esm src/scripts/assign_authority.ts"

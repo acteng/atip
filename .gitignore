@@ -6,7 +6,6 @@ node_modules/
 /playwright-report/
 /playwright/.cache/
 dist
-src/schemas/*.ts
 src/style/main.css
 src/style/main.css.map
 .sass-cache/

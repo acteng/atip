@@ -25,7 +25,7 @@ Very roughly, you'd need to:
 The main `scheme.html` page takes a few URL query parameters:
 
 - `authority` is required, and must match a feature's `name` in `assets/authorities.geojson`
-- `schema` is `v1`, `v2`, `planning`, etc and determines the data entry form
+- `schema` is `v1` or `pipeline` and determines the data entry form
 - `geojsonUrl` will initially load a GeoJSON file from the specified URL. Otherwise, the last file is loaded from local storage, uniquely keyed by (authority, schema).
 - `style` can be `streets` (implied default) or `hybrid` (for a satellite basemap)
 

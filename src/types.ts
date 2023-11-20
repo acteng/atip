@@ -1,9 +1,6 @@
 import type { LineString, Point, Polygon } from "geojson";
-import type { ATF4Intervention } from "./schemas/atf4";
-import type { Planning } from "./schemas/planning";
-import type { Intervention } from "./schemas/v2";
 
-export type Schema = "v1" | "v2" | "planning" | "atf4" | "pipeline";
+export type Schema = "v1" | "pipeline";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
@@ -109,10 +106,7 @@ export interface InterventionProps {
   // For polygons only
   is_coverage_polygon?: boolean;
 
-  // TODO Hack. If these're filled out, ignore the schema above.
-  planning?: Planning;
-  v2?: Intervention;
-  atf4?: ATF4Intervention;
+  // The schema is v1, unless a field here is present
   pipeline?: PipelineIntervention;
 
   // Temporary state, not meant to be serialized

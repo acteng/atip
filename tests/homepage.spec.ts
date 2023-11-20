@@ -25,8 +25,10 @@ test("Uploading a valid atip geojson redirects to the appropriate authority sche
 });
 
 test("schema is plumbed along to the sketch page", async ({ page }) => {
-  await page.goto("/index.html?schema=atf4");
+  await page.goto("/index.html?schema=pipeline");
   await page.getByTestId("transport-authority").fill("LAD_Adur");
   await page.getByRole("button", { name: "Start" }).click();
-  await expect(page).toHaveURL(/.*scheme.html\?authority=LAD_Adur&schema=atf4/);
+  await expect(page).toHaveURL(
+    /.*scheme.html\?authority=LAD_Adur&schema=pipeline/
+  );
 });

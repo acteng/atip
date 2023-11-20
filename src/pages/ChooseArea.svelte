@@ -104,7 +104,7 @@
   function detectSchema(gj: FeatureCollection): Schema {
     if (gj.features.length > 0) {
       let props = gj.features[0].properties;
-      for (let schema of ["planning", "v2", "atf4", "pipeline"]) {
+      for (let schema of ["pipeline"]) {
         if (props && schema in props) {
           return schema as Schema;
         }
