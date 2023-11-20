@@ -235,21 +235,12 @@ export function getMaxTimescale(schemeReference: string): string | undefined {
   ][max];
 }
 
-export function getBudgetHintValue(
-  schemeReference: string
-): number | undefined {
-  const features = getFeaturesFromScheme(schemeReference);
-
-  let summedCost;
-  if (features.length > 0) {
-    summedCost = features
-      .map((feature) => {
-        return feature.properties.pipeline?.cost || 0;
-      })
-      .reduce((partialSum, a) => partialSum + a, 0);
+export function sumBudgetForScheme(schemeReference: string): number {
+  let sum = 0;
+  for (let f of getFeaturesFromScheme(schemeReference)) {
+    sum += f.properties.pipeline!.cost ?? 0;
   }
-
-  return summedCost;
+  return sum;
 }
 
 export function getEmptyPipelineObject(): PipelineScheme {
