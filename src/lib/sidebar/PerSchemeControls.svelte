@@ -8,9 +8,8 @@
     WarningButton,
   } from "lib/govuk";
   import { bbox } from "lib/maplibre";
-  import { gjSchemeCollection, map, mode, sidebarHover } from "stores";
+  import { gjSchemeCollection, map, mode, schema, sidebarHover } from "stores";
   import { onDestroy } from "svelte";
-  import type { Schema } from "types";
   import deleteIcon from "../../../assets/delete.svg?url";
   import GenericSchemeForm from "./GenericSchemeForm.svelte";
   import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
@@ -20,7 +19,6 @@
     interventionWarning,
   } from "./scheme_data";
 
-  export let schema: Schema;
   export let scheme_reference: string;
 
   let showDeleteModal = false;
@@ -28,7 +26,7 @@
   $: numErrors = $gjSchemeCollection.features.filter(
     (f) =>
       f.properties.scheme_reference == scheme_reference &&
-      interventionWarning(schema, f) != null
+      interventionWarning(f) != null
   ).length;
   $: numFeatures = $gjSchemeCollection.features.filter(
     (f) => f.properties.scheme_reference == scheme_reference
@@ -121,7 +119,7 @@
     Delete
   </WarningButton>
 </h3>
-{#if schema == "pipeline"}
+{#if $schema == "pipeline"}
   <PipelineSchemeForm {scheme_reference} />
 {:else}
   <GenericSchemeForm {scheme_reference} />
@@ -137,7 +135,7 @@
 
 <ol class="govuk-list govuk-list--number">
   {#each $gjSchemeCollection.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
-    {@const warning = interventionWarning(schema, feature)}
+    {@const warning = interventionWarning(feature)}
     <li>
       <!-- svelte-ignore a11y-invalid-attribute -->
       <a
@@ -149,7 +147,7 @@
         {#if warning}
           <WarningIcon text={warning} />
         {/if}
-        {interventionName(schema, feature)}
+        {interventionName(feature)}
       </a>
     </li>
   {/each}

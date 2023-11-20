@@ -6,20 +6,19 @@
     SecondaryButton,
     WarningButton,
   } from "lib/govuk";
-  import { gjSchemeCollection, mode, sidebarHover } from "stores";
+  import { gjSchemeCollection, mode, schema, sidebarHover } from "stores";
   import { onMount } from "svelte";
-  import type { Schema, SchemeCollection } from "types";
+  import type { SchemeCollection } from "types";
   import deleteIcon from "../../../assets/delete.svg?url";
   import saveIcon from "../../../assets/save.svg?url";
   import { backfill, emptyCollection } from "./scheme_data";
 
   export let authorityName: string;
-  export let schema: Schema;
   let errorMessage = "";
 
   let filename = authorityName;
-  if (schema != "v1") {
-    filename += `_${schema}`;
+  if ($schema != "v1") {
+    filename += `_${$schema}`;
   }
 
   let loaded = false;

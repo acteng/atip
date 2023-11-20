@@ -25,9 +25,7 @@
     Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { FeatureUnion, Schema, SchemeCollection } from "types";
-
-  export let schema: Schema;
+  import type { FeatureUnion, SchemeCollection } from "types";
 
   $: gj = addLineStringEndpoints($gjSchemeCollection);
 
@@ -93,7 +91,7 @@
   function tooltip(features: Feature[] | null): string {
     if (features) {
       let feature = features[0] as FeatureUnion;
-      let name = interventionName(schema, feature);
+      let name = interventionName(feature);
       let scheme =
         $gjSchemeCollection.schemes[feature.properties.scheme_reference]
           .scheme_name ?? "Untitled scheme";

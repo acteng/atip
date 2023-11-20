@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Schema } from "types";
   import "../style/main.css";
   import type { FeatureCollection } from "geojson";
   // @ts-ignore no declarations
@@ -15,7 +16,6 @@
   import { findSmallestAuthority, type AuthorityBoundaries } from "boundaries";
   import {
     appVersion,
-    defaultSchema,
     FileInput,
     getAuthoritiesGeoJson,
     LoggedIn,
@@ -23,7 +23,7 @@
     Popup,
   } from "lib/common";
   import About from "lib/sidebar/About.svelte";
-  import { map } from "stores";
+  import { map, schema as schemaStore } from "stores";
   import {
     FillLayer,
     GeoJSON,
@@ -31,7 +31,6 @@
     LineLayer,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { Schema } from "types";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",
@@ -40,7 +39,9 @@
 
   let showAbout = false;
   const params = new URLSearchParams(window.location.search);
-  let schema: Schema = (params.get("schema") as Schema) || defaultSchema();
+  if (params.get("schema")) {
+    schemaStore.set(params.get("schema") as Schema);
+  }
   let pageErrorMessage: string = params.get("error") || "";
   let uploadErrorMessage: string = "";
 
@@ -115,11 +116,11 @@
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.location.href = `scheme.html?authority=${
       e.detail.features[0].properties!.full_name
-    }&schema=${schema}`;
+    }&schema=${$schemaStore}`;
   }
 
   function start() {
-    window.location.href = `scheme.html?authority=${inputValue}&schema=${schema}`;
+    window.location.href = `scheme.html?authority=${inputValue}&schema=${$schemaStore}`;
   }
 </script>
 

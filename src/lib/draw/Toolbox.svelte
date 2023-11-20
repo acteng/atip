@@ -1,7 +1,6 @@
 <script lang="ts">
   import { SecondaryButton } from "lib/govuk";
-  import { mode, pointTool, polygonTool, routeTool } from "stores";
-  import type { Schema } from "types";
+  import { mode, pointTool, polygonTool, routeTool, schema } from "stores";
   import imageIcon from "../../../assets/image.svg";
   import pointIcon from "../../../assets/point.svg";
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
@@ -10,14 +9,12 @@
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
   import HoverLayer from "./HoverLayer.svelte";
-
-  export let schema: Schema;
 </script>
 
 <HoverLayer />
 
 <div class="top govuk-prose">
-  {#if schema != "planning"}
+  {#if $schema != "planning"}
     <SecondaryButton
       on:click={() => mode.set({ mode: "new-point" })}
       disabled={!$pointTool}
@@ -47,7 +44,7 @@
     <img src={polygonSnappedIcon} alt="New polygon (snapped)" />
     New polygon (snapped)
   </SecondaryButton>
-  {#if schema != "planning"}
+  {#if $schema != "planning"}
     <SecondaryButton on:click={() => mode.set({ mode: "split-route" })}>
       <img src={splitRouteIcon} alt="Split route" />
       Split route

@@ -1,6 +1,8 @@
 import length from "@turf/length";
 import { randomSchemeColor } from "colors";
-import type { FeatureUnion, Schema, SchemeCollection, SchemeData } from "types";
+import { schema as schemaStore } from "stores";
+import { get } from "svelte/store";
+import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
 import { v4 as uuidv4 } from "uuid";
 
 // TODO This should eventually guarantee the output is a valid Scheme. Only
@@ -82,10 +84,9 @@ export function emptyCollection(): SchemeCollection {
   };
 }
 
-export function interventionName(
-  schema: Schema,
-  feature: FeatureUnion
-): string {
+export function interventionName(feature: FeatureUnion): string {
+  let schema = get(schemaStore);
+
   if (schema == "planning") {
     return feature.properties.planning?.name || "Untitled polygon";
   }
@@ -119,10 +120,9 @@ export function interventionName(
   return `Untitled ${noun}`;
 }
 
-export function interventionWarning(
-  schema: Schema,
-  feature: FeatureUnion
-): string | null {
+export function interventionWarning(feature: FeatureUnion): string | null {
+  let schema = get(schemaStore);
+
   // Only worry about some schemas for now.
   if (schema != "v1" && schema != "pipeline") {
     return null;
@@ -141,10 +141,7 @@ export function interventionWarning(
     return "No intervention type";
   }
 
-  let unexpectedProperties = getUnexpectedProperties(
-    feature.properties,
-    schema
-  );
+  let unexpectedProperties = getUnexpectedProperties(feature.properties);
   if (Object.entries(unexpectedProperties).length > 0) {
     return `Extra GeoJSON properties: ${Object.keys(unexpectedProperties).join(
       ", "
@@ -156,12 +153,10 @@ export function interventionWarning(
 
 // Returns a copy of the input, with expected properties removed. Only
 // unexpected ones remain.
-export function getUnexpectedProperties(
-  props: { [name: string]: any },
-  schema: Schema
-): {
+export function getUnexpectedProperties(props: { [name: string]: any }): {
   [name: string]: any;
 } {
+  let schema = get(schemaStore);
   let copy = JSON.parse(JSON.stringify(props));
 
   // For all schemas

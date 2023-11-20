@@ -3,39 +3,6 @@ import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 import { colors } from "./colors";
 import type { Schema } from "./types";
 
-export function schemaTitle(schema: Schema): string {
-  return {
-    v1: "Scheme Design",
-    v2: "Experimental Scheme Design",
-    planning: "Development Planning",
-    atf4: "ATF4 Scheme",
-    // TODO What do we want to call this?
-    pipeline: "Pipeline Scheme",
-  }[schema];
-}
-
-// The singular form of the object (with the article) managed by this schema
-export function schemaSingularNoun(schema: Schema): string {
-  return {
-    v1: "an intervention",
-    v2: "an intervention",
-    planning: "a development",
-    atf4: "an intervention",
-    pipeline: "an intervention",
-  }[schema];
-}
-
-// The plural form of the object managed by this schema
-export function schemaPluralNoun(schema: Schema): string {
-  return {
-    v1: "interventions",
-    v2: "interventions",
-    planning: "developments",
-    atf4: "interventions",
-    pipeline: "interventions",
-  }[schema];
-}
-
 export function colorInterventionsBySchema(
   schema: Schema
 ): DataDrivenPropertyValueSpecification<string> {
