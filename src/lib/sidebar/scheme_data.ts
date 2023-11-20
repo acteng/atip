@@ -98,15 +98,9 @@ function fillBudgetAndTimelineFromSingleSchemeFormat(
 
     json.schemes[scheme_reference].pipeline.scheme_budget = {
       cost: json.pipeline?.cost,
-      development_funded:
-        json.pipeline?.development_funded !== undefined
-          ? json.pipeline?.development_funded
-          : false,
-      construction_funded:
-        json.pipeline?.construction_funded !== undefined
-          ? json.pipeline?.construction_funded
-          : false,
-      funding_source: json.pipeline.funding_source || "",
+      development_funded: json.pipeline?.development_funded ?? false,
+      construction_funded: json.pipeline?.construction_funded ?? false,
+      funding_source: json.pipeline.funding_source ?? "",
     };
   }
 }
