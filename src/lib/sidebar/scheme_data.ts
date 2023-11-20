@@ -139,11 +139,6 @@ export function interventionName(feature: FeatureUnion): string {
 export function interventionWarning(feature: FeatureUnion): string | null {
   let schema = get(schemaStore);
 
-  // Only worry about some schemas for now.
-  if (schema != "v1" && schema != "pipeline") {
-    return null;
-  }
-
   if (!feature.properties.name) {
     return "No name";
   }
@@ -155,6 +150,12 @@ export function interventionWarning(feature: FeatureUnion): string | null {
     )
   ) {
     return "No intervention type";
+  }
+
+  if (schema == "pipeline") {
+    if (!feature.properties.pipeline?.accuracy) {
+      return "Accuracy not specified";
+    }
   }
 
   let unexpectedProperties = getUnexpectedProperties(feature.properties);
@@ -190,7 +191,14 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
   }
 
   if (schema == "pipeline" && copy.pipeline) {
-    for (let key of ["atf4_type", "accuracy", "is_alternative"]) {
+    // TODO We could recurse into intervention_timescale if needed
+    for (let key of [
+      "atf4_type",
+      "accuracy",
+      "is_alternative",
+      "cost",
+      "intervention_timescale",
+    ]) {
       delete copy.pipeline[key];
     }
     if (Object.entries(copy.pipeline).length == 0) {

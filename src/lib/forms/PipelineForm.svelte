@@ -117,7 +117,7 @@
 
   <TimescaleSubform bind:timescale={props.pipeline.intervention_timescale} />
   <NumberInput
-    label="Cost"
+    label="Cost (GBP)"
     width={10}
     min={0}
     bind:value={props.pipeline.cost}

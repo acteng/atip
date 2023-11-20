@@ -19,7 +19,7 @@
   <legend class="govuk-fieldset__legend">Budget</legend>
 
   <NumberInput
-    label="Cost GBP"
+    label="Cost (GBP)"
     width={10}
     min={0}
     bind:value={budget.cost}
