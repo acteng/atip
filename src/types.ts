@@ -30,12 +30,12 @@ export interface SchemeData {
 export interface PipelineScheme {
   // TODO "intersection" is unclear
   scheme_type:
-  | "cycling route"
-  | "walking route"
-  | "shared-use route"
-  | "area-based scheme"
-  | "intersection"
-  | "";
+    | "cycling route"
+    | "walking route"
+    | "shared-use route"
+    | "area-based scheme"
+    | "intersection"
+    | "";
   atf4_lead_type: ATF4Type | "";
   scheme_description: string;
 
@@ -55,10 +55,9 @@ export interface PipelineTimescale {
 export interface PipelineBudget {
   // GBP
   cost?: number;
-  development_funded: boolean,
-  construction_funded: boolean,
+  development_funded: boolean;
+  construction_funded: boolean;
   funding_source: "ATF2" | "ATF3" | "ATF4" | "ATF4e" | "CRSTS" | "LUF" | "";
-
 }
 
 export interface BrowseSchemeData {
@@ -152,16 +151,16 @@ export function isStreetViewImagery(x: string): x is "google" | "bing" {
 
 export type Mode =
   | {
-    mode: "list";
-  }
+      mode: "list";
+    }
   | {
-    mode: "edit-form";
-    id: number;
-  }
+      mode: "edit-form";
+      id: number;
+    }
   | {
-    mode: "edit-geometry";
-    id: number;
-  }
+      mode: "edit-geometry";
+      id: number;
+    }
   | { mode: "new-point" }
   | { mode: "new-freehand-polygon" }
   | { mode: "new-snapped-polygon" }

@@ -9,6 +9,7 @@
   // Inclusive
   export let min: number | undefined = undefined;
   export let max: number | undefined = undefined;
+  export let hint: string | undefined = undefined;
 
   let stringValue: string | undefined = value?.toString();
 
@@ -41,6 +42,9 @@
 </script>
 
 <FormElement {label} id={label}>
+  {#if hint}
+    <p>{hint}</p>
+  {/if}
   <ErrorMessage errorMessage={validate(stringValue)} />
   <input
     type="text"

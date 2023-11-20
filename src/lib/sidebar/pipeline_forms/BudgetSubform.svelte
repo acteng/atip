@@ -3,6 +3,13 @@
   import type { PipelineBudget } from "types";
 
   export let budget: PipelineBudget;
+  export let summedCost: number | undefined = undefined;
+  $: costHint = getSummedCostHint(summedCost);
+
+  function getSummedCostHint(summedCost: number | undefined) {
+    if (summedCost === undefined) return undefined;
+    return `The sum of costs of interventions in this scheme is: £${summedCost}`;
+  }
 
   function repeat(x: string): [string, string] {
     return [x, x];
@@ -17,6 +24,7 @@
     width={10}
     min={0}
     bind:value={budget.cost}
+    hint={costHint}
   />
 
   <Checkbox id="development-funded" bind:checked={budget.development_funded}>
@@ -43,11 +51,10 @@
   />
 </fieldset>
 
-
 <style>
-    fieldset {
-      /* TODO govuk doesn't style it, but this seems useful */
-      border: 2px solid black;
-      padding: 8px;
-    }
-  </style>
+  fieldset {
+    /* TODO govuk doesn't style it, but this seems useful */
+    border: 2px solid black;
+    padding: 8px;
+  }
+</style>

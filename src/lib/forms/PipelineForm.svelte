@@ -2,11 +2,11 @@
   import {
     Checkbox,
     FormElement,
+    NumberInput,
     Radio,
     SecondaryButton,
     Select,
     TextArea,
-    NumberInput
   } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
   import TimescaleSubform from "lib/sidebar/pipeline_forms/TimescaleSubform.svelte";

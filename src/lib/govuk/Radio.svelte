@@ -12,6 +12,8 @@
   // Show an error if no option is chosen
   export let required = false;
 
+  export let hint: string | undefined = undefined;
+
   // The current value
   export let value: string;
 
@@ -23,6 +25,9 @@
     <legend class="govuk-fieldset__legend govuk-label--s">
       {legend}
     </legend>
+    {#if hint}
+      <p>{hint}</p>
+    {/if}
     <ErrorMessage {errorMessage} />
     <div
       class="govuk-radios"

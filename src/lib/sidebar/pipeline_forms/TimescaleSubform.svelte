@@ -3,11 +3,30 @@
   import type { PipelineTimescale } from "types";
 
   export let timescale: PipelineTimescale;
+  export let maxTimescaleFromInterventions: string | undefined = undefined;
   export let forIntervention = false;
+
+  $: timescaleHint = getTimescaleHint(maxTimescaleFromInterventions);
+
+  function getTimescaleHint(
+    maxTimescaleFromInterventions: string | undefined
+  ): string | undefined {
+    const index = ["short", "medium", "long"].indexOf(
+      maxTimescaleFromInterventions || ""
+    );
+    if (index === -1) return undefined;
+    const humanReadableValues = [
+      "Short (1-3 years)",
+      "Medium (3-6 years)",
+      "Long (6-10 years)",
+    ];
+    return `The longest timescale from interventions in this scheme is: ${humanReadableValues[index]}`;
+  }
 </script>
 
 <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend">Timing and status</legend>
+  <p>max time{maxTimescaleFromInterventions}</p>
 
   <Radio
     legend="Status"
@@ -34,6 +53,7 @@
     inlineSmall
     required={!forIntervention}
     bind:value={timescale.timescale}
+    hint={timescaleHint}
   />
   <NumberInput
     label="Estimated completion year (if known)"

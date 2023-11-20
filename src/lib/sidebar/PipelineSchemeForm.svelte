@@ -9,10 +9,7 @@
     TextInput,
   } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
-  import type {
-    FeatureUnion,
-    SchemeData,
-  } from "types";
+  import type { FeatureUnion, SchemeData } from "types";
   import ATF4Type from "../forms/ATF4Type.svelte";
   import BudgetSubform from "./pipeline_forms/BudgetSubform.svelte";
   import TimescaleSubform from "./pipeline_forms/TimescaleSubform.svelte";
@@ -22,6 +19,8 @@
 
   let showModal = false;
   let scheme: SchemeData | null = null;
+  let maxTimescale: string | undefined;
+  let summedCost: number | undefined;
 
   // Lazily set defaults when the modal is opened the first time for a scheme
   $: if (showModal) {
@@ -30,7 +29,14 @@
         return feature.properties.scheme_reference === scheme?.scheme_reference;
       }
     );
-    scheme = getRectifiedPipelineSchemeWithSuggestedValues($gjSchemeCollection.schemes[scheme_reference], schemeFeatures);
+    const [rectifiedScheme, calculatedTimescale, summedSchemeCost] =
+      getRectifiedPipelineSchemeWithSuggestedValues(
+        $gjSchemeCollection.schemes[scheme_reference],
+        schemeFeatures
+      );
+    scheme = rectifiedScheme;
+    maxTimescale = calculatedTimescale;
+    summedCost = summedSchemeCost;
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -97,8 +103,11 @@
       />
     </fieldset>
 
-    <TimescaleSubform bind:timescale={scheme.pipeline.scheme_timescale} />
-    <BudgetSubform bind:budget={scheme.pipeline.scheme_budget} />
+    <TimescaleSubform
+      bind:timescale={scheme.pipeline.scheme_timescale}
+      maxTimescaleFromInterventions={maxTimescale}
+    />
+    <BudgetSubform bind:budget={scheme.pipeline.scheme_budget} {summedCost} />
 
     <DefaultButton on:click={finish}>Save</DefaultButton>
   {/if}
