@@ -13,6 +13,7 @@
   import ATF4Type from "../forms/ATF4Type.svelte";
   import BudgetSubform from "./pipeline_forms/BudgetSubform.svelte";
   import TimescaleSubform from "./pipeline_forms/TimescaleSubform.svelte";
+  import { getEmptyPipelineObject } from "./scheme_data";
 
   export let scheme_reference: string;
 
@@ -22,6 +23,9 @@
   // Lazily set defaults when the modal is opened the first time for a scheme
   $: if (showModal) {
     scheme = $gjSchemeCollection.schemes[scheme_reference];
+    if(!scheme.pipeline) {
+      scheme.pipeline = getEmptyPipelineObject();
+    }
   }
 
   function onKeyDown(e: KeyboardEvent) {
