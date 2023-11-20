@@ -1,8 +1,13 @@
 import length from "@turf/length";
 import { randomSchemeColor } from "colors";
-import { schema as schemaStore, gjSchemeCollection } from "stores";
+import { gjSchemeCollection, schema as schemaStore } from "stores";
 import { get } from "svelte/store";
-import type { FeatureUnion, PipelineScheme, Schema, SchemeCollection, SchemeData } from "types";
+import type {
+  FeatureUnion,
+  PipelineScheme,
+  SchemeCollection,
+  SchemeData,
+} from "types";
 import { v4 as uuidv4 } from "uuid";
 
 // TODO This should eventually guarantee the output is a valid Scheme. Only
@@ -44,7 +49,7 @@ export function backfill(json: SchemeCollection) {
       // @ts-ignore handling old format
       json.schemes[scheme_reference].scheme_name = json.scheme_name;
 
-      fillBudgetAndTimelineFromSingleSchemeFormat(json, scheme_reference)
+      fillBudgetAndTimelineFromSingleSchemeFormat(json, scheme_reference);
 
       // @ts-ignore handling old format
       delete json.scheme_name;
@@ -53,11 +58,11 @@ export function backfill(json: SchemeCollection) {
     // Some pipeline files have been created; move over attributes.
     // @ts-ignore handling old format
     if (json.pipeline) {
-      console.log("?")
+      console.log("?");
       // @ts-ignore handling old format
       json.schemes[scheme_reference].pipeline = json.pipeline;
 
-      fillBudgetAndTimelineFromSingleSchemeFormat(json, scheme_reference)
+      fillBudgetAndTimelineFromSingleSchemeFormat(json, scheme_reference);
 
       // @ts-ignore handling old format
       delete json.pipeline;
@@ -77,9 +82,12 @@ export function backfill(json: SchemeCollection) {
   return json;
 }
 
-function fillBudgetAndTimelineFromSingleSchemeFormat(json: SchemeCollection, scheme_reference: string) {
+function fillBudgetAndTimelineFromSingleSchemeFormat(
+  json: SchemeCollection,
+  scheme_reference: string
+) {
   // if this is is true we are dealing with a version which contains budge and timeline data
-  console.log("budgetify")
+  console.log("budgetify");
   // @ts-ignore handling old format
   if (json.schemes.pipeline?.status) {
     // @ts-ignore handling old format
@@ -105,20 +113,19 @@ function fillBudgetAndTimelineFromSingleSchemeFormat(json: SchemeCollection, sch
         // @ts-ignore handling old format
         json.pipeline?.development_funded !== undefined
           ? // @ts-ignore handling old format
-          json.pipeline?.development_funded
+            json.pipeline?.development_funded
           : false,
       // @ts-ignore handling old format
       construction_funded:
         // @ts-ignore handling old format
         json.pipeline?.construction_funded !== undefined
           ? // @ts-ignore handling old format
-          json.pipeline?.construction_funded
+            json.pipeline?.construction_funded
           : false,
       // @ts-ignore handling old format
       funding_source: json.pipeline.funding_source || "",
-
-    }
-  };
+    };
+  }
 }
 
 export function emptyCollection(): SchemeCollection {
@@ -291,7 +298,7 @@ function determineMaxTimescale(
     : thisFeature;
 }
 
-export function getEmptyPipelineObject():PipelineScheme {
+export function getEmptyPipelineObject(): PipelineScheme {
   return {
     scheme_type: "",
     atf4_lead_type: "",
