@@ -58,7 +58,6 @@ export function backfill(json: SchemeCollection) {
     // Some pipeline files have been created; move over attributes.
     // @ts-ignore handling old format
     if (json.pipeline) {
-      console.log("?");
       // @ts-ignore handling old format
       json.schemes[scheme_reference].pipeline = json.pipeline;
 
@@ -83,46 +82,30 @@ export function backfill(json: SchemeCollection) {
 }
 
 function fillBudgetAndTimelineFromSingleSchemeFormat(
-  json: SchemeCollection,
+  // Use any to handle old formats
+  json: any,
   scheme_reference: string
 ) {
   // if this is is true we are dealing with a version which contains budge and timeline data
-  console.log("budgetify");
-  // @ts-ignore handling old format
   if (json.schemes.pipeline?.status) {
-    // @ts-ignore handling old format
     json.schemes[scheme_reference].pipeline.scheme_timescale = {
-      // @ts-ignore handling old format
       status: json.pipeline?.status,
-      // @ts-ignore handling old format
       timescale: json.pipeline?.timescale,
-      // @ts-ignore handling old format
       timescale_year: json.pipeline?.timescale_year,
-      // @ts-ignore handling old format
       year_published: json.pipeline?.year_published,
-      // @ts-ignore handling old format
       year_consulted: json.pipeline?.year_consulted,
     };
 
-    // @ts-ignore handling old format
     json.schemes[scheme_reference].pipeline.scheme_budget = {
-      // @ts-ignore handling old format
       cost: json.pipeline?.cost,
-      // @ts-ignore handling old format
       development_funded:
-        // @ts-ignore handling old format
         json.pipeline?.development_funded !== undefined
-          ? // @ts-ignore handling old format
-            json.pipeline?.development_funded
+          ? json.pipeline?.development_funded
           : false,
-      // @ts-ignore handling old format
       construction_funded:
-        // @ts-ignore handling old format
         json.pipeline?.construction_funded !== undefined
-          ? // @ts-ignore handling old format
-            json.pipeline?.construction_funded
+          ? json.pipeline?.construction_funded
           : false,
-      // @ts-ignore handling old format
       funding_source: json.pipeline.funding_source || "",
     };
   }
