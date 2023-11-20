@@ -23,9 +23,7 @@
   // Lazily set defaults when the modal is opened the first time for a scheme
   $: if (showModal) {
     scheme = $gjSchemeCollection.schemes[scheme_reference];
-    if (!scheme.pipeline) {
-      scheme.pipeline = getEmptyPipelineObject();
-    }
+    scheme.pipeline ||= getEmptyPipelineObject();
   }
 
   function onKeyDown(e: KeyboardEvent) {

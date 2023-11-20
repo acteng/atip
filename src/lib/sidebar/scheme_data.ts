@@ -86,7 +86,6 @@ function fillBudgetAndTimelineFromSingleSchemeFormat(
   json: any,
   scheme_reference: string
 ) {
-  // if this is is true we are dealing with a version which contains budge and timeline data
   if (json.schemes.pipeline?.status) {
     json.schemes[scheme_reference].pipeline.scheme_timescale = {
       status: json.pipeline?.status,
