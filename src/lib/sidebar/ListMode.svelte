@@ -47,6 +47,51 @@
       errorFromFile = `Couldn't load scheme from a file: ${err}`;
     }
   }
+
+  function moveSchemeInList(scheme_reference: string, direction: number) {
+    return function () {
+      const currentSchemeOrder = JSON.parse(
+        JSON.stringify(Object.keys($gjSchemeCollection.schemes))
+      );
+      const currentIndex = currentSchemeOrder.indexOf(scheme_reference);
+      if (
+        currentIndex + direction >= 0 &&
+        currentIndex + direction < currentSchemeOrder.length
+      ) {
+        swapArrayValuesInPlace(
+          currentSchemeOrder,
+          currentIndex,
+          currentIndex + direction
+        );
+        const newSchemesObject = getReorderedSchemesObject(
+          currentSchemeOrder,
+          $gjSchemeCollection.schemes
+        );
+        $gjSchemeCollection.schemes = newSchemesObject;
+        $gjSchemeCollection = $gjSchemeCollection;
+      }
+    };
+  }
+
+  function swapArrayValuesInPlace(
+    array: any[],
+    firstIndex: number,
+    secondIndex: number
+  ) {
+    [array[firstIndex], array[secondIndex]] = [array[secondIndex], array[firstIndex]];
+  }
+
+  function getReorderedSchemesObject(
+    newSchemeOrder: string[],
+    currentSchemesObject: { [reference: string]: any }
+  ) {
+    const result: { [reference: string]: any } = {};
+    newSchemeOrder.forEach((scheme_reference) => {
+      result[scheme_reference] = currentSchemesObject[scheme_reference];
+    });
+
+    return result;
+  }
 </script>
 
 <SecondaryButton on:click={newBlankScheme}>
@@ -62,6 +107,15 @@
 <hr />
 
 {#each Object.keys($gjSchemeCollection.schemes) as scheme_reference}
-  <PerSchemeControls {scheme_reference} />
+  <PerSchemeControls {scheme_reference}>
+    {#if Object.keys($gjSchemeCollection.schemes).length > 1}
+      <SecondaryButton on:click={moveSchemeInList(scheme_reference, -1)}>
+        Move Up
+      </SecondaryButton>
+      <SecondaryButton on:click={moveSchemeInList(scheme_reference, 1)}>
+        Move Down
+      </SecondaryButton>
+    {/if}
+  </PerSchemeControls>
   <hr />
 {/each}

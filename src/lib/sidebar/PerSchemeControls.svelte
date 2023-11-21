@@ -119,6 +119,7 @@
     Delete
   </WarningButton>
 </h3>
+<slot />
 {#if $schema == "pipeline"}
   <PipelineSchemeForm {scheme_reference} />
 {:else}
