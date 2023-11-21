@@ -33,6 +33,11 @@
       $gjSchemeCollection.features = $gjSchemeCollection.features.concat(
         gj.features
       );
+      
+      let i = 0;
+      $gjSchemeCollection.features.forEach((feature) => {
+        feature.id = i++;
+      });
 
       $gjSchemeCollection = $gjSchemeCollection;
       errorFromFile = "";
