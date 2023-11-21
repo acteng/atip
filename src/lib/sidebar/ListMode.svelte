@@ -51,13 +51,13 @@
         currentIndex + direction >= 0 &&
         currentIndex + direction < currentSchemeOrder.length
       ) {
-        const newSchemeOrder = swapArrayValues(
+        swapArrayValuesInPlace(
           currentSchemeOrder,
           currentIndex,
           currentIndex + direction
         );
         const newSchemesObject = getReorderedSchemesObject(
-          newSchemeOrder,
+          currentSchemeOrder,
           $gjSchemeCollection.schemes
         );
         $gjSchemeCollection.schemes = newSchemesObject;
@@ -66,17 +66,12 @@
     };
   }
 
-  function swapArrayValues(
+  function swapArrayValuesInPlace(
     array: any[],
     firstIndex: number,
     secondIndex: number
   ) {
-    const firstValue = array[firstIndex];
-    const secondValue = array[secondIndex];
-    array[secondIndex] = firstValue;
-    array[firstIndex] = secondValue;
-
-    return array;
+    [array[firstIndex], array[secondIndex]] = [array[secondIndex], array[firstIndex]];
   }
 
   function getReorderedSchemesObject(
