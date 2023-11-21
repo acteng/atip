@@ -34,7 +34,9 @@
         gj.features
       );
       
-      let i = 0;
+      // Make sure every feature ID is unique. It's fine to change existing
+      // features, since no tool can be open and holding an ID.
+      let i = 1;
       $gjSchemeCollection.features.forEach((feature) => {
         feature.id = i++;
       });
