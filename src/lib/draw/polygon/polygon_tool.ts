@@ -345,9 +345,9 @@ function pointsToLineSegments(points: Position[]): Feature<LineString>[] {
   let lines = [];
   for (let i = 0; i < points.length - 1; i++) {
     lines.push({
-      type: "Feature",
+      type: "Feature" as const,
       geometry: {
-        type: "LineString",
+        type: "LineString" as const,
         coordinates: [points[i], points[i + 1]],
       },
       properties: {},
@@ -355,14 +355,13 @@ function pointsToLineSegments(points: Position[]): Feature<LineString>[] {
   }
   if (points.length >= 3) {
     lines.push({
-      type: "Feature",
+      type: "Feature" as const,
       geometry: {
-        type: "LineString",
+        type: "LineString" as const,
         coordinates: [points[points.length - 1], points[0]],
       },
       properties: {},
     });
   }
-  // TODO TS is failing here
-  return lines as Feature<LineString>[];
+  return lines;
 }
