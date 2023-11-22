@@ -19,7 +19,6 @@
   let showModal = false;
   let scheme: SchemeData | null = null;
 
-  // Lazily set defaults when the modal is opened the first time for a scheme
   $: scheme = $gjSchemeCollection.schemes[scheme_reference];
   $: if (scheme) {
     scheme.pipeline ||= {
