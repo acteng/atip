@@ -33,7 +33,7 @@
       $gjSchemeCollection.features = $gjSchemeCollection.features.concat(
         gj.features
       );
-      
+
       // Make sure every feature ID is unique. It's fine to change existing
       // features, since no tool can be open and holding an ID.
       let i = 1;
@@ -49,28 +49,26 @@
   }
 
   function moveSchemeInList(scheme_reference: string, direction: number) {
-    return function () {
-      const currentSchemeOrder = JSON.parse(
-        JSON.stringify(Object.keys($gjSchemeCollection.schemes))
+    const currentSchemeOrder = JSON.parse(
+      JSON.stringify(Object.keys($gjSchemeCollection.schemes))
+    );
+    const currentIndex = currentSchemeOrder.indexOf(scheme_reference);
+    if (
+      currentIndex + direction >= 0 &&
+      currentIndex + direction < currentSchemeOrder.length
+    ) {
+      swapArrayValuesInPlace(
+        currentSchemeOrder,
+        currentIndex,
+        currentIndex + direction
       );
-      const currentIndex = currentSchemeOrder.indexOf(scheme_reference);
-      if (
-        currentIndex + direction >= 0 &&
-        currentIndex + direction < currentSchemeOrder.length
-      ) {
-        swapArrayValuesInPlace(
-          currentSchemeOrder,
-          currentIndex,
-          currentIndex + direction
-        );
-        const newSchemesObject = getReorderedSchemesObject(
-          currentSchemeOrder,
-          $gjSchemeCollection.schemes
-        );
-        $gjSchemeCollection.schemes = newSchemesObject;
-        $gjSchemeCollection = $gjSchemeCollection;
-      }
-    };
+      const newSchemesObject = getReorderedSchemesObject(
+        currentSchemeOrder,
+        $gjSchemeCollection.schemes
+      );
+      $gjSchemeCollection.schemes = newSchemesObject;
+      $gjSchemeCollection = $gjSchemeCollection;
+    }
   }
 
   function swapArrayValuesInPlace(
@@ -78,7 +76,10 @@
     firstIndex: number,
     secondIndex: number
   ) {
-    [array[firstIndex], array[secondIndex]] = [array[secondIndex], array[firstIndex]];
+    [array[firstIndex], array[secondIndex]] = [
+      array[secondIndex],
+      array[firstIndex],
+    ];
   }
 
   function getReorderedSchemesObject(
@@ -106,14 +107,20 @@
 
 <hr />
 
-{#each Object.keys($gjSchemeCollection.schemes) as scheme_reference}
+{#each Object.keys($gjSchemeCollection.schemes) as scheme_reference, i}
   <PerSchemeControls {scheme_reference}>
     {#if Object.keys($gjSchemeCollection.schemes).length > 1}
-      <SecondaryButton on:click={moveSchemeInList(scheme_reference, -1)}>
-        Move Up
+      <SecondaryButton
+        on:click={() => moveSchemeInList(scheme_reference, -1)}
+        disabled={i == 0}
+      >
+        Move up
       </SecondaryButton>
-      <SecondaryButton on:click={moveSchemeInList(scheme_reference, 1)}>
-        Move Down
+      <SecondaryButton
+        on:click={() => moveSchemeInList(scheme_reference, 1)}
+        disabled={i == Object.keys($gjSchemeCollection.schemes).length - 1}
+      >
+        Move down
       </SecondaryButton>
     {/if}
   </PerSchemeControls>
