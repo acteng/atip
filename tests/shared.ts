@@ -38,3 +38,11 @@ export async function clickMap(page: Page, x: number, y: number) {
     position: { x, y },
   });
 }
+
+export async function getLocalStorage(page: Page, key: string): Promise<any> {
+  let string = await page.evaluate(
+    (key) => window.localStorage.getItem(key),
+    key
+  );
+  return JSON.parse(string!);
+}
