@@ -25,17 +25,13 @@
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
   import { mapStyle, mode, schema } from "stores";
   import { onMount } from "svelte";
-  import type { Schema } from "types";
 
   let showAbout = false;
   let showInstructions = false;
 
-  const params = new URLSearchParams(window.location.search);
+  let params = new URLSearchParams(window.location.search);
   // TODO Add validation and some kind of error page
   let authorityName: string = params.get("authority")!;
-  if (params.get("schema")) {
-    schema.set(params.get("schema") as Schema);
-  }
 
   mapStyle.set(params.get("style") || "streets");
 

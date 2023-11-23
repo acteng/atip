@@ -17,6 +17,9 @@ import {
 // mounted before this is populated.
 export const map: Writable<Map> = writable(null);
 
+// Note this must be set before gjSchemeCollection
+export const schema: Writable<Schema> = writable(defaultSchema());
+
 export const mapStyle: Writable<string> = writable("dataviz");
 
 export const pointTool: Writable<PointTool | null> = writable(null);
@@ -41,8 +44,6 @@ userSettings.subscribe((value) =>
 );
 
 export const mode: Writable<Mode> = writable({ mode: "list" });
-
-export const schema: Writable<Schema> = writable(defaultSchema());
 
 // For browse page
 export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
@@ -107,6 +108,11 @@ function loadUserSettings(): UserSettings {
 }
 
 function defaultSchema(): Schema {
+  let params = new URLSearchParams(window.location.search);
+  if (params.get("schema")) {
+    return params.get("schema") as Schema;
+  }
+
   // Use the pipeline schema on that semi-permanent branch
   if (
     window.location.hostname == "acteng.github.io" &&

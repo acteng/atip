@@ -11,26 +11,14 @@
     TextInput,
   } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
-  import type { SchemeData } from "types";
   import ATF4Type from "../forms/ATF4Type.svelte";
 
   export let scheme_reference: string;
 
   let showModal = false;
-  let scheme: SchemeData | null = null;
-
-  $: scheme = $gjSchemeCollection.schemes[scheme_reference];
-  $: if (scheme) {
-    scheme.pipeline ||= {
-      scheme_type: "",
-      status: "",
-      timescale: "",
-      atf4_lead_type: "",
-      scheme_description: "",
-      funding_source: "",
-      funded: false,
-    };
-  }
+  // This is just for conveience below, but it means most changes are not
+  // synced to $gjSchemeCollection until finish() is called
+  let pipeline = $gjSchemeCollection.schemes[scheme_reference].pipeline!;
 
   function repeat(x: string): [string, string] {
     return [x, x];
@@ -45,17 +33,14 @@
 
   // No changes in the form are saved until this happens
   function finish() {
-    $gjSchemeCollection.schemes[scheme!.scheme_reference] = scheme!;
+    $gjSchemeCollection.schemes[scheme_reference].pipeline = pipeline!;
     $gjSchemeCollection = $gjSchemeCollection;
     showModal = false;
   }
 
   // Check for all required values
   $: errorMessage =
-    scheme &&
-    scheme.pipeline?.scheme_type &&
-    scheme.pipeline?.status &&
-    scheme.pipeline?.timescale
+    pipeline.scheme_type && pipeline.status && pipeline.timescale
       ? ""
       : "Missing some required data";
 </script>
@@ -67,131 +52,133 @@
   Scheme details
 </SecondaryButton>
 <Modal title="Scheme details" bind:open={showModal}>
-  {#if scheme && scheme.pipeline}
-    <TextInput label="Scheme name" required bind:value={scheme.scheme_name} />
+  <TextInput
+    label="Scheme name"
+    required
+    bind:value={$gjSchemeCollection.schemes[scheme_reference].scheme_name}
+  />
 
-    <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend">Basic information</legend>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend">Basic information</legend>
 
-      <Radio
-        legend="Scheme type"
-        id="scheme-type"
-        choices={[
-          ["cycling route", "Cycling route"],
-          ["walking route", "Walking route"],
-          ["shared-use route", "Shared-use route"],
-          ["area-based scheme", "Area-based scheme"],
-          ["intersection", "Intersection/junction scheme"],
-        ]}
-        inlineSmall
-        required
-        bind:value={scheme.pipeline.scheme_type}
-      />
+    <Radio
+      legend="Scheme type"
+      id="scheme-type"
+      choices={[
+        ["cycling route", "Cycling route"],
+        ["walking route", "Walking route"],
+        ["shared-use route", "Shared-use route"],
+        ["area-based scheme", "Area-based scheme"],
+        ["intersection", "Intersection/junction scheme"],
+      ]}
+      inlineSmall
+      required
+      bind:value={pipeline.scheme_type}
+    />
 
-      <ATF4Type
-        label="Type of the main intervention"
-        id="atf4-lead-type"
-        bind:value={scheme.pipeline.atf4_lead_type}
-      />
+    <ATF4Type
+      label="Type of the main intervention"
+      id="atf4-lead-type"
+      bind:value={pipeline.atf4_lead_type}
+    />
 
-      <TextArea
-        label="Scheme description (150 words max)"
-        bind:value={scheme.pipeline.scheme_description}
-      />
-    </fieldset>
+    <TextArea
+      label="Scheme description (150 words max)"
+      bind:value={pipeline.scheme_description}
+    />
+  </fieldset>
 
-    <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend">Timing and status</legend>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend">Timing and status</legend>
 
-      <Radio
-        legend="Status"
-        id="scheme-status"
-        choices={[
-          ["planned", "Planned"],
-          ["in development", "In development"],
-          ["in construction", "In construction"],
-          ["completed", "Completed"],
-        ]}
-        inlineSmall
-        required
-        bind:value={scheme.pipeline.status}
-      />
+    <Radio
+      legend="Status"
+      id="scheme-status"
+      choices={[
+        ["planned", "Planned"],
+        ["in development", "In development"],
+        ["in construction", "In construction"],
+        ["completed", "Completed"],
+      ]}
+      inlineSmall
+      required
+      bind:value={pipeline.status}
+    />
 
-      <Radio
-        legend="Timescale"
-        id="scheme-timescale"
-        choices={[
-          ["short", "Short (1-3 years)"],
-          ["medium", "Medium (3-6 years)"],
-          ["long", "Long (6-10 years)"],
-        ]}
-        inlineSmall
-        required
-        bind:value={scheme.pipeline.timescale}
-      />
-      <NumberInput
-        label="Estimated completion year (if known)"
-        width={4}
-        min={2010}
-        max={2100}
-        bind:value={scheme.pipeline.timescale_year}
-      />
+    <Radio
+      legend="Timescale"
+      id="scheme-timescale"
+      choices={[
+        ["short", "Short (1-3 years)"],
+        ["medium", "Medium (3-6 years)"],
+        ["long", "Long (6-10 years)"],
+      ]}
+      inlineSmall
+      required
+      bind:value={pipeline.timescale}
+    />
+    <NumberInput
+      label="Estimated completion year (if known)"
+      width={4}
+      min={2010}
+      max={2100}
+      bind:value={pipeline.timescale_year}
+    />
 
-      <NumberInput
-        label="What year was this scheme most recently published?"
-        width={4}
-        min={2010}
-        max={2100}
-        bind:value={scheme.pipeline.year_published}
-      />
+    <NumberInput
+      label="What year was this scheme most recently published?"
+      width={4}
+      min={2010}
+      max={2100}
+      bind:value={pipeline.year_published}
+    />
 
-      <NumberInput
-        label="What year was this scheme most recently consulted on?"
-        width={4}
-        min={2010}
-        max={2100}
-        bind:value={scheme.pipeline.year_consulted}
-      />
-    </fieldset>
+    <NumberInput
+      label="What year was this scheme most recently consulted on?"
+      width={4}
+      min={2010}
+      max={2100}
+      bind:value={pipeline.year_consulted}
+    />
+  </fieldset>
 
-    <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend">Budget</legend>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend">Budget</legend>
 
-      <NumberInput
-        label="GBP funded"
-        width={10}
-        min={0}
-        bind:value={scheme.pipeline.budget_funded}
-      />
-      <NumberInput
-        label="GBP unfunded"
-        width={10}
-        min={0}
-        bind:value={scheme.pipeline.budget_unfunded}
-      />
+    <NumberInput
+      label="GBP funded"
+      width={10}
+      min={0}
+      bind:value={pipeline.budget_funded}
+    />
+    <NumberInput
+      label="GBP unfunded"
+      width={10}
+      min={0}
+      bind:value={pipeline.budget_unfunded}
+    />
 
-      <Radio
-        legend="Funding source"
-        id="scheme-funding-source"
-        choices={[
-          repeat("ATF2"),
-          repeat("ATF3"),
-          repeat("ATF4"),
-          repeat("ATF4E"),
-          repeat("CRSTS"),
-          repeat("LUF"),
-        ]}
-        inlineSmall
-        bind:value={scheme.pipeline.funding_source}
-      />
+    <Radio
+      legend="Funding source"
+      id="scheme-funding-source"
+      choices={[
+        repeat("ATF2"),
+        repeat("ATF3"),
+        repeat("ATF4"),
+        repeat("ATF4E"),
+        repeat("CRSTS"),
+        repeat("LUF"),
+      ]}
+      inlineSmall
+      bind:value={pipeline.funding_source}
+    />
 
-      <Checkbox id="scheme-funded" bind:checked={scheme.pipeline.funded}>
-        Is the scheme fully funded?
-      </Checkbox>
-    </fieldset>
+    <Checkbox id="scheme-funded" bind:checked={pipeline.funded}>
+      Is the scheme fully funded?
+    </Checkbox>
+  </fieldset>
 
-    <DefaultButton on:click={finish}>Save</DefaultButton>
-  {/if}
+  <DefaultButton on:click={finish}>Save</DefaultButton>
 </Modal>
 
 <style>

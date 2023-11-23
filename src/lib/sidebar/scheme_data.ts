@@ -2,12 +2,17 @@ import length from "@turf/length";
 import { randomSchemeColor } from "colors";
 import { schema as schemaStore } from "stores";
 import { get } from "svelte/store";
-import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
+import type {
+  FeatureUnion,
+  PipelineScheme,
+  SchemeCollection,
+  SchemeData,
+} from "types";
 import { v4 as uuidv4 } from "uuid";
 
 // TODO This should eventually guarantee the output is a valid Scheme. Only
 // some fixes are applied now.
-export function backfill(json: SchemeCollection) {
+export function backfill(json: any): SchemeCollection {
   let idCounter = 1;
   for (let f of json.features) {
     // Fix input from other tools where properties may be null
@@ -39,20 +44,14 @@ export function backfill(json: SchemeCollection) {
     };
 
     // Move over the optional scheme_name from the old place
-    // @ts-ignore handling old format
     if (json.scheme_name) {
-      // @ts-ignore handling old format
       json.schemes[scheme_reference].scheme_name = json.scheme_name;
-      // @ts-ignore handling old format
       delete json.scheme_name;
     }
 
     // Some pipeline files have been created; move over attributes.
-    // @ts-ignore handling old format
     if (json.pipeline) {
-      // @ts-ignore handling old format
       json.schemes[scheme_reference].pipeline = json.pipeline;
-      // @ts-ignore handling old format
       delete json.pipeline;
     }
 
@@ -62,25 +61,52 @@ export function backfill(json: SchemeCollection) {
     }
   }
 
-  // Ensure every scheme has some color
+  let schema = get(schemaStore);
   for (let scheme of Object.values(json.schemes)) {
-    scheme.color ||= randomSchemeColor();
+    // Ensure every scheme has some color
+    (scheme as any).color ??= randomSchemeColor();
+
+    // Ensure pipeline defaults are set
+    if (schema == "pipeline") {
+      (scheme as any).pipeline ??= emptyPipelineScheme();
+      // Any changes to PipelineScheme after 21 November 2023 must be handled here
+    }
   }
 
   return json;
 }
 
 export function emptyCollection(): SchemeCollection {
+  let gj = {
+    type: "FeatureCollection" as const,
+    features: [],
+    schemes: {},
+  };
+  addEmptyScheme(gj);
+  return gj;
+}
+
+export function addEmptyScheme(gj: SchemeCollection) {
   let scheme_reference = uuidv4();
-  let schemes: { [reference: string]: SchemeData } = {};
-  schemes[scheme_reference] = {
+  gj.schemes[scheme_reference] = {
     scheme_reference,
     color: randomSchemeColor(),
   };
+  let schema = get(schemaStore);
+  if (schema == "pipeline") {
+    gj.schemes[scheme_reference].pipeline = emptyPipelineScheme();
+  }
+}
+
+export function emptyPipelineScheme(): PipelineScheme {
   return {
-    type: "FeatureCollection",
-    features: [],
-    schemes,
+    scheme_type: "",
+    atf4_lead_type: "",
+    scheme_description: "",
+    status: "",
+    timescale: "",
+    funding_source: "",
+    funded: false,
   };
 }
 
