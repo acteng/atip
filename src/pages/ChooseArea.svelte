@@ -38,10 +38,7 @@
   };
 
   let showAbout = false;
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("schema")) {
-    schemaStore.set(params.get("schema") as Schema);
-  }
+  let params = new URLSearchParams(window.location.search);
   let pageErrorMessage: string = params.get("error") || "";
   let uploadErrorMessage: string = "";
 

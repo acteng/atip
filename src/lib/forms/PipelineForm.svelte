@@ -15,6 +15,7 @@
   export let id: number;
   export let props: InterventionProps;
 
+  // Lazily fill for each feature (whether newly created or loaded from an older-format file)
   props.pipeline ||= {
     atf4_type: "",
     accuracy: "",

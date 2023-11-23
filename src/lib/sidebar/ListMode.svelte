@@ -1,18 +1,12 @@
 <script lang="ts">
-  import { randomSchemeColor } from "colors";
   import { FileInput } from "lib/common";
   import { ErrorMessage, SecondaryButton } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
-  import { v4 as uuidv4 } from "uuid";
   import PerSchemeControls from "./PerSchemeControls.svelte";
-  import { backfill } from "./scheme_data";
+  import { addEmptyScheme, backfill } from "./scheme_data";
 
   function newBlankScheme() {
-    let scheme_reference = uuidv4();
-    $gjSchemeCollection.schemes[scheme_reference] = {
-      scheme_reference,
-      color: randomSchemeColor(),
-    };
+    addEmptyScheme($gjSchemeCollection);
     $gjSchemeCollection = $gjSchemeCollection;
   }
 
@@ -107,7 +101,7 @@
 
 <hr />
 
-{#each Object.keys($gjSchemeCollection.schemes) as scheme_reference, i}
+{#each Object.keys($gjSchemeCollection.schemes) as scheme_reference, i (scheme_reference)}
   <PerSchemeControls {scheme_reference}>
     {#if Object.keys($gjSchemeCollection.schemes).length > 1}
       <SecondaryButton
