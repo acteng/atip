@@ -4,6 +4,7 @@ import { schema as schemaStore } from "stores";
 import { get } from "svelte/store";
 import type {
   FeatureUnion,
+  FundingSources,
   PipelineScheme,
   SchemeCollection,
   SchemeData,
@@ -62,14 +63,26 @@ export function backfill(json: any): SchemeCollection {
   }
 
   let schema = get(schemaStore);
-  for (let scheme of Object.values(json.schemes)) {
+  for (let x of Object.values(json.schemes)) {
+    let scheme = x as any;
     // Ensure every scheme has some color
-    (scheme as any).color ??= randomSchemeColor();
+    scheme.color ??= randomSchemeColor();
 
     // Ensure pipeline defaults are set
     if (schema == "pipeline") {
-      (scheme as any).pipeline ??= emptyPipelineScheme();
+      scheme.pipeline ??= emptyPipelineScheme();
       // Any changes to PipelineScheme after 21 November 2023 must be handled here
+
+      scheme.pipeline.development_funded ??= false;
+      scheme.pipeline.construction_funded ??= false;
+      scheme.pipeline.funding_sources ??= emptyFundingSources();
+      // Just delete old budget fields. It's not worth the effort to map these
+      // over to the new fields, since these forms haven't likely been filled
+      // out yet.
+      delete scheme.pipeline.budget_funded;
+      delete scheme.pipeline.budget_unfunded;
+      delete scheme.pipeline.funding_source;
+      delete scheme.pipeline.funded;
     }
   }
 
@@ -105,8 +118,21 @@ export function emptyPipelineScheme(): PipelineScheme {
     scheme_description: "",
     status: "",
     timescale: "",
-    funding_source: "",
-    funded: false,
+    development_funded: false,
+    construction_funded: false,
+    funding_sources: emptyFundingSources(),
+  };
+}
+
+function emptyFundingSources(): FundingSources {
+  return {
+    atf2: false,
+    atf3: false,
+    atf4: false,
+    atf4e: false,
+    crsts: false,
+    luf: false,
+    other: "",
   };
 }
 
@@ -130,11 +156,6 @@ export function interventionName(feature: FeatureUnion): string {
 export function interventionWarning(feature: FeatureUnion): string | null {
   let schema = get(schemaStore);
 
-  // Only worry about some schemas for now.
-  if (schema != "v1" && schema != "pipeline") {
-    return null;
-  }
-
   if (!feature.properties.name) {
     return "No name";
   }
@@ -146,6 +167,12 @@ export function interventionWarning(feature: FeatureUnion): string | null {
     )
   ) {
     return "No intervention type";
+  }
+
+  if (schema == "pipeline") {
+    if (!feature.properties.pipeline?.accuracy) {
+      return "Accuracy not specified";
+    }
   }
 
   let unexpectedProperties = getUnexpectedProperties(feature.properties);

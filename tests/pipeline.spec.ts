@@ -37,8 +37,15 @@ test("scheme validations are updated", async () => {
 
   // Fix the rest of the errors
   await page.getByLabel("Scheme name").fill("Corridor 1");
-  await page.getByText("In development").click();
+  await page.getByLabel("In development").click();
   await page.getByLabel("Medium (3-6 years)").check();
+
+  // Fill in some optional data
+  await page.getByLabel("Cost (GBP)").fill("9001");
+  await page.getByLabel("ATF2").click();
+  // exact=true needed because "ATF4E" also matches
+  await page.getByLabel("ATF4", { exact: true }).click();
+  await page.getByLabel("Other funding sources").fill("Local tax");
 
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText("Missing some required data")).not.toBeVisible();
@@ -52,6 +59,12 @@ test("scheme validations are updated", async () => {
       scheme_type: "shared-use route",
       status: "in development",
       timescale: "medium",
+      budget: 9001,
+      funding_sources: expect.objectContaining({
+        atf2: true,
+        atf4: true,
+        other: "Local tax",
+      }),
     })
   );
 
