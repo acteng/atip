@@ -38,7 +38,7 @@
   };
 
   let showAbout = false;
-  let params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
   let pageErrorMessage: string = params.get("error") || "";
   let uploadErrorMessage: string = "";
 

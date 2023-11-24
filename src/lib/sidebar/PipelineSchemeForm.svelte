@@ -20,6 +20,12 @@
   // synced to $gjSchemeCollection until finish() is called
   let pipeline = $gjSchemeCollection.schemes[scheme_reference].pipeline!;
 
+  // Check for all required values
+  $: errorMessage =
+    pipeline.scheme_type && pipeline.status && pipeline.timescale
+      ? ""
+      : "Missing some required data";
+
   function repeat(x: string): [string, string] {
     return [x, x];
   }
@@ -27,22 +33,22 @@
   function onKeyDown(e: KeyboardEvent) {
     if (showModal && e.key == "Escape") {
       e.stopPropagation();
-      finish();
+      showModal = false;
     }
+  }
+
+  // There are 3 ways to close the modal. Clicking the save button or pressing
+  // escape happen here, but clicking outside the modal happens elsewhere. Make
+  // sure we save in all cases.
+  $: if (!showModal) {
+    finish();
   }
 
   // No changes in the form are saved until this happens
   function finish() {
     $gjSchemeCollection.schemes[scheme_reference].pipeline = pipeline!;
     $gjSchemeCollection = $gjSchemeCollection;
-    showModal = false;
   }
-
-  // Check for all required values
-  $: errorMessage =
-    pipeline.scheme_type && pipeline.status && pipeline.timescale
-      ? ""
-      : "Missing some required data";
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -178,7 +184,7 @@
     </Checkbox>
   </fieldset>
 
-  <DefaultButton on:click={finish}>Save</DefaultButton>
+  <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>
 </Modal>
 
 <style>
