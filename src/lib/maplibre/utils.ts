@@ -15,17 +15,29 @@ import type {
   StyleSpecification,
 } from "maplibre-gl";
 
-export const isPolygon: ExpressionSpecification = ["==", "$type", "Polygon"];
-export const isLine: ExpressionSpecification = ["==", "$type", "LineString"];
-export const isPoint: ExpressionSpecification = ["==", "$type", "Point"];
+export const isPolygon: ExpressionSpecification = [
+  "==",
+  ["geometry-type"],
+  "Polygon",
+];
+export const isLine: ExpressionSpecification = [
+  "==",
+  ["geometry-type"],
+  "LineString",
+];
+export const isPoint: ExpressionSpecification = [
+  "==",
+  ["geometry-type"],
+  "Point",
+];
 export const isNotCoveragePolygon: ExpressionSpecification = [
   "!=",
-  "is_coverage_polygon",
+  ["get", "is_coverage_polygon"],
   true,
 ];
 export const isCoveragePolygon: ExpressionSpecification = [
   "==",
-  "is_coverage_polygon",
+  ["get", "is_coverage_polygon"],
   true,
 ];
 

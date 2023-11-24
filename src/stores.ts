@@ -33,6 +33,9 @@ export const gjSchemeCollection: Writable<SchemeCollection> = writable(
   emptyCollection()
 );
 
+// scheme_references to hide
+export const hideSchemes: Writable<Set<string>> = writable(new Set());
+
 // The optional ID of a feature currently hovered from the sidebar.
 export const sidebarHover: Writable<number | null> = writable(null);
 

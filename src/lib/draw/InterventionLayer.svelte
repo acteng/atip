@@ -14,9 +14,9 @@
   import { interventionName } from "lib/sidebar/scheme_data";
   import type {
     DataDrivenPropertyValueSpecification,
-    FilterSpecification,
+    ExpressionSpecification,
   } from "maplibre-gl";
-  import { gjSchemeCollection, map, mode } from "stores";
+  import { gjSchemeCollection, hideSchemes, map, mode } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -30,14 +30,32 @@
   $: gj = addLineStringEndpoints($gjSchemeCollection);
 
   // TODO Maybe have a separate component for different modes.
-  const hideWhileEditing: FilterSpecification = [
+  const hideWhileEditing: ExpressionSpecification = [
     "!=",
-    "hide_while_editing",
+    ["get", "hide_while_editing"],
     true,
   ];
-  const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
+  const notEndpoint: ExpressionSpecification = [
+    "!=",
+    ["get", "endpoint"],
+    true,
+  ];
 
   $: clickable = $mode.mode == "list";
+
+  // TODO Can't use this for the interventions-lines-endpoints layer, for unknown reasons
+  $: showSchemes = getShowSchemes($hideSchemes);
+  function getShowSchemes(schemesToHide: Set<string>): ExpressionSpecification {
+    // TODO Can't get https://maplibre.org/maplibre-style-spec/expressions/#in to work
+    let expression = ["any"] as ExpressionSpecification;
+    for (let x of Object.keys($gjSchemeCollection.schemes)) {
+      if (!schemesToHide.has(x)) {
+        // @ts-ignore Can't figure out the problem
+        expression.push(["==", ["get", "scheme_reference"], x]);
+      }
+    }
+    return expression;
+  }
 
   let color: DataDrivenPropertyValueSpecification<string>;
   $: {
@@ -105,7 +123,7 @@
 <GeoJSON data={gj}>
   <CircleLayer
     {...layerId("interventions-points")}
-    filter={["all", isPoint, hideWhileEditing, notEndpoint]}
+    filter={["all", isPoint, hideWhileEditing, notEndpoint, showSchemes]}
     paint={{
       "circle-color": color,
       "circle-radius": circleRadius,
@@ -123,7 +141,7 @@
 
   <LineLayer
     {...layerId("interventions-lines")}
-    filter={["all", isLine, hideWhileEditing]}
+    filter={["all", isLine, hideWhileEditing, showSchemes]}
     paint={{
       "line-color": color,
       "line-width": lineWidth,
@@ -140,7 +158,7 @@
   </LineLayer>
   <CircleLayer
     {...layerId("interventions-lines-endpoints")}
-    filter={["==", "endpoint", true]}
+    filter={["==", ["get", "endpoint"], true]}
     paint={{
       "circle-radius": 0.5 * lineWidth,
       "circle-opacity": 0,
@@ -151,7 +169,13 @@
 
   <FillLayer
     {...layerId("interventions-polygons")}
-    filter={["all", isPolygon, hideWhileEditing, isNotCoveragePolygon]}
+    filter={[
+      "all",
+      isPolygon,
+      hideWhileEditing,
+      isNotCoveragePolygon,
+      showSchemes,
+    ]}
     paint={{
       "fill-color": color,
       "fill-opacity": 0.2,
@@ -168,7 +192,13 @@
   </FillLayer>
   <LineLayer
     {...layerId("interventions-polygons-outlines")}
-    filter={["all", isPolygon, hideWhileEditing, isNotCoveragePolygon]}
+    filter={[
+      "all",
+      isPolygon,
+      hideWhileEditing,
+      isNotCoveragePolygon,
+      showSchemes,
+    ]}
     paint={{
       "line-color": color,
       "line-opacity": 0.5,
@@ -178,7 +208,13 @@
 
   <LineLayer
     {...layerId("interventions-coverage-polygons-outlines")}
-    filter={["all", isPolygon, hideWhileEditing, isCoveragePolygon]}
+    filter={[
+      "all",
+      isPolygon,
+      hideWhileEditing,
+      isCoveragePolygon,
+      showSchemes,
+    ]}
     paint={{
       "line-color": color,
       "line-opacity": 0.5,

@@ -6,7 +6,13 @@
     SecondaryButton,
     WarningButton,
   } from "lib/govuk";
-  import { gjSchemeCollection, mode, schema, sidebarHover } from "stores";
+  import {
+    gjSchemeCollection,
+    hideSchemes,
+    mode,
+    schema,
+    sidebarHover,
+  } from "stores";
   import { onMount } from "svelte";
   import type { SchemeCollection } from "types";
   import deleteIcon from "../../../assets/delete.svg?url";
@@ -68,6 +74,7 @@
       return newGj;
     });
     sidebarHover.set(null);
+    hideSchemes.set(new Set());
   }
 
   // Remove the hide_while_editing property hack
