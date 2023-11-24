@@ -1,35 +1,18 @@
 <script lang="ts">
-  import type { ImageSource } from "maplibre-gl";
+  import { layerId } from "lib/maplibre";
   import { map, mode } from "stores";
-  import { onDestroy } from "svelte";
-  import { Marker } from "svelte-maplibre";
+  import { ImageSource, Marker, RasterLayer } from "svelte-maplibre";
   import { imgSrc, opacity } from "./stores";
 
-  // TODO Upstream an ImageLayer component
-
-  $: setupSource($imgSrc);
-
-  let source = "image-source";
-  let layer = "image-layer";
-
   let topLeft = { lng: 0, lat: 0 };
-  let bottomRight = { lng: 0.1, lat: 0.1 };
+  let bottomRight = { lng: 0, lat: 0 };
 
-  onDestroy(() => {
-    setupSource(null);
-  });
-
-  function setupSource(url: string | null) {
-    if ($map.getLayer(layer)) {
-      $map.removeLayer(layer);
-    }
-    if ($map.getSource(source)) {
-      $map.removeSource(source);
-    }
-    if (!url) {
-      return;
-    }
-
+  $: if (
+    $imgSrc &&
+    $mode.mode == "set-image" &&
+    topLeft.lng == 0 &&
+    topLeft.lat == 0
+  ) {
     // Reset the markers to cover some of the current viewport
     let bounds = $map.getBounds();
     topLeft.lng =
@@ -40,48 +23,34 @@
       bounds.getNorth() + 0.4 * (bounds.getSouth() - bounds.getNorth());
     bottomRight.lat =
       bounds.getNorth() + 0.6 * (bounds.getSouth() - bounds.getNorth());
-
-    $map.addSource(source, {
-      type: "image",
-      url,
-      coordinates: [
-        [topLeft.lng, topLeft.lat],
-        [bottomRight.lng, topLeft.lat],
-        [bottomRight.lng, bottomRight.lat],
-        [topLeft.lng, bottomRight.lat],
-      ],
-    });
-    $map.addLayer({
-      id: layer,
-      source,
-      type: "raster",
-      paint: {
-        "raster-fade-duration": 0,
-        "raster-opacity": $opacity / 100.0,
-      },
-    });
   }
+</script>
 
-  $: updateOpacity($opacity);
-  function updateOpacity(opacity: number) {
-    $map.setPaintProperty(layer, "raster-opacity", $opacity / 100.0);
-  }
-
-  function moveImage() {
-    ($map.getSource(source) as ImageSource).setCoordinates([
+{#if $imgSrc}
+  <ImageSource
+    url={$imgSrc}
+    coordinates={[
       [topLeft.lng, topLeft.lat],
       [bottomRight.lng, topLeft.lat],
       [bottomRight.lng, bottomRight.lat],
       [topLeft.lng, bottomRight.lat],
-    ]);
-  }
-</script>
+    ]}
+  >
+    <RasterLayer
+      {...layerId("georeferenced-image")}
+      paint={{
+        "raster-fade-duration": 0,
+        "raster-opacity": $opacity / 100.0,
+      }}
+    />
+  </ImageSource>
+{/if}
 
 {#if $imgSrc && $mode.mode == "set-image"}
-  <Marker bind:lngLat={topLeft} draggable on:drag={moveImage}>
+  <Marker bind:lngLat={topLeft} draggable>
     <span class="dot" style="background-color: red" />
   </Marker>
-  <Marker bind:lngLat={bottomRight} draggable on:drag={moveImage}>
+  <Marker bind:lngLat={bottomRight} draggable>
     <span class="dot" style="background-color: blue" />
   </Marker>
 {/if}
