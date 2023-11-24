@@ -114,7 +114,7 @@ export function addEmptyScheme(gj: SchemeCollection) {
 export function emptyPipelineScheme(): PipelineScheme {
   return {
     scheme_type: "",
-    atf4_lead_type: "",
+    pipeline_lead_type: "",
     scheme_description: "",
     status: "",
     timescale: "",

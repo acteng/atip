@@ -13,7 +13,7 @@
   } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
   import type { FundingSources } from "types";
-  import ATF4Type from "../forms/ATF4Type.svelte";
+  import PipelineType from "../forms/PipelineType.svelte";
 
   export let scheme_reference: string;
 
@@ -90,10 +90,10 @@
       bind:value={pipeline.scheme_type}
     />
 
-    <ATF4Type
+    <PipelineType
       label="Type of the main intervention"
-      id="atf4-lead-type"
-      bind:value={pipeline.atf4_lead_type}
+      id="lead-pipeline-type"
+      bind:value={pipeline.pipeline_lead_type}
     />
 
     <TextArea
