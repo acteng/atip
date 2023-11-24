@@ -84,6 +84,7 @@
       ["medium", "Medium"],
       ["low", "Low"],
     ]}
+    required
     inlineSmall
     bind:value={props.pipeline.accuracy}
   />

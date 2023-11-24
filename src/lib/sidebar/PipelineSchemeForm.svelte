@@ -2,6 +2,7 @@
   import { Modal } from "lib/common";
   import {
     Checkbox,
+    CheckboxGroup,
     DefaultButton,
     ErrorMessage,
     NumberInput,
@@ -11,6 +12,7 @@
     TextInput,
   } from "lib/govuk";
   import { gjSchemeCollection } from "stores";
+  import type { FundingSources } from "types";
   import ATF4Type from "../forms/ATF4Type.svelte";
 
   export let scheme_reference: string;
@@ -20,15 +22,21 @@
   // synced to $gjSchemeCollection until finish() is called
   let pipeline = $gjSchemeCollection.schemes[scheme_reference].pipeline!;
 
+  // TODO Note below we make sure "other" isn't in this list, just to make TS happy
+  let fundingSources = [
+    "atf2",
+    "atf3",
+    "atf4",
+    "atf4e",
+    "crsts",
+    "luf",
+  ] as Array<keyof FundingSources>;
+
   // Check for all required values
   $: errorMessage =
     pipeline.scheme_type && pipeline.status && pipeline.timescale
       ? ""
       : "Missing some required data";
-
-  function repeat(x: string): [string, string] {
-    return [x, x];
-  }
 
   function onKeyDown(e: KeyboardEvent) {
     if (showModal && e.key == "Escape") {
@@ -152,36 +160,39 @@
     <legend class="govuk-fieldset__legend">Budget</legend>
 
     <NumberInput
-      label="GBP funded"
+      label="Cost (GBP)"
       width={10}
       min={0}
-      bind:value={pipeline.budget_funded}
-    />
-    <NumberInput
-      label="GBP unfunded"
-      width={10}
-      min={0}
-      bind:value={pipeline.budget_unfunded}
+      bind:value={pipeline.budget}
     />
 
-    <Radio
-      legend="Funding source"
-      id="scheme-funding-source"
-      choices={[
-        repeat("ATF2"),
-        repeat("ATF3"),
-        repeat("ATF4"),
-        repeat("ATF4E"),
-        repeat("CRSTS"),
-        repeat("LUF"),
-      ]}
-      inlineSmall
-      bind:value={pipeline.funding_source}
-    />
-
-    <Checkbox id="scheme-funded" bind:checked={pipeline.funded}>
-      Is the scheme fully funded?
+    <Checkbox
+      id="development_funded"
+      bind:checked={pipeline.development_funded}
+    >
+      Is the development fully funded?
     </Checkbox>
+    <Checkbox
+      id="construction_funded"
+      bind:checked={pipeline.construction_funded}
+    >
+      Is the construction fully funded?
+    </Checkbox>
+
+    <p>Funding sources</p>
+    <CheckboxGroup>
+      {#each fundingSources as source}
+        {#if source != "other"}
+          <Checkbox id={source} bind:checked={pipeline.funding_sources[source]}>
+            {source.toUpperCase()}
+          </Checkbox>
+        {/if}
+      {/each}
+    </CheckboxGroup>
+    <TextInput
+      label="Other funding sources"
+      bind:value={pipeline.funding_sources.other}
+    />
   </fieldset>
 
   <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>

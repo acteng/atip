@@ -47,11 +47,21 @@ export interface PipelineScheme {
   year_consulted?: number;
 
   // GBP
-  budget_funded?: number;
-  budget_unfunded?: number;
-  funding_source: "ATF2" | "ATF3" | "ATF4" | "ATF4e" | "CRSTS" | "LUF" | "";
-  // TODO What about partially? How's this overlap with budget?
-  funded: boolean;
+  budget?: number;
+  development_funded: boolean;
+  construction_funded: boolean;
+  funding_sources: FundingSources;
+}
+
+export interface FundingSources {
+  atf2: boolean;
+  atf3: boolean;
+  atf4: boolean;
+  atf4e: boolean;
+  crsts: boolean;
+  luf: boolean;
+  // Can be blank
+  other: string;
 }
 
 export interface BrowseSchemeData {
