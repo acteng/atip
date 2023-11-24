@@ -93,7 +93,7 @@
     <PipelineType
       label="Type of the main intervention"
       id="lead-pipeline-type"
-      bind:value={pipeline.pipeline_lead_type}
+      bind:value={pipeline.atf4_lead_type}
     />
 
     <TextArea

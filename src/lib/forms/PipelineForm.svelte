@@ -73,7 +73,7 @@
   <PipelineType
     label="Type"
     id={"pipeline-type-" + id}
-    bind:value={props.pipeline.pipeline_type}
+    bind:value={props.pipeline.atf4_type}
   />
 
   <Radio

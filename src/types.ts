@@ -36,7 +36,7 @@ export interface PipelineScheme {
     | "area-based scheme"
     | "intersection"
     | "";
-  pipeline_lead_type: PipelineType | "";
+  atf4_lead_type: PipelineType | "";
   scheme_description: string;
 
   // TODO Check with DB schema
@@ -127,7 +127,7 @@ export interface InterventionProps {
 }
 
 export interface PipelineIntervention {
-  pipeline_type: PipelineType | "";
+  atf4_type: PipelineType | "";
   accuracy: "high" | "medium" | "low" | "";
   is_alternative: boolean;
 
