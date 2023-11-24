@@ -23,7 +23,7 @@
     Popup,
   } from "lib/common";
   import About from "lib/sidebar/About.svelte";
-  import { map, schema as schemaStore } from "stores";
+  import { schema as schemaStore } from "stores";
   import {
     FillLayer,
     GeoJSON,
@@ -48,13 +48,6 @@
   $: validEntry = authoritySet.has(inputValue);
 
   let showBoundaries: "TA" | "LAD" = "TA";
-  // TODO Upstream svelte-maplibre support for this
-  $: $map?.setFilter("boundaries", ["==", ["get", "level"], showBoundaries]);
-  $: $map?.setFilter("boundaries-outline", [
-    "==",
-    ["get", "level"],
-    showBoundaries,
-  ]);
 
   onMount(async () => {
     // For govuk components. Must happen here.

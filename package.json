@@ -54,7 +54,7 @@
     "read-excel-file": "^5.6.1",
     "route-snapper": "^0.2.5",
     "svelte": "^4.0.0",
-    "svelte-maplibre": "^0.7.0",
+    "svelte-maplibre": "github:dabreegster/svelte-maplibre#updates_for_atip",
     "uuid": "^9.0.1"
   }
 }
