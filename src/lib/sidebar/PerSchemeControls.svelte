@@ -2,13 +2,21 @@
   import { Modal, WarningIcon } from "lib/common";
   import {
     ButtonGroup,
+    Checkbox,
     ErrorMessage,
     SecondaryButton,
     Select,
     WarningButton,
   } from "lib/govuk";
   import { bbox } from "lib/maplibre";
-  import { gjSchemeCollection, map, mode, schema, sidebarHover } from "stores";
+  import {
+    gjSchemeCollection,
+    hideSchemes,
+    map,
+    mode,
+    schema,
+    sidebarHover,
+  } from "stores";
   import { onDestroy } from "svelte";
   import deleteIcon from "../../../assets/delete.svg?url";
   import GenericSchemeForm from "./GenericSchemeForm.svelte";
@@ -80,6 +88,10 @@
       }
       return gj;
     });
+    hideSchemes.update((set) => {
+      set.delete(scheme_reference);
+      return set;
+    });
     showDeleteModal = false;
   }
 
@@ -105,6 +117,19 @@
         scheme.scheme_name ?? "Untitled scheme",
       ]);
   }
+
+  // TODO Svelte can't bind to set membership?
+  let showScheme = !$hideSchemes.has(scheme_reference);
+  function showOrHide() {
+    hideSchemes.update((set) => {
+      if (showScheme) {
+        set.delete(scheme_reference);
+      } else {
+        set.add(scheme_reference);
+      }
+      return set;
+    });
+  }
 </script>
 
 <h3>
@@ -119,6 +144,13 @@
     Delete
   </WarningButton>
 </h3>
+<Checkbox
+  id={"show-scheme-" + scheme_reference}
+  bind:checked={showScheme}
+  on:change={showOrHide}
+>
+  Show
+</Checkbox>
 <slot />
 {#if $schema == "pipeline"}
   <PipelineSchemeForm {scheme_reference} />
