@@ -133,4 +133,7 @@ const layerZorder = [
   // Draw the inverted boundary fade on top of basemap labels
   "boundary",
   "measurement-line",
+
+  // TODO This might look nicer lower
+  "georeferenced-image",
 ];
