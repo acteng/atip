@@ -47,12 +47,12 @@
   $: showSchemes = getShowSchemes($hideSchemes);
   function getShowSchemes(schemesToHide: Set<string>): ExpressionSpecification {
     // TODO Can't get https://maplibre.org/maplibre-style-spec/expressions/#in to work
-    let expression = ["any"] as ExpressionSpecification;
-    for (let x of Object.keys($gjSchemeCollection.schemes)) {
-      if (!schemesToHide.has(x)) {
-        // @ts-ignore Can't figure out the problem
-        expression.push(["==", ["get", "scheme_reference"], x]);
-      }
+    // Note we filter _out_ schemes to hide, rather than specify the ones to
+    // show. Otherwise we have to know when new schemes are created.
+    let expression = ["all"] as ExpressionSpecification;
+    for (let x of schemesToHide.keys()) {
+      // @ts-ignore Can't figure out the problem
+      expression.push(["!=", ["get", "scheme_reference"], x]);
     }
     return expression;
   }
