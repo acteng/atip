@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Select } from "lib/govuk";
-  import type { ATF4Type } from "types";
+  import type { PipelineType } from "types";
 
   export let label: string;
   export let id: string;
-  export let value: ATF4Type | "";
+  export let value: PipelineType | "";
 
   // Keep in sync with intervention_type_short in scheme_data
   // TODO That has more than the 11...
@@ -41,6 +41,9 @@
     repeat("New road crossings"),
     repeat("Restriction or reduction of car parking availability"),
     repeat("School streets"),
+    repeat("Quiet mixed traffic streets"),
+    repeat("Traffic free routes"),
+    repeat("Not specified in LCWIP"),
   ]}
   emptyOption
   bind:value

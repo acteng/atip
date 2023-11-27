@@ -10,7 +10,7 @@
   import { prettyPrintMeters } from "lib/maplibre";
   import { gjSchemeCollection, routeTool } from "stores";
   import type { InterventionProps } from "types";
-  import ATF4Type from "./ATF4Type.svelte";
+  import PipelineType from "./PipelineType.svelte";
 
   export let id: number;
   export let props: InterventionProps;
@@ -70,9 +70,9 @@
 {/if}
 
 {#if props.pipeline}
-  <ATF4Type
+  <PipelineType
     label="Type"
-    id={"atf4-type-" + id}
+    id={"pipeline-type-" + id}
     bind:value={props.pipeline.atf4_type}
   />
 

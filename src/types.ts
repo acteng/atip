@@ -36,7 +36,7 @@ export interface PipelineScheme {
     | "area-based scheme"
     | "intersection"
     | "";
-  atf4_lead_type: ATF4Type | "";
+  atf4_lead_type: PipelineType | "";
   scheme_description: string;
 
   // TODO Check with DB schema
@@ -71,7 +71,7 @@ export interface BrowseSchemeData {
   funding_programme: string;
 }
 
-export type ATF4Type =
+export type PipelineType =
   | "New segregated cycling facility"
   | "New junction treatment"
   | "New permanent footway"
@@ -82,7 +82,10 @@ export type ATF4Type =
   | "Secure cycle parking"
   | "New road crossings"
   | "Restriction or reduction of car parking availability"
-  | "School streets";
+  | "School streets"
+  | "Quiet mixed traffic streets"
+  | "Traffic free routes"
+  | "Not specified in LCWIP";
 
 // TODO Can we use a wildcard type, like Feature<? extends Geometry>
 export type FeatureUnion =
@@ -124,7 +127,7 @@ export interface InterventionProps {
 }
 
 export interface PipelineIntervention {
-  atf4_type: ATF4Type | "";
+  atf4_type: PipelineType | "";
   accuracy: "high" | "medium" | "low" | "";
   is_alternative: boolean;
 
