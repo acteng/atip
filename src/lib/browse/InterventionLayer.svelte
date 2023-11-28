@@ -31,10 +31,10 @@
   // TODO Abusing this property for filtering
   const hideWhileEditing: FilterSpecification = [
     "!=",
-    "hide_while_editing",
+    ["get", "hide_while_editing"],
     true,
   ];
-  const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
+  const notEndpoint: FilterSpecification = ["!=", ["get", "endpoint"], true];
 </script>
 
 <GeoJSON data={gj}>
