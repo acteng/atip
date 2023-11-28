@@ -8,7 +8,7 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
-  import type { FilterSpecification } from "maplibre-gl";
+  import type { ExpressionSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema } from "schemas";
   import {
     CircleLayer,
@@ -29,12 +29,16 @@
   $: gj = addLineStringEndpoints(schemesGj);
 
   // TODO Abusing this property for filtering
-  const hideWhileEditing: FilterSpecification = [
+  const hideWhileEditing: ExpressionSpecification = [
     "!=",
-    "hide_while_editing",
+    ["get", "hide_while_editing"],
     true,
   ];
-  const notEndpoint: FilterSpecification = ["!=", "endpoint", true];
+  const notEndpoint: ExpressionSpecification = [
+    "!=",
+    ["get", "endpoint"],
+    true,
+  ];
 </script>
 
 <GeoJSON data={gj}>
