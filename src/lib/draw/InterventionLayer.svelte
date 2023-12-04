@@ -6,6 +6,7 @@
     constructMatchExpression,
     isCoveragePolygon,
     isLine,
+    isMultiLine,
     isNotCoveragePolygon,
     isPoint,
     isPolygon,
@@ -16,7 +17,13 @@
     DataDrivenPropertyValueSpecification,
     ExpressionSpecification,
   } from "maplibre-gl";
-  import { gjSchemeCollection, hideSchemes, map, mode } from "stores";
+  import {
+    gjSchemeCollection,
+    hideSchemes,
+    map,
+    mode,
+    routesToMerge,
+  } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -41,7 +48,7 @@
     true,
   ];
 
-  $: clickable = $mode.mode == "list";
+  $: clickable = $mode.mode == "list" || $mode.mode == "merge-routes";
 
   // TODO Can't use this for the interventions-lines-endpoints layer, for unknown reasons
   $: showSchemes = getShowSchemes($hideSchemes);
@@ -63,7 +70,7 @@
     if ($mode.mode == "edit-form") {
       // @ts-ignore Can't figure out the problem
       color = ["case", ["==", ["id"], $mode.id], colorInterventions, fadeColor];
-    } else if ($mode.mode == "list") {
+    } else if ($mode.mode == "list" || $mode.mode == "merge-routes") {
       color = colorInterventions;
     } else if ($mode.mode == "split-route") {
       color = [
@@ -95,14 +102,37 @@
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    if ($mode.mode != "list") {
+    if ($mode.mode != "list" && $mode.mode != "merge-routes") {
       return;
     }
+
     // TODO Possible to be missing?
     if (e.detail.features[0]) {
+      console.log(`feature clicked in mode: ${$mode.mode}, at time: ${Date.now()}`);
+      console.log(JSON.stringify(e.detail.event.type))
+      const feature: Feature = e.detail.features[0];
       // We just clicked a feature, so the cursor would've been different
       $map.getCanvas().style.cursor = "inherit";
-      mode.set({ mode: "edit-form", id: e.detail.features[0].id as number });
+      if ($mode.mode === "list") {
+        openInterventionInEditForm(feature);
+      } else if ($mode.mode === "merge-routes") {
+        addRouteToMerge(feature);
+      }
+    }
+    
+  }
+
+  function openInterventionInEditForm(feature: Feature) {
+    mode.set({ mode: "edit-form", id: feature.id as number });
+  }
+
+  function addRouteToMerge(feature: Feature) {
+    if (feature.geometry.type === "LineString" || feature.geometry.type === "MultiLineString") {
+      $routesToMerge.push(
+        // @ts-ignore feature is guaranteed to be of right type by above
+        feature
+      );
+      routesToMerge.set($routesToMerge);
     }
   }
 
@@ -142,6 +172,23 @@
   <LineLayer
     {...layerId("interventions-lines")}
     filter={["all", isLine, hideWhileEditing, showSchemes]}
+    paint={{
+      "line-color": color,
+      "line-width": lineWidth,
+    }}
+    hoverCursor={clickable ? "pointer" : undefined}
+    on:click={onClick}
+    manageHoverState={clickable}
+  >
+    {#if clickable}
+      <Popup openOn="hover" openIfTopMost let:features>
+        <div class="govuk-prose"><p>{tooltip(features)}</p></div>
+      </Popup>
+    {/if}
+  </LineLayer>
+  <LineLayer
+    {...layerId("interventions-lines")}
+    filter={["all", isMultiLine, hideWhileEditing, showSchemes]}
     paint={{
       "line-color": color,
       "line-width": lineWidth,

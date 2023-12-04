@@ -1,5 +1,6 @@
 <script lang="ts">
   import { BaselayerSwitcher } from "lib/common";
+  import MergeRoutesMode from "lib/draw/route/MergeRoutesMode.svelte";
   import { DefaultButton } from "lib/govuk";
   import { map, mode, pointTool, polygonTool, routeTool } from "stores";
   import { onDestroy } from "svelte";
@@ -77,6 +78,29 @@ toolbox, but that gets created and destroyed frequently. -->
       to cancel
     </li>
   </ul>
+{:else if $mode.mode == "merge-routes"}
+  <h2>Merge routes</h2>
+  <DefaultButton on:click={() => mode.set({ mode: "list" })}>
+    Finish
+  </DefaultButton>
+
+  <ul>
+    <li>
+      <b>Click</b>
+      on a route to add or remove it from the list of routes to be merge
+    </li>
+    <li>
+      The items to be merged will be highlighted by &lbrace;To be
+      determined&rbrace;
+    </li>
+    <li>
+      <b>Click</b>
+      on the map or press
+      <b>Escape</b>
+      to cancel
+    </li>
+  </ul>
+  <MergeRoutesMode />
 {:else if $mode.mode == "set-image"}
   <h2>Georeference image</h2>
   <ImageMode />

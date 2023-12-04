@@ -25,6 +25,11 @@ export const isLine: ExpressionSpecification = [
   ["geometry-type"],
   "LineString",
 ];
+export const isMultiLine: ExpressionSpecification = [
+  "==",
+  ["geometry-type"],
+  "MultiLineString",
+];
 export const isPoint: ExpressionSpecification = [
   "==",
   ["geometry-type"],

@@ -1,4 +1,4 @@
-import type { LineString, Point, Polygon } from "geojson";
+import type { LineString, MultiLineString, Point, Polygon } from "geojson";
 
 export type Schema = "v1" | "pipeline";
 
@@ -30,12 +30,12 @@ export interface SchemeData {
 export interface PipelineScheme {
   // TODO "intersection" is unclear
   scheme_type:
-    | "cycling route"
-    | "walking route"
-    | "shared-use route"
-    | "area-based scheme"
-    | "intersection"
-    | "";
+  | "cycling route"
+  | "walking route"
+  | "shared-use route"
+  | "area-based scheme"
+  | "intersection"
+  | "";
   atf4_lead_type: PipelineType | "";
   scheme_description: string;
 
@@ -94,7 +94,7 @@ export type FeatureUnion =
   | Feature<Polygon>;
 
 // Note we're not using Geometry and Feature types from the geojson package
-export type Geometry = Point | LineString | Polygon;
+export type Geometry = Point | LineString | Polygon | MultiLineString;
 
 export interface Feature<G extends Geometry> {
   type: "Feature";
@@ -156,20 +156,21 @@ export function isStreetViewImagery(x: string): x is "google" | "bing" {
 
 export type Mode =
   | {
-      mode: "list";
-    }
+    mode: "list";
+  }
   | {
-      mode: "edit-form";
-      id: number;
-    }
+    mode: "edit-form";
+    id: number;
+  }
   | {
-      mode: "edit-geometry";
-      id: number;
-    }
+    mode: "edit-geometry";
+    id: number;
+  }
   | { mode: "new-point" }
   | { mode: "new-freehand-polygon" }
   | { mode: "new-snapped-polygon" }
   | { mode: "new-route" }
   | { mode: "split-route" }
+  | { mode: "merge-routes" }
   | { mode: "set-image" }
   | { mode: "streetview" };

@@ -46,6 +46,10 @@
     <img src={splitRouteIcon} alt="Split route" />
     Split route
   </SecondaryButton>
+  <SecondaryButton on:click={() => mode.set({mode:"merge-routes"})}>
+    <img src={splitRouteIcon} alt="Merge route" />
+    Merge routes
+  </SecondaryButton>
   <SecondaryButton on:click={() => mode.set({ mode: "set-image" })}>
     <!-- svelte-ignore a11y-img-redundant-alt -->
     <img src={imageIcon} alt="Georeference image" />
