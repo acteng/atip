@@ -30,12 +30,12 @@ export interface SchemeData {
 export interface PipelineScheme {
   // TODO "intersection" is unclear
   scheme_type:
-  | "cycling route"
-  | "walking route"
-  | "shared-use route"
-  | "area-based scheme"
-  | "intersection"
-  | "";
+    | "cycling route"
+    | "walking route"
+    | "shared-use route"
+    | "area-based scheme"
+    | "intersection"
+    | "";
   atf4_lead_type: PipelineType | "";
   scheme_description: string;
 
@@ -156,16 +156,16 @@ export function isStreetViewImagery(x: string): x is "google" | "bing" {
 
 export type Mode =
   | {
-    mode: "list";
-  }
+      mode: "list";
+    }
   | {
-    mode: "edit-form";
-    id: number;
-  }
+      mode: "edit-form";
+      id: number;
+    }
   | {
-    mode: "edit-geometry";
-    id: number;
-  }
+      mode: "edit-geometry";
+      id: number;
+    }
   | { mode: "new-point" }
   | { mode: "new-freehand-polygon" }
   | { mode: "new-snapped-polygon" }

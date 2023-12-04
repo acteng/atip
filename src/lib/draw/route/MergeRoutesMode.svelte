@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { routesToMerge } from "stores";
+  import { routesToMerge } from "stores";
 </script>
 
 <ol>

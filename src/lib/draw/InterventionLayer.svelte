@@ -108,8 +108,10 @@
 
     // TODO Possible to be missing?
     if (e.detail.features[0]) {
-      console.log(`feature clicked in mode: ${$mode.mode}, at time: ${Date.now()}`);
-      console.log(JSON.stringify(e.detail.event.type))
+      console.log(
+        `feature clicked in mode: ${$mode.mode}, at time: ${Date.now()}`
+      );
+      console.log(JSON.stringify(e.detail.event.type));
       const feature: Feature = e.detail.features[0];
       // We just clicked a feature, so the cursor would've been different
       $map.getCanvas().style.cursor = "inherit";
@@ -119,7 +121,6 @@
         addRouteToMerge(feature);
       }
     }
-    
   }
 
   function openInterventionInEditForm(feature: Feature) {
@@ -127,7 +128,10 @@
   }
 
   function addRouteToMerge(feature: Feature) {
-    if (feature.geometry.type === "LineString" || feature.geometry.type === "MultiLineString") {
+    if (
+      feature.geometry.type === "LineString" ||
+      feature.geometry.type === "MultiLineString"
+    ) {
       $routesToMerge.push(
         // @ts-ignore feature is guaranteed to be of right type by above
         feature

@@ -46,7 +46,7 @@
     <img src={splitRouteIcon} alt="Split route" />
     Split route
   </SecondaryButton>
-  <SecondaryButton on:click={() => mode.set({mode:"merge-routes"})}>
+  <SecondaryButton on:click={() => mode.set({ mode: "merge-routes" })}>
     <img src={splitRouteIcon} alt="Merge route" />
     Merge routes
   </SecondaryButton>
