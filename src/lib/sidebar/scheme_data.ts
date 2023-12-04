@@ -107,6 +107,7 @@ export function addEmptyScheme(gj: SchemeCollection) {
     color: randomSchemeColor(),
   };
 
+  // Here we rely on the fact the string keys are traversed in insertion order (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in)
   Object.keys(gj.schemes).forEach((schemeRef) => {
     newSchemes[schemeRef] = gj.schemes[schemeRef];
   });
