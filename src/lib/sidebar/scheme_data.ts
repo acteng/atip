@@ -101,14 +101,20 @@ export function emptyCollection(): SchemeCollection {
 
 export function addEmptyScheme(gj: SchemeCollection) {
   let scheme_reference = uuidv4();
-  gj.schemes[scheme_reference] = {
+  const newSchemes: { [reference: string]: SchemeData } = {}
+  newSchemes[scheme_reference] = {
     scheme_reference,
     color: randomSchemeColor(),
   };
+
+  Object.keys(gj.schemes).forEach((schemeRef) =>{
+    newSchemes[schemeRef] = gj.schemes[schemeRef];
+  });
   let schema = get(schemaStore);
   if (schema == "pipeline") {
-    gj.schemes[scheme_reference].pipeline = emptyPipelineScheme();
+    newSchemes[scheme_reference].pipeline = emptyPipelineScheme();
   }
+  gj.schemes = newSchemes;
 }
 
 export function emptyPipelineScheme(): PipelineScheme {
