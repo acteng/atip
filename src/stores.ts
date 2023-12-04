@@ -1,3 +1,4 @@
+import type { LineString, MultiLineString } from "geojson";
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
 import { PointTool } from "./lib/draw/point/point_tool";
@@ -6,6 +7,7 @@ import { RouteTool } from "./lib/draw/route/route_tool";
 import { emptyCollection } from "./lib/sidebar/scheme_data";
 import {
   isStreetViewImagery,
+  type Feature,
   type Mode,
   type Schema,
   type SchemeCollection,
@@ -47,6 +49,10 @@ userSettings.subscribe((value) =>
 );
 
 export const mode: Writable<Mode> = writable({ mode: "list" });
+
+export const routesToMerge: Writable<
+  (Feature<LineString> | Feature<MultiLineString>)[]
+> = writable([]);
 
 // For browse page
 export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);

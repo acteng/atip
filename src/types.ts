@@ -1,4 +1,4 @@
-import type { LineString, Point, Polygon } from "geojson";
+import type { LineString, MultiLineString, Point, Polygon } from "geojson";
 
 export type Schema = "v1" | "pipeline";
 
@@ -94,7 +94,7 @@ export type FeatureUnion =
   | Feature<Polygon>;
 
 // Note we're not using Geometry and Feature types from the geojson package
-export type Geometry = Point | LineString | Polygon;
+export type Geometry = Point | LineString | Polygon | MultiLineString;
 
 export interface Feature<G extends Geometry> {
   type: "Feature";
@@ -171,5 +171,6 @@ export type Mode =
   | { mode: "new-snapped-polygon" }
   | { mode: "new-route" }
   | { mode: "split-route" }
+  | { mode: "merge-routes" }
   | { mode: "set-image" }
   | { mode: "streetview" };
