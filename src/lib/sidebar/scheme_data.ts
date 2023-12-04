@@ -101,13 +101,13 @@ export function emptyCollection(): SchemeCollection {
 
 export function addEmptyScheme(gj: SchemeCollection) {
   let scheme_reference = uuidv4();
-  const newSchemes: { [reference: string]: SchemeData } = {}
+  const newSchemes: { [reference: string]: SchemeData } = {};
   newSchemes[scheme_reference] = {
     scheme_reference,
     color: randomSchemeColor(),
   };
 
-  Object.keys(gj.schemes).forEach((schemeRef) =>{
+  Object.keys(gj.schemes).forEach((schemeRef) => {
     newSchemes[schemeRef] = gj.schemes[schemeRef];
   });
   let schema = get(schemaStore);
