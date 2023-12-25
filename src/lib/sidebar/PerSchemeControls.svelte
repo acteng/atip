@@ -183,7 +183,7 @@
         {interventionName(feature)}
       </a>
       {#if $schema === "pipeline" && feature.properties.pipeline?.is_alternative}
-        <span> (alternative)</span>
+        <span>&nbsp;(alternative)</span>
       {/if}
     </li>
   {/each}
