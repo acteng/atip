@@ -39,11 +39,16 @@
     window.history.replaceState(null, "", url.toString());
   }
   $: changeStyle(style);
+
+  function onError(e: CustomEvent<any>) {
+    // ErrorEvent isn't exported
+    console.error(`MapLibre error: ${e.detail.error}`);
+  }
 </script>
 
 <div class="map">
   {#if styleSpec}
-    <MapLibre style={styleSpec} bounds={startBounds} hash bind:loaded bind:map>
+    <MapLibre style={styleSpec} bounds={startBounds} hash bind:loaded bind:map on:error={onError}>
       {#if loaded}
         <ScaleControl />
         <NavigationControl position="bottom-right" visualizePitch />

@@ -225,6 +225,7 @@
   </FillLayer>
   <LineLayer
     {...layerId(`${name}-outline`)}
+    sourceLayer={name}
     paint={{
       "line-color": "black",
       "line-width": 0.5,
