@@ -7,7 +7,6 @@
     StreetViewTool,
   } from "lib/common";
   import { CheckboxGroup } from "lib/govuk";
-  import { interactiveMapLayersEnabled } from "stores";
   import CensusOutputAreaLayerControl from "./layers/areas/CensusOutputAreas.svelte";
   import CombinedAuthoritiesLayerControl from "./layers/areas/CombinedAuthorities.svelte";
   import ImdLayerControl from "./layers/areas/IMD.svelte";
@@ -30,6 +29,7 @@
   import SchoolsLayerControl from "./layers/points/Schools.svelte";
   import SportsSpacesLayerControl from "./layers/points/SportsSpaces.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
+  import { interactiveMapLayersEnabled } from "./stores";
 
   // Workaround for https://github.com/sveltejs/svelte/issues/7630
   $: streetviewEnabled = !$interactiveMapLayersEnabled;

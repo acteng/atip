@@ -10,6 +10,7 @@
   import { onMount } from "svelte";
   import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
+  import { filterText } from "./stores";
 
   export let schemesGj: SchemeCollection;
   // These are immutable; re-create this component if they change
@@ -17,9 +18,6 @@
 
   // by scheme_reference
   export let schemesToBeShown: Set<string> = new Set();
-
-  // Read-only, so callers can highlight search terms
-  export let filterText = "";
 
   export let show = true;
 
@@ -51,11 +49,11 @@
 
   // When any filters change, update schemesToBeShown
   function filtersUpdated(
-    filterText: string,
+    filterTextCopy: string,
     filterAuthority: string,
     filterFundingProgramme: string
   ) {
-    let filterNormalized = filterText.toLowerCase();
+    let filterNormalized = filterTextCopy.toLowerCase();
     let filterFeatures = (feature: FeatureUnion) => {
       // Only the name and description fields have anything worth filtering
       if (
@@ -119,7 +117,7 @@
     schemesGj = schemesGj;
     counts = counts;
   }
-  $: filtersUpdated(filterText, filterAuthority, filterFundingProgramme);
+  $: filtersUpdated($filterText, filterAuthority, filterFundingProgramme);
 </script>
 
 <CollapsibleCard label="Filters">
@@ -142,9 +140,9 @@
       type="text"
       class="govuk-input govuk-input--width-10"
       id="filterText"
-      bind:value={filterText}
+      bind:value={$filterText}
     />
-    <SecondaryButton on:click={() => (filterText = "")}>Clear</SecondaryButton>
+    <SecondaryButton on:click={() => ($filterText = "")}>Clear</SecondaryButton>
   </FormElement>
   <InterventionColorSelector />
 </CollapsibleCard>

@@ -1,16 +1,16 @@
 <script lang="ts">
   import { prettyPrintMeters } from "lib/maplibre";
+  import { filterText } from "./stores";
 
   export let props: { [name: string]: any };
-  export let filterText: string;
 
   // When the user is filtering name/description by freeform text, highlight the matching pieces.
   function highlightFilter(input: string): string {
-    if (!filterText) {
+    if (!$filterText) {
       return input;
     }
     return input.replace(
-      new RegExp(filterText, "gi"),
+      new RegExp($filterText, "gi"),
       (match) => `<mark>${match}</mark>`
     );
   }

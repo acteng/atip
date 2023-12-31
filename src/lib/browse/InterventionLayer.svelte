@@ -22,7 +22,6 @@
 
   export let schemesGj: SchemeCollection;
   export let showSchemes: boolean;
-  export let filterText: string;
 
   let colorInterventions = colorInterventionsBySchema("v1");
 
@@ -57,7 +56,7 @@
     }}
   >
     <Popup let:props>
-      <InterventionPopup {props} {filterText} />
+      <InterventionPopup {props} />
     </Popup>
   </CircleLayer>
 
@@ -76,7 +75,7 @@
     }}
   >
     <Popup let:props>
-      <InterventionPopup {props} {filterText} />
+      <InterventionPopup {props} />
     </Popup>
   </LineLayer>
   <CircleLayer
@@ -107,7 +106,7 @@
     }}
   >
     <Popup let:props>
-      <InterventionPopup {props} {filterText} />
+      <InterventionPopup {props} />
     </Popup>
   </FillLayer>
   <LineLayer
