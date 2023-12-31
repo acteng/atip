@@ -127,7 +127,7 @@ test("adding interventions, then deleting one, then adding another", async () =>
 
   await expect(
     page.getByRole("link", {
-      name: "Route from Burnside Crescent and Carnforth Road to ??? and Brighton Road",
+      name: "Route from Burnside Crescent and Carnforth Road to Prince Avenue and West Way",
     })
   ).toBeVisible();
 });
