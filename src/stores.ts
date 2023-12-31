@@ -48,9 +48,6 @@ userSettings.subscribe((value) =>
 
 export const mode: Writable<Mode> = writable({ mode: "list" });
 
-// For browse page
-export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
-
 // All feature IDs must:
 //
 // - be unique

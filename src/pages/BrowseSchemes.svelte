@@ -39,7 +39,6 @@
   };
   let schemes: Map<string, SchemeData> = new Map();
   let schemesToBeShown: Set<string> = new Set();
-  let filterText = "";
   let showSchemes = true;
 
   function loadFile(text: string) {
@@ -72,7 +71,6 @@
         bind:schemesGj
         {schemes}
         bind:schemesToBeShown
-        bind:filterText
         bind:show={showSchemes}
       />
     {/if}
@@ -88,7 +86,7 @@
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Geocoder />
-      <InterventionLayer {schemesGj} {filterText} {showSchemes} />
+      <InterventionLayer {schemesGj} {showSchemes} />
       <div class="top-right">
         <LayerControls />
       </div>
