@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { routeTool } from "lib/draw/stores";
   import { Checkbox, CheckboxGroup, SecondaryButton } from "lib/govuk";
-  import { routeTool, userSettings } from "stores";
+  import { userSettings } from "stores";
   import GeocoderControls from "./GeocoderControls.svelte";
   import { snapMode, undoLength } from "./stores";
 

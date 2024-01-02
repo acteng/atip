@@ -1,15 +1,15 @@
 <script lang="ts">
   import type { LineString, Polygon } from "geojson";
-  import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
-  import type { FeatureWithProps } from "lib/maplibre";
-  import { getArbitraryScheme } from "lib/sidebar/scheme_data";
   import {
     gjSchemeCollection,
     mode,
     newFeatureId,
     routeTool,
-    schema,
-  } from "stores";
+  } from "lib/draw/stores";
+  import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
+  import type { FeatureWithProps } from "lib/maplibre";
+  import { getArbitraryScheme } from "lib/sidebar/scheme_data";
+  import { schema } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import RouteControls from "./RouteControls.svelte";

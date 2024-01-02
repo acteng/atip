@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Modal } from "lib/common";
+  import { gjSchemeCollection } from "lib/draw/stores";
   import {
     Checkbox,
     CheckboxGroup,
@@ -11,7 +12,6 @@
     TextArea,
     TextInput,
   } from "lib/govuk";
-  import { gjSchemeCollection } from "stores";
   import type { FundingSources } from "types";
   import PipelineType from "../forms/PipelineType.svelte";
 

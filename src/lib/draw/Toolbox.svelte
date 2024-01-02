@@ -1,6 +1,5 @@
 <script lang="ts">
   import { SecondaryButton } from "lib/govuk";
-  import { mode, pointTool, polygonTool, routeTool } from "stores";
   import imageIcon from "../../../assets/image.svg";
   import pointIcon from "../../../assets/point.svg";
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";
@@ -9,6 +8,7 @@
   import splitRouteIcon from "../../../assets/split_route.svg";
   import streetViewIcon from "../../../assets/street_view.svg";
   import HoverLayer from "./HoverLayer.svelte";
+  import { mode, pointTool, polygonTool, routeTool } from "./stores";
 </script>
 
 <HoverLayer />

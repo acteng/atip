@@ -3,20 +3,20 @@
   import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
   import { interventionName } from "lib/sidebar/scheme_data";
-  import {
-    gjSchemeCollection,
-    mode,
-    pointTool,
-    polygonTool,
-    routeTool,
-    schema,
-  } from "stores";
+  import { schema } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature, FeatureUnion } from "types";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
+  import {
+    gjSchemeCollection,
+    mode,
+    pointTool,
+    polygonTool,
+    routeTool,
+  } from "./stores";
 
   export let id: number;
 

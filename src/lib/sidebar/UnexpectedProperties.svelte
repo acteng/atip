@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Modal } from "lib/common";
+  import { gjSchemeCollection } from "lib/draw/stores";
   import { ButtonGroup, SecondaryButton, WarningButton } from "lib/govuk";
-  import { gjSchemeCollection } from "stores";
   import { getUnexpectedProperties } from "./scheme_data";
 
   export let id: number;
