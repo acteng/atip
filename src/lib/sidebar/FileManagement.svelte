@@ -1,18 +1,18 @@
 <script lang="ts">
   import { CollapsibleCard, FileInput, Modal } from "lib/common";
   import {
+    gjSchemeCollection,
+    hideSchemes,
+    mode,
+    sidebarHover,
+  } from "lib/draw/stores";
+  import {
     ButtonGroup,
     ErrorMessage,
     SecondaryButton,
     WarningButton,
   } from "lib/govuk";
-  import {
-    gjSchemeCollection,
-    hideSchemes,
-    mode,
-    schema,
-    sidebarHover,
-  } from "stores";
+  import { schema } from "stores";
   import { onMount } from "svelte";
   import type { SchemeCollection } from "types";
   import deleteIcon from "../../../assets/delete.svg?url";

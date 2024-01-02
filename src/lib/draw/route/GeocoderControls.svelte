@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { FeatureCollection } from "@maptiler/geocoding-control/types";
   import type { Position } from "geojson";
+  import { routeTool } from "lib/draw/stores";
   import { TextInput } from "lib/govuk";
   import { emptyGeojson } from "lib/maplibre";
-  import { map, routeTool } from "stores";
+  import { map } from "stores";
   import { geocoderGj } from "./stores";
 
   let query = "";

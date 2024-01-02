@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { mode } from "lib/draw/stores";
   import { layerId } from "lib/maplibre";
-  import { map, mode } from "stores";
+  import { map } from "stores";
   import { ImageSource, Marker, RasterLayer } from "svelte-maplibre";
   import { imgSrc, opacity } from "./stores";
 

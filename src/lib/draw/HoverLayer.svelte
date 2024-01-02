@@ -7,8 +7,8 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
-  import { gjSchemeCollection, sidebarHover } from "stores";
   import { CircleLayer, GeoJSON, LineLayer } from "svelte-maplibre";
+  import { gjSchemeCollection, sidebarHover } from "./stores";
 
   // Use a layer that only ever has zero or one features for hovering.
   $: gj =

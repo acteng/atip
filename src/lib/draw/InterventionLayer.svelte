@@ -16,7 +16,7 @@
     DataDrivenPropertyValueSpecification,
     ExpressionSpecification,
   } from "maplibre-gl";
-  import { gjSchemeCollection, hideSchemes, map, mode } from "stores";
+  import { map } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -26,6 +26,7 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import type { FeatureUnion, SchemeCollection } from "types";
+  import { gjSchemeCollection, hideSchemes, mode } from "./stores";
 
   $: gj = addLineStringEndpoints($gjSchemeCollection);
 

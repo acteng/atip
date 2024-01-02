@@ -1,7 +1,8 @@
 <script lang="ts">
   import { BaselayerSwitcher } from "lib/common";
+  import { mode, pointTool, polygonTool, routeTool } from "lib/draw/stores";
   import { DefaultButton } from "lib/govuk";
-  import { map, mode, pointTool, polygonTool, routeTool } from "stores";
+  import { map } from "stores";
   import { onDestroy } from "svelte";
   import EditGeometryMode from "../draw/EditGeometryMode.svelte";
   import ImageMode from "../draw/image/ImageMode.svelte";

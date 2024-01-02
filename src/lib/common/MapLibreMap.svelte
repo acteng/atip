@@ -48,7 +48,14 @@
 
 <div class="map">
   {#if styleSpec}
-    <MapLibre style={styleSpec} bounds={startBounds} hash bind:loaded bind:map on:error={onError}>
+    <MapLibre
+      style={styleSpec}
+      bounds={startBounds}
+      hash
+      bind:loaded
+      bind:map
+      on:error={onError}
+    >
       {#if loaded}
         <ScaleControl />
         <NavigationControl position="bottom-right" visualizePitch />

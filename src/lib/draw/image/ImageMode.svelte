@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { mode } from "lib/draw/stores";
   import {
     ButtonGroup,
     DefaultButton,
     FormElement,
     WarningButton,
   } from "lib/govuk";
-  import { mode } from "stores";
   import { imgSrc, opacity } from "./stores";
 
   let fileInput: HTMLInputElement;

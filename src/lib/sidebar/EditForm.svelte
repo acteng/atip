@@ -1,4 +1,9 @@
 <script lang="ts">
+  import {
+    deleteIntervention,
+    gjSchemeCollection,
+    mode,
+  } from "lib/draw/stores";
   import FormV1 from "lib/forms/FormV1.svelte";
   import PipelineForm from "lib/forms/PipelineForm.svelte";
   import {
@@ -9,13 +14,7 @@
     WarningButton,
   } from "lib/govuk";
   import type { MapMouseEvent } from "maplibre-gl";
-  import {
-    deleteIntervention,
-    gjSchemeCollection,
-    map,
-    mode,
-    schema,
-  } from "stores";
+  import { map, schema } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { FeatureUnion } from "types";
   import { interventionName, interventionWarning } from "./scheme_data";

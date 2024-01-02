@@ -1,6 +1,12 @@
 <script lang="ts">
   import { Modal, WarningIcon } from "lib/common";
   import {
+    gjSchemeCollection,
+    hideSchemes,
+    mode,
+    sidebarHover,
+  } from "lib/draw/stores";
+  import {
     ButtonGroup,
     Checkbox,
     ErrorMessage,
@@ -9,14 +15,7 @@
     WarningButton,
   } from "lib/govuk";
   import { bbox } from "lib/maplibre";
-  import {
-    gjSchemeCollection,
-    hideSchemes,
-    map,
-    mode,
-    schema,
-    sidebarHover,
-  } from "stores";
+  import { map, schema } from "stores";
   import { onDestroy } from "svelte";
   import deleteIcon from "../../../assets/delete.svg?url";
   import GenericSchemeForm from "./GenericSchemeForm.svelte";

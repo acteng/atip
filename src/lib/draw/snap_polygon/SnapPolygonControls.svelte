@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { routeTool } from "lib/draw/stores";
   import { SecondaryButton } from "lib/govuk";
-  import { routeTool } from "stores";
   import { undoLength } from "../route/stores";
 
   function undo() {

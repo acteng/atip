@@ -17,13 +17,14 @@
   import PolygonToolLayer from "lib/draw/polygon/PolygonToolLayer.svelte";
   import RouteSnapperLayer from "lib/draw/route/RouteSnapperLayer.svelte";
   import SplitRouteMode from "lib/draw/route/SplitRouteMode.svelte";
+  import { mode } from "lib/draw/stores";
   import Toolbox from "lib/draw/Toolbox.svelte";
   import { ButtonGroup, SecondaryButton } from "lib/govuk";
   import About from "lib/sidebar/About.svelte";
   import FileManagement from "lib/sidebar/FileManagement.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
   import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
-  import { mapStyle, mode, schema } from "stores";
+  import { mapStyle, schema } from "stores";
   import { onMount } from "svelte";
 
   let showAbout = false;

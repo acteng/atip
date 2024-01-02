@@ -1,9 +1,14 @@
 <script lang="ts">
   import type { Point } from "geojson";
+  import {
+    gjSchemeCollection,
+    mode,
+    newFeatureId,
+    pointTool,
+  } from "lib/draw/stores";
   import { SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
   import { getArbitraryScheme } from "lib/sidebar/scheme_data";
-  import { gjSchemeCollection, mode, newFeatureId, pointTool } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import PointControls from "./PointControls.svelte";

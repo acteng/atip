@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { gjSchemeCollection, routeTool } from "lib/draw/stores";
   import {
     FormElement,
     Radio,
@@ -7,7 +8,6 @@
     TextArea,
   } from "lib/govuk";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { gjSchemeCollection, routeTool } from "stores";
   import type { InterventionProps } from "types";
 
   export let id: number;
