@@ -1,8 +1,8 @@
 <script lang="ts">
   import { StreetViewHelp, StreetViewTool } from "lib/common";
+  import { mode } from "lib/draw/stores";
   import { DefaultButton, Radio } from "lib/govuk";
   import { userSettings } from "stores";
-  import { mode } from "./stores";
 
   let enabled = true;
   $: if (!enabled) {

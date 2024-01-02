@@ -1,6 +1,7 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "colors";
   import type { Feature } from "geojson";
+  import { gjSchemeCollection, hideSchemes, mode } from "lib/draw/stores";
   import {
     addLineStringEndpoints,
     constructMatchExpression,
@@ -26,7 +27,6 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import type { FeatureUnion, SchemeCollection } from "types";
-  import { gjSchemeCollection, hideSchemes, mode } from "./stores";
 
   $: gj = addLineStringEndpoints($gjSchemeCollection);
 
