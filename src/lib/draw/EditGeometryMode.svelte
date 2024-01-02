@@ -1,5 +1,12 @@
 <script lang="ts">
   import type { LineString, Point, Polygon } from "geojson";
+  import {
+    gjSchemeCollection,
+    mode,
+    pointTool,
+    polygonTool,
+    routeTool,
+  } from "lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
   import type { FeatureWithProps } from "lib/maplibre";
   import { interventionName } from "lib/sidebar/scheme_data";
@@ -10,13 +17,6 @@
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
-  import {
-    gjSchemeCollection,
-    mode,
-    pointTool,
-    polygonTool,
-    routeTool,
-  } from "./stores";
 
   export let id: number;
 
