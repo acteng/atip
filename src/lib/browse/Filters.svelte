@@ -8,13 +8,11 @@
     Select,
   } from "lib/govuk";
   import { onMount } from "svelte";
-  import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
+  import type { FeatureUnion } from "types";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
-  import { filterText } from "./stores";
+  import { filterText, schemes, schemesGj } from "./stores";
 
-  export let schemesGj: SchemeCollection;
-  // These are immutable; re-create this component if they change
-  export let schemes: Map<string, SchemeData>;
+  // NOTE: If schemesGj changes, re-create this component
 
   // by scheme_reference
   export let schemesToBeShown: Set<string> = new Set();
@@ -33,7 +31,7 @@
   onMount(() => {
     let set1: Set<string> = new Set();
     let set2: Set<string> = new Set();
-    for (let x of schemes.values()) {
+    for (let x of $schemes.values()) {
       if (x.browse?.authority_or_region) {
         set1.add(x.browse.authority_or_region);
       }
@@ -66,7 +64,7 @@
         return false;
       }
       if (filterAuthority || filterFundingProgramme) {
-        let scheme = schemes.get(feature.properties.scheme_reference!)!;
+        let scheme = $schemes.get(feature.properties.scheme_reference!)!;
         if (
           filterAuthority &&
           scheme.browse?.authority_or_region != filterAuthority
@@ -83,7 +81,7 @@
       return true;
     };
     schemesToBeShown = new Set(
-      schemesGj.features
+      $schemesGj.features
         .filter(filterFeatures)
         .map((f) => f.properties.scheme_reference!)
     );
@@ -106,7 +104,7 @@
       }
       return true;
     };
-    for (let feature of schemesGj.features) {
+    for (let feature of $schemesGj.features) {
       if (showFeature(feature)) {
         delete feature.properties.hide_while_editing;
         counts[feature.properties.intervention_type]++;
@@ -114,7 +112,7 @@
         feature.properties.hide_while_editing = true;
       }
     }
-    schemesGj = schemesGj;
+    $schemesGj = $schemesGj;
     counts = counts;
   }
   $: filtersUpdated($filterText, filterAuthority, filterFundingProgramme);

@@ -9,6 +9,7 @@
   import SchemeCard from "lib/browse/SchemeCard.svelte";
   import "../style/main.css";
   import InterventionLayer from "lib/browse/InterventionLayer.svelte";
+  import { schemes, schemesGj } from "lib/browse/stores";
   import {
     appVersion,
     FileInput,
@@ -21,7 +22,6 @@
   import { ErrorMessage } from "lib/govuk";
   import { mapStyle } from "stores";
   import { onMount } from "svelte";
-  import type { SchemeCollection, SchemeData } from "types";
 
   onMount(() => {
     // For govuk components. Must happen here.
@@ -32,19 +32,13 @@
   mapStyle.set(params.get("style") || "dataviz");
   let errorMessage = "";
 
-  let schemesGj: SchemeCollection = {
-    type: "FeatureCollection",
-    features: [],
-    schemes: {},
-  };
-  let schemes: Map<string, SchemeData> = new Map();
   let schemesToBeShown: Set<string> = new Set();
   let showSchemes = true;
 
   function loadFile(text: string) {
     try {
-      schemesGj = JSON.parse(text);
-      schemes = processInput(schemesGj);
+      schemesGj.set(JSON.parse(text));
+      schemes.set(processInput($schemesGj));
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
@@ -56,7 +50,7 @@
   <div slot="sidebar" class="govuk-prose">
     <div style="display: flex; justify-content: space-between">
       <h1>Browse schemes</h1>
-      <ZoomOutMap boundaryGeojson={schemesGj} />
+      <ZoomOutMap boundaryGeojson={$schemesGj} />
     </div>
     <AppVersion />
     <LoggedIn />
@@ -66,19 +60,14 @@
     <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />
     <ErrorMessage {errorMessage} />
 
-    {#if schemes.size > 0}
-      <Filters
-        bind:schemesGj
-        {schemes}
-        bind:schemesToBeShown
-        bind:show={showSchemes}
-      />
+    {#if $schemes.size > 0}
+      <Filters bind:schemesToBeShown bind:show={showSchemes} />
     {/if}
 
     <ul>
-      {#each schemes.values() as scheme}
+      {#each $schemes.values() as scheme}
         {#if schemesToBeShown.has(scheme.scheme_reference)}
-          <SchemeCard {schemesGj} {scheme} />
+          <SchemeCard {scheme} />
         {/if}
       {/each}
     </ul>
@@ -86,7 +75,7 @@
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Geocoder />
-      <InterventionLayer {schemesGj} {showSchemes} />
+      <InterventionLayer {showSchemes} />
       <div class="top-right">
         <LayerControls />
       </div>

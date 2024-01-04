@@ -4,16 +4,16 @@
   import { ButtonGroup, SecondaryButton } from "lib/govuk";
   import { bbox } from "lib/maplibre";
   import { map } from "stores";
-  import type { SchemeCollection, SchemeData } from "types";
+  import type { SchemeData } from "types";
+  import { schemesGj } from "./stores";
 
-  export let schemesGj: SchemeCollection;
   export let scheme: SchemeData;
 
   function showScheme() {
     // TODO Highlight on the map? Or fade everything else?
     let gj: FeatureCollection = {
       type: "FeatureCollection",
-      features: schemesGj.features.filter(
+      features: $schemesGj.features.filter(
         (f) => f.properties.scheme_reference == scheme.scheme_reference
       ),
     };
@@ -23,7 +23,7 @@
   function editScheme() {
     let gj = {
       type: "FeatureCollection",
-      features: schemesGj.features.filter(
+      features: $schemesGj.features.filter(
         (f) => f.properties.scheme_reference == scheme.scheme_reference
       ),
     };

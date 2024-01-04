@@ -17,15 +17,14 @@
     hoverStateFilter,
     LineLayer,
   } from "svelte-maplibre";
-  import type { SchemeCollection } from "types";
   import InterventionPopup from "./InterventionPopup.svelte";
+  import { schemesGj } from "./stores";
 
-  export let schemesGj: SchemeCollection;
   export let showSchemes: boolean;
 
   let colorInterventions = colorInterventionsBySchema("v1");
 
-  $: gj = addLineStringEndpoints(schemesGj);
+  $: gj = addLineStringEndpoints($schemesGj);
 
   // TODO Abusing this property for filtering
   const hideWhileEditing: ExpressionSpecification = [
