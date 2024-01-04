@@ -27,7 +27,7 @@
     <p>{@html highlightFilter(props.description)}</p>
   {/if}
   <hr />
-  <p>Part of scheme {props.scheme_reference}</p>
+  <p>Part of scheme: {props.scheme_reference}</p>
   <p>Authority or region: {scheme.browse?.authority_or_region}</p>
   <p>Capital scheme ID: {scheme.browse?.capital_scheme_id}</p>
   <p>Funding programme: {scheme.browse?.funding_programme}</p>
