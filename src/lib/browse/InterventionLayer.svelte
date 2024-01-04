@@ -53,8 +53,10 @@
     layout={{
       visibility: showSchemes ? "visible" : "none",
     }}
+    hoverCursor="pointer"
   >
-    <Popup let:props>
+    <Popup let:props><p>{props.name}</p></Popup>
+    <Popup let:props openOn="click">
       <InterventionPopup {props} />
     </Popup>
   </CircleLayer>
@@ -72,8 +74,10 @@
     layout={{
       visibility: showSchemes ? "visible" : "none",
     }}
+    hoverCursor="pointer"
   >
-    <Popup let:props>
+    <Popup let:props><p>{props.name}</p></Popup>
+    <Popup let:props openOn="click">
       <InterventionPopup {props} />
     </Popup>
   </LineLayer>
@@ -103,8 +107,10 @@
     layout={{
       visibility: showSchemes ? "visible" : "none",
     }}
+    hoverCursor="pointer"
   >
-    <Popup let:props>
+    <Popup let:props><p>{props.name}</p></Popup>
+    <Popup let:props openOn="click">
       <InterventionPopup {props} />
     </Popup>
   </FillLayer>
