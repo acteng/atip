@@ -1,6 +1,6 @@
 <script lang="ts">
   import { prettyPrintMeters } from "lib/maplibre";
-  import { schemes, filterText } from "./stores";
+  import { filterText, schemes } from "./stores";
 
   export let props: { [name: string]: any };
 

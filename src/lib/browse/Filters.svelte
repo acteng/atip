@@ -26,7 +26,7 @@
   let filterFundingProgramme = "";
 
   // Stats about filtered schemes
-  let counts = { area: 0, route: 0, crossing: 0, other: 0 };
+  let counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
 
   onMount(() => {
     let set1: Set<string> = new Set();
@@ -87,7 +87,7 @@
     );
 
     // Hide things on the map, and recalculate stats
-    counts = { area: 0, route: 0, crossing: 0, other: 0 };
+    counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
     let showFeature = (feature: FeatureUnion) => {
       if (!schemesToBeShown.has(feature.properties.scheme_reference!)) {
         return false;
@@ -108,6 +108,12 @@
       if (showFeature(feature)) {
         delete feature.properties.hide_while_editing;
         counts[feature.properties.intervention_type]++;
+        if (
+          feature.geometry.type == "LineString" &&
+          feature.properties.length_meters
+        ) {
+          counts.totalLength += feature.properties.length_meters;
+        }
       } else {
         feature.properties.hide_while_editing = true;
       }
@@ -116,6 +122,10 @@
     counts = counts;
   }
   $: filtersUpdated($filterText, filterAuthority, filterFundingProgramme);
+
+  function metersToMiles(x: number): number {
+    return x * 0.000621371;
+  }
 </script>
 
 <CollapsibleCard label="Filters">
@@ -150,6 +160,8 @@
     Showing {schemesToBeShown.size.toLocaleString()} schemes ({counts.route.toLocaleString()}
     routes, {counts.area.toLocaleString()} areas,
     {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()}
-    other)
+    other, with total LineString length of {metersToMiles(
+      counts.totalLength
+    ).toFixed(1)} miles)
   </Checkbox>
 </CheckboxGroup>
