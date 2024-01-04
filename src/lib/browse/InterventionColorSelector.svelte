@@ -5,6 +5,7 @@
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import { map } from "stores";
   import { colors } from "./colors";
+  import { schemes } from "./stores";
 
   let colorInterventionsAccordingTo = "interventionType";
   let legendRows = schemaLegend("v1");
@@ -15,16 +16,31 @@
       color = colorInterventionsBySchema("v1");
       legendRows = schemaLegend("v1");
     } else {
+      let set: Set<string> = new Set();
+      for (let x of $schemes.values()) {
+        if (x.browse?.funding_programme) {
+          set.add(x.browse.funding_programme);
+        }
+      }
+      let programmes: string[] = Array.from(set);
+      programmes.sort();
+
+      legendRows = [];
+      let colorMapping: { [key: string]: string } = {};
+      let i = 0;
+      for (let x of programmes) {
+        let color =
+          colors.funding_programmes[i++ % colors.funding_programmes.length];
+        colorMapping[x] = color;
+        legendRows.push([x, color]);
+      }
+
       color = constructMatchExpression(
         ["get", "funding_programme"],
-        { ATF2: colors.atf2, ATF3: colors.atf3, ATF4: colors.atf4 },
+        colorMapping,
         "grey"
       );
-      legendRows = [
-        ["ATF2", colors.atf2],
-        ["ATF3", colors.atf3],
-        ["ATF4", colors.atf4],
-      ];
+      legendRows = legendRows;
     }
 
     // TODO Plumb instead of setting

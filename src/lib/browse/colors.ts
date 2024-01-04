@@ -34,9 +34,15 @@ export const colors = {
     "#080C54",
   ],
 
-  atf2: "#00AFFF",
-  atf3: "#FF62DC",
-  atf4: "#FFD833",
+  // A qualitative set from colorbrewer2.org
+  funding_programmes: [
+    "#66c2a5",
+    "#fc8d62",
+    "#8da0cb",
+    "#e78ac3",
+    "#a6d854",
+    "#ffd92f",
+  ],
 };
 
 // For dense line layers, make individual lines easily distinguished when
