@@ -52,8 +52,8 @@ export const colors = {
     "#eddc76",
     "#dafd9d",
     "#76c384",
-    "#488f31"
-  ]
+    "#488f31",
+  ],
 };
 
 // For dense line layers, make individual lines easily distinguished when
