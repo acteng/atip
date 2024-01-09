@@ -47,7 +47,8 @@ export const colors = {
   current_milestone: [
     "grey",
     "grey",
-    "grey",
+    "red",
+    "red",
     "#fbb862",
     "#eddc76",
     "#dafd9d",
