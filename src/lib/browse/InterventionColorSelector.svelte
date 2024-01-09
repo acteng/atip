@@ -2,6 +2,7 @@
   import { Legend } from "lib/common";
   import { Select } from "lib/govuk";
   import { constructMatchExpression } from "lib/maplibre";
+  import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import { map } from "stores";
   import { colors } from "./colors";
@@ -31,7 +32,7 @@
     );
   }
 
-  function styleByFundingProgramme() {
+  function styleByFundingProgramme(): DataDrivenPropertyValueSpecification<string> {
     let set: Set<string> = new Set();
     for (let x of $schemes.values()) {
       if (x.browse?.funding_programme) {
@@ -55,7 +56,7 @@
     return color;
   }
 
-  function styleByCurrentMilestone() {
+  function styleByCurrentMilestone(): DataDrivenPropertyValueSpecification<string> {
     let stageGates = [
       "removed",
       "no data",
