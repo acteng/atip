@@ -61,6 +61,7 @@
       "removed",
       "no data",
       "not progressed",
+      "superseded",
       "preliminary design completed",
       "feasability design completed",
       "detailed design completed",
