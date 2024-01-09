@@ -55,8 +55,8 @@
     }}
     hoverCursor="pointer"
   >
-    <Popup let:props><p>{props.name}</p></Popup>
-    <Popup let:props openOn="click">
+    <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
+    <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup {props} />
     </Popup>
   </CircleLayer>
@@ -76,8 +76,8 @@
     }}
     hoverCursor="pointer"
   >
-    <Popup let:props><p>{props.name}</p></Popup>
-    <Popup let:props openOn="click">
+    <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
+    <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup {props} />
     </Popup>
   </LineLayer>
@@ -109,8 +109,8 @@
     }}
     hoverCursor="pointer"
   >
-    <Popup let:props><p>{props.name}</p></Popup>
-    <Popup let:props openOn="click">
+    <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
+    <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup {props} />
     </Popup>
   </FillLayer>
@@ -127,3 +127,9 @@
     }}
   />
 </GeoJSON>
+
+<style>
+  :global(.border-popup .maplibregl-popup-content) {
+    border: 1px solid black;
+  }
+</style>

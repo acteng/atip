@@ -6,6 +6,7 @@
   import { Popup } from "svelte-maplibre";
 
   export let openOn: "hover" | "click" = "hover";
+  export let popupClass: string | undefined = undefined;
 
   function getProperties(features: Feature[] | null): { [name: string]: any } {
     if (!features) {
@@ -15,7 +16,7 @@
   }
 </script>
 
-<Popup {openOn} openIfTopMost let:features>
+<Popup {openOn} {popupClass} openIfTopMost let:features>
   <div class="govuk-prose">
     <slot props={getProperties(features)} />
   </div>
