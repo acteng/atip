@@ -41,22 +41,14 @@
     let programmes: string[] = Array.from(set);
     programmes.sort();
 
-    legendRows = [];
-    let colorMapping: { [key: string]: string } = {};
-    let i = 0;
-    for (let x of programmes) {
-      let color =
-        colors.funding_programmes[i++ % colors.funding_programmes.length];
-      colorMapping[x] = color;
-      legendRows.push([x, color]);
-    }
+    let [colorMapping, returnedLegendRows] = getColorMappingAndLegend(programmes, colors.current_milestone);
 
     let color = constructMatchExpression(
       ["get", "funding_programme"],
       colorMapping,
       "grey"
     );
-    legendRows = legendRows;
+    legendRows = returnedLegendRows;
     return color;
   }
 
@@ -72,24 +64,31 @@
       "construction completed",
     ];
 
-    legendRows = [];
-    let colorMapping: { [key: string]: string } = {};
-    let i = 0;
-    for (let x of stageGates) {
-      let color =
-        colors.current_milestone[i++ % colors.current_milestone.length];
-      colorMapping[x] = color;
-      legendRows.push([x, color]);
-    }
+    let [colorMapping, returnedLegendRows] = getColorMappingAndLegend(stageGates, colors.current_milestone);
 
     let color = constructMatchExpression(
       ["get", "current_milestone"],
       colorMapping,
       "grey"
     );
-    legendRows = legendRows;
+    legendRows = returnedLegendRows;
     return color;
   }
+
+  function getColorMappingAndLegend(keys: string[], colorList: string[]): [{ [key: string]: string }, [string, string][]] {
+    let legendRows: [string, string][] = [];
+    let colorMapping: { [key: string]: string } = {};
+    let i = 0;
+    for (let x of keys) {
+      let color =
+        colorList[i++ % colorList.length];
+      colorMapping[x] = color;
+      legendRows.push([x, color]);
+    }
+
+    return [colorMapping, legendRows];
+  }
+
 </script>
 
 <Select
