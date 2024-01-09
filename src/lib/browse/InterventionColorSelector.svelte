@@ -41,7 +41,7 @@
     let programmes: string[] = Array.from(set);
     programmes.sort();
 
-    let [colorMapping, returnedLegendRows] = getColorMappingAndLegend(programmes, colors.current_milestone);
+    let [colorMapping, returnedLegendRows] = getColorMappingAndLegend(programmes, colors.funding_programmes);
 
     let color = constructMatchExpression(
       ["get", "funding_programme"],
