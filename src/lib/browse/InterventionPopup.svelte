@@ -31,4 +31,7 @@
   <p>Authority or region: {scheme.browse?.authority_or_region}</p>
   <p>Capital scheme ID: {scheme.browse?.capital_scheme_id}</p>
   <p>Funding programme: {scheme.browse?.funding_programme}</p>
+  {#if scheme.browse?.current_milestone}
+    <p>Current milestone: {scheme.browse?.current_milestone}</p>
+  {/if}
 </div>
