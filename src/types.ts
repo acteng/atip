@@ -69,6 +69,7 @@ export interface BrowseSchemeData {
   authority_or_region: string;
   capital_scheme_id: string;
   funding_programme: string;
+  current_milestone?: string;
 }
 
 export type PipelineType =
