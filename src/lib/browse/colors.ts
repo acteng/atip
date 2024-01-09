@@ -43,6 +43,17 @@ export const colors = {
     "#a6d854",
     "#ffd92f",
   ],
+
+  current_milestone: [
+    "#c6c6c6",
+    "#c6c6c6",
+    "#c6c6c6",
+    "#fbb862",
+    "#eddc76",
+    "#dafd9d",
+    "#76c384",
+    "#488f31"
+  ]
 };
 
 // For dense line layers, make individual lines easily distinguished when

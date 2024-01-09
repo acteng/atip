@@ -26,6 +26,7 @@
   {#if props.description}
     <p>{@html highlightFilter(props.description)}</p>
   {/if}
+  <p>{props.current_milestone}</p>
   <hr />
   <p>Part of scheme: {props.scheme_reference}</p>
   <p>Authority or region: {scheme.browse?.authority_or_region}</p>

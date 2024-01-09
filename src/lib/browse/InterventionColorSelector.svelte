@@ -15,34 +15,11 @@
     if (colorInterventionsAccordingTo == "interventionType") {
       color = colorInterventionsBySchema("v1");
       legendRows = schemaLegend("v1");
-    } else {
-      let set: Set<string> = new Set();
-      for (let x of $schemes.values()) {
-        if (x.browse?.funding_programme) {
-          set.add(x.browse.funding_programme);
-        }
-      }
-      let programmes: string[] = Array.from(set);
-      programmes.sort();
-
-      legendRows = [];
-      let colorMapping: { [key: string]: string } = {};
-      let i = 0;
-      for (let x of programmes) {
-        let color =
-          colors.funding_programmes[i++ % colors.funding_programmes.length];
-        colorMapping[x] = color;
-        legendRows.push([x, color]);
-      }
-
-      color = constructMatchExpression(
-        ["get", "funding_programme"],
-        colorMapping,
-        "grey"
-      );
-      legendRows = legendRows;
+    } else if (colorInterventionsAccordingTo == "fundingProgramme") {
+      color = styleByFundingProgramme();
+    } else if (colorInterventionsAccordingTo == "currentMilestone") {
+      color = styleByCurrentMilestone();
     }
-
     // TODO Plumb instead of setting
     $map.setPaintProperty("interventions-points", "circle-color", color);
     $map.setPaintProperty("interventions-lines", "line-color", color);
@@ -53,6 +30,66 @@
       color
     );
   }
+
+  function styleByFundingProgramme() {
+    let set: Set<string> = new Set();
+    for (let x of $schemes.values()) {
+      if (x.browse?.funding_programme) {
+        set.add(x.browse.funding_programme);
+      }
+    }
+    let programmes: string[] = Array.from(set);
+    programmes.sort();
+
+    legendRows = [];
+    let colorMapping: { [key: string]: string } = {};
+    let i = 0;
+    for (let x of programmes) {
+      let color =
+        colors.funding_programmes[i++ % colors.funding_programmes.length];
+      colorMapping[x] = color;
+      legendRows.push([x, color]);
+    }
+
+    let color = constructMatchExpression(
+      ["get", "funding_programme"],
+      colorMapping,
+      "grey"
+    );
+    legendRows = legendRows;
+    return color;
+  }
+
+  function styleByCurrentMilestone() {
+    let stageGates = [
+      "removed",
+      "no data",
+      "not progressed",
+      "preliminary design completed",
+      "feasability design completed",
+      "detailed design completed",
+      "consruction started",
+      "construction completed",
+    ];
+
+    legendRows = [];
+    let colorMapping: { [key: string]: string } = {};
+    let i = 0;
+    for (let x of stageGates) {
+      let color =
+        colors.current_milestone[i++ % colors.current_milestone.length];
+      colorMapping[x] = color;
+      legendRows.push([x, color]);
+    }
+
+    let color = constructMatchExpression(
+      ["get", "current_milestone"],
+      colorMapping,
+      "grey"
+    );
+    legendRows = legendRows;
+    return color;
+  }
 </script>
 
 <Select
@@ -61,6 +98,7 @@
   choices={[
     ["interventionType", "By intervention type"],
     ["fundingProgramme", "By funding programme"],
+    ["currentMilestone", "By current milestone"],
   ]}
   bind:value={colorInterventionsAccordingTo}
   on:change={changeStyle}
