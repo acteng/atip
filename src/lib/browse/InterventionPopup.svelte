@@ -4,7 +4,7 @@
 
   export let props: { [name: string]: any };
 
-  let scheme = $schemes.get(props.scheme_reference)!;
+  $: scheme = $schemes.get(props.scheme_reference)!;
 
   // When the user is filtering name/description by freeform text, highlight the matching pieces.
   function highlightFilter(input: string): string {
