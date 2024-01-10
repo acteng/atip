@@ -30,7 +30,7 @@ export function processInput(gj: SchemeCollection): Map<string, SchemeData> {
       // As we have more cases like this, revisit what's most performant.
       // @ts-ignore Extend InterventionProps with scheme_reference, current_milestone, and this
       feature.properties!.funding_programme = scheme.browse.funding_programme;
-      // @ts-ignore Extend
+      // @ts-ignore Same
       feature.properties!.current_milestone = scheme.browse.current_milestone;
       // Force numeric IDs (skipping 0) for hovering to work
       feature.id = id++;
