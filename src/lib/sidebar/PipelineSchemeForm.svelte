@@ -82,7 +82,7 @@
         ["cycling route", "Cycling route"],
         ["walking route", "Walking route"],
         ["shared-use route", "Shared-use route"],
-        ["cycling and walking route", "Cycling and walking route, but not shared use"],
+        ["cycling and walking route", "Cycling and walking route, not shared use"],
         ["area-based scheme", "Area-based scheme"],
         ["intersection", "Intersection/junction scheme"],
       ]}
