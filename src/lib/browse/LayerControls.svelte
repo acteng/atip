@@ -65,17 +65,21 @@
     </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Census">
-    <CensusOutputAreaLayerControl />
-    <ImdLayerControl />
+    <CheckboxGroup small>
+      <CensusOutputAreaLayerControl />
+      <ImdLayerControl />
+    </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Other">
-    <VehicleCountsLayerControl />
-    <PctLayerControl />
-    {#if appVersion() == "Private (development)"}
-      <RoadWidthsLayerControl />
-      <RoadSpeedsLayerControl />
-    {/if}
-    <PollutionLayerControl />
+    <CheckboxGroup small>
+      <VehicleCountsLayerControl />
+      <PctLayerControl />
+      {#if appVersion() == "Private (development)"}
+        <RoadWidthsLayerControl />
+        <RoadSpeedsLayerControl />
+      {/if}
+      <PollutionLayerControl />
+    </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Tools">
     <StreetViewTool bind:enabled={streetviewEnabled} />
