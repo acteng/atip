@@ -18,6 +18,7 @@
   import BusRoutesLayerControl from "./layers/lines/BusRoutes.svelte";
   import CyclePathsLayerControl from "./layers/lines/CyclePaths.svelte";
   import MrnLayerControl from "./layers/lines/MajorRoadNetwork.svelte";
+  import PavementWidthsLayerControl from "./layers/lines/PavementWidths.svelte";
   import PctLayerControl from "./layers/lines/PCT.svelte";
   import RoadSpeedsLayerControl from "./layers/lines/RoadSpeeds.svelte";
   import RoadWidthsLayerControl from "./layers/lines/RoadWidths.svelte";
@@ -76,6 +77,7 @@
       <PctLayerControl />
       {#if appVersion() == "Private (development)"}
         <RoadWidthsLayerControl />
+        <PavementWidthsLayerControl />
         <RoadSpeedsLayerControl />
       {/if}
       <PollutionLayerControl />
