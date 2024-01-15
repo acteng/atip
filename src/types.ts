@@ -41,7 +41,13 @@ export interface PipelineScheme {
   scheme_description: string;
 
   // TODO Check with DB schema
-  status: "aspiration" | "planned" | "in development" | "in construction" | "completed" | "";
+  status:
+    | "aspiration"
+    | "planned"
+    | "in development"
+    | "in construction"
+    | "completed"
+    | "";
   timescale: "short" | "medium" | "long" | "";
   timescale_year?: number;
   year_published?: number;
