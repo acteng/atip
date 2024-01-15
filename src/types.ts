@@ -33,6 +33,7 @@ export interface PipelineScheme {
     | "cycling route"
     | "walking route"
     | "shared-use route"
+    | "cycling and walking route"
     | "area-based scheme"
     | "intersection"
     | "";
@@ -40,7 +41,7 @@ export interface PipelineScheme {
   scheme_description: string;
 
   // TODO Check with DB schema
-  status: "planned" | "in development" | "in construction" | "completed" | "";
+  status: "aspiration" | "planned" | "in development" | "in construction" | "completed" | "";
   timescale: "short" | "medium" | "long" | "";
   timescale_year?: number;
   year_published?: number;
