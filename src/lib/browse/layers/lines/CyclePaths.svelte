@@ -5,8 +5,9 @@
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "lib/govuk";
+  import { Checkbox, CheckboxGroup } from "lib/govuk";
   import { constructMatchExpression, layerId } from "lib/maplibre";
+  import type { ExpressionSpecification } from "maplibre-gl";
   import {
     hoverStateFilter,
     LineLayer,
@@ -19,13 +20,27 @@
   let name = "cycle_paths";
 
   let legend = [
-    ["Separated tracks", colors.cycle_paths.track],
-    ["Unprotected lanes", colors.cycle_paths.lane],
-    ["Shared-use (segregated)", colors.cycle_paths.shared_use_segregated],
-    ["Shared-use (unsegregated)", colors.cycle_paths.shared_use_unsegregated],
+    ["track", "Separated tracks", colors.cycle_paths.track],
+    ["lane", "Unprotected lanes", colors.cycle_paths.lane],
+    [
+      "shared_use_segregated",
+      "Shared-use (segregated)",
+      colors.cycle_paths.shared_use_segregated,
+    ],
+    [
+      "shared_use_unsegregated",
+      "Shared-use (unsegregated)",
+      colors.cycle_paths.shared_use_unsegregated,
+    ],
   ];
 
-  let show = false;
+  let showGroup = false;
+  let showLayer: { [name: string]: boolean } = {
+    track: true,
+    lane: true,
+    shared_use_segregated: true,
+    shared_use_unsegregated: true,
+  };
 
   function tooltip(props: { [name: string]: any }): [string, string, string] {
     // @ts-ignore Write types for the feature properties
@@ -51,9 +66,16 @@
       "_blank"
     );
   }
+
+  function makeFilter(showLayer: {
+    [name: string]: boolean;
+  }): ExpressionSpecification {
+    let include = Object.keys(showLayer).filter((l) => showLayer[l]);
+    return ["in", ["get", "kind"], ["literal", include]];
+  }
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox id={name} bind:checked={showGroup}>
   Cycle paths
   <span slot="right">
     <HelpButton>
@@ -91,13 +113,16 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
-  {#each legend as [label, color]}
-    <div>
-      <ColorLegend {color} />
-      {label}
-    </div>
-  {/each}
+{#if showGroup}
+  <CheckboxGroup>
+    {#each legend as [kind, label, color]}
+      <Checkbox id={kind} bind:checked={showLayer[kind]}>
+        <ColorLegend {color} />
+        {label}
+      </Checkbox>
+    {/each}
+  </CheckboxGroup>
+  <hr />
 {/if}
 
 <VectorTileSource
@@ -121,8 +146,9 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: showGroup ? "visible" : "none",
     }}
+    filter={makeFilter(showLayer)}
     manageHoverState
     eventsIfTopMost
     hoverCursor="pointer"
