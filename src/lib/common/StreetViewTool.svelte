@@ -25,12 +25,14 @@
   }
 
   function off() {
-    $map.off("click", onClick);
-    $map.getCanvas().style.cursor = "inherit";
-    for (let helper of roadLayerHelpers) {
-      helper.returnToDefaultPaintValues($map);
+    if ($map) {
+      $map.off("click", onClick);
+      $map.getCanvas().style.cursor = "inherit";
+      for (let helper of roadLayerHelpers) {
+        helper.returnToDefaultPaintValues($map);
+      }
+      roadLayerHelpers = [];
     }
-    roadLayerHelpers = [];
   }
   onDestroy(off);
 
