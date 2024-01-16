@@ -56,7 +56,7 @@
       bind:map
       on:error={onError}
     >
-      {#if loaded}
+      {#if $mapStore}
         <ScaleControl />
         <NavigationControl position="bottom-right" visualizePitch />
         <slot />
