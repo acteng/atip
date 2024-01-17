@@ -73,3 +73,28 @@ test("scheme validations are updated", async () => {
   await checkPageLoaded(page);
   await expect(page.getByText("Missing some required data")).not.toBeVisible();
 });
+
+test("file started with v1 can be edited by adding", async () => {
+  // Load a file with no pipeline data, using the v1 schema
+  await page
+    .getByLabel("Add scheme from file")
+    .setInputFiles("tests/data/LAD_Adur.geojson");
+  // The first is for the blank default scheme; the second is the file we just loaded
+  await page.getByRole("button", { name: "Scheme details" }).nth(1).click();
+  // Make sure a pipeline-specific form shows up
+  await page
+    .getByRole("group", { name: "Scheme type" })
+    .getByText("Shared-use route")
+    .click();
+  //await page.getByRole('group', { name: 'Scheme type' }).locator('[id="scheme-typeshared-use\\ route"]').check();
+  //await page.getByLabel("In development").click();
+});
+
+test("file started with v1 can be edited by loading", async () => {
+  await page.getByText("Manage files").click();
+  await page
+    .getByLabel("Load GeoJSON file")
+    .setInputFiles("tests/data/LAD_Adur.geojson");
+  await page.getByRole("button", { name: "Scheme details" }).click();
+  await page.getByText("Shared-use route").click();
+});

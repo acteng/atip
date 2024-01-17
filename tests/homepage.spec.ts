@@ -32,3 +32,15 @@ test("schema is plumbed along to the sketch page", async ({ page }) => {
     /.*scheme.html\?authority=LAD_Adur&schema=pipeline/
   );
 });
+
+test("a v1 file with a pipeline hint redirects to pipeline mode", async ({
+  page,
+}) => {
+  await page.goto("/index.html?schema=pipeline");
+  await page
+    .getByLabel("Or upload an ATIP GeoJSON file")
+    .setInputFiles("tests/data/LAD_Adur.geojson");
+  await expect(page).toHaveURL(
+    /.*scheme.html\?authority=LAD_Adur&schema=pipeline/
+  );
+});
