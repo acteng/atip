@@ -86,8 +86,6 @@ test("file started with v1 can be edited by adding", async () => {
     .getByRole("group", { name: "Scheme type" })
     .getByText("Shared-use route")
     .click();
-  //await page.getByRole('group', { name: 'Scheme type' }).locator('[id="scheme-typeshared-use\\ route"]').check();
-  //await page.getByLabel("In development").click();
 });
 
 test("file started with v1 can be edited by loading", async () => {
