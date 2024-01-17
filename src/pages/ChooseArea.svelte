@@ -100,7 +100,10 @@
         }
       }
     }
-    return "v1";
+
+    // The file itself doesn't have any data saying what schema it belongs to.
+    // Trust the URL instead.
+    return $schemaStore;
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
