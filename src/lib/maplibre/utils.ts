@@ -197,6 +197,7 @@ export function addLineStringEndpoints(
           type: "Feature",
           properties: {
             endpoint: true,
+            scheme_reference: f.properties.scheme_reference,
           },
           geometry: {
             type: "Point",

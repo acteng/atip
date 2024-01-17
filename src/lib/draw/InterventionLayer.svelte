@@ -44,7 +44,6 @@
 
   $: clickable = $mode.mode == "list";
 
-  // TODO Can't use this for the interventions-lines-endpoints layer, for unknown reasons
   $: showSchemes = getShowSchemes($hideSchemes);
   function getShowSchemes(schemesToHide: Set<string>): ExpressionSpecification {
     // TODO Can't get https://maplibre.org/maplibre-style-spec/expressions/#in to work
@@ -159,7 +158,7 @@
   </LineLayer>
   <CircleLayer
     {...layerId("interventions-lines-endpoints")}
-    filter={["==", ["get", "endpoint"], true]}
+    filter={["all", ["==", ["get", "endpoint"], true], showSchemes]}
     paint={{
       "circle-radius": 0.5 * lineWidth,
       "circle-opacity": 0,
