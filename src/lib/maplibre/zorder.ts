@@ -137,4 +137,6 @@ const layerZorder = [
 
   // TODO This might look nicer lower
   "georeferenced-image",
+
+  "cover-interactive-layers",
 ];
