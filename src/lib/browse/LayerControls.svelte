@@ -7,6 +7,8 @@
     StreetViewTool,
   } from "lib/common";
   import { CheckboxGroup } from "lib/govuk";
+  import { layerId } from "lib/maplibre";
+  import { FillLayer, GeoJSON } from "svelte-maplibre";
   import CensusOutputAreaLayerControl from "./layers/areas/CensusOutputAreas.svelte";
   import CombinedAuthoritiesLayerControl from "./layers/areas/CombinedAuthorities.svelte";
   import ImdLayerControl from "./layers/areas/IMD.svelte";
@@ -35,6 +37,26 @@
   // Workaround for https://github.com/sveltejs/svelte/issues/7630
   $: streetviewEnabled = !$interactiveMapLayersEnabled;
   $: interactiveMapLayersEnabled.set(!streetviewEnabled);
+
+  // When StreetView is on, disable interactive layers -- no hovering or
+  // clicking behavior. Achieve this by enabling an invisible layer on top of
+  // everything.
+  let coverEverything = {
+    type: "Feature" as const,
+    properties: {},
+    geometry: {
+      type: "Polygon" as const,
+      coordinates: [
+        [
+          [180.0, 90.0],
+          [-180.0, 90.0],
+          [-180.0, -90.0],
+          [180.0, -90.0],
+          [180.0, 90.0],
+        ],
+      ],
+    },
+  };
 </script>
 
 <CollapsibleCard label="Layers" open>
@@ -89,3 +111,16 @@
   </CollapsibleCard>
   <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />
 </CollapsibleCard>
+
+<GeoJSON data={coverEverything}>
+  <FillLayer
+    {...layerId("cover-interactive-layers")}
+    paint={{
+      "fill-color": "black",
+      "fill-opacity": 0.0,
+    }}
+    layout={{
+      visibility: $interactiveMapLayersEnabled ? "none" : "visible",
+    }}
+  />
+</GeoJSON>
