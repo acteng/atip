@@ -42,7 +42,11 @@ export function getRoadLayerHelpers(): LayerHelper[] {
   return get(mapStore)
     .getStyle()
     .layers.filter((layer) => {
-      return roadLayerIds.includes(layer.id);
+      // uk-openzoomstack-light has many relevant layers, best identified by source-layer
+      return (
+        // @ts-ignore source-layer sometimes exists
+        roadLayerIds.includes(layer.id) || layer["source-layer"] == "roads"
+      );
     })
     .map((layer) => {
       return new LayerHelper(layer);
