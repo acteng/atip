@@ -127,6 +127,7 @@ export function getStyleChoices(): [string, string][] {
     ["streets", "MapTiler Streets"],
     ["hybrid", "MapTiler Satellite"],
     ["dataviz", "MapTiler Dataviz"],
+    ["uk-openzoomstack-light", "OS Open Zoomstack"],
   ]);
 }
 
@@ -134,7 +135,12 @@ export async function getStyleSpecification(
   style: string
 ): Promise<string | StyleSpecification> {
   // MapTiler vector styles
-  if (style == "streets" || style == "hybrid" || style == "dataviz") {
+  if (
+    style == "streets" ||
+    style == "hybrid" ||
+    style == "dataviz" ||
+    style == "uk-openzoomstack-light"
+  ) {
     return `https://api.maptiler.com/maps/${style}/style.json?key=${
       import.meta.env.VITE_MAPTILER_API_KEY
     }`;
