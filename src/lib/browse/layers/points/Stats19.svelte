@@ -242,3 +242,9 @@
     </Popup>
   </CircleLayer>
 </VectorTileSource>
+
+<style>
+  input {
+    width: 4em;
+  }
+</style>
