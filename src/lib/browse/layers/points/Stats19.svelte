@@ -23,6 +23,7 @@
 
   let filterPedestrians = true;
   let filterCyclists = true;
+  let filterHorseRiders = true;
   let filterOther = false;
   let minYear = 2017;
   let maxYear = 2022;
@@ -32,6 +33,7 @@
     maxYear,
     filterPedestrians,
     filterCyclists,
+    filterHorseRiders,
     filterOther
   );
   function makeFilter(
@@ -39,7 +41,8 @@
     _b: number,
     _c: boolean,
     _d: boolean,
-    _e: boolean
+    _e: boolean,
+    _f: boolean
   ): ExpressionSpecification {
     let includeTypes: ExpressionSpecification = ["any"];
     if (filterPedestrians) {
@@ -47,6 +50,9 @@
     }
     if (filterCyclists) {
       includeTypes.push(["get", "cyclist"]);
+    }
+    if (filterHorseRiders) {
+      includeTypes.push(["get", "horse_rider"]);
     }
     if (filterOther) {
       includeTypes.push(["get", "other"]);
@@ -67,6 +73,9 @@
     }
     if (props.cyclist) {
       list.push("cyclist");
+    }
+    if (props.horse_rider) {
+      list.push("horse rider");
     }
     if (props.other) {
       list.push("other");
@@ -147,6 +156,7 @@
           Approximately 150 collisions from the source data aren't included, due
           to problems with the recorded location
         </li>
+        <li>The "pedestrians" category also include mobility scooters</li>
         <li>
           All limitations <ExternalLink
             href="https://www.gov.uk/guidance/road-accident-and-safety-statistics-guidance"
@@ -171,6 +181,9 @@
       </Checkbox>
       <Checkbox id="stats19-cyclists" bind:checked={filterCyclists}>
         Cyclists
+      </Checkbox>
+      <Checkbox id="stats19-horse-riders" bind:checked={filterHorseRiders}>
+        Horse riders
       </Checkbox>
       <Checkbox id="stats19-other" bind:checked={filterOther}>Other</Checkbox>
     </CheckboxGroup>
