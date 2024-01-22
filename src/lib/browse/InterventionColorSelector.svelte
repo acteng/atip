@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Legend } from "lib/common";
+  import { CollapsibleCard, Legend } from "lib/common";
   import { Select } from "lib/govuk";
   import { constructMatchExpression } from "lib/maplibre";
   import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
@@ -112,4 +112,6 @@
   on:change={changeStyle}
 />
 
-<Legend rows={legendRows} />
+<CollapsibleCard label="Legend">
+  <Legend rows={legendRows} />
+</CollapsibleCard>

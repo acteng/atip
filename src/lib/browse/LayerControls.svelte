@@ -32,6 +32,7 @@
   import RailwayStationsLayerControl from "./layers/points/RailwayStations.svelte";
   import SchoolsLayerControl from "./layers/points/Schools.svelte";
   import SportsSpacesLayerControl from "./layers/points/SportsSpaces.svelte";
+  import Stats19LayerControl from "./layers/points/Stats19.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
   import { interactiveMapLayersEnabled } from "./stores";
 
@@ -98,6 +99,7 @@
   <CollapsibleCard label="Other">
     <CheckboxGroup small>
       <VehicleCountsLayerControl />
+      <Stats19LayerControl />
       <PctLayerControl />
       {#if appVersion() == "Private (development)"}
         <RoadWidthsLayerControl />
