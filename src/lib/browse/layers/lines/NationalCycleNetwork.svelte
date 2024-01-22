@@ -14,7 +14,6 @@
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
-  import OsOglLicense from "../OsOglLicense.svelte";
 
   let name = "national_cycle_network";
   let color = colors.national_cycle_network;
