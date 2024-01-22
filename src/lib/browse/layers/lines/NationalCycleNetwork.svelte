@@ -47,7 +47,7 @@
     eventsIfTopMost
     paint={{
       "line-color": color,
-      "line-width": 7,
+      "line-width": 4,
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
