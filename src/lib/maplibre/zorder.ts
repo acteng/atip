@@ -77,6 +77,7 @@ const layerZorder = [
   // Then optional linear layers
   "mrn",
   "bus_routes",
+  "national_cycle_network",
   "cycle_paths",
   "pct_commute",
   "pct_school",
