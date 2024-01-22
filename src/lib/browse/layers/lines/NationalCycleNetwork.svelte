@@ -58,47 +58,47 @@
       <ul>
         {#if props.Desc_}
           <li>
-            Description: {props.Desc_}
+            Description: <b>{props.Desc_}</b>
           </li>
         {/if}
         {#if props.Greenway}
           <li>
-            Is greenway: {props.Greenway}
+            Is greenway: <b>{props.Greenway}</b>
           </li>
         {/if}
         {#if props.RouteType}
           <li>
-            Route type: {props.RouteType}
+            Route type: <b>{props.RouteType}</b>
           </li>
         {/if}
         {#if props.RouteNo}
           <li>
-            Route number: {props.RouteNo}
+            Route number: <b>{props.RouteNo}</b>
           </li>
         {/if}
         {#if props.RouteCat}
           <li>
-            Route Category: {props.RouteCat}
+            Route Category: <b>{props.RouteCat}</b>
           </li>
         {/if}
         {#if props.OpenStatus}
           <li>
-            Open Status: {props.OpenStatus}
+            Open Status: <b>{props.OpenStatus}</b>
           </li>
         {/if}
         {#if props.Surface}
           <li>
-            Surface: {props.Surface}
+            Surface: <b>{props.Surface}</b>
           </li>
         {/if}
         {#if props.Quality}
           <li>
-            Quality: {props.Quality}
+            Quality: <b>{props.Quality}</b>
           </li>
         {/if}
         {#if props.RoadClass}
           <li>
-            Road Class: {props.RoadClass}
+            Road Class: <b>{props.RoadClass}</b>
           </li>
         {/if}
       </ul>
