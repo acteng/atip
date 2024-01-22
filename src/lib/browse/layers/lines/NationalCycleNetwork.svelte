@@ -89,8 +89,8 @@
         {#if props.Surface}
           <li>
             Surface: {props.Surface}
-            </li>
-            {/if}
+          </li>
+        {/if}
         {#if props.Quality}
           <li>
             Quality: {props.Quality}
