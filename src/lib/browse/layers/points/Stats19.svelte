@@ -108,6 +108,11 @@
     7: "Walking along in carriageway, facing traffic",
     8: "Walking along in carriageway, back to traffic",
   };
+  let severity: { [name: number]: string } = {
+    1: "Fatal",
+    2: "Serious",
+    3: "Slight",
+  };
 
   let fatalColor = colors.sequential_low_to_high[4];
   let seriousColor = colors.sequential_low_to_high[2];
@@ -219,7 +224,7 @@
         Year: <b>{props.year}</b>
       </p>
       <p>
-        Severity: <b>{props.severity}</b>
+        Severity: <b>{severity[props.severity]}</b>
       </p>
       <p>
         Casualties: <b>{casualtyTypes(props)}</b>
