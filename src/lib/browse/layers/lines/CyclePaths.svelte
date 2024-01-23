@@ -114,15 +114,16 @@
   </span>
 </Checkbox>
 {#if showGroup}
-  <CheckboxGroup>
-    {#each legend as [kind, label, color]}
-      <Checkbox id={kind} bind:checked={showLayer[kind]}>
-        <ColorLegend {color} />
-        {label}
-      </Checkbox>
-    {/each}
-  </CheckboxGroup>
-  <hr />
+  <div style="border: 1px solid black; padding: 8px;">
+    <CheckboxGroup>
+      {#each legend as [kind, label, color]}
+        <Checkbox id={kind} bind:checked={showLayer[kind]}>
+          <ColorLegend {color} />
+          {label}
+        </Checkbox>
+      {/each}
+    </CheckboxGroup>
+  </div>
 {/if}
 
 <VectorTileSource
