@@ -24,6 +24,8 @@
   let filterAuthority = "";
   let fundingProgrammes: [string, string][] = [];
   let filterFundingProgramme = "";
+  let currentMilestones: [string, string][] = [];
+  let filterCurrentMilestone = "";
 
   // Stats about filtered schemes
   let counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
@@ -31,6 +33,7 @@
   onMount(() => {
     let set1: Set<string> = new Set();
     let set2: Set<string> = new Set();
+    let set3: Set<string> = new Set();
     for (let x of $schemes.values()) {
       if (x.browse?.authority_or_region) {
         set1.add(x.browse.authority_or_region);
@@ -38,18 +41,24 @@
       if (x.browse?.funding_programme) {
         set2.add(x.browse.funding_programme);
       }
+      if (x.browse?.current_milestone) {
+        set3.add(x.browse.current_milestone);
+      }
     }
     authorities = Array.from(set1.entries());
     authorities.sort();
     fundingProgrammes = Array.from(set2.entries());
     fundingProgrammes.sort();
+    currentMilestones = Array.from(set3.entries());
+    currentMilestones.sort();
   });
 
   // When any filters change, update schemesToBeShown
   function filtersUpdated(
     filterTextCopy: string,
     filterAuthority: string,
-    filterFundingProgramme: string
+    filterFundingProgramme: string,
+    filterCurrentMilestone: string,
   ) {
     let filterNormalized = filterTextCopy.toLowerCase();
     let filterFeatures = (feature: FeatureUnion) => {
@@ -63,7 +72,7 @@
       ) {
         return false;
       }
-      if (filterAuthority || filterFundingProgramme) {
+      if (filterAuthority || filterFundingProgramme || filterCurrentMilestone) {
         let scheme = $schemes.get(feature.properties.scheme_reference!)!;
         if (
           filterAuthority &&
@@ -74,6 +83,12 @@
         if (
           filterFundingProgramme &&
           scheme.browse?.funding_programme != filterFundingProgramme
+        ) {
+          return false;
+        }
+        if (
+          filterCurrentMilestone &&
+          scheme.browse?.current_milestone != filterCurrentMilestone
         ) {
           return false;
         }
@@ -121,7 +136,7 @@
     $schemesGj = $schemesGj;
     counts = counts;
   }
-  $: filtersUpdated($filterText, filterAuthority, filterFundingProgramme);
+  $: filtersUpdated($filterText, filterAuthority, filterFundingProgramme, filterCurrentMilestone);
 
   function metersToMiles(x: number): number {
     return x * 0.000621371;
@@ -142,6 +157,13 @@
     choices={fundingProgrammes}
     emptyOption
     bind:value={filterFundingProgramme}
+  />
+  <Select
+    label="Current milestone"
+    id="filterCurrentMilestone"
+    choices={currentMilestones}
+    emptyOption
+    bind:value={filterCurrentMilestone}
   />
   <FormElement label="Intervention name or description" id="filterText">
     <input
