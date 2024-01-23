@@ -20,6 +20,7 @@
   import BusRoutesLayerControl from "./layers/lines/BusRoutes.svelte";
   import CyclePathsLayerControl from "./layers/lines/CyclePaths.svelte";
   import MrnLayerControl from "./layers/lines/MajorRoadNetwork.svelte";
+  import NationalCycleNetworkLayerControl from "./layers/lines/NationalCycleNetwork.svelte";
   import PavementWidthsLayerControl from "./layers/lines/PavementWidths.svelte";
   import PctLayerControl from "./layers/lines/PCT.svelte";
   import RoadSpeedsLayerControl from "./layers/lines/RoadSpeeds.svelte";
@@ -72,6 +73,7 @@
   <CollapsibleCard label="Existing infrastructure">
     <CheckboxGroup small>
       <CyclePathsLayerControl />
+      <NationalCycleNetworkLayerControl />
       <MrnLayerControl />
       <BusRoutesLayerControl />
       <CycleParkingLayerControl />
