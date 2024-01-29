@@ -9,4 +9,5 @@ export const schemesGj: Writable<SchemeCollection> = writable({
 export const schemes: Writable<Map<string, SchemeData>> = writable(new Map());
 
 export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
-export const filterText: Writable<string> = writable("");
+export const filterInterventionText: Writable<string> = writable("");
+export const filterSchemeText: Writable<string> = writable("");
