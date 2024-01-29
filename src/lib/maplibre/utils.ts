@@ -186,24 +186,30 @@ export async function getStyleSpecification(
 }
 
 // Returns all the input features, additionally with a new point for every
-// LineString endpoint, with an endpoint=true property.
+// LineString endpoint, with an endpoint=true property. Note this drops any
+// foreign members on the input, and that it reuses object references of the
+// input for performance, rather than making a defensive deep copy.
 export function addLineStringEndpoints(
   input: FeatureCollection
 ): FeatureCollection {
-  let copy = JSON.parse(JSON.stringify(input));
+  let output: FeatureCollection = {
+    type: "FeatureCollection",
+    features: [],
+  };
   // Add points for the ends of every LineString
-  let endpoints = [];
-  for (let f of copy.features) {
-    if (f.geometry.type == "LineString" && !f.properties.hide_while_editing) {
+  for (let f of input.features) {
+    output.features.push(f);
+
+    if (f.geometry.type == "LineString" && !f.properties?.hide_while_editing) {
       for (let pt of [
         f.geometry.coordinates[0],
         f.geometry.coordinates[f.geometry.coordinates.length - 1],
       ]) {
-        endpoints.push({
+        output.features.push({
           type: "Feature",
           properties: {
             endpoint: true,
-            scheme_reference: f.properties.scheme_reference,
+            scheme_reference: f.properties?.scheme_reference,
           },
           geometry: {
             type: "Point",
@@ -213,8 +219,7 @@ export function addLineStringEndpoints(
       }
     }
   }
-  copy.features = copy.features.concat(endpoints);
-  return copy;
+  return output;
 }
 
 // Properties are guaranteed to exist
