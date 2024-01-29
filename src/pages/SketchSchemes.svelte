@@ -42,7 +42,7 @@
   // releases.
   let routeSnapperUrl = `${
     import.meta.env.VITE_RESOURCE_BASE
-  }/route-snappers/v2.5/${authorityName}.bin.gz`;
+  }/route-snappers/v2.6/${authorityName}.bin.gz`;
 
   function toggleAbout() {
     showAbout = !showAbout;
