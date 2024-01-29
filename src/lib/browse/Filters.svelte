@@ -10,7 +10,12 @@
   import { onMount } from "svelte";
   import type { FeatureUnion } from "types";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
-  import { filterText, schemes, schemesGj } from "./stores";
+  import {
+    filterInterventionText,
+    filterSchemeText,
+    schemes,
+    schemesGj,
+  } from "./stores";
 
   // NOTE: If schemesGj changes, re-create this component
 
@@ -55,24 +60,33 @@
 
   // When any filters change, update schemesToBeShown
   function filtersUpdated(
-    filterTextCopy: string,
+    filterInterventionTextCopy: string,
+    filterSchemeTextCopy: string,
     filterAuthority: string,
     filterFundingProgramme: string,
-    filterCurrentMilestone: string,
+    filterCurrentMilestone: string
   ) {
-    let filterNormalized = filterTextCopy.toLowerCase();
+    let filterInterventionNormalized = filterInterventionTextCopy.toLowerCase();
+    let filterSchemeNormalized = filterSchemeTextCopy.toLowerCase();
     let filterFeatures = (feature: FeatureUnion) => {
       // Only the name and description fields have anything worth filtering
       if (
-        filterNormalized &&
-        !feature.properties.name?.toLowerCase().includes(filterNormalized) &&
+        filterInterventionNormalized &&
+        !feature.properties.name
+          ?.toLowerCase()
+          .includes(filterInterventionNormalized) &&
         !feature.properties.description
           ?.toLowerCase()
-          .includes(filterNormalized)
+          .includes(filterInterventionNormalized)
       ) {
         return false;
       }
-      if (filterAuthority || filterFundingProgramme || filterCurrentMilestone) {
+      if (
+        filterSchemeNormalized ||
+        filterAuthority ||
+        filterFundingProgramme ||
+        filterCurrentMilestone
+      ) {
         let scheme = $schemes.get(feature.properties.scheme_reference!)!;
         if (
           filterAuthority &&
@@ -89,6 +103,17 @@
         if (
           filterCurrentMilestone &&
           scheme.browse?.current_milestone != filterCurrentMilestone
+        ) {
+          return false;
+        }
+        if (
+          filterSchemeNormalized &&
+          !scheme.scheme_reference
+            .toLowerCase()
+            .includes(filterSchemeNormalized) &&
+          !(scheme.scheme_name ?? "")
+            .toLowerCase()
+            .includes(filterSchemeNormalized)
         ) {
           return false;
         }
@@ -109,11 +134,13 @@
       }
       // If there's free-text, only show interventions matching it within a scheme
       if (
-        filterNormalized &&
-        !feature.properties.name?.toLowerCase().includes(filterNormalized) &&
+        filterInterventionNormalized &&
+        !feature.properties.name
+          ?.toLowerCase()
+          .includes(filterInterventionNormalized) &&
         !feature.properties.description
           ?.toLowerCase()
-          .includes(filterNormalized)
+          .includes(filterInterventionNormalized)
       ) {
         return false;
       }
@@ -136,7 +163,13 @@
     $schemesGj = $schemesGj;
     counts = counts;
   }
-  $: filtersUpdated($filterText, filterAuthority, filterFundingProgramme, filterCurrentMilestone);
+  $: filtersUpdated(
+    $filterInterventionText,
+    $filterSchemeText,
+    filterAuthority,
+    filterFundingProgramme,
+    filterCurrentMilestone
+  );
 
   function metersToMiles(x: number): number {
     return x * 0.000621371;
@@ -165,14 +198,30 @@
     emptyOption
     bind:value={filterCurrentMilestone}
   />
-  <FormElement label="Intervention name or description" id="filterText">
+  <FormElement
+    label="Intervention name or description"
+    id="filterInterventionText"
+  >
     <input
       type="text"
       class="govuk-input govuk-input--width-10"
-      id="filterText"
-      bind:value={$filterText}
+      id="filterInterventionText"
+      bind:value={$filterInterventionText}
     />
-    <SecondaryButton on:click={() => ($filterText = "")}>Clear</SecondaryButton>
+    <SecondaryButton on:click={() => ($filterInterventionText = "")}>
+      Clear
+    </SecondaryButton>
+  </FormElement>
+  <FormElement label="Scheme name or reference" id="filterSchemeText">
+    <input
+      type="text"
+      class="govuk-input govuk-input--width-10"
+      id="filterSchemeText"
+      bind:value={$filterSchemeText}
+    />
+    <SecondaryButton on:click={() => ($filterSchemeText = "")}>
+      Clear
+    </SecondaryButton>
   </FormElement>
   <InterventionColorSelector />
 </CollapsibleCard>
