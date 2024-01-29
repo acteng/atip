@@ -72,7 +72,6 @@ export interface FundingSources {
 }
 
 export interface BrowseSchemeData {
-  num_features: number;
   authority_or_region: string;
   capital_scheme_id: string;
   funding_programme: string;

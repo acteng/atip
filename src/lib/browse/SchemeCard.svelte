@@ -40,8 +40,9 @@
 </script>
 
 <CollapsibleCard
-  label={`${scheme.scheme_reference}: ${scheme.browse?.num_features} features`}
+  label={`${scheme.scheme_name}`}
 >
+  <p>Scheme reference: {scheme.scheme_reference}</p>
   <p>Authority or region: {scheme.browse?.authority_or_region}</p>
   <p>Capital scheme ID: {scheme.browse?.capital_scheme_id}</p>
   <p>Funding programme: {scheme.browse?.funding_programme}</p>
