@@ -1,7 +1,6 @@
 <script lang="ts">
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
-  import AppVersion from "lib/browse/AppVersion.svelte";
   import { processInput } from "lib/browse/data";
   import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
@@ -17,9 +16,10 @@
     Layout,
     LoggedIn,
     MapLibreMap,
+    Modal,
     ZoomOutMap,
   } from "lib/common";
-  import { ErrorMessage } from "lib/govuk";
+  import { ErrorMessage, SecondaryButton } from "lib/govuk";
   import { mapStyle } from "stores";
   import { onMount } from "svelte";
 
@@ -34,6 +34,7 @@
 
   let schemesToBeShown: Set<string> = new Set();
   let showSchemes = true;
+  let showSchemeNotes = false;
 
   function loadFile(text: string) {
     try {
@@ -52,10 +53,24 @@
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$schemesGj} />
     </div>
-    <AppVersion />
+    <p>App version: {appVersion()}</p>
     <LoggedIn />
     {#if appVersion() == "Private (development)"}
       <LoadRemoteSchemeData {loadFile} />
+    {/if}
+    {#if $schemesGj.notes}
+      <SecondaryButton on:click={() => (showSchemeNotes = true)}>
+        About the scheme data
+      </SecondaryButton>
+      <Modal title="About this scheme data" bind:open={showSchemeNotes}>
+        <div class="govuk-prose">
+          <ul>
+            {#each $schemesGj.notes as note}
+              <li>{note}</li>
+            {/each}
+          </ul>
+        </div>
+      </Modal>
     {/if}
     <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />
     <ErrorMessage {errorMessage} />

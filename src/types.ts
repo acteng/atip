@@ -12,6 +12,7 @@ export interface SchemeCollection {
   origin?: string;
   // Keyed by scheme_reference, which doesn't change over the lifetime of the sketch tool
   schemes: { [reference: string]: SchemeData };
+  notes?: string[];
 }
 
 export interface SchemeData {
