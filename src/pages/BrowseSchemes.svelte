@@ -67,7 +67,7 @@
           <p>Please note there are data quality caveats for all scheme data:</p>
           <ul>
             {#each $schemesGj.notes as note}
-              <li>{note}</li>
+              <li><p>{note}</p></li>
             {/each}
           </ul>
         </div>
