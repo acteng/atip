@@ -120,3 +120,17 @@ export async function parseCriticalIssuesExcel(
   }
   return gj;
 }
+
+export function getFundingProgrammesForColouringAndFiltering(): string[] {
+  return fundingProgrammesForColouringAndFiltering;
+}
+
+export const fundingProgrammesForColouringAndFiltering: string[] = [
+  "ATF2",
+  "ATF2 or ATF3",
+  "ATF3",
+  "ATF4",
+  "ATF4E",
+  "Planned pipeline",
+  "Other",
+];

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fundingProgrammesForColouringAndFiltering } from "lib/browse/data";
   import { CollapsibleCard } from "lib/common";
   import {
     Checkbox,
@@ -28,6 +29,8 @@
   let authorities: [string, string][] = [];
   let filterAuthority = "";
   let fundingProgrammes: [string, string][] = [];
+  let atfFundingProgrammes: string[] =
+    fundingProgrammesForColouringAndFiltering.slice(0, -1);
   let filterFundingProgramme = "";
   let currentMilestones: [string, string][] = [];
   let filterCurrentMilestone = "";
@@ -52,8 +55,9 @@
     }
     authorities = Array.from(set1.entries());
     authorities.sort();
-    fundingProgrammes = Array.from(set2.entries());
-    fundingProgrammes.sort();
+    fundingProgrammes = fundingProgrammesForColouringAndFiltering.map(
+      (value: string) => [value, value]
+    );
     currentMilestones = Array.from(set3.entries());
     currentMilestones.sort();
   });
@@ -95,8 +99,13 @@
           return false;
         }
         if (
-          filterFundingProgramme &&
-          scheme.browse?.funding_programme != filterFundingProgramme
+          (filterFundingProgramme &&
+            filterFundingProgramme !== "Other" &&
+            scheme.browse?.funding_programme != filterFundingProgramme) ||
+          (filterFundingProgramme === "Other" &&
+            atfFundingProgrammes.includes(
+              scheme.browse?.funding_programme ?? ""
+            ))
         ) {
           return false;
         }

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fundingProgrammesForColouringAndFiltering } from "lib/browse/data";
   import { CollapsibleCard, Legend } from "lib/common";
   import { Select } from "lib/govuk";
   import { constructMatchExpression } from "lib/maplibre";
@@ -6,10 +7,11 @@
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import { map } from "stores";
   import { colors } from "./colors";
-  import { schemes } from "./stores";
 
-  let colorInterventionsAccordingTo = "interventionType";
+  let colorInterventionsAccordingTo = "fundingProgramme";
+  console.log("funding programme");
   let legendRows = schemaLegend("v1");
+  changeStyle();
 
   function changeStyle() {
     let color;
@@ -33,17 +35,10 @@
   }
 
   function styleByFundingProgramme(): DataDrivenPropertyValueSpecification<string> {
-    let set: Set<string> = new Set();
-    for (let x of $schemes.values()) {
-      if (x.browse?.funding_programme) {
-        set.add(x.browse.funding_programme);
-      }
-    }
-    let programmes: string[] = Array.from(set);
-    programmes.sort();
+    let fundingProgrammes: string[] = fundingProgrammesForColouringAndFiltering;
 
     let [colorMapping, returnedLegendRows] = getColorMappingAndLegend(
-      programmes,
+      fundingProgrammes,
       colors.funding_programmes
     );
 
@@ -104,8 +99,8 @@
   label="Color interventions"
   id="colorInterventions"
   choices={[
-    ["interventionType", "By intervention type"],
     ["fundingProgramme", "By funding programme"],
+    ["interventionType", "By intervention type"],
     ["currentMilestone", "By current milestone"],
   ]}
   bind:value={colorInterventionsAccordingTo}
