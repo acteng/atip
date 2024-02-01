@@ -1,16 +1,12 @@
 <script lang="ts">
   import { CollapsibleCard, Legend } from "lib/common";
   import { Select } from "lib/govuk";
-  import { constructMatchExpression } from "lib/maplibre";
-  import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import { map } from "stores";
-  import { colors } from "./colors";
-  import { fundingProgrammesForColouringAndFiltering } from "./data";
+  import { styleByCurrentMilestone, styleByFundingProgramme } from "./colors";
 
   let colorInterventionsAccordingTo = "fundingProgramme";
   let legendRows = schemaLegend("v1");
-  changeStyle();
 
   function changeStyle() {
     let color;
@@ -18,9 +14,9 @@
       color = colorInterventionsBySchema("v1");
       legendRows = schemaLegend("v1");
     } else if (colorInterventionsAccordingTo == "fundingProgramme") {
-      color = styleByFundingProgramme();
+      [color, legendRows] = styleByFundingProgramme();
     } else if (colorInterventionsAccordingTo == "currentMilestone") {
-      color = styleByCurrentMilestone();
+      [color, legendRows] = styleByCurrentMilestone();
     }
     // TODO Plumb instead of setting
     $map.setPaintProperty("interventions-points", "circle-color", color);
@@ -31,64 +27,6 @@
       "line-color",
       color
     );
-  }
-
-  function styleByFundingProgramme(): DataDrivenPropertyValueSpecification<string> {
-    let [colorMapping, returnedLegendRows] = getColorMappingAndLegend(
-      fundingProgrammesForColouringAndFiltering,
-      colors.funding_programmes
-    );
-
-    let color = constructMatchExpression(
-      ["get", "funding_programme"],
-      colorMapping,
-      "grey"
-    );
-    legendRows = returnedLegendRows;
-    return color;
-  }
-
-  function styleByCurrentMilestone(): DataDrivenPropertyValueSpecification<string> {
-    let stageGates = [
-      "removed",
-      "no data",
-      "not progressed",
-      "superseded",
-      "preliminary design completed",
-      "feasability design completed",
-      "detailed design completed",
-      "consruction started",
-      "construction completed",
-    ];
-
-    let [colorMapping, returnedLegendRows] = getColorMappingAndLegend(
-      stageGates,
-      colors.current_milestone
-    );
-
-    let color = constructMatchExpression(
-      ["get", "current_milestone"],
-      colorMapping,
-      "grey"
-    );
-    legendRows = returnedLegendRows;
-    return color;
-  }
-
-  function getColorMappingAndLegend(
-    keys: string[],
-    colorList: string[]
-  ): [{ [key: string]: string }, [string, string][]] {
-    let legendRows: [string, string][] = [];
-    let colorMapping: { [key: string]: string } = {};
-    let i = 0;
-    for (let x of keys) {
-      let color = colorList[i++ % colorList.length];
-      colorMapping[x] = color;
-      legendRows.push([x, color]);
-    }
-
-    return [colorMapping, legendRows];
   }
 </script>
 

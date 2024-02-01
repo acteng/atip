@@ -9,7 +9,6 @@
     layerId,
   } from "lib/maplibre";
   import type { ExpressionSpecification } from "maplibre-gl";
-  import { colorInterventionsBySchema } from "schemas";
   import {
     CircleLayer,
     FillLayer,
@@ -17,12 +16,13 @@
     hoverStateFilter,
     LineLayer,
   } from "svelte-maplibre";
+  import { styleByFundingProgramme } from "./colors";
   import InterventionPopup from "./InterventionPopup.svelte";
   import { schemesGj } from "./stores";
 
   export let showSchemes: boolean;
 
-  let colorInterventions = colorInterventionsBySchema("v1");
+  let [colorInterventions] = styleByFundingProgramme();
 
   $: gj = addLineStringEndpoints($schemesGj);
 
