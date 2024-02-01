@@ -9,6 +9,7 @@
   } from "lib/govuk";
   import { onMount } from "svelte";
   import type { FeatureUnion } from "types";
+  import { fundingProgrammesForColouringAndFiltering } from "./data";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
   import {
     filterInterventionText,
@@ -28,6 +29,9 @@
   let authorities: [string, string][] = [];
   let filterAuthority = "";
   let fundingProgrammes: [string, string][] = [];
+  let knownFundingProgrammes: Set<string> = new Set(
+    fundingProgrammesForColouringAndFiltering.slice(0, -1)
+  );
   let filterFundingProgramme = "";
   let currentMilestones: [string, string][] = [];
   let filterCurrentMilestone = "";
@@ -52,8 +56,9 @@
     }
     authorities = Array.from(set1.entries());
     authorities.sort();
-    fundingProgrammes = Array.from(set2.entries());
-    fundingProgrammes.sort();
+    fundingProgrammes = fundingProgrammesForColouringAndFiltering.map(
+      (value: string) => [value, value]
+    );
     currentMilestones = Array.from(set3.entries());
     currentMilestones.sort();
   });
@@ -95,8 +100,11 @@
           return false;
         }
         if (
-          filterFundingProgramme &&
-          scheme.browse?.funding_programme != filterFundingProgramme
+          (filterFundingProgramme &&
+            filterFundingProgramme !== "Other" &&
+            scheme.browse?.funding_programme != filterFundingProgramme) ||
+          (filterFundingProgramme === "Other" &&
+            knownFundingProgrammes.has(scheme.browse?.funding_programme ?? ""))
         ) {
           return false;
         }
