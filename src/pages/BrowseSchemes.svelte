@@ -64,6 +64,7 @@
       </SecondaryButton>
       <Modal title="About this scheme data" bind:open={showSchemeNotes}>
         <div class="govuk-prose">
+          <p>Please note there are data quality caveats for all scheme data:</p>
           <ul>
             {#each $schemesGj.notes as note}
               <li>{note}</li>
