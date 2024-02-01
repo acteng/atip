@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fundingProgrammesForColouringAndFiltering } from "lib/browse/data";
   import { CollapsibleCard } from "lib/common";
   import {
     Checkbox,
@@ -10,6 +9,7 @@
   } from "lib/govuk";
   import { onMount } from "svelte";
   import type { FeatureUnion } from "types";
+  import { fundingProgrammesForColouringAndFiltering } from "./data";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
   import {
     filterInterventionText,
@@ -29,8 +29,9 @@
   let authorities: [string, string][] = [];
   let filterAuthority = "";
   let fundingProgrammes: [string, string][] = [];
-  let atfFundingProgrammes: string[] =
-    fundingProgrammesForColouringAndFiltering.slice(0, -1);
+  let knownFundingProgrammes: Set<string> = new Set(
+    fundingProgrammesForColouringAndFiltering.slice(0, -1)
+  );
   let filterFundingProgramme = "";
   let currentMilestones: [string, string][] = [];
   let filterCurrentMilestone = "";
@@ -103,9 +104,7 @@
             filterFundingProgramme !== "Other" &&
             scheme.browse?.funding_programme != filterFundingProgramme) ||
           (filterFundingProgramme === "Other" &&
-            atfFundingProgrammes.includes(
-              scheme.browse?.funding_programme ?? ""
-            ))
+            knownFundingProgrammes.has(scheme.browse?.funding_programme ?? ""))
         ) {
           return false;
         }

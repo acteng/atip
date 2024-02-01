@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fundingProgrammesForColouringAndFiltering } from "lib/browse/data";
   import { CollapsibleCard, Legend } from "lib/common";
   import { Select } from "lib/govuk";
   import { constructMatchExpression } from "lib/maplibre";
@@ -7,9 +6,9 @@
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import { map } from "stores";
   import { colors } from "./colors";
+  import { fundingProgrammesForColouringAndFiltering } from "./data";
 
   let colorInterventionsAccordingTo = "fundingProgramme";
-  console.log("funding programme");
   let legendRows = schemaLegend("v1");
   changeStyle();
 
@@ -35,10 +34,8 @@
   }
 
   function styleByFundingProgramme(): DataDrivenPropertyValueSpecification<string> {
-    let fundingProgrammes: string[] = fundingProgrammesForColouringAndFiltering;
-
     let [colorMapping, returnedLegendRows] = getColorMappingAndLegend(
-      fundingProgrammes,
+      fundingProgrammesForColouringAndFiltering,
       colors.funding_programmes
     );
 
