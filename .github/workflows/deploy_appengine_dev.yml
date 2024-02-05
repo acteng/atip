@@ -1,4 +1,4 @@
-name: Deploy to app engine
+name: Deploy to app engine (dev env)
 
 on:
   push:
