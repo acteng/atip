@@ -1,0 +1,4 @@
+runtime: nodejs18
+env_variables:
+  GCS_BUCKET: "dft-rlg-atip-test"
+  PROJECT_NUMBER: "306057427889"
