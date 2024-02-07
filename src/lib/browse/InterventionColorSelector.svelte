@@ -6,8 +6,7 @@
   import { styleByCurrentMilestone, styleByFundingProgramme } from "./colors";
 
   let colorInterventionsAccordingTo = "fundingProgramme";
-  const arrayContainingLegendRows = styleByFundingProgramme();
-  let legendRows = arrayContainingLegendRows[1];
+  let [_, legendRows] = styleByFundingProgramme();
 
   function changeStyle() {
     let color;
