@@ -6,7 +6,8 @@
   import { styleByCurrentMilestone, styleByFundingProgramme } from "./colors";
 
   let colorInterventionsAccordingTo = "fundingProgramme";
-  let legendRows = schemaLegend("v1");
+  const arrayContainingLegendRows = styleByFundingProgramme();
+  let legendRows = arrayContainingLegendRows[1];
 
   function changeStyle() {
     let color;
