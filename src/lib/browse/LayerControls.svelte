@@ -25,6 +25,7 @@
   import PctLayerControl from "./layers/lines/PCT.svelte";
   import RoadSpeedsLayerControl from "./layers/lines/RoadSpeeds.svelte";
   import RoadWidthsLayerControl from "./layers/lines/RoadWidths.svelte";
+  import TramsLayerControl from "./layers/lines/Trams.svelte";
   import CriticalIssuesLayerControl from "./layers/points/CriticalIssues.svelte";
   import CrossingsLayerControl from "./layers/points/Crossings.svelte";
   import CycleParkingLayerControl from "./layers/points/CycleParking.svelte";
@@ -76,10 +77,13 @@
       <CyclePathsLayerControl />
       <NationalCycleNetworkLayerControl />
       <MrnLayerControl />
-      <BusRoutesLayerControl />
       <CycleParkingLayerControl />
       <CrossingsLayerControl />
     </CheckboxGroup>
+  </CollapsibleCard>
+  <CollapsibleCard label="Public transit">
+    <BusRoutesLayerControl />
+    <TramsLayerControl />
   </CollapsibleCard>
   <CollapsibleCard label="Boundaries">
     <CheckboxGroup small>
