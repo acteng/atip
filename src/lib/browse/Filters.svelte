@@ -182,9 +182,18 @@
   function metersToMiles(x: number): number {
     return x * 0.000621371;
   }
+
+  function resetFilters() {
+    filterAuthority = "";
+    filterFundingProgramme = "";
+    filterCurrentMilestone = "";
+    $filterInterventionText = "";
+    $filterSchemeText = "";
+  }
 </script>
 
 <CollapsibleCard label="Filters">
+  <SecondaryButton on:click={resetFilters}>Reset all filters</SecondaryButton>
   <Select
     label="Authority or region"
     id="filterAuthority"
