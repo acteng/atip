@@ -1,13 +1,13 @@
 <script lang="ts">
   import {
-    ColorLegend,
     ExternalLink,
     HelpButton,
+    Legend,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox } from "lib/govuk";
-  import { layerId } from "lib/maplibre";
+  import { constructMatchExpression, layerId } from "lib/maplibre";
   import {
     CircleLayer,
     VectorTileSource,
@@ -17,7 +17,6 @@
   import OsmLicense from "../OsmLicense.svelte";
 
   let name = "crossings";
-  let color = colors.crossings;
 
   let show = false;
 
@@ -47,10 +46,14 @@
       "_blank"
     );
   }
+
+  let legend: [string, string][] = [
+    ["Signalized", colors.signalized_crossing],
+    ["Other", colors.other_crossing],
+  ];
 </script>
 
 <Checkbox id={name} bind:checked={show}>
-  <ColorLegend {color} />
   Crossings
   <span slot="right">
     <HelpButton>
@@ -65,6 +68,9 @@
     </HelpButton>
   </span>
 </Checkbox>
+{#if show}
+  <Legend rows={legend} />
+{/if}
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
@@ -73,7 +79,13 @@
     {...layerId(name)}
     sourceLayer={name}
     paint={{
-      "circle-color": color,
+      "circle-color": constructMatchExpression(
+        ["get", "crossing"],
+        {
+          traffic_signals: colors.signalized_crossing,
+        },
+        colors.other_crossing
+      ),
       "circle-radius": [
         "interpolate",
         ["linear"],
