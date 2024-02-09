@@ -20,7 +20,6 @@ export const colors = {
   cycle_parking: "black",
   crossings: "green",
   trams: "black",
-  bus_stop: "black",
 
   // Thanks to https://github.com/cyipt/cyipt-website/issues/23
   cycle_paths: {
