@@ -28,6 +28,7 @@
   import CriticalIssuesLayerControl from "./layers/points/CriticalIssues.svelte";
   import CrossingsLayerControl from "./layers/points/Crossings.svelte";
   import CycleParkingLayerControl from "./layers/points/CycleParking.svelte";
+  import HigherEducationLayerControl from "./layers/points/HigherEducation.svelte";
   import HospitalsLayerControl from "./layers/points/Hospitals.svelte";
   import RailwayStationsLayerControl from "./layers/points/RailwayStations.svelte";
   import SchoolsLayerControl from "./layers/points/Schools.svelte";
@@ -66,6 +67,7 @@
   <CollapsibleCard label="Trip generators">
     <CheckboxGroup small>
       <SchoolsLayerControl />
+      <HigherEducationLayerControl />
       <HospitalsLayerControl />
       <SportsSpacesLayerControl />
       <RailwayStationsLayerControl />
