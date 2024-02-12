@@ -6,40 +6,30 @@
     publicResourceBaseUrl,
   } from "lib/common";
   import { Checkbox, CheckboxGroup } from "lib/govuk";
-  import { layerId } from "lib/maplibre";
+  import { constructMatchExpression, layerId } from "lib/maplibre";
   import {
     FillLayer,
     hoverStateFilter,
     VectorTileSource,
+    type ExpressionSpecification,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
 
   let showGroup = false;
+  let name = "education";
 
-  let layerDescriptions = [
-    {
-      name: "schools",
-      capitalisedName: "Schools",
-      color: colors["schools"],
-      show: true,
-      singularNoun: "school",
-    },
-    {
-      name: "colleges",
-      capitalisedName: "Colleges",
-      color: "maroon",
-      show: true,
-      singularNoun: "college",
-    },
-    {
-      name: "universities",
-      capitalisedName: "Universities",
-      color: "navy",
-      show: true,
-      singularNoun: "University",
-    },
-  ];
+  const showLayer: { [name: string]: boolean } = {
+    school: true,
+    college: true,
+    university: true,
+  };
+  function makeFilter(showLayer: {
+    [name: string]: boolean;
+  }): ExpressionSpecification {
+    let include = Object.keys(showLayer).filter((l) => showLayer[l]);
+    return ["in", ["get", "type"], ["literal", include]];
+  }
 </script>
 
 <Checkbox id={"education"} bind:checked={showGroup}>
@@ -57,41 +47,54 @@
 {#if showGroup}
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup>
-      {#each layerDescriptions as layerDescription}
-        <Checkbox
-          id={layerDescription.name}
-          bind:checked={layerDescription.show}
-        >
-          <ColorLegend color={layerDescription.color} />
-          {layerDescription.capitalisedName}
-        </Checkbox>
-      {/each}
+      <Checkbox id={"school"} bind:checked={showLayer.school}>
+        <ColorLegend color={colors.education.schools} />
+        Schools
+      </Checkbox>
+      <Checkbox id={"college"} bind:checked={showLayer.college}>
+        <ColorLegend color={colors.education.colleges} />
+        Colleges
+      </Checkbox>
+      <Checkbox
+        id={"university"}
+        bind:checked={showLayer.university}
+      >
+        <ColorLegend color={colors.education.universities} />
+        Universities
+      </Checkbox>
     </CheckboxGroup>
   </div>
 {/if}
 
-{#each layerDescriptions as layerDescription}
-  <VectorTileSource
-    url={`pmtiles://${publicResourceBaseUrl()}/v1/${
-      layerDescription.name
-    }.pmtiles`}
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
+>
+  <FillLayer
+    {...layerId(name)}
+    sourceLayer={name}
+    paint={{
+      "fill-color": constructMatchExpression(
+        ["get", "type"],
+        {
+          school: colors.education.schools,
+          college: colors.education.colleges,
+          university: colors.education.universities,
+        },
+        "grey"
+      ),
+      "fill-opacity": hoverStateFilter(0.7, 1.0),
+    }}
+    layout={{
+      visibility: showGroup ? "visible" : "none",
+    }}
+    filter={makeFilter(showLayer)}
+    manageHoverState
+    eventsIfTopMost
   >
-    <FillLayer
-      {...layerId(layerDescription.name)}
-      sourceLayer={layerDescription.name}
-      paint={{
-        "fill-color": layerDescription.color,
-        "fill-opacity": hoverStateFilter(0.7, 1.0),
-      }}
-      layout={{
-        visibility: showGroup && layerDescription.show ? "visible" : "none",
-      }}
-      manageHoverState
-      eventsIfTopMost
-    >
-      <Popup let:props>
-        <p>{props.name ?? `Unnamed ${layerDescription.singularNoun}`}</p>
-      </Popup>
-    </FillLayer>
-  </VectorTileSource>
-{/each}
+    <Popup let:props>
+      <p>
+        {props.name ?? `Unnamed institution`}
+      </p>
+    </Popup>
+  </FillLayer>
+</VectorTileSource>
