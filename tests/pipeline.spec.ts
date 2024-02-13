@@ -26,13 +26,13 @@ test("scheme validations are updated", async () => {
   await expect(
     page
       .getByRole("group", { name: "Scheme type" })
-      .getByText("Error: Required")
+      .getByText("Error: Required"),
   ).toBeVisible();
   await page.getByText("Shared-use route").click();
   await expect(
     page
       .getByRole("group", { name: "Scheme type" })
-      .getByText("Error: Required")
+      .getByText("Error: Required"),
   ).not.toBeVisible();
 
   // Fix the rest of the errors
@@ -65,7 +65,7 @@ test("scheme validations are updated", async () => {
         atf4: true,
         other: "Local tax",
       }),
-    })
+    }),
   );
 
   // Refresh and make sure there are no warnings

@@ -6,9 +6,8 @@ import { PolygonTool } from "./polygon/polygon_tool";
 import { RouteTool } from "./route/route_tool";
 
 // TODO Should we instead store a map from ID to feature?
-export const gjSchemeCollection: Writable<SchemeCollection> = writable(
-  emptyCollection()
-);
+export const gjSchemeCollection: Writable<SchemeCollection> =
+  writable(emptyCollection());
 
 export const pointTool: Writable<PointTool | null> = writable(null);
 export const polygonTool: Writable<PolygonTool | null> = writable(null);

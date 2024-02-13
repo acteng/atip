@@ -24,7 +24,7 @@ function getBeforeId(layerId: string): string | undefined {
   let map = get(mapStore);
   if (!map) {
     console.warn(
-      `getBeforeId(${layerId}) called before map is ready. Z-ordering may be incorrect.`
+      `getBeforeId(${layerId}) called before map is ready. Z-ordering may be incorrect.`,
     );
     return undefined;
   }

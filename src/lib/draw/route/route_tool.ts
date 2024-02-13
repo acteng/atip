@@ -11,10 +11,10 @@ export class RouteTool {
   inner: JsRouteSnapper;
   active: boolean;
   eventListenersSuccess: ((
-    f: FeatureWithProps<LineString | Polygon>
+    f: FeatureWithProps<LineString | Polygon>,
   ) => void)[];
   eventListenersUpdated: ((
-    f: FeatureWithProps<LineString | Polygon>
+    f: FeatureWithProps<LineString | Polygon>,
   ) => void)[];
   eventListenersFailure: (() => void)[];
 
@@ -220,7 +220,7 @@ export class RouteTool {
 
     if (!feature.properties.waypoints) {
       window.alert(
-        "Bug: editExistingArea called for a polygon not produced by the route-snapper"
+        "Bug: editExistingArea called for a polygon not produced by the route-snapper",
       );
     }
 
@@ -230,12 +230,12 @@ export class RouteTool {
   }
 
   addEventListenerSuccess(
-    callback: (f: FeatureWithProps<LineString | Polygon>) => void
+    callback: (f: FeatureWithProps<LineString | Polygon>) => void,
   ) {
     this.eventListenersSuccess.push(callback);
   }
   addEventListenerUpdated(
-    callback: (f: FeatureWithProps<LineString | Polygon>) => void
+    callback: (f: FeatureWithProps<LineString | Polygon>) => void,
   ) {
     this.eventListenersUpdated.push(callback);
   }

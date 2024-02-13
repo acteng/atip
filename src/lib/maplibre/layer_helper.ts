@@ -20,7 +20,7 @@ export class LayerHelper {
       map.setPaintProperty(
         this.id,
         propertyName,
-        this.defaultLayer.paint[propertyName]
+        this.defaultLayer.paint[propertyName],
       );
     });
     this.changedProperties = [];

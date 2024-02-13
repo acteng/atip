@@ -49,11 +49,11 @@ test("loading a legacy file with one scheme works", async () => {
 // property. Upload a file with that missing, and make sure it's backfilled.
 test("loading a file without length displays the length", async () => {
   let json = JSON.parse(
-    await readFile("tests/data/LAD_Adur.geojson", { encoding: "utf8" })
+    await readFile("tests/data/LAD_Adur.geojson", { encoding: "utf8" }),
   );
   // Remove the property from the test data first
   await expect(Math.round(json.features[0].properties!.length_meters)).toBe(
-    450
+    450,
   );
   delete json.features[0].properties.length_meters;
   let uploadFile = JSON.stringify(json);
@@ -75,7 +75,7 @@ test("loading a file without length displays the length", async () => {
 // Handle unusual GeoJSON inputs produced by other tools
 test("loading a file with null properties displays the length", async () => {
   let json = JSON.parse(
-    await readFile("tests/data/LAD_Adur.geojson", { encoding: "utf8" })
+    await readFile("tests/data/LAD_Adur.geojson", { encoding: "utf8" }),
   );
   // Remove the property from the test data first
   json.features[0].properties = null;
@@ -134,7 +134,7 @@ test("loading a file produced by another tool shows fixable errors", async () =>
     .setInputFiles("tests/data/external_data.geojson");
   page.on("dialog", (dialog) => dialog.accept());
   await expect(
-    page.getByText("There's a problem with 2 interventions below")
+    page.getByText("There's a problem with 2 interventions below"),
   ).toBeVisible();
 
   // Fix the first problem
@@ -145,7 +145,7 @@ test("loading a file produced by another tool shows fixable errors", async () =>
   await page.getByText("Area", { exact: true }).click();
   await page.getByRole("button", { name: "Save" }).click();
   await expect(
-    page.getByText("There's a problem with one intervention below")
+    page.getByText("There's a problem with one intervention below"),
   ).toBeVisible();
 
   // Fix the second problem
@@ -161,7 +161,7 @@ test("loading a file produced by another tool shows fixable errors", async () =>
   await page.getByRole("button", { name: "Remove these properties" }).click();
   await page.getByRole("button", { name: "Save" }).click();
   await expect(
-    page.getByText("There's a problem with one intervention below")
+    page.getByText("There's a problem with one intervention below"),
   ).not.toBeVisible();
 });
 

@@ -14,11 +14,10 @@ export const map: Writable<Map> = writable(null);
 
 export const mapStyle: Writable<string> = writable("dataviz");
 
-export const userSettings: Writable<UserSettings> = writable(
-  loadUserSettings()
-);
+export const userSettings: Writable<UserSettings> =
+  writable(loadUserSettings());
 userSettings.subscribe((value) =>
-  window.localStorage.setItem("userSettings", JSON.stringify(value))
+  window.localStorage.setItem("userSettings", JSON.stringify(value)),
 );
 
 function loadUserSettings(): UserSettings {

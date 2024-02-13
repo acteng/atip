@@ -55,10 +55,7 @@
         <ColorLegend color={colors.education.colleges} />
         Colleges
       </Checkbox>
-      <Checkbox
-        id={"university"}
-        bind:checked={showLayer.university}
-      >
+      <Checkbox id={"university"} bind:checked={showLayer.university}>
         <ColorLegend color={colors.education.universities} />
         Universities
       </Checkbox>

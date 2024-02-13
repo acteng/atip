@@ -4,7 +4,7 @@ import { colors } from "./colors";
 import type { Schema } from "./types";
 
 export function colorInterventionsBySchema(
-  schema: Schema
+  schema: Schema,
 ): DataDrivenPropertyValueSpecification<string> {
   return constructMatchExpression(
     ["get", "intervention_type"],
@@ -15,7 +15,7 @@ export function colorInterventionsBySchema(
       other: colors.other,
     },
     // The fallback white should never be used in practice
-    "white"
+    "white",
   );
 }
 

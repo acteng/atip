@@ -41,10 +41,10 @@ export function fixBoundaries(gj: FeatureCollection): AuthorityBoundaries {
 // Find the name of the smallest authority boundary completely containing the scheme.
 export function findSmallestAuthority(
   features: Feature[],
-  authorities: AuthorityBoundaries
+  authorities: AuthorityBoundaries,
 ): string | null {
   let f = authorities.features.find((authority) =>
-    allFeaturesContainedByPolygon(features, authority)
+    allFeaturesContainedByPolygon(features, authority),
   );
   if (f) {
     return f.properties!.full_name;
@@ -54,7 +54,7 @@ export function findSmallestAuthority(
 
 function allFeaturesContainedByPolygon(
   features: Feature[],
-  boundary: Feature<Polygon | MultiPolygon>
+  boundary: Feature<Polygon | MultiPolygon>,
 ): boolean {
   // Turf can't handle MultiPolygons. Except for the Isles of Scilly, it's OK
   // to just use the first Polygon and ignore the islands part of Devon

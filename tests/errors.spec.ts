@@ -8,7 +8,7 @@ test("other tools work when route tool doesn't load", async ({ page }) => {
     (route) =>
       route.fulfill({
         status: 404,
-      })
+      }),
   );
   await page.goto("/scheme.html?authority=LAD_Adur");
 
@@ -29,7 +29,7 @@ test("Redirected to homepage with error when incorrect authority given to scheme
 
   await expect(page.getByText("Authority name not found:")).toBeVisible();
   await expect(page).toHaveURL(
-    /.*\?error=Authority\+name\+not\+found%3A\+Adu&style=streets/
+    /.*\?error=Authority\+name\+not\+found%3A\+Adu&style=streets/,
   );
 });
 
@@ -41,7 +41,7 @@ test("Upload file with invalid boundary", async ({ page }) => {
 
   await expect(
     page.getByText(
-      "Couldn't load scheme from a file: Error: Can't figure out the authority boundary that fully contains this scheme"
-    )
+      "Couldn't load scheme from a file: Error: Can't figure out the authority boundary that fully contains this scheme",
+    ),
   ).toBeVisible();
 });
