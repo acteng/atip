@@ -10,7 +10,7 @@
     "fmt": "npx prettier --write *.html tests/* src/*",
     "test": "npx playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "setup-govuk": "sass src/style/main.sass src/style/main.css; rm -rf public/assets; mkdir -p public/assets; cp -R node_modules/govuk-frontend/govuk/assets/ public/",
+    "setup-govuk": "sass src/style/main.sass src/style/main.css; rm -rf public/assets; mkdir -p public/assets; cp -R node_modules/govuk-frontend/dist/govuk/assets/ public/",
     "generate-random-schemes": "npx ts-node --project tsconfig_tsnode.json --esm src/scripts/random_schemes.ts"
   },
   "devDependencies": {
@@ -25,7 +25,7 @@
     "playwright": "^1.41.2",
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.1.2",
-    "sass": "^1.63.6",
+    "sass": "^1.70.0",
     "svelte-check": "^3.4.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
@@ -46,7 +46,7 @@
     "@turf/mask": "^6.5.0",
     "@turf/nearest-point-on-line": "^6.5.0",
     "@turf/random": "^6.5.0",
-    "govuk-frontend": "^4.6.0",
+    "govuk-frontend": "^5.1.0",
     "humanize-string": "^3.0.0",
     "js-cookie": "^3.0.5",
     "maplibre-gl": "^3.5.1",
