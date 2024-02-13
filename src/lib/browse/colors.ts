@@ -4,7 +4,11 @@ import { fundingProgrammesForColouringAndFiltering } from "./data";
 
 // These are specific to the browse page
 export const colors = {
-  schools: "#007DBB",
+  education: {
+    schools: "#007DBB",
+    colleges: "maroon",
+    universities: "navy",
+  },
   hospitals: "#B73D25",
   mrn: "#006478",
   national_cycle_network: "#640078",

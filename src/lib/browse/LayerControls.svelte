@@ -30,9 +30,9 @@
   import CriticalIssuesLayerControl from "./layers/points/CriticalIssues.svelte";
   import CrossingsLayerControl from "./layers/points/Crossings.svelte";
   import CycleParkingLayerControl from "./layers/points/CycleParking.svelte";
+  import EducationLayerControl from "./layers/points/Education.svelte";
   import HospitalsLayerControl from "./layers/points/Hospitals.svelte";
   import RailwayStationsLayerControl from "./layers/points/RailwayStations.svelte";
-  import SchoolsLayerControl from "./layers/points/Schools.svelte";
   import SportsSpacesLayerControl from "./layers/points/SportsSpaces.svelte";
   import Stats19LayerControl from "./layers/points/Stats19.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
@@ -67,7 +67,7 @@
   <CriticalIssuesLayerControl />
   <CollapsibleCard label="Trip generators">
     <CheckboxGroup small>
-      <SchoolsLayerControl />
+      <EducationLayerControl />
       <HospitalsLayerControl />
       <SportsSpacesLayerControl />
       <RailwayStationsLayerControl />
