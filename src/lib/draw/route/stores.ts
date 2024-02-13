@@ -7,7 +7,7 @@ import { writable, type Writable } from "svelte/store";
 
 export const routeToolGj: Writable<GeoJSON> = writable(emptyGeojson());
 export const geocoderGj: Writable<FeatureCollection> = writable(
-  emptyGeojson() as FeatureCollection
+  emptyGeojson() as FeatureCollection,
 );
 export const snapMode: Writable<boolean> = writable(true);
 export const undoLength: Writable<number> = writable(0);

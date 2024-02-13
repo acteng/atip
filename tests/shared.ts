@@ -1,7 +1,7 @@
 import { expect, type Browser, type Page } from "@playwright/test";
 
 export async function loadInitialPageFromBrowser(
-  browser: Browser
+  browser: Browser,
 ): Promise<Page> {
   let page = await browser.newPage();
   await page.goto("/scheme.html?authority=LAD_Adur");
@@ -11,7 +11,9 @@ export async function loadInitialPageFromBrowser(
 
 export async function checkPageLoaded(page: Page) {
   // Wait for the map to load by looking for controls
-  await expect(page.getByRole("button", { name: "Zoom in" })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Zoom to show entire boundary" }),
+  ).toBeVisible();
   // Wait for the route snapper to load
   await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
 }
@@ -42,7 +44,7 @@ export async function clickMap(page: Page, x: number, y: number) {
 export async function getLocalStorage(page: Page, key: string): Promise<any> {
   let string = await page.evaluate(
     (key) => window.localStorage.getItem(key),
-    key
+    key,
   );
   return JSON.parse(string!);
 }

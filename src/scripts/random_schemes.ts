@@ -20,7 +20,7 @@ function main() {
   };
 
   let authorities = JSON.parse(
-    fs.readFileSync("assets/authorities.geojson", { encoding: "utf8" })
+    fs.readFileSync("assets/authorities.geojson", { encoding: "utf8" }),
   );
   // Hack around MultiPolygon boundaries
   for (let f of authorities.features) {

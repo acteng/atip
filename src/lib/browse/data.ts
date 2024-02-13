@@ -76,7 +76,7 @@ interface CriticalRow {
 // CriticalRow (with the exception that submission_time is already formatted as
 // a string).
 export async function parseCriticalIssuesExcel(
-  input: File
+  input: File,
 ): Promise<FeatureCollection> {
   let mapping = {
     ID: "id",
@@ -104,7 +104,7 @@ export async function parseCriticalIssuesExcel(
   };
   for (let row of rows as CriticalRow[]) {
     let coordinates = setPrecision(
-      row.lat_lon.split(",").map(parseFloat).reverse()
+      row.lat_lon.split(",").map(parseFloat).reverse(),
     );
     let properties: { [name: string]: any } = row;
     properties.submission_time = row.submission_time.toLocaleString();

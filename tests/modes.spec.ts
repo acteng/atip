@@ -42,7 +42,7 @@ test("creating a new freehand polygon and canceling doesn't save anything", asyn
 
   await page.getByRole("button", { name: "Cancel" }).click();
   await expect(
-    page.getByRole("link", { name: "Untitled area" })
+    page.getByRole("link", { name: "Untitled area" }),
   ).not.toBeVisible();
 });
 
@@ -67,7 +67,7 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
 
   // The route immediately has a name
   await expect(
-    page.getByText("Editing Route from ??? and Beach Green to ???")
+    page.getByText("Editing Route from ??? and Beach Green to ???"),
   ).toBeVisible();
 
   // Change it
@@ -77,7 +77,7 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
   // Then auto-fill to change it back
   await page.getByText("Auto-fill").click();
   await expect(
-    page.getByText("Editing Route from ??? and Beach Green to ???")
+    page.getByText("Editing Route from ??? and Beach Green to ???"),
   ).toBeVisible();
 });
 
@@ -128,7 +128,7 @@ test("adding interventions, then deleting one, then adding another", async () =>
   await expect(
     page.getByRole("link", {
       name: "Route from Burnside Crescent and Carnforth Road to Prince Avenue and West Way",
-    })
+    }),
   ).toBeVisible();
 });
 
@@ -215,7 +215,7 @@ test("edit a route, then cancel", async () => {
 
   await page.keyboard.down("Escape");
   await expect(
-    page.getByText("Editing Route from ??? and Beach Green to ???")
+    page.getByText("Editing Route from ??? and Beach Green to ???"),
   ).toBeVisible();
 });
 
@@ -255,6 +255,6 @@ test("the viewport changes only once when opening a form", async () => {
 // Assert the page is in the main list mode.
 async function expectListMode() {
   await expect(
-    page.getByRole("heading", { name: "ATIP Scheme Sketcher" })
+    page.getByRole("heading", { name: "ATIP Scheme Sketcher" }),
   ).toBeVisible();
 }

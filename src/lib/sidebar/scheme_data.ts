@@ -170,7 +170,7 @@ export function interventionWarning(feature: FeatureUnion): string | null {
 
   if (
     !new Set(["route", "area", "crossing", "other"]).has(
-      feature.properties.intervention_type
+      feature.properties.intervention_type,
     )
   ) {
     return "No intervention type";
@@ -185,7 +185,7 @@ export function interventionWarning(feature: FeatureUnion): string | null {
   let unexpectedProperties = getUnexpectedProperties(feature.properties);
   if (Object.entries(unexpectedProperties).length > 0) {
     return `Extra GeoJSON properties: ${Object.keys(unexpectedProperties).join(
-      ", "
+      ", ",
     )}`;
   }
 
@@ -229,7 +229,7 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
 // TODO Remove when the UI can manage multiple schemes. This function only
 // makes sense when there's one scheme in the collection.
 export function getArbitraryScheme(
-  schemeCollection: SchemeCollection
+  schemeCollection: SchemeCollection,
 ): SchemeData {
   return Object.values(schemeCollection.schemes)[0];
 }

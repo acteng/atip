@@ -83,24 +83,24 @@ export const denseLineWidth: DataDrivenPropertyValueSpecification<number> = [
 
 export function styleByFundingProgramme(): [
   DataDrivenPropertyValueSpecification<string>,
-  [string, string][]
+  [string, string][],
 ] {
   let [colorMapping, legendRows] = getColorMappingAndLegend(
     fundingProgrammesForColouringAndFiltering,
-    colors.funding_programmes
+    colors.funding_programmes,
   );
 
   let color = constructMatchExpression(
     ["get", "funding_programme"],
     colorMapping,
-    "grey"
+    "grey",
   );
   return [color, legendRows];
 }
 
 export function styleByCurrentMilestone(): [
   DataDrivenPropertyValueSpecification<string>,
-  [string, string][]
+  [string, string][],
 ] {
   let stageGates = [
     "removed",
@@ -116,20 +116,20 @@ export function styleByCurrentMilestone(): [
 
   let [colorMapping, legendRows] = getColorMappingAndLegend(
     stageGates,
-    colors.current_milestone
+    colors.current_milestone,
   );
 
   let color = constructMatchExpression(
     ["get", "current_milestone"],
     colorMapping,
-    "grey"
+    "grey",
   );
   return [color, legendRows];
 }
 
 function getColorMappingAndLegend(
   keys: string[],
-  colorList: string[]
+  colorList: string[],
 ): [{ [key: string]: string }, [string, string][]] {
   let legendRows: [string, string][] = [];
   let colorMapping: { [key: string]: string } = {};

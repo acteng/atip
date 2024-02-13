@@ -9,7 +9,7 @@ test("choosing a local authority and clicking start changes the url", async ({
     .fill("TA_West Yorkshire Combined Authority");
   await page.getByRole("button", { name: "Start" }).click();
   await expect(page).toHaveURL(
-    /.*scheme.html\?authority=TA_West%20Yorkshire%20Combined%20Authority/
+    /.*scheme.html\?authority=TA_West%20Yorkshire%20Combined%20Authority/,
   );
 });
 
@@ -29,7 +29,7 @@ test("schema is plumbed along to the sketch page", async ({ page }) => {
   await page.getByTestId("transport-authority").fill("LAD_Adur");
   await page.getByRole("button", { name: "Start" }).click();
   await expect(page).toHaveURL(
-    /.*scheme.html\?authority=LAD_Adur&schema=pipeline/
+    /.*scheme.html\?authority=LAD_Adur&schema=pipeline/,
   );
 });
 
@@ -41,6 +41,6 @@ test("a v1 file with a pipeline hint redirects to pipeline mode", async ({
     .getByLabel("Or upload an ATIP GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
   await expect(page).toHaveURL(
-    /.*scheme.html\?authority=LAD_Adur&schema=pipeline/
+    /.*scheme.html\?authority=LAD_Adur&schema=pipeline/,
   );
 });
