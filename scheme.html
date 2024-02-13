@@ -14,9 +14,11 @@
       import SketchSchemes from "./src/pages/SketchSchemes.svelte";
 
       // For govuk setup. For some reason, the initAll step doesn't work here.
-      document.body.className = document.body.className
-        ? document.body.className + " js-enabled"
-        : "js-enabled";
+      document.body.className +=
+        " js-enabled" +
+        ("noModule" in HTMLScriptElement.prototype
+          ? " govuk-frontend-supported"
+          : "");
 
       new SketchSchemes({
         target: document.getElementById("app"),
