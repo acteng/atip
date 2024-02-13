@@ -10,13 +10,13 @@ test("changed settings are preserved across refresh", async ({ browser }) => {
 
   // It seems that playwright doesn't have separate storage for each browser spawned so we need to be ready for
   // the test to start with it checked or with it unchecked
-  if (!(await page.getByLabel("Avoid doubling back").isChecked())) {
-    await page.getByLabel("Avoid doubling back").check();
-    await expect(page.getByLabel("Avoid doubling back")).toBeChecked();
+  if (!(await page.getByText("Avoid doubling back").isChecked())) {
+    await page.getByText("Avoid doubling back").check();
+    await expect(page.getByText("Avoid doubling back")).toBeChecked();
     expectedToBeChecked = true;
   } else {
-    await page.getByLabel("Avoid doubling back").uncheck();
-    await expect(page.getByLabel("Avoid doubling back")).not.toBeChecked();
+    await page.getByText("Avoid doubling back").uncheck();
+    await expect(page.getByText("Avoid doubling back")).not.toBeChecked();
     expectedToBeChecked = false;
   }
 
@@ -24,8 +24,8 @@ test("changed settings are preserved across refresh", async ({ browser }) => {
   await checkPageLoaded(page);
   await page.getByRole("button", { name: "New route" }).click();
   if (expectedToBeChecked) {
-    await expect(page.getByLabel("Avoid doubling back")).toBeChecked();
+    await expect(page.getByText("Avoid doubling back")).toBeChecked();
   } else {
-    await expect(page.getByLabel("Avoid doubling back")).not.toBeChecked();
+    await expect(page.getByText("Avoid doubling back")).not.toBeChecked();
   }
 });
