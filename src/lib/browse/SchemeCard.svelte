@@ -14,7 +14,7 @@
     let gj: FeatureCollection = {
       type: "FeatureCollection",
       features: $schemesGj.features.filter(
-        (f) => f.properties.scheme_reference == scheme.scheme_reference
+        (f) => f.properties.scheme_reference == scheme.scheme_reference,
       ),
     };
     $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
@@ -24,7 +24,7 @@
     let gj = {
       type: "FeatureCollection",
       features: $schemesGj.features.filter(
-        (f) => f.properties.scheme_reference == scheme.scheme_reference
+        (f) => f.properties.scheme_reference == scheme.scheme_reference,
       ),
     };
     let filename = scheme.browse?.authority_or_region || "unknown authority";
@@ -34,7 +34,7 @@
     window.localStorage.setItem(filename, JSON.stringify(gj));
     window.open(
       `scheme.html?authority=${scheme.browse?.authority_or_region}`,
-      "_blank"
+      "_blank",
     );
   }
 </script>

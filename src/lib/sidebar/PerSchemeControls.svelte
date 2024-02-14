@@ -33,10 +33,10 @@
   $: numErrors = $gjSchemeCollection.features.filter(
     (f) =>
       f.properties.scheme_reference == scheme_reference &&
-      interventionWarning(f) != null
+      interventionWarning(f) != null,
   ).length;
   $: numFeatures = $gjSchemeCollection.features.filter(
-    (f) => f.properties.scheme_reference == scheme_reference
+    (f) => f.properties.scheme_reference == scheme_reference,
   ).length;
 
   onDestroy(() => {
@@ -79,7 +79,7 @@
   function deleteScheme() {
     gjSchemeCollection.update((gj) => {
       gj.features = gj.features.filter(
-        (f) => f.properties.scheme_reference != scheme_reference
+        (f) => f.properties.scheme_reference != scheme_reference,
       );
       delete gj.schemes[scheme_reference];
       if (Object.keys(gj.schemes).length == 0) {

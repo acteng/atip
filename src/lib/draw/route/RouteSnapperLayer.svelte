@@ -34,13 +34,13 @@
           "snapped-waypoint": "red",
           "free-waypoint": "blue",
         },
-        "black"
+        "black",
       ),
       "circle-opacity": ["case", ["has", "hovered"], 0.5, 1.0],
       "circle-radius": constructMatchExpression(
         ["get", "type"],
         { node: circleRadiusPixels / 2.0 },
-        circleRadiusPixels
+        circleRadiusPixels,
       ),
     }}
   />

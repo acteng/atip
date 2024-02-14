@@ -30,7 +30,7 @@
   let filterAuthority = "";
   let fundingProgrammes: [string, string][] = [];
   let knownFundingProgrammes: Set<string> = new Set(
-    fundingProgrammesForColouringAndFiltering.slice(0, -1)
+    fundingProgrammesForColouringAndFiltering.slice(0, -1),
   );
   let filterFundingProgramme = "";
   let currentMilestones: [string, string][] = [];
@@ -57,7 +57,7 @@
     authorities = Array.from(set1.entries());
     authorities.sort();
     fundingProgrammes = fundingProgrammesForColouringAndFiltering.map(
-      (value: string) => [value, value]
+      (value: string) => [value, value],
     );
     currentMilestones = Array.from(set3.entries());
     currentMilestones.sort();
@@ -69,7 +69,7 @@
     filterSchemeTextCopy: string,
     filterAuthority: string,
     filterFundingProgramme: string,
-    filterCurrentMilestone: string
+    filterCurrentMilestone: string,
   ) {
     let filterInterventionNormalized = filterInterventionTextCopy.toLowerCase();
     let filterSchemeNormalized = filterSchemeTextCopy.toLowerCase();
@@ -131,7 +131,7 @@
     schemesToBeShown = new Set(
       $schemesGj.features
         .filter(filterFeatures)
-        .map((f) => f.properties.scheme_reference!)
+        .map((f) => f.properties.scheme_reference!),
     );
 
     // Hide things on the map, and recalculate stats
@@ -176,7 +176,7 @@
     $filterSchemeText,
     filterAuthority,
     filterFundingProgramme,
-    filterCurrentMilestone
+    filterCurrentMilestone,
   );
 
   function metersToMiles(x: number): number {
@@ -249,7 +249,7 @@
     routes, {counts.area.toLocaleString()} areas,
     {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()}
     other, with total LineString length of {metersToMiles(
-      counts.totalLength
+      counts.totalLength,
     ).toFixed(1)} miles)
   </Checkbox>
 </CheckboxGroup>

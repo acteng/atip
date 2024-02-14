@@ -95,7 +95,7 @@
       // TODO Can we avoid using ! everywhere here?
       let result = lineSplit(
         $gjSchemeCollection.features[snappedIndex!] as Feature<LineString>,
-        snappedCursor!
+        snappedCursor!,
       );
       if (result.features.length == 2) {
         let piece1 = result.features[0];
@@ -113,7 +113,7 @@
 
           // The properties get lost. Copy everything to both
           piece1.properties = JSON.parse(
-            JSON.stringify(gj.features[snappedIndex!].properties)
+            JSON.stringify(gj.features[snappedIndex!].properties),
           );
           // "Deep clone"
           piece2.properties = JSON.parse(JSON.stringify(piece1.properties));
@@ -122,7 +122,7 @@
             gj.features[snappedIndex!] as OurFeature<LineString>,
             piece1 as OurFeature<LineString>,
             piece2 as OurFeature<LineString>,
-            snappedCursor!
+            snappedCursor!,
           );
 
           // Replace the one LineString we snapped to with the two new pieces
@@ -130,7 +130,7 @@
             snappedIndex!,
             1,
             piece1 as OurFeature<LineString>,
-            piece2 as OurFeature<LineString>
+            piece2 as OurFeature<LineString>,
           );
 
           return gj;
@@ -168,7 +168,7 @@
     original: OurFeature<LineString>,
     piece1: OurFeature<LineString>,
     piece2: OurFeature<LineString>,
-    splitPt: Feature<Point>
+    splitPt: Feature<Point>,
   ) {
     // Fix length
     piece1.properties.length_meters =
@@ -186,7 +186,7 @@
     for (let waypt of original.properties.waypoints!) {
       let wayptDist = distanceAlongLine(
         original,
-        point([waypt.lon, waypt.lat])
+        point([waypt.lon, waypt.lat]),
       );
       if (firstPiece) {
         if (wayptDist < splitDist) {

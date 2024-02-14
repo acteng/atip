@@ -18,7 +18,7 @@
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
       `http://openstreetmap.org/way/${e.detail.features[0].properties!.osm_id}`,
-      "_blank"
+      "_blank",
     );
   }
 </script>

@@ -77,7 +77,7 @@
           college: colors.education.colleges,
           university: colors.education.universities,
         },
-        "grey"
+        "grey",
       ),
       "fill-opacity": hoverStateFilter(0.7, 1.0),
     }}

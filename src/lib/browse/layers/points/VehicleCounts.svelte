@@ -31,7 +31,7 @@
       `https://roadtraffic.dft.gov.uk/manualcountpoints/${
         e.detail.features[0].properties!.count_point
       }`,
-      "_blank"
+      "_blank",
     );
   }
 </script>
@@ -75,7 +75,7 @@
       "circle-color": makeColorRamp(
         ["get", "motor_vehicles_2022"],
         limits,
-        colorScale
+        colorScale,
       ),
       "circle-opacity": 0.9,
       "circle-radius": [

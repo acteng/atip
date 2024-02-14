@@ -49,7 +49,7 @@
             zoom: zoom as number,
           });
         }
-      }
+      },
     );
   }
 </script>

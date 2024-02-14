@@ -63,7 +63,7 @@
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
       `http://openstreetmap.org/way/${e.detail.features[0].properties!.osm_id}`,
-      "_blank"
+      "_blank",
     );
   }
 
@@ -141,7 +141,7 @@
           shared_use_segregated: colors.cycle_paths.shared_use_segregated,
           shared_use_unsegregated: colors.cycle_paths.shared_use_unsegregated,
         },
-        "red"
+        "red",
       ),
       "line-width": denseLineWidth,
       "line-opacity": hoverStateFilter(1.0, 0.5),

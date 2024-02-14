@@ -96,7 +96,7 @@
     // filenames with only authority and schema.
     downloadGeneratedFile(
       `${filename}.geojson`,
-      JSON.stringify(geojson, null, "  ")
+      JSON.stringify(geojson, null, "  "),
     );
   }
 
@@ -104,7 +104,7 @@
     var element = document.createElement("a");
     element.setAttribute(
       "href",
-      "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput)
+      "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput),
     );
     element.setAttribute("download", filename);
     document.body.appendChild(element);

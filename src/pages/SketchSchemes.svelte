@@ -64,7 +64,7 @@
   async function loadAuthorityBoundary(): Promise<AuthorityBoundaries> {
     let geojson = await getAuthoritiesGeoJson();
     geojson.features = geojson.features.filter(
-      (feature) => feature.properties.full_name == authorityName
+      (feature) => feature.properties.full_name == authorityName,
     );
     if (geojson.features.length === 0) {
       window.location.href = `index.html?error=Authority name not found: ${authorityName}`;

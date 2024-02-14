@@ -70,7 +70,7 @@
       let smallestAuthority = findSmallestAuthority(gj.features, authoritiesGj);
       if (!smallestAuthority) {
         throw new Error(
-          "Can't figure out the authority boundary that fully contains this scheme"
+          "Can't figure out the authority boundary that fully contains this scheme",
         );
       }
       // Ignore the authority that the file has set; always use the calculated boundary

@@ -33,7 +33,7 @@
     // Help people find the MP for this area
     window.open(
       `https://members.parliament.uk/members/Commons?SearchText=${name}`,
-      "_blank"
+      "_blank",
     );
   }
 </script>

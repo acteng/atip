@@ -80,7 +80,7 @@
 
   $: colorInterventions = colorByScheme($gjSchemeCollection);
   function colorByScheme(
-    gj: SchemeCollection
+    gj: SchemeCollection,
   ): DataDrivenPropertyValueSpecification<string> {
     return constructMatchExpression(
       ["get", "scheme_reference"],
@@ -88,9 +88,9 @@
         Object.values(gj.schemes).map((scheme) => [
           scheme.scheme_reference,
           scheme.color,
-        ])
+        ]),
       ),
-      "black"
+      "black",
     );
   }
 

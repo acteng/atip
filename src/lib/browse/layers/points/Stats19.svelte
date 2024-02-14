@@ -34,7 +34,7 @@
     filterPedestrians,
     filterCyclists,
     filterHorseRiders,
-    filterOther
+    filterOther,
   );
   function makeFilter(
     _a: number,
@@ -42,7 +42,7 @@
     _c: boolean,
     _d: boolean,
     _e: boolean,
-    _f: boolean
+    _f: boolean,
   ): ExpressionSpecification {
     let includeTypes: ExpressionSpecification = ["any"];
     if (filterPedestrians) {
@@ -88,7 +88,7 @@
       `https://www.cyclestreets.net/collisions/reports/${
         e.detail.features[0].properties!.accident_index
       }`,
-      "_blank"
+      "_blank",
     );
   }
 
@@ -207,7 +207,7 @@
       "circle-color": makeColorRamp(
         ["get", "severity"],
         [1, 2, 3],
-        [fatalColor, seriousColor, slightColor]
+        [fatalColor, seriousColor, slightColor],
       ),
       "circle-opacity": 0.9,
       "circle-radius": [

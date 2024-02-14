@@ -113,7 +113,7 @@
   // Copy geometry and properties from source to destination
   function updateFeature(
     destination: FeatureUnion,
-    source: FeatureWithProps<Point | LineString | Polygon>
+    source: FeatureWithProps<Point | LineString | Polygon>,
   ) {
     destination.geometry = source.geometry;
 

@@ -61,7 +61,7 @@
       "fill-color": makeColorRamp(
         ["-", 10, ["get", "decile"]],
         limits,
-        colorScale
+        colorScale,
       ),
       "fill-opacity": hoverStateFilter(0.5, 0.7),
     }}

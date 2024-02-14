@@ -13,7 +13,7 @@
     }
     return input.replace(
       new RegExp(filter, "gi"),
-      (match) => `<mark>${match}</mark>`
+      (match) => `<mark>${match}</mark>`,
     );
   }
 </script>
@@ -32,7 +32,7 @@
   <p>
     Part of scheme: {@html highlightFilter(
       scheme.scheme_name ?? "",
-      $filterSchemeText
+      $filterSchemeText,
     )} ({@html highlightFilter(props.scheme_reference, $filterSchemeText)})
   </p>
   <p>Authority or region: {scheme.browse?.authority_or_region}</p>

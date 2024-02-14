@@ -51,12 +51,12 @@
     if ($userSettings.streetViewImagery == "google") {
       window.open(
         `http://maps.google.com/maps?q=&layer=c&cbll=${lat},${lon}&cbp=11,0,0,0,0`,
-        "_blank"
+        "_blank",
       );
     } else if ($userSettings.streetViewImagery == "bing") {
       window.open(
         `https://www.bing.com/maps?cp=${lat}~${lon}&style=x`,
-        "_blank"
+        "_blank",
       );
     }
   }

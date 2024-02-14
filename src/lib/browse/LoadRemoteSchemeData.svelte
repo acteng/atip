@@ -8,7 +8,7 @@
 
   onMount(async () => {
     let resp = await fetch(
-      `${privateResourceBaseUrl()}/v1/random_schemes.geojson`
+      `${privateResourceBaseUrl()}/v1/random_schemes.geojson`,
     );
     let text = await resp.text();
     loadFile(text);

@@ -28,7 +28,7 @@
       `https://www.ons.gov.uk/visualisations/areas/${
         e.detail.features[0].properties!.CAUTH22CD
       }`,
-      "_blank"
+      "_blank",
     );
   }
 </script>

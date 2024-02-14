@@ -46,12 +46,12 @@
     ) {
       window.open(
         `https://www.ons.gov.uk/census/maps/choropleth/housing/number-of-cars-or-vans/number-of-cars-5a/no-cars-or-vans-in-household?oa=${oa}`,
-        "_blank"
+        "_blank",
       );
     } else {
       window.open(
         `https://www.ons.gov.uk/census/maps/choropleth/population/population-density/population-density/persons-per-square-kilometre?oa=${oa}`,
-        "_blank"
+        "_blank",
       );
     }
   }

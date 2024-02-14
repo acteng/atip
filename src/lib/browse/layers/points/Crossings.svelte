@@ -43,7 +43,7 @@
       `http://openstreetmap.org/node/${
         e.detail.features[0].properties!.osm_id
       }`,
-      "_blank"
+      "_blank",
     );
   }
 
@@ -84,7 +84,7 @@
         {
           traffic_signals: colors.signalized_crossing,
         },
-        colors.other_crossing
+        colors.other_crossing,
       ),
       "circle-radius": [
         "interpolate",

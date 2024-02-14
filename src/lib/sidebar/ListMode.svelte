@@ -19,13 +19,13 @@
       for (let scheme of Object.values(gj.schemes)) {
         if (scheme.scheme_reference in $gjSchemeCollection.schemes) {
           throw new Error(
-            "The file you're loading seems to contain duplicate data. Are you merging in the same file accidentally?"
+            "The file you're loading seems to contain duplicate data. Are you merging in the same file accidentally?",
           );
         }
         $gjSchemeCollection.schemes[scheme.scheme_reference] = scheme;
       }
       $gjSchemeCollection.features = $gjSchemeCollection.features.concat(
-        gj.features
+        gj.features,
       );
 
       // Make sure every feature ID is unique. It's fine to change existing
@@ -44,7 +44,7 @@
 
   function moveSchemeInList(scheme_reference: string, direction: number) {
     const currentSchemeOrder = JSON.parse(
-      JSON.stringify(Object.keys($gjSchemeCollection.schemes))
+      JSON.stringify(Object.keys($gjSchemeCollection.schemes)),
     );
     const currentIndex = currentSchemeOrder.indexOf(scheme_reference);
     if (
@@ -54,11 +54,11 @@
       swapArrayValuesInPlace(
         currentSchemeOrder,
         currentIndex,
-        currentIndex + direction
+        currentIndex + direction,
       );
       const newSchemesObject = getReorderedSchemesObject(
         currentSchemeOrder,
-        $gjSchemeCollection.schemes
+        $gjSchemeCollection.schemes,
       );
       $gjSchemeCollection.schemes = newSchemesObject;
       $gjSchemeCollection = $gjSchemeCollection;
@@ -68,7 +68,7 @@
   function swapArrayValuesInPlace(
     array: any[],
     firstIndex: number,
-    secondIndex: number
+    secondIndex: number,
   ) {
     [array[firstIndex], array[secondIndex]] = [
       array[secondIndex],
@@ -78,7 +78,7 @@
 
   function getReorderedSchemesObject(
     newSchemeOrder: string[],
-    currentSchemesObject: { [reference: string]: any }
+    currentSchemesObject: { [reference: string]: any },
   ) {
     const result: { [reference: string]: any } = {};
     newSchemeOrder.forEach((scheme_reference) => {

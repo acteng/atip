@@ -25,7 +25,7 @@
     $map.setPaintProperty(
       "interventions-polygons-outlines",
       "line-color",
-      color
+      color,
     );
   }
 </script>

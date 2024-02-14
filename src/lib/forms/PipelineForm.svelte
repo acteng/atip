@@ -26,7 +26,7 @@
 
   const shouldDisplayCoveragePolygonQuestion: boolean =
     ($gjSchemeCollection.features.filter(
-      (feature) => feature.properties.is_coverage_polygon
+      (feature) => feature.properties.is_coverage_polygon,
     ).length == 0 ||
       props.is_coverage_polygon === true) &&
     props.intervention_type === "area";

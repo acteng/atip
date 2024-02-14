@@ -104,7 +104,7 @@
     lineToMeasure = lineString(waypointsAsPosition, {});
     if (lineToMeasure.properties) {
       lineToMeasure.properties.length = (length(lineToMeasure) * 1000).toFixed(
-        2
+        2,
       );
     }
     drawGj = JSON.parse(JSON.stringify(lineToMeasure));
