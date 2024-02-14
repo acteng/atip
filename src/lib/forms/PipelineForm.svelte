@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { emptyFundingSources } from "lib/sidebar/scheme_data";
   import { gjSchemeCollection, routeTool } from "lib/draw/stores";
   import {
     Checkbox,
@@ -11,6 +12,8 @@
   import { prettyPrintMeters } from "lib/maplibre";
   import type { InterventionProps } from "types";
   import PipelineType from "./PipelineType.svelte";
+  import TimingForm from "lib/sidebar/pipeline/TimingForm.svelte";
+  import BudgetForm from "lib/sidebar/pipeline/BudgetForm.svelte";
 
   export let id: number;
   export let props: InterventionProps;
@@ -20,6 +23,13 @@
     atf4_type: "",
     accuracy: "",
     is_alternative: false,
+
+    development_funded: false,
+    construction_funded: false,
+    funding_sources: emptyFundingSources(),
+
+    status: "",
+    timescale: "",
   };
 
   props.is_coverage_polygon ||= false;
@@ -104,4 +114,8 @@
       while making the scheme)
     </Checkbox>
   {/if}
+
+  <TimingForm data={props.pipeline} required={false} />
+
+  <BudgetForm data={props.pipeline} />
 {/if}

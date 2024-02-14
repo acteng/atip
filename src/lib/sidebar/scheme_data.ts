@@ -83,6 +83,18 @@ export function backfill(json: any): SchemeCollection {
       delete scheme.pipeline.budget_unfunded;
       delete scheme.pipeline.funding_source;
       delete scheme.pipeline.funded;
+
+      // Backfill fields added 14 Feburary 2024
+      for (let f of json.features) {
+        if (f.properties.pipeline) {
+          f.properties.pipeline.development_funded ??= false;
+          f.properties.pipeline.construction_funded ??= false;
+          f.properties.pipeline.funding_sources ??= emptyFundingSources();
+
+          f.properties.pipeline.status ??= "";
+          f.properties.pipeline.timescale ??= "";
+        }
+      }
     }
   }
 
@@ -131,7 +143,7 @@ export function emptyPipelineScheme(): PipelineScheme {
   };
 }
 
-function emptyFundingSources(): FundingSources {
+export function emptyFundingSources(): FundingSources {
   return {
     atf2: false,
     atf3: false,

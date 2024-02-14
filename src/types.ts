@@ -138,7 +138,7 @@ export interface InterventionProps {
   hide_while_editing?: boolean;
 }
 
-export interface PipelineIntervention {
+export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
   atf4_type: PipelineType | "";
   accuracy: "high" | "medium" | "low" | "";
   is_alternative: boolean;
