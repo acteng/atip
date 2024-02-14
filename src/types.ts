@@ -28,7 +28,7 @@ export interface SchemeData {
 // Every field is optional in this type, to match the reality of starting with
 // a blank form. Mandatory fields are marked in the form UI. Optional string
 // types are encoded as "".
-export interface PipelineScheme {
+export interface PipelineScheme extends PipelineBudget, PipelineTiming {
   // TODO "intersection" is unclear
   scheme_type:
     | "cycling route"
@@ -40,7 +40,17 @@ export interface PipelineScheme {
     | "";
   atf4_lead_type: PipelineType | "";
   scheme_description: string;
+}
 
+export interface PipelineBudget {
+  // GBP
+  budget?: number;
+  development_funded: boolean;
+  construction_funded: boolean;
+  funding_sources: FundingSources;
+}
+
+export interface PipelineTiming {
   // TODO Check with DB schema
   status:
     | "aspiration"
@@ -53,12 +63,6 @@ export interface PipelineScheme {
   timescale_year?: number;
   year_published?: number;
   year_consulted?: number;
-
-  // GBP
-  budget?: number;
-  development_funded: boolean;
-  construction_funded: boolean;
-  funding_sources: FundingSources;
 }
 
 export interface FundingSources {
