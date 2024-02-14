@@ -3,6 +3,14 @@
   import { Checkbox, CheckboxGroup, MoneyInput, TextInput } from "lib/govuk";
 
   export let data: PipelineBudget;
+  // Svelte reactivity for fields modified by this component are invisible to
+  // the caller, so use this callback to listen to changes.
+  export let onUpdate: () => void;
+
+  function update(_: PipelineBudget) {
+    onUpdate();
+  }
+  $: update(data);
 
   // TODO Note below we make sure "other" isn't in this list, just to make TS happy
   let fundingSources = [

@@ -5,6 +5,14 @@
   export let data: PipelineTiming;
   // Are status and timescale required?
   export let required: boolean;
+  // Svelte reactivity for fields modified by this component are invisible to
+  // the caller, so use this callback to listen to changes.
+  export let onUpdate: () => void;
+
+  function update(_: PipelineTiming) {
+    onUpdate();
+  }
+  $: update(data);
 </script>
 
 <fieldset class="govuk-fieldset">

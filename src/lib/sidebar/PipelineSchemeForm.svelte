@@ -20,11 +20,16 @@
   // synced to $gjSchemeCollection until finish() is called
   let pipeline = $gjSchemeCollection.schemes[scheme_reference].pipeline!;
 
-  // Check for all required values
-  $: errorMessage =
-    pipeline.scheme_type && pipeline.status && pipeline.timescale
+  // Svelte doesn't see nested updates in BudgetForm and TimingForm, so use a
+  // counter and manual callback to recalculate errorMessage
+  let updateError = 0;
+  $: errorMessage = checkRequiredValues(pipeline, updateError);
+
+  function checkRequiredValues(_: any, updateError: number): string {
+    return pipeline.scheme_type && pipeline.status && pipeline.timescale
       ? ""
       : "Missing some required data";
+  }
 
   function onKeyDown(e: KeyboardEvent) {
     if (showModal && e.key == "Escape") {
@@ -94,9 +99,9 @@
     />
   </fieldset>
 
-  <TimingForm data={pipeline} required />
+  <TimingForm data={pipeline} required onUpdate={() => updateError++} />
 
-  <BudgetForm data={pipeline} />
+  <BudgetForm data={pipeline} onUpdate={() => updateError++} />
 
   <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>
 </Modal>
