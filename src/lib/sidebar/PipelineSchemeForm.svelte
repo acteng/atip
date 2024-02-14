@@ -7,6 +7,7 @@
     DefaultButton,
     ErrorMessage,
     NumberInput,
+    MoneyInput,
     Radio,
     SecondaryButton,
     TextArea,
@@ -164,12 +165,7 @@
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend">Budget</legend>
 
-    <NumberInput
-      label="Cost (GBP)"
-      width={10}
-      min={0}
-      bind:value={pipeline.budget}
-    />
+    <MoneyInput label="Cost (GBP)" bind:value={pipeline.budget} />
 
     <Checkbox
       id="development_funded"
