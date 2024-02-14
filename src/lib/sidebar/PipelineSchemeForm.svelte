@@ -1,19 +1,16 @@
 <script lang="ts">
+  import TimingForm from "./pipeline/TimingForm.svelte";
+  import BudgetForm from "./pipeline/BudgetForm.svelte";
   import { Modal } from "lib/common";
   import { gjSchemeCollection } from "lib/draw/stores";
   import {
-    Checkbox,
-    CheckboxGroup,
     DefaultButton,
     ErrorMessage,
-    NumberInput,
-    MoneyInput,
     Radio,
     SecondaryButton,
     TextArea,
     TextInput,
   } from "lib/govuk";
-  import type { FundingSources } from "types";
   import PipelineType from "../forms/PipelineType.svelte";
 
   export let scheme_reference: string;
@@ -22,16 +19,6 @@
   // This is just for conveience below, but it means most changes are not
   // synced to $gjSchemeCollection until finish() is called
   let pipeline = $gjSchemeCollection.schemes[scheme_reference].pipeline!;
-
-  // TODO Note below we make sure "other" isn't in this list, just to make TS happy
-  let fundingSources = [
-    "atf2",
-    "atf3",
-    "atf4",
-    "atf4e",
-    "crsts",
-    "luf",
-  ] as Array<keyof FundingSources>;
 
   // Check for all required values
   $: errorMessage =
@@ -107,94 +94,9 @@
     />
   </fieldset>
 
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend">Timing and status</legend>
+  <TimingForm data={pipeline} required />
 
-    <Radio
-      legend="Status"
-      id="scheme-status"
-      choices={[
-        ["aspiration", "Aspiration"],
-        ["planned", "Planned"],
-        ["in development", "In development"],
-        ["in construction", "In construction"],
-        ["completed", "Completed"],
-      ]}
-      inlineSmall
-      required
-      bind:value={pipeline.status}
-    />
-
-    <Radio
-      legend="Timescale"
-      id="scheme-timescale"
-      choices={[
-        ["short", "Short (1-3 years)"],
-        ["medium", "Medium (3-6 years)"],
-        ["long", "Long (6-10 years)"],
-      ]}
-      inlineSmall
-      required
-      bind:value={pipeline.timescale}
-    />
-    <NumberInput
-      label="Estimated completion year (if known)"
-      width={4}
-      min={2010}
-      max={2100}
-      bind:value={pipeline.timescale_year}
-    />
-
-    <NumberInput
-      label="What year was this scheme most recently published?"
-      width={4}
-      min={2010}
-      max={2100}
-      bind:value={pipeline.year_published}
-    />
-
-    <NumberInput
-      label="What year was this scheme most recently consulted on?"
-      width={4}
-      min={2010}
-      max={2100}
-      bind:value={pipeline.year_consulted}
-    />
-  </fieldset>
-
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend">Budget</legend>
-
-    <MoneyInput label="Cost (GBP)" bind:value={pipeline.budget} />
-
-    <Checkbox
-      id="development_funded"
-      bind:checked={pipeline.development_funded}
-    >
-      Is the development fully funded?
-    </Checkbox>
-    <Checkbox
-      id="construction_funded"
-      bind:checked={pipeline.construction_funded}
-    >
-      Is the construction fully funded?
-    </Checkbox>
-
-    <p>Funding sources</p>
-    <CheckboxGroup>
-      {#each fundingSources as source}
-        {#if source != "other"}
-          <Checkbox id={source} bind:checked={pipeline.funding_sources[source]}>
-            {source.toUpperCase()}
-          </Checkbox>
-        {/if}
-      {/each}
-    </CheckboxGroup>
-    <TextInput
-      label="Other funding sources"
-      bind:value={pipeline.funding_sources.other}
-    />
-  </fieldset>
+  <BudgetForm data={pipeline} />
 
   <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>
 </Modal>
