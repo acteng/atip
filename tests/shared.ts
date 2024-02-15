@@ -23,7 +23,10 @@ export async function clearExistingInterventions(page: Page) {
   await page.keyboard.down("Escape");
   await page.keyboard.down("Escape");
 
-  await page.getByText("Manage files").click();
+  // A test may leave the "Manage files" panel open
+  if (!(await page.getByRole("button", { name: "Clear all" }).isVisible())) {
+    await page.getByText("Manage files").click();
+  }
   await page.getByRole("button", { name: "Clear all" }).click();
   await page.getByRole("button", { name: "Clear all work" }).click();
   // Close the panel
