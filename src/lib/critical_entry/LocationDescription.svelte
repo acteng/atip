@@ -46,7 +46,7 @@
   />
 </FormElement>
 <CheckboxGroup small>
-  <Checkbox id="lookupLocation" bind:checked={lookupLocation}>
+  <Checkbox bind:checked={lookupLocation}>
     Lookup location description automatically
   </Checkbox>
 </CheckboxGroup>

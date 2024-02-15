@@ -41,7 +41,7 @@
   };
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   OS Speeds
   <span slot="right">
     <HelpButton>

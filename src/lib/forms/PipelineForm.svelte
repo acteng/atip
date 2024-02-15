@@ -99,17 +99,11 @@
     bind:value={props.pipeline.accuracy}
   />
 
-  <Checkbox
-    id={"alternative-" + id}
-    bind:checked={props.pipeline.is_alternative}
-  >
+  <Checkbox bind:checked={props.pipeline.is_alternative}>
     Is this an alternative route and not the default option?
   </Checkbox>
   {#if shouldDisplayCoveragePolygonQuestion && props.is_coverage_polygon !== undefined}
-    <Checkbox
-      id={"coverage-polygon-" + id}
-      bind:checked={props.is_coverage_polygon}
-    >
+    <Checkbox bind:checked={props.is_coverage_polygon}>
       Does this polygon show the coverage of the scheme? (All area considered
       while making the scheme)
     </Checkbox>

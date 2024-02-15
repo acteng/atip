@@ -36,7 +36,7 @@
   }
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   Vehicle counts
   <span slot="right">
     <HelpButton>

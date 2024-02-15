@@ -28,10 +28,10 @@
 
   <MoneyInput label="Cost (GBP)" bind:value={data.budget} />
 
-  <Checkbox id="development_funded" bind:checked={data.development_funded}>
+  <Checkbox bind:checked={data.development_funded}>
     Is the development fully funded?
   </Checkbox>
-  <Checkbox id="construction_funded" bind:checked={data.construction_funded}>
+  <Checkbox bind:checked={data.construction_funded}>
     Is the construction fully funded?
   </Checkbox>
 
@@ -39,7 +39,7 @@
   <CheckboxGroup>
     {#each fundingSources as source}
       {#if source != "other"}
-        <Checkbox id={source} bind:checked={data.funding_sources[source]}>
+        <Checkbox bind:checked={data.funding_sources[source]}>
           {source.toUpperCase()}
         </Checkbox>
       {/if}

@@ -72,7 +72,6 @@
 </script>
 
 <Checkbox
-  id="percent_households_with_car"
   bind:checked={showHouseholdsWithCar}
   on:change={() => {
     showAverageCars = false;
@@ -109,7 +108,6 @@
 {/if}
 
 <Checkbox
-  id="average_cars_per_household"
   bind:checked={showAverageCars}
   on:change={() => {
     showHouseholdsWithCar = false;
@@ -150,7 +148,6 @@
 {/if}
 
 <Checkbox
-  id="population_density"
   bind:checked={showPopulationDensity}
   on:change={() => {
     showHouseholdsWithCar = false;

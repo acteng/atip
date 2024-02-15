@@ -26,7 +26,7 @@
   // -- but can't we fix that now?
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   <ColorLegend {color} />
   Local Planning Authorities
   <span slot="right">

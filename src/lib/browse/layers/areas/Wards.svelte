@@ -30,7 +30,7 @@
   }
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   <ColorLegend {color} />
   Wards
   <span slot="right">

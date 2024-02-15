@@ -26,7 +26,7 @@
   let show = false;
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   Indices of Multiple Deprivation
   <span slot="right">
     <HelpButton>

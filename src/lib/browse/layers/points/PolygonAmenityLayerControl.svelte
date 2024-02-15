@@ -33,7 +33,7 @@
   let show = false;
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   <ColorLegend {color} />
   {pluralNoun}
   <span slot="right">

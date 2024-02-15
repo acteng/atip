@@ -75,14 +75,12 @@
 
 <CheckboxGroup small>
   <Checkbox
-    id="extendRoute"
     bind:checked={extendRoute}
     hint="Keep clicking to add more points to the end of the route"
   >
     Add points to end
   </Checkbox>
   <Checkbox
-    id="avoidDoublingBack"
     bind:checked={$userSettings.avoidDoublingBack}
     hint="Try to make the route avoid using the same streets with multiple waypoints"
   >

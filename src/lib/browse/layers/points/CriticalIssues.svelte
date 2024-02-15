@@ -67,7 +67,7 @@
   <ErrorMessage {errorMessage} />
   {#if numberIssues > 0}
     <CheckboxGroup small>
-      <Checkbox id="show-criticals" bind:checked={show}>
+      <Checkbox bind:checked={show}>
         <ColorLegend {color} />
         Show {numberIssues.toLocaleString()} issues
       </Checkbox>

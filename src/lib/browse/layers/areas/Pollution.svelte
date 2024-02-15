@@ -65,7 +65,7 @@
   }
 </script>
 
-<Checkbox id="pollution" bind:checked={show}>
+<Checkbox bind:checked={show}>
   Pollution
   <span slot="right">
     <HelpButton>
