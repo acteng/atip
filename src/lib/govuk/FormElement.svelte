@@ -2,7 +2,7 @@
   // The label to show
   export let label: string;
   // A unique (per page) ID of the form element being labelled. Something in
-  // this component's slot must have this ID.
+  // this component's slot must have this ID. Generate using UUID to be safe.
   export let id: string;
 </script>
 

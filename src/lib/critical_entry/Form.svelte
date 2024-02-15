@@ -163,7 +163,6 @@
 
 <Select
   label="Current design stage"
-  id="currentDesignStage"
   choices={designStages}
   emptyOption
   bind:value={currentDesignStage}
@@ -174,7 +173,6 @@
 
 <Select
   label="Critical issue type"
-  id="criticalIssueType"
   choices={criticalIssueTypes}
   emptyOption
   bind:value={criticalIssueType}

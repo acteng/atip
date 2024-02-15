@@ -65,7 +65,6 @@
 
 <Select
   label="Scheme"
-  id={"scheme-" + id}
   choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
     scheme.scheme_reference,
     scheme.scheme_name ?? "Untitled scheme",
@@ -82,13 +81,11 @@
 {#if props.pipeline}
   <PipelineType
     label="Type"
-    id={"pipeline-type-" + id}
     bind:value={props.pipeline.atf4_type}
   />
 
   <Radio
     legend="Accuracy of mapped data"
-    id={"accuracy-" + id}
     choices={[
       ["high", "High"],
       ["medium", "Medium"],

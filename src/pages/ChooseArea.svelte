@@ -146,7 +146,6 @@
 
     <Radio
       legend="Or pick from the map"
-      id="showBoundaries"
       choices={[
         ["TA", "Transport Authorities"],
         ["LAD", "Local Authority Districts"],

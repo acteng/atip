@@ -3,7 +3,6 @@
   import type { PipelineType } from "types";
 
   export let label: string;
-  export let id: string;
   export let value: PipelineType | "";
 
   // Keep in sync with intervention_type_short in scheme_data
@@ -16,7 +15,6 @@
 
 <Select
   {label}
-  {id}
   choices={[
     repeat("New segregated cycling facility"),
     repeat("New junction treatment"),

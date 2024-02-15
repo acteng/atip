@@ -20,7 +20,6 @@
 
   <Radio
     legend="Status"
-    id="scheme-status"
     choices={[
       ["aspiration", "Aspiration"],
       ["planned", "Planned"],
@@ -35,7 +34,6 @@
 
   <Radio
     legend="Timescale"
-    id="scheme-timescale"
     choices={[
       ["short", "Short (1-3 years)"],
       ["medium", "Medium (3-6 years)"],

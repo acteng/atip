@@ -79,7 +79,6 @@
   <SequentialLegend {colorScale} {limits} />
   <Radio
     legend="Trip purpose"
-    id="tripPurpose"
     choices={[
       ["pct_commute", "Commuting"],
       ["pct_school", "School"],
@@ -89,7 +88,6 @@
   />
   <Select
     label="Scenario"
-    id="scenario"
     choices={[
       ["baseline", "Baseline (2011)"],
       ["gov_target", "Government target (2025)"],

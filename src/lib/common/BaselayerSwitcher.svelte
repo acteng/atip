@@ -8,7 +8,6 @@
 
 <Select
   label="Basemap"
-  id="basemap"
   choices={getStyleChoices()}
   bind:value={$mapStyle}
   {disabled}

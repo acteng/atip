@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { v4 as uuidv4 } from "uuid";
+
   // For integer inputs only
   import ErrorMessage from "./ErrorMessage.svelte";
   import FormElement from "./FormElement.svelte";
@@ -12,11 +14,11 @@
 
   let stringValue: string | undefined = value?.toString();
 
+  let id = uuidv4();
+
   function parse() {
     value = stringValue == undefined ? undefined : parseInt(stringValue, 10);
   }
-
-  // TODO Using the label as a unique ID, so users don't have to invent an arbitrary string
 
   function validate(stringValue: string | undefined): string {
     if (stringValue == "" || stringValue == undefined) {
@@ -40,13 +42,13 @@
   }
 </script>
 
-<FormElement {label} id={label}>
+<FormElement {label} {id}>
   <ErrorMessage errorMessage={validate(stringValue)} />
   <input
     type="text"
     inputmode="numeric"
     class={`govuk-input govuk-input--width-${width}`}
-    id={label}
+    {id}
     bind:value={stringValue}
     on:change={parse}
   />
