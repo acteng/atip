@@ -227,7 +227,20 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
   }
 
   if (schema == "pipeline" && copy.pipeline) {
-    for (let key of ["atf4_type", "accuracy", "is_alternative"]) {
+    for (let key of [
+      "atf4_type",
+      "accuracy",
+      "is_alternative",
+      "budget",
+      "development_funded",
+      "construction_funded",
+      "funding_sources",
+      "status",
+      "timescale",
+      "timescale_year",
+      "year_published",
+      "year_consulted",
+    ]) {
       delete copy.pipeline[key];
     }
     if (Object.entries(copy.pipeline).length == 0) {
