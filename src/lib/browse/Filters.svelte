@@ -196,21 +196,18 @@
   <SecondaryButton on:click={resetFilters}>Reset all filters</SecondaryButton>
   <Select
     label="Authority or region"
-    id="filterAuthority"
     choices={authorities}
     emptyOption
     bind:value={filterAuthority}
   />
   <Select
     label="Funding programme"
-    id="filterFundingProgramme"
     choices={fundingProgrammes}
     emptyOption
     bind:value={filterFundingProgramme}
   />
   <Select
     label="Current milestone"
-    id="filterCurrentMilestone"
     choices={currentMilestones}
     emptyOption
     bind:value={filterCurrentMilestone}

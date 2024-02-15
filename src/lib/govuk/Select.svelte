@@ -1,9 +1,8 @@
 <script lang="ts">
+  import { v4 as uuidv4 } from "uuid";
   import { ErrorMessage, FormElement } from "lib/govuk";
 
   export let label: string;
-  // A unique (per page) ID
-  export let id: string;
   // A list of [value, label] representing the choices
   export let choices: [string, string][];
   // Make the first option the empty string
@@ -13,6 +12,8 @@
 
   // The current value
   export let value: string;
+
+  let id = uuidv4();
 </script>
 
 <FormElement {label} {id}>

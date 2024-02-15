@@ -32,7 +32,6 @@
 
 <Select
   label="Color interventions"
-  id="colorInterventions"
   choices={[
     ["fundingProgramme", "By funding programme"],
     ["interventionType", "By intervention type"],

@@ -79,7 +79,6 @@
 
     <Radio
       legend="Source"
-      id="streetViewImagery"
       choices={[
         ["google", "Google Street View"],
         ["bing", "Bing Streetside"],

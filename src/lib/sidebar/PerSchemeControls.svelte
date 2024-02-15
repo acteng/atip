@@ -194,7 +194,6 @@
     </p>
     <Select
       label="Move interventions to another scheme"
-      id="move-interventions"
       choices={moveSchemeChoices()}
       bind:value={moveToScheme}
       on:change={moveFeatures}

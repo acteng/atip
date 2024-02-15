@@ -36,7 +36,6 @@
 
 <Select
   label="Scheme"
-  id={"scheme-" + id}
   choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
     scheme.scheme_reference,
     scheme.scheme_name ?? "Untitled scheme",
@@ -46,7 +45,6 @@
 
 <Radio
   legend="Type"
-  id={"type-" + id}
   choices={[
     ["area", "Area"],
     ["route", "Route"],

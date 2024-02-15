@@ -70,7 +70,6 @@
 
     <Radio
       legend="Scheme type"
-      id="scheme-type"
       choices={[
         ["cycling route", "Cycling route"],
         ["walking route", "Walking route"],
@@ -89,7 +88,6 @@
 
     <PipelineType
       label="Type of the main intervention"
-      id="lead-pipeline-type"
       bind:value={pipeline.atf4_lead_type}
     />
 

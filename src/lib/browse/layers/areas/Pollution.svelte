@@ -98,7 +98,6 @@
 {#if show}
   <Select
     label="Pollutant"
-    id="pollutant"
     choices={[
       ["PM25_viridis", "Background PM2.5"],
       ["PM10_viridis", "Background PM10"],
