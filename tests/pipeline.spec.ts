@@ -96,3 +96,32 @@ test("file started with v1 can be edited by loading", async () => {
   await page.getByRole("button", { name: "Scheme details" }).click();
   await page.getByText("Shared-use route").click();
 });
+
+// Check compatibility of old files with new per-feature fields introduced 14 February 2024
+test("file without new budget/timing forms can be edited by loading", async () => {
+  await page.getByText("Manage files").click();
+  await page
+    .getByLabel("Load GeoJSON file")
+    .setInputFiles("tests/data/pipeline_before_feb_fields.geojson");
+
+  await page.getByRole("link", { name: "POI" }).click();
+  await page.getByLabel("Cost (GBP)").fill("1.2");
+  await page.getByRole("button", { name: "multiply by 1 million" }).click();
+  await page.getByText("Is the construction fully funded?").check();
+  await page.getByText("CRSTS").check();
+  await page.getByRole("button", { name: "Save" }).click();
+
+  // Check the data in local storage
+  let json = await getLocalStorage(page, "LAD_Adur_pipeline");
+  let feature = json.features[0] as any;
+  expect(feature.properties.name).toEqual("POI");
+  expect(feature.properties.pipeline).toEqual(
+    expect.objectContaining({
+      budget: 1_200_000,
+      construction_funded: true,
+      funding_sources: expect.objectContaining({
+        crsts: true,
+      }),
+    }),
+  );
+});

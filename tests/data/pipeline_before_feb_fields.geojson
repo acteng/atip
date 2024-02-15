@@ -1,0 +1,50 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "scheme_reference": "bb649a68-5fc0-423a-b679-25dc43a8d020",
+        "intervention_type": "other",
+        "pipeline": {
+          "atf4_type": "",
+          "accuracy": "",
+          "is_alternative": false
+        },
+        "is_coverage_polygon": false,
+        "name": "POI"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-0.3140953, 50.8386259]
+      },
+      "id": 1
+    }
+  ],
+  "schemes": {
+    "bb649a68-5fc0-423a-b679-25dc43a8d020": {
+      "scheme_reference": "bb649a68-5fc0-423a-b679-25dc43a8d020",
+      "color": "#377eb8",
+      "pipeline": {
+        "scheme_type": "",
+        "atf4_lead_type": "",
+        "scheme_description": "",
+        "status": "",
+        "timescale": "",
+        "development_funded": false,
+        "construction_funded": false,
+        "funding_sources": {
+          "atf2": false,
+          "atf3": false,
+          "atf4": false,
+          "atf4e": false,
+          "crsts": false,
+          "luf": false,
+          "other": ""
+        }
+      }
+    }
+  },
+  "authority": "LAD_Adur",
+  "origin": "atip-v2"
+}
