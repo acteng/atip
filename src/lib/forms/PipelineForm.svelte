@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { v4 as uuidv4 } from "uuid";
   import { emptyFundingSources } from "lib/sidebar/scheme_data";
   import { gjSchemeCollection, routeTool } from "lib/draw/stores";
   import {
@@ -15,7 +16,6 @@
   import TimingForm from "lib/sidebar/pipeline/TimingForm.svelte";
   import BudgetForm from "lib/sidebar/pipeline/BudgetForm.svelte";
 
-  export let id: number;
   export let props: InterventionProps;
 
   // Lazily fill for each feature (whether newly created or loaded from an older-format file)
@@ -50,11 +50,13 @@
       window.alert(`Couldn't auto-name route: ${e}`);
     }
   }
+
+  let nameId = uuidv4();
 </script>
 
-<FormElement label="Name" id={"name-" + id}>
+<FormElement label="Name" id={nameId}>
   <div class="govuk-hint">Use the name from the LCWIP if possible</div>
-  <input type="text" class="govuk-input" bind:value={props.name} />
+  <input type="text" class="govuk-input" id={nameId} bind:value={props.name} />
   <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
   {#if props.length_meters}
     <SecondaryButton on:click={() => autoFillName()} disabled={!$routeTool}>
@@ -79,10 +81,7 @@
 {/if}
 
 {#if props.pipeline}
-  <PipelineType
-    label="Type"
-    bind:value={props.pipeline.atf4_type}
-  />
+  <PipelineType label="Type" bind:value={props.pipeline.atf4_type} />
 
   <Radio
     legend="Accuracy of mapped data"

@@ -1,9 +1,8 @@
 <script lang="ts">
+  import { v4 as uuidv4 } from "uuid";
   import { FormElement } from "lib/govuk";
 
   export let label: string;
-  // This must be unique in the page
-  export let id: string;
   // Called with the file contents as text
   export let loadFile: (text: string) => void;
 
@@ -19,6 +18,8 @@
     let files = fileInput.files!;
     reader.readAsText(files[0]);
   }
+
+  let id = uuidv4();
 </script>
 
 <FormElement {label} {id}>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { v4 as uuidv4 } from "uuid";
   import { gjSchemeCollection, routeTool } from "lib/draw/stores";
   import {
     FormElement,
@@ -10,7 +11,6 @@
   import { prettyPrintMeters } from "lib/maplibre";
   import type { InterventionProps } from "types";
 
-  export let id: number;
   export let props: InterventionProps;
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
@@ -22,10 +22,12 @@
       window.alert(`Couldn't auto-name route: ${e}`);
     }
   }
+
+  let nameId = uuidv4();
 </script>
 
-<FormElement label="Name" id={"name-" + id}>
-  <input type="text" class="govuk-input" bind:value={props.name} />
+<FormElement label="Name" id={nameId}>
+  <input type="text" class="govuk-input" id={nameId} bind:value={props.name} />
   <!-- Only LineStrings can be auto-named, and length_meters being set is the simplest proxy for that -->
   {#if props.length_meters}
     <SecondaryButton on:click={() => autoFillName()} disabled={!$routeTool}>

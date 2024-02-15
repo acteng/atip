@@ -157,11 +157,7 @@
     <hr />
 
     <ErrorMessage errorMessage={uploadErrorMessage} />
-    <FileInput
-      label="Or upload an ATIP GeoJSON file"
-      {loadFile}
-      id="load-geojson"
-    />
+    <FileInput label="Or upload an ATIP GeoJSON file" {loadFile} />
   </div>
   <div class="govuk-grid-column-one-half">
     <div id="map">
