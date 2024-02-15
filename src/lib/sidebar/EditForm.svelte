@@ -102,8 +102,8 @@
 <ErrorMessage errorMessage={warning} />
 {#if $schema == "v1"}
   <UnexpectedProperties id={feature.id} props={feature.properties} />
-  <FormV1 id={feature.id} bind:props={feature.properties} />
+  <FormV1 bind:props={feature.properties} />
 {:else if $schema == "pipeline"}
   <UnexpectedProperties id={feature.id} props={feature.properties} />
-  <PipelineForm id={feature.id} bind:props={feature.properties} />
+  <PipelineForm bind:props={feature.properties} />
 {/if}

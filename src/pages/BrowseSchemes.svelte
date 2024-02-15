@@ -73,7 +73,7 @@
         </div>
       </Modal>
     {/if}
-    <FileInput label="Load schemes from GeoJSON" id="load-geojson" {loadFile} />
+    <FileInput label="Load schemes from GeoJSON" {loadFile} />
     <ErrorMessage {errorMessage} />
 
     {#if $schemes.size > 0}

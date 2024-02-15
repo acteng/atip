@@ -125,7 +125,7 @@
 
 {#if $mode.mode == "list"}
   <CollapsibleCard label="Manage files">
-    <FileInput label="Load GeoJSON file" id="load-geojson" {loadFile} />
+    <FileInput label="Load GeoJSON file" {loadFile} />
 
     <ButtonGroup>
       <SecondaryButton on:click={exportToGeojson}>

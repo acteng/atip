@@ -92,11 +92,7 @@
 <SecondaryButton on:click={newBlankScheme}>
   Add new blank scheme
 </SecondaryButton>
-<FileInput
-  label="Add scheme from file"
-  id="merge-file"
-  loadFile={mergeSchemesFromFile}
-/>
+<FileInput label="Add scheme from file" loadFile={mergeSchemesFromFile} />
 <ErrorMessage errorMessage={errorFromFile} />
 
 <hr />
