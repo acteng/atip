@@ -49,7 +49,7 @@
   }
 </script>
 
-<Checkbox id={nameCommute} bind:checked={show}>
+<Checkbox bind:checked={show}>
   Propensity to Cycle Tool
   <span slot="right">
     <HelpButton>

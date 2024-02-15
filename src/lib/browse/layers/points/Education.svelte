@@ -32,7 +32,7 @@
   }
 </script>
 
-<Checkbox id={"education"} bind:checked={showGroup}>
+<Checkbox bind:checked={showGroup}>
   Education
   <span slot="right">
     <HelpButton>
@@ -47,15 +47,15 @@
 {#if showGroup}
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup>
-      <Checkbox id={"school"} bind:checked={showLayer.school}>
+      <Checkbox bind:checked={showLayer.school}>
         <ColorLegend color={colors.education.schools} />
         Schools
       </Checkbox>
-      <Checkbox id={"college"} bind:checked={showLayer.college}>
+      <Checkbox bind:checked={showLayer.college}>
         <ColorLegend color={colors.education.colleges} />
         Colleges
       </Checkbox>
-      <Checkbox id={"university"} bind:checked={showLayer.university}>
+      <Checkbox bind:checked={showLayer.university}>
         <ColorLegend color={colors.education.universities} />
         Universities
       </Checkbox>

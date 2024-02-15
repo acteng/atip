@@ -21,7 +21,7 @@
   let show = false;
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   <ColorLegend color={colors.bus_route_with_lane} />
   Bus routes
   <span slot="right">

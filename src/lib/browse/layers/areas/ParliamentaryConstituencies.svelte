@@ -38,7 +38,7 @@
   }
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   <ColorLegend {color} />
   Parliamentary constituencies
   <span slot="right">

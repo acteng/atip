@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { v4 as uuidv4 } from "uuid";
+
   // This component must be placed inside a CheckboxGroup. The default slot is
   // required, and is the label for the checkbox. There's an optional "right"
   // slot placed to the right of the checkbox on the same row, but clicking it
   // doesn't activate the checkbox.
 
-  // A unique ID
-  export let id: string;
   export let checked: boolean;
   // TODO Using class="govuk-hint govuk-checkboxes__hint" takes too much space
   // in the use cases so far, so use a tooltip instead.
@@ -15,6 +15,8 @@
   // label, we have to disable this in the govuk style.
   let haveRightSlot = $$slots.right !== undefined;
   let style = haveRightSlot ? "float: none" : "";
+
+  let id = uuidv4();
 </script>
 
 <div class="govuk-checkboxes__item" {style}>

@@ -33,7 +33,7 @@
   }
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   <ColorLegend {color} />
   Local Authority Districts
   <span slot="right">

@@ -133,7 +133,7 @@
   ];
 </script>
 
-<Checkbox id={name} bind:checked={show}>
+<Checkbox bind:checked={show}>
   Stats19
   <span slot="right">
     <HelpButton>
@@ -176,16 +176,10 @@
 {#if show}
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup small>
-      <Checkbox id="stats19-pedestrians" bind:checked={filterPedestrians}>
-        Pedestrians
-      </Checkbox>
-      <Checkbox id="stats19-cyclists" bind:checked={filterCyclists}>
-        Cyclists
-      </Checkbox>
-      <Checkbox id="stats19-horse-riders" bind:checked={filterHorseRiders}>
-        Horse riders
-      </Checkbox>
-      <Checkbox id="stats19-other" bind:checked={filterOther}>Other</Checkbox>
+      <Checkbox bind:checked={filterPedestrians}>Pedestrians</Checkbox>
+      <Checkbox bind:checked={filterCyclists}>Cyclists</Checkbox>
+      <Checkbox bind:checked={filterHorseRiders}>Horse riders</Checkbox>
+      <Checkbox bind:checked={filterOther}>Other</Checkbox>
     </CheckboxGroup>
     <div>
       Filter years:

@@ -75,7 +75,7 @@
   }
 </script>
 
-<Checkbox id={name} bind:checked={showGroup}>
+<Checkbox bind:checked={showGroup}>
   Cycle paths
   <span slot="right">
     <HelpButton>
@@ -117,7 +117,7 @@
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup>
       {#each legend as [kind, label, color]}
-        <Checkbox id={kind} bind:checked={showLayer[kind]}>
+        <Checkbox bind:checked={showLayer[kind]}>
           <ColorLegend {color} />
           {label}
         </Checkbox>

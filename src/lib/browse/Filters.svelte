@@ -244,7 +244,7 @@
 </CollapsibleCard>
 
 <CheckboxGroup small>
-  <Checkbox id="show-schemes" bind:checked={show}>
+  <Checkbox bind:checked={show}>
     Showing {schemesToBeShown.size.toLocaleString()} schemes ({counts.route.toLocaleString()}
     routes, {counts.area.toLocaleString()} areas,
     {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()}

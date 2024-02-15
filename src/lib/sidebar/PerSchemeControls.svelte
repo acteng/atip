@@ -143,13 +143,7 @@
     Delete
   </WarningButton>
 </h3>
-<Checkbox
-  id={"show-scheme-" + scheme_reference}
-  bind:checked={showScheme}
-  on:change={showOrHide}
->
-  Show
-</Checkbox>
+<Checkbox bind:checked={showScheme} on:change={showOrHide}>Show</Checkbox>
 <slot />
 {#if $schema == "pipeline"}
   <PipelineSchemeForm {scheme_reference} />
