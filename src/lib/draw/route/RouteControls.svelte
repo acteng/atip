@@ -18,6 +18,10 @@
   function undo() {
     $routeTool!.undo();
   }
+
+  function toggleSnap() {
+    $routeTool!.toggleSnapMode();
+  }
 </script>
 
 <SecondaryButton disabled={$undoLength == 0} on:click={undo}>
@@ -31,13 +35,15 @@
 {#if $snapMode}
   <p style="background: red; color: white; padding: 8px;">
     Snapping to existing roads. Press <b>s</b>
-    to draw anywhere
+     or click below to draw anywhere
   </p>
+  <SecondaryButton on:click={toggleSnap}>Draw anywhere</SecondaryButton>
 {:else}
   <p style="background: blue; color: white; padding: 8px;">
     Drawing points anywhere. Press <b>s</b>
-    to snap to roads
+     or click below to snap to roads
   </p>
+  <SecondaryButton on:click={toggleSnap}>Snap to roads</SecondaryButton>
 {/if}
 
 <ul>
