@@ -129,7 +129,7 @@ export class RouteTool {
     if (e.key == "Enter") {
       e.stopPropagation();
       this.finish();
-    } else if (e.key == "s") {
+    } else if (e.key == "s" || e.key == "S") {
       e.stopPropagation();
       this.inner.toggleSnapMode();
       this.redraw();
@@ -289,6 +289,11 @@ export class RouteTool {
 
   undo() {
     this.inner.undo();
+    this.redraw();
+  }
+
+  toggleSnapMode() {
+    this.inner.toggleSnapMode();
     this.redraw();
   }
 
