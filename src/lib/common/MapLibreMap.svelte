@@ -1,4 +1,5 @@
 <script lang="ts">
+  import chevron from "../../../assets/chevron.png?url";
   import { getStyleSpecification } from "lib/maplibre";
   import {
     Map,
@@ -55,6 +56,7 @@
       bind:loaded
       bind:map
       on:error={onError}
+      images={[{ id: "chevron", url: chevron }]}
     >
       {#if $mapStore}
         <ScaleControl />
