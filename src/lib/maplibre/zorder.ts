@@ -85,6 +85,8 @@ const layerZorder = [
   "road_widths",
   "road_speeds",
   "pavement_widths",
+  "gradient",
+  "gradient_arrows",
   // Then small point/polygon layers on top
   "education",
   "hospitals",

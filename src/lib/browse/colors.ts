@@ -65,6 +65,16 @@ export const colors = {
     "#76c384",
     "#488f31",
   ],
+
+  // Thanks to https://ropensci.github.io/slopes/articles/roadnetworkcycling.html
+  gradient_flat_to_steep: [
+    "#267300",
+    "#70A800",
+    "#FFAA00",
+    "#E60000",
+    "#A80000",
+    "#730000",
+  ],
 };
 
 // For dense line layers, make individual lines easily distinguished when

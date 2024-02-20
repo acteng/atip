@@ -29,6 +29,7 @@
   import BusStopsLayerControl from "./layers/points/BusStops.svelte";
   import CriticalIssuesLayerControl from "./layers/points/CriticalIssues.svelte";
   import CrossingsLayerControl from "./layers/points/Crossings.svelte";
+  import GradientsLayerControl from "./layers/lines/Gradients.svelte";
   import CycleParkingLayerControl from "./layers/points/CycleParking.svelte";
   import EducationLayerControl from "./layers/points/Education.svelte";
   import HospitalsLayerControl from "./layers/points/Hospitals.svelte";
@@ -107,6 +108,7 @@
       <VehicleCountsLayerControl />
       <Stats19LayerControl />
       <PctLayerControl />
+      <GradientsLayerControl />
       {#if appVersion() == "Private (development)"}
         <RoadWidthsLayerControl />
         <PavementWidthsLayerControl />
