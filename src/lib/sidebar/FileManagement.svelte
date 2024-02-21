@@ -11,7 +11,7 @@
     ErrorMessage,
     SecondaryButton,
     WarningButton,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import { schema } from "stores";
   import { onMount } from "svelte";
   import type { SchemeCollection } from "types";

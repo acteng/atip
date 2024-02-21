@@ -1,6 +1,6 @@
 <script lang="ts">
   import { polygonTool } from "lib/draw/stores";
-  import { SecondaryButton } from "lib/govuk";
+  import { SecondaryButton } from "govuk-svelte";
   import { undoLength } from "./stores";
 
   function undo() {

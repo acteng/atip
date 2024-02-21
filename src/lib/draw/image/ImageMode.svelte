@@ -5,7 +5,7 @@
     DefaultButton,
     FormElement,
     WarningButton,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import { imgSrc, opacity } from "./stores";
 
   let fileInput: HTMLInputElement;

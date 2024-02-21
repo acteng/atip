@@ -19,7 +19,7 @@
     Modal,
     ZoomOutMap,
   } from "lib/common";
-  import { ErrorMessage, SecondaryButton } from "lib/govuk";
+  import { ErrorMessage, SecondaryButton } from "govuk-svelte";
   import { mapStyle } from "stores";
   import { onMount } from "svelte";
 

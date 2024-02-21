@@ -1,6 +1,6 @@
 <script lang="ts">
   import { v4 as uuidv4 } from "uuid";
-  import { FormElement } from "lib/govuk";
+  import { FormElement } from "govuk-svelte";
 
   export let label: string;
   // Called with the file contents as text

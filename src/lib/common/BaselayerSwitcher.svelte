@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Select } from "lib/govuk";
+  import { Select } from "govuk-svelte";
   import { getStyleChoices } from "lib/maplibre";
   import { mapStyle } from "stores";
 

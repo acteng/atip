@@ -6,7 +6,7 @@
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "lib/govuk";
+  import { Checkbox } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import { CircleLayer, VectorTileSource } from "svelte-maplibre";
   import { colors } from "../../colors";

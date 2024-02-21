@@ -7,7 +7,7 @@
     polygonTool,
     routeTool,
   } from "lib/draw/stores";
-  import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
+  import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import type { FeatureWithProps } from "lib/maplibre";
   import { interventionName } from "lib/sidebar/scheme_data";
   import { schema } from "stores";

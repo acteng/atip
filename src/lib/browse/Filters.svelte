@@ -6,7 +6,7 @@
     FormElement,
     SecondaryButton,
     Select,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import { onMount } from "svelte";
   import type { FeatureUnion } from "types";
   import { fundingProgrammesForColouringAndFiltering } from "./data";

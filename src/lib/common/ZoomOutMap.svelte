@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GeoJSON } from "geojson";
-  import { SecondaryButton } from "lib/govuk";
+  import { SecondaryButton } from "govuk-svelte";
   import { bbox } from "lib/maplibre";
   import { map } from "stores";
   import icon from "../../../assets/zoom_out_map.svg";

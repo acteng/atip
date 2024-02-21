@@ -1,6 +1,6 @@
 <script lang="ts">
   import { mode, pointTool, polygonTool, routeTool } from "lib/draw/stores";
-  import { SecondaryButton } from "lib/govuk";
+  import { SecondaryButton } from "govuk-svelte";
   import imageIcon from "../../../assets/image.svg";
   import pointIcon from "../../../assets/point.svg";
   import polygonFreehandIcon from "../../../assets/polygon_freehand.svg";

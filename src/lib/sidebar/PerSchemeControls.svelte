@@ -13,7 +13,7 @@
     SecondaryButton,
     Select,
     WarningButton,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import { bbox } from "lib/maplibre";
   import { map, schema } from "stores";
   import { onDestroy } from "svelte";

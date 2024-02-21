@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ExternalLink, HelpButton } from "lib/common";
-  import { Checkbox, Select } from "lib/govuk";
+  import { Checkbox, Select } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import { RasterLayer, RasterTileSource } from "svelte-maplibre";
   import OsOglLicense from "../OsOglLicense.svelte";

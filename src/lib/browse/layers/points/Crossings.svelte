@@ -6,7 +6,7 @@
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "lib/govuk";
+  import { Checkbox } from "govuk-svelte";
   import { constructMatchExpression, layerId } from "lib/maplibre";
   import {
     CircleLayer,

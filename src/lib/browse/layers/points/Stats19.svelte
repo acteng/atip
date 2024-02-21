@@ -6,7 +6,7 @@
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox, CheckboxGroup } from "lib/govuk";
+  import { Checkbox, CheckboxGroup } from "govuk-svelte";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import type { ExpressionSpecification } from "maplibre-gl";
   import {

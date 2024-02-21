@@ -9,7 +9,7 @@
     Select,
     TextArea,
     WarningButton,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import { setPrecision } from "lib/maplibre";
   import type { LngLat } from "maplibre-gl";
   import LocationDescription from "./LocationDescription.svelte";

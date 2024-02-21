@@ -5,7 +5,7 @@
     Popup,
     privateResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox, Radio } from "lib/govuk";
+  import { Checkbox, Radio } from "govuk-svelte";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
