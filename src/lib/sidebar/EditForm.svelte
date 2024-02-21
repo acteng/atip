@@ -12,7 +12,7 @@
     ErrorMessage,
     SecondaryButton,
     WarningButton,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, schema } from "stores";
   import { onDestroy, onMount } from "svelte";

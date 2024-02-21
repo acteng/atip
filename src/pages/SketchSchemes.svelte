@@ -19,7 +19,7 @@
   import SplitRouteMode from "lib/draw/route/SplitRouteMode.svelte";
   import { mode } from "lib/draw/stores";
   import Toolbox from "lib/draw/Toolbox.svelte";
-  import { ButtonGroup, SecondaryButton } from "lib/govuk";
+  import { ButtonGroup, SecondaryButton } from "govuk-svelte";
   import About from "lib/sidebar/About.svelte";
   import FileManagement from "lib/sidebar/FileManagement.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";

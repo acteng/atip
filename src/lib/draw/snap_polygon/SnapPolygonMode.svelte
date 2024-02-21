@@ -6,7 +6,7 @@
     newFeatureId,
     routeTool,
   } from "lib/draw/stores";
-  import { ButtonGroup, DefaultButton, SecondaryButton } from "lib/govuk";
+  import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import type { FeatureWithProps } from "lib/maplibre";
   import { getArbitraryScheme } from "lib/sidebar/scheme_data";
   import { onDestroy, onMount } from "svelte";

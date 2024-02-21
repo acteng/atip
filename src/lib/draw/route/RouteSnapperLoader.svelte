@@ -1,6 +1,6 @@
 <script lang="ts">
   import { routeTool } from "lib/draw/stores";
-  import { ErrorMessage } from "lib/govuk";
+  import { ErrorMessage } from "govuk-svelte";
   import init from "route-snapper";
   import { map } from "stores";
   import { onMount } from "svelte";

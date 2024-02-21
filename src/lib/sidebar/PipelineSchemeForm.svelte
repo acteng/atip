@@ -10,7 +10,7 @@
     SecondaryButton,
     TextArea,
     TextInput,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import PipelineType from "../forms/PipelineType.svelte";
 
   export let scheme_reference: string;

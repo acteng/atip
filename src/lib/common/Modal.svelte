@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SecondaryButton } from "lib/govuk";
+  import { SecondaryButton } from "govuk-svelte";
 
   export let title: string;
   export let open = false;

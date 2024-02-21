@@ -1,7 +1,7 @@
 <script lang="ts">
   import { StreetViewHelp, StreetViewTool } from "lib/common";
   import { mode } from "lib/draw/stores";
-  import { DefaultButton, Radio } from "lib/govuk";
+  import { DefaultButton, Radio } from "govuk-svelte";
   import { userSettings } from "stores";
 
   let enabled = true;

@@ -7,7 +7,7 @@
     SecondaryButton,
     Select,
     TextArea,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import { prettyPrintMeters } from "lib/maplibre";
   import type { InterventionProps } from "types";
 

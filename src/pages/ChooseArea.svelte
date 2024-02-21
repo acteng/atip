@@ -10,7 +10,7 @@
     FormElement,
     Radio,
     SecondaryButton,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
   import { findSmallestAuthority, type AuthorityBoundaries } from "boundaries";

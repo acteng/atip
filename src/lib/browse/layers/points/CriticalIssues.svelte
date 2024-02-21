@@ -5,7 +5,7 @@
     CheckboxGroup,
     ErrorMessage,
     FormElement,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import { emptyGeojson, layerId } from "lib/maplibre";
   import type { GeoJSONSource } from "maplibre-gl";
   import { map } from "stores";

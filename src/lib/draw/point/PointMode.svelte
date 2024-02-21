@@ -6,7 +6,7 @@
     newFeatureId,
     pointTool,
   } from "lib/draw/stores";
-  import { SecondaryButton } from "lib/govuk";
+  import { SecondaryButton } from "govuk-svelte";
   import type { FeatureWithProps } from "lib/maplibre";
   import { getArbitraryScheme } from "lib/sidebar/scheme_data";
   import { onDestroy, onMount } from "svelte";

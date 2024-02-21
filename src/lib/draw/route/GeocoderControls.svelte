@@ -2,7 +2,7 @@
   import type { FeatureCollection } from "@maptiler/geocoding-control/types";
   import type { Position } from "geojson";
   import { routeTool } from "lib/draw/stores";
-  import { TextInput } from "lib/govuk";
+  import { TextInput } from "govuk-svelte";
   import { emptyGeojson } from "lib/maplibre";
   import { map } from "stores";
   import { geocoderGj } from "./stores";

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { NumberInput, Radio } from "lib/govuk";
+  import { NumberInput, Radio } from "govuk-svelte";
   import type { PipelineTiming } from "types";
 
   export let data: PipelineTiming;

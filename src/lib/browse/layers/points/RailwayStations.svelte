@@ -5,7 +5,7 @@
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "lib/govuk";
+  import { Checkbox } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import { GeoJSON, SymbolLayer } from "svelte-maplibre";
   import railwayStation from "../../../../../assets/railway_station.png?url";

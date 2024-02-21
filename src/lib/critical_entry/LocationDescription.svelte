@@ -4,7 +4,7 @@
     CheckboxGroup,
     ErrorMessage,
     FormElement,
-  } from "lib/govuk";
+  } from "govuk-svelte";
   import type { LngLat } from "maplibre-gl";
 
   export let locationDescription: string;
