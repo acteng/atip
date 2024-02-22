@@ -1,26 +1,23 @@
 <script lang="ts">
-  import { circleRadius } from "colors";
   import {
-    ColorLegend,
     ExternalLink,
     HelpButton,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
+  import railwayStation from "../../../../../assets/train.png?url";
   import { Checkbox } from "lib/govuk";
   import { layerId } from "lib/maplibre";
-  import { CircleLayer, GeoJSON } from "svelte-maplibre";
-  import { colors } from "../../colors";
+  import { GeoJSON, SymbolLayer } from "svelte-maplibre";
   import OsmLicense from "../OsmLicense.svelte";
 
   let name = "railway_stations";
-  let color = colors.railway_stations;
 
   let show = false;
 </script>
 
 <Checkbox bind:checked={show}>
-  <ColorLegend {color} />
+  <img src={railwayStation} />
   Railway Stations
   <span slot="right">
     <HelpButton>
@@ -37,18 +34,17 @@
 </Checkbox>
 
 <GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>
-  <CircleLayer
+  <SymbolLayer
     {...layerId(name)}
-    paint={{
-      "circle-color": color,
-      "circle-radius": circleRadius / 2,
-    }}
     layout={{
+      "icon-image": "railway_station",
+      "icon-size": 1,
+      "icon-allow-overlap": true,
       visibility: show ? "visible" : "none",
     }}
   >
     <Popup let:props>
       <p>{props.name ?? "Unnamed railway station"}</p>
     </Popup>
-  </CircleLayer>
+  </SymbolLayer>
 </GeoJSON>

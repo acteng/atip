@@ -1,25 +1,23 @@
 <script lang="ts">
   import {
-    ColorLegend,
     ExternalLink,
     HelpButton,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
+  import cycleParking from "../../../../../assets/bicycle_parking.png?url";
   import { Checkbox } from "lib/govuk";
   import { layerId } from "lib/maplibre";
-  import { CircleLayer, VectorTileSource } from "svelte-maplibre";
-  import { colors } from "../../colors";
+  import { SymbolLayer, VectorTileSource } from "svelte-maplibre";
   import OsmLicense from "../OsmLicense.svelte";
 
   let name = "cycle_parking";
-  let color = colors.cycle_parking;
 
   let show = false;
 </script>
 
 <Checkbox bind:checked={show}>
-  <ColorLegend {color} />
+  <img src={cycleParking} />
   Cycle parking
   <span slot="right">
     <HelpButton>
@@ -31,6 +29,9 @@
         </ExternalLink> (as of 9 August 2023). The type of parking, public/private
         access, and whether it's covered are not shown.
       </p>
+      <p>
+        Icon from <a href="https://github.com/gravitystorm/openstreetmap-carto?tab=License-1-ov-file#readme">OpenStreetMap Carto</a>
+      </p>
       <OsmLicense />
     </HelpButton>
   </span>
@@ -39,33 +40,20 @@
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
-  <CircleLayer
+  <SymbolLayer
     {...layerId(name)}
     sourceLayer={name}
-    paint={{
-      "circle-color": color,
-      "circle-radius": [
-        "interpolate",
-        ["linear"],
-        ["zoom"],
-        1,
-        2,
-        8,
-        3,
-        13,
-        10,
-      ],
-    }}
     layout={{
+      "icon-image": "cycle_parking",
+      "icon-size": 1.0,
+      "icon-allow-overlap": true,
       visibility: show ? "visible" : "none",
     }}
-    manageHoverState
-    eventsIfTopMost
   >
     <Popup let:props>
       <p>
         Capacity: <b>{props.capacity ?? "unknown"}</b>
       </p>
     </Popup>
-  </CircleLayer>
+  </SymbolLayer>
 </VectorTileSource>

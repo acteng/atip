@@ -3,7 +3,7 @@
   export let limits: any[];
 </script>
 
-<div style="display: flex">
+<div style="display: flex; padding-left:15px; padding-right:15px;">
   {#each colorScale as color}
     <span style="background: {color}; width: 100%; border: 1px solid black;">
       &nbsp;
@@ -12,6 +12,6 @@
 </div>
 <div style="display: flex; justify-content: space-between;">
   {#each limits as limit}
-    <span>{limit}</span>
+    <span style="flex-grow: 1; flex-shrink: 1; text-align:center;">{limit}</span>
   {/each}
 </div>
