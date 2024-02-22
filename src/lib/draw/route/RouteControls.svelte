@@ -35,13 +35,13 @@
 {#if $snapMode}
   <p style="background: red; color: white; padding: 8px;">
     Snapping to existing roads. Press <b>s</b>
-     or click below to draw anywhere
+    or click below to draw anywhere
   </p>
   <SecondaryButton on:click={toggleSnap}>Draw anywhere</SecondaryButton>
 {:else}
   <p style="background: blue; color: white; padding: 8px;">
     Drawing points anywhere. Press <b>s</b>
-     or click below to snap to roads
+    or click below to snap to roads
   </p>
   <SecondaryButton on:click={toggleSnap}>Snap to roads</SecondaryButton>
 {/if}
