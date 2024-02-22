@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CollapsibleCard, FileInput, Modal } from "lib/common";
+  import { Modal } from "lib/common";
   import {
     gjSchemeCollection,
     hideSchemes,
@@ -9,6 +9,8 @@
   import {
     ButtonGroup,
     ErrorMessage,
+    CollapsibleCard,
+    FileInput,
     SecondaryButton,
     WarningButton,
   } from "govuk-svelte";

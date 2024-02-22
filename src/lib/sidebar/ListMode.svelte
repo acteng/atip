@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { FileInput } from "lib/common";
   import { gjSchemeCollection } from "lib/draw/stores";
-  import { ErrorMessage, SecondaryButton } from "govuk-svelte";
+  import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import PerSchemeControls from "./PerSchemeControls.svelte";
   import { addEmptyScheme, backfill } from "./scheme_data";
 

@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { CollapsibleCard, ColorLegend, Popup } from "lib/common";
+  import { ColorLegend, Popup } from "lib/common";
   import {
+    CollapsibleCard,
     Checkbox,
     CheckboxGroup,
     ErrorMessage,

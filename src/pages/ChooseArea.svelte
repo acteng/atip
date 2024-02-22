@@ -8,6 +8,7 @@
     DefaultButton,
     ErrorMessage,
     FormElement,
+    FileInput,
     Radio,
     SecondaryButton,
   } from "govuk-svelte";
@@ -16,7 +17,6 @@
   import { findSmallestAuthority, type AuthorityBoundaries } from "boundaries";
   import {
     appVersion,
-    FileInput,
     getAuthoritiesGeoJson,
     LoggedIn,
     MapLibreMap,
