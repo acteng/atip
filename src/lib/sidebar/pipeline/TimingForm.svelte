@@ -21,6 +21,7 @@
   <Radio
     legend="Status"
     choices={[
+      ["", "Unknown"],
       ["aspiration", "Aspiration"],
       ["planned", "Planned"],
       ["in development", "In development"],
@@ -35,6 +36,7 @@
   <Radio
     legend="Timescale"
     choices={[
+      ["", "Unknown"],
       ["short", "Short (1-3 years)"],
       ["medium", "Medium (3-6 years)"],
       ["long", "Long (6-10 years)"],
