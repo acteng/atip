@@ -3,13 +3,12 @@
   import length from "@turf/length";
   import { colors } from "colors";
   import DraggablePin from "lib/common/DraggablePin.svelte";
-  import { SecondaryButton } from "govuk-svelte";
+  import { CollapsibleCard, SecondaryButton } from "govuk-svelte";
   import { emptyGeojson, layerId } from "lib/maplibre";
   import { LngLat, MapMouseEvent } from "maplibre-gl";
   import { map } from "stores";
   import { onDestroy, onMount } from "svelte";
   import { GeoJSON, LineLayer } from "svelte-maplibre";
-  import { CollapsibleCard } from ".";
 
   let isInactive = true;
   let waypoints: any[] = [];

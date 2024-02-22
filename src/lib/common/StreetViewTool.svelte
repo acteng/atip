@@ -1,7 +1,6 @@
 <script lang="ts">
   import { colors } from "colors";
-  import { CollapsibleCard } from "lib/common";
-  import { Radio, SecondaryButton } from "govuk-svelte";
+  import { CollapsibleCard, Radio, SecondaryButton } from "govuk-svelte";
   import { getRoadLayerHelpers, LayerHelper } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, userSettings } from "stores";

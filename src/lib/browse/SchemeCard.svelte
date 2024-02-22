@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { FeatureCollection } from "geojson";
-  import { CollapsibleCard } from "lib/common";
-  import { ButtonGroup, SecondaryButton } from "govuk-svelte";
+  import { CollapsibleCard, ButtonGroup, SecondaryButton } from "govuk-svelte";
   import { bbox } from "lib/maplibre";
   import { map } from "stores";
   import type { SchemeData } from "types";

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { CollapsibleCard, Legend } from "lib/common";
-  import { Select } from "govuk-svelte";
+  import { Legend } from "lib/common";
+  import { CollapsibleCard, Select } from "govuk-svelte";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import { map } from "stores";
   import { styleByCurrentMilestone, styleByFundingProgramme } from "./colors";

@@ -11,7 +11,6 @@
   import { schemes, schemesGj } from "lib/browse/stores";
   import {
     appVersion,
-    FileInput,
     Geocoder,
     Layout,
     LoggedIn,
@@ -19,7 +18,7 @@
     Modal,
     ZoomOutMap,
   } from "lib/common";
-  import { ErrorMessage, SecondaryButton } from "govuk-svelte";
+  import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import { mapStyle } from "stores";
   import { onMount } from "svelte";
 

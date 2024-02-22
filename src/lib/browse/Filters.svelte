@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { CollapsibleCard } from "lib/common";
   import {
     Checkbox,
+    CollapsibleCard,
     CheckboxGroup,
     FormElement,
     SecondaryButton,

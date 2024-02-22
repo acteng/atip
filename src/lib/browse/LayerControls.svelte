@@ -2,11 +2,10 @@
   import {
     appVersion,
     BaselayerSwitcher,
-    CollapsibleCard,
     LineMeasureController,
     StreetViewTool,
   } from "lib/common";
-  import { CheckboxGroup } from "govuk-svelte";
+  import { CollapsibleCard, CheckboxGroup } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import { FillLayer, GeoJSON } from "svelte-maplibre";
   import CensusOutputAreaLayerControl from "./layers/areas/CensusOutputAreas.svelte";
