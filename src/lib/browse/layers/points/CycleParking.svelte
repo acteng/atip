@@ -5,10 +5,10 @@
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import cycleParking from "../../../../../assets/bicycle_parking.png?url";
   import { Checkbox } from "lib/govuk";
   import { layerId } from "lib/maplibre";
   import { SymbolLayer, VectorTileSource } from "svelte-maplibre";
+  import cycleParking from "../../../../../assets/bicycle_parking.png?url";
   import OsmLicense from "../OsmLicense.svelte";
 
   let name = "cycle_parking";
@@ -17,7 +17,7 @@
 </script>
 
 <Checkbox bind:checked={show}>
-  <img src={cycleParking} />
+  <img src={cycleParking} alt="a logo representing cycle parking" />
   Cycle parking
   <span slot="right">
     <HelpButton>
@@ -30,7 +30,9 @@
         access, and whether it's covered are not shown.
       </p>
       <p>
-        Icon from <a href="https://github.com/gravitystorm/openstreetmap-carto?tab=License-1-ov-file#readme">OpenStreetMap Carto</a>
+        Icon from <a href="https://github.com/gravitystorm/openstreetmap-carto">
+          OpenStreetMap Carto
+        </a>
       </p>
       <OsmLicense />
     </HelpButton>

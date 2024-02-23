@@ -17,7 +17,7 @@
 </script>
 
 <Checkbox bind:checked={show}>
-  <img src={railwayStation} />
+  <img src={railwayStation} alt="A logo representing a train" />
   Railway Stations
   <span slot="right">
     <HelpButton>
@@ -29,9 +29,7 @@
         </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
       </p>
       <p>
-        Icon from <a
-          href="https://iconduck.com/sets/font-awesome-icons"
-        >
+        Icon from <a href="https://iconduck.com/sets/font-awesome-icons">
           Font Awesome Icons
         </a>
       </p>
