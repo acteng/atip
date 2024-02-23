@@ -8,7 +8,7 @@
   import { Checkbox } from "lib/govuk";
   import { layerId } from "lib/maplibre";
   import { GeoJSON, SymbolLayer } from "svelte-maplibre";
-  import railwayStation from "../../../../../assets/train.png?url";
+  import railwayStation from "../../../../../assets/railway_station.png?url";
   import OsmLicense from "../OsmLicense.svelte";
 
   let name = "railway_stations";
@@ -29,9 +29,7 @@
         </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
       </p>
       <p>
-        Icon from <a href="https://iconduck.com/sets/font-awesome-icons">
-          Font Awesome Icons
-        </a>
+        Icon from <a href="https://www.nationalrail.co.uk/">National Rail</a>
       </p>
       <OsmLicense />
     </HelpButton>
