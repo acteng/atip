@@ -10,7 +10,7 @@
   import { MapLibre, NavigationControl, ScaleControl } from "svelte-maplibre";
   import cycleParking from "../../../assets/bicycle_parking.png?url";
   import chevron from "../../../assets/chevron.png?url";
-  import railwayStation from "../../../assets/train.png?url";
+  import railwayStation from "../../../assets/railway_station.png?url";
 
   export let style: string;
   export let startBounds: LngLatBoundsLike | undefined = undefined;
@@ -61,7 +61,7 @@
       images={[
         { id: "chevron", url: chevron },
         { id: "cycle_parking", url: cycleParking },
-        { id: "railway_station", url: railwayStation},
+        { id: "railway_station", url: railwayStation },
       ]}
     >
       {#if $mapStore}
