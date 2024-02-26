@@ -1,5 +1,4 @@
 <script lang="ts">
-  import chevron from "../../../assets/chevron.png?url";
   import { getStyleSpecification } from "lib/maplibre";
   import {
     Map,
@@ -9,6 +8,9 @@
   import { map as mapStore } from "stores";
   import { onMount, setContext } from "svelte";
   import { MapLibre, NavigationControl, ScaleControl } from "svelte-maplibre";
+  import cycleParking from "../../../assets/bicycle_parking.png?url";
+  import chevron from "../../../assets/chevron.png?url";
+  import railwayStation from "../../../assets/railway_station.png?url";
 
   export let style: string;
   export let startBounds: LngLatBoundsLike | undefined = undefined;
@@ -56,7 +58,11 @@
       bind:loaded
       bind:map
       on:error={onError}
-      images={[{ id: "chevron", url: chevron }]}
+      images={[
+        { id: "chevron", url: chevron },
+        { id: "cycle_parking", url: cycleParking },
+        { id: "railway_station", url: railwayStation },
+      ]}
     >
       {#if $mapStore}
         <ScaleControl />
