@@ -39,19 +39,15 @@
     }
   }
 
-  function clickCluster(e: CustomEvent<LayerClickInfo>) {
-    ($map.getSource(source) as GeoJSONSource).getClusterExpansionZoom(
-      e.detail.features[0].properties!.cluster_id,
-      (err, zoom) => {
-        if (!err) {
-          $map.easeTo({
-            // @ts-ignore We know this is a point
-            center: e.detail.features[0].geometry.coordinates,
-            zoom: zoom as number,
-          });
-        }
-      },
-    );
+  async function clickCluster(e: CustomEvent<LayerClickInfo>) {
+    let zoom = await (
+      $map.getSource(source) as GeoJSONSource
+    ).getClusterExpansionZoom(e.detail.features[0].properties!.cluster_id);
+    $map.easeTo({
+      // @ts-ignore We know this is a point
+      center: e.detail.features[0].geometry.coordinates,
+      zoom,
+    });
   }
 </script>
 

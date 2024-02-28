@@ -34,7 +34,7 @@
     "vite-tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
-    "@maptiler/geocoding-control": "^1.2.1",
+    "@maptiler/geocoding-control": "^1.2.2",
     "@turf/area": "^6.5.0",
     "@turf/bbox": "^6.5.0",
     "@turf/boolean-contains": "^6.5.0",
@@ -50,11 +50,11 @@
     "govuk-svelte": "github:acteng/govuk-svelte",
     "humanize-string": "^3.0.0",
     "js-cookie": "^3.0.5",
-    "maplibre-gl": "^3.5.1",
+    "maplibre-gl": "^4.0.2",
     "read-excel-file": "^5.7.1",
     "route-snapper": "^0.3.0",
     "svelte": "^4.2.10",
-    "svelte-maplibre": "^0.7.7",
+    "svelte-maplibre": "^0.8.1",
     "uuid": "^9.0.1"
   }
 }
