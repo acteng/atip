@@ -30,9 +30,11 @@
         access, and whether it's covered are not shown.
       </p>
       <p>
-        Icon from <a href="https://github.com/gravitystorm/openstreetmap-carto">
+        Icon from <ExternalLink
+          href="https://github.com/gravitystorm/openstreetmap-carto"
+        >
           OpenStreetMap Carto
-        </a>
+        </ExternalLink>
       </p>
       <OsmLicense />
     </HelpButton>
