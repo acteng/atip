@@ -29,7 +29,9 @@
         </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
       </p>
       <p>
-        Icon from <a href="https://www.nationalrail.co.uk/">National Rail</a>
+        Icon from <ExternalLink href="https://www.nationalrail.co.uk/">
+          National Rail
+        </ExternalLink>. (Note that not all stations shown are National Rail.)
       </p>
       <OsmLicense />
     </HelpButton>
