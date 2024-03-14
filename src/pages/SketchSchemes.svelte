@@ -3,7 +3,7 @@
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import type { AuthorityBoundaries } from "boundaries";
-  import BoundaryLayer from "lib/BoundaryLayer.svelte";
+  import BoundaryLayer from "lib/draw/BoundaryLayer.svelte";
   import {
     appVersion,
     Geocoder,

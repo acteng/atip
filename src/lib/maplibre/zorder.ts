@@ -52,97 +52,110 @@ function getBeforeId(layerId: string): string | undefined {
   return beforeId;
 }
 
+// Dummy functions just used for documentation below.
+let browse = (x: string) => x;
+let sketch = (x: string) => x;
+let criticalEntry = (x: string) => x;
+
+let maptilerStreets = (x: string) => x;
+let maptilerSatellite = (x: string) => x;
+let maptilerDataviz = (x: string) => x;
+let maptilerZoomstack = (x: string) => x;
+// OS Road/Light/Outdoor and Bluesky
+let rasterBasemaps = (x: string) => x;
+
 // All layer IDs used with layerId must be defined here, with later entries
 // drawn on top.
 //
-// This list covers all pages. We should maybe split it.
+// This list covers all pages and basemaps. We should maybe split it. In the
+// meantime, the page or basemap is at least identified.
 const layerZorder = [
+  rasterBasemaps("raster-basemap"),
+
   // Display optional layers in the browse page below interventions. Start with
   // polygons that cover most of the map.
-  "parliamentary_constituencies",
-  "parliamentary_constituencies-outline",
-  "wards",
-  "wards-outline",
-  "combined_authorities",
-  "combined_authorities-outline",
-  "local_authority_districts",
-  "local_authority_districts-outline",
-  "local_planning_authorities",
-  "local_planning_authorities-outline",
-  "census_output_areas",
-  "census_output_areas-outline",
-  "imd",
-  "imd-outline",
-  "pollution",
+  browse("parliamentary_constituencies"),
+  browse("parliamentary_constituencies-outline"),
+  browse("wards"),
+  browse("wards-outline"),
+  browse("combined_authorities"),
+  browse("combined_authorities-outline"),
+  browse("local_authority_districts"),
+  browse("local_authority_districts-outline"),
+  browse("local_planning_authorities"),
+  browse("local_planning_authorities-outline"),
+  browse("census_output_areas"),
+  browse("census_output_areas-outline"),
+  browse("imd"),
+  browse("imd-outline"),
+  browse("pollution"),
   // Then optional linear layers
-  "mrn",
-  "bus_routes",
-  "trams",
-  "national_cycle_network",
-  "cycle_paths",
-  "pct_commute",
-  "pct_school",
-  "road_widths",
-  "road_speeds",
-  "pavement_widths",
-  "gradient",
-  "gradient_arrows",
+  browse("mrn"),
+  browse("bus_routes"),
+  browse("trams"),
+  browse("national_cycle_network"),
+  browse("cycle_paths"),
+  browse("pct_commute"),
+  browse("pct_school"),
+  browse("road_widths"),
+  browse("road_speeds"),
+  browse("pavement_widths"),
+  browse("gradient"),
+  browse("gradient_arrows"),
   // Then small point/polygon layers on top
-  "education",
-  "hospitals",
-  "sports_spaces",
-  "railway_stations",
-  "cycle_parking",
-  "crossings",
-  "vehicle_counts",
-  "stats19",
-  "bus_stops",
+  browse("education"),
+  browse("hospitals"),
+  browse("sports_spaces"),
+  browse("railway_stations"),
+  browse("cycle_parking"),
+  browse("crossings"),
+  browse("vehicle_counts"),
+  browse("stats19"),
+  browse("bus_stops"),
 
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top
-  "interventions-coverage-polygons-outlines",
-  "interventions-polygons",
-  "interventions-polygons-outlines",
+  sketch("interventions-coverage-polygons-outlines"),
+  sketch(browse("interventions-polygons")),
+  sketch(browse("interventions-polygons-outlines")),
   // This is an outline, so draw on top
-  "hover-polygons",
+  sketch("hover-polygons"),
 
   // The hover effect thickens, so draw beneath
-  "hover-lines",
-  "interventions-lines",
-  "interventions-lines-endpoints",
+  sketch("hover-lines"),
+  sketch(browse("interventions-lines")),
+  sketch(browse("interventions-lines-endpoints")),
 
-  "hover-points",
-  "interventions-points",
+  sketch("hover-points"),
+  sketch(browse("interventions-points")),
 
   // Criticals are one layer that should display on top of scheme data
-  "criticals-clusters",
-  "criticals-counts",
-  "criticals-points",
+  browse("criticals-clusters"),
+  browse("criticals-counts"),
+  browse("criticals-points"),
 
-  "edit-polygon-fill",
-  "edit-polygon-lines",
-  "edit-polygon-vertices",
+  sketch("edit-polygon-fill"),
+  sketch("edit-polygon-lines"),
+  sketch("edit-polygon-vertices"),
 
-  "draw-split-route",
+  sketch("draw-split-route"),
 
-  "draw-street-view",
-
-  "route-points",
-  "route-lines",
-  "route-polygons",
+  sketch("route-points"),
+  sketch("route-lines"),
+  sketch("route-polygons"),
 
   // Draw most things beneath text road labels. These IDs come from the
   // MapTiler basemap, and there are different ones for each basemap. Note for
   // OS raster basemaps, we draw everything on top of the rasters.
-  "road_label",
-  "Road labels",
+  maptilerStreets("road_label"),
+  maptilerZoomstack(maptilerSatellite(maptilerDataviz("Road labels"))),
 
   // Draw the inverted boundary fade on top of basemap labels
-  "boundary",
-  "measurement-line",
+  sketch("boundary"),
+  browse(criticalEntry("measurement-line")),
 
   // TODO This might look nicer lower
-  "georeferenced-image",
+  sketch("georeferenced-image"),
 
-  "cover-interactive-layers",
+  browse("cover-interactive-layers"),
 ];
