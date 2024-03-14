@@ -81,7 +81,7 @@
   }}
 >
   <CircleLayer
-    {...layerId(`${source}-clusters`)}
+    {...layerId(`criticals-clusters`)}
     applyToClusters
     paint={{
       "circle-color": color,
@@ -96,7 +96,7 @@
     on:click={clickCluster}
   />
   <SymbolLayer
-    {...layerId(`${source}-counts`)}
+    {...layerId(`criticals-counts`)}
     applyToClusters
     layout={{
       "text-field": "{point_count_abbreviated}",
@@ -104,7 +104,7 @@
     }}
   />
   <CircleLayer
-    {...layerId(`${source}-points`)}
+    {...layerId(`criticals-points`)}
     applyToClusters={false}
     manageHoverState
     eventsIfTopMost
