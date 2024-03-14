@@ -54,7 +54,7 @@
     "read-excel-file": "^5.7.1",
     "route-snapper": "^0.3.0",
     "svelte": "^4.2.10",
-    "svelte-maplibre": "^0.8.1",
+    "svelte-maplibre": "^0.8.2",
     "uuid": "^9.0.1"
   }
 }
