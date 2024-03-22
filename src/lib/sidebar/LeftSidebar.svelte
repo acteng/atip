@@ -8,7 +8,7 @@
   import ImageMode from "../draw/image/ImageMode.svelte";
   import { PointTool } from "../draw/point/point_tool";
   import PointMode from "../draw/point/PointMode.svelte";
-  import { PolygonTool } from "../draw/polygon/polygon_tool";
+  import { PolygonTool } from "maplibre-draw-polygon";
   import PolygonMode from "../draw/polygon/PolygonMode.svelte";
   import RouteMode from "../draw/route/RouteMode.svelte";
   import RouteSnapperLoader from "../draw/route/RouteSnapperLoader.svelte";

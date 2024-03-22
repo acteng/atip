@@ -2,7 +2,7 @@ import { emptyCollection } from "lib/sidebar/scheme_data";
 import { writable, type Writable } from "svelte/store";
 import type { Mode, SchemeCollection } from "types";
 import { PointTool } from "./point/point_tool";
-import { PolygonTool } from "./polygon/polygon_tool";
+import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "./route/route_tool";
 
 // TODO Should we instead store a map from ID to feature?
