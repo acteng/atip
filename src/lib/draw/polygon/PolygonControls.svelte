@@ -1,7 +1,7 @@
 <script lang="ts">
   import { polygonTool } from "lib/draw/stores";
   import { SecondaryButton } from "govuk-svelte";
-  import { undoLength } from "./stores";
+  import { undoLength } from "maplibre-draw-polygon";
 
   function undo() {
     $polygonTool!.undo();

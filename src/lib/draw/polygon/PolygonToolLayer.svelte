@@ -2,7 +2,7 @@
   import { circleRadius, colors } from "colors";
   import { isLine, isPoint, isPolygon, layerId } from "lib/maplibre";
   import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
-  import { polygonToolGj } from "./stores";
+  import { polygonToolGj } from "maplibre-draw-polygon";
 </script>
 
 <GeoJSON data={$polygonToolGj}>
