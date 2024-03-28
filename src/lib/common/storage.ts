@@ -13,6 +13,7 @@ export function setLocalStorageItem(name: string, content: string) {
       error.stack.includes("exceeded the quota.");
     if (!storageQuotaExceeded && isStorageQuotaError) {
       window.alert(storageQuotaErrorMessage + error);
+      window.alert("Here's a breakdown of how your memory is being used, BEFORE attempting to save the current version. You should be able to fill 5 or 10 MBs of local storage:\n" + getBreakdownOfLocalStorageUsage());
       storageQuotaExceeded = true;
     } else if (isStorageQuotaError) {
       console.log(`StorageQuotaExceeded again: ${error}`);
@@ -20,4 +21,24 @@ export function setLocalStorageItem(name: string, content: string) {
       console.log(`Unexpected error when saving locally: ${error}`);
     }
   }
+}
+
+function getBreakdownOfLocalStorageUsage(): string {
+    const itemsObject = { ...localStorage};
+    let breakdownString = "";
+    let totalMBFilled = 0;
+    
+    Object.keys(itemsObject).forEach((key) => {
+       const lengthInMB = getLengthInMB(itemsObject[key]); 
+       breakdownString = breakdownString +  `The object stored for ${key} is taking up ${lengthInMB.toString().slice(0,4)} MB\n`;
+       totalMBFilled  += lengthInMB
+    });
+
+    breakdownString = breakdownString + `Total memory used: ${totalMBFilled.toString().slice(0,4)} MB`
+    return breakdownString;
+}
+
+function getLengthInMB(text: string) {
+    const lengthInMBytes = text.length / (1024 * 1024) ;
+    return lengthInMBytes;
 }
