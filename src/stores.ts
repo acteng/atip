@@ -3,7 +3,7 @@
 import type { Map } from "maplibre-gl";
 import { writable, type Writable } from "svelte/store";
 import { isStreetViewImagery, type Schema, type UserSettings } from "./types";
-import { setLocalStorageItem } from "lib/common"
+import { setLocalStorageItem } from "lib/common";
 
 // Note this must be set before gjSchemeCollection in lib/draw/stores.ts
 export const schema: Writable<Schema> = writable(defaultSchema());

@@ -5,7 +5,7 @@
   import { map } from "stores";
   import type { SchemeData } from "types";
   import { schemesGj } from "./stores";
-    import { setLocalStorageItem } from "lib/common";
+  import { setLocalStorageItem } from "lib/common";
 
   export let scheme: SchemeData;
 
