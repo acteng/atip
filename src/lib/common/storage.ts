@@ -8,8 +8,7 @@ export function setLocalStorageItem(name: string, content: string) {
   } catch (error: any) {
     const isStorageQuotaError =
       error.stack &&
-      error.stack.includes("exceeded the quota.") &&
-      error.stack.includes("at setLocalStorageItem");
+      error.stack.includes("exceeded the quota.");
     if (!storageQuotaExceeded && isStorageQuotaError) {
       window.alert(storageQuotaErrorMessage + error);
       storageQuotaExceeded = true;
