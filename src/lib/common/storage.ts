@@ -6,6 +6,8 @@ export function setLocalStorageItem(name: string, content: string) {
   try {
     window.localStorage.setItem(name, content);
   } catch (error: any) {
+    // Unfortunately it looks like we can't use typeof or instanceof to determine this one: 
+    // all we get is that it's an object so if someone changess the wording we may have to add new checks
     const isStorageQuotaError =
       error.stack &&
       error.stack.includes("exceeded the quota.");
