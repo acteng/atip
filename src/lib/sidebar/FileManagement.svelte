@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Modal } from "lib/common";
+  import { Modal, setLocalStorageItem } from "lib/common";
   import {
     gjSchemeCollection,
     hideSchemes,
@@ -61,7 +61,7 @@
   $: {
     if (loaded && $gjSchemeCollection) {
       console.log(`GJ changed, saving to local storage`);
-      window.localStorage.setItem(filename, JSON.stringify(geojsonToSave()));
+      setLocalStorageItem(filename, JSON.stringify(geojsonToSave()));
     }
   }
 

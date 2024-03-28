@@ -5,6 +5,7 @@
   import { map } from "stores";
   import type { SchemeData } from "types";
   import { schemesGj } from "./stores";
+    import { setLocalStorageItem } from "lib/common";
 
   export let scheme: SchemeData;
 
@@ -30,7 +31,7 @@
     // Assuming the schema is always v1
 
     // Put the file in local storage, so it'll be loaded from the next page
-    window.localStorage.setItem(filename, JSON.stringify(gj));
+    setLocalStorageItem(filename, JSON.stringify(gj));
     window.open(
       `scheme.html?authority=${scheme.browse?.authority_or_region}`,
       "_blank",

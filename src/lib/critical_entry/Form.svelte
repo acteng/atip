@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Modal } from "lib/common";
+  import { Modal, setLocalStorageItem } from "lib/common";
   import {
     ButtonGroup,
     DefaultButton,
@@ -21,9 +21,9 @@
   let schemeReference = window.localStorage.getItem("schemeReference") ?? "";
   let currentDesignStage =
     window.localStorage.getItem("currentDesignStage") ?? "";
-  $: window.localStorage.setItem("inspector", inspector);
-  $: window.localStorage.setItem("schemeReference", schemeReference);
-  $: window.localStorage.setItem("currentDesignStage", currentDesignStage);
+  $: setLocalStorageItem("inspector", inspector);
+  $: setLocalStorageItem("schemeReference", schemeReference);
+  $: setLocalStorageItem("currentDesignStage", currentDesignStage);
 
   let criticalIssueType = "";
   let locationDescription = "";

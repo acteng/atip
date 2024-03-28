@@ -21,6 +21,7 @@
     LoggedIn,
     MapLibreMap,
     Popup,
+    setLocalStorageItem,
   } from "lib/common";
   import About from "lib/sidebar/About.svelte";
   import { schema as schemaStore } from "stores";
@@ -84,7 +85,7 @@
       }
 
       // Put the file in local storage, so it'll be loaded from the next page
-      window.localStorage.setItem(filename, JSON.stringify(gj));
+      setLocalStorageItem(filename, JSON.stringify(gj));
       window.location.href = `scheme.html?authority=${gj.authority}&schema=${schema}`;
     } catch (err) {
       pageErrorMessage = `Couldn't load scheme from a file: ${err}`;
