@@ -57,11 +57,22 @@
     loaded = true;
   });
 
+  let quotaExceeded = false;
+  let showQuotaModal = false;
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
   $: {
     if (loaded && $gjSchemeCollection) {
       console.log(`GJ changed, saving to local storage`);
-      setLocalStorageItem(filename, JSON.stringify(geojsonToSave()));
+      try {
+        window.localStorage.setItem(filename, JSON.stringify(geojsonToSave()));
+      } catch (err) {
+        console.log(`Local storage full: ${err}`);
+
+        if (!quotaExceeded) {
+          quotaExceeded = true;
+          showQuotaModal = true;
+        }
+      }
     }
   }
 
@@ -158,3 +169,9 @@
     </Modal>
   </CollapsibleCard>
 {/if}
+
+<Modal title="Local storage out of quota" bind:open={showQuotaModal}>
+  <p>Explain problem</p>
+  <p>WarningButton with confirmation asking to delete everything</p>
+  <p>Or breakdown by key, delete button for each key</p>
+</Modal>
