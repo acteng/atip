@@ -15,6 +15,7 @@
   import LocalPlanningAuthoritiesLayerControl from "./layers/areas/LocalPlanningAuthorities.svelte";
   import ParliamentaryConstituenciesLayerControl from "./layers/areas/ParliamentaryConstituencies.svelte";
   import PollutionLayerControl from "./layers/areas/Pollution.svelte";
+  import RoadNoiseLayerControl from "./layers/areas/RoadNoise.svelte";
   import WardsLayerControl from "./layers/areas/Wards.svelte";
   import BusRoutesLayerControl from "./layers/lines/BusRoutes.svelte";
   import CyclePathsLayerControl from "./layers/lines/CyclePaths.svelte";
@@ -114,6 +115,7 @@
         <RoadSpeedsLayerControl />
       {/if}
       <PollutionLayerControl />
+      <RoadNoiseLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Tools">
