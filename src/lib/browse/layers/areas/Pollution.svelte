@@ -4,14 +4,13 @@
   import { layerId } from "lib/maplibre";
   import { RasterLayer, RasterTileSource } from "svelte-maplibre";
   import OsOglLicense from "../OsOglLicense.svelte";
-  import SequentialLegend from "../SequentialLegend.svelte";
 
   let show = false;
   let opacity = 50;
   let pollutant = "PM25_viridis";
 
   // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services
-  // and QGIS, or http://www.extrium.co.uk/noiseviewer.html for the noise layer
+  // and QGIS
   $: info = {
     NOx_viridis: ["22", "Data for 2022"],
     PM25_viridis: ["21", "Data for 2022"],
@@ -19,20 +18,10 @@
     NOxRoads_viridis: ["22", "Data for 2022"],
     PM25Roads_viridis: ["14", "Data for 2022"],
     PM10Roads_viridis: ["22", "Data for 2022"],
-    // TODO This one is disabled by leaving it out of the dropdown. The WMS
-    // server uses HTTP, not HTTPS, and doesn't work when deployed.
-    Noise: [
-      "NoiseE:RD_LQ16_R3",
-      "Annual average noise level for the 16-hour period between 0700-2300 (dB)",
-    ],
   }[pollutant];
 
   function wmsUrl(): string {
-    if (pollutant == "Noise") {
-      return `http://wms.extrium.co.uk/geoserver/NoiseE/wms`;
-    } else {
-      return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2022/${pollutant}/MapServer/WMSServer`;
-    }
+    return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2022/${pollutant}/MapServer/WMSServer`;
   }
 
   function title(pollutant: string): string {
@@ -79,17 +68,6 @@
         <sup>3</sup>
         . Note the particulate matter layers are not corrected for natural sources.
       </p>
-      <p>
-        The noise layer is from <ExternalLink
-          href="http://www.extrium.co.uk/noiseviewer.html"
-        >
-          Extrium
-        </ExternalLink>, using 2017 data. See their <ExternalLink
-          href="http://www.extrium.co.uk/noiseviewer/FAQs.pdf"
-        >
-          FAQ
-        </ExternalLink>.
-      </p>
       <OsOglLicense />
     </HelpButton>
   </span>
@@ -117,18 +95,11 @@
     </label>
   </div>
 
-  {#if pollutant == "Noise"}
-    <SequentialLegend
-      colorScale={["#FF6600", "#FF3333", "#990033", "#AD9AD6", "#0000E0"]}
-      limits={["55", "60", "65", "70", "75", ">"]}
-    />
-  {:else}
-    <img
-      src={legendUrl(pollutant)}
-      width={150}
-      alt={`Legend for ${pollutant} layer`}
-    />
-  {/if}
+  <img
+    src={legendUrl(pollutant)}
+    width={150}
+    alt={`Legend for ${pollutant} layer`}
+  />
 {/if}
 
 <RasterTileSource tiles={[tilesUrl(pollutant)]} tileSize={256}>
