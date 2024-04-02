@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { Modal, setLocalStorageItem } from "lib/common";
+  import {
+    Modal,
+    setLocalStorageItem,
+    type SetStorageErrorObject,
+  } from "lib/common";
   import {
     gjSchemeCollection,
     hideSchemes,
@@ -20,6 +24,7 @@
   import deleteIcon from "../../../assets/delete.svg?url";
   import saveIcon from "../../../assets/save.svg?url";
   import { backfill, emptyCollection } from "./scheme_data";
+  import StorageModal from "./StorageModal.svelte";
 
   export let authorityName: string;
   let errorMessage = "";
@@ -57,20 +62,22 @@
     loaded = true;
   });
 
-  let quotaExceeded = false;
   let showQuotaModal = false;
+  let setStorageError: SetStorageErrorObject | undefined;
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
   $: {
     if (loaded && $gjSchemeCollection) {
       console.log(`GJ changed, saving to local storage`);
-      try {
-        window.localStorage.setItem(filename, JSON.stringify(geojsonToSave()));
-      } catch (err) {
-        console.log(`Local storage full: ${err}`);
+      const [success, storageError] = setLocalStorageItem(
+        filename,
+        JSON.stringify(geojsonToSave()),
+      );
+      if (!success) {
+        console.log(storageError.message);
 
-        if (!quotaExceeded) {
-          quotaExceeded = true;
+        if (storageError.isQuotaError) {
           showQuotaModal = true;
+          setStorageError = storageError;
         }
       }
     }
@@ -88,6 +95,7 @@
     });
     sidebarHover.set(null);
     hideSchemes.set(new Set());
+    $mode.mode = "list";
   }
 
   // Remove the hide_while_editing property hack
@@ -170,8 +178,9 @@
   </CollapsibleCard>
 {/if}
 
-<Modal title="Local storage out of quota" bind:open={showQuotaModal}>
-  <p>Explain problem</p>
-  <p>WarningButton with confirmation asking to delete everything</p>
-  <p>Or breakdown by key, delete button for each key</p>
-</Modal>
+<StorageModal
+  bind:show={showQuotaModal}
+  bind:setStorageError
+  clearCurrentSketch={clearAll}
+  currentAuthority={authorityName}
+/>
