@@ -89,6 +89,7 @@ const layerZorder = [
   browse("imd"),
   browse("imd-outline"),
   browse("pollution"),
+  browse("road_noise"),
   // Then optional linear layers
   browse("mrn"),
   browse("bus_routes"),
