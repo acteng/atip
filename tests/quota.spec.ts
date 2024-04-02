@@ -19,5 +19,5 @@ test("exceeding local storage quota displays an error", async () => {
   await clickMap(page, 400, 500);
   await page.getByRole("button", { name: "Finish" }).click();
 
-  await expect(page.getByText("Length: 450 m")).toBeVisible();
+  await expect(page.getByText("Local Storage Quota Exceeded")).toBeVisible();
 });
