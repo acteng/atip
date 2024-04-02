@@ -18,7 +18,22 @@
 
   let name = "road_noise";
 
-  let colorScale = colors.sequential_low_to_high;
+  // 5 buckets from the input are grouped into 3
+  function describe(noiseclass: string): string {
+    return {
+      "55.0-59.9": "Comfortable noise levels",
+      "60.0-64.9": "Comfortable noise levels",
+      "65.0-69.9": "Slightly noisy",
+      "70.0-74.9": "Slightly noisy",
+      ">=75.0": "Excessively noisy",
+    }[noiseclass]!;
+  }
+
+  let colorScale = [
+    colors.sequential_low_to_high[0],
+    colors.sequential_low_to_high[2],
+    colors.sequential_low_to_high[4],
+  ];
 
   let show = false;
 </script>
@@ -44,7 +59,7 @@
   </span>
 </Checkbox>
 {#if show}
-  <SequentialLegend {colorScale} limits={["55", "60", "65", "70", "75", ">"]} />
+  <SequentialLegend {colorScale} limits={["55", "65", "75", ">"]} />
 {/if}
 
 <VectorTileSource
@@ -58,14 +73,14 @@
         ["get", "noiseclass"],
         {
           "55.0-59.9": colorScale[0],
-          "60.0-64.9": colorScale[1],
-          "65.0-69.9": colorScale[2],
-          "70.0-74.9": colorScale[3],
-          ">=75.0": colorScale[4],
+          "60.0-64.9": colorScale[0],
+          "65.0-69.9": colorScale[1],
+          "70.0-74.9": colorScale[1],
+          ">=75.0": colorScale[2],
         },
         "red",
       ),
-      "fill-opacity": hoverStateFilter(0.5, 0.7),
+      "fill-opacity": hoverStateFilter(0.5, 0.8),
     }}
     layout={{
       visibility: show ? "visible" : "none",
@@ -74,7 +89,7 @@
     eventsIfTopMost
   >
     <Popup let:props>
-      <p>{props.noiseclass} dB</p>
+      <p>{props.noiseclass} dB ({describe(props.noiseclass)})</p>
     </Popup>
   </FillLayer>
 </VectorTileSource>
