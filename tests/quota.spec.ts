@@ -24,6 +24,10 @@ test("exceeding local storage quota displays an error", async () => {
 
 test("exceeding local storage quota allows user  to clear local storage", async () => {
 
+  await page.evaluate(() =>
+    window.localStorage.setItem("small", "x"),
+  );
+
   // Draw one simple route, so that when a big item is added the quota is gone past
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 500, 500);
