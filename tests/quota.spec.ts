@@ -3,7 +3,7 @@ import { clickMap, loadInitialPageFromBrowser } from "./shared.js";
 
 let page: Page;
 
-test.beforeAll(async ({ browser }) => {
+test.beforeEach(async ({ browser }) => {
   page = await loadInitialPageFromBrowser(browser);
 });
 
