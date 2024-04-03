@@ -14,15 +14,13 @@
   export let currentAuthority: string;
 
   function removeStorageItem(key: string) {
-    return function () {
-      let storedStrings = clearLocalStorageItem(key);
-      if (setStorageError) {
-        setStorageError.storedStrings = storedStrings;
-      }
-      if (key === currentAuthority) {
-        clearCurrentSketch();
-      }
-    };
+    let storedStrings = clearLocalStorageItem(key);
+    if (setStorageError) {
+      setStorageError.storedStrings = storedStrings;
+    }
+    if (key === currentAuthority) {
+      clearCurrentSketch();
+    }
   }
 
   function clearLocalStorageAndCloseModal() {
@@ -41,7 +39,7 @@
     Be sure that you're not losing anything important before doing this!
   </p>
   <WarningButton on:click={clearLocalStorageAndCloseModal}>
-    Delete All Sketch Data From Browser
+    Delete all sketch data from browser
   </WarningButton>
   {#if setStorageError}
     <p>
@@ -49,17 +47,11 @@
       delete individual items (normally storage quota is 5mb or 10mb):
     </p>
     {#each setStorageError.storedStrings as storedStringDescriptor}
-      <p>Stored object: {storedStringDescriptor.key}</p>
-      <p>
-        Storage used (rounded to nearest 0.01MB): {storedStringDescriptor.storageUsedInMB
-          .toString()
-          .slice(0, 4)}MB
-      </p>
       {#if storedStringDescriptor.key === currentAuthority}
-        <p><WarningIcon text={"warning icon"} />This is the current sketch.</p>
+        <p><WarningIcon text={"warning icon"} />The button below deletes the current sketch.</p>
       {/if}
-      <SecondaryButton on:click={removeStorageItem(storedStringDescriptor.key)}>
-        Remove stored item for {storedStringDescriptor.key}
+      <SecondaryButton on:click={() => removeStorageItem(storedStringDescriptor.key)}>
+        Remove stored item for {storedStringDescriptor.key}({storedStringDescriptor.storageUsedInMB}MB)
       </SecondaryButton>
     {/each}
   {/if}

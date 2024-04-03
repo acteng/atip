@@ -68,17 +68,13 @@
   $: {
     if (loaded && $gjSchemeCollection) {
       console.log(`GJ changed, saving to local storage`);
-      const [success, storageError] = setLocalStorageItem(
+      const storageError = setLocalStorageItem(
         filename,
         JSON.stringify(geojsonToSave()),
       );
-      if (!success) {
-        console.log(storageError.message);
-
-        if (storageError.isQuotaError) {
-          showQuotaModal = true;
-          setStorageError = storageError;
-        }
+      if (storageError.isQuotaError) {
+        showQuotaModal = true;
+        setStorageError = storageError;
       }
     }
   }

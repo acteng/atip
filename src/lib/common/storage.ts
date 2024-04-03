@@ -23,49 +23,35 @@ function getEmptySetStorageErrorObject(): SetStorageErrorObject {
 export function setLocalStorageItem(
   name: string,
   content: string,
-): [boolean, SetStorageErrorObject] {
+): SetStorageErrorObject {
   try {
     window.localStorage.setItem(name, content);
-    return [true, getEmptySetStorageErrorObject()];
+    return getEmptySetStorageErrorObject();
   } catch (error: any) {
-    // Unfortunately it looks like we can't use typeof or instanceof to determine this one:
-    // all we get is that it's an object so if someone changess the wording we may have to add new checks
-    const isStorageQuotaError =
-      error.stack && error.stack.includes("exceeded the quota.");
-    if (isStorageQuotaError) {
-      return [
-        false,
-        {
-          isQuotaError: true,
-          message: storageQuotaErrorMessage + error,
-          storedStrings: getStoredStrings(),
-        },
-      ];
-    }
-
-    return [false, getEmptySetStorageErrorObject()];
+    return {
+      isQuotaError: true,
+      message: storageQuotaErrorMessage + error,
+      storedStrings: getStoredStrings(),
+    };
   }
 }
 
 function getStoredStrings(): StoredStringDescriptor[] {
-  const itemsObject = { ...localStorage };
-
-  const results: StoredStringDescriptor[] = Object.keys(itemsObject).map(
-    (key) => {
-      const storageUsedInMB = getLengthInMB(itemsObject[key]);
-      return {
-        key,
-        storageUsedInMB,
-      };
-    },
-  );
+  const results: StoredStringDescriptor[] = [];
+  for (let i = 0; i < window.localStorage.length; i++) {
+    const key: string = window.localStorage.key(i) || "";
+    const storageUsedInMB = getLengthInMB(window.localStorage.getItem(key) || "");
+    results.push({
+      key,
+      storageUsedInMB,
+    });
+  }
 
   return results;
 }
 
-function getLengthInMB(text: string) {
-  const lengthInMBytes = text.length / (1024 * 1024);
-  return lengthInMBytes;
+function getLengthInMB(text: string): number {
+  return text.length / (1024 * 1024);
 }
 
 export function clearLocalStorage() {
