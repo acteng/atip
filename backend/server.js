@@ -44,6 +44,9 @@ app.get("/data/*", async (req, resp) => {
       resp.type("application/geo+json");
     } else if (path.endsWith(".pmtiles")) {
       resp.type("binary/octet-stream");
+    } else if (path.endsWith(".geojson.gz")) {
+      resp.type("application/geo+json");
+      resp.append("Content-Encoding", "gzip");
     }
 
     // Return the whole file?
