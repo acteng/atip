@@ -37,7 +37,7 @@ export function setLocalStorageItem(
 }
 
 function getStoredStrings(): StoredStringDescriptor[] {
-  const results: StoredStringDescriptor[] = [];
+  let results: StoredStringDescriptor[] = [];
   for (let i = 0; i < window.localStorage.length; i++) {
     const key: string = window.localStorage.key(i) || "";
     const storageUsedInMB = getLengthInMB(window.localStorage.getItem(key) || "");
@@ -46,6 +46,10 @@ function getStoredStrings(): StoredStringDescriptor[] {
       storageUsedInMB,
     });
   }
+
+  results = results.sort((thisStoredString, thatStoredString) => {
+    return thatStoredString.storageUsedInMB - thisStoredString.storageUsedInMB;
+  })
 
   return results;
 }
