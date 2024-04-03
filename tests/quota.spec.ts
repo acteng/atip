@@ -3,14 +3,9 @@ import { clickMap, loadInitialPageFromBrowser } from "./shared.js";
 
 let page: Page;
 
-test.beforeAll(async ({ browser }) => {
+test.beforeEach(async ({browser}) => {
   page = await loadInitialPageFromBrowser(browser);
-});
-
-test.beforeEach(async ({}) => {
-  if (page) {
-    await page.evaluate(() => window.localStorage.clear());
-  }
+  await page.evaluate(() => window.localStorage.clear());
 });
 
 test("exceeding local storage quota displays an error", async () => {

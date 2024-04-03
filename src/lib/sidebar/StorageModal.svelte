@@ -48,9 +48,14 @@
     </p>
     {#each setStorageError.storedStrings as storedStringDescriptor}
       {#if storedStringDescriptor.key === currentAuthority}
-        <p><WarningIcon text={"warning icon"} />The button below deletes the current sketch.</p>
+        <p>
+          <WarningIcon text={"warning icon"} />The button below deletes the
+          current sketch.
+        </p>
       {/if}
-      <SecondaryButton on:click={() => removeStorageItem(storedStringDescriptor.key)}>
+      <SecondaryButton
+        on:click={() => removeStorageItem(storedStringDescriptor.key)}
+      >
         Remove stored item for {storedStringDescriptor.key}({storedStringDescriptor.storageUsedInMB}MB)
       </SecondaryButton>
     {/each}
