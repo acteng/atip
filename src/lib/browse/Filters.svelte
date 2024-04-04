@@ -214,12 +214,6 @@
 <CollapsibleCard label="Filters">
   <SecondaryButton on:click={resetFilters}>Reset all filters</SecondaryButton>
   <Select
-    label="Sketch source"
-    choices={sketchSources}
-    emptyOption
-    bind:value={filterSketchSource}
-  />
-  <Select
     label="Authority or region"
     choices={authorities}
     emptyOption
@@ -236,6 +230,12 @@
     choices={currentMilestones}
     emptyOption
     bind:value={filterCurrentMilestone}
+  />
+  <Select
+    label="Sketch source"
+    choices={sketchSources}
+    emptyOption
+    bind:value={filterSketchSource}
   />
   <FormElement
     label="Intervention name or description"
