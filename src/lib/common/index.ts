@@ -18,6 +18,7 @@ export { default as StreetViewHelp } from "./StreetViewHelp.svelte";
 export { default as StreetViewTool } from "./StreetViewTool.svelte";
 export { default as WarningIcon } from "./WarningIcon.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
+export * from "./storage";
 
 export async function getAuthoritiesGeoJson(): Promise<AuthorityBoundaries> {
   let resp = await fetch(authoritiesUrl);

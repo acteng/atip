@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { Modal } from "lib/common";
+  import {
+    Modal,
+    setLocalStorageItem,
+    type SetStorageErrorObject,
+  } from "lib/common";
   import {
     gjSchemeCollection,
     hideSchemes,
@@ -20,6 +24,7 @@
   import deleteIcon from "../../../assets/delete.svg?url";
   import saveIcon from "../../../assets/save.svg?url";
   import { backfill, emptyCollection } from "./scheme_data";
+  import StorageModal from "./StorageModal.svelte";
 
   export let authorityName: string;
   let errorMessage = "";
@@ -57,11 +62,20 @@
     loaded = true;
   });
 
+  let showQuotaModal = false;
+  let setStorageError: SetStorageErrorObject | undefined;
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
   $: {
     if (loaded && $gjSchemeCollection) {
       console.log(`GJ changed, saving to local storage`);
-      window.localStorage.setItem(filename, JSON.stringify(geojsonToSave()));
+      const storageError = setLocalStorageItem(
+        filename,
+        JSON.stringify(geojsonToSave()),
+      );
+      if (storageError.isQuotaError) {
+        showQuotaModal = true;
+        setStorageError = storageError;
+      }
     }
   }
 
@@ -77,6 +91,7 @@
     });
     sidebarHover.set(null);
     hideSchemes.set(new Set());
+    $mode.mode = "list";
   }
 
   // Remove the hide_while_editing property hack
@@ -158,3 +173,10 @@
     </Modal>
   </CollapsibleCard>
 {/if}
+
+<StorageModal
+  bind:show={showQuotaModal}
+  bind:setStorageError
+  clearCurrentSketch={clearAll}
+  currentAuthority={authorityName}
+/>
