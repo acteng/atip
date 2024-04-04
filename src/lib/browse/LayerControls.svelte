@@ -19,7 +19,8 @@
   import WardsLayerControl from "./layers/areas/Wards.svelte";
   import BusRoutesLayerControl from "./layers/lines/BusRoutes.svelte";
   import CyclePathsLayerControl from "./layers/lines/CyclePaths.svelte";
-  import MrnLayerControl from "./layers/lines/MajorRoadNetwork.svelte";
+  import MajorRoadNetworkLayerControl from "./layers/lines/MajorRoadNetwork.svelte";
+  import StrategicRoadNetworkLayerControl from "./layers/lines/StrategicRoadNetwork.svelte";
   import NationalCycleNetworkLayerControl from "./layers/lines/NationalCycleNetwork.svelte";
   import PavementWidthsLayerControl from "./layers/lines/PavementWidths.svelte";
   import PctLayerControl from "./layers/lines/PCT.svelte";
@@ -78,7 +79,8 @@
     <CheckboxGroup small>
       <CyclePathsLayerControl />
       <NationalCycleNetworkLayerControl />
-      <MrnLayerControl />
+      <MajorRoadNetworkLayerControl />
+      <StrategicRoadNetworkLayerControl />
       <CycleParkingLayerControl />
       <CrossingsLayerControl />
     </CheckboxGroup>
