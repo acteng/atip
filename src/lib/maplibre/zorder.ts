@@ -92,6 +92,7 @@ const layerZorder = [
   browse("road_noise"),
   // Then optional linear layers
   browse("mrn"),
+  browse("srn"),
   browse("bus_routes"),
   browse("trams"),
   browse("national_cycle_network"),
