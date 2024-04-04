@@ -25,7 +25,13 @@
 
   export let show = true;
 
-  // Dropdown filters
+  // Dropdown filters;
+  let sketchSources: [string, string][] = [
+    ["ATF-Assessment", "ATF-Assessment"],
+    ["LCWIP-Mapping", "LCWIP-Mapping"],
+    ["Both", "Both"],
+  ];
+  let filterSketchSource = "";
   let authorities: [string, string][] = [];
   let filterAuthority = "";
   let fundingProgrammes: [string, string][] = [];
@@ -59,12 +65,14 @@
     fundingProgrammes = fundingProgrammesForColouringAndFiltering.map(
       (value: string) => [value, value],
     );
+
     currentMilestones = Array.from(set3.entries());
     currentMilestones.sort();
   });
 
   // When any filters change, update schemesToBeShown
   function filtersUpdated(
+    filterSketchSource: string,
     filterInterventionTextCopy: string,
     filterSchemeTextCopy: string,
     filterAuthority: string,
@@ -87,6 +95,7 @@
         return false;
       }
       if (
+        filterSketchSource ||
         filterSchemeNormalized ||
         filterAuthority ||
         filterFundingProgramme ||
@@ -124,6 +133,14 @@
             .includes(filterSchemeNormalized)
         ) {
           return false;
+        }
+        if (filterSketchSource) {
+          if (
+            filterSketchSource !== "Both" &&
+            filterSketchSource !== scheme.browse?.sketch_source
+          ) {
+            return false;
+          }
         }
       }
       return true;
@@ -172,6 +189,7 @@
     counts = counts;
   }
   $: filtersUpdated(
+    filterSketchSource,
     $filterInterventionText,
     $filterSchemeText,
     filterAuthority,
@@ -184,6 +202,7 @@
   }
 
   function resetFilters() {
+    filterSketchSource = "";
     filterAuthority = "";
     filterFundingProgramme = "";
     filterCurrentMilestone = "";
@@ -194,6 +213,12 @@
 
 <CollapsibleCard label="Filters">
   <SecondaryButton on:click={resetFilters}>Reset all filters</SecondaryButton>
+  <Select
+    label="Sketch source"
+    choices={sketchSources}
+    emptyOption
+    bind:value={filterSketchSource}
+  />
   <Select
     label="Authority or region"
     choices={authorities}
