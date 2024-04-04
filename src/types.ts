@@ -81,7 +81,7 @@ export interface BrowseSchemeData {
   capital_scheme_id: string;
   funding_programme: string;
   current_milestone?: string;
-  sketch_source: "ATF-Assessment" | "LCWIP-Mapping";
+  sketch_source: "ATF assessment" | "LCWIP mapping";
 }
 
 export type PipelineType =

@@ -26,12 +26,6 @@
   export let show = true;
 
   // Dropdown filters;
-  let sketchSources: [string, string][] = [
-    ["ATF-Assessment", "ATF-Assessment"],
-    ["LCWIP-Mapping", "LCWIP-Mapping"],
-    ["Both", "Both"],
-  ];
-  let filterSketchSource = "";
   let authorities: [string, string][] = [];
   let filterAuthority = "";
   let fundingProgrammes: [string, string][] = [];
@@ -41,6 +35,12 @@
   let filterFundingProgramme = "";
   let currentMilestones: [string, string][] = [];
   let filterCurrentMilestone = "";
+  let sketchSources: [string, string][] = [
+    ["ATF assessment", "ATF assessment"],
+    ["LCWIP mapping", "LCWIP mapping"],
+    ["Both", "Both"],
+  ];
+  let filterSketchSource = "";
 
   // Stats about filtered schemes
   let counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
