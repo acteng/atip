@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { clickMap, loadInitialPageFromBrowser } from "./shared.js";
+import { checkPageLoaded, clickMap, loadInitialPageFromBrowser } from "./shared.js";
 
 let page: Page;
 
@@ -52,8 +52,9 @@ test("exceeding local storage quota allows user to clear specific local storage 
     window.localStorage.setItem("huge", "x".repeat(4.999 * 1024 * 1024)),
   );
 
-  await page.goto("/index.html?schema=pipeline");
-  await page.getByTestId("transport-authority").fill("LAD_Worthing");
+  await page.goto("/scheme.html?authority=LAD_Worthing");
+
+  await checkPageLoaded(page);
 
   // Draw one simple route, causing quota to go over
   await page.getByRole("button", { name: "New route" }).click();
@@ -62,7 +63,7 @@ test("exceeding local storage quota allows user to clear specific local storage 
   await page.getByRole("button", { name: "Finish" }).click();
 
   await page.getByText("Remove stored item for huge").click();
-  await page.getByText("X").click();
+  await page.getByText("Close").click();
   await page.getByText("Save").click();
 
   // See that we're now able to make the route without exceeding the quota
@@ -82,8 +83,9 @@ test("exceeding local storage quota allows user to clear local storage, includin
     window.localStorage.setItem("huge", "x".repeat(4.999 * 1024 * 1024)),
   );
 
-  await page.goto("/index.html?schema=pipeline");
-  await page.getByTestId("transport-authority").fill("LAD_Worthing");
+  await page.goto("/scheme.html?authority=LAD_Worthing");
+
+  await checkPageLoaded(page);
 
   // Draw one simple route, causing quota to go over
   await page.getByRole("button", { name: "New route" }).click();

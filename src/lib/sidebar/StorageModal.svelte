@@ -44,7 +44,7 @@
   {#if setStorageError}
     <p>
       Otherwise here is a breakdown of what is currently stored locally. You can
-      delete individual items (normally storage quota is 5mb or 10mb):
+      delete individual items (normally storage quota is 5MB or 10MB):
     </p>
     {#each setStorageError.storedStrings as storedStringDescriptor}
       {#if storedStringDescriptor.key === currentAuthority}
@@ -56,7 +56,7 @@
       <SecondaryButton
         on:click={() => removeStorageItem(storedStringDescriptor.key)}
       >
-        Remove stored item for {storedStringDescriptor.key}({storedStringDescriptor.storageUsedInMB}MB)
+        Remove stored item for {storedStringDescriptor.key}({storedStringDescriptor.storageUsedInMB.toFixed(2)}MB)
       </SecondaryButton>
     {/each}
   {/if}

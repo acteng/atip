@@ -24,7 +24,7 @@
     <div style="display: flex; justify-content: space-between;">
       <h1 class="govuk-heading-l">{title}</h1>
       {#if displayEscapeButton}
-        <SecondaryButton on:click={() => (open = false)}>X</SecondaryButton>
+        <SecondaryButton on:click={() => (open = false)}>Close</SecondaryButton>
       {/if}
     </div>
     <slot />
