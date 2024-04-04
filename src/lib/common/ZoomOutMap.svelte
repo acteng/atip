@@ -8,7 +8,13 @@
   export let boundaryGeojson: GeoJSON;
 
   function recenter() {
-    $map.fitBounds(bbox(boundaryGeojson), {
+    let bounds = bbox(boundaryGeojson);
+    // If the GJ is empty, don't do anything
+    if (!Number.isFinite(bounds[0])) {
+      return;
+    }
+
+    $map.fitBounds(bounds, {
       padding: 20,
       animate: true,
       duration: 500,
