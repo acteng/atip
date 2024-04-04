@@ -40,10 +40,10 @@
     <HelpButton>
       <p>
         Data from <ExternalLink
-          href="https://geoportal.statistics.gov.uk/datasets/ons::local-authority-districts-may-2023-boundaries-uk-buc/explore"
+          href="https://geoportal.statistics.gov.uk/maps/79a4e87783be4b6bbb96ddad6dda52a3"
         >
           ONS Geography
-        </ExternalLink>, as of May 2023.
+        </ExternalLink>, as of January 2024.
       </p>
       <OsOglLicense />
     </HelpButton>
