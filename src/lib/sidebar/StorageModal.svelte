@@ -56,7 +56,9 @@
       <SecondaryButton
         on:click={() => removeStorageItem(storedStringDescriptor.key)}
       >
-        Remove stored item for {storedStringDescriptor.key}({storedStringDescriptor.storageUsedInMB.toFixed(2)}MB)
+        Remove stored item for {storedStringDescriptor.key}({storedStringDescriptor.storageUsedInMB.toFixed(
+          2,
+        )}MB)
       </SecondaryButton>
     {/each}
   {/if}

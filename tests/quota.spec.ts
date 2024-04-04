@@ -1,9 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
-import { checkPageLoaded, clickMap, loadInitialPageFromBrowser } from "./shared.js";
+import {
+  checkPageLoaded,
+  clickMap,
+  loadInitialPageFromBrowser,
+} from "./shared.js";
 
 let page: Page;
 
-test.beforeEach(async ({browser}) => {
+test.beforeEach(async ({ browser }) => {
   page = await loadInitialPageFromBrowser(browser);
   await page.evaluate(() => window.localStorage.clear());
 });
@@ -62,9 +66,11 @@ test("exceeding local storage quota allows user to clear specific local storage 
   await clickMap(page, 400, 500);
   await page.getByRole("button", { name: "Finish" }).click();
 
-  await page.getByText("Remove stored item for huge").click();
-  await page.getByText("Close").click();
-  await page.getByText("Save").click();
+  await page
+    .getByRole("button", { name: "Remove stored item for huge" })
+    .click();
+  await page.getByRole("button", { name: "X" }).click();
+  await page.getByRole("button", { name: "Save" }).click();
 
   // See that we're now able to make the route without exceeding the quota
   await page.getByRole("button", { name: "New route" }).click();
