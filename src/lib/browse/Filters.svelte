@@ -25,7 +25,7 @@
 
   export let show = true;
 
-  // Dropdown filters;
+  // Dropdown filters
   let authorities: [string, string][] = [];
   let filterAuthority = "";
   let fundingProgrammes: [string, string][] = [];
