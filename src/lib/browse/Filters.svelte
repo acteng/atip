@@ -35,6 +35,12 @@
   let filterFundingProgramme = "";
   let currentMilestones: [string, string][] = [];
   let filterCurrentMilestone = "";
+  let sketchSources: [string, string][] = [
+    ["ATF assessment", "ATF assessment"],
+    ["LCWIP mapping", "LCWIP mapping"],
+    ["Both", "Both"],
+  ];
+  let filterSketchSource = "";
 
   // Stats about filtered schemes
   let counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
@@ -59,12 +65,14 @@
     fundingProgrammes = fundingProgrammesForColouringAndFiltering.map(
       (value: string) => [value, value],
     );
+
     currentMilestones = Array.from(set3.entries());
     currentMilestones.sort();
   });
 
   // When any filters change, update schemesToBeShown
   function filtersUpdated(
+    filterSketchSource: string,
     filterInterventionTextCopy: string,
     filterSchemeTextCopy: string,
     filterAuthority: string,
@@ -87,6 +95,7 @@
         return false;
       }
       if (
+        filterSketchSource ||
         filterSchemeNormalized ||
         filterAuthority ||
         filterFundingProgramme ||
@@ -124,6 +133,14 @@
             .includes(filterSchemeNormalized)
         ) {
           return false;
+        }
+        if (filterSketchSource) {
+          if (
+            filterSketchSource !== "Both" &&
+            filterSketchSource !== scheme.browse?.sketch_source
+          ) {
+            return false;
+          }
         }
       }
       return true;
@@ -172,6 +189,7 @@
     counts = counts;
   }
   $: filtersUpdated(
+    filterSketchSource,
     $filterInterventionText,
     $filterSchemeText,
     filterAuthority,
@@ -184,6 +202,7 @@
   }
 
   function resetFilters() {
+    filterSketchSource = "";
     filterAuthority = "";
     filterFundingProgramme = "";
     filterCurrentMilestone = "";
@@ -211,6 +230,12 @@
     choices={currentMilestones}
     emptyOption
     bind:value={filterCurrentMilestone}
+  />
+  <Select
+    label="Sketch source"
+    choices={sketchSources}
+    emptyOption
+    bind:value={filterSketchSource}
   />
   <FormElement
     label="Intervention name or description"
