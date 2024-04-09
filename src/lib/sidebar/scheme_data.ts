@@ -14,6 +14,8 @@ import { v4 as uuidv4 } from "uuid";
 // TODO This should eventually guarantee the output is a valid Scheme. Only
 // some fixes are applied now.
 export function backfill(json: any): SchemeCollection {
+  let schema = get(schemaStore);
+
   let idCounter = 1;
   for (let f of json.features) {
     // Fix input from other tools where properties may be null
@@ -22,12 +24,13 @@ export function backfill(json: any): SchemeCollection {
       // We'll set this below when json.schemes is missing
       scheme_reference: "",
       description: "",
+      intervention_type: "other",
       is_coverage_polygon: false,
     };
 
-    // Set a default for this v1 property if it's missing. The field can't be
-    // edited by the user with the pipeline schema.
-    if (!f.properties.intervention_type) {
+    // Set a default for this v1 property if it's missing and not exposed by a
+    // form the user can edit.
+    if (schema == "pipeline" && !f.properties.intervention_type) {
       // Guess based on geometry
       f.properties.intervention_type =
         new Map([
@@ -72,7 +75,6 @@ export function backfill(json: any): SchemeCollection {
     }
   }
 
-  let schema = get(schemaStore);
   for (let x of Object.values(json.schemes)) {
     let scheme = x as any;
     // Ensure every scheme has some color
