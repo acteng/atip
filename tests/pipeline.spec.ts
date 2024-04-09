@@ -125,3 +125,18 @@ test("file without new budget/timing forms can be edited by loading", async () =
     }),
   );
 });
+
+test("file from another tool can be edited", async () => {
+  // Load a file produced with another tool
+  await page
+    .getByLabel("Add scheme from file")
+    .setInputFiles("tests/data/external_data.geojson");
+
+  // The first feature has no properties at all
+  await page.getByRole("link", { name: "Untitled area" }).click();
+  await expect(page.getByText("No name")).toBeVisible();
+  await page.getByLabel("Name").fill("Square area");
+  // This warning should't apppear, because it gets backfilled
+  await expect(page.getByText("No intervention type")).not.toBeVisible();
+  await expect(page.getByText("Accuracy not specified")).toBeVisible();
+});
