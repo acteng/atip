@@ -22,9 +22,19 @@ export function backfill(json: any): SchemeCollection {
       // We'll set this below when json.schemes is missing
       scheme_reference: "",
       description: "",
-      intervention_type: "other",
       is_coverage_polygon: false,
     };
+
+    // Set a default for this v1 property if it's missing. The field can't be
+    // edited by the user with the pipeline schema.
+    if (!f.properties.intervention_type) {
+      // Guess based on geometry
+      f.properties.intervention_type =
+        new Map([
+          ["LineString", "route"],
+          ["Polygon", "area"],
+        ]).get(f.geometry.type) ?? "other";
+    }
 
     // Look for any LineStrings without length_meters. Old route-snapper versions didn't fill this out.
     if (f.geometry.type == "LineString" && !f.properties.length_meters) {
