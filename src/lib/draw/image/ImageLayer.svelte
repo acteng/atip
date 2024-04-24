@@ -63,4 +63,9 @@
     border-radius: 50%;
     display: inline-block;
   }
+
+  .dot:hover {
+    border: 1px solid black;
+    cursor: pointer;
+  }
 </style>
