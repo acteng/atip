@@ -4,6 +4,7 @@
   import { map } from "stores";
   import { ImageSource, Marker, RasterLayer } from "svelte-maplibre";
   import { imgSrc, opacity } from "./stores";
+  import Dot from "./Dot.svelte";
 
   let topLeft = { lng: 0, lat: 0 };
   let bottomRight = { lng: 0, lat: 0 };
@@ -49,23 +50,9 @@
 
 {#if $imgSrc && $mode.mode == "set-image"}
   <Marker bind:lngLat={topLeft} draggable>
-    <span class="dot" style="background-color: red" />
+    <Dot color="red" label="A" />
   </Marker>
   <Marker bind:lngLat={bottomRight} draggable>
-    <span class="dot" style="background-color: blue" />
+    <Dot color="blue" label="B" />
   </Marker>
 {/if}
-
-<style>
-  .dot {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .dot:hover {
-    border: 1px solid black;
-    cursor: pointer;
-  }
-</style>

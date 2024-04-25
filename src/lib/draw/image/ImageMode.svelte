@@ -1,4 +1,6 @@
 <script lang="ts">
+  import tmpUrl from "./tmp.png?url";
+  import ImageControlPoints from "./ImageControlPoints.svelte";
   import { mode } from "lib/draw/stores";
   import {
     ButtonGroup,
@@ -27,6 +29,8 @@
       mode.set({ mode: "list" });
     }
   }
+
+  $imgSrc = tmpUrl;
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -51,6 +55,8 @@
 </FormElement>
 
 {#if $imgSrc}
+  <ImageControlPoints src={$imgSrc} />
+
   <div>
     <label>
       <input type="range" min="0" max="100" bind:value={$opacity} />
