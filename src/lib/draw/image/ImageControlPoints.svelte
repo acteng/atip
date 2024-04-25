@@ -11,7 +11,7 @@
   let x2 = 200;
   let y2 = 200;
 
-  $: if (renderedDims[0] > 0) {
+  $: if (renderedDims[0] > 0 && renderedDims[1] > 0) {
     $percentX1 = x1 / renderedDims[0];
     $percentY1 = y1 / renderedDims[1];
     $percentX2 = x2 / renderedDims[0];
@@ -22,7 +22,8 @@
   let renderedDims = [0, 0];
 
   function measure(element: HTMLImageElement) {
-    renderedDims = [element.width, element.height];
+    // TODO height isn't calculated immediately
+    renderedDims = [element.width, element.height || 276];
     realDims = [element.naturalWidth, element.naturalHeight];
   }
 </script>

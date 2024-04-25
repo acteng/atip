@@ -1,5 +1,4 @@
 <script lang="ts">
-  import tmpUrl from "./tmp.png?url";
   import ImageControlPoints from "./ImageControlPoints.svelte";
   import { mode } from "lib/draw/stores";
   import {
@@ -29,8 +28,6 @@
       mode.set({ mode: "list" });
     }
   }
-
-  $imgSrc = tmpUrl;
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
