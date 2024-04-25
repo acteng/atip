@@ -3,11 +3,25 @@
   import { layerId } from "lib/maplibre";
   import { map } from "stores";
   import { ImageSource, Marker, RasterLayer } from "svelte-maplibre";
-  import { imgSrc, opacity } from "./stores";
+  import {
+    imgSrc,
+    opacity,
+    percentX1,
+    percentY1,
+    percentX2,
+    percentY2,
+  } from "./stores";
   import Dot from "./Dot.svelte";
 
+  // Marker positions
   let topLeft = { lng: 0, lat: 0 };
   let bottomRight = { lng: 0, lat: 0 };
+
+  $: x1 = topLeft.lng + $percentX1 * (bottomRight.lng - topLeft.lng);
+  $: y1 = topLeft.lat + $percentY1 * (bottomRight.lat - topLeft.lat);
+  $: x2 = topLeft.lng + $percentX2 * (bottomRight.lng - topLeft.lng);
+  $: y2 = topLeft.lat + $percentY2 * (bottomRight.lat - topLeft.lat);
+  $: console.log({ x1, y1, x2, y2 });
 
   $: if (
     $imgSrc &&
@@ -32,10 +46,10 @@
   <ImageSource
     url={$imgSrc}
     coordinates={[
-      [topLeft.lng, topLeft.lat],
-      [bottomRight.lng, topLeft.lat],
-      [bottomRight.lng, bottomRight.lat],
-      [topLeft.lng, bottomRight.lat],
+      [x1, y1],
+      [x2, y1],
+      [x2, y2],
+      [x1, y2],
     ]}
   >
     <RasterLayer
