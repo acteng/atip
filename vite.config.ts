@@ -11,7 +11,6 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
         nested: resolve(__dirname, "scheme.html"),
         nested2: resolve(__dirname, "browse.html"),
-        nested3: resolve(__dirname, "critical_entry.html"),
       },
     },
     /* To debug production builds:

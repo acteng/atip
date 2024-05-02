@@ -55,7 +55,6 @@ function getBeforeId(layerId: string): string | undefined {
 // Dummy functions just used for documentation below.
 let browse = (x: string) => x;
 let sketch = (x: string) => x;
-let criticalEntry = (x: string) => x;
 
 let maptilerStreets = (x: string) => x;
 let maptilerSatellite = (x: string) => x;
@@ -154,7 +153,7 @@ const layerZorder = [
 
   // Draw the inverted boundary fade on top of basemap labels
   sketch("boundary"),
-  browse(criticalEntry("measurement-line")),
+  browse("measurement-line"),
 
   // TODO This might look nicer lower
   sketch("georeferenced-image"),
