@@ -2,7 +2,7 @@
   import {
     appVersion,
     BaselayerSwitcher,
-    LineMeasureController,
+    LineMeasureTool,
     StreetViewTool,
   } from "lib/common";
   import { CollapsibleCard, CheckboxGroup } from "govuk-svelte";
@@ -122,7 +122,7 @@
   </CollapsibleCard>
   <CollapsibleCard label="Tools">
     <StreetViewTool bind:enabled={streetviewEnabled} />
-    <LineMeasureController />
+    <LineMeasureTool />
   </CollapsibleCard>
   <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />
 </CollapsibleCard>
