@@ -14,7 +14,7 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import { map } from "stores";
   import { onDestroy, onMount } from "svelte";
-  import { CircleLayer, GeoJSON } from "svelte-maplibre";
+  import { CircleLayer, GeoJSON, MapEvents } from "svelte-maplibre";
   import type { Feature as OurFeature } from "types";
   import splitIcon from "../../../../assets/split_route.svg";
 
@@ -24,15 +24,9 @@
   onMount(() => {
     // Use a fallback icon in case the image fails
     $map.getCanvas().style.cursor = `url(${splitIcon}), crosshair`;
-
-    $map.on("mousemove", onMouseMove);
-    $map.on("click", onClick);
   });
   onDestroy(() => {
     $map.getCanvas().style.cursor = "inherit";
-
-    $map.off("mousemove", onMouseMove);
-    $map.off("click", onClick);
   });
 
   let snappedCursor: Feature<Point> | null = null;
@@ -48,17 +42,18 @@
     snappedCursorGj = gj;
   }
 
-  function onMouseMove(e: MapMouseEvent) {
+  function onMouseMove(e: CustomEvent<MapMouseEvent>) {
     snappedCursor = null;
     snappedIndex = null;
 
-    let cursor = cursorFeature(e.lngLat.toArray());
+    let cursor = cursorFeature(e.detail.lngLat.toArray());
     const nearbyPoint: [number, number] = [
-      e.point.x - snapDistancePixels,
-      e.point.y,
+      e.detail.point.x - snapDistancePixels,
+      e.detail.point.y,
     ];
     const thresholdKm =
-      $map.unproject(e.point).distanceTo($map.unproject(nearbyPoint)) / 1000.0;
+      $map.unproject(e.detail.point).distanceTo($map.unproject(nearbyPoint)) /
+      1000.0;
 
     // Are we snapped to anything?
     let candidates: [number, Position, number][] = [];
@@ -245,6 +240,8 @@
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
+
+<MapEvents on:mousemove={onMouseMove} on:click={onClick} />
 
 <GeoJSON data={snappedCursorGj}>
   <CircleLayer

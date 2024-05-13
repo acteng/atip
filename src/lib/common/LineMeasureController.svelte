@@ -6,9 +6,7 @@
   import { CollapsibleCard, SecondaryButton } from "govuk-svelte";
   import { emptyGeojson, layerId } from "lib/maplibre";
   import { LngLat, MapMouseEvent } from "maplibre-gl";
-  import { map } from "stores";
-  import { onDestroy, onMount } from "svelte";
-  import { GeoJSON, LineLayer } from "svelte-maplibre";
+  import { GeoJSON, LineLayer, MapEvents } from "svelte-maplibre";
 
   let isInactive = true;
   let waypoints: any[] = [];
@@ -18,7 +16,7 @@
 
   let drawGj = emptyGeojson();
 
-  function handleMapClickEvent(e: MapMouseEvent) {
+  function handleMapClickEvent(e: CustomEvent<MapMouseEvent>) {
     if (isInactive) {
       return;
     }
@@ -26,13 +24,13 @@
     if (!isShiftDown) {
       waypoints.push({
         id: nextId++,
-        lngLat: e.lngLat,
+        lngLat: e.detail.lngLat,
       });
       waypoints = waypoints;
       waypointsUpdated();
     }
     if (isShiftDown && waypoints.length > 0) {
-      findAndRemoveNeareastWaypoint(e.lngLat);
+      findAndRemoveNeareastWaypoint(e.detail.lngLat);
 
       waypointsUpdated();
     }
@@ -113,14 +111,6 @@
     lineToMeasure = undefined;
     drawGj = emptyGeojson();
   }
-
-  onMount(() => {
-    $map.on("click", handleMapClickEvent);
-  });
-
-  onDestroy(() => {
-    $map.off("click", handleMapClickEvent);
-  });
 </script>
 
 {#if isInactive}
@@ -164,6 +154,8 @@
   {/each}
 {/if}
 <svelte:window on:keydown={keyDown} on:keyup={keyUp} />
+
+<MapEvents on:click={handleMapClickEvent} />
 
 <GeoJSON data={drawGj}>
   <LineLayer
