@@ -27,11 +27,18 @@
   <span slot="right">
     <HelpButton>
       <p>
-        This is average and minimum pavement width (in meters) from Ordnance
-        Survey. The coloring shows the average width, and the line thickness has
-        no meaning. Hover over a line to see if there's pavement on one or both
-        sides of the road. (You won't be able to distinguish left and right
-        though; use the OS Road basemap instead.)
+        This shows the average and minimum pavement width (in meters) from
+        Ordnance Survey. Because the shape of pavement may vary along a road,
+        both average and minimum are reported. Measurements may be available for
+        the left side of the road, the right, or both. The coloring shows the
+        larger of the two average widths, and the line thickness has no meaning.
+        Hover over a line to see if there's pavement on one or both sides of the
+        road. (You won't be able to distinguish left and right though; use the
+        OS Road basemap instead.)
+      </p>
+      <p>
+        Note these measurements are difficult to interpret near dual
+        carriageways (shown as parallel lines).
       </p>
       <p>Data valid as of 1 January, 2024</p>
       <p>
@@ -58,7 +65,15 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "line-color": makeColorRamp(["get", "average"], limits, colorScale),
+      "line-color": makeColorRamp(
+        [
+          "max",
+          ["number", ["get", "left_average"], 0],
+          ["number", ["get", "right_average"], 0],
+        ],
+        limits,
+        colorScale,
+      ),
       // TODO Try showing the actual width, in meters and not pixels
       "line-width": denseLineWidth,
       "line-opacity": hoverStateFilter(1.0, 0.5),
@@ -68,17 +83,27 @@
     }}
   >
     <Popup let:props>
-      <p>
-        Side of the road: <b>{props.side}</b>
-      </p>
-      <p>
-        Average width: <b>{props.average}</b>
-        meters
-      </p>
-      <p>
-        Minimum width: <b>{props.minimum}</b>
-        meters
-      </p>
+      {#if props.left_average}
+        <p>
+          Left side of the road: <b>{props.left_average}</b>
+          m average,
+          <b>{props.left_minimum}</b>
+          m minimum
+        </p>
+      {:else}
+        <p>Left side of the road: no pavement</p>
+      {/if}
+
+      {#if props.right_average}
+        <p>
+          Right side of the road: <b>{props.right_average}</b>
+          m average,
+          <b>{props.right_minimum}</b>
+          m minimum
+        </p>
+      {:else}
+        <p>Right side of the road: no pavement</p>
+      {/if}
     </Popup>
   </LineLayer>
 </VectorTileSource>
