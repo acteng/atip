@@ -3,7 +3,7 @@ import { writable, type Writable } from "svelte/store";
 import type { Mode, SchemeCollection } from "types";
 import { PointTool } from "./point/point_tool";
 import { PolygonTool } from "maplibre-draw-polygon";
-import { RouteTool } from "./route/route_tool";
+import { RouteTool } from "route-snapper-ts";
 
 // TODO Should we instead store a map from ID to feature?
 export const gjSchemeCollection: Writable<SchemeCollection> =

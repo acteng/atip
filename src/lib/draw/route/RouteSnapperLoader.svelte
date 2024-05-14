@@ -1,10 +1,10 @@
 <script lang="ts">
   import { routeTool } from "lib/draw/stores";
   import { ErrorMessage } from "govuk-svelte";
-  import init from "route-snapper";
   import { map } from "stores";
   import { onMount } from "svelte";
-  import { RouteTool } from "./route_tool";
+  import { init, RouteTool } from "route-snapper-ts";
+  import { routeToolGj, snapMode, undoLength } from "./stores";
 
   export let url: string;
 
@@ -19,7 +19,9 @@
     console.log(`Grabbing ${url}`);
     try {
       const graphBytes = await fetchWithProgress(url);
-      routeTool.set(new RouteTool($map, graphBytes));
+      routeTool.set(
+        new RouteTool($map, graphBytes, routeToolGj, snapMode, undoLength),
+      );
       progress = 100;
       routeToolReady = true;
     } catch (err) {
