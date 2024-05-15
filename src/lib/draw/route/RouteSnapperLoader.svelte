@@ -4,7 +4,7 @@
   import { map } from "stores";
   import { onMount } from "svelte";
   import { init, RouteTool } from "route-snapper-ts";
-  import { routeToolGj, snapMode, undoLength } from "./stores";
+  import { showAllNodesGj, routeToolGj, snapMode, undoLength } from "./stores";
 
   export let url: string;
 
@@ -24,6 +24,11 @@
       );
       progress = 100;
       routeToolReady = true;
+
+      // TODO Different API for just the nodes
+      let nodesGj = JSON.parse($routeTool!.inner.debugRenderGraph());
+      nodesGj.features = nodesGj.features.filter((f) => f.geometry.type == "Point");
+      $showAllNodesGj = nodesGj;
     } catch (err) {
       console.log(`Route tool broke: ${err}`);
       failedToLoadRouteTool = true;

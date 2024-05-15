@@ -141,6 +141,7 @@ const layerZorder = [
 
   sketch("draw-split-route"),
 
+  sketch("route-debug-nodes"),
   sketch("route-points"),
   sketch("route-lines"),
   sketch("route-polygons"),

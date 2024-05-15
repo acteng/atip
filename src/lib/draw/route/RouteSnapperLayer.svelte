@@ -14,7 +14,7 @@
     LineLayer,
     MarkerLayer,
   } from "svelte-maplibre";
-  import { geocoderGj, routeToolGj } from "./stores";
+  import { showAllNodesGj, geocoderGj, routeToolGj } from "./stores";
 
   const circleRadiusPixels = 10;
 
@@ -70,4 +70,14 @@
       {getNumber(feature)}
     </div>
   </MarkerLayer>
+</GeoJSON>
+
+<GeoJSON data={$showAllNodesGj}>
+  <CircleLayer
+    {...layerId("route-debug-nodes")}
+    paint={{
+      "circle-color": "black",
+      "circle-radius": 5,
+    }}
+  />
 </GeoJSON>
