@@ -86,6 +86,10 @@
 
     return result;
   }
+
+  function hideAll() {
+    // TODO Need to bind something else to the checkbox then
+  }
 </script>
 
 <SecondaryButton on:click={newBlankScheme}>
@@ -95,6 +99,8 @@
 <ErrorMessage errorMessage={errorFromFile} />
 
 <hr />
+
+<SecondaryButton on:click={hideAll}>Hide all schemes</SecondaryButton>
 
 {#each Object.keys($gjSchemeCollection.schemes) as scheme_reference, i (scheme_reference)}
   <PerSchemeControls {scheme_reference}>

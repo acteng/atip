@@ -131,56 +131,61 @@
   }
 </script>
 
-<h3>
+<Checkbox bind:checked={showScheme} on:change={showOrHide}>
   {$gjSchemeCollection.schemes[scheme_reference].scheme_name ??
     "Untitled scheme"}
   <input
     type="color"
     bind:value={$gjSchemeCollection.schemes[scheme_reference].color}
   />
+</Checkbox>
+
+{#if showScheme}
   <WarningButton on:click={() => (showDeleteModal = true)}>
     <img src={deleteIcon} alt="Delete scheme" />
     Delete
   </WarningButton>
-</h3>
-<Checkbox bind:checked={showScheme} on:change={showOrHide}>Show</Checkbox>
-<slot />
-{#if $schema == "pipeline"}
-  <PipelineSchemeForm {scheme_reference} />
-{:else}
-  <GenericSchemeForm {scheme_reference} />
-{/if}
 
-{#if numErrors == 1}
-  <ErrorMessage errorMessage="There's a problem with one intervention below" />
-{:else if numErrors > 0}
-  <ErrorMessage
-    errorMessage="There's a problem with {numErrors} interventions below"
-  />
-{/if}
+  <slot />
+  {#if $schema == "pipeline"}
+    <PipelineSchemeForm {scheme_reference} />
+  {:else}
+    <GenericSchemeForm {scheme_reference} />
+  {/if}
 
-<ol class="govuk-list govuk-list--number">
-  {#each $gjSchemeCollection.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
-    {@const warning = interventionWarning(feature)}
-    <li>
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a
-        href="#"
-        on:click={(e) => edit(e, feature.id)}
-        on:mouseenter={() => sidebarHover.set(feature.id)}
-        on:mouseleave={() => unhover(feature.id)}
-      >
-        {#if warning}
-          <WarningIcon text={warning} />
+  {#if numErrors == 1}
+    <ErrorMessage
+      errorMessage="There's a problem with one intervention below"
+    />
+  {:else if numErrors > 0}
+    <ErrorMessage
+      errorMessage="There's a problem with {numErrors} interventions below"
+    />
+  {/if}
+
+  <ol class="govuk-list govuk-list--number">
+    {#each $gjSchemeCollection.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
+      {@const warning = interventionWarning(feature)}
+      <li>
+        <!-- svelte-ignore a11y-invalid-attribute -->
+        <a
+          href="#"
+          on:click={(e) => edit(e, feature.id)}
+          on:mouseenter={() => sidebarHover.set(feature.id)}
+          on:mouseleave={() => unhover(feature.id)}
+        >
+          {#if warning}
+            <WarningIcon text={warning} />
+          {/if}
+          {interventionName(feature)}
+        </a>
+        {#if $schema === "pipeline" && feature.properties.pipeline?.is_alternative}
+          <span>&nbsp;(alternative)</span>
         {/if}
-        {interventionName(feature)}
-      </a>
-      {#if $schema === "pipeline" && feature.properties.pipeline?.is_alternative}
-        <span>&nbsp;(alternative)</span>
-      {/if}
-    </li>
-  {/each}
-</ol>
+      </li>
+    {/each}
+  </ol>
+{/if}
 
 <Modal
   title="Delete this scheme?"
