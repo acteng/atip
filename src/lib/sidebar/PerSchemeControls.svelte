@@ -129,6 +129,12 @@
       return set;
     });
   }
+
+  function featureLink(node, { id }) {
+    if ($mode.lastSavedFeature == id) {
+      node.scrollIntoView();
+    }
+  }
 </script>
 
 <h3>
@@ -162,7 +168,7 @@
 <ol class="govuk-list govuk-list--number">
   {#each $gjSchemeCollection.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
     {@const warning = interventionWarning(feature)}
-    <li>
+    <li use:featureLink={{ id: feature.id }}>
       <!-- svelte-ignore a11y-invalid-attribute -->
       <a
         href="#"

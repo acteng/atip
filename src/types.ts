@@ -170,6 +170,7 @@ export function isStreetViewImagery(x: string): x is "google" | "bing" {
 export type Mode =
   | {
       mode: "list";
+      lastSavedFeature?: number | null;
     }
   | {
       mode: "edit-form";

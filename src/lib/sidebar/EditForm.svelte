@@ -90,7 +90,9 @@
 <h2>Editing {interventionName(feature)}</h2>
 
 <ButtonGroup>
-  <DefaultButton on:click={() => mode.set({ mode: "list" })}>
+  <DefaultButton
+    on:click={() => mode.set({ mode: "list", lastSavedFeature: id })}
+  >
     Save
   </DefaultButton>
   <SecondaryButton on:click={() => mode.set({ mode: "edit-geometry", id })}>
