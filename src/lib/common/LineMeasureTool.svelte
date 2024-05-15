@@ -1,5 +1,6 @@
 <script lang="ts">
   import { lineString } from "@turf/helpers";
+  import bearing from "@turf/bearing";
   import turfLength from "@turf/length";
   import { colors } from "colors";
   import { CollapsibleCard, SecondaryButton } from "govuk-svelte";
@@ -38,6 +39,21 @@
     points.splice(idx, 1);
     points = points;
   }
+
+  // Returns an angle for both endpoints and null for midpoints
+  function arrowAngles(points: [number, number][]): Array<number | null> {
+    let angles = [];
+    for (let i = 0; i < points.length; i++) {
+      if (i == 0 && points.length > 1) {
+        angles.push(bearing(points[1], points[0]));
+      } else if (i == points.length - 1 && points.length > 1) {
+        angles.push(bearing(points[points.length - 2], points[i]));
+      } else {
+        angles.push(null);
+      }
+    }
+    return angles;
+  }
 </script>
 
 {#if active}
@@ -69,9 +85,18 @@
 
   <MapEvents on:click={onMapClick} />
 
-  {#each points as point, idx}
-    <Marker draggable bind:lngLat={point} on:click={() => removePoint(idx)}>
-      <span class="dot" />
+  {#each arrowAngles(points) as angle, idx}
+    <Marker
+      draggable
+      bind:lngLat={points[idx]}
+      on:click={() => removePoint(idx)}
+      rotation={angle ?? 0}
+    >
+      {#if angle == null}
+        <span class="dot" />
+      {:else}
+        <span style="font-size: 50px">↑</span>
+      {/if}
     </Marker>
   {/each}
 {:else}
