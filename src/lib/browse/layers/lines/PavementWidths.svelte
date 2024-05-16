@@ -22,7 +22,8 @@
   let show = false;
 
   function direction(angle: number): string {
-    // 0 means north and the orientation is weird; verify visually
+    // 0 means north
+    // TODO These are wrong; north should be 45/2 and 360-45/2
     if (angle < 45 || angle > 315) {
       return "N";
     } else if (angle < 90) {
@@ -109,33 +110,21 @@
     }}
   >
     <Popup let:props openOn="hover">
-      {#if props.left_average}
-        <p>
-          {@html directionLabel(props.angle - 90)} side of the road:
-          <b>{props.left_average}</b>
-          m average,
-          <b>{props.left_minimum}</b>
-          m minimum
-        </p>
-      {:else}
-        <p>
-          {@html directionLabel(props.angle - 90)} side of the road: no pavement
-        </p>
-      {/if}
-
-      {#if props.right_average}
-        <p>
-          {@html directionLabel(props.angle + 90)} side of the road:
-          <b>{props.right_average}</b>
-          m average,
-          <b>{props.right_minimum}</b>
-          m minimum
-        </p>
-      {:else}
-        <p>
-          {@html directionLabel(props.angle + 90)} side of the road: no pavement
-        </p>
-      {/if}
+      {#each [[props.left_average, props.left_minimum, -90], [props.right_average, props.right_minimum, 90]] as [avg, min, offset]}
+        {#if avg}
+          <p>
+            {@html directionLabel(props.angle + offset)} side of the road:
+            <b>{avg}</b>
+            m average,
+            <b>{min}</b>
+            m minimum
+          </p>
+        {:else}
+          <p>
+            {@html directionLabel(props.angle + offset)} side of the road: no pavement
+          </p>
+        {/if}
+      {/each}
     </Popup>
   </LineLayer>
 </VectorTileSource>
