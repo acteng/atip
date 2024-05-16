@@ -20,6 +20,32 @@
   let limits = [0, 2, 4, 6, 8, 13];
 
   let show = false;
+
+  function direction(angle: number): string {
+    // 0 means north and the orientation is weird; verify visually
+    if (angle < 45 || angle > 315) {
+      return "N";
+    } else if (angle < 90) {
+      return "NE";
+    } else if (angle < 135) {
+      return "E";
+    } else if (angle < 180) {
+      return "SE";
+    } else if (angle < 225) {
+      return "S";
+    } else if (angle < 270) {
+      return "SW";
+    } else if (angle < 315) {
+      return "W";
+    } else {
+      return "NW";
+    }
+  }
+
+  // Returns HTML
+  function directionLabel(angle: number): string {
+    return `${direction(angle)} <span style="display: inline-block; rotate: ${angle}deg">⬆</span>`;
+  }
 </script>
 
 <Checkbox bind:checked={show}>
@@ -82,27 +108,33 @@
       visibility: show ? "visible" : "none",
     }}
   >
-    <Popup let:props>
+    <Popup let:props openOn="hover">
       {#if props.left_average}
         <p>
-          Left side of the road: <b>{props.left_average}</b>
+          {@html directionLabel(props.angle - 90)} side of the road:
+          <b>{props.left_average}</b>
           m average,
           <b>{props.left_minimum}</b>
           m minimum
         </p>
       {:else}
-        <p>Left side of the road: no pavement</p>
+        <p>
+          {@html directionLabel(props.angle - 90)} side of the road: no pavement
+        </p>
       {/if}
 
       {#if props.right_average}
         <p>
-          Right side of the road: <b>{props.right_average}</b>
+          {@html directionLabel(props.angle + 90)} side of the road:
+          <b>{props.right_average}</b>
           m average,
           <b>{props.right_minimum}</b>
           m minimum
         </p>
       {:else}
-        <p>Right side of the road: no pavement</p>
+        <p>
+          {@html directionLabel(props.angle + 90)} side of the road: no pavement
+        </p>
       {/if}
     </Popup>
   </LineLayer>
