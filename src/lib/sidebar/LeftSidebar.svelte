@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { BaselayerSwitcher } from "lib/common";
   import { mode, pointTool, polygonTool, routeTool } from "lib/draw/stores";
   import { DefaultButton } from "govuk-svelte";
   import { map } from "stores";
@@ -85,8 +84,3 @@ toolbox, but that gets created and destroyed frequently. -->
   <h2>StreetView</h2>
   <StreetViewMode />
 {/if}
-
-{#if $mode.mode != "list"}
-  <hr />
-{/if}
-<BaselayerSwitcher />

@@ -5,6 +5,7 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, userSettings } from "stores";
   import { onDestroy } from "svelte";
+  import streetViewIcon from "../../../assets/street_view.svg?url";
   import cameraCursorUrl from "../../../assets/camera_cursor.svg?url";
   import StreetViewHelp from "./StreetViewHelp.svelte";
 
@@ -90,7 +91,7 @@
     </CollapsibleCard>
   {:else}
     <SecondaryButton on:click={() => (enabled = true)}>
-      Enable Street View
+      <img src={streetViewIcon} alt="StreetView" />
     </SecondaryButton>
   {/if}
 {/if}

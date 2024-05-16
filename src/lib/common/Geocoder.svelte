@@ -6,10 +6,6 @@
   import { map } from "stores";
   import { onMount } from "svelte";
 
-  // TODO The position for the sketch page is very awkward, but there's
-  // seemingly no option to make the menu appear above the widget
-  export let position: "top-left" | "top-right" = "top-left";
-
   let mapController: MapController;
 
   // TODO HMR is broken
@@ -22,25 +18,9 @@
 </script>
 
 {#if mapController}
-  <div class={position}>
-    <GeocodingControl
-      {mapController}
-      apiKey={import.meta.env.VITE_MAPTILER_API_KEY}
-      country="gb"
-    />
-  </div>
+  <GeocodingControl
+    {mapController}
+    apiKey={import.meta.env.VITE_MAPTILER_API_KEY}
+    country="gb"
+  />
 {/if}
-
-<style>
-  .top-left {
-    position: absolute;
-    top: 20px;
-    left: 50px;
-  }
-
-  .top-right {
-    position: absolute;
-    top: 150px;
-    right: 10px;
-  }
-</style>

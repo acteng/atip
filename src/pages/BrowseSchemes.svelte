@@ -4,6 +4,7 @@
   import { processInput } from "lib/browse/data";
   import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
+  import Toolbox from "lib/browse/Toolbox.svelte";
   import LoadRemoteSchemeData from "lib/browse/LoadRemoteSchemeData.svelte";
   import SchemeCard from "lib/browse/SchemeCard.svelte";
   import "../style/main.css";
@@ -89,8 +90,11 @@
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
-      <Geocoder />
       <InterventionLayer {showSchemes} />
+      <div class="top-left">
+        <Geocoder />
+        <Toolbox />
+      </div>
       <div class="top-right">
         <LayerControls />
       </div>
@@ -99,6 +103,15 @@
 </Layout>
 
 <style>
+  .top-left {
+    position: absolute;
+    top: 10px;
+    /* Leave room for the sidebar collapser/expander */
+    left: 50px;
+
+    display: flex;
+  }
+
   .top-right {
     position: absolute;
     right: 10px;

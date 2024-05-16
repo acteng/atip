@@ -6,6 +6,7 @@
   import BoundaryLayer from "lib/draw/BoundaryLayer.svelte";
   import {
     appVersion,
+    BaselayerSwitcher,
     Geocoder,
     getAuthoritiesGeoJson,
     LoggedIn,
@@ -110,7 +111,6 @@
   </div>
   <div class="main">
     <MapLibreMap style={$mapStyle}>
-      <Geocoder position="top-right" />
       <BoundaryLayer {boundaryGeojson} />
       <InterventionLayer />
       <ImageLayer />
@@ -121,6 +121,11 @@
       {/if}
       <RouteSnapperLayer />
       <PolygonToolLayer />
+
+      <div class="control-panel">
+        <Geocoder />
+        <BaselayerSwitcher />
+      </div>
     </MapLibreMap>
   </div>
 </div>
@@ -156,5 +161,11 @@
   .main {
     flex-grow: 1;
     display: flex;
+  }
+
+  .control-panel {
+    position: absolute;
+    top: 150px;
+    right: 10px;
   }
 </style>
