@@ -22,25 +22,11 @@
   let show = false;
 
   function direction(angle: number): string {
-    // 0 means north
-    // TODO These are wrong; north should be 45/2 and 360-45/2
-    if (angle < 45 || angle > 315) {
-      return "N";
-    } else if (angle < 90) {
-      return "NE";
-    } else if (angle < 135) {
-      return "E";
-    } else if (angle < 180) {
-      return "SE";
-    } else if (angle < 225) {
-      return "S";
-    } else if (angle < 270) {
-      return "SW";
-    } else if (angle < 315) {
-      return "W";
-    } else {
-      return "NW";
-    }
+    // 0 degrees is directly north. Split 360 into 8 pieces: 45 degrees. Shift
+    // everything by 45/2, so that north counts as [-45/2, 45/2].
+    // The input is [-90, 360 + 90]
+    let idx = Math.floor(((angle + 45 / 2) % 360) / 45);
+    return ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"][idx];
   }
 
   // Returns HTML
