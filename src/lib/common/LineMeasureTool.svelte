@@ -2,7 +2,7 @@
   import { lineString } from "@turf/helpers";
   import turfLength from "@turf/length";
   import { colors } from "colors";
-  import { CollapsibleCard, SecondaryButton } from "govuk-svelte";
+  import { CollapsibleCard } from "govuk-svelte";
   import { emptyGeojson, layerId } from "lib/maplibre";
   import { MapMouseEvent } from "maplibre-gl";
   import { GeoJSON, LineLayer, MapEvents, Marker } from "svelte-maplibre";
@@ -13,9 +13,9 @@
   let points: [number, number][] = [];
   $: length = calculateLength(points);
 
-  function calculateLength(points: [number, number][]): number | null {
+  function calculateLength(points: [number, number][]): number {
     if (points.length < 2) {
-      return null;
+      return 0;
     }
     return 1000 * turfLength(lineString(points), { units: "kilometers" });
   }
@@ -43,31 +43,33 @@
 </script>
 
 {#if active}
-  <div><SecondaryButton on:click={stop}>Stop measuring</SecondaryButton></div>
-  {#if length}
+  <div style="display: flex; flex-flow: column">
+    <IconButton on:click={stop} activated>
+      <img src={icon} alt="Stop measuring lines" />
+    </IconButton>
     <p>Length: {length.toFixed(2)} meters</p>
-  {/if}
 
-  <CollapsibleCard label="Help">
-    <ul>
-      <li>
-        <b>Click</b>
-        on the map to place a new waypoint
-      </li>
-      <li>
-        <b>Click and drag</b>
-        an existing waypoint to move it
-      </li>
-      <li>
-        <b>Click</b>
-        an existing waypoint to delete it
-      </li>
-      <li>
-        Press <b>Escape</b>
-        to exit this mode
-      </li>
-    </ul>
-  </CollapsibleCard>
+    <CollapsibleCard label="Help">
+      <ul>
+        <li>
+          <b>Click</b>
+          on the map to place a new waypoint
+        </li>
+        <li>
+          <b>Click and drag</b>
+          an existing waypoint to move it
+        </li>
+        <li>
+          <b>Click</b>
+          an existing waypoint to delete it
+        </li>
+        <li>
+          Press <b>Escape</b>
+          to exit this mode
+        </li>
+      </ul>
+    </CollapsibleCard>
+  </div>
 
   <MapEvents on:click={onMapClick} />
 

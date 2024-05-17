@@ -1,6 +1,6 @@
 <script lang="ts">
   import { colors } from "colors";
-  import { CollapsibleCard, Radio, SecondaryButton } from "govuk-svelte";
+  import { CollapsibleCard, Radio } from "govuk-svelte";
   import { getRoadLayerHelpers, LayerHelper } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, userSettings } from "stores";
@@ -74,22 +74,24 @@
 
 {#if showControls}
   {#if enabled}
-    <SecondaryButton on:click={() => (enabled = false)}>
-      Disable Street View
-    </SecondaryButton>
+    <div style="display: flex; flex-flow: column">
+      <IconButton on:click={() => (enabled = false)} activated>
+        <img src={streetViewIcon} alt="Disable StreetView" />
+      </IconButton>
 
-    <Radio
-      legend="Source"
-      choices={[
-        ["google", "Google Street View"],
-        ["bing", "Bing Streetside"],
-      ]}
-      bind:value={$userSettings.streetViewImagery}
-    />
+      <Radio
+        legend="Source"
+        choices={[
+          ["google", "Google Street View"],
+          ["bing", "Bing Streetside"],
+        ]}
+        bind:value={$userSettings.streetViewImagery}
+      />
 
-    <CollapsibleCard label="Help">
-      <StreetViewHelp />
-    </CollapsibleCard>
+      <CollapsibleCard label="Help">
+        <StreetViewHelp />
+      </CollapsibleCard>
+    </div>
   {:else}
     <IconButton on:click={() => (enabled = true)}>
       <img src={streetViewIcon} alt="StreetView" />

@@ -11,15 +11,17 @@
 </script>
 
 {#if showControls}
-  <IconButton on:click={() => (showControls = false)}>
-    <img src={icon} alt="Basemap" />
-  </IconButton>
-  <Select
-    label="Basemap"
-    choices={getStyleChoices()}
-    bind:value={$mapStyle}
-    {disabled}
-  />
+  <div style="display: flex; flex-flow: column">
+    <IconButton on:click={() => (showControls = false)} activated>
+      <img src={icon} alt="Basemap" />
+    </IconButton>
+    <Select
+      label="Basemap"
+      choices={getStyleChoices()}
+      bind:value={$mapStyle}
+      {disabled}
+    />
+  </div>
 {:else}
   <IconButton on:click={() => (showControls = true)}>
     <img src={icon} alt="Basemap" />

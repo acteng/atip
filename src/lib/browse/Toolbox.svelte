@@ -33,7 +33,7 @@
   };
 </script>
 
-<div>
+<div class="govuk-prose">
   <StreetViewTool bind:enabled={streetviewEnabled} />
   <LineMeasureTool />
   <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />
