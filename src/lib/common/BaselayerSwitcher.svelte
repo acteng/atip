@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { SecondaryButton, Select } from "govuk-svelte";
+  import { Select } from "govuk-svelte";
   import { getStyleChoices } from "lib/maplibre";
   import { mapStyle } from "stores";
   import icon from "../../../assets/basemap.svg?url";
+  import { IconButton } from "./";
 
   export let disabled = false;
 
@@ -10,9 +11,9 @@
 </script>
 
 {#if showControls}
-  <SecondaryButton on:click={() => (showControls = false)}>
+  <IconButton on:click={() => (showControls = false)}>
     <img src={icon} alt="Basemap" />
-  </SecondaryButton>
+  </IconButton>
   <Select
     label="Basemap"
     choices={getStyleChoices()}
@@ -20,7 +21,7 @@
     {disabled}
   />
 {:else}
-  <SecondaryButton on:click={() => (showControls = true)}>
+  <IconButton on:click={() => (showControls = true)}>
     <img src={icon} alt="Basemap" />
-  </SecondaryButton>
+  </IconButton>
 {/if}

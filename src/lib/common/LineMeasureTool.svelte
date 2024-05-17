@@ -7,6 +7,7 @@
   import { MapMouseEvent } from "maplibre-gl";
   import { GeoJSON, LineLayer, MapEvents, Marker } from "svelte-maplibre";
   import icon from "../../../assets/measure.svg?url";
+  import { IconButton } from "./";
 
   let active = false;
   let points: [number, number][] = [];
@@ -77,9 +78,9 @@
   {/each}
 {:else}
   <div>
-    <SecondaryButton on:click={() => (active = true)}>
+    <IconButton on:click={() => (active = true)}>
       <img src={icon} alt="Measure lines" />
-    </SecondaryButton>
+    </IconButton>
   </div>
 {/if}
 

@@ -8,6 +8,7 @@
   import streetViewIcon from "../../../assets/street_view.svg?url";
   import cameraCursorUrl from "../../../assets/camera_cursor.svg?url";
   import StreetViewHelp from "./StreetViewHelp.svelte";
+  import { IconButton } from "./";
 
   export let enabled: boolean;
   export let showControls = true;
@@ -90,8 +91,8 @@
       <StreetViewHelp />
     </CollapsibleCard>
   {:else}
-    <SecondaryButton on:click={() => (enabled = true)}>
+    <IconButton on:click={() => (enabled = true)}>
       <img src={streetViewIcon} alt="StreetView" />
-    </SecondaryButton>
+    </IconButton>
   {/if}
 {/if}

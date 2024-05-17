@@ -165,7 +165,7 @@
 
   .control-panel {
     position: absolute;
-    top: 150px;
+    top: 100px;
     right: 10px;
   }
 </style>
