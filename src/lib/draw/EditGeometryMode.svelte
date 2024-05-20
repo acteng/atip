@@ -17,7 +17,7 @@
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
-  import { type Props } from "route-snapper-ts";
+  import type { AreaProps, RouteProps } from "route-snapper-ts";
 
   export let id: number;
 
@@ -40,14 +40,16 @@
     name = interventionName(feature);
 
     if (feature.geometry.type == "LineString") {
-      $routeTool?.editExistingRoute(feature as Feature<LineString, Props>);
+      $routeTool?.editExistingRoute(
+        feature as unknown as Feature<LineString, RouteProps>,
+      );
       $routeTool?.addEventListenerSuccess(onSuccess);
       $routeTool?.addEventListenerUpdated(onUpdate);
       $routeTool?.addEventListenerFailure(onFailure);
       controls = "route";
     } else if (feature.geometry.type == "Polygon") {
       if (feature.properties.waypoints) {
-        $routeTool?.editExistingArea(feature as Feature<Polygon, Props>);
+        $routeTool?.editExistingArea(feature as Feature<Polygon, AreaProps>);
         $routeTool?.addEventListenerSuccess(onSuccess);
         $routeTool?.addEventListenerUpdated(onUpdate);
         $routeTool?.addEventListenerFailure(onFailure);
