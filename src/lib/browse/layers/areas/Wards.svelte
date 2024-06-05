@@ -21,7 +21,17 @@
   let name = "wards";
   let color = colors.wards;
 
-  let show = false;
+  let show = new URLSearchParams(window.location.search).has(name);
+  function updateURL(show: boolean) {
+    let url = new URL(window.location.href);
+    if (show) {
+      url.searchParams.set(name, "1");
+    } else {
+      url.searchParams.delete(name);
+    }
+    window.history.replaceState(null, "", url.toString());
+  }
+  $: updateURL(show);
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     let name = encodeURIComponent(e.detail.features[0].properties!.name);
