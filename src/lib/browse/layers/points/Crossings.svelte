@@ -15,10 +15,11 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "crossings";
 
-  let show = false;
+  let show = showHideLayer(name);
 
   function tooltip(props: { [name: string]: any }): string {
     let descriptions: Record<string, string> = {
@@ -53,7 +54,7 @@
   ];
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   Crossings
   <span slot="right">
     <HelpButton>
@@ -68,7 +69,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <Legend rows={legend} />
 {/if}
 
@@ -99,7 +100,7 @@
       ],
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     hoverCursor="pointer"
     eventsIfTopMost

@@ -13,6 +13,7 @@
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
+  import { showHideLayer } from "../url";
 
   // This name is used for multiple things:
   // - The name of a .pmtiles file
@@ -30,10 +31,10 @@
   // @ts-ignore TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <ColorLegend {color} />
   {pluralNoun}
   <span slot="right">
@@ -52,7 +53,7 @@
       "fill-opacity": hoverStateFilter(0.7, 1.0),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost

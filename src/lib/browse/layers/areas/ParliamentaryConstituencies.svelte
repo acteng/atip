@@ -17,11 +17,12 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "parliamentary_constituencies";
   let color = colors.parliamentary_constituencies;
 
-  let show = false;
+  let show = showHideLayer(name);
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     // There are common suffixes that don't work with the search
@@ -38,7 +39,7 @@
   }
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <ColorLegend {color} />
   Parliamentary constituencies
   <span slot="right">
@@ -66,7 +67,7 @@
       "fill-opacity": hoverStateFilter(0.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost
@@ -85,7 +86,7 @@
       "line-width": 5,
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   />
 </VectorTileSource>

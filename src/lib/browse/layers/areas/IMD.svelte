@@ -16,6 +16,7 @@
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "imd";
 
@@ -23,10 +24,10 @@
   // The deciles are [1, 10]. The 5 colors cover two each.
   let limits = [0, 2, 4, 6, 8, 10];
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   Indices of Multiple Deprivation
   <span slot="right">
     <HelpButton>
@@ -46,7 +47,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <SequentialLegend {colorScale} limits={["Least deprived", "Most deprived"]} />
 {/if}
 
@@ -66,7 +67,7 @@
       "fill-opacity": hoverStateFilter(0.5, 0.7),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost
@@ -90,7 +91,7 @@
       "line-width": 0.5,
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   />
 </VectorTileSource>

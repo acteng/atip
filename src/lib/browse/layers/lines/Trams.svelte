@@ -10,10 +10,11 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "trams";
 
-  let show = false;
+  let show = showHideLayer(name);
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
@@ -23,7 +24,7 @@
   }
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <ColorLegend color={colors.trams} />
   Trams
   <span slot="right">
@@ -50,7 +51,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost

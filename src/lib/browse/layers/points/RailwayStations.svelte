@@ -10,13 +10,14 @@
   import { GeoJSON, SymbolLayer } from "svelte-maplibre";
   import railwayStation from "../../../../../assets/railway_station.png?url";
   import OsmLicense from "../OsmLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "railway_stations";
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <img src={railwayStation} alt="A logo representing a train" />
   Railway Stations
   <span slot="right">
@@ -45,7 +46,7 @@
       "icon-image": "railway_station",
       "icon-size": 1,
       "icon-allow-overlap": true,
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   >
     <Popup let:props>

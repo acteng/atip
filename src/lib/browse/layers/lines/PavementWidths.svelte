@@ -14,12 +14,13 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "pavement_widths";
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 2, 4, 6, 8, 13];
 
-  let show = false;
+  let show = showHideLayer(name);
 
   function direction(angle: number): string {
     // 0 degrees is directly north. Split 360 into 8 pieces: 45 degrees. Shift
@@ -35,7 +36,7 @@
   }
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   OS Pavement widths
   <span slot="right">
     <HelpButton>
@@ -65,7 +66,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <SequentialLegend {colorScale} {limits} />
 {/if}
 
@@ -92,7 +93,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   >
     <Popup let:props openOn="hover">

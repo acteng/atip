@@ -15,13 +15,14 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "bus_routes";
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <ColorLegend color={colors.bus_route_with_lane} />
   Bus routes
   <span slot="right">
@@ -60,7 +61,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost
