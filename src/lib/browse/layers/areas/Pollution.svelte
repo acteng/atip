@@ -4,10 +4,30 @@
   import { layerId } from "lib/maplibre";
   import { RasterLayer, RasterTileSource } from "svelte-maplibre";
   import OsOglLicense from "../OsOglLicense.svelte";
+  import { customUrl } from "../url";
 
-  let show = false;
-  let opacity = 50;
-  let pollutant = "PM25_viridis";
+  type State = {
+    show: boolean;
+    pollutant: string;
+    opacity: number;
+  };
+  let defaultState = {
+    show: false,
+    pollutant: "PM25_viridis",
+    opacity: 50,
+  };
+  function stringify(x: State): string | null {
+    return x.show ? `${x.pollutant}/${x.opacity}` : null;
+  }
+  function parse(result: string): State {
+    let [pollutant, opacity] = result.split("/");
+    return {
+      show: true,
+      pollutant,
+      opacity: parseInt(opacity),
+    };
+  }
+  let state = customUrl("pollution", defaultState, stringify, parse);
 
   // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services
   // and QGIS
@@ -18,10 +38,10 @@
     NOxRoads_viridis: ["22", "Data for 2022"],
     PM25Roads_viridis: ["14", "Data for 2022"],
     PM10Roads_viridis: ["22", "Data for 2022"],
-  }[pollutant];
+  }[$state.pollutant];
 
   function wmsUrl(): string {
-    return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2022/${pollutant}/MapServer/WMSServer`;
+    return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2022/${$state.pollutant}/MapServer/WMSServer`;
   }
 
   function title(pollutant: string): string {
@@ -54,7 +74,7 @@
   }
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$state.show}>
   Pollution
   <span slot="right">
     <HelpButton>
@@ -73,7 +93,7 @@
   </span>
 </Checkbox>
 
-{#if show}
+{#if $state.show}
   <Select
     label="Pollutant"
     choices={[
@@ -84,32 +104,32 @@
       ["PM10Roads_viridis", "Roadside PM10"],
       ["NOxRoads_viridis", "Roadside NOx"],
     ]}
-    bind:value={pollutant}
+    bind:value={$state.pollutant}
   />
-  <p>{title(pollutant)}</p>
+  <p>{title($state.pollutant)}</p>
 
   <div>
     <label>
       Opacity
-      <input type="range" min="0" max="100" bind:value={opacity} />
+      <input type="range" min="0" max="100" bind:value={$state.opacity} />
     </label>
   </div>
 
   <img
-    src={legendUrl(pollutant)}
+    src={legendUrl($state.pollutant)}
     width={150}
-    alt={`Legend for ${pollutant} layer`}
+    alt={`Legend for ${$state.pollutant} layer`}
   />
 {/if}
 
-<RasterTileSource tiles={[tilesUrl(pollutant)]} tileSize={256}>
+<RasterTileSource tiles={[tilesUrl($state.pollutant)]} tileSize={256}>
   <RasterLayer
     {...layerId("pollution")}
     paint={{
-      "raster-opacity": opacity / 100.0,
+      "raster-opacity": $state.opacity / 100.0,
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $state.show ? "visible" : "none",
     }}
   />
 </RasterTileSource>

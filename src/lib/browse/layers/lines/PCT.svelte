@@ -14,6 +14,7 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { customUrl } from "../url";
 
   // TODO It'd be much simpler to have one source with both attributes
   let nameCommute = "pct_commute";
@@ -21,10 +22,31 @@
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 50, 100, 500, 1000, 2000];
 
-  let tripPurpose = nameCommute;
-  let scenario = "baseline";
-
-  let show = false;
+  type State = {
+    show: boolean;
+    tripPurpose: string;
+    scenario: string;
+  };
+  let defaultState = {
+    show: false,
+    tripPurpose: nameCommute,
+    scenario: "baseline",
+  };
+  function stringify(x: State): string | null {
+    if (!x.show) {
+      return null;
+    }
+    return `${x.tripPurpose}/${x.scenario}`;
+  }
+  function parse(result: string): State {
+    let [tripPurpose, scenario] = result.split("/");
+    return {
+      show: true,
+      tripPurpose,
+      scenario,
+    };
+  }
+  let state = customUrl("pct", defaultState, stringify, parse);
 
   // TODO Don't use a function and @html; do everything in Svelte?
   function tooltip(props: { [name: string]: any }): string {
@@ -33,7 +55,7 @@
     let go_dutch = props.go_dutch;
 
     let x = `<h2>Trip purpose: ${
-      tripPurpose == nameCommute ? "commuting" : "school"
+      $state.tripPurpose == nameCommute ? "commuting" : "school"
     }</h2>`;
     x += `<p>Baseline (2011): <b>${baseline.toLocaleString()}</b></p>`;
     if (baseline == 0) {
@@ -49,7 +71,7 @@
   }
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$state.show}>
   Propensity to Cycle Tool
   <span slot="right">
     <HelpButton>
@@ -75,7 +97,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $state.show}
   <SequentialLegend {colorScale} {limits} />
   <Radio
     legend="Trip purpose"
@@ -83,7 +105,7 @@
       ["pct_commute", "Commuting"],
       ["pct_school", "School"],
     ]}
-    bind:value={tripPurpose}
+    bind:value={$state.tripPurpose}
     inlineSmall
   />
   <Select
@@ -93,7 +115,7 @@
       ["gov_target", "Government target (2025)"],
       ["go_dutch", "Go Dutch"],
     ]}
-    bind:value={scenario}
+    bind:value={$state.scenario}
   />
 {/if}
 
@@ -104,12 +126,13 @@
     {...layerId(nameCommute)}
     sourceLayer={nameCommute}
     paint={{
-      "line-color": makeColorRamp(["get", scenario], limits, colorScale),
+      "line-color": makeColorRamp(["get", $state.scenario], limits, colorScale),
       "line-width": denseLineWidth,
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show && tripPurpose == nameCommute ? "visible" : "none",
+      visibility:
+        $state.show && $state.tripPurpose == nameCommute ? "visible" : "none",
     }}
   >
     <Popup let:props>
@@ -126,12 +149,13 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "line-color": makeColorRamp(["get", scenario], limits, colorScale),
+      "line-color": makeColorRamp(["get", $state.scenario], limits, colorScale),
       "line-width": denseLineWidth,
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show && tripPurpose == nameSchool ? "visible" : "none",
+      visibility:
+        $state.show && $state.tripPurpose == nameSchool ? "visible" : "none",
     }}
   >
     <Popup let:props>
