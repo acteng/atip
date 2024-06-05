@@ -17,32 +17,55 @@
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { customUrl } from "../url";
 
   let name = "census_output_areas";
   let colorScale = colors.sequential_low_to_high;
 
-  // Mutually exclusive, like a radio button
-  let showHouseholdsWithCar = false;
-  let showAverageCars = false;
-  let showPopulationDensity = false;
-  let colorBy = "";
+  type State = {
+    show: boolean;
+    kind: string;
+  };
+  let defaultState = {
+    show: false,
+    kind: "",
+  };
+  function stringify(x: State): string | null {
+    return x.show ? x.kind : null;
+  }
+  function parse(result: string): State {
+    return {
+      show: true,
+      kind: result,
+    };
+  }
+  let state = customUrl(name, defaultState, stringify, parse);
+
+  // Mutually exclusive, like a radio button. We need these for checkboxes to work
+  let showHouseholdsWithCar = $state.kind == "percent_households_with_car";
+  let showAverageCars = $state.kind == "average_cars_per_household";
+  let showPopulationDensity = $state.kind == "population_density";
   $: {
     if (showHouseholdsWithCar) {
-      colorBy = "percent_households_with_car";
+      $state.show = true;
+      $state.kind = "percent_households_with_car";
     } else if (showAverageCars) {
-      colorBy = "average_cars_per_household";
+      $state.show = true;
+      $state.kind = "average_cars_per_household";
     } else if (showPopulationDensity) {
-      colorBy = "population_density";
+      $state.show = true;
+      $state.kind = "population_density";
     } else {
-      colorBy = "";
+      $state.show = false;
+      $state.kind = "";
     }
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     let oa = e.detail.features[0].properties!["OA21CD"];
     if (
-      colorBy == "percent_households_with_car" ||
-      colorBy == "average_cars_per_household"
+      $state.kind == "percent_households_with_car" ||
+      $state.kind == "average_cars_per_household"
     ) {
       window.open(
         `https://www.ons.gov.uk/census/maps/choropleth/housing/number-of-cars-or-vans/number-of-cars-5a/no-cars-or-vans-in-household?oa=${oa}`,
@@ -57,11 +80,11 @@
   }
 
   // Should return 6 things (1 more than colorScale)
-  function makeLimits(): number[] {
-    if (colorBy == "percent_households_with_car") {
+  function makeLimits(kind: string): number[] {
+    if (kind == "percent_households_with_car") {
       // Equal buckets of 20%
       return [0, 20, 40, 60, 80, 100];
-    } else if (colorBy == "average_cars_per_household") {
+    } else if (kind == "average_cars_per_household") {
       // The max value is 2.4, so pick equal buckets
       return [0.0, 0.5, 1.0, 1.5, 2.0, 2.5];
     } else {
@@ -103,8 +126,8 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if colorBy == "percent_households_with_car"}
-  <SequentialLegend {colorScale} limits={makeLimits()} />
+{#if $state.kind == "percent_households_with_car"}
+  <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
 {/if}
 
 <Checkbox
@@ -143,8 +166,8 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if colorBy == "average_cars_per_household"}
-  <SequentialLegend {colorScale} limits={makeLimits()} />
+{#if $state.kind == "average_cars_per_household"}
+  <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
 {/if}
 
 <Checkbox
@@ -172,11 +195,11 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if colorBy == "population_density"}
+{#if $state.kind == "population_density"}
   <p>(people per square kilometres)</p>
   <SequentialLegend
     {colorScale}
-    limits={makeLimits().map((x) => x.toLocaleString())}
+    limits={makeLimits($state.kind).map((x) => x.toLocaleString())}
   />
 {/if}
 
@@ -187,11 +210,15 @@
     {...layerId(name)}
     sourceLayer={name}
     paint={{
-      "fill-color": makeColorRamp(["get", colorBy], makeLimits(), colorScale),
+      "fill-color": makeColorRamp(
+        ["get", $state.kind],
+        makeLimits($state.kind),
+        colorScale,
+      ),
       "fill-opacity": hoverStateFilter(0.5, 0.7),
     }}
     layout={{
-      visibility: colorBy != "" ? "visible" : "none",
+      visibility: $state.kind != "" ? "visible" : "none",
     }}
     eventsIfTopMost
     manageHoverState
@@ -200,13 +227,13 @@
   >
     <Popup let:props>
       {@const oa = props["OA21CD"]}
-      {@const value = props[colorBy]}
-      {#if colorBy == "percent_households_with_car"}
+      {@const value = props[$state.kind]}
+      {#if $state.kind == "percent_households_with_car"}
         <p>
           <b>{value}%</b>
           of households in {oa} have 1 or more cars
         </p>
-      {:else if colorBy == "average_cars_per_household"}
+      {:else if $state.kind == "average_cars_per_household"}
         <p>
           Households in {oa} have an average of
           <b>{value}</b>
@@ -228,7 +255,7 @@
       "line-width": 0.5,
     }}
     layout={{
-      visibility: colorBy != "" ? "visible" : "none",
+      visibility: $state.kind != "" ? "visible" : "none",
     }}
   />
 </VectorTileSource>
