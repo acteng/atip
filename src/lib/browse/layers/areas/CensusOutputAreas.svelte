@@ -17,7 +17,7 @@
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
-  import { customUrl } from "../url";
+  import { customUrlState } from "../url";
 
   let name = "census_output_areas";
   let colorScale = colors.sequential_low_to_high;
@@ -33,13 +33,13 @@
   function stringify(x: State): string | null {
     return x.show ? x.kind : null;
   }
-  function parse(result: string): State {
+  function parse(x: string): State {
     return {
       show: true,
-      kind: result,
+      kind: x,
     };
   }
-  let state = customUrl(name, defaultState, stringify, parse);
+  let state = customUrlState(name, defaultState, stringify, parse);
 
   // Mutually exclusive, like a radio button. We need these for checkboxes to work
   let showHouseholdsWithCar = $state.kind == "percent_households_with_car";

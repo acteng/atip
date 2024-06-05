@@ -1,5 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 
+// Create a store to represent whether a layer should be shown or hidden. The
+// state is synced as a URL query parameter.
 export function showHideLayer(name: string): Writable<boolean> {
   let initialValue = new URLSearchParams(window.location.search).has(name);
   let store = writable(initialValue);
@@ -16,11 +18,14 @@ export function showHideLayer(name: string): Writable<boolean> {
   return store;
 }
 
-export function customUrl<T>(
+// Create a store to represent some state about a layer, syncing it to a URL
+// query parameter. The parameter missing is equivalent to stringify returning
+// null.
+export function customUrlState<T>(
   name: string,
   defaultValue: T,
-  stringify: (x: T) => string | null,
-  parse: (x: string) => T,
+  stringify: (state: T) => string | null,
+  parse: (param: string) => T,
 ): Writable<T> {
   let param = new URLSearchParams(window.location.search).get(name);
   let initialValue = param == null ? defaultValue : parse(param);

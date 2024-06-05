@@ -4,7 +4,7 @@
   import { layerId } from "lib/maplibre";
   import { RasterLayer, RasterTileSource } from "svelte-maplibre";
   import OsOglLicense from "../OsOglLicense.svelte";
-  import { customUrl } from "../url";
+  import { customUrlState } from "../url";
 
   type State = {
     show: boolean;
@@ -19,15 +19,15 @@
   function stringify(x: State): string | null {
     return x.show ? `${x.pollutant}/${x.opacity}` : null;
   }
-  function parse(result: string): State {
-    let [pollutant, opacity] = result.split("/");
+  function parse(x: string): State {
+    let [pollutant, opacity] = x.split("/");
     return {
       show: true,
       pollutant,
       opacity: parseInt(opacity),
     };
   }
-  let state = customUrl("pollution", defaultState, stringify, parse);
+  let state = customUrlState("pollution", defaultState, stringify, parse);
 
   // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services
   // and QGIS

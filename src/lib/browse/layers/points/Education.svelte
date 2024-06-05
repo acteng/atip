@@ -15,39 +15,36 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
-  import { customUrl } from "../url";
+  import { customUrlState } from "../url";
 
   let name = "education";
 
   type State = {
-    group: boolean;
+    show: boolean;
     school: boolean;
     college: boolean;
     university: boolean;
   };
   let keys = ["school", "college", "university"] as const;
   let defaultState = {
-    group: false,
+    show: false,
     school: true,
     college: true,
     university: true,
   };
   function stringify(x: State): string | null {
-    if (!x.group) {
-      return null;
-    }
-    return keys.filter((c) => x[c]).join(",");
+    return x.show ? keys.filter((c) => x[c]).join(",") : null;
   }
-  function parse(result: string): State {
+  function parse(x: string): State {
     return {
-      group: true,
-      school: result.includes("school"),
-      college: result.includes("college"),
-      university: result.includes("university"),
+      show: true,
+      school: x.includes("school"),
+      college: x.includes("college"),
+      university: x.includes("university"),
     };
   }
 
-  let state = customUrl(name, defaultState, stringify, parse);
+  let state = customUrlState(name, defaultState, stringify, parse);
 
   function makeFilter(state: State): ExpressionSpecification {
     let include = keys.filter((l) => state[l]);
@@ -55,7 +52,7 @@
   }
 </script>
 
-<Checkbox bind:checked={$state.group}>
+<Checkbox bind:checked={$state.show}>
   Education
   <span slot="right">
     <HelpButton>
@@ -67,7 +64,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if $state.group}
+{#if $state.show}
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup>
       <Checkbox bind:checked={$state.school}>
@@ -105,7 +102,7 @@
       "fill-opacity": hoverStateFilter(0.7, 1.0),
     }}
     layout={{
-      visibility: $state.group ? "visible" : "none",
+      visibility: $state.show ? "visible" : "none",
     }}
     filter={makeFilter($state)}
     manageHoverState
