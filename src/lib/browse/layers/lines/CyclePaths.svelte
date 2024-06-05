@@ -16,12 +16,12 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
-  import { customUrl } from "../url";
+  import { customUrlState } from "../url";
 
   let name = "cycle_paths";
 
   type State = {
-    group: boolean;
+    show: boolean;
     track: boolean;
     lane: boolean;
     shared_use_segregated: boolean;
@@ -34,29 +34,26 @@
     "shared_use_unsegregated",
   ] as const;
   let defaultState = {
-    group: false,
+    show: false,
     track: true,
     lane: true,
     shared_use_segregated: true,
     shared_use_unsegregated: true,
   };
   function stringify(x: State): string | null {
-    if (!x.group) {
-      return null;
-    }
-    return keys.filter((c) => x[c]).join(",");
+    return x.show ? keys.filter((c) => x[c]).join(",") : null;
   }
-  function parse(result: string): State {
+  function parse(x: string): State {
     return {
-      group: true,
-      track: result.includes("track"),
-      lane: result.includes("lane"),
-      shared_use_segregated: result.includes("shared_use_segregated"),
-      shared_use_unsegregated: result.includes("shared_use_unsegregated"),
+      show: true,
+      track: x.includes("track"),
+      lane: x.includes("lane"),
+      shared_use_segregated: x.includes("shared_use_segregated"),
+      shared_use_unsegregated: x.includes("shared_use_unsegregated"),
     };
   }
 
-  let state = customUrl(name, defaultState, stringify, parse);
+  let state = customUrlState(name, defaultState, stringify, parse);
 
   let legend = [
     ["track", "Separated tracks", colors.cycle_paths.track],
@@ -104,7 +101,7 @@
   }
 </script>
 
-<Checkbox bind:checked={$state.group}>
+<Checkbox bind:checked={$state.show}>
   Cycle paths
   <span slot="right">
     <HelpButton>
@@ -142,7 +139,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if $state.group}
+{#if $state.show}
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup>
       {#each legend as [kind, label, color]}
@@ -176,7 +173,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: $state.group ? "visible" : "none",
+      visibility: $state.show ? "visible" : "none",
     }}
     filter={makeFilter($state)}
     manageHoverState

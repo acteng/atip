@@ -14,7 +14,7 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
-  import { customUrl } from "../url";
+  import { customUrlState } from "../url";
 
   // TODO It'd be much simpler to have one source with both attributes
   let nameCommute = "pct_commute";
@@ -33,20 +33,17 @@
     scenario: "baseline",
   };
   function stringify(x: State): string | null {
-    if (!x.show) {
-      return null;
-    }
-    return `${x.tripPurpose}/${x.scenario}`;
+    return x.show ? `${x.tripPurpose}/${x.scenario}` : null;
   }
-  function parse(result: string): State {
-    let [tripPurpose, scenario] = result.split("/");
+  function parse(x: string): State {
+    let [tripPurpose, scenario] = x.split("/");
     return {
       show: true,
       tripPurpose,
       scenario,
     };
   }
-  let state = customUrl("pct", defaultState, stringify, parse);
+  let state = customUrlState("pct", defaultState, stringify, parse);
 
   // TODO Don't use a function and @html; do everything in Svelte?
   function tooltip(props: { [name: string]: any }): string {

@@ -14,7 +14,7 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
-  import { customUrl } from "../url";
+  import { customUrlState } from "../url";
 
   let name = "road_speeds";
   let colorScale = colors.sequential_low_to_high;
@@ -29,18 +29,15 @@
     kind: "indicative_mph",
   };
   function stringify(x: State): string | null {
-    if (!x.show) {
-      return null;
-    }
-    return x.kind;
+    return x.show ? x.kind : null;
   }
-  function parse(result: string): State {
+  function parse(x: string): State {
     return {
       show: true,
-      kind: result,
+      kind: x,
     };
   }
-  let state = customUrl(name, defaultState, stringify, parse);
+  let state = customUrlState(name, defaultState, stringify, parse);
 
   let times: Record<string, string> = {
     mf4to7: "Monday-Friday 4-7am",

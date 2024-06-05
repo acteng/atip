@@ -16,7 +16,7 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
-  import { customUrl } from "../url";
+  import { customUrlState } from "../url";
 
   let name = "stats19";
 
@@ -46,8 +46,8 @@
     let bools = keys.filter((c) => x[c]).join(",");
     return `${bools}/${x.minYear}/${x.maxYear}`;
   }
-  function parse(result: string): State {
-    let [bools, minYear, maxYear] = result.split("/");
+  function parse(x: string): State {
+    let [bools, minYear, maxYear] = x.split("/");
     return {
       show: true,
       pedestrians: bools.includes("pedestrians"),
@@ -59,7 +59,7 @@
     };
   }
 
-  let state = customUrl(name, defaultState, stringify, parse);
+  let state = customUrlState(name, defaultState, stringify, parse);
 
   $: filter = makeFilter(
     $state.minYear,
