@@ -97,7 +97,7 @@
 
   function makeFilter(state: State): ExpressionSpecification {
     let include = keys.filter((l) => state[l]);
-    return ["in", ["get", "type"], ["literal", include]];
+    return ["in", ["get", "kind"], ["literal", include]];
   }
 </script>
 
