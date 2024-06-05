@@ -16,25 +16,58 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
+  import { customUrl } from "../url";
 
   let name = "stats19";
 
-  let show = false;
+  type State = {
+    show: boolean;
+    pedestrians: boolean;
+    cyclists: boolean;
+    horseRiders: boolean;
+    other: boolean;
+    minYear: number;
+    maxYear: number;
+  };
+  let keys = ["pedestrians", "cyclists", "horseRiders", "other"] as const;
+  let defaultState = {
+    show: false,
+    pedestrians: true,
+    cyclists: true,
+    horseRiders: true,
+    other: false,
+    minYear: 2017,
+    maxYear: 2022,
+  };
+  function stringify(x: State): string | null {
+    if (!x.show) {
+      return null;
+    }
+    let bools = keys.filter((c) => x[c]).join(",");
+    return `${bools}/${x.minYear}/${x.maxYear}`;
+  }
+  function parse(result: string): State {
+    let [bools, minYear, maxYear] = result.split("/");
+    return {
+      show: true,
+      pedestrians: bools.includes("pedestrians"),
+      cyclists: bools.includes("cyclists"),
+      horseRiders: bools.includes("horseRiders"),
+      other: bools.includes("other"),
+      minYear: parseInt(minYear),
+      maxYear: parseInt(maxYear),
+    };
+  }
 
-  let filterPedestrians = true;
-  let filterCyclists = true;
-  let filterHorseRiders = true;
-  let filterOther = false;
-  let minYear = 2017;
-  let maxYear = 2022;
+  let state = customUrl(name, defaultState, stringify, parse);
 
   $: filter = makeFilter(
-    minYear,
-    maxYear,
-    filterPedestrians,
-    filterCyclists,
-    filterHorseRiders,
-    filterOther,
+    $state.minYear,
+    $state.maxYear,
+    $state.pedestrians,
+    $state.cyclists,
+    $state.horseRiders,
+    $state.other,
   );
   function makeFilter(
     _a: number,
@@ -45,23 +78,23 @@
     _f: boolean,
   ): ExpressionSpecification {
     let includeTypes: ExpressionSpecification = ["any"];
-    if (filterPedestrians) {
+    if ($state.pedestrians) {
       includeTypes.push(["get", "pedestrian"]);
     }
-    if (filterCyclists) {
+    if ($state.cyclists) {
       includeTypes.push(["get", "cyclist"]);
     }
-    if (filterHorseRiders) {
+    if ($state.horseRiders) {
       includeTypes.push(["get", "horse_rider"]);
     }
-    if (filterOther) {
+    if ($state.other) {
       includeTypes.push(["get", "other"]);
     }
 
     return [
       "all",
-      [">=", ["get", "year"], minYear],
-      ["<=", ["get", "year"], maxYear],
+      [">=", ["get", "year"], $state.minYear],
+      ["<=", ["get", "year"], $state.maxYear],
       includeTypes,
     ];
   }
@@ -133,7 +166,7 @@
   ];
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$state.show}>
   Stats19
   <span slot="right">
     <HelpButton>
@@ -173,19 +206,19 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $state.show}
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup small>
-      <Checkbox bind:checked={filterPedestrians}>Pedestrians</Checkbox>
-      <Checkbox bind:checked={filterCyclists}>Cyclists</Checkbox>
-      <Checkbox bind:checked={filterHorseRiders}>Horse riders</Checkbox>
-      <Checkbox bind:checked={filterOther}>Other</Checkbox>
+      <Checkbox bind:checked={$state.pedestrians}>Pedestrians</Checkbox>
+      <Checkbox bind:checked={$state.cyclists}>Cyclists</Checkbox>
+      <Checkbox bind:checked={$state.horseRiders}>Horse riders</Checkbox>
+      <Checkbox bind:checked={$state.other}>Other</Checkbox>
     </CheckboxGroup>
     <div>
       Filter years:
-      <input type="number" min={2017} max={2022} bind:value={minYear} />
+      <input type="number" min={2017} max={2022} bind:value={$state.minYear} />
       -
-      <input type="number" min={2017} max={2022} bind:value={maxYear} />
+      <input type="number" min={2017} max={2022} bind:value={$state.maxYear} />
     </div>
     <Legend rows={severityLegend} />
   </div>
@@ -220,7 +253,7 @@
     }}
     {filter}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $state.show ? "visible" : "none",
     }}
     hoverCursor="pointer"
     eventsIfTopMost
