@@ -11,16 +11,17 @@
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "bus_stops";
 
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 3, 10, 20, 30, 100];
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   Bus stops
   <span slot="right">
     <HelpButton>
@@ -44,7 +45,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <p>Peak hourly frequency:</p>
   <SequentialLegend {colorScale} {limits} />
 {/if}
@@ -70,7 +71,7 @@
       ],
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost

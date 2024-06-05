@@ -17,21 +17,12 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "wards";
   let color = colors.wards;
 
-  let show = new URLSearchParams(window.location.search).has(name);
-  function updateURL(show: boolean) {
-    let url = new URL(window.location.href);
-    if (show) {
-      url.searchParams.set(name, "1");
-    } else {
-      url.searchParams.delete(name);
-    }
-    window.history.replaceState(null, "", url.toString());
-  }
-  $: updateURL(show);
+  let show = showHideLayer(name);
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     let name = encodeURIComponent(e.detail.features[0].properties!.name);
@@ -40,7 +31,7 @@
   }
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <ColorLegend {color} />
   Wards
   <span slot="right">
@@ -68,7 +59,7 @@
       "fill-opacity": hoverStateFilter(0.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost
@@ -87,7 +78,7 @@
       "line-width": 2.5,
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   />
 </VectorTileSource>

@@ -14,15 +14,16 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "road_widths";
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 5, 10, 15, 20, 100];
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   OS Road widths
   <span slot="right">
     <HelpButton>
@@ -44,7 +45,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <SequentialLegend {colorScale} {limits} />
 {/if}
 
@@ -63,7 +64,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   >
     <Popup let:props>

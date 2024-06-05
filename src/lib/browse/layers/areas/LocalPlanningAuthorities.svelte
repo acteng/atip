@@ -16,17 +16,18 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "local_planning_authorities";
   let color = colors.local_planning_authorities;
 
-  let show = false;
+  let show = showHideLayer(name);
 
   // TODO Note there are overlapping features, so the tooltip may be incomplete
   // -- but can't we fix that now?
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <ColorLegend {color} />
   Local Planning Authorities
   <span slot="right">
@@ -79,7 +80,7 @@
       "fill-opacity": hoverStateFilter(0.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost
@@ -96,7 +97,7 @@
       "line-width": 2.5,
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   />
 </VectorTileSource>

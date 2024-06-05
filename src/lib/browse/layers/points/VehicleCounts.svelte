@@ -15,6 +15,7 @@
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "vehicle_counts";
 
@@ -24,7 +25,7 @@
   // Remove some because there's not much width
   let describeLimits = ["", "40k", "80k", "120k", "160k", ""];
 
-  let show = false;
+  let show = showHideLayer(name);
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
@@ -36,7 +37,7 @@
   }
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   Vehicle counts
   <span slot="right">
     <HelpButton>
@@ -63,7 +64,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <SequentialLegend {colorScale} limits={describeLimits} />
 {/if}
 
@@ -104,7 +105,7 @@
       ],
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     hoverCursor="pointer"
     eventsIfTopMost

@@ -17,11 +17,12 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "local_authority_districts";
   let color = colors.local_authority_districts;
 
-  let show = false;
+  let show = showHideLayer(name);
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
@@ -33,7 +34,7 @@
   }
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <ColorLegend {color} />
   Local Authority Districts
   <span slot="right">
@@ -58,7 +59,7 @@
       "fill-opacity": hoverStateFilter(0.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost
@@ -76,7 +77,7 @@
       "line-width": 2.5,
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   />
 </GeoJSON>

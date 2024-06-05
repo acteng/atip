@@ -17,15 +17,16 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "gradient";
   let colorScale = colors.gradient_flat_to_steep;
   let limits = [0, 3, 5, 8, 10, 20, 100];
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   Gradients
   <span slot="right">
     <HelpButton>
@@ -50,7 +51,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <SequentialLegend {colorScale} {limits} />
 {/if}
 
@@ -72,7 +73,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   >
     <Popup let:props>
@@ -95,7 +96,7 @@
       "symbol-spacing": 50,
       "icon-allow-overlap": true,
       "icon-rotate": ["case", ["<", ["get", "gradient"], 0], 180, 0],
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   />
 </VectorTileSource>

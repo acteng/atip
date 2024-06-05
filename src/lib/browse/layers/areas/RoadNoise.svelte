@@ -15,6 +15,7 @@
   import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "road_noise";
 
@@ -35,10 +36,10 @@
     colors.sequential_low_to_high[4],
   ];
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   Road noise
   <span slot="right">
     <HelpButton>
@@ -58,7 +59,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <SequentialLegend {colorScale} limits={["55", "65", "75", ">"]} />
 {/if}
 
@@ -83,7 +84,7 @@
       "fill-opacity": hoverStateFilter(0.5, 0.8),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     manageHoverState
     eventsIfTopMost

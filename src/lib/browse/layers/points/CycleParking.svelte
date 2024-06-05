@@ -10,13 +10,14 @@
   import { SymbolLayer, VectorTileSource } from "svelte-maplibre";
   import cycleParking from "../../../../../assets/bicycle_parking.png?url";
   import OsmLicense from "../OsmLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "cycle_parking";
 
-  let show = false;
+  let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$show}>
   <img src={cycleParking} alt="a logo representing cycle parking" />
   Cycle parking
   <span slot="right">
@@ -51,7 +52,7 @@
       "icon-image": "cycle_parking",
       "icon-size": 1.0,
       "icon-allow-overlap": true,
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   >
     <Popup let:props>
