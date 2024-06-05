@@ -16,8 +16,47 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
+  import { customUrl } from "../url";
 
   let name = "cycle_paths";
+
+  type State = {
+    group: boolean;
+    track: boolean;
+    lane: boolean;
+    shared_use_segregated: boolean;
+    shared_use_unsegregated: boolean;
+  };
+  let keys = [
+    "track",
+    "lane",
+    "shared_use_segregated",
+    "shared_use_unsegregated",
+  ] as const;
+  let defaultState = {
+    group: false,
+    track: true,
+    lane: true,
+    shared_use_segregated: true,
+    shared_use_unsegregated: true,
+  };
+  function stringify(x: State): string | null {
+    if (!x.group) {
+      return null;
+    }
+    return keys.filter((c) => x[c]).join(",");
+  }
+  function parse(result: string): State {
+    return {
+      group: true,
+      track: result.includes("track"),
+      lane: result.includes("lane"),
+      shared_use_segregated: result.includes("shared_use_segregated"),
+      shared_use_unsegregated: result.includes("shared_use_unsegregated"),
+    };
+  }
+
+  let state = customUrl(name, defaultState, stringify, parse);
 
   let legend = [
     ["track", "Separated tracks", colors.cycle_paths.track],
@@ -32,15 +71,7 @@
       "Shared-use (unsegregated)",
       colors.cycle_paths.shared_use_unsegregated,
     ],
-  ];
-
-  let showGroup = false;
-  let showLayer: { [name: string]: boolean } = {
-    track: true,
-    lane: true,
-    shared_use_segregated: true,
-    shared_use_unsegregated: true,
-  };
+  ] as const;
 
   function tooltip(props: { [name: string]: any }): [string, string, string] {
     // @ts-ignore Write types for the feature properties
@@ -67,15 +98,13 @@
     );
   }
 
-  function makeFilter(showLayer: {
-    [name: string]: boolean;
-  }): ExpressionSpecification {
-    let include = Object.keys(showLayer).filter((l) => showLayer[l]);
-    return ["in", ["get", "kind"], ["literal", include]];
+  function makeFilter(state: State): ExpressionSpecification {
+    let include = keys.filter((l) => state[l]);
+    return ["in", ["get", "type"], ["literal", include]];
   }
 </script>
 
-<Checkbox bind:checked={showGroup}>
+<Checkbox bind:checked={$state.group}>
   Cycle paths
   <span slot="right">
     <HelpButton>
@@ -113,11 +142,11 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if showGroup}
+{#if $state.group}
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup>
       {#each legend as [kind, label, color]}
-        <Checkbox bind:checked={showLayer[kind]}>
+        <Checkbox bind:checked={$state[kind]}>
           <ColorLegend {color} />
           {label}
         </Checkbox>
@@ -147,9 +176,9 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: showGroup ? "visible" : "none",
+      visibility: $state.group ? "visible" : "none",
     }}
-    filter={makeFilter(showLayer)}
+    filter={makeFilter($state)}
     manageHoverState
     eventsIfTopMost
     hoverCursor="pointer"

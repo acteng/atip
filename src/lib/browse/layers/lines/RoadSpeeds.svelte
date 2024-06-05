@@ -14,14 +14,33 @@
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
+  import { customUrl } from "../url";
 
   let name = "road_speeds";
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 20, 30, 40, 50, 90];
 
-  let showSpeed = "indicative_mph";
-
-  let show = false;
+  type State = {
+    show: boolean;
+    kind: string;
+  };
+  let defaultState = {
+    show: false,
+    kind: "indicative_mph",
+  };
+  function stringify(x: State): string | null {
+    if (!x.show) {
+      return null;
+    }
+    return x.kind;
+  }
+  function parse(result: string): State {
+    return {
+      show: true,
+      kind: result,
+    };
+  }
+  let state = customUrl(name, defaultState, stringify, parse);
 
   let times: Record<string, string> = {
     mf4to7: "Monday-Friday 4-7am",
@@ -41,7 +60,7 @@
   };
 </script>
 
-<Checkbox bind:checked={show}>
+<Checkbox bind:checked={$state.show}>
   OS Speeds
   <span slot="right">
     <HelpButton>
@@ -66,7 +85,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $state.show}
   <SequentialLegend {colorScale} {limits} />
   <Radio
     legend="Show speed types"
@@ -74,7 +93,7 @@
       ["indicative_mph", "Posted speed limit"],
       ["highest_mph", "Highest measured average speed"],
     ]}
-    bind:value={showSpeed}
+    bind:value={$state.kind}
     inlineSmall
   />
 {/if}
@@ -88,12 +107,12 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "line-color": makeColorRamp(["get", showSpeed], limits, colorScale),
+      "line-color": makeColorRamp(["get", $state.kind], limits, colorScale),
       "line-width": denseLineWidth,
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $state.show ? "visible" : "none",
     }}
   >
     <Popup let:props>

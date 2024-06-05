@@ -15,24 +15,47 @@
   } from "svelte-maplibre";
   import { colors } from "../../colors";
   import OsmLicense from "../OsmLicense.svelte";
+  import { customUrl } from "../url";
 
-  let showGroup = false;
   let name = "education";
 
-  const showLayer: { [name: string]: boolean } = {
+  type State = {
+    group: boolean;
+    school: boolean;
+    college: boolean;
+    university: boolean;
+  };
+  let keys = ["school", "college", "university"] as const;
+  let defaultState = {
+    group: false,
     school: true,
     college: true,
     university: true,
   };
-  function makeFilter(showLayer: {
-    [name: string]: boolean;
-  }): ExpressionSpecification {
-    let include = Object.keys(showLayer).filter((l) => showLayer[l]);
+  function stringify(x: State): string | null {
+    if (!x.group) {
+      return null;
+    }
+    return keys.filter((c) => x[c]).join(",");
+  }
+  function parse(result: string): State {
+    return {
+      group: true,
+      school: result.includes("school"),
+      college: result.includes("college"),
+      university: result.includes("university"),
+    };
+  }
+
+  let state = customUrl(name, defaultState, stringify, parse);
+
+  function makeFilter(state: State): ExpressionSpecification {
+    let include = keys.filter((l) => state[l]);
     return ["in", ["get", "type"], ["literal", include]];
   }
 </script>
 
-<Checkbox bind:checked={showGroup}>
+<Checkbox bind:checked={$state.group}>
   Education
   <span slot="right">
     <HelpButton>
@@ -44,18 +67,18 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if showGroup}
+{#if $state.group}
   <div style="border: 1px solid black; padding: 8px;">
     <CheckboxGroup>
-      <Checkbox bind:checked={showLayer.school}>
+      <Checkbox bind:checked={$state.school}>
         <ColorLegend color={colors.education.schools} />
         Schools
       </Checkbox>
-      <Checkbox bind:checked={showLayer.college}>
+      <Checkbox bind:checked={$state.college}>
         <ColorLegend color={colors.education.colleges} />
         Colleges
       </Checkbox>
-      <Checkbox bind:checked={showLayer.university}>
+      <Checkbox bind:checked={$state.university}>
         <ColorLegend color={colors.education.universities} />
         Universities
       </Checkbox>
@@ -82,9 +105,9 @@
       "fill-opacity": hoverStateFilter(0.7, 1.0),
     }}
     layout={{
-      visibility: showGroup ? "visible" : "none",
+      visibility: $state.group ? "visible" : "none",
     }}
-    filter={makeFilter(showLayer)}
+    filter={makeFilter($state)}
     manageHoverState
     eventsIfTopMost
   >
