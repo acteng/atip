@@ -5,6 +5,7 @@
   import { onMount } from "svelte";
   import { init, RouteTool } from "route-snapper-ts";
   import { routeToolGj, snapMode, undoLength } from "./stores";
+  import { fetchWithProgress } from "lib/common";
 
   export let url: string;
 
@@ -18,7 +19,9 @@
 
     console.log(`Grabbing ${url}`);
     try {
-      const graphBytes = await fetchWithProgress(url);
+      const graphBytes = await fetchWithProgress(url, (p) => {
+        progress = p;
+      });
       routeTool.set(
         new RouteTool($map, graphBytes, routeToolGj, snapMode, undoLength),
       );
@@ -29,44 +32,6 @@
       failedToLoadRouteTool = true;
     }
   });
-
-  // This requires the server to send back a Content-Length header. The actual
-  // bytes received may exceed this length (when the file is compressed), which
-  // means setProgress may get percentages over 100.
-  async function fetchWithProgress(url: string): Promise<Uint8Array> {
-    const response = await fetch(url);
-    // TODO Handle error cases better
-    const reader = response.body!.getReader();
-
-    let lengthHeader = response.headers.get("Content-Length");
-    if (!lengthHeader) {
-      throw new Error(`No Content-Length header from ${url}`);
-    }
-    const contentLength = parseInt(lengthHeader);
-
-    let receivedLength = 0;
-    let chunks = [];
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        break;
-      }
-
-      chunks.push(value);
-      receivedLength += value.length;
-
-      progress = (100.0 * receivedLength) / contentLength;
-    }
-
-    let allChunks = new Uint8Array(receivedLength);
-    let position = 0;
-    for (let chunk of chunks) {
-      allChunks.set(chunk, position);
-      position += chunk.length;
-    }
-
-    return allChunks;
-  }
 </script>
 
 {#if !routeToolReady && !failedToLoadRouteTool && !downloadComplete}
