@@ -27,8 +27,18 @@ export function customUrlState<T>(
   stringify: (state: T) => string | null,
   parse: (param: string) => T,
 ): Writable<T> {
+  let initialValue = defaultValue;
   let param = new URLSearchParams(window.location.search).get(name);
-  let initialValue = param == null ? defaultValue : parse(param);
+  if (param != null) {
+    try {
+      initialValue = parse(param);
+    } catch (err) {
+      console.warn(
+        `Parsing URL parameter ${name}=${param} failed, using default value: ${err}`,
+      );
+    }
+  }
+
   let store = writable(initialValue);
   // TODO How do we avoid leaking this?
   store.subscribe((state) => {
