@@ -40,6 +40,10 @@
     PM10Roads_viridis: ["22", "Data for 2022"],
   }[$state.pollutant];
 
+  // Changes to opacity shouldn't re-render the tile URL. Use this indirection
+  // (thanks to https://thoughtspile.github.io/2023/04/22/svelte-state/)
+  $: url = tilesUrl($state.pollutant);
+
   function wmsUrl(): string {
     return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2022/${$state.pollutant}/MapServer/WMSServer`;
   }
@@ -122,7 +126,7 @@
   />
 {/if}
 
-<RasterTileSource tiles={[tilesUrl($state.pollutant)]} tileSize={256}>
+<RasterTileSource tiles={[url]} tileSize={256}>
   <RasterLayer
     {...layerId("pollution")}
     paint={{
