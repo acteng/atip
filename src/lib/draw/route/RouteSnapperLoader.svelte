@@ -33,7 +33,7 @@
   // This requires the server to send back a Content-Length header. The actual
   // bytes received may exceed this length (when the file is compressed), which
   // means setProgress may get percentages over 100.
-  async function fetchWithProgress(url: string) {
+  async function fetchWithProgress(url: string): Promise<Uint8Array> {
     const response = await fetch(url);
     // TODO Handle error cases better
     const reader = response.body!.getReader();
