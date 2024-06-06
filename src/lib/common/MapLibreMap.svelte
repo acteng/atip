@@ -13,6 +13,7 @@
   import railwayStation from "../../../assets/railway_station.png?url";
 
   export let style: string;
+  // startBounds will only be used if the URL doesn't already have a camera set
   export let startBounds: LngLatBoundsLike | undefined = undefined;
 
   let styleSpec: string | StyleSpecification | null = null;
@@ -20,9 +21,12 @@
   let map: Map;
   let loaded = false;
 
-  // Before creating the map, check if there's a hash, because one will get set below
-  // TODO Change BoundaryLayer to not do this?
+  // Before creating the map, record if there's a camera viewport specified. If
+  // startBounds isn't used, other code can set one dynamically.
   setContext("setCamera", !window.location.hash);
+  if (window.location.hash) {
+    startBounds = undefined;
+  }
 
   $: if (loaded) {
     // TODO Get rid of mapStore entirely, eventually?

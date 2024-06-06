@@ -8,9 +8,8 @@
 
   export let boundaryGeojson: FeatureCollection<Polygon | MultiPolygon>;
 
-  const setCamera = getContext("setCamera");
-
-  if (setCamera) {
+  // If the URL didn't initially have a viewport set, fit the boundary
+  if (getContext("setCamera")) {
     $map.fitBounds(bbox(boundaryGeojson), {
       padding: 20,
       animate: false,
