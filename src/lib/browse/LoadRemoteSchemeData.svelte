@@ -1,7 +1,6 @@
 <script lang="ts">
   import { SecondaryButton } from "govuk-svelte";
   import { fetchWithProgress, privateResourceBaseUrl } from "lib/common";
-  // means setProgress may get percentages over 100.
   import { onMount } from "svelte";
 
   export let loadFile: (text: string) => void;
