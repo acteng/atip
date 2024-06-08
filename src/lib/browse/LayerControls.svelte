@@ -28,7 +28,6 @@
   import RoadWidthsLayerControl from "./layers/lines/RoadWidths.svelte";
   import TramsLayerControl from "./layers/lines/Trams.svelte";
   import BusStopsLayerControl from "./layers/points/BusStops.svelte";
-  import CriticalIssuesLayerControl from "./layers/points/CriticalIssues.svelte";
   import CrossingsLayerControl from "./layers/points/Crossings.svelte";
   import GradientsLayerControl from "./layers/lines/Gradients.svelte";
   import CycleParkingLayerControl from "./layers/points/CycleParking.svelte";
@@ -66,7 +65,6 @@
 </script>
 
 <CollapsibleCard label="Layers" open>
-  <CriticalIssuesLayerControl />
   <CollapsibleCard label="Trip generators">
     <CheckboxGroup small>
       <EducationLayerControl />
