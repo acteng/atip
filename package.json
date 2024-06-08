@@ -50,7 +50,6 @@
     "js-cookie": "^3.0.5",
     "maplibre-draw-polygon": "github:dabreegster/maplibre-draw-polygon",
     "maplibre-gl": "^4.0.2",
-    "read-excel-file": "^5.7.1",
     "route-snapper": "^0.3.0",
     "route-snapper-ts": "^0.0.5",
     "svelte": "^4.2.10",

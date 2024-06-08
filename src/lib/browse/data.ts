@@ -1,6 +1,3 @@
-import type { FeatureCollection } from "geojson";
-import { setPrecision } from "lib/maplibre";
-import readXlsxFile from "read-excel-file";
 import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
@@ -58,67 +55,6 @@ function keepFeature(feature: FeatureUnion): boolean {
   }
 
   return true;
-}
-
-interface CriticalRow {
-  id: string;
-  inspector: string;
-  submission_time: Date;
-  scheme_reference: string;
-  current_design_stage: string;
-  critical_type: string;
-  lat_lon: string;
-  location_description: string;
-  notes: string;
-}
-
-// Returns a FeatureCollection of points. The properties are described by
-// CriticalRow (with the exception that submission_time is already formatted as
-// a string).
-export async function parseCriticalIssuesExcel(
-  input: File,
-): Promise<FeatureCollection> {
-  let mapping = {
-    ID: "id",
-    Inspector: "inspector",
-    "Submission Time": "submission_time",
-    "Please enter the Scheme Reference number, (e.g. ATF2_WYO_01)":
-      "scheme_reference",
-    "Please enter current Design Stage": "current_design_stage",
-    "Select Critical Issue type below:": "critical_type",
-    "Please Enter Latitude and Longitude \n(Right click on location in Google, left click on information to copy to clipboard, paste below)":
-      "lat_lon",
-    Column1: "location_description",
-    "Enter any additional information (e.g. any comments or notes about this critical issue)":
-      "notes",
-  };
-
-  let { rows } = await readXlsxFile(input, {
-    map: mapping,
-    sheet: "Form Input",
-  });
-
-  let gj: FeatureCollection = {
-    type: "FeatureCollection",
-    features: [],
-  };
-  for (let row of rows as CriticalRow[]) {
-    let coordinates = setPrecision(
-      row.lat_lon.split(",").map(parseFloat).reverse(),
-    );
-    let properties: { [name: string]: any } = row;
-    properties.submission_time = row.submission_time.toLocaleString();
-    gj.features.push({
-      type: "Feature",
-      properties,
-      geometry: {
-        type: "Point",
-        coordinates,
-      },
-      id: gj.features.length + 1,
-    });
-  }
-  return gj;
 }
 
 export const fundingProgrammesForColouringAndFiltering: string[] = [
