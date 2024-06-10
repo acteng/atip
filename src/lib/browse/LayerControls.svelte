@@ -37,6 +37,7 @@
   import SportsSpacesLayerControl from "./layers/points/SportsSpaces.svelte";
   import Stats19LayerControl from "./layers/points/Stats19.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
+  import ProblemsLayerControl from "./layers/points/Problems.svelte";
   import { interactiveMapLayersEnabled } from "./stores";
 
   // Workaround for https://github.com/sveltejs/svelte/issues/7630
@@ -113,6 +114,7 @@
         <RoadWidthsLayerControl />
         <PavementWidthsLayerControl />
         <RoadSpeedsLayerControl />
+        <ProblemsLayerControl />
       {/if}
       <PollutionLayerControl />
       <RoadNoiseLayerControl />
