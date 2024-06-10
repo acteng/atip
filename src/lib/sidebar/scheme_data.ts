@@ -16,6 +16,22 @@ import { v4 as uuidv4 } from "uuid";
 export function backfill(json: any): SchemeCollection {
   let schema = get(schemaStore);
 
+  // Fix unsupported geometry types by making copies of them
+  let features = [];
+  for (let f of json.features) {
+    if (f.geometry.type.startsWith("Multi")) {
+      for (let coordinates of f.geometry.coordinates) {
+        let copy = JSON.parse(JSON.stringify(f));
+        copy.geometry.type = copy.geometry.type.slice("Multi".length);
+        copy.geometry.coordinates = JSON.parse(JSON.stringify(coordinates));
+        features.push(copy);
+      }
+    } else {
+      features.push(f);
+    }
+  }
+  json.features = features;
+
   let idCounter = 1;
   for (let f of json.features) {
     // Fix input from other tools where properties may be null
