@@ -17,7 +17,6 @@
   // Display full details in a certain order
   let keys = [
     "Issue ID",
-    "Proposed ID",
     "Scheme ID",
     "Date Logged",
     "Inspector",
@@ -45,7 +44,7 @@
 </script>
 
 <Checkbox bind:checked={$show}>
-  Problems
+  Issues & Conflicts
   <span slot="right">
     <HelpButton>
       <p>
