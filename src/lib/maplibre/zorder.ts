@@ -130,10 +130,8 @@ const layerZorder = [
   sketch("hover-points"),
   sketch(browse("interventions-points")),
 
-  // Criticals are one layer that should display on top of scheme data
-  browse("criticals-clusters"),
-  browse("criticals-counts"),
-  browse("criticals-points"),
+  // Problem points are one layer that should display on top of scheme data
+  browse("problems"),
 
   sketch("edit-polygon-fill"),
   sketch("edit-polygon-lines"),
