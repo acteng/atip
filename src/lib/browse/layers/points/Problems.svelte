@@ -58,7 +58,7 @@
     </HelpButton>
   </span>
 </Checkbox>
-{#if show}
+{#if $show}
   <Legend rows={legend} />
 {/if}
 
