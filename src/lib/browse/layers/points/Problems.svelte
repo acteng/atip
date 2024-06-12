@@ -48,10 +48,13 @@
   <span slot="right">
     <HelpButton>
       <p>
-        Critical issues and policy conflicts from the DA Log. This is internally
-        collected data.
+        Critical issues and policy conflicts from the Design Assistance Log.
+        This is internally collected data.
       </p>
-      <p>This layer is manually copied from a copy of the DA Log. The data is recent as of 10 June 2024.</p>
+      <p>
+        This layer is manually copied from a copy of the DA Log. The data is
+        recent as of 10 June 2024.
+      </p>
     </HelpButton>
   </span>
 </Checkbox>
