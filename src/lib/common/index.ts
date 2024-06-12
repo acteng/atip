@@ -1,5 +1,5 @@
 import { fixBoundaries, type AuthorityBoundaries } from "boundaries";
-import authoritiesUrl from "../../../assets/authorities.geojson?url";
+import authoritiesUrl from "../../../assets/authorities-with-gent.geojson?url";
 
 export { default as Alpha } from "./Alpha.svelte";
 export { default as BaselayerSwitcher } from "./BaselayerSwitcher.svelte";
