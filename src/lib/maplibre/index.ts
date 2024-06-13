@@ -1,4 +1,4 @@
+export { getRoadLayerNames } from "./highlight_roads";
+export { getStyleChoices, getStyleSpecification } from "./styles";
 export * from "./utils";
-export * from "./layer_helper";
-export * from "./layer_helper_utils";
 export { layerId } from "./zorder";
