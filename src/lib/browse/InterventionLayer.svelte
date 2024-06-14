@@ -62,6 +62,7 @@
   <LineLayer
     {...layerId("interventions-lines-outlines")}
     filter={["all", isLine, hideWhileEditing]}
+    minzoom={10}
     manageHoverState
     eventsIfTopMost
     paint={{
