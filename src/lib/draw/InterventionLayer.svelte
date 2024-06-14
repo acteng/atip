@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { circleRadius, colors, lineWidth } from "colors";
+  import { circleRadius, lineWidth } from "colors";
   import type { Feature } from "geojson";
   import { gjSchemeCollection, hideSchemes, mode } from "lib/draw/stores";
   import {
-    addLineStringEndpoints,
     constructMatchExpression,
     isCoveragePolygon,
     isLine,
@@ -24,21 +23,15 @@
     GeoJSON,
     LineLayer,
     Popup,
+    hoverStateFilter,
     type LayerClickInfo,
   } from "svelte-maplibre";
   import type { FeatureUnion, SchemeCollection } from "types";
-
-  $: gj = addLineStringEndpoints($gjSchemeCollection);
 
   // TODO Maybe have a separate component for different modes.
   const hideWhileEditing: ExpressionSpecification = [
     "!=",
     ["get", "hide_while_editing"],
-    true,
-  ];
-  const notEndpoint: ExpressionSpecification = [
-    "!=",
-    ["get", "endpoint"],
     true,
   ];
 
@@ -120,10 +113,10 @@
   }
 </script>
 
-<GeoJSON data={gj}>
+<GeoJSON data={$gjSchemeCollection}>
   <CircleLayer
     {...layerId("interventions-points")}
-    filter={["all", isPoint, hideWhileEditing, notEndpoint, showSchemes]}
+    filter={["all", isPoint, hideWhileEditing, showSchemes]}
     paint={{
       "circle-color": color,
       "circle-radius": circleRadius,
@@ -146,6 +139,18 @@
       "line-color": color,
       "line-width": lineWidth,
     }}
+  />
+  <LineLayer
+    {...layerId("interventions-lines-outlines")}
+    filter={["all", isLine, hideWhileEditing, showSchemes]}
+    paint={{
+      "line-color": "black",
+      "line-width": hoverStateFilter(1, 2),
+      "line-gap-width": lineWidth,
+    }}
+    layout={{
+      "line-cap": "round",
+    }}
     hoverCursor={clickable ? "pointer" : undefined}
     on:click={onClick}
     manageHoverState={clickable}
@@ -156,16 +161,6 @@
       </Popup>
     {/if}
   </LineLayer>
-  <CircleLayer
-    {...layerId("interventions-lines-endpoints")}
-    filter={["all", ["==", ["get", "endpoint"], true], showSchemes]}
-    paint={{
-      "circle-radius": 0.5 * lineWidth,
-      "circle-opacity": 0,
-      "circle-stroke-color": colors.lineEndpointColor,
-      "circle-stroke-width": 2.0,
-    }}
-  />
 
   <FillLayer
     {...layerId("interventions-polygons")}

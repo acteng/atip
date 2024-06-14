@@ -6,7 +6,6 @@ export const colors = {
   other: "#984ea3",
 
   hovering: "black",
-  lineEndpointColor: "black",
   streetview: "blue",
   measuringLine: "cyan",
 };

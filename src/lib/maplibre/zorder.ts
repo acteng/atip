@@ -125,7 +125,7 @@ const layerZorder = [
   // The hover effect thickens, so draw beneath
   sketch("hover-lines"),
   sketch(browse("interventions-lines")),
-  sketch(browse("interventions-lines-endpoints")),
+  sketch(browse("interventions-lines-outlines")),
 
   sketch("hover-points"),
   sketch(browse("interventions-points")),

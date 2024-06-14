@@ -1,13 +1,7 @@
 <script lang="ts">
-  import { circleRadius, colors, lineWidth } from "colors";
+  import { circleRadius, lineWidth } from "colors";
   import { Popup } from "lib/common";
-  import {
-    addLineStringEndpoints,
-    isLine,
-    isPoint,
-    isPolygon,
-    layerId,
-  } from "lib/maplibre";
+  import { isLine, isPoint, isPolygon, layerId } from "lib/maplibre";
   import type { ExpressionSpecification } from "maplibre-gl";
   import {
     CircleLayer,
@@ -24,25 +18,18 @@
 
   let [colorInterventions] = styleByFundingProgramme();
 
-  $: gj = addLineStringEndpoints($schemesGj);
-
   // TODO Abusing this property for filtering
   const hideWhileEditing: ExpressionSpecification = [
     "!=",
     ["get", "hide_while_editing"],
     true,
   ];
-  const notEndpoint: ExpressionSpecification = [
-    "!=",
-    ["get", "endpoint"],
-    true,
-  ];
 </script>
 
-<GeoJSON data={gj}>
+<GeoJSON data={$schemesGj}>
   <CircleLayer
     {...layerId("interventions-points")}
-    filter={["all", isPoint, hideWhileEditing, notEndpoint]}
+    filter={["all", isPoint, hideWhileEditing]}
     manageHoverState
     eventsIfTopMost
     paint={{
@@ -64,14 +51,26 @@
   <LineLayer
     {...layerId("interventions-lines")}
     filter={["all", isLine, hideWhileEditing]}
-    manageHoverState
-    eventsIfTopMost
     paint={{
       "line-color": colorInterventions,
       "line-width": lineWidth,
-      "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
+      visibility: showSchemes ? "visible" : "none",
+    }}
+  />
+  <LineLayer
+    {...layerId("interventions-lines-outlines")}
+    filter={["all", isLine, hideWhileEditing]}
+    manageHoverState
+    eventsIfTopMost
+    paint={{
+      "line-color": "black",
+      "line-width": hoverStateFilter(1, 2),
+      "line-gap-width": lineWidth,
+    }}
+    layout={{
+      "line-cap": "round",
       visibility: showSchemes ? "visible" : "none",
     }}
     hoverCursor="pointer"
@@ -81,19 +80,6 @@
       <InterventionPopup {props} />
     </Popup>
   </LineLayer>
-  <CircleLayer
-    {...layerId("interventions-lines-endpoints")}
-    filter={["==", "endpoint", true]}
-    paint={{
-      "circle-radius": 0.5 * lineWidth,
-      "circle-opacity": 0,
-      "circle-stroke-color": colors.lineEndpointColor,
-      "circle-stroke-width": 2.0,
-    }}
-    layout={{
-      visibility: showSchemes ? "visible" : "none",
-    }}
-  />
 
   <FillLayer
     {...layerId("interventions-polygons")}
