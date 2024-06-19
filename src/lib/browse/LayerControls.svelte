@@ -84,7 +84,7 @@
       <CrossingsLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
-  <CollapsibleCard label="Public transit">
+  <CollapsibleCard label="Public transport">
     <BusRoutesLayerControl />
     <TramsLayerControl />
     <BusStopsLayerControl />
