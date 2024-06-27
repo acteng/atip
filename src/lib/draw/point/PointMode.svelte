@@ -12,6 +12,7 @@
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import PointControls from "./PointControls.svelte";
+  import { cfg } from "../config";
 
   onMount(() => {
     $pointTool!.start();
@@ -27,7 +28,7 @@
     gjSchemeCollection.update((gj) => {
       feature.id = newFeatureId(gj);
       feature.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      feature.properties.intervention_type = "other";
+      cfg.newPointFeature(feature);
       gj.features.push(feature as Feature<Point>);
       return gj;
     });

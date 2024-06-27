@@ -12,6 +12,7 @@
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import SnapPolygonControls from "./SnapPolygonControls.svelte";
+  import { cfg } from "../config";
 
   onMount(() => {
     $routeTool!.startArea();
@@ -27,8 +28,10 @@
     gjSchemeCollection.update((gj) => {
       feature.id = newFeatureId(gj);
       feature.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      feature.properties.intervention_type = "area";
-      gj.features.push(feature as Feature<Polygon>);
+      // We did startArea, so we know it's a Polygon
+      let polygonFeature = feature as Feature<Polygon>;
+      cfg.newPolygonFeature(polygonFeature);
+      gj.features.push(polygonFeature);
       return gj;
     });
 

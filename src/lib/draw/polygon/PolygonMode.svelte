@@ -12,6 +12,7 @@
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import PolygonControls from "./PolygonControls.svelte";
+  import { cfg } from "../config";
 
   onMount(() => {
     $polygonTool!.startNew();
@@ -27,8 +28,7 @@
     gjSchemeCollection.update((gj) => {
       feature.id = newFeatureId(gj);
       feature.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      feature.properties.intervention_type = "area";
-      feature.properties.is_coverage_polygon = false;
+      cfg.newPolygonFeature(feature);
       gj.features.push(feature as Feature<Polygon>);
       return gj;
     });
