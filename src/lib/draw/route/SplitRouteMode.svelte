@@ -5,7 +5,6 @@
 
   import { splitRoute, type RouteProps } from "route-snapper-ts";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
-  // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
   import {
     gjSchemeCollection,
@@ -18,7 +17,6 @@
   import { map } from "stores";
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON, MapEvents } from "svelte-maplibre";
-  import type { Feature as OurFeature } from "types";
   import splitIcon from "../../../../assets/split_route.svg";
 
   const circleRadiusPixels = 10;
@@ -111,10 +109,9 @@
         gj.features.splice(
           snappedIndex!,
           1,
-          // TODO Maybe splitRoute's types can be more precise. Existing
-          // properties get copied, so this is valid.
-          piece1 as unknown as OurFeature<LineString>,
-          piece2 as unknown as OurFeature<LineString>,
+          // @ts-expect-error The more specific types are lost. Trust splitRoute.
+          piece1,
+          piece2,
         );
 
         return gj;

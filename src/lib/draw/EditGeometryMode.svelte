@@ -7,11 +7,10 @@
     polygonTool,
     routeTool,
   } from "lib/draw/stores";
+  import type { FeatureWithAnyProps } from "lib/draw/types";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
-  import type { FeatureWithProps } from "lib/draw/types";
   import { cfg } from "lib/draw/config";
   import { onDestroy, onMount } from "svelte";
-  import type { FeatureUnion } from "types";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
@@ -23,12 +22,12 @@
   let name = "";
   let controls = "";
 
-  // As a feature is being edited, store the latest version
-  let unsavedFeature: FeatureWithProps<Point | LineString | Polygon> | null =
-    null;
+  // As a feature is being edited, store the latest version. This type ignores
+  // the ID and specifics of the properties, but they're there.
+  let unsavedFeature: FeatureWithAnyProps | null = null;
 
   onMount(() => {
-    let maybeFeature: FeatureUnion | null = null;
+    let maybeFeature: FeatureWithAnyProps | null = null;
     gjSchemeCollection.update((gj) => {
       maybeFeature = gj.features.find((f) => f.id == id)!;
       // Hide it from the regular drawing while we're editing
@@ -39,9 +38,7 @@
     name = cfg.interventionName(feature);
 
     if (feature.geometry.type == "LineString") {
-      $routeTool?.editExistingRoute(
-        feature as unknown as Feature<LineString, RouteProps>,
-      );
+      $routeTool?.editExistingRoute(feature as Feature<LineString, RouteProps>);
       $routeTool?.addEventListenerSuccess(onSuccess);
       $routeTool?.addEventListenerUpdated(onUpdate);
       $routeTool?.addEventListenerFailure(onFailure);
@@ -95,13 +92,14 @@
     });
   });
 
-  function onSuccess(feature: FeatureWithProps<Point | Polygon | LineString>) {
+  function onSuccess(feature: Feature<Point | Polygon | LineString>) {
+    feature.properties ??= {};
     // Let onDestroy apply the update
-    unsavedFeature = feature;
+    unsavedFeature = feature as FeatureWithAnyProps;
     mode.set({ mode: "edit-form", id });
   }
 
-  function onUpdate(feature: FeatureWithProps<Polygon | LineString>) {
+  function onUpdate(feature: FeatureWithAnyProps<Polygon | LineString>) {
     // Just remember the update; don't apply it yet
     unsavedFeature = feature;
   }
@@ -114,8 +112,8 @@
 
   // Copy geometry and properties from source to destination
   function updateFeature(
-    destination: FeatureUnion,
-    source: FeatureWithProps<Point | LineString | Polygon>,
+    destination: FeatureWithAnyProps,
+    source: FeatureWithAnyProps,
   ) {
     destination.geometry = source.geometry;
 

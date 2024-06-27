@@ -21,7 +21,6 @@ export type Mode =
   | { mode: "streetview" };
 
 // Properties are guaranteed to exist, but can be anything, so TS is mostly disabled
-// TODO Remove, probably
-export type FeatureWithProps<G extends Geometry> = Feature<G> & {
+export type FeatureWithAnyProps<G extends Geometry = Geometry> = Feature<G> & {
   properties: { [name: string]: any };
 };
