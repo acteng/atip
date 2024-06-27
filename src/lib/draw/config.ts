@@ -1,6 +1,11 @@
 import type { FeatureUnion } from "types";
-import type { FeatureWithProps } from "lib/draw/types";
-import type { LineString, Polygon, Point } from "geojson";
+import {
+  newFeatureId,
+  getArbitrarySchemeRef,
+  gjSchemeCollection,
+} from "lib/draw/stores";
+import type { FeatureWithAnyProps } from "lib/draw/types";
+import type { Feature, LineString, Polygon, Point } from "geojson";
 import { interventionName } from "lib/sidebar/scheme_data";
 import { schema } from "stores";
 import { get } from "svelte/store";
@@ -9,33 +14,59 @@ import { get } from "svelte/store";
 // schema. Start centralizing the logic here, so it's easy for other users to
 // override.
 
+// TODO As an alternate idea, users could implement a custom Svelte store with methods for doing these things
+
 export let cfg = {
-  interventionName: (f: FeatureUnion) => {
-    return interventionName(f);
+  interventionName: (f: FeatureWithAnyProps) => {
+    return interventionName(f as FeatureUnion);
   },
 
-  newPointFeature: (f: FeatureWithProps<Point>) => {
-    f.properties.intervention_type = "other";
+  newPointFeature: (f: Feature<Point>) => {
+    gjSchemeCollection.update((gj) => {
+      f.id = newFeatureId(gj);
+      f.properties ||= {};
+      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
+      f.properties.intervention_type = "other";
+      // Typecast safe because we've established the invariants above
+      gj.features.push(f as FeatureUnion);
+      return gj;
+    });
   },
 
-  newPolygonFeature: (f: FeatureWithProps<Polygon>) => {
-    f.properties.intervention_type = "area";
-    f.properties.is_coverage_polygon = false;
+  newPolygonFeature: (f: Feature<Polygon>) => {
+    gjSchemeCollection.update((gj) => {
+      f.id = newFeatureId(gj);
+      f.properties ||= {};
+      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
+      f.properties.intervention_type = "area";
+      f.properties.is_coverage_polygon = false;
+      // Typecast safe because we've established the invariants above
+      gj.features.push(f as FeatureUnion);
+      return gj;
+    });
   },
 
-  newLineStringFeature: (f: FeatureWithProps<LineString | Polygon>) => {
-    f.properties.intervention_type = "route";
-    if (f.properties.route_name) {
-      if (get(schema) != "pipeline") {
-        f.properties.name = f.properties.route_name;
+  newLineStringFeature: (f: Feature<LineString>) => {
+    gjSchemeCollection.update((gj) => {
+      f.id = newFeatureId(gj);
+      f.properties ||= {};
+      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
+      f.properties.intervention_type = "route";
+      if (f.properties.route_name) {
+        if (get(schema) != "pipeline") {
+          f.properties.name = f.properties.route_name;
+        }
+        delete f.properties.route_name;
       }
-      delete f.properties.route_name;
-    }
+      // Typecast safe because we've established the invariants above
+      gj.features.push(f as FeatureUnion);
+      return gj;
+    });
   },
 
   updateFeature: (
-    destination: FeatureUnion,
-    source: FeatureWithProps<Point | LineString | Polygon>,
+    destination: FeatureWithAnyProps,
+    source: FeatureWithAnyProps,
   ) => {
     // Only copy route_name if the user hasn't set it. It's not simple to
     // distinguish the user manually editing the name from it being auto-filled

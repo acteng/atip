@@ -1,15 +1,13 @@
-import type { Point } from "geojson";
-import type { FeatureWithProps } from "lib/draw/types";
+import type { Feature, Point } from "geojson";
 import { setPrecision } from "lib/draw/stores";
 import type { Map, MapMouseEvent } from "maplibre-gl";
 
-// Note this uses the geojson FeatureWithProps, not our specialization in types.ts
 export class PointTool {
   map: Map;
   active: boolean;
-  eventListenersSuccess: ((f: FeatureWithProps<Point>) => void)[];
+  eventListenersSuccess: ((f: Feature<Point>) => void)[];
   eventListenersFailure: (() => void)[];
-  cursor: FeatureWithProps<Point> | null;
+  cursor: Feature<Point> | null;
 
   onMouseMove = (e: MapMouseEvent) => {
     if (this.active) {
@@ -70,7 +68,7 @@ export class PointTool {
     this.stop();
   }
 
-  addEventListenerSuccess(callback: (f: FeatureWithProps<Point>) => void) {
+  addEventListenerSuccess(callback: (f: Feature<Point>) => void) {
     this.eventListenersSuccess.push(callback);
   }
   addEventListenerFailure(callback: () => void) {

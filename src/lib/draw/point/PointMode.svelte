@@ -1,16 +1,8 @@
 <script lang="ts">
-  import type { Point } from "geojson";
-  import {
-    gjSchemeCollection,
-    mode,
-    newFeatureId,
-    pointTool,
-    getArbitrarySchemeRef,
-  } from "lib/draw/stores";
+  import type { Feature, Point } from "geojson";
+  import { mode, pointTool } from "lib/draw/stores";
   import { SecondaryButton } from "govuk-svelte";
-  import type { FeatureWithProps } from "lib/draw/types";
   import { onDestroy, onMount } from "svelte";
-  import type { Feature } from "types";
   import PointControls from "./PointControls.svelte";
   import { cfg } from "lib/draw/config";
 
@@ -24,15 +16,8 @@
     $pointTool!.clearEventListeners();
   });
 
-  function onSuccess(feature: FeatureWithProps<Point>) {
-    gjSchemeCollection.update((gj) => {
-      feature.id = newFeatureId(gj);
-      feature.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      cfg.newPointFeature(feature);
-      gj.features.push(feature as Feature<Point>);
-      return gj;
-    });
-
+  function onSuccess(feature: Feature<Point>) {
+    cfg.newPointFeature(feature);
     mode.set({ mode: "edit-form", id: feature.id as number });
   }
 
