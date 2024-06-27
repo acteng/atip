@@ -5,10 +5,10 @@
     mode,
     newFeatureId,
     routeTool,
+    getArbitrarySchemeRef,
   } from "lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { getArbitraryScheme } from "lib/sidebar/scheme_data";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import SnapPolygonControls from "./SnapPolygonControls.svelte";
@@ -26,8 +26,7 @@
   function onSuccess(feature: FeatureWithProps<LineString | Polygon>) {
     gjSchemeCollection.update((gj) => {
       feature.id = newFeatureId(gj);
-      feature.properties.scheme_reference =
-        getArbitraryScheme(gj).scheme_reference;
+      feature.properties.scheme_reference = getArbitrarySchemeRef(gj);
       feature.properties.intervention_type = "area";
       gj.features.push(feature as Feature<Polygon>);
       return gj;

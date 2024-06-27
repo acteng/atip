@@ -262,11 +262,3 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
 
   return copy;
 }
-
-// TODO Remove when the UI can manage multiple schemes. This function only
-// makes sense when there's one scheme in the collection.
-export function getArbitraryScheme(
-  schemeCollection: SchemeCollection,
-): SchemeData {
-  return Object.values(schemeCollection.schemes)[0];
-}
