@@ -8,8 +8,8 @@
     routeTool,
   } from "lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
-  import type { FeatureWithProps } from "lib/maplibre";
-  import { cfg } from "./config";
+  import type { FeatureWithProps } from "lib/draw/types";
+  import { cfg } from "lib/draw/config";
   import { onDestroy, onMount } from "svelte";
   import type { FeatureUnion } from "types";
   import PointControls from "./point/PointControls.svelte";

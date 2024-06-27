@@ -1,5 +1,5 @@
 import type { FeatureUnion } from "types";
-import type { FeatureWithProps } from "lib/maplibre";
+import type { FeatureWithProps } from "lib/draw/types";
 import type { LineString, Polygon, Point } from "geojson";
 import { interventionName } from "lib/sidebar/scheme_data";
 import { schema } from "stores";

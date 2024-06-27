@@ -166,23 +166,3 @@ export interface UserSettings {
 export function isStreetViewImagery(x: string): x is "google" | "bing" {
   return x == "google" || x == "bing";
 }
-
-export type Mode =
-  | {
-      mode: "list";
-    }
-  | {
-      mode: "edit-form";
-      id: number;
-    }
-  | {
-      mode: "edit-geometry";
-      id: number;
-    }
-  | { mode: "new-point" }
-  | { mode: "new-freehand-polygon" }
-  | { mode: "new-snapped-polygon" }
-  | { mode: "new-route" }
-  | { mode: "split-route" }
-  | { mode: "set-image" }
-  | { mode: "streetview" };

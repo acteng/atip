@@ -8,11 +8,11 @@
     getArbitrarySchemeRef,
   } from "lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
-  import type { FeatureWithProps } from "lib/maplibre";
+  import type { FeatureWithProps } from "lib/draw/types";
   import { onDestroy, onMount } from "svelte";
   import type { Feature } from "types";
   import RouteControls from "./RouteControls.svelte";
-  import { cfg } from "../config";
+  import { cfg } from "lib/draw/config";
 
   onMount(() => {
     $routeTool!.startRoute();

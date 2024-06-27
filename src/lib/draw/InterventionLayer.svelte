@@ -12,7 +12,7 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
-  import { cfg } from "./config";
+  import { cfg } from "lib/draw/config";
   import type {
     DataDrivenPropertyValueSpecification,
     ExpressionSpecification,
