@@ -1,13 +1,6 @@
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
 import turfBbox from "@turf/bbox";
-import type {
-  Feature,
-  FeatureCollection,
-  GeoJSON,
-  Geometry,
-  Point,
-  Position,
-} from "geojson";
+import type { FeatureCollection, GeoJSON } from "geojson";
 import type {
   DataDrivenPropertyValueSpecification,
   ExpressionSpecification,
@@ -44,23 +37,6 @@ export function emptyGeojson(): FeatureCollection {
     type: "FeatureCollection",
     features: [],
   };
-}
-
-export function pointFeature(pt: Position): FeatureWithProps<Point> {
-  return {
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "Point",
-      coordinates: setPrecision(pt),
-    },
-  };
-}
-
-// Per https://datatracker.ietf.org/doc/html/rfc7946#section-11.2, 6 decimal
-// places (10cm) is plenty of precision
-export function setPrecision(pt: Position): Position {
-  return [Math.round(pt[0] * 10e6) / 10e6, Math.round(pt[1] * 10e6) / 10e6];
 }
 
 // Helper for https://maplibre.org/maplibre-style-spec/expressions/#match.
@@ -146,8 +122,3 @@ export function addLineStringEndpoints(
   }
   return output;
 }
-
-// Properties are guaranteed to exist
-export type FeatureWithProps<G extends Geometry> = Feature<G> & {
-  properties: { [name: string]: any };
-};

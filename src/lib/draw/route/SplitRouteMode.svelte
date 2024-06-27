@@ -7,8 +7,13 @@
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   // Note we don't use our specialization of Feature here
   import type { Feature, LineString, Point, Position } from "geojson";
-  import { gjSchemeCollection, mode, newFeatureId } from "lib/draw/stores";
-  import { emptyGeojson, layerId, setPrecision } from "lib/maplibre";
+  import {
+    gjSchemeCollection,
+    mode,
+    newFeatureId,
+    setPrecision,
+  } from "lib/draw/stores";
+  import { emptyGeojson, layerId } from "lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map } from "stores";
   import { onDestroy, onMount } from "svelte";

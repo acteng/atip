@@ -1,9 +1,11 @@
 import { emptyCollection } from "lib/sidebar/scheme_data";
 import { writable, type Writable } from "svelte/store";
-import type { Mode, SchemeCollection } from "types";
+import type { SchemeCollection } from "types";
+import type { Mode } from "./types";
 import { PointTool } from "./point/point_tool";
 import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "route-snapper-ts";
+import type { Position } from "geojson";
 
 // TODO Should we instead store a map from ID to feature?
 export const gjSchemeCollection: Writable<SchemeCollection> =
@@ -66,4 +68,10 @@ export function getArbitrarySchemeRef(
   schemeCollection: SchemeCollection,
 ): string {
   return Object.values(schemeCollection.schemes)[0].scheme_reference;
+}
+
+// Per https://datatracker.ietf.org/doc/html/rfc7946#section-11.2, 6 decimal
+// places (10cm) is plenty of precision
+export function setPrecision(pt: Position): Position {
+  return [Math.round(pt[0] * 10e6) / 10e6, Math.round(pt[1] * 10e6) / 10e6];
 }
