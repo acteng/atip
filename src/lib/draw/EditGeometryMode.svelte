@@ -10,7 +10,6 @@
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import type { FeatureWithProps } from "lib/maplibre";
   import { cfg } from "./config";
-  import { schema } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { FeatureUnion } from "types";
   import PointControls from "./point/PointControls.svelte";
@@ -129,17 +128,7 @@
     if (source.properties.waypoints) {
       destination.properties.waypoints = source.properties.waypoints;
     }
-    // Only copy route_name if the user hasn't set it. It's not simple to
-    // distinguish the user manually editing the name from it being auto-filled
-    // previously, so be safe and don't overwrite anything. The user can always
-    // use the auto-fill button explicitly.
-    if (
-      source.properties.route_name &&
-      !destination.properties.name &&
-      $schema != "pipeline"
-    ) {
-      destination.properties.name = source.properties.route_name;
-    }
+    cfg.updateFeature(destination, source);
   }
 
   function finish() {
