@@ -59,3 +59,11 @@ export function deleteIntervention(id: number) {
   sidebarHover.set(null);
   mode.set({ mode: "list" });
 }
+
+// When creating a new feature, arbitrarily assign it to the first scheme. The
+// user can change it later.
+export function getArbitrarySchemeRef(
+  schemeCollection: SchemeCollection,
+): string {
+  return Object.values(schemeCollection.schemes)[0].scheme_reference;
+}

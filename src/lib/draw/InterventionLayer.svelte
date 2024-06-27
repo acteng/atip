@@ -12,7 +12,7 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
-  import { interventionName } from "lib/sidebar/scheme_data";
+  import { cfg } from "./config";
   import type {
     DataDrivenPropertyValueSpecification,
     ExpressionSpecification,
@@ -109,7 +109,7 @@
   function tooltip(features: Feature[] | null): string {
     if (features) {
       let feature = features[0] as FeatureUnion;
-      let name = interventionName(feature);
+      let name = cfg.interventionName(feature);
       let scheme =
         $gjSchemeCollection.schemes[feature.properties.scheme_reference]
           .scheme_name ?? "Untitled scheme";

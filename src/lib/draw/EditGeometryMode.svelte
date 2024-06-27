@@ -9,7 +9,7 @@
   } from "lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import type { FeatureWithProps } from "lib/maplibre";
-  import { interventionName } from "lib/sidebar/scheme_data";
+  import { cfg } from "./config";
   import { schema } from "stores";
   import { onDestroy, onMount } from "svelte";
   import type { FeatureUnion } from "types";
@@ -37,7 +37,7 @@
       return gj;
     });
     let feature = maybeFeature!;
-    name = interventionName(feature);
+    name = cfg.interventionName(feature);
 
     if (feature.geometry.type == "LineString") {
       $routeTool?.editExistingRoute(
