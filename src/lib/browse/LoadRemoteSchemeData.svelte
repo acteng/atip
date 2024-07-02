@@ -3,7 +3,7 @@
   import { fetchWithProgress, privateResourceBaseUrl } from "lib/common";
   import { onMount } from "svelte";
 
-  export let loadFile: (text: string) => void;
+  export let loadFile: (filename: string, text: string) => void;
 
   let shouldLoad = !new URLSearchParams(window.location.search).has(
     "disable_schemes",
@@ -20,7 +20,7 @@
     );
     progress = 100;
     let text = new TextDecoder().decode(bytes);
-    loadFile(text);
+    loadFile("all_schemes_output.geojson", text);
     loading = false;
   }
 

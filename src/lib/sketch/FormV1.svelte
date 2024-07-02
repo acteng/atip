@@ -13,6 +13,7 @@
   } from "govuk-svelte";
   import { prettyPrintMeters } from "lib/maplibre";
   import type { InterventionProps } from "types";
+  import { schemeName } from "./scheme_data";
 
   export let props: InterventionProps;
 
@@ -43,7 +44,7 @@
   label="Scheme"
   choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
     scheme.scheme_reference,
-    scheme.scheme_name ?? "Untitled scheme",
+    schemeName(scheme),
   ])}
   bind:value={props.scheme_reference}
 />

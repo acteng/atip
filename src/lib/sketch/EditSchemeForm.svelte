@@ -1,6 +1,6 @@
 <script lang="ts">
   import GenericSchemeForm from "./GenericSchemeForm.svelte";
-  import PipelineSchemeForm from "./PipelineSchemeForm.svelte";
+  import PipelineSchemeForm from "./pipeline/PipelineSchemeForm.svelte";
   import { schema } from "stores";
 
   export let scheme_reference: string;

@@ -13,12 +13,14 @@ export { default as LineMeasureTool } from "./LineMeasureTool.svelte";
 export { default as LoggedIn } from "./LoggedIn.svelte";
 export { default as Popup } from "./Popup.svelte";
 export { default as MapLibreMap } from "./MapLibreMap.svelte";
-export { default as Modal } from "./Modal.svelte";
-export { default as StreetViewHelp } from "./StreetViewHelp.svelte";
-export { default as StreetViewTool } from "./StreetViewTool.svelte";
-export { default as WarningIcon } from "./WarningIcon.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
 export * from "./storage";
+export {
+  Modal,
+  StreetViewHelp,
+  StreetViewTool,
+  WarningIcon,
+} from "scheme-sketcher-lib/common";
 
 export async function getAuthoritiesGeoJson(): Promise<AuthorityBoundaries> {
   let resp = await fetch(authoritiesUrl);

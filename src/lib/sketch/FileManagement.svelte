@@ -129,7 +129,7 @@
     document.body.removeChild(element);
   }
 
-  function loadFile(text: string) {
+  function loadFile(filename: string, text: string) {
     try {
       // TODO Should we prompt before deleting the current scheme?
       gjSchemeCollection.set(backfill(JSON.parse(text)));
@@ -142,7 +142,7 @@
 
 {#if $mode.mode == "list"}
   <CollapsibleCard label="Manage files">
-    <FileInput label="Load GeoJSON file" {loadFile} />
+    <FileInput label="Load GeoJSON file" onLoad={loadFile} />
 
     <ButtonGroup>
       <SecondaryButton on:click={exportToGeojson}>
