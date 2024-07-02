@@ -1,7 +1,10 @@
 <script lang="ts">
   import { v4 as uuidv4 } from "uuid";
   import { emptyFundingSources } from "lib/sidebar/scheme_data";
-  import { gjSchemeCollection, routeTool } from "lib/draw/stores";
+  import {
+    gjSchemeCollection,
+    routeTool,
+  } from "scheme-sketcher-lib/draw/stores";
   import {
     Checkbox,
     FormElement,

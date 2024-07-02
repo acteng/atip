@@ -3,7 +3,15 @@
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import type { AuthorityBoundaries } from "boundaries";
-  import BoundaryLayer from "lib/draw/BoundaryLayer.svelte";
+  import {
+    BoundaryLayer,
+    ImageLayer,
+    InterventionLayer,
+    PolygonToolLayer,
+    RouteSnapperLayer,
+    SplitRouteMode,
+    Toolbox,
+  } from "scheme-sketcher-lib/draw";
   import {
     appVersion,
     Geocoder,
@@ -12,18 +20,12 @@
     MapLibreMap,
     ZoomOutMap,
   } from "lib/common";
-  import ImageLayer from "lib/draw/image/ImageLayer.svelte";
-  import InterventionLayer from "lib/draw/InterventionLayer.svelte";
-  import PolygonToolLayer from "lib/draw/polygon/PolygonToolLayer.svelte";
-  import RouteSnapperLayer from "lib/draw/route/RouteSnapperLayer.svelte";
-  import SplitRouteMode from "lib/draw/route/SplitRouteMode.svelte";
-  import { mode } from "lib/draw/stores";
-  import Toolbox from "lib/draw/Toolbox.svelte";
+  import { mode } from "scheme-sketcher-lib/draw/stores";
   import { ButtonGroup, SecondaryButton } from "govuk-svelte";
   import About from "lib/sidebar/About.svelte";
   import FileManagement from "lib/sidebar/FileManagement.svelte";
   import Instructions from "lib/sidebar/Instructions.svelte";
-  import LeftSidebar from "lib/sidebar/LeftSidebar.svelte";
+  import { PerModeControls } from "scheme-sketcher-lib/sidebar";
   import { mapStyle, schema } from "stores";
   import { onMount } from "svelte";
 
@@ -106,7 +108,7 @@
       <LoggedIn />
     {/if}
     <FileManagement {authorityName} />
-    <LeftSidebar {routeSnapperUrl} />
+    <PerModeControls {routeSnapperUrl} />
   </div>
   <div class="main">
     <MapLibreMap style={$mapStyle}>
