@@ -72,7 +72,7 @@
   label="Scheme"
   choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
     scheme.scheme_reference,
-    schemeName(scheme.scheme_name),
+    schemeName(scheme),
   ])}
   bind:value={props.scheme_reference}
 />
