@@ -2,7 +2,7 @@
   import TimingForm from "./pipeline/TimingForm.svelte";
   import BudgetForm from "./pipeline/BudgetForm.svelte";
   import { Modal } from "lib/common";
-  import { gjSchemeCollection } from "lib/draw/stores";
+  import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";
   import {
     DefaultButton,
     ErrorMessage,

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Modal } from "lib/common";
-  import { gjSchemeCollection } from "lib/draw/stores";
+  import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";
   import { ButtonGroup, SecondaryButton, WarningButton } from "govuk-svelte";
   import { getUnexpectedProperties } from "./scheme_data";
 

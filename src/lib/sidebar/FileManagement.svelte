@@ -9,7 +9,7 @@
     hideSchemes,
     mode,
     sidebarHover,
-  } from "lib/draw/stores";
+  } from "scheme-sketcher-lib/draw/stores";
   import {
     ButtonGroup,
     ErrorMessage,

@@ -72,7 +72,7 @@ function allFeaturesContainedByPolygon(
     if (f.geometry.type == "MultiLineString") {
       for (let points of f.geometry.coordinates) {
         let lineString = {
-          type: "LineString",
+          type: "LineString" as const,
           coordinates: points,
         };
         if (!booleanContains(boundaryPolygon, lineString)) {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Modal } from "lib/common";
-  import { gjSchemeCollection } from "lib/draw/stores";
+  import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";
   import { DefaultButton, SecondaryButton, TextInput } from "govuk-svelte";
 
   export let scheme_reference: string;
