@@ -22,12 +22,15 @@
   } from "lib/common";
   import { mode } from "scheme-sketcher-lib/draw/stores";
   import { ButtonGroup, SecondaryButton } from "govuk-svelte";
-  import About from "lib/sidebar/About.svelte";
-  import FileManagement from "lib/sidebar/FileManagement.svelte";
-  import Instructions from "lib/sidebar/Instructions.svelte";
+  import About from "lib/sketch/About.svelte";
+  import FileManagement from "lib/sketch/FileManagement.svelte";
+  import Instructions from "lib/sketch/Instructions.svelte";
   import { PerModeControls } from "scheme-sketcher-lib/sidebar";
   import { mapStyle, schema } from "stores";
   import { onMount } from "svelte";
+  import { setupSchemeSketcher } from "lib/sketch/config";
+
+  setupSchemeSketcher();
 
   let showAbout = false;
   let showInstructions = false;

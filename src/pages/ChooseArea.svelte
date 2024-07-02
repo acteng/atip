@@ -23,7 +23,7 @@
     Popup,
     setLocalStorageItem,
   } from "lib/common";
-  import About from "lib/sidebar/About.svelte";
+  import About from "lib/sketch/About.svelte";
   import { schema as schemaStore } from "stores";
   import {
     FillLayer,
@@ -64,7 +64,7 @@
     }
   });
 
-  function loadFile(text: string) {
+  function loadFile(filename: string, text: string) {
     try {
       let gj = JSON.parse(text);
 
@@ -158,7 +158,7 @@
     <hr />
 
     <ErrorMessage errorMessage={uploadErrorMessage} />
-    <FileInput label="Or upload an ATIP GeoJSON file" {loadFile} />
+    <FileInput label="Or upload an ATIP GeoJSON file" onLoad={loadFile} />
   </div>
   <div class="govuk-grid-column-one-half">
     <div id="map">

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { v4 as uuidv4 } from "uuid";
-  import { emptyFundingSources } from "lib/sidebar/scheme_data";
+  import { emptyFundingSources, schemeName } from "../scheme_data";
   import {
     gjSchemeCollection,
     routeTool,
@@ -16,8 +16,8 @@
   import { prettyPrintMeters } from "lib/maplibre";
   import type { InterventionProps } from "types";
   import PipelineType from "./PipelineType.svelte";
-  import TimingForm from "lib/sidebar/pipeline/TimingForm.svelte";
-  import BudgetForm from "lib/sidebar/pipeline/BudgetForm.svelte";
+  import TimingForm from "./TimingForm.svelte";
+  import BudgetForm from "./BudgetForm.svelte";
 
   export let props: InterventionProps;
 
@@ -72,7 +72,7 @@
   label="Scheme"
   choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
     scheme.scheme_reference,
-    scheme.scheme_name ?? "Untitled scheme",
+    schemeName(scheme.scheme_name),
   ])}
   bind:value={props.scheme_reference}
 />

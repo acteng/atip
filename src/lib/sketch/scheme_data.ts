@@ -184,6 +184,10 @@ export function interventionName(feature: FeatureUnion): string {
   return `Untitled ${noun}`;
 }
 
+export function schemeName(scheme: SchemeData): string {
+  return scheme.scheme_name ?? "Untitled scheme";
+}
+
 export function interventionWarning(feature: FeatureUnion): string | null {
   let schema = get(schemaStore);
 

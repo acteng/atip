@@ -35,7 +35,7 @@
   let showSchemes = true;
   let showSchemeNotes = false;
 
-  function loadFile(text: string) {
+  function loadFile(filename: string, text: string) {
     try {
       schemesGj.set(JSON.parse(text));
       schemes.set(processInput($schemesGj));
@@ -72,7 +72,7 @@
         </div>
       </Modal>
     {/if}
-    <FileInput label="Load schemes from GeoJSON" {loadFile} />
+    <FileInput label="Load schemes from GeoJSON" onLoad={loadFile} />
     <ErrorMessage {errorMessage} />
 
     {#if $schemes.size > 0}

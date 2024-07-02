@@ -1,6 +1,6 @@
 <script lang="ts">
-  import TimingForm from "./pipeline/TimingForm.svelte";
-  import BudgetForm from "./pipeline/BudgetForm.svelte";
+  import TimingForm from "./TimingForm.svelte";
+  import BudgetForm from "./BudgetForm.svelte";
   import { Modal } from "lib/common";
   import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";
   import {
@@ -11,7 +11,7 @@
     TextArea,
     TextInput,
   } from "govuk-svelte";
-  import PipelineType from "../forms/PipelineType.svelte";
+  import PipelineType from "./PipelineType.svelte";
 
   export let scheme_reference: string;
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import FormV1 from "lib/forms/FormV1.svelte";
-  import PipelineForm from "lib/forms/PipelineForm.svelte";
+  import FormV1 from "./FormV1.svelte";
+  import PipelineForm from "./pipeline/PipelineForm.svelte";
   import { schema } from "stores";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
   import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";

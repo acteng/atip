@@ -2,7 +2,7 @@
   // This launches a modal when clicked. The user should put the modal contents
   // as a slot beneath this component.
   import icon from "../../../assets/help.svg";
-  import Modal from "./Modal.svelte";
+  import { Modal } from "scheme-sketcher-lib/common";
 
   let open = false;
 
