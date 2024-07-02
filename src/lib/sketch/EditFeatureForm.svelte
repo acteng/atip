@@ -3,17 +3,14 @@
   import PipelineForm from "./pipeline/PipelineForm.svelte";
   import { schema } from "stores";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
-  import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";
 
   export let id: number;
-
-  let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;
+  export let props: { [name: string]: any };
 </script>
 
+<UnexpectedProperties {id} {props} />
 {#if $schema == "v1"}
-  <UnexpectedProperties id={feature.id} props={feature.properties} />
-  <FormV1 bind:props={feature.properties} />
+  <FormV1 bind:props />
 {:else if $schema == "pipeline"}
-  <UnexpectedProperties id={feature.id} props={feature.properties} />
-  <PipelineForm bind:props={feature.properties} />
+  <PipelineForm bind:props />
 {/if}
