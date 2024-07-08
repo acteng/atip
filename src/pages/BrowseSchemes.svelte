@@ -19,12 +19,13 @@
     ZoomOutMap,
   } from "lib/common";
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
-  import { mapStyle } from "stores";
+  import { map, mapStyle } from "stores";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
-  import { getRoadLayerNames } from "lib/maplibre";
-  import { cfg } from "scheme-sketcher-lib/config";
+  import { getRoadLayerNames, setupZorder } from "lib/maplibre";
+  import { cfg, map as sketchMapStore } from "scheme-sketcher-lib/config";
 
+  let setupDone = false;
   onMount(() => {
     // For govuk components. Must happen here.
     initAll();
@@ -34,6 +35,8 @@
     cfg.getStreetViewRoadLayerNames = (map) => {
       return getRoadLayerNames(map, get(mapStyle));
     };
+    setupZorder();
+    setupDone = true;
   });
 
   const params = new URLSearchParams(window.location.search);
@@ -52,6 +55,10 @@
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
     }
+  }
+
+  $: if ($map) {
+    sketchMapStore.set($map);
   }
 </script>
 
@@ -99,10 +106,12 @@
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Geocoder />
-      <InterventionLayer {showSchemes} />
-      <div class="top-right">
-        <LayerControls />
-      </div>
+      {#if setupDone}
+        <InterventionLayer {showSchemes} />
+        <div class="top-right">
+          <LayerControls />
+        </div>
+      {/if}
     </MapLibreMap>
   </div>
 </Layout>

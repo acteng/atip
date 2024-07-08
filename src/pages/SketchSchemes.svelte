@@ -31,6 +31,7 @@
   import { onMount } from "svelte";
   import { setupSchemeSketcher } from "lib/sketch/config";
   import { map as sketchMapStore } from "scheme-sketcher-lib/config";
+  import { setupZorder } from "lib/maplibre";
 
   let setupDone = false;
   let showAbout = false;
@@ -66,6 +67,7 @@
 
     boundaryGeojson = await loadAuthorityBoundary();
     setupSchemeSketcher();
+    setupZorder();
     setupDone = true;
   });
 
@@ -130,8 +132,8 @@
   <div class="main">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="top-right" />
-      <BoundaryLayer {boundaryGeojson} />
       {#if setupDone}
+        <BoundaryLayer {boundaryGeojson} />
         <InterventionLayer />
         <ImageLayer />
         {#if $mode.mode == "list"}
