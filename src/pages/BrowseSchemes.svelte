@@ -21,10 +21,19 @@
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import { mapStyle } from "stores";
   import { onMount } from "svelte";
+  import { get } from "svelte/store";
+  import { getRoadLayerNames } from "lib/maplibre";
+  import { cfg } from "scheme-sketcher-lib/config";
 
   onMount(() => {
     // For govuk components. Must happen here.
     initAll();
+
+    // The StreetViewTool code is in scheme-sketcher-lib, so we need to configure this here
+    // TODO But this seems to not get called
+    cfg.getStreetViewRoadLayerNames = (map) => {
+      return getRoadLayerNames(map, get(mapStyle));
+    };
   });
 
   const params = new URLSearchParams(window.location.search);

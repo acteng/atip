@@ -15,12 +15,7 @@ export { default as Popup } from "./Popup.svelte";
 export { default as MapLibreMap } from "./MapLibreMap.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
 export * from "./storage";
-export {
-  Modal,
-  StreetViewHelp,
-  StreetViewTool,
-  WarningIcon,
-} from "scheme-sketcher-lib/common";
+export { Modal, WarningIcon } from "scheme-sketcher-lib/common";
 
 export async function getAuthoritiesGeoJson(): Promise<AuthorityBoundaries> {
   let resp = await fetch(authoritiesUrl);

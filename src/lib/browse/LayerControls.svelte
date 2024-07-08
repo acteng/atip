@@ -1,10 +1,6 @@
 <script lang="ts">
-  import {
-    appVersion,
-    BaselayerSwitcher,
-    LineMeasureTool,
-    StreetViewTool,
-  } from "lib/common";
+  import { appVersion, BaselayerSwitcher, LineMeasureTool } from "lib/common";
+  import { StreetViewTool } from "scheme-sketcher-lib/common";
   import { CollapsibleCard, CheckboxGroup } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import { FillLayer, GeoJSON } from "svelte-maplibre";

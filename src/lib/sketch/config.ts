@@ -13,12 +13,13 @@ import type {
   FeatureWithID,
 } from "scheme-sketcher-lib/draw/types";
 import type { LineString, Polygon, Point } from "geojson";
-import { schema } from "stores";
+import { schema, mapStyle } from "stores";
 import { get } from "svelte/store";
 import {
   emptyCollection,
   gjSchemeCollection,
 } from "scheme-sketcher-lib/draw/stores";
+import { getRoadLayerNames } from "lib/maplibre";
 
 export function setupSchemeSketcher() {
   cfg.interventionName = interventionName;
@@ -64,6 +65,10 @@ export function setupSchemeSketcher() {
       destination.properties.name = source.properties.route_name;
     }
   };
+
+  cfg.maptilerApiKey = import.meta.env.VITE_MAPTILER_API_KEY;
+  cfg.getStreetViewRoadLayerNames = (map) =>
+    getRoadLayerNames(map, get(mapStyle));
 
   // TODO Hack. gjSchemeCollection is initialized before this function is called. Sanity check that it's empty, then call it again to invoke initializeEmptyScheme.
   let gj = get(gjSchemeCollection);
