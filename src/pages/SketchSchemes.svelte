@@ -31,8 +31,7 @@
   import { setupSchemeSketcher } from "lib/sketch/config";
   import { map as sketchMapStore } from "scheme-sketcher-lib/config";
 
-  setupSchemeSketcher();
-
+  let setupDone = false;
   let showAbout = false;
   let showInstructions = false;
 
@@ -65,6 +64,8 @@
     initAll();
 
     boundaryGeojson = await loadAuthorityBoundary();
+    setupSchemeSketcher();
+    setupDone = true;
   });
 
   async function loadAuthorityBoundary(): Promise<AuthorityBoundaries> {
@@ -116,22 +117,26 @@
       </ButtonGroup>
       <LoggedIn />
     {/if}
-    <FileManagement {authorityName} />
-    <PerModeControls {routeSnapperUrl} />
+    {#if setupDone}
+      <FileManagement {authorityName} />
+      <PerModeControls {routeSnapperUrl} />
+    {/if}
   </div>
   <div class="main">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="top-right" />
       <BoundaryLayer {boundaryGeojson} />
-      <InterventionLayer />
-      <ImageLayer />
-      {#if $mode.mode == "list"}
-        <Toolbox />
-      {:else if $mode.mode == "split-route"}
-        <SplitRouteMode />
+      {#if setupDone}
+        <InterventionLayer />
+        <ImageLayer />
+        {#if $mode.mode == "list"}
+          <Toolbox />
+        {:else if $mode.mode == "split-route"}
+          <SplitRouteMode />
+        {/if}
+        <RouteSnapperLayer />
+        <PolygonToolLayer />
       {/if}
-      <RouteSnapperLayer />
-      <PolygonToolLayer />
     </MapLibreMap>
   </div>
 </div>

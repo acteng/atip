@@ -15,6 +15,10 @@ import type {
 import type { LineString, Polygon, Point } from "geojson";
 import { schema } from "stores";
 import { get } from "svelte/store";
+import {
+  emptyCollection,
+  gjSchemeCollection,
+} from "scheme-sketcher-lib/draw/stores";
 
 export function setupSchemeSketcher() {
   cfg.interventionName = interventionName;
@@ -60,4 +64,10 @@ export function setupSchemeSketcher() {
       destination.properties.name = source.properties.route_name;
     }
   };
+
+  // TODO Hack. gjSchemeCollection is initialized before this function is called. Sanity check that it's empty, then call it again to invoke initializeEmptyScheme.
+  let gj = get(gjSchemeCollection);
+  if (Object.values(gj.schemes).length == 1 && gj.features.length == 0) {
+    gjSchemeCollection.set(emptyCollection());
+  }
 }
