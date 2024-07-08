@@ -26,9 +26,10 @@
   import FileManagement from "lib/sketch/FileManagement.svelte";
   import Instructions from "lib/sketch/Instructions.svelte";
   import { PerModeControls } from "scheme-sketcher-lib/sidebar";
-  import { mapStyle, schema } from "stores";
+  import { map, mapStyle, schema } from "stores";
   import { onMount } from "svelte";
   import { setupSchemeSketcher } from "lib/sketch/config";
+  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
 
   setupSchemeSketcher();
 
@@ -88,6 +89,11 @@
     }
     // Unexpected input, just return it
     return authorityName;
+  }
+
+  // Need this to set up PerModeControls
+  $: if ($map) {
+    sketchMapStore.set($map);
   }
 </script>
 

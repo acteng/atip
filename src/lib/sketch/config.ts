@@ -4,67 +4,44 @@ import {
   schemeName,
   backfill,
   interventionWarning,
+  initializeEmptyScheme,
 } from "./scheme_data";
 import EditFeatureForm from "./EditFeatureForm.svelte";
-import type { FeatureWithAnyProps } from "scheme-sketcher-lib/draw/types";
-import type { Feature, LineString, Polygon, Point } from "geojson";
+import EditSchemeForm from "./EditSchemeForm.svelte";
+import type {
+  FeatureWithAnyProps,
+  FeatureWithID,
+} from "scheme-sketcher-lib/draw/types";
+import type { LineString, Polygon, Point } from "geojson";
 import { schema } from "stores";
 import { get } from "svelte/store";
-import type { FeatureUnion } from "types";
-import {
-  gjSchemeCollection,
-  newFeatureId,
-  getArbitrarySchemeRef,
-} from "scheme-sketcher-lib/draw/stores";
 
 export function setupSchemeSketcher() {
   cfg.interventionName = interventionName;
   cfg.schemeName = schemeName;
+  cfg.initializeEmptyScheme = initializeEmptyScheme;
   cfg.backfill = backfill;
   cfg.interventionWarning = interventionWarning;
   cfg.editFeatureForm = EditFeatureForm;
+  cfg.editSchemeForm = EditSchemeForm;
 
-  cfg.newPointFeature = (f: Feature<Point>) => {
-    gjSchemeCollection.update((gj) => {
-      f.id = newFeatureId(gj);
-      f.properties ||= {};
-      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      f.properties.intervention_type = "other";
-      // Typecast safe because we've established the invariants above
-      gj.features.push(f as FeatureUnion);
-      return gj;
-    });
+  cfg.newPointFeature = (f: FeatureWithID<Point>) => {
+    f.properties.intervention_type = "other";
   };
 
-  cfg.newPolygonFeature = (f: Feature<Polygon>) => {
-    gjSchemeCollection.update((gj) => {
-      f.id = newFeatureId(gj);
-      f.properties ||= {};
-      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      f.properties.intervention_type = "area";
-      f.properties.is_coverage_polygon = false;
-      // Typecast safe because we've established the invariants above
-      gj.features.push(f as FeatureUnion);
-      return gj;
-    });
+  cfg.newPolygonFeature = (f: FeatureWithID<Polygon>) => {
+    f.properties.intervention_type = "area";
+    f.properties.is_coverage_polygon = false;
   };
 
-  cfg.newLineStringFeature = (f: Feature<LineString>) => {
-    gjSchemeCollection.update((gj) => {
-      f.id = newFeatureId(gj);
-      f.properties ||= {};
-      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      f.properties.intervention_type = "route";
-      if (f.properties.route_name) {
-        if (get(schema) != "pipeline") {
-          f.properties.name = f.properties.route_name;
-        }
-        delete f.properties.route_name;
+  cfg.newLineStringFeature = (f: FeatureWithID<LineString>) => {
+    f.properties.intervention_type = "route";
+    if (f.properties.route_name) {
+      if (get(schema) != "pipeline") {
+        f.properties.name = f.properties.route_name;
       }
-      // Typecast safe because we've established the invariants above
-      gj.features.push(f as FeatureUnion);
-      return gj;
-    });
+      delete f.properties.route_name;
+    }
   };
 
   cfg.updateFeature = (
