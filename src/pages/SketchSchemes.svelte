@@ -14,6 +14,7 @@
   } from "scheme-sketcher-lib/draw";
   import {
     appVersion,
+    BaselayerSwitcher,
     Geocoder,
     getAuthoritiesGeoJson,
     LoggedIn,
@@ -121,6 +122,10 @@
       <FileManagement {authorityName} />
       <PerModeControls {routeSnapperUrl} />
     {/if}
+    {#if $mode.mode != "list"}
+      <hr />
+    {/if}
+    <BaselayerSwitcher />
   </div>
   <div class="main">
     <MapLibreMap style={$mapStyle}>
