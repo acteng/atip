@@ -113,33 +113,11 @@ export function backfill(json: any): SchemeCollection {
   return json;
 }
 
-export function emptyCollection(): SchemeCollection {
-  let gj = {
-    type: "FeatureCollection" as const,
-    features: [],
-    schemes: {},
-  };
-  addEmptyScheme(gj);
-  return gj;
-}
-
-export function addEmptyScheme(gj: SchemeCollection) {
-  let scheme_reference = uuidv4();
-  const newSchemes: { [reference: string]: SchemeData } = {};
-  newSchemes[scheme_reference] = {
-    scheme_reference,
-    color: randomSchemeColor(),
-  };
-
-  // Here we rely on the fact the string keys are traversed in insertion order (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in)
-  Object.keys(gj.schemes).forEach((schemeRef) => {
-    newSchemes[schemeRef] = gj.schemes[schemeRef];
-  });
+export function initializeEmptyScheme(scheme: SchemeData) {
   let schema = get(schemaStore);
   if (schema == "pipeline") {
-    newSchemes[scheme_reference].pipeline = emptyPipelineScheme();
+    scheme.pipeline = emptyPipelineScheme();
   }
-  gj.schemes = newSchemes;
 }
 
 export function emptyPipelineScheme(): PipelineScheme {

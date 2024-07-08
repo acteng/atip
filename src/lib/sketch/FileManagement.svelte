@@ -9,6 +9,7 @@
     hideSchemes,
     mode,
     sidebarHover,
+    emptyCollection,
   } from "scheme-sketcher-lib/draw/stores";
   import {
     ButtonGroup,
@@ -23,7 +24,7 @@
   import type { SchemeCollection } from "types";
   import deleteIcon from "../../../assets/delete.svg?url";
   import saveIcon from "../../../assets/save.svg?url";
-  import { backfill, emptyCollection } from "./scheme_data";
+  import { backfill } from "./scheme_data";
   import StorageModal from "./StorageModal.svelte";
 
   export let authorityName: string;
