@@ -31,13 +31,13 @@ export interface SchemeData {
 export interface PipelineScheme extends PipelineBudget, PipelineTiming {
   // TODO "intersection" is unclear
   scheme_type:
-    | "cycling route"
-    | "walking route"
-    | "shared-use route"
-    | "cycling and walking route"
-    | "area-based scheme"
-    | "intersection"
-    | "";
+  | "cycling route"
+  | "walking route"
+  | "shared-use route"
+  | "cycling and walking route"
+  | "area-based scheme"
+  | "intersection"
+  | "";
   atf4_lead_type: PipelineType | "";
   scheme_description: string;
 }
@@ -53,12 +53,12 @@ export interface PipelineBudget {
 export interface PipelineTiming {
   // TODO Check with DB schema
   status:
-    | "aspiration"
-    | "planned"
-    | "in development"
-    | "in construction"
-    | "completed"
-    | "";
+  | "aspiration"
+  | "planned"
+  | "in development"
+  | "in construction"
+  | "completed"
+  | "";
   timescale: "short" | "medium" | "long" | "";
   timescale_year?: number;
   year_published?: number;
@@ -82,6 +82,7 @@ export interface BrowseSchemeData {
   funding_programme: string;
   current_milestone?: string;
   sketch_source: "ATF assessment" | "LCWIP mapping";
+  published?: string;
 }
 
 export type PipelineType =

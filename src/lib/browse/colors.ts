@@ -136,6 +136,23 @@ export function styleByCurrentMilestone(): [
   return [color, legendRows];
 }
 
+export function styleByPublishedStatus(): [
+  DataDrivenPropertyValueSpecification<string>,
+  [string, string][],
+] {
+  let [colorMapping, legendRows] = getColorMappingAndLegend(
+    ["published", "unpublished"],
+    ["green", "red"],
+  );
+
+  let color = constructMatchExpression(
+    ["get", "published"],
+    colorMapping,
+    "grey",
+  );
+  return [color, legendRows];
+}
+
 function getColorMappingAndLegend(
   keys: string[],
   colorList: string[],

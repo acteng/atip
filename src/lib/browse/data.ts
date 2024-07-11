@@ -15,6 +15,7 @@ export function processInput(gj: SchemeCollection): Map<string, SchemeData> {
   gj.features = gj.features.filter((f) => keepFeature(f));
 
   let id = 1;
+  let i = 0;
   for (let feature of gj.features) {
     let scheme: SchemeData = schemes.get(feature.properties!.scheme_reference);
     if (scheme.browse) {
@@ -24,6 +25,8 @@ export function processInput(gj: SchemeCollection): Map<string, SchemeData> {
       feature.properties!.funding_programme = scheme.browse.funding_programme;
       // @ts-ignore Same
       feature.properties!.current_milestone = scheme.browse.current_milestone;
+      // @ts-ignore Same
+      feature.properties!.published = scheme.browse.published;
       // Force numeric IDs (skipping 0) for hovering to work
       feature.id = id++;
     }

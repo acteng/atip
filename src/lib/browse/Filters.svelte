@@ -41,6 +41,12 @@
     ["Both", "Both"],
   ];
   let filterSketchSource = "";
+  let publishedStatus: [string, string][] = [
+    ["Published", "Published"],
+    ["Both", "Both"],
+    ["Unpublished", "Unpublished/Unknown"],
+  ];
+  let filterPublished = "";
 
   // Stats about filtered schemes
   let counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
@@ -78,6 +84,7 @@
     filterAuthority: string,
     filterFundingProgramme: string,
     filterCurrentMilestone: string,
+    filterPublished: string,
   ) {
     let filterInterventionNormalized = filterInterventionTextCopy.toLowerCase();
     let filterSchemeNormalized = filterSchemeTextCopy.toLowerCase();
@@ -99,7 +106,8 @@
         filterSchemeNormalized ||
         filterAuthority ||
         filterFundingProgramme ||
-        filterCurrentMilestone
+        filterCurrentMilestone ||
+        filterPublished
       ) {
         let scheme = $schemes.get(feature.properties.scheme_reference!)!;
         if (
@@ -139,6 +147,14 @@
             filterSketchSource !== "Both" &&
             filterSketchSource !== scheme.browse?.sketch_source
           ) {
+            return false;
+          }
+        }
+        if (filterPublished) {
+          if (filterPublished === "Published" && scheme.browse?.published !== "published") {
+            return false;
+          }
+          if (filterPublished === "Unpublished" && scheme.browse?.published !== "unpublished") {
             return false;
           }
         }
@@ -195,6 +211,7 @@
     filterAuthority,
     filterFundingProgramme,
     filterCurrentMilestone,
+    filterPublished,
   );
 
   function metersToMiles(x: number): number {
@@ -236,6 +253,12 @@
     choices={sketchSources}
     emptyOption
     bind:value={filterSketchSource}
+  />
+  <Select
+    label="Published"
+    choices={publishedStatus}
+    emptyOption
+    bind:value={filterPublished}
   />
   <FormElement
     label="Intervention name or description"

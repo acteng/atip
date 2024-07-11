@@ -3,7 +3,7 @@
   import { CollapsibleCard, Select } from "govuk-svelte";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import { map } from "stores";
-  import { styleByCurrentMilestone, styleByFundingProgramme } from "./colors";
+  import { styleByCurrentMilestone, styleByFundingProgramme, styleByPublishedStatus} from "./colors";
 
   let colorInterventionsAccordingTo = "fundingProgramme";
   let [_, legendRows] = styleByFundingProgramme();
@@ -17,6 +17,8 @@
       [color, legendRows] = styleByFundingProgramme();
     } else if (colorInterventionsAccordingTo == "currentMilestone") {
       [color, legendRows] = styleByCurrentMilestone();
+    } else if (colorInterventionsAccordingTo == "publishedStatus") {
+      [color, legendRows] = styleByPublishedStatus();
     }
     // TODO Plumb instead of setting
     $map.setPaintProperty("interventions-points", "circle-color", color);
@@ -36,6 +38,7 @@
     ["fundingProgramme", "By funding programme"],
     ["interventionType", "By intervention type"],
     ["currentMilestone", "By current milestone"],
+    ["publishedStatus", "By published status"],
   ]}
   bind:value={colorInterventionsAccordingTo}
   on:change={changeStyle}
