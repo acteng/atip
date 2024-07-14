@@ -3,14 +3,23 @@
   import PipelineForm from "./pipeline/PipelineForm.svelte";
   import { schema } from "stores";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
+  import type { Config } from "scheme-sketcher-lib/config";
+  import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
+  import type { InterventionProps, OurSchemeData, Schemes } from "types";
+  import type { Writable } from "svelte/store";
 
+  export let cfg: Config<InterventionProps, OurSchemeData>;
+  export let gjSchemes: Writable<Schemes>;
   export let id: number;
-  export let props: { [name: string]: any };
+  export let props: FeatureProps<InterventionProps>;
+
+  // Workaround unused var warning
+  cfg;
 </script>
 
-<UnexpectedProperties {id} {props} />
+<UnexpectedProperties {gjSchemes} {id} {props} />
 {#if $schema == "v1"}
-  <FormV1 bind:props />
+  <FormV1 {gjSchemes} bind:props />
 {:else if $schema == "pipeline"}
-  <PipelineForm bind:props />
+  <PipelineForm {gjSchemes} bind:props />
 {/if}

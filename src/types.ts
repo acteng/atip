@@ -1,29 +1,30 @@
-import type { LineString, Point, Polygon } from "geojson";
+import type {
+  Schemes as GenericSchemes,
+  SchemeData as GenericSchemeData,
+  FeatureWithID,
+} from "scheme-sketcher-lib/draw/types";
 
 export type Schema = "v1" | "pipeline";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
-export interface SchemeCollection {
-  type: "FeatureCollection";
-  features: FeatureUnion[];
+export interface Schemes
+  extends GenericSchemes<InterventionProps, OurSchemeData> {
   // Foreign members
   authority?: string;
   origin?: string;
-  // Keyed by scheme_reference, which doesn't change over the lifetime of the sketch tool
-  schemes: { [reference: string]: SchemeData };
   notes?: string[];
 }
 
-export interface SchemeData {
-  // The key into SchemeCollection.schemes
-  scheme_reference: string;
+// TODO Naming
+export interface OurSchemeData {
   scheme_name?: string;
-  // For the sketch page; not important
-  color: string;
   pipeline?: PipelineScheme;
   browse?: BrowseSchemeData;
 }
+
+export type SchemeData = GenericSchemeData & OurSchemeData;
+export type Feature = FeatureWithID<InterventionProps>;
 
 // Every field is optional in this type, to match the reality of starting with
 // a blank form. Mandatory fields are marked in the form UI. Optional string
@@ -100,43 +101,17 @@ export type PipelineType =
   | "Traffic free routes"
   | "Not specified in LCWIP";
 
-// TODO Can we use a wildcard type, like Feature<? extends Geometry>
-export type FeatureUnion =
-  | Feature<Point>
-  | Feature<LineString>
-  | Feature<Polygon>;
-
-// Note we're not using Geometry and Feature types from the geojson package
-export type Geometry = Point | LineString | Polygon;
-
-export interface Feature<G extends Geometry> {
-  type: "Feature";
-  // Must be defined, and always > 0
-  id: number;
-  geometry: G;
-  properties: InterventionProps;
-}
-
 export interface InterventionProps {
   // These 3 fields are v1 schema
   intervention_type: "area" | "route" | "crossing" | "other";
-  // A key into SchemeCollection.schemes
-  scheme_reference: string;
   name: string;
   description: string;
 
-  // For LineStrings only
-  length_meters?: number;
-  // For LineStrings and Polygons only
-  waypoints?: Waypoint[];
   // For polygons only
   is_coverage_polygon?: boolean;
 
   // The schema is v1, unless a field here is present
   pipeline?: PipelineIntervention;
-
-  // Temporary state, not meant to be serialized
-  hide_while_editing?: boolean;
 }
 
 export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
@@ -148,12 +123,7 @@ export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
   // TODO for routes, ltn120 type: fully protected, light segregation, off-carriageway, shared-use, dedicated footpath. minimum width?
 }
 
-export interface Waypoint {
-  lon: number;
-  lat: number;
-  snapped: boolean;
-}
-
+// TODO All of this is in ss-lib, remove from here?
 // Remember settings from different tools
 export interface UserSettings {
   // From the StreetView tool

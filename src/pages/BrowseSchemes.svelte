@@ -21,22 +21,11 @@
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import { map, mapStyle } from "stores";
   import { onMount } from "svelte";
-  import { get } from "svelte/store";
-  import { getRoadLayerNames, setupZorder } from "lib/maplibre";
-  import { cfg, map as sketchMapStore } from "scheme-sketcher-lib/config";
+  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
 
-  let setupDone = false;
   onMount(() => {
     // For govuk components. Must happen here.
     initAll();
-
-    // The StreetViewTool code is in scheme-sketcher-lib, so we need to configure this here
-    // TODO But this seems to not get called
-    cfg.getStreetViewRoadLayerNames = (map) => {
-      return getRoadLayerNames(map, get(mapStyle));
-    };
-    setupZorder();
-    setupDone = true;
   });
 
   const params = new URLSearchParams(window.location.search);
@@ -106,12 +95,10 @@
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Geocoder />
-      {#if setupDone}
-        <InterventionLayer {showSchemes} />
-        <div class="top-right">
-          <LayerControls />
-        </div>
-      {/if}
+      <InterventionLayer {showSchemes} />
+      <div class="top-right">
+        <LayerControls />
+      </div>
     </MapLibreMap>
   </div>
 </Layout>

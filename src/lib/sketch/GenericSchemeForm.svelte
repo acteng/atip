@@ -1,7 +1,10 @@
 <script lang="ts">
   import { Modal } from "lib/common";
-  import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";
   import { DefaultButton, SecondaryButton, TextInput } from "govuk-svelte";
+  import type { Schemes } from "types";
+  import type { Writable } from "svelte/store";
+
+  export let gjSchemes: Writable<Schemes>;
 
   export let scheme_reference: string;
 
@@ -24,7 +27,7 @@
   <TextInput
     label="Scheme name"
     required
-    bind:value={$gjSchemeCollection.schemes[scheme_reference].scheme_name}
+    bind:value={$gjSchemes.schemes[scheme_reference].scheme_name}
   />
 
   <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>
