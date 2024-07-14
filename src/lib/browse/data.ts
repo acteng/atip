@@ -1,10 +1,10 @@
-import type { FeatureUnion, SchemeCollection, SchemeData } from "types";
+import type { Feature, Schemes, SchemeData } from "types";
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
 // Modifies this GeoJSON in-place, and returns a dictionary of Schemes, keyed
 // (and ordered) by scheme_reference. Each feature (intervention) in the GJ
 // links back to one of these schemes by scheme_reference.
-export function processInput(gj: SchemeCollection): Map<string, SchemeData> {
+export function processInput(gj: Schemes): Map<string, SchemeData> {
   let schemes = new Map();
 
   // Assume the input has a top-level dictionary keyed by scheme_reference
@@ -33,7 +33,7 @@ export function processInput(gj: SchemeCollection): Map<string, SchemeData> {
 }
 
 // These should ideally be fixed during upstream data validation processes.
-function keepFeature(feature: FeatureUnion): boolean {
+function keepFeature(feature: Feature): boolean {
   // Manually filter out some large areas that describe a boundary or
   // non-specific location of interventions. They make it harder to
   // interact with smaller, more specific interventions.
@@ -57,7 +57,7 @@ function keepFeature(feature: FeatureUnion): boolean {
   return true;
 }
 
-export const fundingProgrammesForColouringAndFiltering: string[] = [
+export const fundingProgrammesForColouringAndFiltering = [
   "ATF2",
   "ATF2 or ATF3",
   "ATF3",

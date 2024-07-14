@@ -1,7 +1,7 @@
 import { writable, type Writable } from "svelte/store";
-import type { SchemeCollection, SchemeData } from "types";
+import type { Schemes, SchemeData } from "types";
 
-export const schemesGj: Writable<SchemeCollection> = writable({
+export const schemesGj: Writable<Schemes> = writable({
   type: "FeatureCollection",
   features: [],
   schemes: {},

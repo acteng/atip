@@ -1,9 +1,6 @@
 <script lang="ts">
   import { v4 as uuidv4 } from "uuid";
-  import {
-    gjSchemeCollection,
-    routeTool,
-  } from "scheme-sketcher-lib/draw/stores";
+  import { routeTool } from "scheme-sketcher-lib/draw/stores";
   import {
     FormElement,
     Radio,
@@ -12,10 +9,13 @@
     TextArea,
   } from "govuk-svelte";
   import { prettyPrintMeters } from "lib/maplibre";
-  import type { InterventionProps } from "types";
+  import type { InterventionProps, Schemes } from "types";
   import { schemeName } from "./scheme_data";
+  import type { Writable } from "svelte/store";
+  import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
 
-  export let props: InterventionProps;
+  export let gjSchemes: Writable<Schemes>;
+  export let props: FeatureProps<InterventionProps>;
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -42,7 +42,7 @@
 
 <Select
   label="Scheme"
-  choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
+  choices={Object.values($gjSchemes.schemes).map((scheme) => [
     scheme.scheme_reference,
     schemeName(scheme),
   ])}

@@ -5,11 +5,10 @@
     type SetStorageErrorObject,
   } from "lib/common";
   import {
-    gjSchemeCollection,
     hideSchemes,
     mode,
     sidebarHover,
-    emptyCollection,
+    emptySchemes,
   } from "scheme-sketcher-lib/draw/stores";
   import {
     ButtonGroup,
@@ -21,13 +20,18 @@
   } from "govuk-svelte";
   import { schema } from "stores";
   import { onMount } from "svelte";
-  import type { SchemeCollection } from "types";
   import deleteIcon from "../../../assets/delete.svg?url";
   import saveIcon from "../../../assets/save.svg?url";
   import { backfill } from "./scheme_data";
   import StorageModal from "./StorageModal.svelte";
+  import type { Config } from "scheme-sketcher-lib/config";
+  import type { InterventionProps, OurSchemeData, Schemes } from "types";
+  import type { Writable } from "svelte/store";
 
+  export let cfg: Config<InterventionProps, OurSchemeData>;
+  export let gjSchemes: Writable<Schemes>;
   export let authorityName: string;
+
   let errorMessage = "";
 
   let filename = authorityName;
@@ -49,13 +53,13 @@
       try {
         let resp = await fetch(loadUrl);
         let body = await resp.text();
-        gjSchemeCollection.set(backfill(JSON.parse(body)));
+        gjSchemes.set(backfill(JSON.parse(body)));
       } catch (err) {
         console.log(`Failed to load from URL: ${err}`);
       }
     } else if (loadLocal) {
       try {
-        gjSchemeCollection.set(backfill(JSON.parse(loadLocal)));
+        gjSchemes.set(backfill(JSON.parse(loadLocal)));
       } catch (err) {
         console.log(`Failed to load from local storage: ${err}`);
       }
@@ -67,7 +71,7 @@
   let setStorageError: SetStorageErrorObject | undefined;
   // Set up local storage sync. Don't run before onMount above is done with the initial load.
   $: {
-    if (loaded && $gjSchemeCollection) {
+    if (loaded && $gjSchemes) {
       console.log(`GJ changed, saving to local storage`);
       const storageError = setLocalStorageItem(
         filename,
@@ -83,8 +87,8 @@
   function clearAll() {
     displayClearAllConfirmation = false;
 
-    gjSchemeCollection.update((gj) => {
-      let newGj = emptyCollection();
+    gjSchemes.update((gj) => {
+      let newGj = emptySchemes(cfg) as Schemes;
       // Preserve some foreign members
       newGj.origin = gj.origin;
       newGj.authority = gj.authority;
@@ -96,8 +100,8 @@
   }
 
   // Remove the hide_while_editing property hack
-  function geojsonToSave(): SchemeCollection {
-    const copy = JSON.parse(JSON.stringify($gjSchemeCollection));
+  function geojsonToSave(): Schemes {
+    const copy = JSON.parse(JSON.stringify($gjSchemes));
     for (let feature of copy.features) {
       delete feature.properties.hide_while_editing;
     }
@@ -133,7 +137,7 @@
   function loadFile(filename: string, text: string) {
     try {
       // TODO Should we prompt before deleting the current scheme?
-      gjSchemeCollection.set(backfill(JSON.parse(text)));
+      gjSchemes.set(backfill(JSON.parse(text)));
       errorMessage = "";
     } catch (err) {
       errorMessage = `Couldn't load scheme from a file: ${err}`;

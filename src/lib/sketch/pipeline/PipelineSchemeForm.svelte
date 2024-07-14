@@ -2,7 +2,6 @@
   import TimingForm from "./TimingForm.svelte";
   import BudgetForm from "./BudgetForm.svelte";
   import { Modal } from "lib/common";
-  import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";
   import {
     DefaultButton,
     ErrorMessage,
@@ -12,13 +11,16 @@
     TextInput,
   } from "govuk-svelte";
   import PipelineType from "./PipelineType.svelte";
+  import type { Schemes } from "types";
+  import type { Writable } from "svelte/store";
 
+  export let gjSchemes: Writable<Schemes>;
   export let scheme_reference: string;
 
   let showModal = false;
   // This is just for conveience below, but it means most changes are not
-  // synced to $gjSchemeCollection until finish() is called
-  let pipeline = $gjSchemeCollection.schemes[scheme_reference].pipeline!;
+  // synced to $gjSchemes until finish() is called
+  let pipeline = $gjSchemes.schemes[scheme_reference].pipeline!;
 
   // Svelte doesn't see nested updates in BudgetForm and TimingForm, so use a
   // counter and manual callback to recalculate errorMessage
@@ -47,8 +49,8 @@
 
   // No changes in the form are saved until this happens
   function finish() {
-    $gjSchemeCollection.schemes[scheme_reference].pipeline = pipeline!;
-    $gjSchemeCollection = $gjSchemeCollection;
+    $gjSchemes.schemes[scheme_reference].pipeline = pipeline!;
+    $gjSchemes = $gjSchemes;
   }
 </script>
 
@@ -62,7 +64,7 @@
   <TextInput
     label="Scheme name"
     required
-    bind:value={$gjSchemeCollection.schemes[scheme_reference].scheme_name}
+    bind:value={$gjSchemes.schemes[scheme_reference].scheme_name}
   />
 
   <fieldset class="govuk-fieldset">

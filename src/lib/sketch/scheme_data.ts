@@ -3,17 +3,18 @@ import { randomSchemeColor } from "colors";
 import { schema as schemaStore } from "stores";
 import { get } from "svelte/store";
 import type {
-  FeatureUnion,
+  Feature,
   FundingSources,
   PipelineScheme,
-  SchemeCollection,
-  SchemeData,
+  Schemes,
+  OurSchemeData,
 } from "types";
+import type { SchemeData as GenericSchemeData } from "scheme-sketcher-lib/draw/types";
 import { v4 as uuidv4 } from "uuid";
 
 // TODO This should eventually guarantee the output is a valid Scheme. Only
 // some fixes are applied now.
-export function backfill(json: any): SchemeCollection {
+export function backfill(json: any): Schemes {
   let schema = get(schemaStore);
 
   let idCounter = 1;
@@ -113,11 +114,15 @@ export function backfill(json: any): SchemeCollection {
   return json;
 }
 
-export function initializeEmptyScheme(scheme: SchemeData) {
+export function initializeEmptyScheme(
+  s: GenericSchemeData,
+): GenericSchemeData & OurSchemeData {
+  let scheme = s as GenericSchemeData & OurSchemeData;
   let schema = get(schemaStore);
   if (schema == "pipeline") {
     scheme.pipeline = emptyPipelineScheme();
   }
+  return scheme;
 }
 
 export function emptyPipelineScheme(): PipelineScheme {
@@ -145,7 +150,7 @@ export function emptyFundingSources(): FundingSources {
   };
 }
 
-export function interventionName(feature: FeatureUnion): string {
+export function interventionName(feature: Feature): string {
   if (feature.properties.name) {
     return feature.properties.name;
   }
@@ -162,11 +167,11 @@ export function interventionName(feature: FeatureUnion): string {
   return `Untitled ${noun}`;
 }
 
-export function schemeName(scheme: SchemeData): string {
+export function schemeName(scheme: GenericSchemeData & OurSchemeData): string {
   return scheme.scheme_name ?? "Untitled scheme";
 }
 
-export function interventionWarning(feature: FeatureUnion): string | null {
+export function interventionWarning(feature: Feature): string | null {
   let schema = get(schemaStore);
 
   if (!feature.properties.name) {

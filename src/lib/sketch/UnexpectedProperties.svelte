@@ -1,9 +1,11 @@
 <script lang="ts">
   import { Modal } from "lib/common";
-  import { gjSchemeCollection } from "scheme-sketcher-lib/draw/stores";
   import { ButtonGroup, SecondaryButton, WarningButton } from "govuk-svelte";
   import { getUnexpectedProperties } from "./scheme_data";
+  import type { Schemes } from "types";
+  import type { Writable } from "svelte/store";
 
+  export let gjSchemes: Writable<Schemes>;
   export let id: number;
   export let props: { [name: string]: any };
 
@@ -12,7 +14,7 @@
 
   function removeExtraProperties() {
     open = false;
-    gjSchemeCollection.update((gj) => {
+    gjSchemes.update((gj) => {
       let feature = gj.features.find((f) => f.id == id)!;
       for (let key of Object.keys(unexpected)) {
         // @ts-ignore TS thinks the properties don't have extra properties, but they do

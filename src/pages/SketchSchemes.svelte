@@ -29,11 +29,14 @@
   import { PerModeControls } from "scheme-sketcher-lib/sidebar";
   import { map, mapStyle, schema } from "stores";
   import { onMount } from "svelte";
-  import { setupSchemeSketcher } from "lib/sketch/config";
+  import { cfg } from "lib/sketch/config";
   import { map as sketchMapStore } from "scheme-sketcher-lib/config";
-  import { setupZorder } from "lib/maplibre";
+  import { writable } from "svelte/store";
+  import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
 
-  let setupDone = false;
+  // TODO How's the local storage auto-load stuff happen?
+  let gjSchemes = writable(emptySchemes(cfg));
+
   let showAbout = false;
   let showInstructions = false;
 
@@ -66,9 +69,6 @@
     initAll();
 
     boundaryGeojson = await loadAuthorityBoundary();
-    setupSchemeSketcher();
-    setupZorder();
-    setupDone = true;
   });
 
   async function loadAuthorityBoundary(): Promise<AuthorityBoundaries> {
@@ -120,10 +120,8 @@
       </ButtonGroup>
       <LoggedIn />
     {/if}
-    {#if setupDone}
-      <FileManagement {authorityName} />
-      <PerModeControls {routeSnapperUrl} />
-    {/if}
+    <FileManagement {cfg} {gjSchemes} {authorityName} />
+    <PerModeControls {cfg} {gjSchemes} {routeSnapperUrl} />
     {#if $mode.mode != "list"}
       <hr />
     {/if}
@@ -132,18 +130,16 @@
   <div class="main">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="top-right" />
-      {#if setupDone}
-        <BoundaryLayer {boundaryGeojson} />
-        <InterventionLayer />
-        <ImageLayer />
-        {#if $mode.mode == "list"}
-          <Toolbox />
-        {:else if $mode.mode == "split-route"}
-          <SplitRouteMode />
-        {/if}
-        <RouteSnapperLayer />
-        <PolygonToolLayer />
+      <BoundaryLayer {cfg} {boundaryGeojson} />
+      <InterventionLayer {cfg} {gjSchemes} />
+      <ImageLayer {cfg} />
+      {#if $mode.mode == "list"}
+        <Toolbox {cfg} {gjSchemes} />
+      {:else if $mode.mode == "split-route"}
+        <SplitRouteMode {cfg} {gjSchemes} />
       {/if}
+      <RouteSnapperLayer {cfg} />
+      <PolygonToolLayer {cfg} />
     </MapLibreMap>
   </div>
 </div>

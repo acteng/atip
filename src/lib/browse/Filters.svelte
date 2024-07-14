@@ -8,7 +8,7 @@
     Select,
   } from "govuk-svelte";
   import { onMount } from "svelte";
-  import type { FeatureUnion } from "types";
+  import type { Feature } from "types";
   import { fundingProgrammesForColouringAndFiltering } from "./data";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
   import {
@@ -81,7 +81,7 @@
   ) {
     let filterInterventionNormalized = filterInterventionTextCopy.toLowerCase();
     let filterSchemeNormalized = filterSchemeTextCopy.toLowerCase();
-    let filterFeatures = (feature: FeatureUnion) => {
+    let filterFeatures = (feature: Feature) => {
       // Only the name and description fields have anything worth filtering
       if (
         filterInterventionNormalized &&
@@ -153,7 +153,7 @@
 
     // Hide things on the map, and recalculate stats
     counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
-    let showFeature = (feature: FeatureUnion) => {
+    let showFeature = (feature: Feature) => {
       if (!schemesToBeShown.has(feature.properties.scheme_reference!)) {
         return false;
       }

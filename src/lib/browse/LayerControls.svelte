@@ -35,6 +35,10 @@
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
   import ProblemsLayerControl from "./layers/points/Problems.svelte";
   import { interactiveMapLayersEnabled } from "./stores";
+  import { getRoadLayerNames } from "lib/maplibre";
+  import { get } from "svelte/store";
+  import { mapStyle } from "stores";
+  import type { Map } from "maplibre-gl";
 
   // Workaround for https://github.com/sveltejs/svelte/issues/7630
   $: streetviewEnabled = !$interactiveMapLayersEnabled;
@@ -57,6 +61,12 @@
           [180.0, 90.0],
         ],
       ],
+    },
+  };
+
+  let cfg = {
+    getStreetViewRoadLayerNames: (map: Map) => {
+      return getRoadLayerNames(map, get(mapStyle));
     },
   };
 </script>
@@ -117,7 +127,7 @@
     </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Tools">
-    <StreetViewTool bind:enabled={streetviewEnabled} />
+    <StreetViewTool {cfg} bind:enabled={streetviewEnabled} />
     <LineMeasureTool />
   </CollapsibleCard>
   <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />

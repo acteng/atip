@@ -1,10 +1,7 @@
 <script lang="ts">
   import { v4 as uuidv4 } from "uuid";
   import { emptyFundingSources, schemeName } from "../scheme_data";
-  import {
-    gjSchemeCollection,
-    routeTool,
-  } from "scheme-sketcher-lib/draw/stores";
+  import { routeTool } from "scheme-sketcher-lib/draw/stores";
   import {
     Checkbox,
     FormElement,
@@ -14,12 +11,15 @@
     TextArea,
   } from "govuk-svelte";
   import { prettyPrintMeters } from "lib/maplibre";
-  import type { InterventionProps } from "types";
+  import type { InterventionProps, Schemes } from "types";
   import PipelineType from "./PipelineType.svelte";
   import TimingForm from "./TimingForm.svelte";
   import BudgetForm from "./BudgetForm.svelte";
+  import type { Writable } from "svelte/store";
+  import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
 
-  export let props: InterventionProps;
+  export let gjSchemes: Writable<Schemes>;
+  export let props: FeatureProps<InterventionProps>;
 
   // Lazily fill for each feature (whether newly created or loaded from an older-format file)
   props.pipeline ||= {
@@ -38,7 +38,7 @@
   props.is_coverage_polygon ||= false;
 
   const shouldDisplayCoveragePolygonQuestion: boolean =
-    ($gjSchemeCollection.features.filter(
+    ($gjSchemes.features.filter(
       (feature) => feature.properties.is_coverage_polygon,
     ).length == 0 ||
       props.is_coverage_polygon === true) &&
@@ -70,7 +70,7 @@
 
 <Select
   label="Scheme"
-  choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
+  choices={Object.values($gjSchemes.schemes).map((scheme) => [
     scheme.scheme_reference,
     schemeName(scheme),
   ])}

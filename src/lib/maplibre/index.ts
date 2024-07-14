@@ -5,7 +5,9 @@ import type {
 
 export { getRoadLayerNames } from "./highlight_roads";
 export { getStyleChoices, getStyleSpecification } from "./styles";
-export { setupZorder } from "./zorder";
+// TODO Syntax to do both isn't working?
+export { layerZorder } from "./zorder";
+import { layerZorder } from "./zorder";
 
 export {
   isPolygon,
@@ -15,8 +17,8 @@ export {
   constructMatchExpression,
   bbox,
   addLineStringEndpoints,
-  layerId,
 } from "scheme-sketcher-lib/maplibre";
+import { layerId as libraryLayerId } from "scheme-sketcher-lib/maplibre";
 
 export const isNotCoveragePolygon: ExpressionSpecification = [
   "!=",
@@ -52,4 +54,13 @@ export function prettyPrintMeters(x: number): string {
     return Math.round(x) + " m";
   }
   return (x / 1000.0).toFixed(1) + "km";
+}
+
+// Wrap the scheme-sketcher-lib version by declaring the fixed config here
+export function layerId(layerId: string): {
+  id: string;
+  beforeId: string | undefined;
+} {
+  let cfg = { layerZorder: layerZorder };
+  return libraryLayerId(cfg, layerId);
 }
