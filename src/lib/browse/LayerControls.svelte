@@ -37,7 +37,7 @@
   import { interactiveMapLayersEnabled } from "./stores";
   import { getRoadLayerNames } from "lib/maplibre";
   import { get } from "svelte/store";
-  import { mapStyle } from "stores";
+  import { map, mapStyle } from "stores";
   import type { Map } from "maplibre-gl";
 
   // Workaround for https://github.com/sveltejs/svelte/issues/7630
@@ -127,7 +127,7 @@
     </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Tools">
-    <StreetViewTool {cfg} bind:enabled={streetviewEnabled} />
+    <StreetViewTool {cfg} map={$map} bind:enabled={streetviewEnabled} />
     <LineMeasureTool />
   </CollapsibleCard>
   <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />
