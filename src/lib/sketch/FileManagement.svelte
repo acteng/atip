@@ -22,7 +22,7 @@
   import { onMount } from "svelte";
   import deleteIcon from "../../../assets/delete.svg?url";
   import saveIcon from "../../../assets/save.svg?url";
-  import { backfill } from "./scheme_data";
+  import { backfill } from "./config";
   import StorageModal from "./StorageModal.svelte";
   import type { Config } from "scheme-sketcher-lib/config";
   import type { InterventionProps, OurSchemeData, Schemes } from "types";

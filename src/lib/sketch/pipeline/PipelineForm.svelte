@@ -1,6 +1,6 @@
 <script lang="ts">
   import { v4 as uuidv4 } from "uuid";
-  import { emptyFundingSources, schemeName } from "../scheme_data";
+  import { emptyFundingSources, schemeName } from "../config";
   import { routeTool } from "scheme-sketcher-lib/draw/stores";
   import {
     Checkbox,

@@ -10,7 +10,7 @@
   } from "govuk-svelte";
   import { prettyPrintMeters } from "lib/maplibre";
   import type { InterventionProps, Schemes } from "types";
-  import { schemeName } from "./scheme_data";
+  import { schemeName } from "./config";
   import type { Writable } from "svelte/store";
   import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Modal } from "lib/common";
   import { ButtonGroup, SecondaryButton, WarningButton } from "govuk-svelte";
-  import { getUnexpectedProperties } from "./scheme_data";
+  import { getUnexpectedProperties } from "./config";
   import type { Schemes } from "types";
   import type { Writable } from "svelte/store";
 
