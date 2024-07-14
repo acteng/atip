@@ -34,7 +34,7 @@
   import { writable } from "svelte/store";
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
 
-  // TODO How's the local storage auto-load stuff happen?
+  // When FileManagement loads, it'll load from local storage
   let gjSchemes = writable(emptySchemes(cfg));
 
   let showAbout = false;

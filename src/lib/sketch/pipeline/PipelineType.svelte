@@ -5,7 +5,7 @@
   export let label: string;
   export let value: PipelineType | "";
 
-  // Keep in sync with intervention_type_short in scheme_data
+  // Keep in sync with intervention_type_short in config
   // TODO That has more than the 11...
 
   function repeat(x: string): [string, string] {
