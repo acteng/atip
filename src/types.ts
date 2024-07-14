@@ -122,17 +122,3 @@ export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
   // TODO new / existing / upgrade existing?
   // TODO for routes, ltn120 type: fully protected, light segregation, off-carriageway, shared-use, dedicated footpath. minimum width?
 }
-
-// TODO All of this is in ss-lib, remove from here?
-// Remember settings from different tools
-export interface UserSettings {
-  // From the StreetView tool
-  streetViewImagery: "google" | "bing";
-
-  // From the Route tool
-  avoidDoublingBack: boolean;
-}
-
-export function isStreetViewImagery(x: string): x is "google" | "bing" {
-  return x == "google" || x == "bing";
-}
