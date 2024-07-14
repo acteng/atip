@@ -1,7 +1,4 @@
-import type {
-  DataDrivenPropertyValueSpecification,
-  ExpressionSpecification,
-} from "maplibre-gl";
+import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 
 export { getRoadLayerNames } from "./highlight_roads";
 export { getStyleChoices, getStyleSpecification } from "./styles";
@@ -19,17 +16,6 @@ export {
   addLineStringEndpoints,
 } from "scheme-sketcher-lib/maplibre";
 import { layerId as libraryLayerId } from "scheme-sketcher-lib/maplibre";
-
-export const isNotCoveragePolygon: ExpressionSpecification = [
-  "!=",
-  ["get", "is_coverage_polygon"],
-  true,
-];
-export const isCoveragePolygon: ExpressionSpecification = [
-  "==",
-  ["get", "is_coverage_polygon"],
-  true,
-];
 
 // Helper for https://maplibre.org/maplibre-style-spec/expressions/#step.
 export function makeColorRamp(
