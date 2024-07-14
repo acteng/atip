@@ -19,9 +19,8 @@
     ZoomOutMap,
   } from "lib/common";
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
-  import { map, mapStyle } from "stores";
+  import { mapStyle } from "stores";
   import { onMount } from "svelte";
-  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
 
   onMount(() => {
     // For govuk components. Must happen here.
@@ -44,10 +43,6 @@
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
     }
-  }
-
-  $: if ($map) {
-    sketchMapStore.set($map);
   }
 </script>
 
