@@ -130,16 +130,18 @@
   <div class="main">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="top-right" />
-      <BoundaryLayer {cfg} {boundaryGeojson} />
-      <InterventionLayer {cfg} {gjSchemes} />
-      <ImageLayer {cfg} />
-      {#if $mode.mode == "list"}
-        <Toolbox {cfg} {gjSchemes} />
-      {:else if $mode.mode == "split-route"}
-        <SplitRouteMode {cfg} {gjSchemes} />
+      {#if $sketchMapStore}
+        <BoundaryLayer {cfg} {boundaryGeojson} />
+        <InterventionLayer {cfg} {gjSchemes} />
+        <ImageLayer {cfg} />
+        {#if $mode.mode == "list"}
+          <Toolbox {cfg} {gjSchemes} />
+        {:else if $mode.mode == "split-route"}
+          <SplitRouteMode {cfg} {gjSchemes} />
+        {/if}
+        <RouteSnapperLayer {cfg} />
+        <PolygonToolLayer {cfg} />
       {/if}
-      <RouteSnapperLayer {cfg} />
-      <PolygonToolLayer {cfg} />
     </MapLibreMap>
   </div>
 </div>
