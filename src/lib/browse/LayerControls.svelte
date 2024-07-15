@@ -26,6 +26,7 @@
   import PctLayerControl from "./layers/lines/PCT.svelte";
   import RoadSpeedsLayerControl from "./layers/lines/RoadSpeeds.svelte";
   import RoadWidthsLayerControl from "./layers/lines/RoadWidths.svelte";
+  import OsPolygonsLayerControl from "./layers/areas/OsPolygons.svelte";
   import TramsLayerControl from "./layers/lines/Trams.svelte";
   import BusStopsLayerControl from "./layers/points/BusStops.svelte";
   import CrossingsLayerControl from "./layers/points/Crossings.svelte";
@@ -111,6 +112,7 @@
       <PctLayerControl />
       <GradientsLayerControl />
       {#if appVersion() == "Private (development)"}
+        <OsPolygonsLayerControl />
         <RoadWidthsLayerControl />
         <PavementWidthsLayerControl />
         <RoadSpeedsLayerControl />
