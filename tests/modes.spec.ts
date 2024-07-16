@@ -115,7 +115,7 @@ test("adding interventions, then deleting one, then adding another", async () =>
   await page.getByRole("button", { name: "Save" }).click();
   await page
     .getByRole("link", {
-      name: "Route from High Street and West Street to ??? and Silverdale Drive",
+      name: "Route from ???, High Street, and West Street to ??? and Silverdale Drive",
     })
     .click();
   await page.getByRole("button", { name: "Delete" }).click();
@@ -127,7 +127,7 @@ test("adding interventions, then deleting one, then adding another", async () =>
 
   await expect(
     page.getByRole("link", {
-      name: "Route from Burnside Crescent and Carnforth Road to Prince Avenue and West Way",
+      name: "Route from Burnside Crescent and Carnforth Road to ??? and Brighton Road",
     }),
   ).toBeVisible();
 });
