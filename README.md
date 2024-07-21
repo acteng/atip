@@ -9,17 +9,6 @@ It's developed by the Alan Turing Institute in collaboration with Active Travel 
 The development version of ATIP with data for England is available for use at <https://acteng.github.io/atip>.
 Note: this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of ATIP files.
 
-### Using ATIP in other places
-
-You can build your own hosted instance but will need some technical experience to get started.
-Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation about using ATIP in other places.
-
-Very roughly, you'd need to:
-
-1.  Replace `assets/authorities.geojson` with appropriate boundaries for your region, and adjust Svelte components using this file
-2.  Generate files for the route-snapper tool to work, using <https://github.com/acteng/atip-data-prep>. Right now, this only requires OpenStreetMap data and should work worldwide, but this may change.
-3.  Host those files and a compiled version of this Svelte app somewhere. You only need a static file host, like S3.
-
 ### Query parameters
 
 The main `scheme.html` page takes a few URL query parameters:
@@ -34,3 +23,7 @@ The main `scheme.html` page takes a few URL query parameters:
 See our current roadmap on the [Milestones](https://github.com/acteng/atip/milestones?direction=desc&sort=completeness&state=open) page. Issues, feature requests, and pull requests are welcome. Please open an issue if you're interested in contributing!
 
 See the [developer guide](docs/developer_guide.md) if you want to work on ATIP.
+
+### Using ATIP in other places
+
+You can set up the scheme sketcher in another place, using [the common library](https://github.com/acteng/scheme-sketcher-lib). You'll need technical experience to do this. Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation.
