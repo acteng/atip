@@ -19,8 +19,9 @@
     ZoomOutMap,
   } from "lib/common";
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
-  import { mapStyle } from "stores";
+  import { map, mapStyle } from "stores";
   import { onMount } from "svelte";
+  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
 
   onMount(() => {
     // For govuk components. Must happen here.
@@ -34,6 +35,11 @@
   let schemesToBeShown: Set<string> = new Set();
   let showSchemes = true;
   let showSchemeNotes = false;
+
+  // Need this for zordering to work
+  $: if ($map) {
+    sketchMapStore.set($map);
+  }
 
   function loadFile(filename: string, text: string) {
     try {
@@ -90,10 +96,12 @@
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Geocoder />
-      <InterventionLayer {showSchemes} />
-      <div class="top-right">
-        <LayerControls />
-      </div>
+      {#if $sketchMapStore}
+        <InterventionLayer {showSchemes} />
+        <div class="top-right">
+          <LayerControls />
+        </div>
+      {/if}
     </MapLibreMap>
   </div>
 </Layout>
