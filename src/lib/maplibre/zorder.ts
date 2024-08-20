@@ -6,7 +6,7 @@ let maptilerStreets = (x: string) => x;
 let maptilerSatellite = (x: string) => x;
 let maptilerDataviz = (x: string) => x;
 let maptilerZoomstack = (x: string) => x;
-// OS Road/Light/Outdoor and Bluesky
+// OS Road/Light/Outdoor, Bluesky, Google
 let rasterBasemaps = (x: string) => x;
 
 // All layer IDs used with layerId must be defined here, with later entries

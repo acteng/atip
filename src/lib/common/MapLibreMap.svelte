@@ -7,10 +7,18 @@
   } from "maplibre-gl";
   import { map as mapStore } from "stores";
   import { onMount, setContext } from "svelte";
-  import { MapLibre, NavigationControl, ScaleControl } from "svelte-maplibre";
+  import {
+    MapLibre,
+    NavigationControl,
+    ScaleControl,
+    MapEvents,
+  } from "svelte-maplibre";
   import cycleParking from "../../../assets/bicycle_parking.png?url";
   import chevron from "../../../assets/chevron.png?url";
   import railwayStation from "../../../assets/railway_station.png?url";
+  import googleLogo from "../../../assets/google_on_non_white_hdpi.png?url";
+  import { attribution, getGoogleAttribution } from "../maplibre/attribution";
+  import Attributions from "./Attributions.svelte";
 
   export let style: string;
   // startBounds will only be used if the URL doesn't already have a camera set
@@ -51,6 +59,12 @@
     // ErrorEvent isn't exported
     console.error(`MapLibre error: ${e.detail.error}`);
   }
+
+  async function updateViewport() {
+    if (style == "google" && $mapStore) {
+      $attribution = await getGoogleAttribution($mapStore);
+    }
+  }
 </script>
 
 <div class="map">
@@ -67,10 +81,16 @@
         { id: "cycle_parking", url: cycleParking },
         { id: "railway_station", url: railwayStation },
       ]}
+      attributionControl={false}
     >
       {#if $mapStore}
+        <MapEvents on:zoomend={updateViewport} on:moveend={updateViewport} />
+        <Attributions attribution={$attribution} />
         <ScaleControl />
-        <NavigationControl position="bottom-right" visualizePitch />
+        <NavigationControl position="bottom-left" visualizePitch />
+        {#if style == "google"}
+          <img src={googleLogo} alt="Google logo" />
+        {/if}
         <slot />
       {/if}
     </MapLibre>
@@ -83,5 +103,11 @@
     flex-grow: 1;
     /* TODO: Hack, can't figure out why height broken */
     min-height: 100vh;
+  }
+
+  img {
+    position: absolute;
+    bottom: 30px;
+    left: 10px;
   }
 </style>
