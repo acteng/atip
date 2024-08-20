@@ -50,7 +50,7 @@
 />
 
 <Radio
-  legend="Type"
+  label="Type"
   choices={[
     ["area", "Area"],
     ["route", "Route"],

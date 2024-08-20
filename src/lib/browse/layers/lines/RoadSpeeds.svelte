@@ -85,7 +85,7 @@
 {#if $state.show}
   <SequentialLegend {colorScale} {limits} />
   <Radio
-    legend="Show speed types"
+    label="Show speed types"
     choices={[
       ["indicative_mph", "Posted speed limit"],
       ["highest_mph", "Highest measured average speed"],

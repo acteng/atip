@@ -97,7 +97,7 @@
 {#if $state.show}
   <SequentialLegend {colorScale} {limits} />
   <Radio
-    legend="Trip purpose"
+    label="Trip purpose"
     choices={[
       ["pct_commute", "Commuting"],
       ["pct_school", "School"],
