@@ -87,7 +87,7 @@
   <PipelineType label="Type" bind:value={props.pipeline.atf4_type} />
 
   <Radio
-    legend="Accuracy of mapped data"
+    label="Accuracy of mapped data"
     choices={[
       ["high", "High"],
       ["medium", "Medium"],

@@ -19,7 +19,7 @@
   <legend class="govuk-fieldset__legend">Timing and status</legend>
 
   <Radio
-    legend="Status"
+    label="Status"
     choices={[
       ["", "Unknown"],
       ["aspiration", "Aspiration"],
@@ -34,7 +34,7 @@
   />
 
   <Radio
-    legend="Timescale"
+    label="Timescale"
     choices={[
       ["", "Unknown"],
       ["short", "Short (1-3 years)"],

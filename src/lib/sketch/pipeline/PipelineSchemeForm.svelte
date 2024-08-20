@@ -71,7 +71,7 @@
     <legend class="govuk-fieldset__legend">Basic information</legend>
 
     <Radio
-      legend="Scheme type"
+      label="Scheme type"
       choices={[
         ["cycling route", "Cycling route"],
         ["walking route", "Walking route"],

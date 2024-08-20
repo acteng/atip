@@ -146,7 +146,7 @@
     <hr />
 
     <Radio
-      legend="Or pick from the map"
+      label="Or pick from the map"
       choices={[
         ["TA", "Transport Authorities"],
         ["LAD", "Local Authority Districts"],
