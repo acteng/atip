@@ -97,7 +97,7 @@ test("editing geometry of a polygon works", async () => {
   await expect(page.getByLabel("Description")).not.toBeVisible();
 
   // Click the polygon to open the form
-  await clickMap(page, 312, 501);
+  await clickMap(page, 300, 470);
   await page.getByLabel("Description").click();
 
   // Edit geometry, and click the polygon again
