@@ -18,6 +18,7 @@
   import {
     appVersion,
     getAuthoritiesGeoJson,
+    Header,
     LoggedIn,
     MapLibreMap,
     Popup,
@@ -118,7 +119,9 @@
   }
 </script>
 
-<div class="govuk-grid-row">
+<Header />
+
+<div class="govuk-grid-row below-header">
   <div class="govuk-grid-column-one-half left">
     <h1 class="govuk-heading-l">Welcome to ATIP Scheme Sketcher v2</h1>
     <p>App version: {appVersion()}</p>
@@ -203,12 +206,12 @@
   }
 
   .left {
+    position: absolute;
     margin: 10px;
   }
 
   #map {
     position: absolute;
-    top: 0;
     bottom: 0;
     right: 0;
     width: 50%;

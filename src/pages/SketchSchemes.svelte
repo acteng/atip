@@ -16,6 +16,7 @@
     appVersion,
     BaselayerSwitcher,
     Geocoder,
+    Header,
     getAuthoritiesGeoJson,
     LoggedIn,
     MapLibreMap,
@@ -101,8 +102,10 @@
   }
 </script>
 
+<Header />
+
 <div class="overall-layout">
-  <div class="sidebar govuk-prose">
+  <div class="sidebar govuk-prose below-header">
     {#if $mode.mode == "list"}
       <h2>ATIP Scheme Sketcher</h2>
       <p>App version: {appVersion()}</p>
@@ -127,7 +130,7 @@
     {/if}
     <BaselayerSwitcher />
   </div>
-  <div class="main">
+  <div class="main below-header">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="top-right" />
       {#if $sketchMapStore}
