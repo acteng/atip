@@ -206,7 +206,6 @@
   }
 
   .left {
-    position: absolute;
     margin: 10px;
   }
 
