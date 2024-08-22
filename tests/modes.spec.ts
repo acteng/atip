@@ -204,8 +204,8 @@ test("edit a snapped polygon, then cancel", async () => {
 
 test("edit a route, then cancel", async () => {
   await page.getByRole("button", { name: "New route" }).click();
-  await clickMap(page, 500, 500);
-  await clickMap(page, 400, 500);
+  await clickMap(page, 500, 467);
+  await clickMap(page, 400, 467);
   await page.getByRole("button", { name: "Finish" }).click();
 
   await page.getByRole("button", { name: "Edit geometry" }).click();
