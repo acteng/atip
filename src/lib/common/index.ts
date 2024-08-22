@@ -6,6 +6,7 @@ export { default as BaselayerSwitcher } from "./BaselayerSwitcher.svelte";
 export { default as ColorLegend } from "./ColorLegend.svelte";
 export { default as ExternalLink } from "./ExternalLink.svelte";
 export { default as Geocoder } from "./Geocoder.svelte";
+export { default as Header } from "./Header.svelte";
 export { default as HelpButton } from "./HelpButton.svelte";
 export { default as Layout } from "./Layout.svelte";
 export { default as Legend } from "./Legend.svelte";

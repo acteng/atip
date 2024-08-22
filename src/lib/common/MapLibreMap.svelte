@@ -102,7 +102,7 @@
     position: relative;
     flex-grow: 1;
     /* TODO: Hack, can't figure out why height broken */
-    min-height: 100vh;
+    min-height: calc(100vh - 66px);
   }
 
   img {
