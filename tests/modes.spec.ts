@@ -84,7 +84,7 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
 test("editing geometry of a polygon works", async () => {
   // Create a polygon
   await page.getByRole("button", { name: "New polygon (snapped)" }).click();
-  await clickMap(page, 241, 509);
+  await clickMap(page, 200, 600);
   await clickMap(page, 235, 431);
   await clickMap(page, 465, 459);
   await page.getByRole("button", { name: "Finish" }).click();
@@ -97,7 +97,7 @@ test("editing geometry of a polygon works", async () => {
   await expect(page.getByLabel("Description")).not.toBeVisible();
 
   // Click the polygon to open the form
-  await clickMap(page, 300, 470);
+  await clickMap(page, 332, 515);
   await page.getByLabel("Description").click();
 
   // Edit geometry, and click the polygon again
