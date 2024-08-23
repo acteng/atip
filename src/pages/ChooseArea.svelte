@@ -18,7 +18,6 @@
   import {
     appVersion,
     getAuthoritiesGeoJson,
-    Header,
     LoggedIn,
     MapLibreMap,
     Popup,
@@ -33,6 +32,7 @@
     LineLayer,
     type LayerClickInfo,
   } from "svelte-maplibre";
+  import Header from "./ChooseAreaHeader.svelte";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",
@@ -119,49 +119,52 @@
   }
 </script>
 
-<Header />
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <Header />
 
-<div class="govuk-grid-row below-header">
-  <div class="govuk-grid-column-one-half left">
-    <h1 class="govuk-heading-l">Welcome to ATIP Scheme Sketcher v2</h1>
-    <p>App version: {appVersion()}</p>
-    <LoggedIn />
-    <SecondaryButton on:click={() => (showAbout = !showAbout)}>
-      About
-    </SecondaryButton>
-    <ErrorMessage errorMessage={pageErrorMessage} />
+    <div class="left">
+      <LoggedIn />
+      <p>App version: {appVersion()}</p>
+      <SecondaryButton on:click={() => (showAbout = !showAbout)}>
+        About
+      </SecondaryButton>
+      <ErrorMessage errorMessage={pageErrorMessage} />
 
-    <FormElement
-      label="Select Transport Authority or Local Authority District"
-      id="inputValue"
-    >
-      <input
-        class="govuk-input govuk-input--width-20"
+      <FormElement
+        label="Select Transport Authority or Local Authority District"
         id="inputValue"
-        data-testid="transport-authority"
-        list="authorities-list"
-        bind:value={inputValue}
+      >
+        <input
+          class="govuk-input govuk-input--width-20"
+          id="inputValue"
+          data-testid="transport-authority"
+          list="authorities-list"
+          bind:value={inputValue}
+        />
+        <datalist id="authorities-list" bind:this={dataList} />
+      </FormElement>
+      <DefaultButton on:click={start} disabled={!validEntry}>
+        Start
+      </DefaultButton>
+
+      <hr />
+
+      <Radio
+        label="Or pick from the map"
+        choices={[
+          ["TA", "Transport Authorities"],
+          ["LAD", "Local Authority Districts"],
+        ]}
+        inlineSmall
+        bind:value={showBoundaries}
       />
-      <datalist id="authorities-list" bind:this={dataList} />
-    </FormElement>
-    <DefaultButton on:click={start} disabled={!validEntry}>Start</DefaultButton>
 
-    <hr />
+      <hr />
 
-    <Radio
-      label="Or pick from the map"
-      choices={[
-        ["TA", "Transport Authorities"],
-        ["LAD", "Local Authority Districts"],
-      ]}
-      inlineSmall
-      bind:value={showBoundaries}
-    />
-
-    <hr />
-
-    <ErrorMessage errorMessage={uploadErrorMessage} />
-    <FileInput label="Or upload an ATIP GeoJSON file" onLoad={loadFile} />
+      <ErrorMessage errorMessage={uploadErrorMessage} />
+      <FileInput label="Or upload an ATIP GeoJSON file" onLoad={loadFile} />
+    </div>
   </div>
   <div class="govuk-grid-column-one-half">
     <div id="map">
@@ -211,6 +214,7 @@
 
   #map {
     position: absolute;
+    top: 0;
     bottom: 0;
     right: 0;
     width: 50%;

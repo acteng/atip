@@ -17,6 +17,7 @@
     MapLibreMap,
     Modal,
     ZoomOutMap,
+    Header,
   } from "lib/common";
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import { map, mapStyle } from "stores";
@@ -54,12 +55,13 @@
 
 <Layout>
   <div slot="sidebar" class="govuk-prose">
+    <Header />
     <div style="display: flex; justify-content: space-between">
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$schemesGj} />
     </div>
-    <p>App version: {appVersion()}</p>
     <LoggedIn />
+    <p>App version: {appVersion()}</p>
     {#if appVersion() == "Private (development)"}
       <LoadRemoteSchemeData {loadFile} />
     {/if}
