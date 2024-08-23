@@ -1,5 +1,6 @@
 <script lang="ts">
-  import logoUrl from "../../../assets/ate_logo.png?url";
+  // This differs from lib/common/Header, because the margins to override are different.
+  import logoUrl from "../../assets/ate_logo.png?url";
 </script>
 
 <div class="black-bar">
@@ -11,16 +12,15 @@
 <style>
   .black-bar {
     background: #0b0c0c;
-    margin-top: -1rem;
-    margin-left: -1rem;
-    margin-right: -1rem;
+    /* Fill the padding from govuk-grid-column-one-half */
+    margin-right: -15px;
   }
 
   .green-bar {
     background: #007161;
     height: 10px;
-    margin-left: -1rem;
-    margin-right: -1rem;
+    /* Fill the padding from govuk-grid-column-one-half */
+    margin-right: -15px;
   }
 
   img {

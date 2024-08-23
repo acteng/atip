@@ -16,11 +16,11 @@
     appVersion,
     BaselayerSwitcher,
     Geocoder,
-    Header,
     getAuthoritiesGeoJson,
     LoggedIn,
     MapLibreMap,
     ZoomOutMap,
+    Header,
   } from "lib/common";
   import { mode } from "scheme-sketcher-lib/draw/stores";
   import { ButtonGroup, SecondaryButton } from "govuk-svelte";
@@ -102,12 +102,12 @@
   }
 </script>
 
-<Header />
-
 <div class="overall-layout">
-  <div class="sidebar govuk-prose below-header">
+  <div class="sidebar govuk-prose">
+    <Header />
+
     {#if $mode.mode == "list"}
-      <h2>ATIP Scheme Sketcher</h2>
+      <LoggedIn />
       <p>App version: {appVersion()}</p>
       <div style="display: flex; justify-content: space-between">
         <p>{authorityDescription()}</p>
@@ -121,7 +121,6 @@
           Instructions
         </SecondaryButton>
       </ButtonGroup>
-      <LoggedIn />
     {/if}
     <FileManagement {cfg} {gjSchemes} {authorityName} />
     <PerModeControls {cfg} {gjSchemes} {routeSnapperUrl} />
@@ -130,7 +129,7 @@
     {/if}
     <BaselayerSwitcher />
   </div>
-  <div class="main below-header">
+  <div class="main">
     <MapLibreMap style={$mapStyle}>
       <Geocoder position="top-right" />
       {#if $sketchMapStore}

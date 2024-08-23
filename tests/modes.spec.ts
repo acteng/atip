@@ -61,8 +61,8 @@ test("creating a new snapped polygon opens a form", async () => {
 
 test("creating a new route opens a form, and auto-fill sets its name", async () => {
   await page.getByRole("button", { name: "New route" }).click();
-  await clickMap(page, 500, 467);
-  await clickMap(page, 400, 467);
+  await clickMap(page, 500, 500);
+  await clickMap(page, 400, 500);
   await page.getByRole("button", { name: "Finish" }).click();
 
   // The route immediately has a name
@@ -84,20 +84,20 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
 test("editing geometry of a polygon works", async () => {
   // Create a polygon
   await page.getByRole("button", { name: "New polygon (snapped)" }).click();
-  await clickMap(page, 241, 476);
-  await clickMap(page, 235, 398);
-  await clickMap(page, 465, 426);
+  await clickMap(page, 241, 509);
+  await clickMap(page, 235, 431);
+  await clickMap(page, 465, 459);
   await page.getByRole("button", { name: "Finish" }).click();
   await expect(page.getByText("Editing Untitled area")).toBeVisible();
   await page.getByLabel("Description").click();
 
   // Click off the polygon to close the form
-  await clickMap(page, 284, 251);
+  await clickMap(page, 284, 284);
   // Make sure the form is closed
   await expect(page.getByLabel("Description")).not.toBeVisible();
 
   // Click the polygon to open the form
-  await clickMap(page, 312, 472);
+  await clickMap(page, 312, 501);
   await page.getByLabel("Description").click();
 
   // Edit geometry, and click the polygon again
@@ -109,8 +109,8 @@ test("editing geometry of a polygon works", async () => {
 
 test("adding interventions, then deleting one, then adding another", async () => {
   await page.getByRole("button", { name: "New route" }).click();
-  await clickMap(page, 522, 435);
-  await clickMap(page, 192, 480);
+  await clickMap(page, 522, 468);
+  await clickMap(page, 192, 513);
   await page.getByRole("button", { name: "Finish" }).click();
   await page.getByRole("button", { name: "Save" }).click();
   await page
@@ -120,8 +120,8 @@ test("adding interventions, then deleting one, then adding another", async () =>
     .click();
   await page.getByRole("button", { name: "Delete" }).click();
   await page.getByRole("button", { name: "New route" }).click();
-  await clickMap(page, 196, 343);
-  await clickMap(page, 481, 366);
+  await clickMap(page, 196, 375);
+  await clickMap(page, 481, 399);
   await page.getByRole("button", { name: "Finish" }).click();
   await page.getByRole("button", { name: "Save" }).click();
 
@@ -204,8 +204,8 @@ test("edit a snapped polygon, then cancel", async () => {
 
 test("edit a route, then cancel", async () => {
   await page.getByRole("button", { name: "New route" }).click();
-  await clickMap(page, 500, 467);
-  await clickMap(page, 400, 467);
+  await clickMap(page, 500, 500);
+  await clickMap(page, 400, 500);
   await page.getByRole("button", { name: "Finish" }).click();
 
   await page.getByRole("button", { name: "Edit geometry" }).click();

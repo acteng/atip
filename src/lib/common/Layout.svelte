@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Header from "./Header.svelte";
   export let sidebarWidth = "25rem";
 
   let showSidebar = true;
@@ -10,10 +9,8 @@
 </script>
 
 <div class="overall-layout">
-  <Header />
-
   <aside
-    class={showSidebar ? "below-header" : "collapsed below-header"}
+    class={showSidebar ? "" : "collapsed"}
     style="--sidebarWidth: {sidebarWidth}"
   >
     <div class="sidebar-content content-container">
@@ -27,7 +24,7 @@
       &rarr;
     </button>
   </aside>
-  <main class="below-header">
+  <main>
     <slot name="main" />
   </main>
 </div>
