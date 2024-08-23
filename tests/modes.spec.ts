@@ -255,6 +255,6 @@ test("the viewport changes only once when opening a form", async () => {
 // Assert the page is in the main list mode.
 async function expectListMode() {
   await expect(
-    page.getByRole("heading", { name: "ATIP Scheme Sketcher" }),
+    page.getByRole("button", { name: "Zoom to show entire boundary" }),
   ).toBeVisible();
 }
