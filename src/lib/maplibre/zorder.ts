@@ -88,6 +88,7 @@ export let layerZorder = [
   sketch("route-points"),
   sketch("route-lines"),
   sketch("route-polygons"),
+  sketch("route-debug-nodes"),
 
   // Draw most things beneath text road labels. These IDs come from the
   // MapTiler basemap, and there are different ones for each basemap. Note for
