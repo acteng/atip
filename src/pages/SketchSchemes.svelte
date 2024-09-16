@@ -31,7 +31,7 @@
   import { map, mapStyle, schema } from "stores";
   import { onMount } from "svelte";
   import { cfg } from "lib/sketch/config";
-  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
+  import { map as sketchMapStore, sidebarDiv } from "scheme-sketcher-lib/config";
   import { writable } from "svelte/store";
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
 
@@ -103,7 +103,7 @@
 </script>
 
 <div class="overall-layout">
-  <div class="sidebar govuk-prose">
+  <div class="sidebar govuk-prose" bind:this={$sidebarDiv}>
     <Header />
 
     {#if $mode.mode == "list"}
