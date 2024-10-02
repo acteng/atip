@@ -211,6 +211,17 @@
   }
 </script>
 
+<CheckboxGroup small>
+  <Checkbox bind:checked={show}>
+    Showing {schemesToBeShown.size.toLocaleString()} schemes ({counts.route.toLocaleString()}
+    routes, {counts.area.toLocaleString()} areas,
+    {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()}
+    other, with total LineString length of {metersToMiles(
+      counts.totalLength,
+    ).toFixed(1)} miles)
+  </Checkbox>
+</CheckboxGroup>
+
 <CollapsibleCard label="Filters">
   <SecondaryButton on:click={resetFilters}>Reset all filters</SecondaryButton>
   <Select
@@ -264,14 +275,3 @@
   </FormElement>
   <InterventionColorSelector />
 </CollapsibleCard>
-
-<CheckboxGroup small>
-  <Checkbox bind:checked={show}>
-    Showing {schemesToBeShown.size.toLocaleString()} schemes ({counts.route.toLocaleString()}
-    routes, {counts.area.toLocaleString()} areas,
-    {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()}
-    other, with total LineString length of {metersToMiles(
-      counts.totalLength,
-    ).toFixed(1)} miles)
-  </Checkbox>
-</CheckboxGroup>

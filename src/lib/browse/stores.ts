@@ -11,3 +11,5 @@ export const schemes: Writable<Map<string, SchemeData>> = writable(new Map());
 export const interactiveMapLayersEnabled: Writable<boolean> = writable(true);
 export const filterInterventionText: Writable<string> = writable("");
 export const filterSchemeText: Writable<string> = writable("");
+
+export let controls: Writable<HTMLDivElement | null> = writable(null);
