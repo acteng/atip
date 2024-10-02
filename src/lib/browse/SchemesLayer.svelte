@@ -3,18 +3,16 @@
     CollapsibleCard,
     ErrorMessage,
     FileInput,
-    SecondaryButton,
+    Checkbox,
   } from "govuk-svelte";
-  import { appVersion, Modal } from "lib/common";
+  import { appVersion, HelpButton } from "lib/common";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
   import { processInput } from "./data";
   import Filters from "./Filters.svelte";
   import { schemes, schemesGj } from "./stores";
   import InterventionLayer from "./InterventionLayer.svelte";
 
-  let schemesToBeShown: Set<string> = new Set();
-  let showSchemes = true;
-  let showSchemeNotes = false;
+  let show = true;
 
   let errorMessage = "";
 
@@ -33,27 +31,28 @@
   {#if appVersion() == "Private (development)"}
     <LoadRemoteSchemeData {loadFile} />
   {/if}
-  {#if $schemesGj.notes}
-    <SecondaryButton on:click={() => (showSchemeNotes = true)}>
-      About the scheme data
-    </SecondaryButton>
-    <Modal title="About this scheme data" bind:open={showSchemeNotes}>
-      <div class="govuk-prose">
-        <p>Please note there are data quality caveats for all scheme data:</p>
-        <ul>
-          {#each $schemesGj.notes as note}
-            <li><p>{note}</p></li>
-          {/each}
-        </ul>
-      </div>
-    </Modal>
+  {#if $schemes.size > 0}
+    <Checkbox bind:checked={show}>
+      ATF and LCWIP schemes
+      <span slot="right">
+        <HelpButton>
+          <p>Please note there are data quality caveats for all scheme data:</p>
+          {#if $schemesGj.notes}
+            <ul>
+              {#each $schemesGj.notes as note}
+                <li><p>{note}</p></li>
+              {/each}
+            </ul>
+          {/if}
+        </HelpButton>
+      </span>
+    </Checkbox>
+
+    <Filters />
   {/if}
+
   <FileInput label="Load schemes from GeoJSON" onLoad={loadFile} />
   <ErrorMessage {errorMessage} />
-
-  {#if $schemes.size > 0}
-    <Filters bind:schemesToBeShown bind:show={showSchemes} />
-  {/if}
 </CollapsibleCard>
 
-<InterventionLayer {showSchemes} />
+<InterventionLayer {show} />

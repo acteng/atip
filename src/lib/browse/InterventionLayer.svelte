@@ -20,7 +20,7 @@
   import InterventionPopup from "./InterventionPopup.svelte";
   import { schemesGj } from "./stores";
 
-  export let showSchemes: boolean;
+  export let show: boolean;
 
   let [colorInterventions] = styleByFundingProgramme();
 
@@ -51,7 +51,7 @@
       "circle-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: showSchemes ? "visible" : "none",
+      visibility: show ? "visible" : "none",
     }}
     hoverCursor="pointer"
   >
@@ -72,7 +72,7 @@
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: showSchemes ? "visible" : "none",
+      visibility: show ? "visible" : "none",
     }}
     hoverCursor="pointer"
   >
@@ -91,7 +91,7 @@
       "circle-stroke-width": 2.0,
     }}
     layout={{
-      visibility: showSchemes ? "visible" : "none",
+      visibility: show ? "visible" : "none",
     }}
   />
 
@@ -105,7 +105,7 @@
       "fill-opacity": hoverStateFilter(0.2, 0.5),
     }}
     layout={{
-      visibility: showSchemes ? "visible" : "none",
+      visibility: show ? "visible" : "none",
     }}
     hoverCursor="pointer"
   >
@@ -123,7 +123,7 @@
       "line-width": 0.7 * lineWidth,
     }}
     layout={{
-      visibility: showSchemes ? "visible" : "none",
+      visibility: show ? "visible" : "none",
     }}
   />
 </GeoJSON>
