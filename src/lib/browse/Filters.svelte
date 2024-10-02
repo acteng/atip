@@ -9,7 +9,6 @@
   import { onMount } from "svelte";
   import type { Feature, Schemes, SchemeData } from "types";
   import { fundingProgrammesForColouringAndFiltering } from "./data";
-  import InterventionColorSelector from "./InterventionColorSelector.svelte";
 
   export let source: string;
   export let schemes: Map<string, SchemeData>;
@@ -34,12 +33,6 @@
   let filterFundingProgramme = "";
   let currentMilestones: [string, string][] = [];
   let filterCurrentMilestone = "";
-  let sketchSources: [string, string][] = [
-    ["ATF assessment", "ATF assessment"],
-    ["LCWIP mapping", "LCWIP mapping"],
-    ["Both", "Both"],
-  ];
-  let filterSketchSource = "";
 
   // TODO Change when schemes changes
   onMount(() => {
@@ -69,7 +62,6 @@
 
   // When any filters change, update showSchemes
   function filtersUpdated(
-    filterSketchSource: string,
     filterInterventionTextCopy: string,
     filterSchemeTextCopy: string,
     filterAuthority: string,
@@ -92,7 +84,6 @@
         return false;
       }
       if (
-        filterSketchSource ||
         filterSchemeNormalized ||
         filterAuthority ||
         filterFundingProgramme ||
@@ -130,14 +121,6 @@
             .includes(filterSchemeNormalized)
         ) {
           return false;
-        }
-        if (filterSketchSource) {
-          if (
-            filterSketchSource !== "Both" &&
-            filterSketchSource !== scheme.browse?.sketch_source
-          ) {
-            return false;
-          }
         }
       }
       return true;
@@ -186,7 +169,6 @@
     counts = counts;
   }
   $: filtersUpdated(
-    filterSketchSource,
     filterInterventionText,
     filterSchemeText,
     filterAuthority,
@@ -199,7 +181,6 @@
   }
 
   function resetFilters() {
-    filterSketchSource = "";
     filterAuthority = "";
     filterFundingProgramme = "";
     filterCurrentMilestone = "";
@@ -241,12 +222,6 @@
     emptyOption
     bind:value={filterCurrentMilestone}
   />
-  <Select
-    label="Sketch source"
-    choices={sketchSources}
-    emptyOption
-    bind:value={filterSketchSource}
-  />
   <FormElement
     label="Intervention name or description"
     id="filterInterventionText"
@@ -272,7 +247,6 @@
       Clear
     </SecondaryButton>
   </FormElement>
-  <InterventionColorSelector />
 
   <DefaultButton on:click={() => (open = false)}>Done</DefaultButton>
 </Modal>

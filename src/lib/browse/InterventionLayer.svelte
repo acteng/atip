@@ -8,7 +8,10 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
-  import type { ExpressionSpecification } from "maplibre-gl";
+  import type {
+    DataDrivenPropertyValueSpecification,
+    ExpressionSpecification,
+  } from "maplibre-gl";
   import {
     CircleLayer,
     FillLayer,
@@ -16,7 +19,6 @@
     hoverStateFilter,
     LineLayer,
   } from "svelte-maplibre";
-  import { styleByFundingProgramme } from "./colors";
   import InterventionPopup from "./InterventionPopup.svelte";
   import type { Schemes, SchemeData } from "types";
 
@@ -27,8 +29,7 @@
   export let schemesGj: Schemes;
   export let filterSchemeText: string;
   export let filterInterventionText: string;
-
-  let [colorInterventions] = styleByFundingProgramme();
+  export let color: DataDrivenPropertyValueSpecification<string>;
 
   $: gj = addLineStringEndpoints(schemesGj);
 
@@ -52,7 +53,7 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "circle-color": colorInterventions,
+      "circle-color": color,
       "circle-radius": circleRadius,
       "circle-opacity": hoverStateFilter(1.0, 0.5),
     }}
@@ -79,7 +80,7 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "line-color": colorInterventions,
+      "line-color": color,
       "line-width": lineWidth,
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
@@ -119,7 +120,7 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "fill-color": colorInterventions,
+      "fill-color": color,
       "fill-opacity": hoverStateFilter(0.2, 0.5),
     }}
     layout={{
@@ -142,7 +143,7 @@
     {...layerId(`${source}-interventions-polygons-outlines`)}
     filter={["all", isPolygon, hideWhileEditing]}
     paint={{
-      "line-color": colorInterventions,
+      "line-color": color,
       "line-opacity": 0.5,
       "line-width": 0.7 * lineWidth,
     }}
