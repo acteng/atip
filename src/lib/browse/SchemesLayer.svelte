@@ -4,8 +4,9 @@
     ErrorMessage,
     FileInput,
     Checkbox,
+    Select,
   } from "govuk-svelte";
-  import { appVersion, HelpButton } from "lib/common";
+  import { appVersion, HelpButton, Legend } from "lib/common";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
   import { setupSchemes } from "./data";
   import Filters from "./Filters.svelte";
@@ -20,11 +21,20 @@
     filterLcwipInterventionText,
   } from "./stores";
   import InterventionLayer from "./InterventionLayer.svelte";
+  import { colorInterventionsBySchema, schemaLegend } from "schemas";
+  import { styleByCurrentMilestone, styleByFundingProgramme } from "./colors";
+  import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
+
+  let errorMessage = "";
 
   let showAtf = true;
   let showLcwip = true;
 
-  let errorMessage = "";
+  let atfStyle = "fundingProgramme";
+  $: [atfColor, atfLegend] = pickStyle(atfStyle);
+
+  let lcwipStyle = "fundingProgramme";
+  $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
 
   function loadFile(filename: string, text: string) {
     try {
@@ -34,9 +44,24 @@
       errorMessage = `The file you loaded is broken: ${err}`;
     }
   }
+
+  function pickStyle(
+    style: string,
+  ): [DataDrivenPropertyValueSpecification<string>, [string, string][]] {
+    if (style == "interventionType") {
+      return [colorInterventionsBySchema("v1"), schemaLegend("v1")];
+    } else if (style == "fundingProgramme") {
+      return styleByFundingProgramme();
+    } else if (style == "currentMilestone") {
+      return styleByCurrentMilestone();
+    } else {
+      // Should be impossible
+      return ["red", []];
+    }
+  }
 </script>
 
-<CollapsibleCard label="Schemes">
+<CollapsibleCard label="Schemes" open>
   {#if appVersion() == "Private (development)"}
     <LoadRemoteSchemeData {loadFile} />
   {/if}
@@ -56,13 +81,26 @@
       </span>
     </Checkbox>
 
-    <Filters
-      source="ATF"
-      bind:schemesGj={$atfSchemesGj}
-      bind:schemes={$atfSchemes}
-      bind:filterSchemeText={$filterAtfSchemeText}
-      bind:filterInterventionText={$filterAtfInterventionText}
-    />
+    <div style="display: flex; justify-content: space-between;">
+      <Filters
+        source="ATF"
+        bind:schemesGj={$atfSchemesGj}
+        bind:schemes={$atfSchemes}
+        bind:filterSchemeText={$filterAtfSchemeText}
+        bind:filterInterventionText={$filterAtfInterventionText}
+      />
+
+      <Select
+        label="Colour interventions"
+        choices={[
+          ["fundingProgramme", "By funding programme"],
+          ["interventionType", "By intervention type"],
+          ["currentMilestone", "By current milestone"],
+        ]}
+        bind:value={atfStyle}
+      />
+    </div>
+    <Legend rows={atfLegend} />
   {/if}
 
   {#if $lcwipSchemes.size > 0}
@@ -80,13 +118,26 @@
       </span>
     </Checkbox>
 
-    <Filters
-      source="LCWIP"
-      bind:schemesGj={$lcwipSchemesGj}
-      bind:schemes={$lcwipSchemes}
-      bind:filterSchemeText={$filterLcwipSchemeText}
-      bind:filterInterventionText={$filterLcwipInterventionText}
-    />
+    <div style="display: flex; justify-content: space-between;">
+      <Filters
+        source="LCWIP"
+        bind:schemesGj={$lcwipSchemesGj}
+        bind:schemes={$lcwipSchemes}
+        bind:filterSchemeText={$filterLcwipSchemeText}
+        bind:filterInterventionText={$filterLcwipInterventionText}
+      />
+
+      <Select
+        label="Colour interventions"
+        choices={[
+          ["fundingProgramme", "By funding programme"],
+          ["interventionType", "By intervention type"],
+          ["currentMilestone", "By current milestone"],
+        ]}
+        bind:value={lcwipStyle}
+      />
+    </div>
+    <Legend rows={lcwipLegend} />
   {/if}
 
   <FileInput label="Load schemes from GeoJSON" onLoad={loadFile} />
@@ -100,6 +151,7 @@
   schemes={$atfSchemes}
   filterSchemeText={$filterAtfSchemeText}
   filterInterventionText={$filterAtfInterventionText}
+  color={atfColor}
 />
 <InterventionLayer
   source="lcwip"
@@ -108,4 +160,5 @@
   schemes={$lcwipSchemes}
   filterSchemeText={$filterLcwipSchemeText}
   filterInterventionText={$filterLcwipInterventionText}
+  color={lcwipColor}
 />
