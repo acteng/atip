@@ -63,18 +63,31 @@ export let layerZorder = [
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top
   sketch("interventions-coverage-polygons-outlines"),
-  sketch(browse("interventions-polygons")),
-  sketch(browse("interventions-polygons-outlines")),
+  sketch("interventions-polygons"),
+  sketch("interventions-polygons-outlines"),
   // This is an outline, so draw on top
   sketch("hover-polygons"),
 
+  browse("atf-interventions-polygons"),
+  browse("lcwip-interventions-polygons"),
+  browse("atf-interventions-polygons-outlines"),
+  browse("lcwip-interventions-polygons-outlines"),
+
   // The hover effect thickens, so draw beneath
   sketch("hover-lines"),
-  sketch(browse("interventions-lines")),
-  sketch(browse("interventions-lines-endpoints")),
+  sketch("interventions-lines"),
+  sketch("interventions-lines-endpoints"),
+
+  browse("atf-interventions-lines"),
+  browse("lcwip-interventions-lines"),
+  browse("atf-interventions-lines-endpoints"),
+  browse("lcwip-interventions-lines-endpoints"),
 
   sketch("hover-points"),
-  sketch(browse("interventions-points")),
+  sketch("interventions-points"),
+
+  browse("atf-interventions-points"),
+  browse("lcwip-interventions-points"),
 
   // Problem points are one layer that should display on top of scheme data
   browse("problems"),

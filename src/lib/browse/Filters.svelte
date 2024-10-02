@@ -7,15 +7,15 @@
   } from "govuk-svelte";
   import { Modal } from "lib/common";
   import { onMount } from "svelte";
-  import type { Feature } from "types";
+  import type { Feature, Schemes, SchemeData } from "types";
   import { fundingProgrammesForColouringAndFiltering } from "./data";
   import InterventionColorSelector from "./InterventionColorSelector.svelte";
-  import {
-    filterInterventionText,
-    filterSchemeText,
-    schemes,
-    schemesGj,
-  } from "./stores";
+
+  export let source: string;
+  export let schemes: Map<string, SchemeData>;
+  export let schemesGj: Schemes;
+  export let filterSchemeText: string;
+  export let filterInterventionText: string;
 
   let open = false;
 
@@ -41,12 +41,12 @@
   ];
   let filterSketchSource = "";
 
-  // TODO Change when $schemes changes
+  // TODO Change when schemes changes
   onMount(() => {
     let set1: Set<string> = new Set();
     let set2: Set<string> = new Set();
     let set3: Set<string> = new Set();
-    for (let x of $schemes.values()) {
+    for (let x of schemes.values()) {
       if (x.browse?.authority_or_region) {
         set1.add(x.browse.authority_or_region);
       }
@@ -98,7 +98,7 @@
         filterFundingProgramme ||
         filterCurrentMilestone
       ) {
-        let scheme = $schemes.get(feature.properties.scheme_reference!)!;
+        let scheme = schemes.get(feature.properties.scheme_reference!)!;
         if (
           filterAuthority &&
           scheme.browse?.authority_or_region != filterAuthority
@@ -143,7 +143,7 @@
       return true;
     };
     showSchemes = new Set(
-      $schemesGj.features
+      schemesGj.features
         .filter(filterFeatures)
         .map((f) => f.properties.scheme_reference!),
     );
@@ -168,7 +168,7 @@
       }
       return true;
     };
-    for (let feature of $schemesGj.features) {
+    for (let feature of schemesGj.features) {
       if (showFeature(feature)) {
         delete feature.properties.hide_while_editing;
         counts.interventions++;
@@ -182,13 +182,13 @@
         feature.properties.hide_while_editing = true;
       }
     }
-    $schemesGj = $schemesGj;
+    schemesGj = schemesGj;
     counts = counts;
   }
   $: filtersUpdated(
     filterSketchSource,
-    $filterInterventionText,
-    $filterSchemeText,
+    filterInterventionText,
+    filterSchemeText,
     filterAuthority,
     filterFundingProgramme,
     filterCurrentMilestone,
@@ -203,14 +203,14 @@
     filterAuthority = "";
     filterFundingProgramme = "";
     filterCurrentMilestone = "";
-    $filterInterventionText = "";
-    $filterSchemeText = "";
+    filterInterventionText = "";
+    filterSchemeText = "";
   }
 </script>
 
 <SecondaryButton on:click={() => (open = true)}>Filters</SecondaryButton>
 
-<Modal title="Filter schemes" bind:open>
+<Modal title={`Filter ${source} schemes`} bind:open>
   <p>Showing:</p>
   <ul>
     <li>
@@ -255,9 +255,9 @@
       type="text"
       class="govuk-input govuk-input--width-10"
       id="filterInterventionText"
-      bind:value={$filterInterventionText}
+      bind:value={filterInterventionText}
     />
-    <SecondaryButton on:click={() => ($filterInterventionText = "")}>
+    <SecondaryButton on:click={() => (filterInterventionText = "")}>
       Clear
     </SecondaryButton>
   </FormElement>
@@ -266,9 +266,9 @@
       type="text"
       class="govuk-input govuk-input--width-10"
       id="filterSchemeText"
-      bind:value={$filterSchemeText}
+      bind:value={filterSchemeText}
     />
-    <SecondaryButton on:click={() => ($filterSchemeText = "")}>
+    <SecondaryButton on:click={() => (filterSchemeText = "")}>
       Clear
     </SecondaryButton>
   </FormElement>

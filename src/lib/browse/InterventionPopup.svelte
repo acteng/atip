@@ -4,19 +4,18 @@
   import { bbox } from "lib/maplibre";
   import { map } from "stores";
   import { prettyPrintMeters } from "lib/maplibre";
-  import {
-    filterInterventionText,
-    filterSchemeText,
-    schemes,
-    schemesGj,
-  } from "./stores";
   import { setLocalStorageItem } from "lib/common";
   import DescribePipelineTiming from "./DescribePipelineTiming.svelte";
   import DescribePipelineBudget from "./DescribePipelineBudget.svelte";
+  import type { Schemes, SchemeData } from "types";
 
   export let props: { [name: string]: any };
+  export let schemes: Map<string, SchemeData>;
+  export let schemesGj: Schemes;
+  export let filterSchemeText: string;
+  export let filterInterventionText: string;
 
-  $: scheme = $schemes.get(props.scheme_reference)!;
+  $: scheme = schemes.get(props.scheme_reference)!;
 
   // When the user is filtering name/description by freeform text, highlight the matching pieces.
   function highlightFilter(input: string, filter: string): string {
@@ -33,7 +32,7 @@
     // TODO Highlight on the map? Or fade everything else?
     let gj: FeatureCollection = {
       type: "FeatureCollection",
-      features: $schemesGj.features.filter(
+      features: schemesGj.features.filter(
         (f) => f.properties.scheme_reference == scheme.scheme_reference,
       ),
     };
@@ -41,12 +40,14 @@
   }
 
   function editScheme() {
-    let gj = {
+    let gj: Schemes = {
       type: "FeatureCollection",
-      features: $schemesGj.features.filter(
+      features: schemesGj.features.filter(
         (f) => f.properties.scheme_reference == scheme.scheme_reference,
       ),
+      schemes: {},
     };
+    gj.schemes[scheme.scheme_reference] = scheme;
     let filename = scheme.browse?.authority_or_region || "unknown authority";
     // Assuming the schema is always v1
 
@@ -61,7 +62,7 @@
 
 <div style="max-width: 30vw; max-height: 60vh; overflow: auto;">
   <h2>
-    {@html highlightFilter(props.name, $filterInterventionText)} ({props.intervention_type})
+    {@html highlightFilter(props.name, filterInterventionText)} ({props.intervention_type})
   </h2>
   {#if props.length_meters}
     <p>
@@ -69,7 +70,7 @@
     </p>
   {/if}
   {#if props.description}
-    <p>{@html highlightFilter(props.description, $filterInterventionText)}</p>
+    <p>{@html highlightFilter(props.description, filterInterventionText)}</p>
   {/if}
 
   {#if props.pipeline}
@@ -96,8 +97,8 @@
   <p>
     Part of scheme: {@html highlightFilter(
       scheme.scheme_name ?? "",
-      $filterSchemeText,
-    )} ({@html highlightFilter(props.scheme_reference, $filterSchemeText)})
+      filterSchemeText,
+    )} ({@html highlightFilter(props.scheme_reference, filterSchemeText)})
   </p>
   <p>
     Authority or region: <b>{scheme.browse?.authority_or_region}</b>

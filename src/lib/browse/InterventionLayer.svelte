@@ -18,13 +18,19 @@
   } from "svelte-maplibre";
   import { styleByFundingProgramme } from "./colors";
   import InterventionPopup from "./InterventionPopup.svelte";
-  import { schemesGj } from "./stores";
+  import type { Schemes, SchemeData } from "types";
 
+  export let source: string;
   export let show: boolean;
+
+  export let schemes: Map<string, SchemeData>;
+  export let schemesGj: Schemes;
+  export let filterSchemeText: string;
+  export let filterInterventionText: string;
 
   let [colorInterventions] = styleByFundingProgramme();
 
-  $: gj = addLineStringEndpoints($schemesGj);
+  $: gj = addLineStringEndpoints(schemesGj);
 
   // TODO Abusing this property for filtering
   const hideWhileEditing: ExpressionSpecification = [
@@ -41,7 +47,7 @@
 
 <GeoJSON data={gj}>
   <CircleLayer
-    {...layerId("interventions-points")}
+    {...layerId(`${source}-interventions-points`)}
     filter={["all", isPoint, hideWhileEditing, notEndpoint]}
     manageHoverState
     eventsIfTopMost
@@ -57,12 +63,18 @@
   >
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
-      <InterventionPopup {props} />
+      <InterventionPopup
+        {props}
+        {schemesGj}
+        {schemes}
+        {filterSchemeText}
+        {filterInterventionText}
+      />
     </Popup>
   </CircleLayer>
 
   <LineLayer
-    {...layerId("interventions-lines")}
+    {...layerId(`${source}-interventions-lines`)}
     filter={["all", isLine, hideWhileEditing]}
     manageHoverState
     eventsIfTopMost
@@ -78,11 +90,17 @@
   >
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
-      <InterventionPopup {props} />
+      <InterventionPopup
+        {props}
+        {schemesGj}
+        {schemes}
+        {filterSchemeText}
+        {filterInterventionText}
+      />
     </Popup>
   </LineLayer>
   <CircleLayer
-    {...layerId("interventions-lines-endpoints")}
+    {...layerId(`${source}-interventions-lines-endpoints`)}
     filter={["==", "endpoint", true]}
     paint={{
       "circle-radius": 0.5 * lineWidth,
@@ -96,7 +114,7 @@
   />
 
   <FillLayer
-    {...layerId("interventions-polygons")}
+    {...layerId(`${source}-interventions-polygons`)}
     filter={["all", isPolygon, hideWhileEditing]}
     manageHoverState
     eventsIfTopMost
@@ -111,11 +129,17 @@
   >
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
-      <InterventionPopup {props} />
+      <InterventionPopup
+        {props}
+        {schemesGj}
+        {schemes}
+        {filterSchemeText}
+        {filterInterventionText}
+      />
     </Popup>
   </FillLayer>
   <LineLayer
-    {...layerId("interventions-polygons-outlines")}
+    {...layerId(`${source}-interventions-polygons-outlines`)}
     filter={["all", isPolygon, hideWhileEditing]}
     paint={{
       "line-color": colorInterventions,
