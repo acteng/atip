@@ -22,8 +22,9 @@
   } from "./stores";
   import InterventionLayer from "./InterventionLayer.svelte";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
-  import { styleByCurrentMilestone, styleByFundingProgramme } from "./colors";
+  import { currentMilestones, atfFundingProgrammes } from "./colors";
   import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
+  import { constructMatchExpression } from "lib/maplibre";
 
   let errorMessage = "";
 
@@ -33,7 +34,7 @@
   let atfStyle = "fundingProgramme";
   $: [atfColor, atfLegend] = pickStyle(atfStyle);
 
-  let lcwipStyle = "fundingProgramme";
+  let lcwipStyle = "interventionType";
   $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
 
   function loadFile(filename: string, text: string) {
@@ -51,9 +52,23 @@
     if (style == "interventionType") {
       return [colorInterventionsBySchema("v1"), schemaLegend("v1")];
     } else if (style == "fundingProgramme") {
-      return styleByFundingProgramme();
+      return [
+        constructMatchExpression(
+          ["get", "funding_programme"],
+          atfFundingProgrammes,
+          "grey",
+        ),
+        Object.entries(atfFundingProgrammes),
+      ];
     } else if (style == "currentMilestone") {
-      return styleByCurrentMilestone();
+      return [
+        constructMatchExpression(
+          ["get", "current_milestone"],
+          currentMilestones,
+          "grey",
+        ),
+        Object.entries(currentMilestones),
+      ];
     } else {
       // Should be impossible
       return ["red", []];
@@ -129,11 +144,7 @@
 
       <Select
         label="Colour interventions"
-        choices={[
-          ["fundingProgramme", "By funding programme"],
-          ["interventionType", "By intervention type"],
-          ["currentMilestone", "By current milestone"],
-        ]}
+        choices={[["interventionType", "By intervention type"]]}
         bind:value={lcwipStyle}
       />
     </div>

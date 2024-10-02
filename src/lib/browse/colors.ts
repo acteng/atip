@@ -40,29 +40,6 @@ export const colors = {
     "#080C54",
   ],
 
-  // A qualitative set from colorbrewer2.org
-  funding_programmes: [
-    "#66c2a5",
-    "#fc8d62",
-    "#8da0cb",
-    "#e78ac3",
-    "#a6d854",
-    "#ffd92f",
-    "grey",
-  ],
-
-  current_milestone: [
-    "grey",
-    "grey",
-    "red",
-    "red",
-    "#fbb862",
-    "#eddc76",
-    "#dafd9d",
-    "#76c384",
-    "#488f31",
-  ],
-
   // Thanks to https://ropensci.github.io/slopes/articles/roadnetworkcycling.html
   gradient_flat_to_steep: [
     "#267300",
