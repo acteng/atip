@@ -4,6 +4,8 @@
     FormElement,
     SecondaryButton,
     Select,
+    Checkbox,
+    CheckboxGroup,
   } from "govuk-svelte";
   import { Modal } from "lib/common";
   import type { Feature, Schemes, SchemeData } from "types";
@@ -25,16 +27,15 @@
   // Stats about filtered schemes
   let counts = { interventions: 0, totalLength: 0.0 };
 
-  // Dropdown filters
-  $: authorities = getAuthorities(schemes);
-  let filterAuthority = "";
-  let fundingProgrammes: [string, string][] = Object.keys(
-    atfFundingProgrammes,
-  ).map((x) => [x, x]);
-  let filterFundingProgramme = "";
   let currentMilestones: [string, string][] = Object.keys(
     currentMilestoneColors,
   ).map((x) => [x, x]);
+
+  $: authorities = getAuthorities(schemes);
+  let filterAuthority = "";
+  let filterFundingProgrammes = Object.fromEntries(
+    Object.keys(atfFundingProgrammes).map((x) => [x, true]),
+  );
   let filterCurrentMilestone = "";
 
   function getAuthorities(
@@ -56,7 +57,7 @@
     filterInterventionTextCopy: string,
     filterSchemeTextCopy: string,
     filterAuthority: string,
-    filterFundingProgramme: string,
+    filterFundingProgrammes: { [name: string]: boolean },
     filterCurrentMilestone: string,
   ) {
     let filterInterventionNormalized = filterInterventionTextCopy.toLowerCase();
@@ -74,43 +75,38 @@
       ) {
         return false;
       }
+
+      let scheme = schemes.get(feature.properties.scheme_reference!)!;
       if (
-        filterSchemeNormalized ||
-        filterAuthority ||
-        filterFundingProgramme ||
-        filterCurrentMilestone
+        filterAuthority &&
+        scheme.browse?.authority_or_region != filterAuthority
       ) {
-        let scheme = schemes.get(feature.properties.scheme_reference!)!;
-        if (
-          filterAuthority &&
-          scheme.browse?.authority_or_region != filterAuthority
-        ) {
-          return false;
-        }
-        if (
-          filterFundingProgramme &&
-          scheme.browse?.funding_programme != filterFundingProgramme
-        ) {
-          return false;
-        }
-        if (
-          filterCurrentMilestone &&
-          scheme.browse?.current_milestone != filterCurrentMilestone
-        ) {
-          return false;
-        }
-        if (
-          filterSchemeNormalized &&
-          !scheme.scheme_reference
-            .toLowerCase()
-            .includes(filterSchemeNormalized) &&
-          !(scheme.scheme_name ?? "")
-            .toLowerCase()
-            .includes(filterSchemeNormalized)
-        ) {
-          return false;
-        }
+        return false;
       }
+      if (
+        source == "ATF" &&
+        !filterFundingProgrammes[scheme.browse!.funding_programme]
+      ) {
+        return false;
+      }
+      if (
+        filterCurrentMilestone &&
+        scheme.browse?.current_milestone != filterCurrentMilestone
+      ) {
+        return false;
+      }
+      if (
+        filterSchemeNormalized &&
+        !scheme.scheme_reference
+          .toLowerCase()
+          .includes(filterSchemeNormalized) &&
+        !(scheme.scheme_name ?? "")
+          .toLowerCase()
+          .includes(filterSchemeNormalized)
+      ) {
+        return false;
+      }
+
       return true;
     };
     showSchemes = new Set(
@@ -160,7 +156,7 @@
     filterInterventionText,
     filterSchemeText,
     filterAuthority,
-    filterFundingProgramme,
+    filterFundingProgrammes,
     filterCurrentMilestone,
   );
 
@@ -170,7 +166,9 @@
 
   function resetFilters() {
     filterAuthority = "";
-    filterFundingProgramme = "";
+    filterFundingProgrammes = Object.fromEntries(
+      Object.keys(atfFundingProgrammes).map((x) => [x, true]),
+    );
     filterCurrentMilestone = "";
     filterInterventionText = "";
     filterSchemeText = "";
@@ -232,12 +230,15 @@
       </div>
 
       <div class="govuk-grid-column-one-half">
-        <Select
-          label="Funding programme"
-          choices={fundingProgrammes}
-          emptyOption
-          bind:value={filterFundingProgramme}
-        />
+        <FormElement label="Funding programmes" id="filterFundingProgrammes">
+          <CheckboxGroup small>
+            {#each Object.keys(atfFundingProgrammes) as fp}
+              <Checkbox bind:checked={filterFundingProgrammes[fp]}>
+                {fp}
+              </Checkbox>
+            {/each}
+          </CheckboxGroup>
+        </FormElement>
 
         <Select
           label="Current milestone"
