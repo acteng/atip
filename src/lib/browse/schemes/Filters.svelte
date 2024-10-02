@@ -6,9 +6,11 @@
     Select,
   } from "govuk-svelte";
   import { Modal } from "lib/common";
-  import { onMount } from "svelte";
   import type { Feature, Schemes, SchemeData } from "types";
-  import { fundingProgrammesForColouringAndFiltering } from "./data";
+  import {
+    atfFundingProgrammes,
+    currentMilestones as currentMilestoneColors,
+  } from "./colors";
 
   export let source: string;
   export let schemes: Map<string, SchemeData>;
@@ -24,41 +26,30 @@
   let counts = { interventions: 0, totalLength: 0.0 };
 
   // Dropdown filters
-  let authorities: [string, string][] = [];
+  $: authorities = getAuthorities(schemes);
   let filterAuthority = "";
-  let fundingProgrammes: [string, string][] = [];
-  let knownFundingProgrammes: Set<string> = new Set(
-    fundingProgrammesForColouringAndFiltering.slice(0, -1),
-  );
+  let fundingProgrammes: [string, string][] = Object.keys(
+    atfFundingProgrammes,
+  ).map((x) => [x, x]);
   let filterFundingProgramme = "";
-  let currentMilestones: [string, string][] = [];
+  let currentMilestones: [string, string][] = Object.keys(
+    currentMilestoneColors,
+  ).map((x) => [x, x]);
   let filterCurrentMilestone = "";
 
-  // TODO Change when schemes changes
-  onMount(() => {
-    let set1: Set<string> = new Set();
-    let set2: Set<string> = new Set();
-    let set3: Set<string> = new Set();
+  function getAuthorities(
+    schemes: Map<string, SchemeData>,
+  ): [string, string][] {
+    let names: Set<string> = new Set();
     for (let x of schemes.values()) {
       if (x.browse?.authority_or_region) {
-        set1.add(x.browse.authority_or_region);
-      }
-      if (x.browse?.funding_programme) {
-        set2.add(x.browse.funding_programme);
-      }
-      if (x.browse?.current_milestone) {
-        set3.add(x.browse.current_milestone);
+        names.add(x.browse.authority_or_region);
       }
     }
-    authorities = Array.from(set1.entries());
-    authorities.sort();
-    fundingProgrammes = fundingProgrammesForColouringAndFiltering.map(
-      (value: string) => [value, value],
-    );
-
-    currentMilestones = Array.from(set3.entries());
-    currentMilestones.sort();
-  });
+    let result = Array.from(names.entries());
+    result.sort();
+    return result;
+  }
 
   // When any filters change, update showSchemes
   function filtersUpdated(
@@ -97,11 +88,8 @@
           return false;
         }
         if (
-          (filterFundingProgramme &&
-            filterFundingProgramme !== "Other" &&
-            scheme.browse?.funding_programme != filterFundingProgramme) ||
-          (filterFundingProgramme === "Other" &&
-            knownFundingProgrammes.has(scheme.browse?.funding_programme ?? ""))
+          filterFundingProgramme &&
+          scheme.browse?.funding_programme != filterFundingProgramme
         ) {
           return false;
         }
@@ -204,49 +192,96 @@
   </ul>
 
   <SecondaryButton on:click={resetFilters}>Reset all filters</SecondaryButton>
-  <Select
-    label="Authority or region"
-    choices={authorities}
-    emptyOption
-    bind:value={filterAuthority}
-  />
-  <Select
-    label="Funding programme"
-    choices={fundingProgrammes}
-    emptyOption
-    bind:value={filterFundingProgramme}
-  />
-  <Select
-    label="Current milestone"
-    choices={currentMilestones}
-    emptyOption
-    bind:value={filterCurrentMilestone}
-  />
-  <FormElement
-    label="Intervention name or description"
-    id="filterInterventionText"
-  >
-    <input
-      type="text"
-      class="govuk-input govuk-input--width-10"
+
+  {#if source == "ATF"}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <FormElement
+          label="Intervention name or description"
+          id="filterInterventionText"
+        >
+          <input
+            type="text"
+            class="govuk-input govuk-input--width-10"
+            id="filterInterventionText"
+            bind:value={filterInterventionText}
+          />
+          <SecondaryButton on:click={() => (filterInterventionText = "")}>
+            Clear
+          </SecondaryButton>
+        </FormElement>
+
+        <FormElement label="Scheme name or reference" id="filterSchemeText">
+          <input
+            type="text"
+            class="govuk-input govuk-input--width-10"
+            id="filterSchemeText"
+            bind:value={filterSchemeText}
+          />
+          <SecondaryButton on:click={() => (filterSchemeText = "")}>
+            Clear
+          </SecondaryButton>
+        </FormElement>
+
+        <Select
+          label="Authority or region"
+          choices={authorities}
+          emptyOption
+          bind:value={filterAuthority}
+        />
+      </div>
+
+      <div class="govuk-grid-column-one-half">
+        <Select
+          label="Funding programme"
+          choices={fundingProgrammes}
+          emptyOption
+          bind:value={filterFundingProgramme}
+        />
+
+        <Select
+          label="Current milestone"
+          choices={currentMilestones}
+          emptyOption
+          bind:value={filterCurrentMilestone}
+        />
+      </div>
+    </div>
+  {:else}
+    <FormElement
+      label="Intervention name or description"
       id="filterInterventionText"
-      bind:value={filterInterventionText}
+    >
+      <input
+        type="text"
+        class="govuk-input govuk-input--width-10"
+        id="filterInterventionText"
+        bind:value={filterInterventionText}
+      />
+      <SecondaryButton on:click={() => (filterInterventionText = "")}>
+        Clear
+      </SecondaryButton>
+    </FormElement>
+
+    <FormElement label="Scheme name or reference" id="filterSchemeText">
+      <input
+        type="text"
+        class="govuk-input govuk-input--width-10"
+        id="filterSchemeText"
+        bind:value={filterSchemeText}
+      />
+      <SecondaryButton on:click={() => (filterSchemeText = "")}>
+        Clear
+      </SecondaryButton>
+    </FormElement>
+
+    <Select
+      label="Authority or region"
+      choices={authorities}
+      emptyOption
+      bind:value={filterAuthority}
     />
-    <SecondaryButton on:click={() => (filterInterventionText = "")}>
-      Clear
-    </SecondaryButton>
-  </FormElement>
-  <FormElement label="Scheme name or reference" id="filterSchemeText">
-    <input
-      type="text"
-      class="govuk-input govuk-input--width-10"
-      id="filterSchemeText"
-      bind:value={filterSchemeText}
-    />
-    <SecondaryButton on:click={() => (filterSchemeText = "")}>
-      Clear
-    </SecondaryButton>
-  </FormElement>
+  {/if}
 
   <DefaultButton on:click={() => (open = false)}>Done</DefaultButton>
 </Modal>

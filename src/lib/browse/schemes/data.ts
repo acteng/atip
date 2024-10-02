@@ -87,13 +87,3 @@ function keepFeature(feature: Feature): boolean {
 
   return true;
 }
-
-export const fundingProgrammesForColouringAndFiltering = [
-  "ATF2",
-  "ATF2 or ATF3",
-  "ATF3",
-  "ATF4",
-  "ATF4E",
-  "Planned pipeline",
-  "Other",
-];
