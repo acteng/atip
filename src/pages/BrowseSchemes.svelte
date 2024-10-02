@@ -3,7 +3,7 @@
   import { initAll } from "govuk-frontend";
   import LayerControls from "lib/browse/LayerControls.svelte";
   import "../style/main.css";
-  import { schemesGj, controls } from "lib/browse/stores";
+  import { atfSchemesGj, controls } from "lib/browse/stores";
   import {
     appVersion,
     Geocoder,
@@ -42,7 +42,7 @@
     <Header />
     <div style="display: flex; justify-content: space-between">
       <h1>Browse schemes</h1>
-      <ZoomOutMap boundaryGeojson={$schemesGj} />
+      <ZoomOutMap boundaryGeojson={$atfSchemesGj} />
     </div>
     <LoggedIn />
     <p>App version: {appVersion()}</p>

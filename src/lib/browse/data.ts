@@ -1,35 +1,69 @@
 import type { Feature, Schemes, SchemeData } from "types";
+import {
+  atfSchemesGj,
+  atfSchemes as atfSchemesStore,
+  lcwipSchemesGj,
+  lcwipSchemes as lcwipSchemesStore,
+} from "./stores";
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
-// Modifies this GeoJSON in-place, and returns a dictionary of Schemes, keyed
-// (and ordered) by scheme_reference. Each feature (intervention) in the GJ
-// links back to one of these schemes by scheme_reference.
-export function processInput(gj: Schemes): Map<string, SchemeData> {
-  let schemes = new Map();
+// Populates the two stores for each of ATF and LCWIP schemes.
+export function setupSchemes(gj: Schemes) {
+  let atfGj: Schemes = {
+    type: "FeatureCollection",
+    features: [],
+    schemes: {},
+    // TODO For now, duplicate the notes between the two. Later, these will become two separate files
+    notes: gj.notes,
+  };
+  let atfSchemes: Map<string, SchemeData> = new Map();
 
-  // Assume the input has a top-level dictionary keyed by scheme_reference
+  let lcwipGj: Schemes = {
+    type: "FeatureCollection",
+    features: [],
+    schemes: {},
+    notes: gj.notes,
+  };
+  let lcwipSchemes: Map<string, SchemeData> = new Map();
+
   for (let [scheme_reference, scheme] of Object.entries(gj.schemes)) {
-    schemes.set(scheme_reference, scheme);
-  }
-
-  gj.features = gj.features.filter((f) => keepFeature(f));
-
-  let id = 1;
-  for (let feature of gj.features) {
-    let scheme: SchemeData = schemes.get(feature.properties!.scheme_reference);
-    if (scheme.browse) {
-      // TODO For easy styling, copy one field from scheme to all its features.
-      // As we have more cases like this, revisit what's most performant.
-      // @ts-ignore Extend InterventionProps with scheme_reference, current_milestone, and this
-      feature.properties!.funding_programme = scheme.browse.funding_programme;
-      // @ts-ignore Same
-      feature.properties!.current_milestone = scheme.browse.current_milestone;
-      // Force numeric IDs (skipping 0) for hovering to work
-      feature.id = id++;
+    if (scheme.pipeline) {
+      lcwipSchemes.set(scheme_reference, scheme);
+      lcwipGj.schemes[scheme_reference] = scheme;
+    } else {
+      atfSchemes.set(scheme_reference, scheme);
+      atfGj.schemes[scheme_reference] = scheme;
     }
   }
 
-  return schemes;
+  for (let feature of gj.features) {
+    if (!keepFeature(feature)) {
+      continue;
+    }
+
+    let scheme_reference = feature.properties.scheme_reference;
+    let is_atf = atfSchemes.has(scheme_reference);
+
+    let schemes = is_atf ? atfSchemes : lcwipSchemes;
+    let scheme = schemes.get(scheme_reference)!;
+    if (scheme.browse) {
+      // TODO For easy styling, copy one field from scheme to all its features.
+      // As we have more cases like this, revisit what's most performant.
+      // TODO Aren't these only for LCWIP?
+      feature.properties.funding_programme = scheme.browse.funding_programme;
+      feature.properties.current_milestone = scheme.browse.current_milestone;
+    }
+
+    let gj = is_atf ? atfGj : lcwipGj;
+    // Force numeric IDs (skipping 0) for hovering to work
+    feature.id = gj.features.length + 1;
+    gj.features.push(feature);
+  }
+
+  atfSchemesGj.set(atfGj);
+  atfSchemesStore.set(atfSchemes);
+  lcwipSchemesGj.set(lcwipGj);
+  lcwipSchemesStore.set(lcwipSchemes);
 }
 
 // These should ideally be fixed during upstream data validation processes.
@@ -47,9 +81,6 @@ function keepFeature(feature: Feature): boolean {
     "84cc5eb1b52a4e49188058373e587ff0",
   ];
 
-  // @ts-ignore The id field is present in the current input data, but it's not
-  // part of our intended schema or used elsewhere, so InterventionProps
-  // deliberately does not include it. Only use it here.
   if (hugeAreas.includes(feature.properties.id)) {
     return false;
   }

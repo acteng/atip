@@ -19,6 +19,7 @@
       [color, legendRows] = styleByCurrentMilestone();
     }
     // TODO Plumb instead of setting
+    // TODO Need to plumb source
     $map.setPaintProperty("interventions-points", "circle-color", color);
     $map.setPaintProperty("interventions-lines", "line-color", color);
     $map.setPaintProperty("interventions-polygons", "fill-color", color);
