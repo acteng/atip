@@ -1,25 +1,18 @@
 <script lang="ts">
   // @ts-ignore no declarations
   import { initAll } from "govuk-frontend";
-  import { processInput } from "lib/browse/data";
-  import Filters from "lib/browse/Filters.svelte";
   import LayerControls from "lib/browse/LayerControls.svelte";
-  import LoadRemoteSchemeData from "lib/browse/LoadRemoteSchemeData.svelte";
-  import SchemeCard from "lib/browse/SchemeCard.svelte";
   import "../style/main.css";
-  import InterventionLayer from "lib/browse/InterventionLayer.svelte";
-  import { schemes, schemesGj } from "lib/browse/stores";
+  import { schemesGj, controls } from "lib/browse/stores";
   import {
     appVersion,
     Geocoder,
     Layout,
     LoggedIn,
     MapLibreMap,
-    Modal,
     ZoomOutMap,
     Header,
   } from "lib/common";
-  import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import { map, mapStyle } from "stores";
   import { onMount } from "svelte";
   import { map as sketchMapStore } from "scheme-sketcher-lib/config";
@@ -31,25 +24,16 @@
 
   const params = new URLSearchParams(window.location.search);
   mapStyle.set(params.get("style") || "dataviz");
-  let errorMessage = "";
-
-  let schemesToBeShown: Set<string> = new Set();
-  let showSchemes = true;
-  let showSchemeNotes = false;
 
   // Need this for zordering to work
   $: if ($map) {
     sketchMapStore.set($map);
   }
 
-  function loadFile(filename: string, text: string) {
-    try {
-      schemesGj.set(JSON.parse(text));
-      schemes.set(processInput($schemesGj));
-      errorMessage = "";
-    } catch (err) {
-      errorMessage = `The file you loaded is broken: ${err}`;
-    }
+  let sidebarDiv: HTMLDivElement;
+  $: if (sidebarDiv && $controls) {
+    sidebarDiv.innerHTML = "";
+    sidebarDiv.appendChild($controls);
   }
 </script>
 
@@ -62,44 +46,13 @@
     </div>
     <LoggedIn />
     <p>App version: {appVersion()}</p>
-    {#if appVersion() == "Private (development)"}
-      <LoadRemoteSchemeData {loadFile} />
-    {/if}
-    {#if $schemesGj.notes}
-      <SecondaryButton on:click={() => (showSchemeNotes = true)}>
-        About the scheme data
-      </SecondaryButton>
-      <Modal title="About this scheme data" bind:open={showSchemeNotes}>
-        <div class="govuk-prose">
-          <p>Please note there are data quality caveats for all scheme data:</p>
-          <ul>
-            {#each $schemesGj.notes as note}
-              <li><p>{note}</p></li>
-            {/each}
-          </ul>
-        </div>
-      </Modal>
-    {/if}
-    <FileInput label="Load schemes from GeoJSON" onLoad={loadFile} />
-    <ErrorMessage {errorMessage} />
 
-    {#if $schemes.size > 0}
-      <Filters bind:schemesToBeShown bind:show={showSchemes} />
-    {/if}
-
-    <ul>
-      {#each $schemes.values() as scheme}
-        {#if schemesToBeShown.has(scheme.scheme_reference)}
-          <SchemeCard {scheme} />
-        {/if}
-      {/each}
-    </ul>
+    <div bind:this={sidebarDiv} />
   </div>
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Geocoder />
       {#if $sketchMapStore}
-        <InterventionLayer {showSchemes} />
         <div class="top-right">
           <LayerControls />
         </div>

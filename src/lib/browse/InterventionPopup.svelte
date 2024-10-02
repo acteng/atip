@@ -1,6 +1,16 @@
 <script lang="ts">
+  import { SecondaryButton } from "govuk-svelte";
+  import type { FeatureCollection } from "geojson";
+  import { bbox } from "lib/maplibre";
+  import { map } from "stores";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { filterInterventionText, filterSchemeText, schemes } from "./stores";
+  import {
+    filterInterventionText,
+    filterSchemeText,
+    schemes,
+    schemesGj,
+  } from "./stores";
+  import { setLocalStorageItem } from "lib/common";
   import DescribePipelineTiming from "./DescribePipelineTiming.svelte";
   import DescribePipelineBudget from "./DescribePipelineBudget.svelte";
 
@@ -16,6 +26,35 @@
     return input.replace(
       new RegExp(filter, "gi"),
       (match) => `<mark>${match}</mark>`,
+    );
+  }
+
+  function showScheme() {
+    // TODO Highlight on the map? Or fade everything else?
+    let gj: FeatureCollection = {
+      type: "FeatureCollection",
+      features: $schemesGj.features.filter(
+        (f) => f.properties.scheme_reference == scheme.scheme_reference,
+      ),
+    };
+    $map?.fitBounds(bbox(gj), { padding: 20, animate: false });
+  }
+
+  function editScheme() {
+    let gj = {
+      type: "FeatureCollection",
+      features: $schemesGj.features.filter(
+        (f) => f.properties.scheme_reference == scheme.scheme_reference,
+      ),
+    };
+    let filename = scheme.browse?.authority_or_region || "unknown authority";
+    // Assuming the schema is always v1
+
+    // Put the file in local storage, so it'll be loaded from the next page
+    setLocalStorageItem(filename, JSON.stringify(gj));
+    window.open(
+      `scheme.html?authority=${scheme.browse?.authority_or_region}`,
+      "_blank",
     );
   }
 </script>
@@ -95,4 +134,11 @@
     <DescribePipelineBudget props={p} />
     <DescribePipelineTiming props={p} />
   {/if}
+
+  <SecondaryButton on:click={showScheme}>
+    Zoom to show entire scheme
+  </SecondaryButton>
+  <SecondaryButton on:click={editScheme}>
+    Edit a copy of this scheme
+  </SecondaryButton>
 </div>

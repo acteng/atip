@@ -34,7 +34,8 @@
   import Stats19LayerControl from "./layers/points/Stats19.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
   import ProblemsLayerControl from "./layers/points/Problems.svelte";
-  import { interactiveMapLayersEnabled } from "./stores";
+  import SchemesLayer from "./SchemesLayer.svelte";
+  import { interactiveMapLayersEnabled, controls } from "./stores";
   import { getRoadLayerNames } from "lib/maplibre";
   import { get } from "svelte/store";
   import { map, mapStyle } from "stores";
@@ -71,7 +72,8 @@
   };
 </script>
 
-<CollapsibleCard label="Layers" open>
+<div bind:this={$controls}>
+  <SchemesLayer />
   <CollapsibleCard label="Trip generators">
     <CheckboxGroup small>
       <EducationLayerControl />
@@ -131,7 +133,7 @@
     <LineMeasureTool />
   </CollapsibleCard>
   <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />
-</CollapsibleCard>
+</div>
 
 <GeoJSON data={coverEverything}>
   <FillLayer
