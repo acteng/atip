@@ -34,7 +34,7 @@
   import Stats19LayerControl from "./layers/points/Stats19.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
   import ProblemsLayerControl from "./layers/points/Problems.svelte";
-  import SchemesLayer from "./SchemesLayer.svelte";
+  import SchemesLayer from "./schemes/SchemesLayer.svelte";
   import { interactiveMapLayersEnabled, controls } from "./stores";
   import { getRoadLayerNames } from "lib/maplibre";
   import { get } from "svelte/store";

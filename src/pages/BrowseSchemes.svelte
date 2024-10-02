@@ -3,7 +3,8 @@
   import { initAll } from "govuk-frontend";
   import LayerControls from "lib/browse/LayerControls.svelte";
   import "../style/main.css";
-  import { atfSchemesGj, controls } from "lib/browse/stores";
+  import { controls } from "lib/browse/stores";
+  import { atfSchemesGj } from "lib/browse/schemes/stores";
   import {
     appVersion,
     Geocoder,
