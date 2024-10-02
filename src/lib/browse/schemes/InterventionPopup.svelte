@@ -10,6 +10,7 @@
   import type { Schemes, SchemeData } from "types";
   import { afterUpdate } from "svelte";
 
+  export let source: string;
   export let props: { [name: string]: any };
   export let schemes: Map<string, SchemeData>;
   export let schemesGj: Schemes;
@@ -76,14 +77,20 @@
     style="max-width: 30vw; max-height: 60vh; overflow: auto;"
     bind:this={div}
   >
-    <h2>
-      {@html highlightFilter(props.name, filterInterventionText)} ({props.intervention_type})
-    </h2>
+    <h2>Intervention</h2>
+
+    <p>
+      <b>Name</b>
+      : {@html highlightFilter(props.name, filterInterventionText)} ({props.intervention_type})
+    </p>
+
     {#if props.length_meters}
       <p>
-        Length: <b>{prettyPrintMeters(props.length_meters)}</b>
+        <b>Length</b>
+        : {prettyPrintMeters(props.length_meters)}
       </p>
     {/if}
+
     {#if props.description}
       <p>{@html highlightFilter(props.description, filterInterventionText)}</p>
     {/if}
@@ -92,12 +99,14 @@
       {@const p = props.pipeline}
       {#if p.atf4_type}
         <p>
-          ATF4 type: <b>{p.atf4_type}</b>
+          <b>ATF4 type</b>
+          : {p.atf4_type}
         </p>
       {/if}
       {#if p.accuracy}
         <p>
-          Accuracy: <b>{p.accuracy}</b>
+          <b>Accuracy</b>
+          : {p.accuracy}
         </p>
       {/if}
       {#if p.is_alternative}
@@ -109,26 +118,34 @@
 
     <hr />
 
+    <h2>{source.toUpperCase()} Scheme</h2>
+
     <p>
-      Part of scheme: {@html highlightFilter(
-        scheme.scheme_name ?? "",
-        filterSchemeText,
-      )} ({@html highlightFilter(props.scheme_reference, filterSchemeText)})
+      <b>Scheme name</b>
+      : {@html highlightFilter(scheme.scheme_name ?? "", filterSchemeText)}
     </p>
     <p>
-      Authority or region: <b>{scheme.browse?.authority_or_region}</b>
+      <b>Scheme reference</b>
+      : {@html highlightFilter(props.scheme_reference, filterSchemeText)}
+    </p>
+    <p>
+      <b>Authority or region</b>
+      : {scheme.browse?.authority_or_region}
     </p>
     {#if scheme.browse?.capital_scheme_id}
       <p>
-        Capital scheme ID: <b>{scheme.browse?.capital_scheme_id}</b>
+        <b>Capital scheme ID</b>
+        : {scheme.browse?.capital_scheme_id}
       </p>
     {/if}
     <p>
-      Funding programme: <b>{scheme.browse?.funding_programme}</b>
+      <b>Funding programme</b>
+      : {scheme.browse?.funding_programme}
     </p>
     {#if scheme.browse?.current_milestone}
       <p>
-        Current milestone: <b>{scheme.browse?.current_milestone}</b>
+        <b>Current milestone</b>
+        : {scheme.browse?.current_milestone}
       </p>
     {/if}
 
@@ -136,16 +153,21 @@
       {@const p = scheme.pipeline}
       {#if p.scheme_type}
         <p>
-          Scheme type: <b>{p.scheme_type}</b>
+          <b>Scheme type</b>
+          : {p.scheme_type}
         </p>
       {/if}
       {#if p.atf4_lead_type}
         <p>
-          ATF4 lead type: <b>{p.atf4_lead_type}</b>
+          <b>ATF4 lead type</b>
+          : {p.atf4_lead_type}
         </p>
       {/if}
       {#if p.scheme_description}
-        <p>Descripton: {p.scheme_description}</p>
+        <p>
+          <b>Descripton</b>
+          : {p.scheme_description}
+        </p>
       {/if}
       <DescribePipelineBudget props={p} />
       <DescribePipelineTiming props={p} />

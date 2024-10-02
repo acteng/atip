@@ -6,30 +6,35 @@
 
 {#if props.status}
   <p>
-    Status: <b>{props.status}</b>
+    <b>Status</b>
+    : {props.status}
   </p>
 {/if}
 
 {#if props.timescale}
   <p>
-    Timescale: <b>{props.timescale}</b>
+    <b>Timescale</b>
+    : {props.timescale}
   </p>
 {/if}
 
 {#if props.timescale_year}
   <p>
-    Estimated completion year: <b>{props.timescale_year}</b>
+    <b>Estimated completion year</b>
+    : {props.timescale_year}
   </p>
 {/if}
 
 {#if props.year_published}
   <p>
-    Scheme most recently published: <b>{props.year_published}</b>
+    <b>Scheme most recently published</b>
+    : {props.year_published}
   </p>
 {/if}
 
 {#if props.year_consulted}
   <p>
-    Scheme most recently consulted on: <b>{props.year_consulted}</b>
+    <b>Scheme most recently consulted on</b>
+    : {props.year_consulted}
   </p>
 {/if}
