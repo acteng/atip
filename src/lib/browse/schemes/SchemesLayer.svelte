@@ -96,25 +96,23 @@
       </span>
     </Checkbox>
 
-    <div style="display: flex; justify-content: space-between;">
-      <Filters
-        source="ATF"
-        bind:schemesGj={$atfSchemesGj}
-        bind:schemes={$atfSchemes}
-        bind:filterSchemeText={$filterAtfSchemeText}
-        bind:filterInterventionText={$filterAtfInterventionText}
-      />
+    <Filters
+      source="ATF"
+      bind:schemesGj={$atfSchemesGj}
+      bind:schemes={$atfSchemes}
+      bind:filterSchemeText={$filterAtfSchemeText}
+      bind:filterInterventionText={$filterAtfInterventionText}
+    />
 
-      <Select
-        label="Colour interventions"
-        choices={[
-          ["fundingProgramme", "By funding programme"],
-          ["interventionType", "By intervention type"],
-          ["currentMilestone", "By current milestone"],
-        ]}
-        bind:value={atfStyle}
-      />
-    </div>
+    <Select
+      label="Colour interventions"
+      choices={[
+        ["fundingProgramme", "By funding programme"],
+        ["interventionType", "By intervention type"],
+        ["currentMilestone", "By current milestone"],
+      ]}
+      bind:value={atfStyle}
+    />
     <Legend rows={atfLegend} />
   {/if}
 
@@ -133,21 +131,19 @@
       </span>
     </Checkbox>
 
-    <div style="display: flex; justify-content: space-between;">
-      <Filters
-        source="LCWIP"
-        bind:schemesGj={$lcwipSchemesGj}
-        bind:schemes={$lcwipSchemes}
-        bind:filterSchemeText={$filterLcwipSchemeText}
-        bind:filterInterventionText={$filterLcwipInterventionText}
-      />
+    <Filters
+      source="LCWIP"
+      bind:schemesGj={$lcwipSchemesGj}
+      bind:schemes={$lcwipSchemes}
+      bind:filterSchemeText={$filterLcwipSchemeText}
+      bind:filterInterventionText={$filterLcwipInterventionText}
+    />
 
-      <Select
-        label="Colour interventions"
-        choices={[["interventionType", "By intervention type"]]}
-        bind:value={lcwipStyle}
-      />
-    </div>
+    <Select
+      label="Colour interventions"
+      choices={[["interventionType", "By intervention type"]]}
+      bind:value={lcwipStyle}
+    />
     <Legend rows={lcwipLegend} />
   {/if}
 
