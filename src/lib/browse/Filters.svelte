@@ -1,12 +1,11 @@
 <script lang="ts">
   import {
-    Checkbox,
-    CollapsibleCard,
-    CheckboxGroup,
+    DefaultButton,
     FormElement,
     SecondaryButton,
     Select,
   } from "govuk-svelte";
+  import { Modal } from "lib/common";
   import { onMount } from "svelte";
   import type { Feature } from "types";
   import { fundingProgrammesForColouringAndFiltering } from "./data";
@@ -18,12 +17,12 @@
     schemesGj,
   } from "./stores";
 
-  // NOTE: If schemesGj changes, re-create this component
+  let open = false;
 
   // by scheme_reference
-  export let schemesToBeShown: Set<string> = new Set();
-
-  export let show = true;
+  let showSchemes: Set<string> = new Set();
+  // Stats about filtered schemes
+  let counts = { interventions: 0, totalLength: 0.0 };
 
   // Dropdown filters
   let authorities: [string, string][] = [];
@@ -42,9 +41,7 @@
   ];
   let filterSketchSource = "";
 
-  // Stats about filtered schemes
-  let counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
-
+  // TODO Change when $schemes changes
   onMount(() => {
     let set1: Set<string> = new Set();
     let set2: Set<string> = new Set();
@@ -70,7 +67,7 @@
     currentMilestones.sort();
   });
 
-  // When any filters change, update schemesToBeShown
+  // When any filters change, update showSchemes
   function filtersUpdated(
     filterSketchSource: string,
     filterInterventionTextCopy: string,
@@ -145,16 +142,16 @@
       }
       return true;
     };
-    schemesToBeShown = new Set(
+    showSchemes = new Set(
       $schemesGj.features
         .filter(filterFeatures)
         .map((f) => f.properties.scheme_reference!),
     );
 
     // Hide things on the map, and recalculate stats
-    counts = { area: 0, route: 0, crossing: 0, other: 0, totalLength: 0.0 };
+    counts = { interventions: 0, totalLength: 0 };
     let showFeature = (feature: Feature) => {
-      if (!schemesToBeShown.has(feature.properties.scheme_reference!)) {
+      if (!showSchemes.has(feature.properties.scheme_reference!)) {
         return false;
       }
       // If there's free-text, only show interventions matching it within a scheme
@@ -174,7 +171,7 @@
     for (let feature of $schemesGj.features) {
       if (showFeature(feature)) {
         delete feature.properties.hide_while_editing;
-        counts[feature.properties.intervention_type]++;
+        counts.interventions++;
         if (
           feature.geometry.type == "LineString" &&
           feature.properties.length_meters
@@ -211,18 +208,20 @@
   }
 </script>
 
-<CheckboxGroup small>
-  <Checkbox bind:checked={show}>
-    Showing {schemesToBeShown.size.toLocaleString()} schemes ({counts.route.toLocaleString()}
-    routes, {counts.area.toLocaleString()} areas,
-    {counts.crossing.toLocaleString()} crossings, {counts.other.toLocaleString()}
-    other, with total LineString length of {metersToMiles(
-      counts.totalLength,
-    ).toFixed(1)} miles)
-  </Checkbox>
-</CheckboxGroup>
+<SecondaryButton on:click={() => (open = true)}>Filters</SecondaryButton>
 
-<CollapsibleCard label="Filters">
+<Modal title="Filter schemes" bind:open>
+  <p>Showing:</p>
+  <ul>
+    <li>
+      {counts.interventions.toLocaleString()} interventions
+    </li>
+    <li>{showSchemes.size.toLocaleString()} schemes</li>
+    <li>
+      total route length of {metersToMiles(counts.totalLength).toFixed(1)} miles
+    </li>
+  </ul>
+
   <SecondaryButton on:click={resetFilters}>Reset all filters</SecondaryButton>
   <Select
     label="Authority or region"
@@ -274,4 +273,6 @@
     </SecondaryButton>
   </FormElement>
   <InterventionColorSelector />
-</CollapsibleCard>
+
+  <DefaultButton on:click={() => (open = false)}>Done</DefaultButton>
+</Modal>
