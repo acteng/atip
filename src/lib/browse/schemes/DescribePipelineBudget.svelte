@@ -23,7 +23,8 @@
 
 {#if props.budget}
   <p>
-    Cost: <b>{props.budget.toLocaleString()}</b>
+    <b>Cost</b>
+    : {props.budget.toLocaleString()}
     GBP
   </p>
 {/if}
@@ -38,6 +39,7 @@
 
 {#if funding}
   <p>
-    Funding sources: <b>{funding}</b>
+    <b>Funding sources</b>
+    : {funding}
   </p>
 {/if}

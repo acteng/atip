@@ -65,6 +65,7 @@
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
+        {source}
         {props}
         {schemesGj}
         {schemes}
@@ -92,6 +93,7 @@
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
+        {source}
         {props}
         {schemesGj}
         {schemes}
@@ -131,6 +133,7 @@
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
+        {source}
         {props}
         {schemesGj}
         {schemes}
