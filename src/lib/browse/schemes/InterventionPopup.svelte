@@ -49,12 +49,15 @@
     };
     gj.schemes[scheme.scheme_reference] = scheme;
     let filename = scheme.browse?.authority_or_region || "unknown authority";
-    // Assuming the schema is always v1
+    let schema = scheme.pipeline ? "pipeline" : "v1";
+    if (schema == "pipeline") {
+      filename += "_pipeline";
+    }
 
     // Put the file in local storage, so it'll be loaded from the next page
     setLocalStorageItem(filename, JSON.stringify(gj));
     window.open(
-      `scheme.html?authority=${scheme.browse?.authority_or_region}`,
+      `scheme.html?authority=${scheme.browse?.authority_or_region}&schema=${schema}`,
       "_blank",
     );
   }
