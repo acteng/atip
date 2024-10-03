@@ -7,10 +7,10 @@
   import {
     DefaultButton,
     ErrorMessage,
-    FormElement,
     FileInput,
     Radio,
     SecondaryButton,
+    AutocompleteTextInput,
   } from "govuk-svelte";
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
@@ -45,7 +45,6 @@
   let uploadErrorMessage: string = "";
 
   let inputValue: string;
-  let dataList: HTMLDataListElement;
   let authoritySet: Set<string> = new Set();
   $: validEntry = authoritySet.has(inputValue);
 
@@ -57,10 +56,6 @@
 
     authoritiesGj = await getAuthoritiesGeoJson();
     for (let feature of authoritiesGj.features) {
-      let option = document.createElement("option");
-      option.value = feature.properties.full_name;
-      option.label = `${feature.properties.name} (${feature.properties.level})`;
-      dataList.appendChild(option);
       authoritySet.add(feature.properties.full_name);
     }
   });
@@ -131,19 +126,17 @@
       </SecondaryButton>
       <ErrorMessage errorMessage={pageErrorMessage} />
 
-      <FormElement
-        label="Select Transport Authority or Local Authority District"
-        id="inputValue"
-      >
-        <input
-          class="govuk-input govuk-input--width-20"
-          id="inputValue"
-          data-testid="transport-authority"
-          list="authorities-list"
+      {#if authoritiesGj.features.length > 0}
+        <AutocompleteTextInput
+          label="Select Transport Authority or Local Authority District"
           bind:value={inputValue}
+          options={authoritiesGj.features.map((f) => [
+            f.properties.full_name,
+            `${f.properties.name} (${f.properties.level})`,
+          ])}
         />
-        <datalist id="authorities-list" bind:this={dataList} />
-      </FormElement>
+      {/if}
+
       <DefaultButton on:click={start} disabled={!validEntry}>
         Start
       </DefaultButton>
