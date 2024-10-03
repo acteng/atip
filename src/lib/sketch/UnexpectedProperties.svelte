@@ -17,7 +17,6 @@
     gjSchemes.update((gj) => {
       let feature = gj.features.find((f) => f.id == id)!;
       for (let key of Object.keys(unexpected)) {
-        // @ts-ignore TS thinks the properties don't have extra properties, but they do
         delete feature.properties[key];
       }
       return gj;

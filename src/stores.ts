@@ -8,7 +8,7 @@ import { type Schema } from "./types";
 export const schema: Writable<Schema> = writable(defaultSchema());
 
 // A global singleton, containing a loaded map
-// @ts-ignore TODO By construction, no components using the store should be
+// @ts-expect-error TODO By construction, no components using the store should be
 // mounted before this is populated.
 export const map: Writable<Map> = writable(null);
 

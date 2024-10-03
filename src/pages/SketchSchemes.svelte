@@ -1,5 +1,5 @@
 <script lang="ts">
-  // @ts-ignore no declarations
+  // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import "../style/main.css";
   import type { AuthorityBoundaries } from "boundaries";

@@ -28,7 +28,7 @@
 
   // The caller must also fill in the default slot with the contents of a help modal
 
-  // @ts-ignore TODO Also constrain name to exist in the colors type
+  // @ts-expect-error TODO Also constrain name to exist in the colors type
   let color = colors[name];
 
   let show = showHideLayer(name);
