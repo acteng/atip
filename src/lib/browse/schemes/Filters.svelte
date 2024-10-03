@@ -6,6 +6,7 @@
     Select,
     Checkbox,
     CheckboxGroup,
+    AutocompleteTextInput,
   } from "govuk-svelte";
   import { Modal } from "lib/common";
   import type { Feature, Schemes, SchemeData } from "types";
@@ -173,6 +174,20 @@
     filterInterventionText = "";
     filterSchemeText = "";
   }
+
+  function schemeAutocompleteOptions(
+    schemes: Map<string, SchemeData>,
+  ): [string, string][] {
+    let result = [] as [string, string][];
+    for (let scheme of schemes.values()) {
+      // TODO Consider not doing this for LCWIPs
+      result.push([scheme.scheme_reference, scheme.scheme_reference]);
+      if (scheme.scheme_name) {
+        result.push([scheme.scheme_name, scheme.scheme_name]);
+      }
+    }
+    return result;
+  }
 </script>
 
 <SecondaryButton on:click={() => (open = true)}>Filters</SecondaryButton>
@@ -209,17 +224,11 @@
           </SecondaryButton>
         </FormElement>
 
-        <FormElement label="Scheme name or reference" id="filterSchemeText">
-          <input
-            type="text"
-            class="govuk-input govuk-input--width-10"
-            id="filterSchemeText"
-            bind:value={filterSchemeText}
-          />
-          <SecondaryButton on:click={() => (filterSchemeText = "")}>
-            Clear
-          </SecondaryButton>
-        </FormElement>
+        <AutocompleteTextInput
+          label="Scheme name or reference"
+          bind:value={filterSchemeText}
+          options={schemeAutocompleteOptions(schemes)}
+        />
 
         <Select
           label="Authority or region"
@@ -264,17 +273,11 @@
       </SecondaryButton>
     </FormElement>
 
-    <FormElement label="Scheme name or reference" id="filterSchemeText">
-      <input
-        type="text"
-        class="govuk-input govuk-input--width-10"
-        id="filterSchemeText"
-        bind:value={filterSchemeText}
-      />
-      <SecondaryButton on:click={() => (filterSchemeText = "")}>
-        Clear
-      </SecondaryButton>
-    </FormElement>
+    <AutocompleteTextInput
+      label="Scheme name or reference"
+      bind:value={filterSchemeText}
+      options={schemeAutocompleteOptions(schemes)}
+    />
 
     <Select
       label="Authority or region"

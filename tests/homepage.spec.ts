@@ -5,7 +5,7 @@ test("choosing a local authority and clicking start changes the url", async ({
 }) => {
   await page.goto("/");
   await page
-    .getByTestId("transport-authority")
+    .getByLabel("Select Transport Authority or Local Authority District")
     .fill("TA_West Yorkshire Combined Authority");
   await page.getByRole("button", { name: "Start" }).click();
   await expect(page).toHaveURL(
@@ -26,7 +26,9 @@ test("Uploading a valid atip geojson redirects to the appropriate authority sche
 
 test("schema is plumbed along to the sketch page", async ({ page }) => {
   await page.goto("/index.html?schema=pipeline");
-  await page.getByTestId("transport-authority").fill("LAD_Adur");
+  await page
+    .getByLabel("Select Transport Authority or Local Authority District")
+    .fill("LAD_Adur");
   await page.getByRole("button", { name: "Start" }).click();
   await expect(page).toHaveURL(
     /.*scheme.html\?authority=LAD_Adur&schema=pipeline/,
