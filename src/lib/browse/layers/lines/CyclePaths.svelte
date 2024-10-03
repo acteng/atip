@@ -71,14 +71,14 @@
   ] as const;
 
   function tooltip(props: { [name: string]: any }): [string, string, string] {
-    // @ts-ignore Write types for the feature properties
+    // @ts-expect-error Write types for the feature properties
     let kind = {
       track: "Separated track",
       lane: "Unprotected lane",
       shared_use_segregated: "Shared-use (segregated)",
       shared_use_unsegregated: "Shared-use (unsegregated)",
     }[props.kind];
-    // @ts-ignore Write types for the feature properties
+    // @ts-expect-error Write types for the feature properties
     let direction = {
       "one-way": "&uarr;",
       "two-way": "&#8597;",

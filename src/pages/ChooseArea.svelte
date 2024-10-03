@@ -2,7 +2,7 @@
   import type { Schema } from "types";
   import "../style/main.css";
   import type { FeatureCollection } from "geojson";
-  // @ts-ignore no declarations
+  // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import {
     DefaultButton,

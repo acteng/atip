@@ -69,7 +69,7 @@ function main() {
         "Repair damaged surface",
       ]);
     }
-    // @ts-ignore ts being overzealous, it's okay to have properties in our features
+    // @ts-expect-error ts being overzealous, it's okay to have properties in our features
     gj.features.push(pt);
 
     let route = makeLineString(authority.geometry);
@@ -83,7 +83,7 @@ function main() {
       "Shared use with segregation",
       "Stepped cycle-track on the north side only",
     ]);
-    // @ts-ignore ts being overzealous, it's okay to have properties in our features
+    // @ts-expect-error ts being overzealous, it's okay to have properties in our features
     gj.features.push(route);
 
     let area = makePolygon(authority.geometry);
@@ -94,7 +94,7 @@ function main() {
       "Lighting improvements",
       "New cycle hangars",
     ]);
-    // @ts-ignore ts being overzealous, it's okay to have properties in our features
+    // @ts-expect-error ts being overzealous, it's okay to have properties in our features
     gj.features.push(area);
   }
 
