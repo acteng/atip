@@ -6,7 +6,7 @@
     Checkbox,
     Select,
   } from "govuk-svelte";
-  import { appVersion, HelpButton, Legend } from "lib/common";
+  import { appVersion, HelpButton, Legend, WarningIcon } from "lib/common";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
   import { setupSchemes } from "./data";
   import Filters from "./Filters.svelte";
@@ -86,7 +86,10 @@
       ATF schemes
       <span slot="right">
         <HelpButton>
-          <p>Please note there are data quality caveats for all scheme data:</p>
+          <p>
+            <WarningIcon text="Scheme data caveats" />Please note there are data
+            quality caveats for all scheme data:
+          </p>
           <ul>
             {#each $atfSchemesGj.notes ?? [] as note}
               <li><p>{note}</p></li>
@@ -121,7 +124,10 @@
       LCWIP schemes
       <span slot="right">
         <HelpButton>
-          <p>Please note there are data quality caveats for all scheme data:</p>
+          <p>
+            <WarningIcon text="Scheme data caveats" />Please note there are data
+            quality caveats for all scheme data:
+          </p>
           <ul>
             {#each $lcwipSchemesGj.notes ?? [] as note}
               <li><p>{note}</p></li>

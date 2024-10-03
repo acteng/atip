@@ -49,8 +49,8 @@
     {#each setStorageError.storedStrings as storedStringDescriptor}
       {#if storedStringDescriptor.key === currentAuthority}
         <p>
-          <WarningIcon text={"warning icon"} />The button below deletes the
-          current sketch.
+          <WarningIcon text="This will delete the current sketch" />The button
+          below deletes the current sketch.
         </p>
       {/if}
       <SecondaryButton
