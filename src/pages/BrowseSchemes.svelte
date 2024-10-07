@@ -42,13 +42,17 @@
 <Layout>
   <div slot="sidebar" class="govuk-prose">
     <Header />
+
+    <Alpha />
+    <div style="border-bottom: 1px solid #b1b4b6">
+      <LoggedIn />
+      <p>App version: {appVersion()}</p>
+    </div>
+
     <div style="display: flex; justify-content: space-between">
-      <h1>Browse schemes</h1>
+      <h1>Scheme Browser</h1>
       <ZoomOutMap boundaryGeojson={$atfSchemesGj} />
     </div>
-    <Alpha />
-    <LoggedIn />
-    <p>App version: {appVersion()}</p>
 
     <div bind:this={sidebarDiv} />
   </div>

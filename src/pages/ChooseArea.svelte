@@ -116,13 +116,18 @@
 </script>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-half">
+  <div class="govuk-grid-column-one-half govuk-prose">
     <Header />
 
     <div class="left">
-      <LoggedIn />
       <Alpha />
-      <p>App version: {appVersion()}</p>
+      <div style="border-bottom: 1px solid #b1b4b6">
+        <LoggedIn />
+        <p>App version: {appVersion()}</p>
+      </div>
+
+      <h1>Scheme Sketcher</h1>
+
       <SecondaryButton on:click={() => (showAbout = !showAbout)}>
         About
       </SecondaryButton>
