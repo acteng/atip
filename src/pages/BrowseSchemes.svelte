@@ -10,6 +10,7 @@
     Geocoder,
     Layout,
     LoggedIn,
+    Alpha,
     MapLibreMap,
     ZoomOutMap,
     Header,
@@ -45,6 +46,7 @@
       <h1>Browse schemes</h1>
       <ZoomOutMap boundaryGeojson={$atfSchemesGj} />
     </div>
+    <Alpha />
     <LoggedIn />
     <p>App version: {appVersion()}</p>
 
