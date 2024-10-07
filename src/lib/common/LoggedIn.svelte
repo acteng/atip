@@ -1,6 +1,6 @@
 <script lang="ts">
   import Cookies from "js-cookie";
-  import { Alpha, appVersion } from "lib/common";
+  import { appVersion } from "lib/common";
   import { ErrorMessage } from "govuk-svelte";
 
   let email = Cookies.get("email");
@@ -15,5 +15,3 @@
     />
   {/if}
 {/if}
-
-<Alpha />

@@ -19,6 +19,7 @@
     appVersion,
     getAuthoritiesGeoJson,
     LoggedIn,
+    Alpha,
     MapLibreMap,
     Popup,
     setLocalStorageItem,
@@ -120,6 +121,7 @@
 
     <div class="left">
       <LoggedIn />
+      <Alpha />
       <p>App version: {appVersion()}</p>
       <SecondaryButton on:click={() => (showAbout = !showAbout)}>
         About

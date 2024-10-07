@@ -18,6 +18,7 @@
     Geocoder,
     getAuthoritiesGeoJson,
     LoggedIn,
+    Alpha,
     MapLibreMap,
     ZoomOutMap,
     Header,
@@ -108,6 +109,7 @@
 
     {#if $mode.mode == "list"}
       <LoggedIn />
+      <Alpha />
       <p>App version: {appVersion()}</p>
       <div style="display: flex; justify-content: space-between">
         <p>{authorityDescription()}</p>
