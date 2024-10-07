@@ -108,9 +108,12 @@
     <Header />
 
     {#if $mode.mode == "list"}
-      <LoggedIn />
       <Alpha />
-      <p>App version: {appVersion()}</p>
+      <div style="border-bottom: 1px solid #b1b4b6">
+        <LoggedIn />
+        <p>App version: {appVersion()}</p>
+      </div>
+
       <div style="display: flex; justify-content: space-between">
         <p>{authorityDescription()}</p>
         <a href={`index.html?schema=${$schema}`}>Change area</a>
