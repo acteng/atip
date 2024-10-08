@@ -25,21 +25,28 @@
   import { currentMilestones, atfFundingProgrammes } from "./colors";
   import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
   import { constructMatchExpression } from "lib/maplibre";
+  import LayerControl from "../layers/LayerControl.svelte";
+  import { showHideLayer } from "../layers/url";
 
   let errorMessage = "";
 
-  let showAtf = true;
-  let showLcwip = true;
-
+  let atfName = "atf_schemes";
+  let atfTitle = "ATF schemes";
+  let atfShow = showHideLayer(atfName);
   let atfStyle = "fundingProgramme";
   $: [atfColor, atfLegend] = pickStyle(atfStyle);
 
+  let lcwipName = "lcwip_schemes";
+  let lcwipTitle = "LCWIP schemes";
+  let lcwipShow = showHideLayer(lcwipName);
   let lcwipStyle = "interventionType";
   $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
 
   function loadFile(filename: string, text: string) {
     try {
       setupSchemes(JSON.parse(text));
+      $atfShow = true;
+      $lcwipShow = true;
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
@@ -82,75 +89,79 @@
   {/if}
 
   {#if $atfSchemes.size > 0}
-    <Checkbox bind:checked={showAtf}>
-      ATF schemes
-      <span slot="right">
-        <HelpButton>
-          <p>
-            <WarningIcon text="Scheme data caveats" />Please note there are data
-            quality caveats for all scheme data:
-          </p>
-          <ul>
-            {#each $atfSchemesGj.notes ?? [] as note}
-              <li><p>{note}</p></li>
-            {/each}
-          </ul>
-        </HelpButton>
-      </span>
-    </Checkbox>
+    <LayerControl name={atfName} title={atfTitle} bind:show={$atfShow}>
+      <Checkbox bind:checked={$atfShow}>
+        {atfTitle}
+        <span slot="right">
+          <HelpButton>
+            <p>
+              <WarningIcon text="Scheme data caveats" />Please note there are
+              data quality caveats for all scheme data:
+            </p>
+            <ul>
+              {#each $atfSchemesGj.notes ?? [] as note}
+                <li><p>{note}</p></li>
+              {/each}
+            </ul>
+          </HelpButton>
+        </span>
+      </Checkbox>
 
-    <Filters
-      source="ATF"
-      bind:schemesGj={$atfSchemesGj}
-      bind:schemes={$atfSchemes}
-      bind:filterSchemeText={$filterAtfSchemeText}
-      bind:filterInterventionText={$filterAtfInterventionText}
-    />
+      <Filters
+        source="ATF"
+        bind:schemesGj={$atfSchemesGj}
+        bind:schemes={$atfSchemes}
+        bind:filterSchemeText={$filterAtfSchemeText}
+        bind:filterInterventionText={$filterAtfInterventionText}
+      />
 
-    <Select
-      label="Colour interventions"
-      choices={[
-        ["fundingProgramme", "By funding programme"],
-        ["interventionType", "By intervention type"],
-        ["currentMilestone", "By current milestone"],
-      ]}
-      bind:value={atfStyle}
-    />
-    <Legend rows={atfLegend} />
+      <Select
+        label="Colour interventions"
+        choices={[
+          ["fundingProgramme", "By funding programme"],
+          ["interventionType", "By intervention type"],
+          ["currentMilestone", "By current milestone"],
+        ]}
+        bind:value={atfStyle}
+      />
+      <Legend rows={atfLegend} />
+    </LayerControl>
   {/if}
 
   {#if $lcwipSchemes.size > 0}
-    <Checkbox bind:checked={showLcwip}>
-      LCWIP schemes
-      <span slot="right">
-        <HelpButton>
-          <p>
-            <WarningIcon text="Scheme data caveats" />Please note there are data
-            quality caveats for all scheme data:
-          </p>
-          <ul>
-            {#each $lcwipSchemesGj.notes ?? [] as note}
-              <li><p>{note}</p></li>
-            {/each}
-          </ul>
-        </HelpButton>
-      </span>
-    </Checkbox>
+    <LayerControl name={lcwipName} title={lcwipTitle} bind:show={$lcwipShow}>
+      <Checkbox bind:checked={$lcwipShow}>
+        {lcwipTitle}
+        <span slot="right">
+          <HelpButton>
+            <p>
+              <WarningIcon text="Scheme data caveats" />Please note there are
+              data quality caveats for all scheme data:
+            </p>
+            <ul>
+              {#each $lcwipSchemesGj.notes ?? [] as note}
+                <li><p>{note}</p></li>
+              {/each}
+            </ul>
+          </HelpButton>
+        </span>
+      </Checkbox>
 
-    <Filters
-      source="LCWIP"
-      bind:schemesGj={$lcwipSchemesGj}
-      bind:schemes={$lcwipSchemes}
-      bind:filterSchemeText={$filterLcwipSchemeText}
-      bind:filterInterventionText={$filterLcwipInterventionText}
-    />
+      <Filters
+        source="LCWIP"
+        bind:schemesGj={$lcwipSchemesGj}
+        bind:schemes={$lcwipSchemes}
+        bind:filterSchemeText={$filterLcwipSchemeText}
+        bind:filterInterventionText={$filterLcwipInterventionText}
+      />
 
-    <Select
-      label="Colour interventions"
-      choices={[["interventionType", "By intervention type"]]}
-      bind:value={lcwipStyle}
-    />
-    <Legend rows={lcwipLegend} />
+      <Select
+        label="Colour interventions"
+        choices={[["interventionType", "By intervention type"]]}
+        bind:value={lcwipStyle}
+      />
+      <Legend rows={lcwipLegend} />
+    </LayerControl>
   {/if}
 
   <FileInput label="Load schemes from GeoJSON" onLoad={loadFile} />
@@ -159,7 +170,7 @@
 
 <InterventionLayer
   source="atf"
-  show={showAtf}
+  show={$atfShow}
   schemesGj={$atfSchemesGj}
   schemes={$atfSchemes}
   filterSchemeText={$filterAtfSchemeText}
@@ -168,7 +179,7 @@
 />
 <InterventionLayer
   source="lcwip"
-  show={showLcwip}
+  show={$lcwipShow}
   schemesGj={$lcwipSchemesGj}
   schemes={$lcwipSchemes}
   filterSchemeText={$filterLcwipSchemeText}
