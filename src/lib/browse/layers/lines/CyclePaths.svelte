@@ -134,7 +134,7 @@
   </span>
 
   <div slot="controls" style="border: 1px solid black; padding: 8px;">
-    <CheckboxGroup>
+    <CheckboxGroup small>
       {#each legend as [kind, label, color]}
         <Checkbox bind:checked={$state[kind]}>
           <ColorLegend {color} />
