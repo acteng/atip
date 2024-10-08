@@ -8,15 +8,16 @@
   let contents: HTMLDivElement | null = null;
 
   $: if (contents) {
-    console.log(`centrally register ${name} please`);
     layerLegends.update((l) => {
+      // Initially hide the controls. Before they appear in the legend, the DOM node is mounted on the left sidebar
+      // TODO Can we remove it from the DOM entirely and just store in this map instead?
+      contents!.style.display = "none";
       l.set(name, contents!);
       return l;
     });
   }
 
   onDestroy(() => {
-    console.log(`centrally unregister ${name} please`);
     layerLegends.update((l) => {
       l.delete(name);
       return l;

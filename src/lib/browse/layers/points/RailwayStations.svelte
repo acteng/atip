@@ -18,10 +18,12 @@
   let show = showHideLayer(name);
 </script>
 
+<Checkbox bind:checked={$show}>Railway stations</Checkbox>
+
 <LayerControl {name}>
   <Checkbox bind:checked={$show}>
     <img src={railwayStation} alt="A logo representing a train" />
-    Railway Stations
+    Railway stations
     <span slot="right">
       <HelpButton>
         <p>

@@ -23,6 +23,8 @@
   let show = showHideLayer(name);
 </script>
 
+<Checkbox bind:checked={$show}>Sports spaces</Checkbox>
+
 <LayerControl {name}>
   <Checkbox bind:checked={$show}>
     <ColorLegend color={colors.sports_spaces} />

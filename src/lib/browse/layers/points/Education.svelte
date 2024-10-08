@@ -53,6 +53,8 @@
   }
 </script>
 
+<Checkbox bind:checked={$state.show}>Education</Checkbox>
+
 <LayerControl {name}>
   <Checkbox bind:checked={$state.show}>
     Education
