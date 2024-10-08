@@ -20,6 +20,7 @@
   import { showHideLayer } from "../url";
 
   let name = "imd";
+  let title = "Indices of Multiple Deprivation";
 
   let colorScale = colors.sequential_low_to_high;
   // The deciles are [1, 10]. The 5 colors cover two each.
@@ -28,9 +29,9 @@
   let show = showHideLayer(name);
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    Indices of Multiple Deprivation
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

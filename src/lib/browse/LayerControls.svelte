@@ -93,9 +93,11 @@
     </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Public transport">
-    <BusRoutesLayerControl />
-    <TramsLayerControl />
-    <BusStopsLayerControl />
+    <CheckboxGroup small>
+      <BusRoutesLayerControl />
+      <TramsLayerControl />
+      <BusStopsLayerControl />
+    </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Boundaries">
     <CheckboxGroup small>

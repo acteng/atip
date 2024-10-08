@@ -19,16 +19,15 @@
   import OsmLicense from "../OsmLicense.svelte";
 
   let name = "hospitals";
+  let title = "Hospitals";
 
   let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={$show}>Hospitals</Checkbox>
-
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
     <ColorLegend color={colors.hospitals} />
-    Hospitals
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

@@ -20,6 +20,7 @@
   import { customUrlState } from "../url";
 
   let name = "cycle_paths";
+  let title = "Cycle paths";
 
   type State = {
     show: boolean;
@@ -102,9 +103,9 @@
   }
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$state.show}>
   <Checkbox bind:checked={$state.show}>
-    Cycle paths
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

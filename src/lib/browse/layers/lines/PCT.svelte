@@ -20,6 +20,7 @@
   // TODO It'd be much simpler to have one source with both attributes
   let nameCommute = "pct_commute";
   let nameSchool = "pct_school";
+  let title = "Propensity to Cycle Tool";
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 50, 100, 500, 1000, 2000];
 
@@ -69,9 +70,9 @@
   }
 </script>
 
-<LayerControl name="pct">
+<LayerControl name="pct" {title} bind:show={$state.show}>
   <Checkbox bind:checked={$state.show}>
-    Propensity to Cycle Tool
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

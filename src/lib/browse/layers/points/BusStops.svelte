@@ -15,6 +15,7 @@
   import { showHideLayer } from "../url";
 
   let name = "bus_stops";
+  let title = "Bus stops";
 
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 3, 10, 20, 30, 100];
@@ -22,9 +23,9 @@
   let show = showHideLayer(name);
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    Bus stops
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

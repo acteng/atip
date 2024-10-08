@@ -18,6 +18,7 @@
   import { showHideLayer } from "../url";
 
   let name = "pavement_widths";
+  let title = "OS Pavement widths";
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 2, 4, 6, 8, 13];
 
@@ -37,9 +38,9 @@
   }
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    OS Pavement widths
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

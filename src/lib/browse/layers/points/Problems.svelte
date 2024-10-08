@@ -12,6 +12,7 @@
   import { showHideLayer } from "../url";
 
   let name = "problems";
+  let title = "Issues & Conflicts";
 
   let show = showHideLayer(name);
 
@@ -44,9 +45,9 @@
   ];
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    Issues & Conflicts
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

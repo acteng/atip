@@ -19,15 +19,16 @@
   import { showHideLayer } from "../url";
 
   let name = "mrn";
+  let title = "Major Road Network";
   let color = colors.mrn;
 
   let show = showHideLayer(name);
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
     <ColorLegend {color} />
-    Major Road Network
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

@@ -19,6 +19,7 @@
   import { customUrlState } from "../url";
 
   let name = "education";
+  let title = "Education";
 
   type State = {
     show: boolean;
@@ -53,11 +54,9 @@
   }
 </script>
 
-<Checkbox bind:checked={$state.show}>Education</Checkbox>
-
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$state.show}>
   <Checkbox bind:checked={$state.show}>
-    Education
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

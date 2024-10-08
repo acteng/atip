@@ -1,8 +1,12 @@
 <script lang="ts">
+  import { Checkbox } from "govuk-svelte";
   import { onDestroy } from "svelte";
   import { layerLegends } from "./stores";
 
   export let name: string;
+  export let title: string;
+  // This must be bound to state that controls the layer display and URL
+  export let show: boolean;
 
   // TODO explain the remote DOM pattern
   let contents: HTMLDivElement | null = null;
@@ -24,6 +28,8 @@
     });
   });
 </script>
+
+<Checkbox bind:checked={show}>{title}</Checkbox>
 
 <div bind:this={contents}>
   <slot />

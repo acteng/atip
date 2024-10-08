@@ -14,14 +14,15 @@
   import { showHideLayer } from "../url";
 
   let name = "cycle_parking";
+  let title = "Cycle parking";
 
   let show = showHideLayer(name);
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
     <img src={cycleParking} alt="a logo representing cycle parking" />
-    Cycle parking
+    {title}
     <span slot="right">
       <HelpButton>
         <p>
