@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -166,63 +167,75 @@
   ];
 </script>
 
-<Checkbox bind:checked={$state.show}>
-  Stats19
-  <span slot="right">
-    <HelpButton>
-      <p>
-        This layer shows collisions recorded in the <ExternalLink
-          href="https://www.data.gov.uk/dataset/cb7ae6f0-4be6-4935-9277-47e5ce24a11f/road-safety-data"
-        >
-          DfT stats19
-        </ExternalLink> dataset. Please note these limitations:
-      </p>
-      <ul>
-        <li>Only collisions between 2017 and 2022 are included</li>
-        <li>
-          This tool is intended to be used at high-zoom levels, while inspecting
-          a scheme or development area. Not all points are shown at lower zoom
-          levels. Do not use this to look for trends across a city or region
-          scale.
-        </li>
-        <li>
-          Approximately 150 collisions from the source data aren't included, due
-          to problems with the recorded location
-        </li>
-        <li>The "pedestrians" category also include mobility scooters</li>
-        <li>
-          All limitations <ExternalLink
-            href="https://www.gov.uk/guidance/road-accident-and-safety-statistics-guidance"
+<LayerControl {name}>
+  <Checkbox bind:checked={$state.show}>
+    Stats19
+    <span slot="right">
+      <HelpButton>
+        <p>
+          This layer shows collisions recorded in the <ExternalLink
+            href="https://www.data.gov.uk/dataset/cb7ae6f0-4be6-4935-9277-47e5ce24a11f/road-safety-data"
           >
-            documented by DfT
-          </ExternalLink> also apply. Not all collisions or near misses are reported.
-          There's nuance with the severity categories.
-        </li>
-      </ul>
-      <p>
-        You can click a point to open the full report, thanks to CycleStreets.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $state.show}
-  <div style="border: 1px solid black; padding: 8px;">
-    <CheckboxGroup small>
-      <Checkbox bind:checked={$state.pedestrians}>Pedestrians</Checkbox>
-      <Checkbox bind:checked={$state.cyclists}>Cyclists</Checkbox>
-      <Checkbox bind:checked={$state.horseRiders}>Horse riders</Checkbox>
-      <Checkbox bind:checked={$state.other}>Other</Checkbox>
-    </CheckboxGroup>
-    <div>
-      Filter years:
-      <input type="number" min={2017} max={2022} bind:value={$state.minYear} />
-      -
-      <input type="number" min={2017} max={2022} bind:value={$state.maxYear} />
+            DfT stats19
+          </ExternalLink> dataset. Please note these limitations:
+        </p>
+        <ul>
+          <li>Only collisions between 2017 and 2022 are included</li>
+          <li>
+            This tool is intended to be used at high-zoom levels, while
+            inspecting a scheme or development area. Not all points are shown at
+            lower zoom levels. Do not use this to look for trends across a city
+            or region scale.
+          </li>
+          <li>
+            Approximately 150 collisions from the source data aren't included,
+            due to problems with the recorded location
+          </li>
+          <li>The "pedestrians" category also include mobility scooters</li>
+          <li>
+            All limitations <ExternalLink
+              href="https://www.gov.uk/guidance/road-accident-and-safety-statistics-guidance"
+            >
+              documented by DfT
+            </ExternalLink> also apply. Not all collisions or near misses are reported.
+            There's nuance with the severity categories.
+          </li>
+        </ul>
+        <p>
+          You can click a point to open the full report, thanks to CycleStreets.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $state.show}
+    <div style="border: 1px solid black; padding: 8px;">
+      <CheckboxGroup small>
+        <Checkbox bind:checked={$state.pedestrians}>Pedestrians</Checkbox>
+        <Checkbox bind:checked={$state.cyclists}>Cyclists</Checkbox>
+        <Checkbox bind:checked={$state.horseRiders}>Horse riders</Checkbox>
+        <Checkbox bind:checked={$state.other}>Other</Checkbox>
+      </CheckboxGroup>
+      <div>
+        Filter years:
+        <input
+          type="number"
+          min={2017}
+          max={2022}
+          bind:value={$state.minYear}
+        />
+        -
+        <input
+          type="number"
+          min={2017}
+          max={2022}
+          bind:value={$state.maxYear}
+        />
+      </div>
+      <Legend rows={severityLegend} />
     </div>
-    <Legend rows={severityLegend} />
-  </div>
-{/if}
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

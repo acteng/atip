@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ColorLegend,
     ExternalLink,
@@ -23,23 +24,25 @@
   let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={$show}>
-  <ColorLegend {color} />
-  Strategic Road Network
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Data from <ExternalLink
-          href="https://osdatahub.os.uk/downloads/open/OpenRoads"
-        >
-          OS Open Roads
-        </ExternalLink>, as of December 2023. The SRN is equivalent to trunk
-        roads.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <ColorLegend {color} />
+    Strategic Road Network
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Data from <ExternalLink
+            href="https://osdatahub.os.uk/downloads/open/OpenRoads"
+          >
+            OS Open Roads
+          </ExternalLink>, as of December 2023. The SRN is equivalent to trunk
+          roads.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

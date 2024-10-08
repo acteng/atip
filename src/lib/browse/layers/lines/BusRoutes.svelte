@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ColorLegend,
     ExternalLink,
@@ -22,27 +23,29 @@
   let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={$show}>
-  <ColorLegend color={colors.bus_route_with_lane} />
-  Bus routes
-  <span slot="right">
-    <HelpButton>
-      <p>
-        This shows all roads with at least one bus route crossing them. It also
-        shows whether the road has a bus lane or not.
-      </p>
-      <p>
-        Note this data is from OpenStreetMap (as of 9 August 2023), not <ExternalLink
-          href="https://gtfs.org"
-        >
-          GTFS
-        </ExternalLink>, and doesn't include which routes are run or the
-        frequency of service.
-      </p>
-      <OsmLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <ColorLegend color={colors.bus_route_with_lane} />
+    Bus routes
+    <span slot="right">
+      <HelpButton>
+        <p>
+          This shows all roads with at least one bus route crossing them. It
+          also shows whether the road has a bus lane or not.
+        </p>
+        <p>
+          Note this data is from OpenStreetMap (as of 9 August 2023), not <ExternalLink
+            href="https://gtfs.org"
+          >
+            GTFS
+          </ExternalLink>, and doesn't include which routes are run or the
+          frequency of service.
+        </p>
+        <OsmLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

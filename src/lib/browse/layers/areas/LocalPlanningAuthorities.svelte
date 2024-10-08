@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ColorLegend,
     ExternalLink,
@@ -27,47 +28,49 @@
   // -- but can't we fix that now?
 </script>
 
-<Checkbox bind:checked={$show}>
-  <ColorLegend {color} />
-  Local Planning Authorities
-  <span slot="right">
-    <HelpButton>
-      <p>
-        LPAs may be a <ExternalLink
-          href="https://www.planning.data.gov.uk/dataset/local-authority"
-        >
-          local authority
-        </ExternalLink>, <ExternalLink
-          href="https://www.planning.data.gov.uk/dataset/national-park-authority"
-        >
-          national park authorit
-        </ExternalLink>y, or <ExternalLink
-          href="https://www.planning.data.gov.uk/dataset/development-corporation"
-        >
-          development corporation
-        </ExternalLink>.
-      </p>
-      <p>
-        <strong>
-          Note there are overlapping LPAs near Northhamptonshire. Only one
-          authority name is shown when hovering. Use <ExternalLink
-            href="https://www.planning.data.gov.uk/map/?dataset=local-planning-authority"
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <ColorLegend {color} />
+    Local Planning Authorities
+    <span slot="right">
+      <HelpButton>
+        <p>
+          LPAs may be a <ExternalLink
+            href="https://www.planning.data.gov.uk/dataset/local-authority"
           >
-            this map
-          </ExternalLink> to get more details.
-        </strong>
-      </p>
-      <p>
-        Data from ONS Geography via <ExternalLink
-          href="https://www.planning.data.gov.uk/dataset/local-planning-authority"
-        >
-          planning.data.gov.uk
-        </ExternalLink>, as of November 2022.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+            local authority
+          </ExternalLink>, <ExternalLink
+            href="https://www.planning.data.gov.uk/dataset/national-park-authority"
+          >
+            national park authorit
+          </ExternalLink>y, or <ExternalLink
+            href="https://www.planning.data.gov.uk/dataset/development-corporation"
+          >
+            development corporation
+          </ExternalLink>.
+        </p>
+        <p>
+          <strong>
+            Note there are overlapping LPAs near Northhamptonshire. Only one
+            authority name is shown when hovering. Use <ExternalLink
+              href="https://www.planning.data.gov.uk/map/?dataset=local-planning-authority"
+            >
+              this map
+            </ExternalLink> to get more details.
+          </strong>
+        </p>
+        <p>
+          Data from ONS Geography via <ExternalLink
+            href="https://www.planning.data.gov.uk/dataset/local-planning-authority"
+          >
+            planning.data.gov.uk
+          </ExternalLink>, as of November 2022.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

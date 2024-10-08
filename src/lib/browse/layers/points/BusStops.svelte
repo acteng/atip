@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -21,34 +22,36 @@
   let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={$show}>
-  Bus stops
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Data from the <ExternalLink href="https://data.bus-data.dft.gov.uk">
-          Bus Open Data Service
-        </ExternalLink>, as of 7 February 2024. To calculate frequency, every
-        scheduled arrival time per stop is considered, grouped by day of the
-        week. The total daily count is just the number of scheduled arrivals for
-        a day. The peak hour frequency is the highest number of buses in any one
-        hour window. That window might not lined up perfectly on the hour -- a
-        peak hour might occur from 8:25 to 9:25,for example.
-      </p>
-      <p>
-        There are known limitations with this layer, so please use caution when
-        using these numbers. Some stops may not be shown at all. Frequency could
-        be over- or under-counted, due to exceptions to the regular daily
-        schedule of a service.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $show}
-  <p>Peak hourly frequency:</p>
-  <SequentialLegend {colorScale} {limits} />
-{/if}
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    Bus stops
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Data from the <ExternalLink href="https://data.bus-data.dft.gov.uk">
+            Bus Open Data Service
+          </ExternalLink>, as of 7 February 2024. To calculate frequency, every
+          scheduled arrival time per stop is considered, grouped by day of the
+          week. The total daily count is just the number of scheduled arrivals
+          for a day. The peak hour frequency is the highest number of buses in
+          any one hour window. That window might not lined up perfectly on the
+          hour -- a peak hour might occur from 8:25 to 9:25,for example.
+        </p>
+        <p>
+          There are known limitations with this layer, so please use caution
+          when using these numbers. Some stops may not be shown at all.
+          Frequency could be over- or under-counted, due to exceptions to the
+          regular daily schedule of a service.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $show}
+    <p>Peak hourly frequency:</p>
+    <SequentialLegend {colorScale} {limits} />
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

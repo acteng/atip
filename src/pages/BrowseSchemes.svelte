@@ -2,6 +2,7 @@
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import LayerControls from "lib/browse/LayerControls.svelte";
+  import ActiveLayersLegend from "lib/browse/layers/ActiveLayersLegend.svelte";
   import "../style/main.css";
   import { controls } from "lib/browse/stores";
   import { atfSchemesGj } from "lib/browse/schemes/stores";
@@ -56,6 +57,7 @@
 
     <div bind:this={sidebarDiv} />
   </div>
+
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
       <Geocoder />
@@ -65,3 +67,21 @@
     </MapLibreMap>
   </div>
 </Layout>
+
+<div class="top-right">
+  <ActiveLayersLegend />
+</div>
+
+<style>
+  .top-right {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: white;
+    padding: 16px;
+    /* Leave room at the bottom for some of the map controls */
+    max-height: calc(100vh - 200px);
+    overflow: auto;
+    max-width: 450px;
+  }
+</style>

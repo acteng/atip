@@ -1,21 +1,66 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
+  import {
+    ColorLegend,
+    HelpButton,
+    Popup,
+    publicResourceBaseUrl,
+  } from "lib/common";
+  import { Checkbox } from "govuk-svelte";
+  import { layerId } from "lib/maplibre";
+  import {
+    FillLayer,
+    hoverStateFilter,
+    VectorTileSource,
+  } from "svelte-maplibre";
+  import { colors } from "../../colors";
+  import { showHideLayer } from "../url";
   import { ExternalLink } from "lib/common";
   import OsmLicense from "../OsmLicense.svelte";
-  import PolygonAmenityLayerControl from "./PolygonAmenityLayerControl.svelte";
+
+  let name = "hospitals";
+
+  let show = showHideLayer(name);
 </script>
 
-<PolygonAmenityLayerControl
-  name="hospitals"
-  singularNoun="hospital"
-  pluralNoun="Hospitals"
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <ColorLegend color={colors.hospitals} />
+    Hospitals
+    <span slot="right">
+      <HelpButton>
+        <p>
+          This shows <ExternalLink
+            href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
+          >
+            hospital
+          </ExternalLink> data from OpenStreetMap (as of 9 August 2023). It doesn't
+          include outpatient clinics or individual doctor's offices.
+        </p>
+        <OsmLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
+
+<VectorTileSource
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
-  <p>
-    This shows <ExternalLink
-      href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
-    >
-      hospital
-    </ExternalLink> data from OpenStreetMap (as of 9 August 2023). It doesn't include
-    outpatient clinics or individual doctor's offices.
-  </p>
-  <OsmLicense />
-</PolygonAmenityLayerControl>
+  <FillLayer
+    {...layerId(name)}
+    sourceLayer={name}
+    paint={{
+      "fill-color": colors.hospitals,
+      "fill-opacity": hoverStateFilter(0.7, 1.0),
+    }}
+    layout={{
+      visibility: $show ? "visible" : "none",
+    }}
+    manageHoverState
+    eventsIfTopMost
+  >
+    <Popup let:props>
+      <p>{props.name ?? "Unnamed hospital"}</p>
+    </Popup>
+  </FillLayer>
+</VectorTileSource>

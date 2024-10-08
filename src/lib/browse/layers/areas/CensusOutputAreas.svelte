@@ -18,6 +18,7 @@
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { customUrlState } from "../url";
+  import LayerControl from "../LayerControl.svelte";
 
   let name = "census_output_areas";
   let colorScale = colors.sequential_low_to_high;
@@ -94,114 +95,116 @@
   }
 </script>
 
-<Checkbox
-  bind:checked={showHouseholdsWithCar}
-  on:change={() => {
-    showAverageCars = false;
-    showPopulationDensity = false;
-  }}
->
-  Percent of households with a car
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Car/van availability data is from the 2021 census, via <ExternalLink
-          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
-        >
-          NOMIS TS045
-        </ExternalLink>. Output area boundaries from <ExternalLink
-          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
-        >
-          ONS Geography
-        </ExternalLink>.
-      </p>
-      <p>
-        License: <ExternalLink
-          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-        >
-          Open Government License
-        </ExternalLink>. Contains OS data &copy; Crown copyright and database
-        right 2023.
-      </p>
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $state.kind == "percent_households_with_car"}
-  <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
-{/if}
+<LayerControl {name}>
+  <Checkbox
+    bind:checked={showHouseholdsWithCar}
+    on:change={() => {
+      showAverageCars = false;
+      showPopulationDensity = false;
+    }}
+  >
+    Percent of households with a car
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Car/van availability data is from the 2021 census, via <ExternalLink
+            href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+          >
+            NOMIS TS045
+          </ExternalLink>. Output area boundaries from <ExternalLink
+            href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+          >
+            ONS Geography
+          </ExternalLink>.
+        </p>
+        <p>
+          License: <ExternalLink
+            href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+          >
+            Open Government License
+          </ExternalLink>. Contains OS data &copy; Crown copyright and database
+          right 2023.
+        </p>
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $state.kind == "percent_households_with_car"}
+    <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
+  {/if}
 
-<Checkbox
-  bind:checked={showAverageCars}
-  on:change={() => {
-    showHouseholdsWithCar = false;
-    showPopulationDensity = false;
-  }}
->
-  Average cars per household
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Where the census counts "3 or more cars or vans", the average shown here
-        assumes 3.
-      </p>
-      <p>
-        Car/van availability data is from the 2021 census, via <ExternalLink
-          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
-        >
-          NOMIS TS045
-        </ExternalLink>. Output area boundaries from <ExternalLink
-          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
-        >
-          ONS Geography
-        </ExternalLink>.
-      </p>
-      <p>
-        License: <ExternalLink
-          href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-        >
-          Open Government License
-        </ExternalLink>. Contains OS data &copy; Crown copyright and database
-        right 2023.
-      </p>
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $state.kind == "average_cars_per_household"}
-  <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
-{/if}
+  <Checkbox
+    bind:checked={showAverageCars}
+    on:change={() => {
+      showHouseholdsWithCar = false;
+      showPopulationDensity = false;
+    }}
+  >
+    Average cars per household
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Where the census counts "3 or more cars or vans", the average shown
+          here assumes 3.
+        </p>
+        <p>
+          Car/van availability data is from the 2021 census, via <ExternalLink
+            href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+          >
+            NOMIS TS045
+          </ExternalLink>. Output area boundaries from <ExternalLink
+            href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+          >
+            ONS Geography
+          </ExternalLink>.
+        </p>
+        <p>
+          License: <ExternalLink
+            href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+          >
+            Open Government License
+          </ExternalLink>. Contains OS data &copy; Crown copyright and database
+          right 2023.
+        </p>
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $state.kind == "average_cars_per_household"}
+    <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
+  {/if}
 
-<Checkbox
-  bind:checked={showPopulationDensity}
-  on:change={() => {
-    showHouseholdsWithCar = false;
-    showAverageCars = false;
-  }}
->
-  Population density
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Population density data is from the 2021 census, via <ExternalLink
-          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
-        >
-          NOMIS TS006
-        </ExternalLink>. Output area boundaries from <ExternalLink
-          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
-        >
-          ONS Geography
-        </ExternalLink>.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $state.kind == "population_density"}
-  <p>(people per square kilometres)</p>
-  <SequentialLegend
-    {colorScale}
-    limits={makeLimits($state.kind).map((x) => x.toLocaleString())}
-  />
-{/if}
+  <Checkbox
+    bind:checked={showPopulationDensity}
+    on:change={() => {
+      showHouseholdsWithCar = false;
+      showAverageCars = false;
+    }}
+  >
+    Population density
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Population density data is from the 2021 census, via <ExternalLink
+            href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+          >
+            NOMIS TS006
+          </ExternalLink>. Output area boundaries from <ExternalLink
+            href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+          >
+            ONS Geography
+          </ExternalLink>.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $state.kind == "population_density"}
+    <p>(people per square kilometres)</p>
+    <SequentialLegend
+      {colorScale}
+      limits={makeLimits($state.kind).map((x) => x.toLocaleString())}
+    />
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

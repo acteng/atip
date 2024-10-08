@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -57,43 +58,45 @@
   };
 </script>
 
-<Checkbox bind:checked={$state.show}>
-  OS Speeds
-  <span slot="right">
-    <HelpButton>
-      <p>
-        The average speed data is collected over a six-month period by <ExternalLink
-          href="https://basemap.co.uk/speed-data"
-        >
-          Basemap
-        </ExternalLink> from 135,000 vehicle telematic systems and provided through
-        Ordnance Survey. The averages are grouped by different time periods for weekdays
-        and weekends. This map shows the highest average.
-      </p>
-      <p>Data valid as of 1 September, 2023</p>
-      <p>
-        License: Contains OS data &copy; Crown copyright and database right
-        2023. Made available under the <ExternalLink
-          href="https://www.ordnancesurvey.co.uk/documents/licensing/psga-member-licence.pdf"
-        >
-          Public Sector Geospatial Agreement
-        </ExternalLink>.
-      </p>
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $state.show}
-  <SequentialLegend {colorScale} {limits} />
-  <Radio
-    label="Show speed types"
-    choices={[
-      ["indicative_mph", "Posted speed limit"],
-      ["highest_mph", "Highest measured average speed"],
-    ]}
-    bind:value={$state.kind}
-    inlineSmall
-  />
-{/if}
+<LayerControl {name}>
+  <Checkbox bind:checked={$state.show}>
+    OS Speeds
+    <span slot="right">
+      <HelpButton>
+        <p>
+          The average speed data is collected over a six-month period by <ExternalLink
+            href="https://basemap.co.uk/speed-data"
+          >
+            Basemap
+          </ExternalLink> from 135,000 vehicle telematic systems and provided through
+          Ordnance Survey. The averages are grouped by different time periods for
+          weekdays and weekends. This map shows the highest average.
+        </p>
+        <p>Data valid as of 1 September, 2023</p>
+        <p>
+          License: Contains OS data &copy; Crown copyright and database right
+          2023. Made available under the <ExternalLink
+            href="https://www.ordnancesurvey.co.uk/documents/licensing/psga-member-licence.pdf"
+          >
+            Public Sector Geospatial Agreement
+          </ExternalLink>.
+        </p>
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $state.show}
+    <SequentialLegend {colorScale} {limits} />
+    <Radio
+      label="Show speed types"
+      choices={[
+        ["indicative_mph", "Posted speed limit"],
+        ["highest_mph", "Highest measured average speed"],
+      ]}
+      bind:value={$state.kind}
+      inlineSmall
+    />
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${privateResourceBaseUrl()}/v1/${name}.pmtiles`}

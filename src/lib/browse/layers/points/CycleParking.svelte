@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -17,30 +18,32 @@
   let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={$show}>
-  <img src={cycleParking} alt="a logo representing cycle parking" />
-  Cycle parking
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Cycle parking, according to <ExternalLink
-          href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking"
-        >
-          OpenStreetMap
-        </ExternalLink> (as of 9 August 2023). The type of parking, public/private
-        access, and whether it's covered are not shown.
-      </p>
-      <p>
-        Icon from <ExternalLink
-          href="https://github.com/gravitystorm/openstreetmap-carto"
-        >
-          OpenStreetMap Carto
-        </ExternalLink>
-      </p>
-      <OsmLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <img src={cycleParking} alt="a logo representing cycle parking" />
+    Cycle parking
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Cycle parking, according to <ExternalLink
+            href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking"
+          >
+            OpenStreetMap
+          </ExternalLink> (as of 9 August 2023). The type of parking, public/private
+          access, and whether it's covered are not shown.
+        </p>
+        <p>
+          Icon from <ExternalLink
+            href="https://github.com/gravitystorm/openstreetmap-carto"
+          >
+            OpenStreetMap Carto
+          </ExternalLink>
+        </p>
+        <OsmLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

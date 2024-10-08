@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -68,53 +69,55 @@
   }
 </script>
 
-<Checkbox bind:checked={$state.show}>
-  Propensity to Cycle Tool
-  <span slot="right">
-    <HelpButton>
-      <p>
-        The PCT shows major links on the transport network on which there is
-        high latent demand for cycling under scenarios of change, based on the
-        "fastest" routes from CycleStreets. Counts approximate daily rush hour
-        traffic levels.
-      </p>
-      <p>
-        Note this layer uses 2011 census data and outdated OpenStreetMap data.
-        Please use this layer with caution.
-      </p>
-      <p>
-        See <ExternalLink href="https://www.pct.bike">
-          the PCT website
-        </ExternalLink> and <ExternalLink
-          href="https://www.jtlu.org/index.php/jtlu/article/view/862"
-        >
-          2017 journal article
-        </ExternalLink> for details on methodology and data sources.
-      </p>
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $state.show}
-  <SequentialLegend {colorScale} {limits} />
-  <Radio
-    label="Trip purpose"
-    choices={[
-      ["pct_commute", "Commuting"],
-      ["pct_school", "School"],
-    ]}
-    bind:value={$state.tripPurpose}
-    inlineSmall
-  />
-  <Select
-    label="Scenario"
-    choices={[
-      ["baseline", "Baseline (2011)"],
-      ["gov_target", "Government target (2025)"],
-      ["go_dutch", "Go Dutch"],
-    ]}
-    bind:value={$state.scenario}
-  />
-{/if}
+<LayerControl name="pct">
+  <Checkbox bind:checked={$state.show}>
+    Propensity to Cycle Tool
+    <span slot="right">
+      <HelpButton>
+        <p>
+          The PCT shows major links on the transport network on which there is
+          high latent demand for cycling under scenarios of change, based on the
+          "fastest" routes from CycleStreets. Counts approximate daily rush hour
+          traffic levels.
+        </p>
+        <p>
+          Note this layer uses 2011 census data and outdated OpenStreetMap data.
+          Please use this layer with caution.
+        </p>
+        <p>
+          See <ExternalLink href="https://www.pct.bike">
+            the PCT website
+          </ExternalLink> and <ExternalLink
+            href="https://www.jtlu.org/index.php/jtlu/article/view/862"
+          >
+            2017 journal article
+          </ExternalLink> for details on methodology and data sources.
+        </p>
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $state.show}
+    <SequentialLegend {colorScale} {limits} />
+    <Radio
+      label="Trip purpose"
+      choices={[
+        ["pct_commute", "Commuting"],
+        ["pct_school", "School"],
+      ]}
+      bind:value={$state.tripPurpose}
+      inlineSmall
+    />
+    <Select
+      label="Scenario"
+      choices={[
+        ["baseline", "Baseline (2011)"],
+        ["gov_target", "Government target (2025)"],
+        ["go_dutch", "Go Dutch"],
+      ]}
+      bind:value={$state.scenario}
+    />
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${nameCommute}.pmtiles`}

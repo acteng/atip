@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -37,36 +38,38 @@
   }
 </script>
 
-<Checkbox bind:checked={$show}>
-  Vehicle counts
-  <span slot="right">
-    <HelpButton>
-      <p>
-        AADF (annual average daily flow) data from <ExternalLink
-          href="https://roadtraffic.dft.gov.uk/downloads"
-        >
-          DfT road statistics
-        </ExternalLink>. This counts the total daily number of vehicles
-        traveling past a count point (in both directions) on an average day of
-        the year. Data from the latest year available is shown. See <ExternalLink
-          href="https://storage.googleapis.com/dft-statistics/road-traffic/all-traffic-data-metadata.pdf"
-        >
-          methodology
-        </ExternalLink> for details and caveats about the measurements.
-      </p>
-      <p>
-        The colors show motor vehicles AADF, not pedal cycles. The outline is
-        thicker when the latest data is a manual or automatic count, and thinner
-        when it's an estimate from previous years or nearby counters. Click a
-        point for full data.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $show}
-  <SequentialLegend {colorScale} limits={describeLimits} />
-{/if}
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    Vehicle counts
+    <span slot="right">
+      <HelpButton>
+        <p>
+          AADF (annual average daily flow) data from <ExternalLink
+            href="https://roadtraffic.dft.gov.uk/downloads"
+          >
+            DfT road statistics
+          </ExternalLink>. This counts the total daily number of vehicles
+          traveling past a count point (in both directions) on an average day of
+          the year. Data from the latest year available is shown. See <ExternalLink
+            href="https://storage.googleapis.com/dft-statistics/road-traffic/all-traffic-data-metadata.pdf"
+          >
+            methodology
+          </ExternalLink> for details and caveats about the measurements.
+        </p>
+        <p>
+          The colors show motor vehicles AADF, not pedal cycles. The outline is
+          thicker when the latest data is a manual or automatic count, and
+          thinner when it's an estimate from previous years or nearby counters.
+          Click a point for full data.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $show}
+    <SequentialLegend {colorScale} limits={describeLimits} />
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
