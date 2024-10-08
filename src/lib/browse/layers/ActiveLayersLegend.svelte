@@ -23,5 +23,5 @@
   $: update(container, $activeLayers, $layerLegends);
 </script>
 
-<p>Active layers</p>
+<p><b>Selected layers</b></p>
 <div bind:this={container} />
