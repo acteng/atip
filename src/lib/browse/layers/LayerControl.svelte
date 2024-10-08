@@ -69,9 +69,7 @@
 <!-- For the right panel -->
 <div bind:this={contents}>
   <CheckboxGroup small>
-    <div
-      style="display: flex; justify-content: space-between; white-space: nowrap"
-    >
+    <div style="display: flex; justify-content: space-between">
       <Checkbox bind:checked={show}>
         <slot name="icon" />
         {title}
