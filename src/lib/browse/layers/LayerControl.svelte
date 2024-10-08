@@ -1,7 +1,10 @@
 <script lang="ts">
-  import { Checkbox } from "govuk-svelte";
+  import { HelpButton } from "lib/common";
+  import { SecondaryButton, Checkbox, CheckboxGroup } from "govuk-svelte";
   import { onDestroy } from "svelte";
   import { activeLayers, layerLegends } from "./stores";
+
+  // Slots include: icon, controls, help
 
   export let name: string;
   export let title: string;
@@ -46,12 +49,35 @@
       return l;
     });
   }
+
+  function remove() {
+    $activeLayers.delete(name);
+    $activeLayers = $activeLayers;
+    show = false;
+  }
 </script>
 
+<!-- For the left sidebar -->
 <Checkbox checked={$activeLayers.has(name)} on:change={toggleActive}>
   {title}
 </Checkbox>
 
+<!-- For the right panel -->
 <div bind:this={contents}>
-  <slot />
+  <CheckboxGroup small>
+    <Checkbox bind:checked={show}>
+      <slot name="icon" />
+      {title}
+      <span slot="right">
+        <HelpButton>
+          <slot name="help" />
+        </HelpButton>
+
+        <SecondaryButton on:click={remove}>X</SecondaryButton>
+      </span>
+    </Checkbox>
+  </CheckboxGroup>
+  {#if show}
+    <slot name="controls" />
+  {/if}
 </div>

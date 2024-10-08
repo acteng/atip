@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ColorLegend,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ColorLegend, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId } from "lib/maplibre";
   import {
     FillLayer,
@@ -25,23 +19,18 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <ColorLegend color={colors.hospitals} />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This shows <ExternalLink
-            href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
-          >
-            hospital
-          </ExternalLink> data from OpenStreetMap (as of 9 August 2023). It doesn't
-          include outpatient clinics or individual doctor's offices.
-        </p>
-        <OsmLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="icon"><ColorLegend color={colors.hospitals} /></span>
+  <span slot="help">
+    <p>
+      This shows <ExternalLink
+        href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
+      >
+        hospital
+      </ExternalLink> data from OpenStreetMap (as of 9 August 2023). It doesn't include
+      outpatient clinics or individual doctor's offices.
+    </p>
+    <OsmLicense />
+  </span>
 </LayerControl>
 
 <VectorTileSource

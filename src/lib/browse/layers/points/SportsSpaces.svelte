@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ColorLegend,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ColorLegend, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId } from "lib/maplibre";
   import {
     FillLayer,
@@ -25,26 +19,21 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <ColorLegend color={colors.sports_spaces} />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This shows <ExternalLink
-            href="https://wiki.openstreetmap.org/wiki/Tag:leisure%3Dpitch"
-          >
-            sports pitches
-          </ExternalLink> and <ExternalLink
-            href="https://wiki.openstreetmap.org/wiki/Tag:leisure%3Dsports_centre"
-          >
-            sports centres
-          </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
-        </p>
-        <OsmLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="icon"><ColorLegend color={colors.sports_spaces} /></span>
+  <span slot="help">
+    <p>
+      This shows <ExternalLink
+        href="https://wiki.openstreetmap.org/wiki/Tag:leisure%3Dpitch"
+      >
+        sports pitches
+      </ExternalLink> and <ExternalLink
+        href="https://wiki.openstreetmap.org/wiki/Tag:leisure%3Dsports_centre"
+      >
+        sports centres
+      </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
+    </p>
+    <OsmLicense />
+  </span>
 </LayerControl>
 
 <VectorTileSource

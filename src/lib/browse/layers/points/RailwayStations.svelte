@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId } from "lib/maplibre";
   import { GeoJSON, SymbolLayer } from "svelte-maplibre";
   import railwayStation from "../../../../../assets/railway_station.png?url";
@@ -20,27 +14,22 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <img src={railwayStation} alt="A logo representing a train" />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This shows <ExternalLink
-            href="https://wiki.openstreetmap.org/wiki/Tag:railway%3Dstation"
-          >
-            railway station
-          </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
-        </p>
-        <p>
-          Icon from <ExternalLink href="https://www.nationalrail.co.uk/">
-            National Rail
-          </ExternalLink>. (Note that not all stations shown are National Rail.)
-        </p>
-        <OsmLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <img slot="icon" src={railwayStation} alt="A logo representing a train" />
+  <div slot="help">
+    <p>
+      This shows <ExternalLink
+        href="https://wiki.openstreetmap.org/wiki/Tag:railway%3Dstation"
+      >
+        railway station
+      </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
+    </p>
+    <p>
+      Icon from <ExternalLink href="https://www.nationalrail.co.uk/">
+        National Rail
+      </ExternalLink>. (Note that not all stations shown are National Rail.)
+    </p>
+    <OsmLicense />
+  </div>
 </LayerControl>
 
 <GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>

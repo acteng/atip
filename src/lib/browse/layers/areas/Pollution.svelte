@@ -1,7 +1,7 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import { ExternalLink, HelpButton } from "lib/common";
-  import { Checkbox, Select } from "govuk-svelte";
+  import { ExternalLink } from "lib/common";
+  import { Select } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import { RasterLayer, RasterTileSource } from "svelte-maplibre";
   import OsOglLicense from "../OsOglLicense.svelte";
@@ -83,26 +83,20 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$state.show}>
-  <Checkbox bind:checked={$state.show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          Most layers show air quality data from <ExternalLink
-            href="https://uk-air.defra.gov.uk/data/wms-services"
-          >
-            DEFRA
-          </ExternalLink>. The measurements are annual means, in units of
-          &micro;gm
-          <sup>3</sup>
-          . Note the particulate matter layers are not corrected for natural sources.
-        </p>
-        <OsOglLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="help">
+    <p>
+      Most layers show air quality data from <ExternalLink
+        href="https://uk-air.defra.gov.uk/data/wms-services"
+      >
+        DEFRA
+      </ExternalLink>. The measurements are annual means, in units of &micro;gm
+      <sup>3</sup>
+      . Note the particulate matter layers are not corrected for natural sources.
+    </p>
+    <OsOglLicense />
+  </span>
 
-  {#if $state.show}
+  <span slot="controls">
     <Select
       label="Pollutant"
       choices={[
@@ -129,7 +123,7 @@
       width={150}
       alt={`Legend for ${$state.pollutant} layer`}
     />
-  {/if}
+  </span>
 </LayerControl>
 
 <RasterTileSource tiles={[url]} tileSize={256}>

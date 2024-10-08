@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    HelpButton,
-    Popup,
-    privateResourceBaseUrl,
-    Legend,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { Popup, privateResourceBaseUrl, Legend } from "lib/common";
   import { layerId, constructMatchExpression } from "lib/maplibre";
   import { CircleLayer, GeoJSON } from "svelte-maplibre";
   import { showHideLayer } from "../url";
@@ -46,24 +40,19 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          Critical issues and policy conflicts from the Design Assistance Log.
-          This is internally collected data.
-        </p>
-        <p>
-          This layer is manually copied from a copy of the DA Log. The data is
-          recent as of 10 June 2024.
-        </p>
-      </HelpButton>
-    </span>
-  </Checkbox>
-  {#if $show}
+  <span slot="help">
+    <p>
+      Critical issues and policy conflicts from the Design Assistance Log. This
+      is internally collected data.
+    </p>
+    <p>
+      This layer is manually copied from a copy of the DA Log. The data is
+      recent as of 10 June 2024.
+    </p>
+  </span>
+  <span slot="controls">
     <Legend rows={legend} />
-  {/if}
+  </span>
 </LayerControl>
 
 <GeoJSON data={`${privateResourceBaseUrl()}/v1/problems.geojson.gz`}>

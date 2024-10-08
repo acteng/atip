@@ -1,11 +1,6 @@
 <script lang="ts">
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox, Radio } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
+  import { Radio } from "govuk-svelte";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     FillLayer,
@@ -76,77 +71,74 @@
 </script>
 
 <LayerControl {name} title="2021 census" bind:show={$state.show}>
-  <Checkbox bind:checked={$state.show}>
-    2021 census
-    <span slot="right">
-      <HelpButton>
-        {#if $state.kind == "percent_households_with_car"}
-          <p>
-            Car/van availability data is from the 2021 census, via <ExternalLink
-              href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
-            >
-              NOMIS TS045
-            </ExternalLink>. Output area boundaries from <ExternalLink
-              href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
-            >
-              ONS Geography
-            </ExternalLink>.
-          </p>
-        {:else if $state.kind == "average_cars_per_household"}
-          <p>
-            Where the census counts "3 or more cars or vans", the average shown
-            here assumes 3.
-          </p>
-          <p>
-            Car/van availability data is from the 2021 census, via <ExternalLink
-              href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
-            >
-              NOMIS TS045
-            </ExternalLink>. Output area boundaries from <ExternalLink
-              href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
-            >
-              ONS Geography
-            </ExternalLink>.
-          </p>
-        {:else}
-          <p>
-            Population density data is from the 2021 census, via <ExternalLink
-              href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
-            >
-              NOMIS TS006
-            </ExternalLink>. Output area boundaries from <ExternalLink
-              href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
-            >
-              ONS Geography
-            </ExternalLink>.
-          </p>
-        {/if}
-        <OsOglLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="help">
+    {#if $state.kind == "percent_households_with_car"}
+      <p>
+        Car/van availability data is from the 2021 census, via <ExternalLink
+          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+        >
+          NOMIS TS045
+        </ExternalLink>. Output area boundaries from <ExternalLink
+          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+        >
+          ONS Geography
+        </ExternalLink>.
+      </p>
+    {:else if $state.kind == "average_cars_per_household"}
+      <p>
+        Where the census counts "3 or more cars or vans", the average shown here
+        assumes 3.
+      </p>
+      <p>
+        Car/van availability data is from the 2021 census, via <ExternalLink
+          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+        >
+          NOMIS TS045
+        </ExternalLink>. Output area boundaries from <ExternalLink
+          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+        >
+          ONS Geography
+        </ExternalLink>.
+      </p>
+    {:else}
+      <p>
+        Population density data is from the 2021 census, via <ExternalLink
+          href="https://www.nomisweb.co.uk/sources/census_2021_bulk"
+        >
+          NOMIS TS006
+        </ExternalLink>. Output area boundaries from <ExternalLink
+          href="https://geoportal.statistics.gov.uk/datasets/ons::output-areas-2021-boundaries-ew-bgc/explore"
+        >
+          ONS Geography
+        </ExternalLink>.
+      </p>
+    {/if}
+    <OsOglLicense />
+  </span>
 
-  <Radio
-    label="Dataset"
-    choices={[
-      ["percent_households_with_car", "Percent of households with a car"],
-      ["average_cars_per_household", "Average cars per household"],
-      ["population_density", "Population density"],
-    ]}
-    bind:value={$state.kind}
-  />
-
-  {#if $state.kind == "percent_households_with_car"}
-    <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
-  {:else if $state.kind == "average_cars_per_household"}
-    <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
-  {:else if $state.kind == "population_density"}
-    <p>(people per square kilometres)</p>
-    <SequentialLegend
-      {colorScale}
-      limits={makeLimits($state.kind).map((x) => x.toLocaleString())}
+  <span slot="controls">
+    <Radio
+      label="Dataset"
+      choices={[
+        ["percent_households_with_car", "Percent of households with a car"],
+        ["average_cars_per_household", "Average cars per household"],
+        ["population_density", "Population density"],
+      ]}
+      bind:value={$state.kind}
     />
-  {/if}
+
+    {#if $state.kind == "percent_households_with_car"}
+      <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
+    {:else if $state.kind == "average_cars_per_household"}
+      <SequentialLegend {colorScale} limits={makeLimits($state.kind)} />
+    {:else if $state.kind == "population_density"}
+      <p>(people per square kilometres)</p>
+      <SequentialLegend
+        {colorScale}
+        limits={makeLimits($state.kind).map((x) => x.toLocaleString())}
+      />
+    {/if}
+  </span>
 </LayerControl>
 
 <VectorTileSource

@@ -3,11 +3,9 @@
   import {
     ColorLegend,
     ExternalLink,
-    HelpButton,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import {
     FillLayer,
@@ -42,22 +40,17 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <ColorLegend {color} />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          Data from <ExternalLink
-            href="https://www.ordnancesurvey.co.uk/products/boundary-line"
-          >
-            Ordnance Survey Boundary-Line
-          </ExternalLink>, as of May 2023.
-        </p>
-        <OsOglLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="icon"><ColorLegend {color} /></span>
+  <span slot="help">
+    <p>
+      Data from <ExternalLink
+        href="https://www.ordnancesurvey.co.uk/products/boundary-line"
+      >
+        Ordnance Survey Boundary-Line
+      </ExternalLink>, as of May 2023.
+    </p>
+    <OsOglLicense />
+  </span>
 </LayerControl>
 
 <VectorTileSource

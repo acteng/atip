@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId, constructMatchExpression } from "lib/maplibre";
   import {
     FillLayer,
@@ -42,29 +36,24 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This is the LAeq,16h dataset showing annual average noise levels in
-          units of decibels for the 16-hour period between 7am and 11pm. Only
-          roads in areas with at least 100,000 people are included.
-        </p>
-        <p>
-          Data from June 2019, produced by <ExternalLink
-            href="https://environment.data.gov.uk/dataset/b9c6bf30-a02d-4378-94a0-2982de1bef86"
-          >
-            DEFRA
-          </ExternalLink>. See there for methodology details
-        </p>
-        <OsOglLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
-  {#if $show}
+  <span slot="help">
+    <p>
+      This is the LAeq,16h dataset showing annual average noise levels in units
+      of decibels for the 16-hour period between 7am and 11pm. Only roads in
+      areas with at least 100,000 people are included.
+    </p>
+    <p>
+      Data from June 2019, produced by <ExternalLink
+        href="https://environment.data.gov.uk/dataset/b9c6bf30-a02d-4378-94a0-2982de1bef86"
+      >
+        DEFRA
+      </ExternalLink>. See there for methodology details
+    </p>
+    <OsOglLicense />
+  </span>
+  <span slot="controls">
     <SequentialLegend {colorScale} limits={["55", "65", "75", ">"]} />
-  {/if}
+  </span>
 </LayerControl>
 
 <VectorTileSource

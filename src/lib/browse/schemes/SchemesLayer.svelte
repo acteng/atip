@@ -3,10 +3,9 @@
     CollapsibleCard,
     ErrorMessage,
     FileInput,
-    Checkbox,
     Select,
   } from "govuk-svelte";
-  import { appVersion, HelpButton, Legend, WarningIcon } from "lib/common";
+  import { appVersion, Legend, WarningIcon } from "lib/common";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
   import { setupSchemes } from "./data";
   import Filters from "./Filters.svelte";
@@ -90,77 +89,71 @@
 
   {#if $atfSchemes.size > 0}
     <LayerControl name={atfName} title={atfTitle} bind:show={$atfShow}>
-      <Checkbox bind:checked={$atfShow}>
-        {atfTitle}
-        <span slot="right">
-          <HelpButton>
-            <p>
-              <WarningIcon text="Scheme data caveats" />Please note there are
-              data quality caveats for all scheme data:
-            </p>
-            <ul>
-              {#each $atfSchemesGj.notes ?? [] as note}
-                <li><p>{note}</p></li>
-              {/each}
-            </ul>
-          </HelpButton>
-        </span>
-      </Checkbox>
+      <span slot="help">
+        <p>
+          <WarningIcon text="Scheme data caveats" />Please note there are data
+          quality caveats for all scheme data:
+        </p>
+        <ul>
+          {#each $atfSchemesGj.notes ?? [] as note}
+            <li><p>{note}</p></li>
+          {/each}
+        </ul>
+      </span>
 
-      <Filters
-        source="ATF"
-        bind:schemesGj={$atfSchemesGj}
-        bind:schemes={$atfSchemes}
-        bind:filterSchemeText={$filterAtfSchemeText}
-        bind:filterInterventionText={$filterAtfInterventionText}
-      />
+      <span slot="controls">
+        <Filters
+          source="ATF"
+          bind:schemesGj={$atfSchemesGj}
+          bind:schemes={$atfSchemes}
+          bind:filterSchemeText={$filterAtfSchemeText}
+          bind:filterInterventionText={$filterAtfInterventionText}
+        />
 
-      <Select
-        label="Colour interventions"
-        choices={[
-          ["fundingProgramme", "By funding programme"],
-          ["interventionType", "By intervention type"],
-          ["currentMilestone", "By current milestone"],
-        ]}
-        bind:value={atfStyle}
-      />
-      <Legend rows={atfLegend} />
+        <Select
+          label="Colour interventions"
+          choices={[
+            ["fundingProgramme", "By funding programme"],
+            ["interventionType", "By intervention type"],
+            ["currentMilestone", "By current milestone"],
+          ]}
+          bind:value={atfStyle}
+        />
+        <Legend rows={atfLegend} />
+      </span>
     </LayerControl>
   {/if}
 
   {#if $lcwipSchemes.size > 0}
     <LayerControl name={lcwipName} title={lcwipTitle} bind:show={$lcwipShow}>
-      <Checkbox bind:checked={$lcwipShow}>
-        {lcwipTitle}
-        <span slot="right">
-          <HelpButton>
-            <p>
-              <WarningIcon text="Scheme data caveats" />Please note there are
-              data quality caveats for all scheme data:
-            </p>
-            <ul>
-              {#each $lcwipSchemesGj.notes ?? [] as note}
-                <li><p>{note}</p></li>
-              {/each}
-            </ul>
-          </HelpButton>
-        </span>
-      </Checkbox>
+      <span slot="help">
+        <p>
+          <WarningIcon text="Scheme data caveats" />Please note there are data
+          quality caveats for all scheme data:
+        </p>
+        <ul>
+          {#each $lcwipSchemesGj.notes ?? [] as note}
+            <li><p>{note}</p></li>
+          {/each}
+        </ul>
+      </span>
 
-      <Filters
-        source="LCWIP"
-        bind:schemesGj={$lcwipSchemesGj}
-        bind:schemes={$lcwipSchemes}
-        bind:filterSchemeText={$filterLcwipSchemeText}
-        bind:filterInterventionText={$filterLcwipInterventionText}
-      />
+      <span slot="controls">
+        <Filters
+          source="LCWIP"
+          bind:schemesGj={$lcwipSchemesGj}
+          bind:schemes={$lcwipSchemes}
+          bind:filterSchemeText={$filterLcwipSchemeText}
+          bind:filterInterventionText={$filterLcwipInterventionText}
+        />
 
-      <Select
-        label="Colour interventions"
-        choices={[["interventionType", "By intervention type"]]}
-        bind:value={lcwipStyle}
-      />
-      <Legend rows={lcwipLegend} />
+        <Select
+          label="Colour interventions"
+          choices={[["interventionType", "By intervention type"]]}
+          bind:value={lcwipStyle}
+        />
+        <Legend rows={lcwipLegend} />
+      </span>
     </LayerControl>
   {/if}
 
