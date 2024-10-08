@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ColorLegend,
     ExternalLink,
@@ -34,22 +35,24 @@
   }
 </script>
 
-<Checkbox bind:checked={$show}>
-  <ColorLegend {color} />
-  Combined authorities
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Data from <ExternalLink
-          href="https://geoportal.statistics.gov.uk/datasets/ons::combined-authorities-december-2022-boundaries-en-buc/explore"
-        >
-          ONS Geography
-        </ExternalLink>, as of December 2022.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <ColorLegend {color} />
+    Combined authorities
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Data from <ExternalLink
+            href="https://geoportal.statistics.gov.uk/datasets/ons::combined-authorities-december-2022-boundaries-en-buc/explore"
+          >
+            ONS Geography
+          </ExternalLink>, as of December 2022.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
 
 <GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>
   <FillLayer

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ColorLegend,
     HelpButton,
@@ -52,36 +53,38 @@
   }
 </script>
 
-<Checkbox bind:checked={$state.show}>
-  Education
-  <span slot="right">
-    <HelpButton>
-      <p>
-        This shows different places of education according to OpenStreetMap (as
-        of 07 February 2024).
-      </p>
-      <OsmLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $state.show}
-  <div style="border: 1px solid black; padding: 8px;">
-    <CheckboxGroup>
-      <Checkbox bind:checked={$state.school}>
-        <ColorLegend color={colors.education.schools} />
-        Schools
-      </Checkbox>
-      <Checkbox bind:checked={$state.college}>
-        <ColorLegend color={colors.education.colleges} />
-        Colleges
-      </Checkbox>
-      <Checkbox bind:checked={$state.university}>
-        <ColorLegend color={colors.education.universities} />
-        Universities
-      </Checkbox>
-    </CheckboxGroup>
-  </div>
-{/if}
+<LayerControl {name}>
+  <Checkbox bind:checked={$state.show}>
+    Education
+    <span slot="right">
+      <HelpButton>
+        <p>
+          This shows different places of education according to OpenStreetMap
+          (as of 07 February 2024).
+        </p>
+        <OsmLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $state.show}
+    <div style="border: 1px solid black; padding: 8px;">
+      <CheckboxGroup>
+        <Checkbox bind:checked={$state.school}>
+          <ColorLegend color={colors.education.schools} />
+          Schools
+        </Checkbox>
+        <Checkbox bind:checked={$state.college}>
+          <ColorLegend color={colors.education.colleges} />
+          Colleges
+        </Checkbox>
+        <Checkbox bind:checked={$state.university}>
+          <ColorLegend color={colors.education.universities} />
+          Universities
+        </Checkbox>
+      </CheckboxGroup>
+    </div>
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

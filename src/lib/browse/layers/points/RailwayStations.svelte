@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -17,27 +18,29 @@
   let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={$show}>
-  <img src={railwayStation} alt="A logo representing a train" />
-  Railway Stations
-  <span slot="right">
-    <HelpButton>
-      <p>
-        This shows <ExternalLink
-          href="https://wiki.openstreetmap.org/wiki/Tag:railway%3Dstation"
-        >
-          railway station
-        </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
-      </p>
-      <p>
-        Icon from <ExternalLink href="https://www.nationalrail.co.uk/">
-          National Rail
-        </ExternalLink>. (Note that not all stations shown are National Rail.)
-      </p>
-      <OsmLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <img src={railwayStation} alt="A logo representing a train" />
+    Railway Stations
+    <span slot="right">
+      <HelpButton>
+        <p>
+          This shows <ExternalLink
+            href="https://wiki.openstreetmap.org/wiki/Tag:railway%3Dstation"
+          >
+            railway station
+          </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
+        </p>
+        <p>
+          Icon from <ExternalLink href="https://www.nationalrail.co.uk/">
+            National Rail
+          </ExternalLink>. (Note that not all stations shown are National Rail.)
+        </p>
+        <OsmLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
 
 <GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>
   <SymbolLayer

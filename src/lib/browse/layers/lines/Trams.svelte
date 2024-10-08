@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import { ColorLegend, HelpButton, publicResourceBaseUrl } from "lib/common";
   import { Checkbox } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
@@ -24,20 +25,22 @@
   }
 </script>
 
-<Checkbox bind:checked={$show}>
-  <ColorLegend color={colors.trams} />
-  Trams
-  <span slot="right">
-    <HelpButton>
-      <p>
-        This shows all trams and light rail lines, according to OpenStreetMap
-        (as of 7 February 2024). When these are close to a scheme, interactions
-        between the modes must be designed carefully.
-      </p>
-      <OsmLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <ColorLegend color={colors.trams} />
+    Trams
+    <span slot="right">
+      <HelpButton>
+        <p>
+          This shows all trams and light rail lines, according to OpenStreetMap
+          (as of 7 February 2024). When these are close to a scheme,
+          interactions between the modes must be designed carefully.
+        </p>
+        <OsmLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

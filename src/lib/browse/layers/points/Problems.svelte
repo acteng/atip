@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     HelpButton,
     Popup,
@@ -43,24 +44,26 @@
   ];
 </script>
 
-<Checkbox bind:checked={$show}>
-  Issues & Conflicts
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Critical issues and policy conflicts from the Design Assistance Log.
-        This is internally collected data.
-      </p>
-      <p>
-        This layer is manually copied from a copy of the DA Log. The data is
-        recent as of 10 June 2024.
-      </p>
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $show}
-  <Legend rows={legend} />
-{/if}
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    Issues & Conflicts
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Critical issues and policy conflicts from the Design Assistance Log.
+          This is internally collected data.
+        </p>
+        <p>
+          This layer is manually copied from a copy of the DA Log. The data is
+          recent as of 10 June 2024.
+        </p>
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $show}
+    <Legend rows={legend} />
+  {/if}
+</LayerControl>
 
 <GeoJSON data={`${privateResourceBaseUrl()}/v1/problems.geojson.gz`}>
   <CircleLayer

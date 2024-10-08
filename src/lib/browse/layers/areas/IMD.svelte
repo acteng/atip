@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -27,29 +28,35 @@
   let show = showHideLayer(name);
 </script>
 
-<Checkbox bind:checked={$show}>
-  Indices of Multiple Deprivation
-  <span slot="right">
-    <HelpButton>
-      <p>
-        The 2019 English IMD scores come from <ExternalLink
-          href="https://data-communities.opendata.arcgis.com/datasets/communities::indices-of-multiple-deprivation-imd-2019-1/explore"
-        >
-          DLUCH GIS
-        </ExternalLink>. Note the LSOAs identified are from the 2011 census. A
-        detailed breakdown of the score across different categories can be found <ExternalLink
-          href="http://dclgapps.communities.gov.uk/imd/iod_index.html"
-        >
-          here
-        </ExternalLink>.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $show}
-  <SequentialLegend {colorScale} limits={["Least deprived", "Most deprived"]} />
-{/if}
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    Indices of Multiple Deprivation
+    <span slot="right">
+      <HelpButton>
+        <p>
+          The 2019 English IMD scores come from <ExternalLink
+            href="https://data-communities.opendata.arcgis.com/datasets/communities::indices-of-multiple-deprivation-imd-2019-1/explore"
+          >
+            DLUCH GIS
+          </ExternalLink>. Note the LSOAs identified are from the 2011 census. A
+          detailed breakdown of the score across different categories can be
+          found <ExternalLink
+            href="http://dclgapps.communities.gov.uk/imd/iod_index.html"
+          >
+            here
+          </ExternalLink>.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $show}
+    <SequentialLegend
+      {colorScale}
+      limits={["Least deprived", "Most deprived"]}
+    />
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

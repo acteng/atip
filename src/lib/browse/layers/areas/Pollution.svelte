@@ -1,10 +1,13 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import { ExternalLink, HelpButton } from "lib/common";
   import { Checkbox, Select } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import { RasterLayer, RasterTileSource } from "svelte-maplibre";
   import OsOglLicense from "../OsOglLicense.svelte";
   import { customUrlState } from "../url";
+
+  let name = "pollution";
 
   type State = {
     show: boolean;
@@ -27,7 +30,7 @@
       opacity: parseInt(opacity),
     };
   }
-  let state = customUrlState("pollution", defaultState, stringify, parse);
+  let state = customUrlState(name, defaultState, stringify, parse);
 
   // URLs and layers found from https://uk-air.defra.gov.uk/data/wms-services
   // and QGIS
@@ -78,57 +81,59 @@
   }
 </script>
 
-<Checkbox bind:checked={$state.show}>
-  Pollution
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Most layers show air quality data from <ExternalLink
-          href="https://uk-air.defra.gov.uk/data/wms-services"
-        >
-          DEFRA
-        </ExternalLink>. The measurements are annual means, in units of
-        &micro;gm
-        <sup>3</sup>
-        . Note the particulate matter layers are not corrected for natural sources.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+<LayerControl {name}>
+  <Checkbox bind:checked={$state.show}>
+    Pollution
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Most layers show air quality data from <ExternalLink
+            href="https://uk-air.defra.gov.uk/data/wms-services"
+          >
+            DEFRA
+          </ExternalLink>. The measurements are annual means, in units of
+          &micro;gm
+          <sup>3</sup>
+          . Note the particulate matter layers are not corrected for natural sources.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
 
-{#if $state.show}
-  <Select
-    label="Pollutant"
-    choices={[
-      ["PM25_viridis", "Background PM2.5"],
-      ["PM10_viridis", "Background PM10"],
-      ["NOx_viridis", "Background NOx"],
-      ["PM25Roads_viridis", "Roadside PM2.5"],
-      ["PM10Roads_viridis", "Roadside PM10"],
-      ["NOxRoads_viridis", "Roadside NOx"],
-    ]}
-    bind:value={$state.pollutant}
-  />
-  <p>{title($state.pollutant)}</p>
+  {#if $state.show}
+    <Select
+      label="Pollutant"
+      choices={[
+        ["PM25_viridis", "Background PM2.5"],
+        ["PM10_viridis", "Background PM10"],
+        ["NOx_viridis", "Background NOx"],
+        ["PM25Roads_viridis", "Roadside PM2.5"],
+        ["PM10Roads_viridis", "Roadside PM10"],
+        ["NOxRoads_viridis", "Roadside NOx"],
+      ]}
+      bind:value={$state.pollutant}
+    />
+    <p>{title($state.pollutant)}</p>
 
-  <div>
-    <label>
-      Opacity
-      <input type="range" min="0" max="100" bind:value={$state.opacity} />
-    </label>
-  </div>
+    <div>
+      <label>
+        Opacity
+        <input type="range" min="0" max="100" bind:value={$state.opacity} />
+      </label>
+    </div>
 
-  <img
-    src={legendUrl($state.pollutant)}
-    width={150}
-    alt={`Legend for ${$state.pollutant} layer`}
-  />
-{/if}
+    <img
+      src={legendUrl($state.pollutant)}
+      width={150}
+      alt={`Legend for ${$state.pollutant} layer`}
+    />
+  {/if}
+</LayerControl>
 
 <RasterTileSource tiles={[url]} tileSize={256}>
   <RasterLayer
-    {...layerId("pollution")}
+    {...layerId(name)}
     paint={{
       "raster-opacity": $state.opacity / 100.0,
     }}

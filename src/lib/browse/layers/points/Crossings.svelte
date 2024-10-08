@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     HelpButton,
@@ -54,24 +55,26 @@
   ];
 </script>
 
-<Checkbox bind:checked={$show}>
-  Crossings
-  <span slot="right">
-    <HelpButton>
-      <p>
-        This shows <ExternalLink
-          href="https://wiki.openstreetmap.org/wiki/Key:crossing"
-        >
-          crossing
-        </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
-      </p>
-      <OsmLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
-{#if $show}
-  <Legend rows={legend} />
-{/if}
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    Crossings
+    <span slot="right">
+      <HelpButton>
+        <p>
+          This shows <ExternalLink
+            href="https://wiki.openstreetmap.org/wiki/Key:crossing"
+          >
+            crossing
+          </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
+        </p>
+        <OsmLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+  {#if $show}
+    <Legend rows={legend} />
+  {/if}
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}

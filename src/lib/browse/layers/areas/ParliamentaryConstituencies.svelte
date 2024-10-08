@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LayerControl from "../LayerControl.svelte";
   import {
     ColorLegend,
     ExternalLink,
@@ -39,22 +40,24 @@
   }
 </script>
 
-<Checkbox bind:checked={$show}>
-  <ColorLegend {color} />
-  Parliamentary constituencies
-  <span slot="right">
-    <HelpButton>
-      <p>
-        Data from <ExternalLink
-          href="https://www.ordnancesurvey.co.uk/products/boundary-line"
-        >
-          Ordnance Survey Boundary-Line
-        </ExternalLink>, as of May 2023.
-      </p>
-      <OsOglLicense />
-    </HelpButton>
-  </span>
-</Checkbox>
+<LayerControl {name}>
+  <Checkbox bind:checked={$show}>
+    <ColorLegend {color} />
+    Parliamentary constituencies
+    <span slot="right">
+      <HelpButton>
+        <p>
+          Data from <ExternalLink
+            href="https://www.ordnancesurvey.co.uk/products/boundary-line"
+          >
+            Ordnance Survey Boundary-Line
+          </ExternalLink>, as of May 2023.
+        </p>
+        <OsOglLicense />
+      </HelpButton>
+    </span>
+  </Checkbox>
+</LayerControl>
 
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
