@@ -23,6 +23,8 @@
   let show = showHideLayer(name);
 </script>
 
+<Checkbox bind:checked={$show}>Hospitals</Checkbox>
+
 <LayerControl {name}>
   <Checkbox bind:checked={$show}>
     <ColorLegend color={colors.hospitals} />
