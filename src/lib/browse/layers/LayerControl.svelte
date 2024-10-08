@@ -65,17 +65,21 @@
 <!-- For the right panel -->
 <div bind:this={contents}>
   <CheckboxGroup small>
-    <Checkbox bind:checked={show}>
-      <slot name="icon" />
-      {title}
-      <span slot="right">
+    <div
+      style="display: flex; justify-content: space-between; white-space: nowrap"
+    >
+      <Checkbox bind:checked={show}>
+        <slot name="icon" />
+        {title}
+      </Checkbox>
+      <span>
         <HelpButton>
           <slot name="help" />
         </HelpButton>
 
         <SecondaryButton on:click={remove}>X</SecondaryButton>
       </span>
-    </Checkbox>
+    </div>
   </CheckboxGroup>
   {#if show}
     <slot name="controls" />
