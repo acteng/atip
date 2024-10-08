@@ -59,7 +59,7 @@
   </span>
 
   <div slot="controls" style="border: 1px solid black; padding: 8px;">
-    <CheckboxGroup>
+    <CheckboxGroup small>
       <Checkbox bind:checked={$state.school}>
         <ColorLegend color={colors.education.schools} />
         Schools

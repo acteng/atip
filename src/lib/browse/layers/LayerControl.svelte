@@ -20,7 +20,7 @@
   // The controls for each layer are defined in a layer component's optional
   // "controls" slot, as well as the generic controls defined below in
   // this component. The whole DOM element is bound here, then it's
-  // stored centrally in layerLegends . That lets ActiveLayersLegend
+  // stored centrally in layerLegends. That lets ActiveLayersLegend
   // later display the proper layer controls in one place.
   let contents: HTMLDivElement | null = null;
 
