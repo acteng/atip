@@ -76,7 +76,7 @@
     </p>
   </span>
 
-  <span slot="controls">
+  <div slot="controls" style="border: 1px solid black; padding: 8px;">
     <SequentialLegend {colorScale} {limits} />
     <Radio
       label="Show speed types"
@@ -87,7 +87,7 @@
       bind:value={$state.kind}
       inlineSmall
     />
-  </span>
+  </div>
 </LayerControl>
 
 <VectorTileSource

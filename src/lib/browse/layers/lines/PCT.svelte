@@ -89,7 +89,7 @@
     </p>
   </span>
 
-  <span slot="controls">
+  <div slot="controls" style="border: 1px solid black; padding: 8px;">
     <SequentialLegend {colorScale} {limits} />
     <Radio
       label="Trip purpose"
@@ -109,7 +109,7 @@
       ]}
       bind:value={$state.scenario}
     />
-  </span>
+  </div>
 </LayerControl>
 
 <VectorTileSource

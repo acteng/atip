@@ -116,7 +116,7 @@
     <OsOglLicense />
   </span>
 
-  <span slot="controls">
+  <div slot="controls" style="border: 1px solid black; padding: 8px;">
     <Radio
       label="Dataset"
       choices={[
@@ -125,6 +125,7 @@
         ["population_density", "Population density"],
       ]}
       bind:value={$state.kind}
+      inlineSmall
     />
 
     {#if $state.kind == "percent_households_with_car"}
@@ -138,7 +139,7 @@
         limits={makeLimits($state.kind).map((x) => x.toLocaleString())}
       />
     {/if}
-  </span>
+  </div>
 </LayerControl>
 
 <VectorTileSource
