@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { activeLayers } from "./url";
-  import { layerLegends } from "./stores";
+  import { activeLayers, layerLegends } from "./stores";
 
   let container: HTMLDivElement | null = null;
 
