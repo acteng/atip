@@ -8,6 +8,7 @@
   import { customUrlState } from "../url";
 
   let name = "pollution";
+  let title = "Pollution";
 
   type State = {
     show: boolean;
@@ -51,7 +52,7 @@
     return `https://ukair.maps.rcdo.co.uk/ukairserver/services/aq_amb_2022/${$state.pollutant}/MapServer/WMSServer`;
   }
 
-  function title(pollutant: string): string {
+  function label(pollutant: string): string {
     return info![1];
   }
 
@@ -81,9 +82,9 @@
   }
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$state.show}>
   <Checkbox bind:checked={$state.show}>
-    Pollution
+    {title}
     <span slot="right">
       <HelpButton>
         <p>
@@ -114,7 +115,7 @@
       ]}
       bind:value={$state.pollutant}
     />
-    <p>{title($state.pollutant)}</p>
+    <p>{label($state.pollutant)}</p>
 
     <div>
       <label>

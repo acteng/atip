@@ -21,6 +21,7 @@
   import { showHideLayer } from "../url";
 
   let name = "wards";
+  let title = "Wards";
   let color = colors.wards;
 
   let show = showHideLayer(name);
@@ -32,10 +33,10 @@
   }
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
     <ColorLegend {color} />
-    Wards
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

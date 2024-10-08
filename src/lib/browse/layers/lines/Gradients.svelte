@@ -21,15 +21,16 @@
   import { showHideLayer } from "../url";
 
   let name = "gradient";
+  let title = "Gradients";
   let colorScale = colors.gradient_flat_to_steep;
   let limits = [0, 3, 5, 8, 10, 20, 100];
 
   let show = showHideLayer(name);
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    Gradients
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

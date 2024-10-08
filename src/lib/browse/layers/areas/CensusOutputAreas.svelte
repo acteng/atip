@@ -95,7 +95,11 @@
   }
 </script>
 
-<LayerControl {name}>
+<LayerControl
+  {name}
+  title="TODO the 3 census layers"
+  bind:show={showHouseholdsWithCar}
+>
   <Checkbox
     bind:checked={showHouseholdsWithCar}
     on:change={() => {

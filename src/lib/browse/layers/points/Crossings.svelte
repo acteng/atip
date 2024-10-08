@@ -19,6 +19,7 @@
   import { showHideLayer } from "../url";
 
   let name = "crossings";
+  let title = "Crossings";
 
   let show = showHideLayer(name);
 
@@ -55,9 +56,9 @@
   ];
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    Crossings
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

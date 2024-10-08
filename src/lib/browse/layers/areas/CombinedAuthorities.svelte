@@ -21,6 +21,7 @@
   import { showHideLayer } from "../url";
 
   let name = "combined_authorities";
+  let title = "Combined authorities";
   let color = colors.combined_authorities;
 
   let show = showHideLayer(name);
@@ -35,10 +36,10 @@
   }
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
     <ColorLegend {color} />
-    Combined authorities
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

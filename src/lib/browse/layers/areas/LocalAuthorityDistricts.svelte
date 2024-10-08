@@ -21,6 +21,7 @@
   import { showHideLayer } from "../url";
 
   let name = "local_authority_districts";
+  let title = "Local Authority Districts";
   let color = colors.local_authority_districts;
 
   let show = showHideLayer(name);
@@ -35,10 +36,10 @@
   }
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
     <ColorLegend {color} />
-    Local Authority Districts
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

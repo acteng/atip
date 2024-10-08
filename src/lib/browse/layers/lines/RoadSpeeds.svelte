@@ -18,6 +18,7 @@
   import { customUrlState } from "../url";
 
   let name = "road_speeds";
+  let title = "OS Speeds";
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 20, 30, 40, 50, 90];
 
@@ -58,9 +59,9 @@
   };
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$state.show}>
   <Checkbox bind:checked={$state.show}>
-    OS Speeds
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

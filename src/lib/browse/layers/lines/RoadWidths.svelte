@@ -18,15 +18,16 @@
   import { showHideLayer } from "../url";
 
   let name = "road_widths";
+  let title = "OS Road widths";
   let colorScale = colors.sequential_low_to_high;
   let limits = [0, 5, 10, 15, 20, 100];
 
   let show = showHideLayer(name);
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    OS Road widths
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

@@ -20,6 +20,7 @@
   import { showHideLayer } from "../url";
 
   let name = "local_planning_authorities";
+  let title = "Local Planning Authorities";
   let color = colors.local_planning_authorities;
 
   let show = showHideLayer(name);
@@ -28,10 +29,10 @@
   // -- but can't we fix that now?
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
     <ColorLegend {color} />
-    Local Planning Authorities
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

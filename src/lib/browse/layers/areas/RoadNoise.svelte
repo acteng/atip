@@ -19,6 +19,7 @@
   import { showHideLayer } from "../url";
 
   let name = "road_noise";
+  let title = "Road noise";
 
   // 5 buckets from the input are grouped into 3
   function describe(noiseclass: string): string {
@@ -40,9 +41,9 @@
   let show = showHideLayer(name);
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    Road noise
+    {title}
     <span slot="right">
       <HelpButton>
         <p>

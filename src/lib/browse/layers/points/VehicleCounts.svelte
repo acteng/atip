@@ -19,6 +19,7 @@
   import { showHideLayer } from "../url";
 
   let name = "vehicle_counts";
+  let title = "Vehicle counts";
 
   let colorScale = colors.sequential_low_to_high;
   // Manual buckets for motor_vehicles, which max out at 205,000
@@ -38,9 +39,9 @@
   }
 </script>
 
-<LayerControl {name}>
+<LayerControl {name} {title} bind:show={$show}>
   <Checkbox bind:checked={$show}>
-    Vehicle counts
+    {title}
     <span slot="right">
       <HelpButton>
         <p>
