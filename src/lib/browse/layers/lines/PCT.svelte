@@ -1,12 +1,7 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox, Radio, Select } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
+  import { Radio, Select } from "govuk-svelte";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
@@ -72,33 +67,29 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$state.show}>
-  <Checkbox bind:checked={$state.show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          The PCT shows major links on the transport network on which there is
-          high latent demand for cycling under scenarios of change, based on the
-          "fastest" routes from CycleStreets. Counts approximate daily rush hour
-          traffic levels.
-        </p>
-        <p>
-          Note this layer uses 2011 census data and outdated OpenStreetMap data.
-          Please use this layer with caution.
-        </p>
-        <p>
-          See <ExternalLink href="https://www.pct.bike">
-            the PCT website
-          </ExternalLink> and <ExternalLink
-            href="https://www.jtlu.org/index.php/jtlu/article/view/862"
-          >
-            2017 journal article
-          </ExternalLink> for details on methodology and data sources.
-        </p>
-      </HelpButton>
-    </span>
-  </Checkbox>
-  {#if $state.show}
+  <span slot="help">
+    <p>
+      The PCT shows major links on the transport network on which there is high
+      latent demand for cycling under scenarios of change, based on the
+      "fastest" routes from CycleStreets. Counts approximate daily rush hour
+      traffic levels.
+    </p>
+    <p>
+      Note this layer uses 2011 census data and outdated OpenStreetMap data.
+      Please use this layer with caution.
+    </p>
+    <p>
+      See <ExternalLink href="https://www.pct.bike">
+        the PCT website
+      </ExternalLink> and <ExternalLink
+        href="https://www.jtlu.org/index.php/jtlu/article/view/862"
+      >
+        2017 journal article
+      </ExternalLink> for details on methodology and data sources.
+    </p>
+  </span>
+
+  <span slot="controls">
     <SequentialLegend {colorScale} {limits} />
     <Radio
       label="Trip purpose"
@@ -118,7 +109,7 @@
       ]}
       bind:value={$state.scenario}
     />
-  {/if}
+  </span>
 </LayerControl>
 
 <VectorTileSource

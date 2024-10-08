@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     FillLayer,
@@ -30,33 +24,27 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          The 2019 English IMD scores come from <ExternalLink
-            href="https://data-communities.opendata.arcgis.com/datasets/communities::indices-of-multiple-deprivation-imd-2019-1/explore"
-          >
-            DLUCH GIS
-          </ExternalLink>. Note the LSOAs identified are from the 2011 census. A
-          detailed breakdown of the score across different categories can be
-          found <ExternalLink
-            href="http://dclgapps.communities.gov.uk/imd/iod_index.html"
-          >
-            here
-          </ExternalLink>.
-        </p>
-        <OsOglLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
-  {#if $show}
+  <span slot="help">
+    <p>
+      The 2019 English IMD scores come from <ExternalLink
+        href="https://data-communities.opendata.arcgis.com/datasets/communities::indices-of-multiple-deprivation-imd-2019-1/explore"
+      >
+        DLUCH GIS
+      </ExternalLink>. Note the LSOAs identified are from the 2011 census. A
+      detailed breakdown of the score across different categories can be found <ExternalLink
+        href="http://dclgapps.communities.gov.uk/imd/iod_index.html"
+      >
+        here
+      </ExternalLink>.
+    </p>
+    <OsOglLicense />
+  </span>
+  <span slot="controls">
     <SequentialLegend
       {colorScale}
       limits={["Least deprived", "Most deprived"]}
     />
-  {/if}
+  </span>
 </LayerControl>
 
 <VectorTileSource

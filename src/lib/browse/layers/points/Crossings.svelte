@@ -2,12 +2,10 @@
   import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
-    HelpButton,
     Legend,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
   import { constructMatchExpression, layerId } from "lib/maplibre";
   import {
     CircleLayer,
@@ -57,24 +55,19 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This shows <ExternalLink
-            href="https://wiki.openstreetmap.org/wiki/Key:crossing"
-          >
-            crossing
-          </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
-        </p>
-        <OsmLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
-  {#if $show}
+  <span slot="help">
+    <p>
+      This shows <ExternalLink
+        href="https://wiki.openstreetmap.org/wiki/Key:crossing"
+      >
+        crossing
+      </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
+    </p>
+    <OsmLicense />
+  </span>
+  <div slot="controls">
     <Legend rows={legend} />
-  {/if}
+  </div>
 </LayerControl>
 
 <VectorTileSource

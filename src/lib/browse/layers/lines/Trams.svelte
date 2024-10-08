@@ -1,7 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import { ColorLegend, HelpButton, publicResourceBaseUrl } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ColorLegend, publicResourceBaseUrl } from "lib/common";
   import { layerId } from "lib/maplibre";
   import {
     hoverStateFilter,
@@ -27,20 +26,15 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <ColorLegend color={colors.trams} />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This shows all trams and light rail lines, according to OpenStreetMap
-          (as of 7 February 2024). When these are close to a scheme,
-          interactions between the modes must be designed carefully.
-        </p>
-        <OsmLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="icon"><ColorLegend color={colors.trams} /></span>
+  <span slot="help">
+    <p>
+      This shows all trams and light rail lines, according to OpenStreetMap (as
+      of 7 February 2024). When these are close to a scheme, interactions
+      between the modes must be designed carefully.
+    </p>
+    <OsmLicense />
+  </span>
 </LayerControl>
 
 <VectorTileSource

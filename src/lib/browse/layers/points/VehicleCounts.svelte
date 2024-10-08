@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     CircleLayer,
@@ -40,36 +34,31 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          AADF (annual average daily flow) data from <ExternalLink
-            href="https://roadtraffic.dft.gov.uk/downloads"
-          >
-            DfT road statistics
-          </ExternalLink>. This counts the total daily number of vehicles
-          traveling past a count point (in both directions) on an average day of
-          the year. Data from the latest year available is shown. See <ExternalLink
-            href="https://storage.googleapis.com/dft-statistics/road-traffic/all-traffic-data-metadata.pdf"
-          >
-            methodology
-          </ExternalLink> for details and caveats about the measurements.
-        </p>
-        <p>
-          The colors show motor vehicles AADF, not pedal cycles. The outline is
-          thicker when the latest data is a manual or automatic count, and
-          thinner when it's an estimate from previous years or nearby counters.
-          Click a point for full data.
-        </p>
-        <OsOglLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
-  {#if $show}
+  <span slot="help">
+    <p>
+      AADF (annual average daily flow) data from <ExternalLink
+        href="https://roadtraffic.dft.gov.uk/downloads"
+      >
+        DfT road statistics
+      </ExternalLink>. This counts the total daily number of vehicles traveling
+      past a count point (in both directions) on an average day of the year.
+      Data from the latest year available is shown. See <ExternalLink
+        href="https://storage.googleapis.com/dft-statistics/road-traffic/all-traffic-data-metadata.pdf"
+      >
+        methodology
+      </ExternalLink> for details and caveats about the measurements.
+    </p>
+    <p>
+      The colors show motor vehicles AADF, not pedal cycles. The outline is
+      thicker when the latest data is a manual or automatic count, and thinner
+      when it's an estimate from previous years or nearby counters. Click a
+      point for full data.
+    </p>
+    <OsOglLicense />
+  </span>
+  <span slot="controls">
     <SequentialLegend {colorScale} limits={describeLimits} />
-  {/if}
+  </span>
 </LayerControl>
 
 <VectorTileSource

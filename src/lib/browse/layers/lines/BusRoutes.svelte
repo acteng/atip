@@ -3,11 +3,9 @@
   import {
     ColorLegend,
     ExternalLink,
-    HelpButton,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import {
     hoverStateFilter,
@@ -25,27 +23,22 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <ColorLegend color={colors.bus_route_with_lane} />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This shows all roads with at least one bus route crossing them. It
-          also shows whether the road has a bus lane or not.
-        </p>
-        <p>
-          Note this data is from OpenStreetMap (as of 9 August 2023), not <ExternalLink
-            href="https://gtfs.org"
-          >
-            GTFS
-          </ExternalLink>, and doesn't include which routes are run or the
-          frequency of service.
-        </p>
-        <OsmLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="icon"><ColorLegend color={colors.bus_route_with_lane} /></span>
+  <span slot="help">
+    <p>
+      This shows all roads with at least one bus route crossing them. It also
+      shows whether the road has a bus lane or not.
+    </p>
+    <p>
+      Note this data is from OpenStreetMap (as of 9 August 2023), not <ExternalLink
+        href="https://gtfs.org"
+      >
+        GTFS
+      </ExternalLink>, and doesn't include which routes are run or the frequency
+      of service.
+    </p>
+    <OsmLicense />
+  </span>
 </LayerControl>
 
 <VectorTileSource

@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    privateResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ExternalLink, Popup, privateResourceBaseUrl } from "lib/common";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
@@ -39,39 +33,34 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This shows the average and minimum pavement width (in meters) from
-          Ordnance Survey. Because the shape of pavement may vary along a road,
-          both average and minimum are reported. Measurements may be available
-          for the left side of the road, the right, or both. The coloring shows
-          the larger of the two average widths, and the line thickness has no
-          meaning. Hover over a line to see if there's pavement on one or both
-          sides of the road. (You won't be able to distinguish left and right
-          though; use the OS Road basemap instead.)
-        </p>
-        <p>
-          Note these measurements are difficult to interpret near dual
-          carriageways (shown as parallel lines).
-        </p>
-        <p>Data valid as of 1 January, 2024</p>
-        <p>
-          License: Contains OS data &copy; Crown copyright and database right
-          2023. Made available under the <ExternalLink
-            href="https://www.ordnancesurvey.co.uk/documents/licensing/psga-member-licence.pdf"
-          >
-            Public Sector Geospatial Agreement
-          </ExternalLink>.
-        </p>
-      </HelpButton>
-    </span>
-  </Checkbox>
-  {#if $show}
+  <span slot="help">
+    <p>
+      This shows the average and minimum pavement width (in meters) from
+      Ordnance Survey. Because the shape of pavement may vary along a road, both
+      average and minimum are reported. Measurements may be available for the
+      left side of the road, the right, or both. The coloring shows the larger
+      of the two average widths, and the line thickness has no meaning. Hover
+      over a line to see if there's pavement on one or both sides of the road.
+      (You won't be able to distinguish left and right though; use the OS Road
+      basemap instead.)
+    </p>
+    <p>
+      Note these measurements are difficult to interpret near dual carriageways
+      (shown as parallel lines).
+    </p>
+    <p>Data valid as of 1 January, 2024</p>
+    <p>
+      License: Contains OS data &copy; Crown copyright and database right 2023.
+      Made available under the <ExternalLink
+        href="https://www.ordnancesurvey.co.uk/documents/licensing/psga-member-licence.pdf"
+      >
+        Public Sector Geospatial Agreement
+      </ExternalLink>.
+    </p>
+  </span>
+  <span slot="controls">
     <SequentialLegend {colorScale} {limits} />
-  {/if}
+  </span>
 </LayerControl>
 
 <VectorTileSource

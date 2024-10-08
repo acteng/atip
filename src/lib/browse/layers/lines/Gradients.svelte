@@ -2,13 +2,7 @@
   import LayerControl from "../LayerControl.svelte";
   import OsmLicense from "../OsmLicense.svelte";
   import OsOglLicense from "../OsOglLicense.svelte";
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
@@ -29,34 +23,29 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          This layer shows the steepness of roads, with the arrows pointing
-          uphill. You have to zoom in to see all roads.
-        </p>
-        <p>
-          Note the gradient may be incorrect near bridges and tunnels, depending
-          on the underlying Digital Elevation Model used.
-        </p>
-        <p>
-          This layer is built from <ExternalLink
-            href="https://www.ordnancesurvey.co.uk/products/os-terrain-50"
-          >
-            OS Terrain 50
-          </ExternalLink> and roads from OpenStreetMap. The data is valid as of 18
-          February 2024.
-        </p>
-        <OsOglLicense />
-        <OsmLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
-  {#if $show}
+  <span slot="help">
+    <p>
+      This layer shows the steepness of roads, with the arrows pointing uphill.
+      You have to zoom in to see all roads.
+    </p>
+    <p>
+      Note the gradient may be incorrect near bridges and tunnels, depending on
+      the underlying Digital Elevation Model used.
+    </p>
+    <p>
+      This layer is built from <ExternalLink
+        href="https://www.ordnancesurvey.co.uk/products/os-terrain-50"
+      >
+        OS Terrain 50
+      </ExternalLink> and roads from OpenStreetMap. The data is valid as of 18 February
+      2024.
+    </p>
+    <OsOglLicense />
+    <OsmLicense />
+  </span>
+  <span slot="controls">
     <SequentialLegend {colorScale} {limits} />
-  {/if}
+  </span>
 </LayerControl>
 
 <VectorTileSource

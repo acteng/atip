@@ -1,12 +1,6 @@
 <script lang="ts">
   import LayerControl from "../LayerControl.svelte";
-  import {
-    ExternalLink,
-    HelpButton,
-    Popup,
-    publicResourceBaseUrl,
-  } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId } from "lib/maplibre";
   import { SymbolLayer, VectorTileSource } from "svelte-maplibre";
   import cycleParking from "../../../../../assets/bicycle_parking.png?url";
@@ -20,30 +14,25 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <img src={cycleParking} alt="a logo representing cycle parking" />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          Cycle parking, according to <ExternalLink
-            href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking"
-          >
-            OpenStreetMap
-          </ExternalLink> (as of 9 August 2023). The type of parking, public/private
-          access, and whether it's covered are not shown.
-        </p>
-        <p>
-          Icon from <ExternalLink
-            href="https://github.com/gravitystorm/openstreetmap-carto"
-          >
-            OpenStreetMap Carto
-          </ExternalLink>
-        </p>
-        <OsmLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <img slot="icon" src={cycleParking} alt="a logo representing cycle parking" />
+  <span slot="help">
+    <p>
+      Cycle parking, according to <ExternalLink
+        href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking"
+      >
+        OpenStreetMap
+      </ExternalLink> (as of 9 August 2023). The type of parking, public/private
+      access, and whether it's covered are not shown.
+    </p>
+    <p>
+      Icon from <ExternalLink
+        href="https://github.com/gravitystorm/openstreetmap-carto"
+      >
+        OpenStreetMap Carto
+      </ExternalLink>
+    </p>
+    <OsmLicense />
+  </span>
 </LayerControl>
 
 <VectorTileSource

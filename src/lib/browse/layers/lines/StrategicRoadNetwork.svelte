@@ -3,11 +3,9 @@
   import {
     ColorLegend,
     ExternalLink,
-    HelpButton,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import {
     hoverStateFilter,
@@ -26,23 +24,18 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <ColorLegend {color} />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          Data from <ExternalLink
-            href="https://osdatahub.os.uk/downloads/open/OpenRoads"
-          >
-            OS Open Roads
-          </ExternalLink>, as of December 2023. The SRN is equivalent to trunk
-          roads.
-        </p>
-        <OsOglLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="icon"><ColorLegend {color} /></span>
+  <span slot="help">
+    <p>
+      Data from <ExternalLink
+        href="https://osdatahub.os.uk/downloads/open/OpenRoads"
+      >
+        OS Open Roads
+      </ExternalLink>, as of December 2023. The SRN is equivalent to trunk
+      roads.
+    </p>
+    <OsOglLicense />
+  </span>
 </LayerControl>
 
 <VectorTileSource

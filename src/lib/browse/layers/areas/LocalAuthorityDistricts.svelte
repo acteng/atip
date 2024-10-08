@@ -3,11 +3,9 @@
   import {
     ColorLegend,
     ExternalLink,
-    HelpButton,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import {
     FillLayer,
@@ -37,22 +35,17 @@
 </script>
 
 <LayerControl {name} {title} bind:show={$show}>
-  <Checkbox bind:checked={$show}>
-    <ColorLegend {color} />
-    {title}
-    <span slot="right">
-      <HelpButton>
-        <p>
-          Data from <ExternalLink
-            href="https://geoportal.statistics.gov.uk/maps/79a4e87783be4b6bbb96ddad6dda52a3"
-          >
-            ONS Geography
-          </ExternalLink>, as of January 2024.
-        </p>
-        <OsOglLicense />
-      </HelpButton>
-    </span>
-  </Checkbox>
+  <span slot="icon"><ColorLegend {color} /></span>
+  <span slot="help">
+    <p>
+      Data from <ExternalLink
+        href="https://geoportal.statistics.gov.uk/maps/79a4e87783be4b6bbb96ddad6dda52a3"
+      >
+        ONS Geography
+      </ExternalLink>, as of January 2024.
+    </p>
+    <OsOglLicense />
+  </span>
 </LayerControl>
 
 <GeoJSON data={`${publicResourceBaseUrl()}/v1/${name}.geojson`}>
