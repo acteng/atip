@@ -17,6 +17,7 @@
   import SequentialLegend from "../SequentialLegend.svelte";
   import { customUrlState } from "../url";
 
+  let name = "pct";
   // TODO It'd be much simpler to have one source with both attributes
   let nameCommute = "pct_commute";
   let nameSchool = "pct_school";
@@ -45,7 +46,7 @@
       scenario,
     };
   }
-  let state = customUrlState("pct", defaultState, stringify, parse);
+  let state = customUrlState(name, defaultState, stringify, parse);
 
   // TODO Don't use a function and @html; do everything in Svelte?
   function tooltip(props: { [name: string]: any }): string {
@@ -70,7 +71,7 @@
   }
 </script>
 
-<LayerControl name="pct" {title} bind:show={$state.show}>
+<LayerControl {name} {title} bind:show={$state.show}>
   <Checkbox bind:checked={$state.show}>
     {title}
     <span slot="right">

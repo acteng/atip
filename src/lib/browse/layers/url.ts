@@ -1,7 +1,5 @@
 import { writable, type Writable } from "svelte/store";
 
-export let activeLayers: Writable<Set<string>> = writable(new Set());
-
 // Create a store to represent whether a layer should be shown or hidden. The
 // state is synced as a URL query parameter.
 export function showHideLayer(name: string): Writable<boolean> {
@@ -15,14 +13,6 @@ export function showHideLayer(name: string): Writable<boolean> {
     } else {
       url.searchParams.delete(name);
     }
-    activeLayers.update((l) => {
-      if (show) {
-        l.add(name);
-      } else {
-        l.delete(name);
-      }
-      return l;
-    });
     window.history.replaceState(null, "", url.toString());
   });
   return store;
@@ -59,14 +49,6 @@ export function customUrlState<T>(
     } else {
       url.searchParams.set(name, value);
     }
-    activeLayers.update((l) => {
-      if (value == null) {
-        l.delete(name);
-      } else {
-        l.add(name);
-      }
-      return l;
-    });
     window.history.replaceState(null, "", url.toString());
   });
   return store;
