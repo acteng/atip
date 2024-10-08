@@ -50,9 +50,10 @@
       recent as of 10 June 2024.
     </p>
   </span>
-  <span slot="controls">
+
+  <div slot="controls" style="border: 1px solid black; padding: 8px;">
     <Legend rows={legend} />
-  </span>
+  </div>
 </LayerControl>
 
 <GeoJSON data={`${privateResourceBaseUrl()}/v1/problems.geojson.gz`}>

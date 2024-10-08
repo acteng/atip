@@ -68,7 +68,7 @@
   </div>
 </Layout>
 
-<div class="top-right">
+<div class="top-right govuk-prose">
   <ActiveLayersLegend />
 </div>
 

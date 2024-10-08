@@ -96,7 +96,7 @@
     <OsOglLicense />
   </span>
 
-  <span slot="controls">
+  <div slot="controls" style="border: 1px solid black; padding: 8px;">
     <Select
       label="Pollutant"
       choices={[
@@ -123,7 +123,7 @@
       width={150}
       alt={`Legend for ${$state.pollutant} layer`}
     />
-  </span>
+  </div>
 </LayerControl>
 
 <RasterTileSource tiles={[url]} tileSize={256}>
