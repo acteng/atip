@@ -15,10 +15,12 @@
     MapLibreMap,
     ZoomOutMap,
     Header,
+    openChooseSketchArea,
   } from "lib/common";
   import { map, mapStyle } from "stores";
   import { onMount } from "svelte";
   import { map as sketchMapStore } from "scheme-sketcher-lib/config";
+  import { SecondaryButton } from "govuk-svelte";
 
   onMount(() => {
     // For govuk components. Must happen here.
@@ -54,6 +56,9 @@
       <h1>Scheme Browser</h1>
       <ZoomOutMap boundaryGeojson={$atfSchemesGj} />
     </div>
+    <SecondaryButton on:click={openChooseSketchArea}>
+      Open Scheme Sketcher
+    </SecondaryButton>
 
     <div bind:this={sidebarDiv} />
   </div>

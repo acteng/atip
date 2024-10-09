@@ -23,6 +23,8 @@
     MapLibreMap,
     Popup,
     setLocalStorageItem,
+    startSketching,
+    openBrowsePage,
   } from "lib/common";
   import About from "lib/sketch/About.svelte";
   import { schema as schemaStore } from "stores";
@@ -34,7 +36,6 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import Header from "./ChooseAreaHeader.svelte";
-  import { startSketching, openBrowsePage } from "../lib/common/navigation";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",
