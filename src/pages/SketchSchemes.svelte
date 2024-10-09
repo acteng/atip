@@ -26,6 +26,7 @@
   import { mode } from "scheme-sketcher-lib/draw/stores";
   import { ButtonGroup, SecondaryButton } from "govuk-svelte";
   import About from "lib/sketch/About.svelte";
+  import { openBrowsePage } from "lib/common/navigation";
   import FileManagement from "lib/sketch/FileManagement.svelte";
   import Instructions from "lib/sketch/Instructions.svelte";
   import { PerModeControls } from "scheme-sketcher-lib/sidebar";
@@ -124,6 +125,9 @@
         <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
         <SecondaryButton on:click={toggleInstructions}>
           Instructions
+        </SecondaryButton>
+        <SecondaryButton on:click={openBrowsePage}>
+          Open Browse Page
         </SecondaryButton>
       </ButtonGroup>
     {/if}

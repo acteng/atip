@@ -34,6 +34,7 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import Header from "./ChooseAreaHeader.svelte";
+  import { startSketching, openBrowsePage } from "../lib/common/navigation";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",
@@ -105,13 +106,7 @@
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    window.location.href = `scheme.html?authority=${
-      e.detail.features[0].properties!.full_name
-    }&schema=${$schemaStore}`;
-  }
-
-  function start() {
-    window.location.href = `scheme.html?authority=${inputValue}&schema=${$schemaStore}`;
+    startSketching(e.detail.features[0].properties!.full_name);
   }
 </script>
 
@@ -128,9 +123,14 @@
 
       <h1>Scheme Sketcher</h1>
 
-      <SecondaryButton on:click={() => (showAbout = !showAbout)}>
-        About
-      </SecondaryButton>
+      <div class="govuk-button-group">
+        <SecondaryButton on:click={() => (showAbout = !showAbout)}>
+          About
+        </SecondaryButton>
+        <SecondaryButton on:click={openBrowsePage}>
+          Open Scheme Browser
+        </SecondaryButton>
+      </div>
       <ErrorMessage errorMessage={pageErrorMessage} />
 
       {#if authoritiesGj.features.length > 0}
@@ -144,7 +144,7 @@
         />
       {/if}
 
-      <DefaultButton on:click={start} disabled={!validEntry}>
+      <DefaultButton on:click={() => startSketching(inputValue)} disabled={!validEntry}>
         Start
       </DefaultButton>
 
