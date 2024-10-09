@@ -6,7 +6,7 @@
     Select,
     CheckboxGroup,
   } from "govuk-svelte";
-  import { appVersion, Legend, WarningIcon } from "lib/common";
+  import { appVersion, Legend, WarningIcon, getAllSketches } from "lib/common";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
   import { setupSchemes } from "./data";
   import Filters from "./Filters.svelte";
@@ -27,6 +27,7 @@
   import { constructMatchExpression } from "lib/maplibre";
   import LayerControl from "../layers/LayerControl.svelte";
   import { showHideLayer } from "../layers/url";
+  import { onMount } from "svelte";
 
   let errorMessage = "";
 
@@ -41,6 +42,12 @@
   let lcwipShow = showHideLayer(lcwipName);
   let lcwipStyle = "interventionType";
   $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
+
+  let localSketches;
+
+  onMount(() => {
+    localSketches = getAllSketches();
+  });
 
   function loadFile(filename: string, text: string) {
     try {
@@ -157,6 +164,10 @@
           <Legend rows={lcwipLegend} />
         </div>
       </LayerControl>
+    {/if}
+
+    {#if localSketches != undefined} 
+
     {/if}
   </CheckboxGroup>
 
