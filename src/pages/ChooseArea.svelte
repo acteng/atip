@@ -144,7 +144,10 @@
         />
       {/if}
 
-      <DefaultButton on:click={() => startSketching(inputValue)} disabled={!validEntry}>
+      <DefaultButton
+        on:click={() => startSketching(inputValue)}
+        disabled={!validEntry}
+      >
         Start
       </DefaultButton>
 
