@@ -127,7 +127,7 @@
           Instructions
         </SecondaryButton>
         <SecondaryButton on:click={openBrowsePage}>
-          Open Browse Page
+          Open Scheme Browser
         </SecondaryButton>
       </ButtonGroup>
     {/if}
