@@ -70,8 +70,10 @@ export let layerZorder = [
 
   browse("atf-interventions-polygons"),
   browse("lcwip-interventions-polygons"),
+  browse("local-sketches-interventions-polygons"),
   browse("atf-interventions-polygons-outlines"),
   browse("lcwip-interventions-polygons-outlines"),
+  browse("local-sketches-interventions-polygons-outlines"),
 
   // The hover effect thickens, so draw beneath
   sketch("hover-lines"),
@@ -80,14 +82,17 @@ export let layerZorder = [
 
   browse("atf-interventions-lines"),
   browse("lcwip-interventions-lines"),
+  browse("local-sketches-interventions-lines"),
   browse("atf-interventions-lines-endpoints"),
   browse("lcwip-interventions-lines-endpoints"),
+  browse("local-sketches-interventions-lines-endpoints"),
 
   sketch("hover-points"),
   sketch("interventions-points"),
 
   browse("atf-interventions-points"),
   browse("lcwip-interventions-points"),
+  browse("local-sketches-interventions-points"),
 
   // Problem points are one layer that should display on top of scheme data
   browse("problems"),

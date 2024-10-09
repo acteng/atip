@@ -1,9 +1,10 @@
 import type {
     Schemes
 } from "scheme-sketcher-lib/draw/types";
+import type { InterventionProps, OurSchemeData } from "types";
 
-export function getAllSketches(): Schemes {
-    const sketchGJs: Schemes[] = [];
+export function getAllSketches(): Schemes<InterventionProps, OurSchemeData> {
+    const sketchGJs: Schemes<InterventionProps, OurSchemeData>[] = [];
     for (const key in window.localStorage) {
         try {
             const storedObject = JSON.parse(window.localStorage[key]);
@@ -14,7 +15,7 @@ export function getAllSketches(): Schemes {
             console.log(`Object at ${key} not parseable JSON`);
         }
     }
-    let result: Schemes = {
+    let result: Schemes<InterventionProps, OurSchemeData> = {
         type: "FeatureCollection",
         features: [],
         schemes: {},

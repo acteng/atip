@@ -28,6 +28,8 @@
   import LayerControl from "../layers/LayerControl.svelte";
   import { showHideLayer } from "../layers/url";
   import { onMount } from "svelte";
+  import type { Schemes } from "scheme-sketcher-lib/draw/types";
+  import type { InterventionProps, OurSchemeData } from "types";
 
   let errorMessage = "";
 
@@ -42,8 +44,12 @@
   let lcwipShow = showHideLayer(lcwipName);
   let lcwipStyle = "interventionType";
   $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
+  
+  let localSketchesName = "local_sketches_schemes";
+  let localSketchesTitle = "Local Sketches Schemes";
+  let localSketchesShow = showHideLayer(localSketchesName);
 
-  let localSketches;
+  let localSketches: Schemes<InterventionProps, OurSchemeData> | undefined;
 
   onMount(() => {
     localSketches = getAllSketches();
@@ -166,8 +172,8 @@
       </LayerControl>
     {/if}
 
-    {#if localSketches != undefined} 
-
+    {#if localSketches != undefined && localSketches.features.length > 0}
+      <LayerControl name={localSketchesName} title={localSketchesTitle} bind:show={$localSketchesShow} />
     {/if}
   </CheckboxGroup>
 
@@ -193,3 +199,15 @@
   filterInterventionText={$filterLcwipInterventionText}
   color={lcwipColor}
 />
+
+{#if localSketches != undefined}
+  <InterventionLayer
+    source="local-sketches"
+    show={$localSketchesShow}
+    schemesGj={localSketches}
+    schemes={$lcwipSchemes}
+    filterSchemeText={$filterLcwipSchemeText}
+    filterInterventionText={$filterLcwipInterventionText}
+    color={lcwipColor}
+  />
+{/if}
