@@ -29,7 +29,7 @@
   import { showHideLayer } from "../layers/url";
   import { onMount } from "svelte";
   import type { Schemes } from "scheme-sketcher-lib/draw/types";
-  import type { InterventionProps, OurSchemeData } from "types";
+  import type { InterventionProps, SchemeData } from "types";
 
   let errorMessage = "";
 
@@ -44,15 +44,24 @@
   let lcwipShow = showHideLayer(lcwipName);
   let lcwipStyle = "interventionType";
   $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
-  
+
   let localSketchesName = "local_sketches_schemes";
   let localSketchesTitle = "Local Sketches Schemes";
   let localSketchesShow = showHideLayer(localSketchesName);
 
-  let localSketches: Schemes<InterventionProps, OurSchemeData> | undefined;
+  let localSketches: Schemes<InterventionProps, SchemeData> = {
+    features: [],
+    type: "FeatureCollection",
+    schemes: {},
+  };
+  let localSketchesSchemes: Map<string, SchemeData> = new Map();
 
   onMount(() => {
     localSketches = getAllSketches();
+    Object.keys(localSketches.schemes).forEach((key) => {
+      // ts-expect-error if we have a key then schemes has a value for it
+      localSketchesSchemes?.set(key, localSketches?.schemes[key]);
+    });
   });
 
   function loadFile(filename: string, text: string) {
@@ -173,7 +182,11 @@
     {/if}
 
     {#if localSketches != undefined && localSketches.features.length > 0}
-      <LayerControl name={localSketchesName} title={localSketchesTitle} bind:show={$localSketchesShow} />
+      <LayerControl
+        name={localSketchesName}
+        title={localSketchesTitle}
+        bind:show={$localSketchesShow}
+      />
     {/if}
   </CheckboxGroup>
 
@@ -205,7 +218,7 @@
     source="local-sketches"
     show={$localSketchesShow}
     schemesGj={localSketches}
-    schemes={$lcwipSchemes}
+    schemes={localSketchesSchemes}
     filterSchemeText={$filterLcwipSchemeText}
     filterInterventionText={$filterLcwipInterventionText}
     color={lcwipColor}
