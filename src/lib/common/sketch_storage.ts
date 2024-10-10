@@ -6,7 +6,6 @@ export function getAllSketches(): Schemes<InterventionProps, SchemeData> {
   for (const key in window.localStorage) {
     try {
       const storedObject = JSON.parse(window.localStorage[key]);
-      console.log(storedObject);
       if (objectIsSkecth(storedObject)) {
         Object.keys(storedObject.schemes).forEach((schemeId) => {
           const scheme = storedObject.schemes[schemeId];
