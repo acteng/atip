@@ -4,22 +4,19 @@ import type { InterventionProps, SchemeData } from "types";
 export function getAllSketches(): Schemes<InterventionProps, SchemeData> {
   const sketchGJs: Schemes<InterventionProps, SchemeData>[] = [];
   for (const key in window.localStorage) {
+    const storedStringOrObject = window.localStorage[key];
     try {
-      const storedObject = JSON.parse(window.localStorage[key]);
+      const storedObject =
+        typeof storedStringOrObject === "string"
+          ? JSON.parse(storedStringOrObject)
+          : storedStringOrObject;
       if (objectIsSkecth(storedObject)) {
-        Object.keys(storedObject.schemes).forEach((schemeId) => {
-          const scheme = storedObject.schemes[schemeId];
-          scheme.browse =
-            scheme.browse ||
-            Object.assign(scheme.browse, {
-              authority_or_region: key,
-              capital_scheme_id: schemeId,
-            });
-        });
-        sketchGJs.push(storedObject);
+        sketchGJs.push(
+          getAugmentedSketchObjectForBrowsePage(storedObject, key),
+        );
       }
-    } catch {
-      console.log(`Object at ${key} not parseable JSON`);
+    } catch (e) {
+      console.log(`Cannot parse string at local storage[${key}] due to: ${e}`);
     }
   }
 
@@ -37,6 +34,20 @@ export function getAllSketches(): Schemes<InterventionProps, SchemeData> {
   });
 
   return result;
+}
+
+function getAugmentedSketchObjectForBrowsePage(
+  object: any,
+  authorityName: string,
+) {
+  Object.keys(object.schemes).forEach((schemeId) => {
+    const scheme = object.schemes[schemeId];
+    scheme.browse = scheme.browse || {
+      authority_or_region: authorityName,
+      capital_scheme_id: schemeId,
+    };
+  });
+  return object;
 }
 
 function objectIsSkecth(object: any) {
