@@ -15,11 +15,11 @@
   let name = "vehicle_counts";
   let title = "Vehicle counts";
 
-  let colorScale = colors.sequential_low_to_high;
+  let colorScale = ["green", "orange", "red", "black"];
   // Manual buckets for motor_vehicles, which max out at 205,000
-  let limits = [0, 40000, 80000, 120000, 160000, 205000];
+  let limits = [0, 2500, 8000, 15000, 205000];
   // Remove some because there's not much width
-  let describeLimits = ["", "40k", "80k", "120k", "160k", ""];
+  let describeLimits = ["0-2.5k", "2.5-8k", "8-15k", ">15k"];
 
   let show = showHideLayer(name);
 
