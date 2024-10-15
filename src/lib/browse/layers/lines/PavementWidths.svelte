@@ -7,7 +7,7 @@
     LineLayer,
     VectorTileSource,
   } from "svelte-maplibre";
-  import { colors, denseLineWidth } from "../../colors";
+  import { denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { showHideLayer } from "../url";
 

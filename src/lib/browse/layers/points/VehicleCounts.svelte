@@ -7,7 +7,6 @@
     VectorTileSource,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import { colors } from "../../colors";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { showHideLayer } from "../url";
