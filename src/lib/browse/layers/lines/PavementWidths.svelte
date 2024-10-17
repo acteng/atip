@@ -7,14 +7,15 @@
     LineLayer,
     VectorTileSource,
   } from "svelte-maplibre";
-  import { colors, denseLineWidth } from "../../colors";
+  import { denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { showHideLayer } from "../url";
 
   let name = "pavement_widths";
   let title = "OS Pavement widths";
-  let colorScale = colors.sequential_low_to_high;
-  let limits = [0, 2, 4, 6, 8, 13];
+  let colorScale = ["black", "red", "orange", "green"];
+  let limits = [0, 1.5, 2, 3, 100];
+  let describeLimits = ["0-1.5m", "1.5-2m", "2-3m", ">3m"];
 
   let show = showHideLayer(name);
 
@@ -59,7 +60,7 @@
     </p>
   </span>
   <span slot="controls">
-    <SequentialLegend {colorScale} {limits} />
+    <SequentialLegend {colorScale} limits={describeLimits} />
   </span>
 </LayerControl>
 
