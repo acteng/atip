@@ -13,6 +13,7 @@
   import { colors, denseLineWidth } from "../../colors";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { showHideLayer } from "../url";
+  import chevron from "../../../../../assets/chevron.png?url";
 
   let name = "gradient";
   let title = "Gradients";
@@ -45,6 +46,7 @@
   </span>
   <span slot="controls">
     <SequentialLegend {colorScale} {limits} />
+    <p><img src={chevron} alt="arrow">Arrows point uphill</p>
   </span>
 </LayerControl>
 
