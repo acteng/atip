@@ -5,6 +5,7 @@
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import {
+    ButtonGroup,
     DefaultButton,
     ErrorMessage,
     FileInput,
@@ -124,14 +125,14 @@
 
       <h1>Scheme Sketcher</h1>
 
-      <div class="govuk-button-group">
+      <ButtonGroup>
         <SecondaryButton on:click={() => (showAbout = !showAbout)}>
           About
         </SecondaryButton>
         <SecondaryButton on:click={openBrowsePage}>
           Open Scheme Browser
         </SecondaryButton>
-      </div>
+      </ButtonGroup>
       <ErrorMessage errorMessage={pageErrorMessage} />
 
       {#if authoritiesGj.features.length > 0}
