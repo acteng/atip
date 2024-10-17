@@ -15,7 +15,7 @@
   let title = "OS Pavement widths";
   let colorScale = ["black", "red", "orange", "green"];
   let limits = [0, 1.5, 2, 3, 100];
-  let describeLimits = ["0-1.5m", "1.5-2m", "2-3m", "3+m"];
+  let describeLimits = ["0-1.5m", "1.5-2m", "2-3m", ">3m"];
 
   let show = showHideLayer(name);
 
