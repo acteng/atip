@@ -5,6 +5,7 @@
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import {
+    ButtonGroup,
     DefaultButton,
     ErrorMessage,
     FileInput,
@@ -23,6 +24,8 @@
     MapLibreMap,
     Popup,
     setLocalStorageItem,
+    startSketching,
+    openBrowsePage,
   } from "lib/common";
   import About from "lib/sketch/About.svelte";
   import { schema as schemaStore } from "stores";
@@ -105,13 +108,7 @@
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    window.location.href = `scheme.html?authority=${
-      e.detail.features[0].properties!.full_name
-    }&schema=${$schemaStore}`;
-  }
-
-  function start() {
-    window.location.href = `scheme.html?authority=${inputValue}&schema=${$schemaStore}`;
+    startSketching(e.detail.features[0].properties!.full_name);
   }
 </script>
 
@@ -128,9 +125,14 @@
 
       <h1>Scheme Sketcher</h1>
 
-      <SecondaryButton on:click={() => (showAbout = !showAbout)}>
-        About
-      </SecondaryButton>
+      <ButtonGroup>
+        <SecondaryButton on:click={() => (showAbout = !showAbout)}>
+          About
+        </SecondaryButton>
+        <SecondaryButton on:click={openBrowsePage}>
+          Open Scheme Browser
+        </SecondaryButton>
+      </ButtonGroup>
       <ErrorMessage errorMessage={pageErrorMessage} />
 
       {#if authoritiesGj.features.length > 0}
@@ -144,7 +146,10 @@
         />
       {/if}
 
-      <DefaultButton on:click={start} disabled={!validEntry}>
+      <DefaultButton
+        on:click={() => startSketching(inputValue)}
+        disabled={!validEntry}
+      >
         Start
       </DefaultButton>
 
