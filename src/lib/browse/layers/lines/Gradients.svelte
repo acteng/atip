@@ -46,7 +46,10 @@
   </span>
   <span slot="controls">
     <SequentialLegend {colorScale} {limits} />
-    <p><img src={chevron} alt="arrow">Arrows point uphill</p>
+    <p>
+      <img src={chevron} alt="arrow" />
+      Arrows point uphill
+    </p>
   </span>
 </LayerControl>
 

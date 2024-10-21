@@ -30,7 +30,7 @@
       shows whether the road has a bus lane or not.
     </p>
     <p>
-      Note this data is from OpenStreetMap (as of 9 August 2023), not <ExternalLink
+      Note this data is from OpenStreetMap (as of 20 October 2024), not <ExternalLink
         href="https://gtfs.org"
       >
         GTFS
