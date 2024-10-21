@@ -102,7 +102,7 @@
   <span slot="help">
     <p>
       This shows different types of cycle path, according to OpenStreetMap (as
-      of 15 August 2023).
+      of 20 October 2024).
     </p>
     <ul>
       <li>

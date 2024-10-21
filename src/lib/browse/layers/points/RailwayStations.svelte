@@ -21,7 +21,7 @@
         href="https://wiki.openstreetmap.org/wiki/Tag:railway%3Dstation"
       >
         railway station
-      </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
+      </ExternalLink> data from OpenStreetMap (as of 20 October 2024).
     </p>
     <p>
       Icon from <ExternalLink href="https://www.nationalrail.co.uk/">

@@ -61,7 +61,7 @@
         href="https://wiki.openstreetmap.org/wiki/Key:crossing"
       >
         crossing
-      </ExternalLink> data from OpenStreetMap (as of 9 August 2023).
+      </ExternalLink> data from OpenStreetMap (as of 20 October 2024).
     </p>
     <OsmLicense />
   </span>
