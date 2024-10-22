@@ -17,7 +17,9 @@ let expectedAudience = `/projects/${process.env.PROJECT_NUMBER}/apps/${process.e
 
 let app = express();
 
-app.use(checkIap);
+if(process.env.USE_IAP === "true") {
+  app.use(checkIap);
+}
 
 // Serve the ATIP frontend, which is just statically built HTML, CSS, JS, WASM
 // files bundled in the App Engine deployment directly.
