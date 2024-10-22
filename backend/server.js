@@ -17,7 +17,7 @@ let expectedAudience = `/projects/${process.env.PROJECT_NUMBER}/apps/${process.e
 
 let app = express();
 
-if(process.env.USE_IAP === "true") {
+if(process.env.USE_IAP !== "false") {
   app.use(checkIap);
 }
 
