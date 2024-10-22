@@ -22,6 +22,7 @@
     MapLibreMap,
     ZoomOutMap,
     Header,
+    openBrowsePage,
   } from "lib/common";
   import { mode } from "scheme-sketcher-lib/draw/stores";
   import { ButtonGroup, SecondaryButton } from "govuk-svelte";
@@ -124,6 +125,9 @@
         <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
         <SecondaryButton on:click={toggleInstructions}>
           Instructions
+        </SecondaryButton>
+        <SecondaryButton on:click={openBrowsePage}>
+          Open Scheme Browser
         </SecondaryButton>
       </ButtonGroup>
     {/if}
