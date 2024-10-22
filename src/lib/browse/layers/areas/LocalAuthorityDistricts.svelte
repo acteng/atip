@@ -27,7 +27,7 @@
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
       `https://www.ons.gov.uk/visualisations/areas/${
-        e.detail.features[0].properties!.LAD23CD
+        e.detail.features[0].properties!.LAD24CD
       }`,
       "_blank",
     );
@@ -39,10 +39,10 @@
   <span slot="help">
     <p>
       Data from <ExternalLink
-        href="https://geoportal.statistics.gov.uk/maps/79a4e87783be4b6bbb96ddad6dda52a3"
+        href="https://geoportal.statistics.gov.uk/datasets/fb6ab0ce776243339e45e33444f431c8_0/explore"
       >
         ONS Geography
-      </ExternalLink>, as of January 2024.
+      </ExternalLink>, as of May 2024.
     </p>
     <OsOglLicense />
   </span>

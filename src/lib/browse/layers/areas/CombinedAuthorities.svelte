@@ -27,7 +27,7 @@
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
       `https://www.ons.gov.uk/visualisations/areas/${
-        e.detail.features[0].properties!.CAUTH22CD
+        e.detail.features[0].properties!.CAUTH24CD
       }`,
       "_blank",
     );
@@ -39,10 +39,10 @@
   <span slot="help">
     <p>
       Data from <ExternalLink
-        href="https://geoportal.statistics.gov.uk/datasets/ons::combined-authorities-december-2022-boundaries-en-buc/explore"
+        href="https://geoportal.statistics.gov.uk/datasets/8369f71423ba474ebdbac60a539b53c8_0/explore"
       >
         ONS Geography
-      </ExternalLink>, as of December 2022.
+      </ExternalLink>, as of May 2024.
     </p>
     <OsOglLicense />
   </span>
