@@ -2,3 +2,4 @@ runtime: nodejs18
 env_variables:
   GCS_BUCKET: "dft-rlg-atip-dev"
   PROJECT_NUMBER: "537912455420"
+  USE_IAP: "true"
