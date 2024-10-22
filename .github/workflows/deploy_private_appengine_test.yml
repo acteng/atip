@@ -1,4 +1,4 @@
-name: Deploy to app engine (test env)
+name: Deploy to app engine (internal test env)
 
 on:
   push:

@@ -1,0 +1,47 @@
+name: Deploy to app engine (internal dev env)
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: dft-rlg-atip-dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'npm'
+
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+
+      - name: Build
+        run: |
+          npm ci
+          npm run setup-govuk
+          VITE_RESOURCE_BASE="https://${PROJECT_ID}.ew.r.appspot.com/data" npm run build
+          cd backend
+          rm -rf dist
+          cp -R ../dist .
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_DEV_CREDENTIALS }}'
+
+      - name: Deploy
+        uses: google-github-actions/deploy-appengine@v1
+        with:
+          project_id: ${{ vars.PROJECT_ID }}
+          deliverables: backend/app_dev.yaml

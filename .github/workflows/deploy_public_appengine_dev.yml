@@ -1,4 +1,4 @@
-name: Deploy to app engine (dev env)
+name: Deploy to app engine (public dev env)
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  PROJECT_ID: dft-rlg-atip-dev
+  PROJECT_ID: dft-rlg-schemes-gis-dev
 
 jobs:
   build:
@@ -44,4 +44,4 @@ jobs:
         uses: google-github-actions/deploy-appengine@v1
         with:
           project_id: ${{ vars.PROJECT_ID }}
-          deliverables: backend/app_dev.yaml
+          deliverables: backend/app_dev_public.yaml
