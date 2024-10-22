@@ -1,4 +1,4 @@
 runtime: nodejs18
 env_variables:
-  GCS_BUCKET: "dft-rlg-atip-dev"
-  PROJECT_NUMBER: "237643263862"
+  GCS_BUCKET: "dft-rlg-schemes-gis-dev"
+  PROJECT_NUMBER: "239567674839"
