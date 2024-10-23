@@ -38,7 +38,7 @@
     horseRiders: true,
     other: false,
     minYear: 2017,
-    maxYear: 2022,
+    maxYear: 2023,
   };
   function stringify(x: State): string | null {
     if (!x.show) {
@@ -174,10 +174,10 @@
         href="https://www.data.gov.uk/dataset/cb7ae6f0-4be6-4935-9277-47e5ce24a11f/road-safety-data"
       >
         DfT stats19
-      </ExternalLink> dataset. Please note these limitations:
+      </ExternalLink> dataset, as of 30 September 2024. Please note these limitations:
     </p>
     <ul>
-      <li>Only collisions between 2017 and 2022 are included</li>
+      <li>Only collisions between 2017 and 2023 are included</li>
       <li>
         This tool is intended to be used at high-zoom levels, while inspecting a
         scheme or development area. Not all points are shown at lower zoom
@@ -213,9 +213,9 @@
     </CheckboxGroup>
     <div>
       Filter years:
-      <input type="number" min={2017} max={2022} bind:value={$state.minYear} />
+      <input type="number" min={2017} max={2023} bind:value={$state.minYear} />
       -
-      <input type="number" min={2017} max={2022} bind:value={$state.maxYear} />
+      <input type="number" min={2017} max={2023} bind:value={$state.maxYear} />
     </div>
     <Legend rows={severityLegend} />
   </div>
