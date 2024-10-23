@@ -17,7 +17,7 @@ let expectedAudience = `/projects/${process.env.PROJECT_NUMBER}/apps/${process.e
 
 let app = express();
 
-if(process.env.USE_IAP !== "false") {
+if (process.env.USE_IAP !== "false") {
   app.use(checkIap);
 }
 
@@ -48,6 +48,9 @@ app.get("/data/*", async (req, resp) => {
       resp.type("binary/octet-stream");
     } else if (path.endsWith(".geojson.gz")) {
       resp.type("application/geo+json");
+      resp.append("Content-Encoding", "gzip");
+    } else if (path.endsWith(".bin.gz")) {
+      resp.type("application/octet-stream");
       resp.append("Content-Encoding", "gzip");
     }
 
