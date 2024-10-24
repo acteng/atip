@@ -41,12 +41,13 @@ export let cfg: Config<InterventionProps, OurSchemeData> = {
   },
   newLineStringFeature: (f) => {
     f.properties.intervention_type = "route";
-    if (f.properties.route_name) {
+    if (f.properties.route_name && !f.properties.name) {
       if (get(schemaStore) != "pipeline") {
         f.properties.name = f.properties.route_name;
       }
-      delete f.properties.route_name;
     }
+    delete f.properties.route_name;
+    delete f.properties.full_path;
   },
 
   updateFeature: (destination, source) => {
@@ -62,8 +63,6 @@ export let cfg: Config<InterventionProps, OurSchemeData> = {
       destination.properties.name = source.properties.route_name;
     }
   },
-
-  maptilerApiKey: import.meta.env.VITE_MAPTILER_API_KEY,
 
   getStreetViewRoadLayerNames: (map) => getRoadLayerNames(map, get(mapStyle)),
 

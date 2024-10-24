@@ -145,7 +145,7 @@
   }
 </script>
 
-{#if $mode.mode == "list"}
+{#if $mode.mode == "list" || $mode.mode == "split-route" || $mode.mode == "set-image" || $mode.mode == "streetview"}
   <CollapsibleCard label="Manage files">
     <FileInput label="Load GeoJSON file" onLoad={loadFile} />
 
