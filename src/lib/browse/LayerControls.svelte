@@ -73,15 +73,15 @@
 </script>
 
 <div bind:this={$controls}>
-  <SchemesLayer />
-  <CollapsibleCard label="Trip generators">
-    <CheckboxGroup small>
-      <EducationLayerControl />
-      <HospitalsLayerControl />
-      <SportsSpacesLayerControl />
-      <RailwayStationsLayerControl />
-    </CheckboxGroup>
+  <CollapsibleCard label="Schemes" open>
+    <SchemesLayer />
+    {#if appVersion() == "Private (development)"}
+      <CheckboxGroup small>
+        <ProblemsLayerControl />
+      </CheckboxGroup>
+    {/if}
   </CollapsibleCard>
+
   <CollapsibleCard label="Existing infrastructure">
     <CheckboxGroup small>
       <CyclePathsLayerControl />
@@ -92,13 +92,24 @@
       <CrossingsLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
+  <CollapsibleCard label="Trip generators">
+    <CheckboxGroup small>
+      <EducationLayerControl />
+      <HospitalsLayerControl />
+      <SportsSpacesLayerControl />
+    </CheckboxGroup>
+  </CollapsibleCard>
+
   <CollapsibleCard label="Public transport">
     <CheckboxGroup small>
       <BusRoutesLayerControl />
-      <TramsLayerControl />
       <BusStopsLayerControl />
+      <TramsLayerControl />
+      <RailwayStationsLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Boundaries">
     <CheckboxGroup small>
       <ParliamentaryConstituenciesLayerControl />
@@ -108,32 +119,35 @@
       <LocalPlanningAuthoritiesLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Census">
     <CheckboxGroup small>
       <CensusOutputAreaLayerControl />
       <ImdLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
-  <CollapsibleCard label="Other">
+
+  <CollapsibleCard label="ATE Assessment">
     <CheckboxGroup small>
+      <PctLayerControl />
       <VehicleCountsLayerControl />
       <Stats19LayerControl />
-      <PctLayerControl />
       <GradientsLayerControl />
       {#if appVersion() == "Private (development)"}
         <RoadWidthsLayerControl />
         <PavementWidthsLayerControl />
         <RoadSpeedsLayerControl />
-        <ProblemsLayerControl />
       {/if}
       <PollutionLayerControl />
       <RoadNoiseLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Tools">
     <StreetViewTool {cfg} map={$map} bind:enabled={streetviewEnabled} />
     <LineMeasureTool />
   </CollapsibleCard>
+
   <BaselayerSwitcher disabled={!$interactiveMapLayersEnabled} />
 </div>
 
