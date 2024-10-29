@@ -47,7 +47,7 @@
         href="https://www.ordnancesurvey.co.uk/products/boundary-line"
       >
         Ordnance Survey Boundary-Line
-      </ExternalLink>, as of May 2023.
+      </ExternalLink>, as of October 2024.
     </p>
     <OsOglLicense />
   </span>
