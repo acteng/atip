@@ -18,9 +18,9 @@ test.beforeEach(async () => {
 });
 
 test("scheme validations are updated", async () => {
+  await page.getByRole("button", { name: "Edit" }).click();
   // Blank schemes aren't valid
   await expect(page.getByText("Missing some required data")).toBeVisible();
-  await page.getByRole("button", { name: "Scheme details" }).click();
 
   // Check for validation errors on a specific field
   await expect(
@@ -47,8 +47,8 @@ test("scheme validations are updated", async () => {
   await page.getByText("ATF4", { exact: true }).click();
   await page.getByLabel("Other funding sources").fill("Local tax");
 
-  await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText("Missing some required data")).not.toBeVisible();
+  await page.getByRole("button", { name: "Save changes" }).click();
 
   // Check the data in local storage
   let json = await getLocalStorage(page, "LAD_Adur_pipeline");
@@ -71,6 +71,7 @@ test("scheme validations are updated", async () => {
   // Refresh and make sure there are no warnings
   await page.reload();
   await checkPageLoaded(page);
+  await page.getByRole("button", { name: "Edit" }).click();
   await expect(page.getByText("Missing some required data")).not.toBeVisible();
 });
 
@@ -80,7 +81,7 @@ test("file started with v1 can be edited by adding", async () => {
     .getByLabel("Add scheme from file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
   // The first is for the blank default scheme; the second is the file we just loaded
-  await page.getByRole("button", { name: "Scheme details" }).nth(1).click();
+  await page.getByRole("button", { name: "Edit" }).nth(1).click();
   // Make sure a pipeline-specific form shows up
   await page
     .getByRole("group", { name: "Scheme type" })
@@ -93,7 +94,7 @@ test("file started with v1 can be edited by loading", async () => {
   await page
     .getByLabel("Load GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
-  await page.getByRole("button", { name: "Scheme details" }).click();
+  await page.getByRole("button", { name: "Edit" }).click();
   await page.getByText("Shared-use route").click();
 });
 
