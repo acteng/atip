@@ -108,7 +108,7 @@
     </Checkbox>
   {/if}
 
-  <TimingForm data={props.pipeline} required={false} onUpdate={() => {}} />
+  <TimingForm bind:data={props.pipeline} required={false} onUpdate={() => {}} />
 
-  <BudgetForm data={props.pipeline} onUpdate={() => {}} />
+  <BudgetForm bind:data={props.pipeline} onUpdate={() => {}} />
 {/if}
