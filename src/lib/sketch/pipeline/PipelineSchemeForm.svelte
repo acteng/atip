@@ -21,8 +21,13 @@
 
   // No changes in the form are saved until this happens
   onDestroy(() => {
-    $gjSchemes.schemes[scheme_reference].pipeline = pipeline!;
-    $gjSchemes = $gjSchemes;
+    gjSchemes.update((gj) => {
+      // The scheme may have been deleted entirely
+      if (Object.hasOwn(gj.schemes, scheme_reference)) {
+        gj.schemes[scheme_reference].pipeline = pipeline!;
+      }
+      return gj;
+    });
   });
 
   function checkRequiredValues(_: any, updateError: number): string {
