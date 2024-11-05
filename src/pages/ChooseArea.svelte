@@ -1,7 +1,5 @@
 <script lang="ts">
-  import type { Schema } from "types";
   import "../style/main.css";
-  import type { FeatureCollection } from "geojson";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import {
@@ -14,15 +12,13 @@
   } from "govuk-svelte";
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
-  import { findSmallestAuthority, type AuthorityBoundaries } from "boundaries";
+  import { type AuthorityBoundaries } from "boundaries";
   import {
-    appVersion,
     getAuthoritiesGeoJson,
     LoggedIn,
     Alpha,
     MapLibreMap,
     Popup,
-    setLocalStorageItem,
   } from "lib/common";
   import About from "lib/sketch/About.svelte";
   import { schema as schemaStore } from "stores";
@@ -34,6 +30,7 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import Header from "./ChooseAreaHeader.svelte";
+  import { importFile } from "lib/common/files";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",
@@ -42,8 +39,8 @@
 
   let showAbout = false;
   const params = new URLSearchParams(window.location.search);
-  let pageErrorMessage: string = params.get("error") || "";
-  let uploadErrorMessage: string = "";
+  let pageErrorMessage = params.get("error") || "";
+  let uploadErrorMessage = "";
 
   let inputValue: string;
   let authoritySet: Set<string> = new Set();
@@ -61,57 +58,22 @@
     }
   });
 
-  function loadFile(filename: string, text: string) {
-    try {
-      let gj = JSON.parse(text);
-
-      let smallestAuthority = findSmallestAuthority(gj.features, authoritiesGj);
-      if (!smallestAuthority) {
-        throw new Error(
-          "Can't figure out the authority boundary that fully contains this scheme",
-        );
-      }
-      // Ignore the authority that the file has set; always use the calculated boundary
-      // TODO Will that ever be annoying? Keep the pre-set value if it's valid?
-      gj.authority = smallestAuthority;
-
-      let filename = gj.authority;
-      let schema = detectSchema(gj);
-      if (schema != "v1") {
-        filename += `_${schema}`;
-      }
-
-      // Put the file in local storage, so it'll be loaded from the next page
-      setLocalStorageItem(filename, JSON.stringify(gj));
-      window.location.href = `scheme.html?authority=${gj.authority}&schema=${schema}`;
-    } catch (err) {
-      pageErrorMessage = `Couldn't load scheme from a file: ${err}`;
-    }
-  }
-
-  function detectSchema(gj: FeatureCollection): Schema {
-    if (gj.features.length > 0) {
-      let props = gj.features[0].properties;
-      for (let schema of ["pipeline"]) {
-        if (props && schema in props) {
-          return schema as Schema;
-        }
-      }
-    }
-
-    // The file itself doesn't have any data saying what schema it belongs to.
-    // Trust the URL instead.
-    return $schemaStore;
-  }
-
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    window.location.href = `scheme.html?authority=${
+    window.location.href = `files.html?authority=${
       e.detail.features[0].properties!.full_name
     }&schema=${$schemaStore}`;
   }
 
   function start() {
-    window.location.href = `scheme.html?authority=${inputValue}&schema=${$schemaStore}`;
+    window.location.href = `files.html?authority=${inputValue}&schema=${$schemaStore}`;
+  }
+
+  function loadFile(filename: string, text: string) {
+    try {
+      window.location.href = importFile(filename, text, authoritiesGj);
+    } catch (err) {
+      uploadErrorMessage = `Couldn't import file: ${err}`;
+    }
   }
 </script>
 
@@ -123,7 +85,6 @@
       <Alpha />
       <div style="border-bottom: 1px solid #b1b4b6">
         <LoggedIn />
-        <p>App version: {appVersion()}</p>
       </div>
 
       <h1>Scheme Sketcher</h1>
@@ -163,7 +124,7 @@
       <hr />
 
       <ErrorMessage errorMessage={uploadErrorMessage} />
-      <FileInput label="Or upload an ATIP GeoJSON file" onLoad={loadFile} />
+      <FileInput label="Or import a GeoJSON file" onLoad={loadFile} />
     </div>
   </div>
   <div class="govuk-grid-column-one-half">

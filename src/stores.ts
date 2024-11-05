@@ -16,8 +16,9 @@ export const mapStyle: Writable<string> = writable("dataviz");
 
 function defaultSchema(): Schema {
   let params = new URLSearchParams(window.location.search);
-  if (params.get("schema")) {
-    return params.get("schema") as Schema;
+  let schema = params.get("schema");
+  if (schema && (schema == "v1" || schema == "pipeline")) {
+    return schema;
   }
 
   // Use the pipeline schema on that semi-permanent branch

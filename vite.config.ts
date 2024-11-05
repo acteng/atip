@@ -9,8 +9,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
-        nested: resolve(__dirname, "scheme.html"),
-        nested2: resolve(__dirname, "browse.html"),
+        nested: resolve(__dirname, "files.html"),
+        nested2: resolve(__dirname, "scheme.html"),
+        nested3: resolve(__dirname, "browse.html"),
       },
     },
     /* To debug production builds:
