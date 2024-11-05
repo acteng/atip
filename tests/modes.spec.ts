@@ -17,10 +17,10 @@ test.beforeEach(async () => {
 
 test("creating a new point opens a form", async () => {
   await page.getByRole("button", { name: "New point" }).click();
+  await clickMap(page, 500, 500);
   await page.getByLabel("Name").fill("Point name");
   await page.getByLabel("Description").click();
-
-  await clickMap(page, 500, 500);
+  await page.getByRole("button", { name: "Finish" }).click();
 
   await page.getByRole("link", { name: "Point name" }).click();
 });

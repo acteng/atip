@@ -3,7 +3,6 @@ import {
   checkPageLoaded,
   clearExistingInterventions,
   getLocalStorage,
-  clickMap,
 } from "./shared.js";
 
 let page: Page;
@@ -111,8 +110,7 @@ test("file without new budget/timing forms can be edited by loading", async () =
   await page.getByRole("button", { name: "multiply by 1 million" }).click();
   await page.getByText("Is the construction fully funded?").check();
   await page.getByText("CRSTS").check();
-  // TODO Editing points is special; there's no finish button right now. Click the map instead to confirm.
-  await clickMap(page, 400, 600);
+  await page.getByRole("button", { name: "Finish" }).click();
 
   // Check the data in local storage
   let json = await getLocalStorage(page, "LAD_Adur_pipeline");

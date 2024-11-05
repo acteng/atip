@@ -105,6 +105,7 @@ test("the previous file from local storage is loaded by default", async () => {
       y: 500,
     },
   });
+  await page.getByRole("button", { name: "Finish" }).click();
 
   await page.reload();
 
