@@ -105,7 +105,6 @@ test("the previous file from local storage is loaded by default", async () => {
       y: 500,
     },
   });
-  await page.getByRole("button", { name: "Save" }).click();
 
   await page.reload();
 
@@ -143,7 +142,7 @@ test("loading a file produced by another tool shows fixable errors", async () =>
   await page.locator('input[type="text"]').fill("Square area");
   await expect(page.getByText("No intervention type")).toBeVisible();
   await page.getByText("Area", { exact: true }).click();
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "Finish" }).click();
   await expect(
     page.getByText("There's a problem with one intervention below"),
   ).toBeVisible();
@@ -159,7 +158,7 @@ test("loading a file produced by another tool shows fixable errors", async () =>
     .getByRole("button", { name: "Handle extra GeoJSON properties" })
     .click();
   await page.getByRole("button", { name: "Remove these properties" }).click();
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "Finish" }).click();
   await expect(
     page.getByText("There's a problem with one intervention below"),
   ).not.toBeVisible();

@@ -9,8 +9,8 @@
     InterventionLayer,
     PolygonToolLayer,
     RouteSnapperLayer,
-    SplitRouteMode,
     Toolbox,
+    NewFeatureForm,
   } from "scheme-sketcher-lib/draw";
   import {
     appVersion,
@@ -28,7 +28,7 @@
   import About from "lib/sketch/About.svelte";
   import FileManagement from "lib/sketch/FileManagement.svelte";
   import Instructions from "lib/sketch/Instructions.svelte";
-  import { PerModeControls } from "scheme-sketcher-lib/sidebar";
+  import { ListMode, EditFeatureForm } from "scheme-sketcher-lib/sidebar";
   import { map, mapStyle, schema } from "stores";
   import { onMount } from "svelte";
   import { cfg } from "lib/sketch/config";
@@ -97,7 +97,6 @@
     return authorityName;
   }
 
-  // Need this to set up PerModeControls
   $: if ($map) {
     sketchMapStore.set($map);
   }
@@ -107,7 +106,7 @@
   <div class="sidebar govuk-prose">
     <Header />
 
-    {#if $mode.mode == "list"}
+    {#if $mode.mode == "list" || $mode.mode == "split-route" || $mode.mode == "set-image" || $mode.mode == "streetview"}
       <Alpha />
       <div style="border-bottom: 1px solid #b1b4b6">
         <LoggedIn />
@@ -127,8 +126,16 @@
         </SecondaryButton>
       </ButtonGroup>
     {/if}
+
     <FileManagement {cfg} {gjSchemes} {authorityName} />
-    <PerModeControls {cfg} {gjSchemes} {routeSnapperUrl} />
+
+    {#if $mode.mode == "list" || $mode.mode == "split-route" || $mode.mode == "set-image" || $mode.mode == "streetview"}
+      <ListMode {cfg} {gjSchemes} />
+    {:else if $mode.mode == "new-point" || $mode.mode == "new-freehand-polygon" || $mode.mode == "new-snapped-polygon" || $mode.mode == "new-route"}
+      <NewFeatureForm {cfg} {gjSchemes} />
+    {:else if $mode.mode == "edit"}
+      <EditFeatureForm {cfg} {gjSchemes} id={$mode.id} />
+    {/if}
     {#if $mode.mode != "list"}
       <hr />
     {/if}
@@ -141,11 +148,7 @@
         <BoundaryLayer {cfg} {boundaryGeojson} />
         <InterventionLayer {cfg} {gjSchemes} />
         <ImageLayer {cfg} />
-        {#if $mode.mode == "list"}
-          <Toolbox {cfg} {gjSchemes} />
-        {:else if $mode.mode == "split-route"}
-          <SplitRouteMode {cfg} {gjSchemes} />
-        {/if}
+        <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
         <RouteSnapperLayer {cfg} />
         <PolygonToolLayer {cfg} />
       {/if}

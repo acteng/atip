@@ -1,3 +1,4 @@
+import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
 import { type Config } from "scheme-sketcher-lib/config";
 import EditFeatureForm from "./EditFeatureForm.svelte";
 import EditSchemeForm from "./EditSchemeForm.svelte";
@@ -41,12 +42,13 @@ export let cfg: Config<InterventionProps, OurSchemeData> = {
   },
   newLineStringFeature: (f) => {
     f.properties.intervention_type = "route";
-    if (f.properties.route_name) {
+    if (f.properties.route_name && !f.properties.name) {
       if (get(schemaStore) != "pipeline") {
         f.properties.name = f.properties.route_name;
       }
-      delete f.properties.route_name;
     }
+    delete f.properties.route_name;
+    delete f.properties.full_path;
   },
 
   updateFeature: (destination, source) => {
@@ -62,8 +64,6 @@ export let cfg: Config<InterventionProps, OurSchemeData> = {
       destination.properties.name = source.properties.route_name;
     }
   },
-
-  maptilerApiKey: import.meta.env.VITE_MAPTILER_API_KEY,
 
   getStreetViewRoadLayerNames: (map) => getRoadLayerNames(map, get(mapStyle)),
 
@@ -229,29 +229,31 @@ export function schemeName(scheme: GenericSchemeData & OurSchemeData): string {
   return scheme.scheme_name ?? "Untitled scheme";
 }
 
-function interventionWarning(feature: Feature): string | null {
+function interventionWarning(
+  props: FeatureProps<InterventionProps>,
+): string | null {
   let schema = get(schemaStore);
 
-  if (!feature.properties.name) {
+  if (!props.name) {
     return "No name";
   }
   // Blank description is fine
 
   if (
     !new Set(["route", "area", "crossing", "other"]).has(
-      feature.properties.intervention_type,
+      props.intervention_type,
     )
   ) {
     return "No intervention type";
   }
 
   if (schema == "pipeline") {
-    if (!feature.properties.pipeline?.accuracy) {
+    if (!props.pipeline?.accuracy) {
       return "Accuracy not specified";
     }
   }
 
-  let unexpectedProperties = getUnexpectedProperties(feature.properties);
+  let unexpectedProperties = getUnexpectedProperties(props);
   if (Object.entries(unexpectedProperties).length > 0) {
     return `Extra GeoJSON properties: ${Object.keys(unexpectedProperties).join(
       ", ",

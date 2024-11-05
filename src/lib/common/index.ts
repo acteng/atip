@@ -7,7 +7,6 @@ export { default as ColorLegend } from "./ColorLegend.svelte";
 export { default as ExternalLink } from "./ExternalLink.svelte";
 export { default as Geocoder } from "./Geocoder.svelte";
 export { default as Header } from "./Header.svelte";
-export { default as HelpButton } from "./HelpButton.svelte";
 export { default as Layout } from "./Layout.svelte";
 export { default as Legend } from "./Legend.svelte";
 export { default as LineMeasureTool } from "./LineMeasureTool.svelte";
@@ -16,7 +15,7 @@ export { default as Popup } from "./Popup.svelte";
 export { default as MapLibreMap } from "./MapLibreMap.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
 export * from "./storage";
-export { Modal, WarningIcon } from "scheme-sketcher-lib/common";
+export { HelpButton, Modal, WarningIcon } from "scheme-sketcher-lib/common";
 
 export async function getAuthoritiesGeoJson(): Promise<AuthorityBoundaries> {
   let resp = await fetch(authoritiesUrl);
