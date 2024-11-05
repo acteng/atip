@@ -19,8 +19,10 @@ export async function checkPageLoaded(page: Page) {
 }
 
 export async function clearExistingInterventions(page: Page) {
-  // We may be in any mode. The escape key always exits. The deepest possible state is editing geometry, so press escape twice to get back to editing the form, then the main mode.
+  // We may be in any mode. The escape key always exits back to list mode.
   await page.keyboard.down("Escape");
+  // But the test runner is flaky, so always wait a bit and try again
+  await page.waitForTimeout(100);
   await page.keyboard.down("Escape");
 
   // A test may leave the "Manage files" panel open
