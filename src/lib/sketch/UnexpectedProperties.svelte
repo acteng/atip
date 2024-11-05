@@ -2,11 +2,7 @@
   import { Modal } from "lib/common";
   import { ButtonGroup, SecondaryButton, WarningButton } from "govuk-svelte";
   import { getUnexpectedProperties } from "./config";
-  import type { Schemes } from "types";
-  import type { Writable } from "svelte/store";
 
-  export let gjSchemes: Writable<Schemes>;
-  export let id: number;
   export let props: { [name: string]: any };
 
   $: unexpected = getUnexpectedProperties(props);
@@ -14,13 +10,10 @@
 
   function removeExtraProperties() {
     open = false;
-    gjSchemes.update((gj) => {
-      let feature = gj.features.find((f) => f.id == id)!;
-      for (let key of Object.keys(unexpected)) {
-        delete feature.properties[key];
-      }
-      return gj;
-    });
+    for (let key of Object.keys(unexpected)) {
+      delete props[key];
+    }
+    props = props;
   }
 </script>
 

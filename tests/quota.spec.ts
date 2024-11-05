@@ -70,12 +70,18 @@ test("exceeding local storage quota allows user to clear specific local storage 
     .getByRole("button", { name: "Remove stored item for huge" })
     .click();
   await page.getByRole("button", { name: "X" }).click();
-  await page.getByRole("button", { name: "Save" }).click();
 
-  // See that we're now able to make the route without exceeding the quota
+  // Check that the previous route still exists
+  await expect(
+    page.getByRole("link", {
+      name: "Route from Henty Road and South Farm Road to Canterbury Road and Cranmer Road",
+    }),
+  ).toBeVisible();
+
+  // Create a second route and make sure quota isn't exceeded
   await page.getByRole("button", { name: "New route" }).click();
-  await clickMap(page, 500, 500);
-  await clickMap(page, 400, 500);
+  await clickMap(page, 450, 450);
+  await clickMap(page, 490, 490);
   await page.getByRole("button", { name: "Finish" }).click();
 
   await expect(

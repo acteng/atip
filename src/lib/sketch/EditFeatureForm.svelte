@@ -10,14 +10,16 @@
 
   export let cfg: Config<InterventionProps, OurSchemeData>;
   export let gjSchemes: Writable<Schemes>;
-  export let id: number;
+  export let id: number | null;
   export let props: FeatureProps<InterventionProps>;
 
   // Workaround unused var warning
   cfg;
 </script>
 
-<UnexpectedProperties {gjSchemes} {id} {props} />
+{#if id != null}
+  <UnexpectedProperties bind:props />
+{/if}
 {#if $schema == "v1"}
   <FormV1 {gjSchemes} bind:props />
 {:else if $schema == "pipeline"}
