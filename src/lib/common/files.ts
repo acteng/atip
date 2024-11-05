@@ -35,6 +35,25 @@ export function listFilesInAuthority(authority: string): [string, Schema][] {
   return list;
 }
 
+// Returns a list of all authorities with at least one file.
+export function countFilesPerAuthority(): [string, number][] {
+  let count: Map<string, number> = new Map();
+  for (let i = 0; i < window.localStorage.length; i++) {
+    let key = window.localStorage.key(i)!;
+    let parts = key.split("/");
+    if (parts.length == 3 && parts[0] == "sketch") {
+      let authority = parts[1];
+      let x = count.has(authority) ? count.get(authority)! : 0;
+      count.set(authority, x + 1);
+    }
+  }
+
+  let list: [string, number][] = [...count.entries()];
+  // Sort by count descending
+  list.sort((a, b) => b[1] - a[1]);
+  return list;
+}
+
 export function downloadGeneratedFile(filename: string, textInput: string) {
   let element = document.createElement("a");
   element.setAttribute(

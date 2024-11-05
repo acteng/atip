@@ -30,7 +30,7 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import Header from "./ChooseAreaHeader.svelte";
-  import { importFile } from "lib/common/files";
+  import { importFile, countFilesPerAuthority } from "lib/common/files";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",
@@ -47,6 +47,8 @@
   $: validEntry = authoritySet.has(inputValue);
 
   let showBoundaries: "TA" | "LAD" = "TA";
+
+  let filesPerAuthority = countFilesPerAuthority();
 
   onMount(async () => {
     // For govuk components. Must happen here.
@@ -125,6 +127,34 @@
 
       <ErrorMessage errorMessage={uploadErrorMessage} />
       <FileInput label="Or import a GeoJSON file" onLoad={loadFile} />
+
+      {#if filesPerAuthority.length > 0}
+        <hr />
+
+        <p>Or choose an area with existing files</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Number of files</th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each filesPerAuthority as [authority, count]}
+              <tr>
+                <td>
+                  <a
+                    href={`files.html?authority=${authority}&schema=${$schemaStore}`}
+                  >
+                    {authority}
+                  </a>
+                </td>
+                <td>{count}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      {/if}
     </div>
   </div>
   <div class="govuk-grid-column-one-half">
