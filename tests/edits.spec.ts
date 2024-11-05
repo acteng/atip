@@ -75,6 +75,7 @@ test.skip("the viewport changes only once when opening a form", async () => {
   // Create a point, and make sure the viewport hasn't changed
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
+  await page.getByRole("button", { name: "Finish" }).click();
   await expect.soft(new URL(page.url()).hash).toEqual(defaultViewport);
 
   // Open the form from the sidebar. The viewport should change
