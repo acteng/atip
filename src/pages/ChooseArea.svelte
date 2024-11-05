@@ -19,6 +19,7 @@
     Alpha,
     MapLibreMap,
     Popup,
+    describeAuthority,
   } from "lib/common";
   import About from "lib/sketch/About.svelte";
   import { schema as schemaStore } from "stores";
@@ -30,7 +31,11 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import Header from "./ChooseAreaHeader.svelte";
-  import { importFile, countFilesPerAuthority } from "lib/common/files";
+  import {
+    importFile,
+    importOldFiles,
+    countFilesPerAuthority,
+  } from "lib/common/files";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",
@@ -48,7 +53,7 @@
 
   let showBoundaries: "TA" | "LAD" = "TA";
 
-  let filesPerAuthority = countFilesPerAuthority();
+  let filesPerAuthority: [string, number][] = [];
 
   onMount(async () => {
     // For govuk components. Must happen here.
@@ -57,7 +62,10 @@
     authoritiesGj = await getAuthoritiesGeoJson();
     for (let feature of authoritiesGj.features) {
       authoritySet.add(feature.properties.full_name);
+      importOldFiles(feature.properties.full_name);
     }
+
+    filesPerAuthority = countFilesPerAuthority();
   });
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
@@ -80,7 +88,7 @@
 </script>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-half govuk-prose">
+  <div class="govuk-grid-column-one-half govuk-prose left-scroll">
     <Header />
 
     <div class="left">
@@ -102,7 +110,7 @@
           bind:value={inputValue}
           options={authoritiesGj.features.map((f) => [
             f.properties.full_name,
-            `${f.properties.name} (${f.properties.level})`,
+            describeAuthority(f.properties.full_name),
           ])}
         />
       {/if}
@@ -146,7 +154,7 @@
                   <a
                     href={`files.html?authority=${authority}&schema=${$schemaStore}`}
                   >
-                    {authority}
+                    {describeAuthority(authority)}
                   </a>
                 </td>
                 <td>{count}</td>
@@ -174,7 +182,7 @@
             on:click={onClick}
           >
             <Popup let:props>
-              <p>{props.name} ({props.level})</p>
+              <p>{describeAuthority(props.full_name)}</p>
             </Popup>
           </FillLayer>
           <LineLayer
@@ -201,6 +209,11 @@
 
   .left {
     margin: 10px;
+  }
+
+  .left-scroll {
+    height: 100vh;
+    overflow: auto;
   }
 
   #map {

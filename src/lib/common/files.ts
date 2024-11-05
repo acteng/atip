@@ -81,10 +81,15 @@ export function importOldFiles(authority: string) {
   }
 
   for (let [oldKey, newKey] of rename) {
+    // TODO What if we're about to override a key?
     console.log(`Renaming ${oldKey} to ${newKey}`);
-    let contents = window.localStorage.getItem(oldKey)!;
-    window.localStorage.setItem(newKey, contents);
-    window.localStorage.removeItem(oldKey);
+    try {
+      let contents = window.localStorage.getItem(oldKey)!;
+      window.localStorage.setItem(newKey, contents);
+      window.localStorage.removeItem(oldKey);
+    } catch (err) {
+      console.error(`Couldn't importOldFiles: ${err}`);
+    }
   }
 }
 
