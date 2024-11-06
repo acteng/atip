@@ -115,7 +115,7 @@ test("the previous file from local storage is loaded by default", async () => {
 test("loading a file from the homepage goes to the correct page", async () => {
   await page.goto("/");
   await page
-    .getByLabel("Or upload an ATIP GeoJSON file")
+    .getByLabel("Or import a ATIP GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
 
   await expect(page).toHaveURL(/scheme.html\?authority=LAD_Adur/);

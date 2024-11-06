@@ -1,13 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
 import { resetSketch, clickMap } from "./shared.js";
 
-let page: Page;
-
-test.beforeEach(async ({ browser }) => {
-  page = await resetSketch(browser);
+test.beforeEach(async ({ page }) => {
+  await resetSketch(page);
 });
 
-test("creating a new point opens a form", async () => {
+test("creating a new point opens a form", async ({ page }) => {
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
   await page.getByLabel("Name").fill("Point name");
@@ -17,7 +15,7 @@ test("creating a new point opens a form", async () => {
   await page.getByRole("link", { name: "Point name" }).click();
 });
 
-test("creating a new freehand area opens a form", async () => {
+test("creating a new freehand area opens a form", async ({ page }) => {
   await page.getByRole("button", { name: "New area (freehand)" }).click();
   await page.getByLabel("Name").fill("Area name");
   await page.getByLabel("Description").click();
@@ -30,7 +28,9 @@ test("creating a new freehand area opens a form", async () => {
   await page.getByRole("link", { name: "Area name" }).click();
 });
 
-test("creating a new freehand area and canceling doesn't save anything", async () => {
+test("creating a new freehand area and canceling doesn't save anything", async ({
+  page,
+}) => {
   await page.getByRole("button", { name: "New area (freehand)" }).click();
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
@@ -44,7 +44,7 @@ test("creating a new freehand area and canceling doesn't save anything", async (
 
 // TODO Repeat canceling for other draw tools
 
-test("creating a new snapped area opens a form", async () => {
+test("creating a new snapped area opens a form", async ({ page }) => {
   await page.getByRole("button", { name: "New area (snapped)" }).click();
   await page.getByLabel("Name").fill("Area name");
   await page.getByLabel("Description").click();
@@ -57,7 +57,9 @@ test("creating a new snapped area opens a form", async () => {
   await page.getByRole("link", { name: "Area name" }).click();
 });
 
-test("creating a new route opens a form, and auto-fill sets its name", async () => {
+test("creating a new route opens a form, and auto-fill sets its name", async ({
+  page,
+}) => {
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
@@ -81,7 +83,7 @@ test("creating a new route opens a form, and auto-fill sets its name", async () 
   ).toBeVisible();
 });
 
-test("editing geometry of a area works", async () => {
+test("editing geometry of a area works", async ({ page }) => {
   // Create an area
   await page.getByRole("button", { name: "New area (snapped)" }).click();
   await clickMap(page, 241, 509);
@@ -97,7 +99,9 @@ test("editing geometry of a area works", async () => {
 });
 
 // TODO Flaky only on GH Actions
-test.skip("adding interventions, then deleting one, then adding another", async () => {
+test("adding interventions, then deleting one, then adding another", async ({
+  page,
+}) => {
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 522, 468);
   await clickMap(page, 192, 513);
@@ -122,12 +126,12 @@ test.skip("adding interventions, then deleting one, then adding another", async 
   ).toBeVisible();
 });
 
-test("escape key works from every mode", async () => {
+test("escape key works from every mode", async ({ page }) => {
   // We start in list mode
-  await expectListMode();
+  await expectListMode(page);
   // Pressing escape from there shouldn't do anything
   await page.keyboard.down("Escape");
-  await expectListMode();
+  await expectListMode(page);
 
   // From each tool, make sure escape goes back to list mode
   for (let mode of [
@@ -140,11 +144,11 @@ test("escape key works from every mode", async () => {
   ]) {
     await page.getByRole("button", { name: mode }).click();
     await page.keyboard.down("Escape");
-    await expectListMode();
+    await expectListMode(page);
   }
 });
 
 // Assert the page is in the main list mode.
-async function expectListMode() {
+async function expectListMode(page: Page) {
   await expect(page.getByRole("button", { name: "New point" })).toBeEnabled();
 }

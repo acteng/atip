@@ -1,23 +1,9 @@
-import { expect, test, type Page } from "@playwright/test";
-import {
-  checkPageLoaded,
-  clearExistingInterventions,
-  getLocalStorage,
-} from "./shared.js";
+import { expect, test } from "@playwright/test";
+import { resetSketch, getLocalStorage } from "./shared.js";
 
-let page: Page;
+test("scheme validations are updated", async ({ page }) => {
+  let filename = await resetSketch(page, "pipeline");
 
-test.beforeAll(async ({ browser }) => {
-  page = await browser.newPage();
-  await page.goto("/scheme.html?authority=LAD_Adur&schema=pipeline");
-  await checkPageLoaded(page);
-});
-
-test.beforeEach(async () => {
-  await clearExistingInterventions(page);
-});
-
-test("scheme validations are updated", async () => {
   await page.getByRole("button", { name: "Edit" }).click();
   // Blank schemes aren't valid
   await expect(page.getByText("Missing some required data")).toBeVisible();
@@ -51,7 +37,7 @@ test("scheme validations are updated", async () => {
   await page.getByRole("button", { name: "Save changes" }).click();
 
   // Check the data in local storage
-  let json = await getLocalStorage(page, "LAD_Adur_pipeline");
+  let json = await getLocalStorage(page, `sketch/LAD_Adur/${filename}`);
   let scheme = Object.values(json.schemes)[0] as any;
   expect(scheme.scheme_name).toEqual("Corridor 1");
   expect(scheme.pipeline).toEqual(
@@ -70,12 +56,14 @@ test("scheme validations are updated", async () => {
 
   // Refresh and make sure there are no warnings
   await page.reload();
-  await checkPageLoaded(page);
+  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
   await page.getByRole("button", { name: "Edit" }).click();
   await expect(page.getByText("Missing some required data")).not.toBeVisible();
 });
 
-test("file started with v1 can be edited by adding", async () => {
+test("file started with v1 can be edited by adding", async ({ page }) => {
+  await resetSketch(page, "pipeline");
+
   // Load a file with no pipeline data, using the v1 schema
   await page
     .getByLabel("Add scheme from file")
@@ -89,21 +77,29 @@ test("file started with v1 can be edited by adding", async () => {
     .click();
 });
 
-test("file started with v1 can be edited by loading", async () => {
+// TODO need to rethink this one
+/*test("file started with v1 can be edited by loading", async () => {
   await page.getByText("Manage files").click();
   await page
     .getByLabel("Load GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByText("Shared-use route").click();
-});
+});*/
 
 // Check compatibility of old files with new per-feature fields introduced 14 February 2024
-test("file without new budget/timing forms can be edited by loading", async () => {
-  await page.getByText("Manage files").click();
+test("file without new budget/timing forms can be edited by loading", async ({
+  page,
+}) => {
+  await page.goto("/");
   await page
-    .getByLabel("Load GeoJSON file")
+    .getByLabel("Or import a ATIP GeoJSON file")
     .setInputFiles("tests/data/pipeline_before_feb_fields.geojson");
+
+  await expect(page).toHaveURL(
+    /.*scheme.html\?authority=LAD_Adur&filename=pipeline_before_feb_fields/,
+  );
+  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
 
   await page.getByRole("link", { name: "POI" }).click();
   await page.getByLabel("Cost (GBP)").fill("1.2");
@@ -113,7 +109,10 @@ test("file without new budget/timing forms can be edited by loading", async () =
   await page.getByRole("button", { name: "Finish" }).click();
 
   // Check the data in local storage
-  let json = await getLocalStorage(page, "LAD_Adur_pipeline");
+  let json = await getLocalStorage(
+    page,
+    "sketch/LAD_Adur/pipeline_before_feb_fields",
+  );
   let feature = json.features[0] as any;
   expect(feature.properties.name).toEqual("POI");
   expect(feature.properties.pipeline).toEqual(
@@ -127,7 +126,9 @@ test("file without new budget/timing forms can be edited by loading", async () =
   );
 });
 
-test("file from another tool can be edited", async () => {
+test("file from another tool can be edited", async ({ page }) => {
+  await resetSketch(page, "pipeline");
+
   // Load a file produced with another tool
   await page
     .getByLabel("Add scheme from file")

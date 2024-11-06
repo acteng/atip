@@ -1,10 +1,12 @@
 import { expect, type Browser, type Page } from "@playwright/test";
 import { v4 as uuidv4 } from "uuid";
 
-// Starts a blank file with a unique name, and waits for everything to be ready
-export async function resetSketch(browser: Browser): Promise<Page> {
-  let page = await browser.newPage();
-  await page.goto("/files.html?authority=LAD_Adur");
+// Starts a blank file with a unique name, and waits for everything to be ready. Returns the filename.
+export async function resetSketch(
+  page: Page,
+  schema: string = "v1",
+): Promise<string> {
+  await page.goto(`/files.html?authority=LAD_Adur&schema=${schema}`);
 
   let filename = uuidv4();
   page.on("dialog", (dialog) => dialog.accept(filename));
@@ -14,7 +16,7 @@ export async function resetSketch(browser: Browser): Promise<Page> {
   // Wait for the route snapper to load
   await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
 
-  return page;
+  return filename;
 }
 
 // TODO Deprecated

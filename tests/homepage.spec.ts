@@ -13,12 +13,12 @@ test("choosing a local authority and clicking start changes the url", async ({
   );
 });
 
-test("Uploading a valid geojson redirects to the appropriate authority scheme page", async ({
+test("Importing a valid geojson redirects to the appropriate authority scheme page", async ({
   page,
 }) => {
   await page.goto("/");
   await page
-    .getByLabel("Or upload a GeoJSON file")
+    .getByLabel("Or import a ATIP GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
 
   await expect(page).toHaveURL(
@@ -48,7 +48,7 @@ test("a v1 file with a pipeline hint redirects to pipeline mode", async ({
 }) => {
   await page.goto("/index.html?schema=pipeline");
   await page
-    .getByLabel("Or upload an ATIP GeoJSON file")
+    .getByLabel("Or import a ATIP GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
   await expect(page).toHaveURL(
     /.*scheme.html\?authority=LAD_Adur&schema=pipeline/,
