@@ -58,11 +58,29 @@
 
   <h1 style="margin-top: 30px">Manage local storage</h1>
 
-  <p>TODO explain</p>
+  <a href="index.html" class="govuk-back-link">Return to the Scheme Sketcher</a>
 
-  <p>TODO back buttons</p>
+  <p>
+    All sketch files are stored in your browser's local storage. There's a 5MB
+    size limit, and you've been redirected to this page because the last action
+    you took exceeds this limit. You must delete some other files first to
+    continue. <b>Before you delete a file, you should download a copy.</b>
+  </p>
 
-  <p>Progress bar. {formatBytes(sum)} total right now</p>
+  <p>
+    If you see this page frequently or have any problems, please contact
+    <a href="mailto:dcarlino@turing.ac.uk">Dustin</a>
+    and
+    <a href="mailto:Peter.York@activetravelengland.gov.uk">Pete</a>
+    for help.
+  </p>
+
+  <p>{formatBytes(sum)} / 5 MB is used right now</p>
+  <progress
+    value={(100 * sum) / (1024 * 1024 * 5)}
+    max="100"
+    style="width: 100%"
+  />
 
   <table>
     <table>

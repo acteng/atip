@@ -160,7 +160,7 @@ export function importFile(
 
 // Returns all local storage items, sorted by size (in bytes) descending.
 export function measureLocalStorageSizes(): [string, number][] {
-  let list = [];
+  let list: [string, number][] = [];
   for (let i = 0; i < window.localStorage.length; i++) {
     let key = window.localStorage.key(i)!;
     list.push([key, window.localStorage.getItem(key)!.length]);
