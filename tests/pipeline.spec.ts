@@ -97,7 +97,7 @@ test("file without new budget/timing forms can be edited by loading", async ({
     .setInputFiles("tests/data/pipeline_before_feb_fields.geojson");
 
   await expect(page).toHaveURL(
-    /.*scheme.html\?authority=LAD_Adur&filename=pipeline_before_feb_fields/,
+    /.*scheme.html\?authority=LAD_Adur&schema=pipeline&file=pipeline_before_feb_fields/,
   );
   await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
 
