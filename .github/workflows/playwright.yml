@@ -30,13 +30,14 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    - name: Run Playwright tests
-      run: npm test
-
     - name: Run type-checker
       run: npm run check
 
+    - name: Run Playwright tests
+      run: npm test
+
     - uses: actions/upload-artifact@v3
+      if: ${{ !cancelled() }}
       with:
         name: playwright-report
         path: playwright-report/
