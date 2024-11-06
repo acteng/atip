@@ -1,18 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import {
-  clearExistingInterventions,
-  clickMap,
-  loadInitialPageFromBrowser,
-} from "./shared.js";
+import { resetSketch, clickMap } from "./shared.js";
 
 let page: Page;
 
-test.beforeAll(async ({ browser }) => {
-  page = await loadInitialPageFromBrowser(browser);
-});
-
-test.beforeEach(async () => {
-  await clearExistingInterventions(page);
+test.beforeEach(async ({ browser }) => {
+  page = await resetSketch(browser);
 });
 
 test("creating a new point opens a form", async () => {
@@ -154,7 +146,5 @@ test("escape key works from every mode", async () => {
 
 // Assert the page is in the main list mode.
 async function expectListMode() {
-  await expect(
-    page.getByRole("button", { name: "Zoom to show entire boundary" }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "New point" })).toBeEnabled();
 }

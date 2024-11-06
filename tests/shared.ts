@@ -1,5 +1,23 @@
 import { expect, type Browser, type Page } from "@playwright/test";
+import { v4 as uuidv4 } from "uuid";
 
+// Starts a blank file with a unique name, and waits for everything to be ready
+export async function resetSketch(browser: Browser): Promise<Page> {
+  let page = await browser.newPage();
+  await page.goto("/files.html?authority=LAD_Adur");
+
+  let filename = uuidv4();
+  page.on("dialog", (dialog) => dialog.accept(filename));
+  await page.getByRole("button", { name: "Create new file" }).click();
+  await expect(page).toHaveURL(/.*scheme.html\?authority=LAD_Adur/);
+
+  // Wait for the route snapper to load
+  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
+
+  return page;
+}
+
+// TODO Deprecated
 export async function loadInitialPageFromBrowser(
   browser: Browser,
 ): Promise<Page> {
@@ -18,6 +36,7 @@ export async function checkPageLoaded(page: Page) {
   await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
 }
 
+// TODO Deprecated
 export async function clearExistingInterventions(page: Page) {
   // We may be in any mode. The escape key always exits back to list mode.
   await page.keyboard.down("Escape");

@@ -26,7 +26,7 @@ export function getEditUrl(
   filename: string,
   schema: Schema,
 ): string {
-  return `scheme.html?authority=${authority}&file=${filename}&schema=${schema}`;
+  return `scheme.html?authority=${authority}&schema=${schema}&file=${filename}`;
 }
 
 // Returns a list of filenames and the detected schema

@@ -1,18 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import {
-  clearExistingInterventions,
-  clickMap,
-  loadInitialPageFromBrowser,
-} from "./shared.js";
+import { resetSketch, clickMap } from "./shared.js";
 
 let page: Page;
 
-test.beforeAll(async ({ browser }) => {
-  page = await loadInitialPageFromBrowser(browser);
-});
-
-test.beforeEach(async () => {
-  await clearExistingInterventions(page);
+test.beforeEach(async ({ browser }) => {
+  page = await resetSketch(browser);
 });
 
 test("edit a freehand area, then cancel", async () => {
@@ -68,8 +60,7 @@ test("edit a route, then cancel", async () => {
   await expectListMode();
 });
 
-// TODO Flaky only on GH Actions
-test.skip("the viewport changes only once when opening a form", async () => {
+test("the viewport changes only once when opening a form", async () => {
   let defaultViewport = new URL(page.url()).hash;
 
   // Create a point, and make sure the viewport hasn't changed
@@ -102,7 +93,5 @@ test.skip("the viewport changes only once when opening a form", async () => {
 
 // Assert the page is in the main list mode.
 async function expectListMode() {
-  await expect(
-    page.getByRole("button", { name: "Zoom to show entire boundary" }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "New point" })).toBeEnabled();
 }
