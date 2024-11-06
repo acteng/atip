@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { getKey, serializeSchemes, exportFile } from "lib/common/files";
+  import {
+    getKey,
+    serializeSchemes,
+    exportFile,
+    setLocalStorage,
+  } from "lib/common/files";
   import { mode } from "scheme-sketcher-lib/draw/stores";
   import { SecondaryButton } from "govuk-svelte";
   import { onMount } from "svelte";
@@ -31,7 +36,7 @@
   $: {
     if (loaded && $gjSchemes) {
       console.log(`GJ changed, saving to local storage`);
-      window.localStorage.setItem(
+      setLocalStorage(
         key,
         JSON.stringify(serializeSchemes(authority, $gjSchemes)),
       );

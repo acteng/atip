@@ -6,6 +6,20 @@ export function getKey(authority: string, filename: string): string {
   return `sketch/${authority}/${filename}`;
 }
 
+// Sets a local storage item. If quota is exceeded, then redirect to a page
+// where the user can clean things up.
+export function setLocalStorage(key: string, value: string) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch (err) {
+    console.log(`Couldn't set local storage for ${key}: ${err}`);
+    window.alert(
+      "Your changes couldn't be saved because you've run out of local storage. Please fix this problem on the next page and try again.",
+    );
+    window.location.href = "local_storage.html";
+  }
+}
+
 // Returns the URL to edit a file
 export function getEditUrl(
   authority: string,
@@ -67,6 +81,7 @@ export function downloadGeneratedFile(filename: string, textInput: string) {
 }
 
 // Detects old sketch files and renames them
+// TODO Note this temporarily requires double the local storage space, which might be a problem.
 export function importOldFiles(authority: string) {
   let rename = [];
   for (let i = 0; i < window.localStorage.length; i++) {
@@ -85,7 +100,7 @@ export function importOldFiles(authority: string) {
     console.log(`Renaming ${oldKey} to ${newKey}`);
     try {
       let contents = window.localStorage.getItem(oldKey)!;
-      window.localStorage.setItem(newKey, contents);
+      setLocalStorage(newKey, contents);
       window.localStorage.removeItem(oldKey);
     } catch (err) {
       console.error(`Couldn't importOldFiles: ${err}`);
@@ -150,7 +165,7 @@ export function importFile(
   // TODO Handle duplicate filenames
   let filename = cleanImportedFilename(rawFilename);
 
-  window.localStorage.setItem(
+  setLocalStorage(
     getKey(gj.authority, filename),
     JSON.stringify(serializeSchemes(gj.authority, gj)),
   );

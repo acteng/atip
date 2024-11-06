@@ -17,6 +17,7 @@
     exportFile,
     getEditUrl,
     importFile,
+    setLocalStorage,
   } from "lib/common/files";
   import { Header, describeAuthority, getAuthoritiesGeoJson } from "lib/common";
   import { cfg } from "lib/sketch/config";
@@ -44,7 +45,7 @@
     if (newName) {
       let oldKey = getKey(authority, filename);
       let contents = window.localStorage.getItem(oldKey)!;
-      window.localStorage.setItem(getKey(authority, newName), contents);
+      setLocalStorage(getKey(authority, newName), contents);
       window.localStorage.removeItem(oldKey);
       fileList = listFilesInAuthority(authority);
       /*if ($currentFile == filename) {
@@ -83,7 +84,7 @@
     let gj = emptySchemes(cfg);
     // There's only one scheme
     Object.values(gj.schemes)[0].scheme_name = filename;
-    window.localStorage.setItem(
+    setLocalStorage(
       getKey(authority, filename),
       // TODO serializeSchemes?
       JSON.stringify(gj),

@@ -4,7 +4,12 @@
   import { bbox } from "lib/maplibre";
   import { map } from "stores";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { getKey, getEditUrl, serializeSchemes } from "lib/common/files";
+  import {
+    getKey,
+    getEditUrl,
+    serializeSchemes,
+    setLocalStorage,
+  } from "lib/common/files";
   import DescribePipelineTiming from "./DescribePipelineTiming.svelte";
   import DescribePipelineBudget from "./DescribePipelineBudget.svelte";
   import type { Schema, Schemes, SchemeData } from "types";
@@ -72,7 +77,7 @@
     // TODO Handle duplicate filenames
     let filename = `browse_copy_${scheme.scheme_reference}`;
 
-    window.localStorage.setItem(
+    setLocalStorage(
       getKey(authority, filename),
       JSON.stringify(serializeSchemes(authority, gj)),
     );
