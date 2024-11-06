@@ -76,7 +76,7 @@ test("the viewport changes only once when opening a form", async ({ page }) => {
 
   // The cursor is on the marker, so scrolling won't work unless we move first.
   // Clicking has no effect.
-  await clickMap(page, 400, 400);
+  await clickMap(page, 100, 100);
 
   // Zoom in on the map without closing the form. The viewport should again differ.
   await page.getByRole("region", { name: "Map" }).hover();

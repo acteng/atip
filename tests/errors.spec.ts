@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
-import { resetSketch, clickMap } from "./shared.js";
+import { clickMap } from "./shared.js";
+import { v4 as uuidv4 } from "uuid";
 
 test("other tools work when route tool doesn't load", async ({ page }) => {
   // Do this first
@@ -10,7 +11,12 @@ test("other tools work when route tool doesn't load", async ({ page }) => {
         status: 404,
       }),
   );
-  await resetSketch(page);
+
+  await page.goto(`/files.html?authority=LAD_Adur`);
+  let filename = uuidv4();
+  page.on("dialog", (dialog) => dialog.accept(filename));
+  await page.getByRole("button", { name: "Create new file" }).click();
+  await expect(page).toHaveURL(/.*scheme.html\?authority=LAD_Adur/);
 
   await expect(page.getByText("Failed to load route snapper")).toBeVisible();
 
@@ -23,20 +29,15 @@ test("other tools work when route tool doesn't load", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Pointless" })).toBeVisible();
 });
 
-test("Redirected to homepage with error when incorrect params given to scheme page", async ({
+test("Redirected to homepage with error when incorrect params given", async ({
   page,
 }) => {
-  await page.goto("/scheme.html?authority=Adu");
-
-  await expect(page.getByText("Authority name not found:")).toBeVisible();
-  await expect(page).toHaveURL(
-    /.*\?error=Authority\+name\+not\+found%3A\+Adu&style=streets/,
-  );
+  await page.goto("/files.html?authority=Adu");
+  await expect(page.getByText("Authority name not found: Adu")).toBeVisible();
 
   await page.goto("/scheme.html?authority=LAD_Adur&file=missing");
-
   await expect(
-    page.getByText("File missing in authority LAD_Adur not found:"),
+    page.getByText("File missing in authority LAD_Adur not found"),
   ).toBeVisible();
 });
 
@@ -48,7 +49,7 @@ test("Import file with invalid boundary", async ({ page }) => {
 
   await expect(
     page.getByText(
-      "Couldn't load scheme from a file: Error: Can't figure out the authority boundary that fully contains this scheme",
+      "Couldn't import file: Error: Can't figure out the authority boundary that fully contains this scheme",
     ),
   ).toBeVisible();
 });

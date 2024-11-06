@@ -1,9 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import {
-  checkPageLoaded,
-  clickMap,
-  loadInitialPageFromBrowser,
-} from "./shared.js";
+import { clickMap } from "./shared.js";
 
 let page: Page;
 

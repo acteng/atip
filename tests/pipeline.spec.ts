@@ -78,14 +78,14 @@ test("file started with v1 can be edited by adding", async ({ page }) => {
 });
 
 // TODO need to rethink this one
-/*test("file started with v1 can be edited by loading", async () => {
+test("file started with v1 can be edited by loading", async ({ page }) => {
   await page.getByText("Manage files").click();
   await page
     .getByLabel("Load GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByText("Shared-use route").click();
-});*/
+});
 
 // Check compatibility of old files with new per-feature fields introduced 14 February 2024
 test("file without new budget/timing forms can be edited by loading", async ({
@@ -93,7 +93,7 @@ test("file without new budget/timing forms can be edited by loading", async ({
 }) => {
   await page.goto("/");
   await page
-    .getByLabel("Or import a ATIP GeoJSON file")
+    .getByLabel("Or import a GeoJSON file")
     .setInputFiles("tests/data/pipeline_before_feb_fields.geojson");
 
   await expect(page).toHaveURL(
