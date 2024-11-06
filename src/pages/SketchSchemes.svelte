@@ -32,6 +32,7 @@
   import { map as sketchMapStore } from "scheme-sketcher-lib/config";
   import { writable } from "svelte/store";
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
+  import { getKey } from "lib/common/files";
 
   // FileManagement will set this up
   let gjSchemes = writable(emptySchemes(cfg));
@@ -39,9 +40,16 @@
   let showAbout = false;
 
   let params = new URLSearchParams(window.location.search);
-  // TODO Add validation and some kind of error page
-  let authority = params.get("authority")!;
-  let filename = params.get("file")!;
+  // If the authority is invalid, it'll be handled in onMount asynchronously
+  let authority = params.get("authority") || "";
+  let filename = params.get("file") || "";
+
+  if (window.localStorage.getItem(getKey(authority, filename)) == null) {
+    // If either the filename or authority is wrong, redirect to the very first
+    // page. This might be annoying if the authority is correct, but it's
+    // simpler. Unless a user copies a bad URL, this shouldn't happen anyway
+    window.location.href = `index.html?schema=${$schema}&error=File ${filename} in authority ${authority} not found`;
+  }
 
   mapStyle.set(params.get("style") || "streets");
 

@@ -97,27 +97,32 @@
         <LoggedIn />
       </div>
 
-      <h1>Scheme Sketcher</h1>
+      <div style="display: flex; justify-content: space-between">
+        <h1>Scheme Sketcher</h1>
 
-      <SecondaryButton on:click={() => (showAbout = !showAbout)}>
-        About
-      </SecondaryButton>
+        <SecondaryButton on:click={() => (showAbout = !showAbout)}>
+          About
+        </SecondaryButton>
+      </div>
+
       <ErrorMessage errorMessage={pageErrorMessage} />
 
-      {#if authoritiesGj.features.length > 0}
-        <AutocompleteTextInput
-          label="Select Transport Authority or Local Authority District"
-          bind:value={inputValue}
-          options={authoritiesGj.features.map((f) => [
-            f.properties.full_name,
-            describeAuthority(f.properties.full_name),
-          ])}
-        />
-      {/if}
+      <div style="display: flex; justify-content: space-between">
+        {#if authoritiesGj.features.length > 0}
+          <AutocompleteTextInput
+            label="Select Transport Authority or Local Authority District"
+            bind:value={inputValue}
+            options={authoritiesGj.features.map((f) => [
+              f.properties.full_name,
+              describeAuthority(f.properties.full_name),
+            ])}
+          />
+        {/if}
 
-      <DefaultButton on:click={start} disabled={!validEntry}>
-        Start
-      </DefaultButton>
+        <DefaultButton on:click={start} disabled={!validEntry}>
+          Start
+        </DefaultButton>
+      </div>
 
       <hr />
 

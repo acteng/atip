@@ -24,19 +24,28 @@
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
   import { onMount } from "svelte";
   import { schema as schemaStore } from "stores";
+  import type { AuthorityBoundaries } from "boundaries";
 
   let params = new URLSearchParams(window.location.search);
-  // TODO Add validation and some kind of error page
-  let authority = params.get("authority")!;
+  // If the authority is invalid, it'll be handled in onMount asynchronously
+  let authority = params.get("authority") || "missing";
+
+  let authoritiesGj: AuthorityBoundaries | null = null;
 
   importOldFiles(authority);
   let fileList = listFilesInAuthority(authority);
 
   let uploadErrorMessage = "";
 
-  onMount(() => {
+  onMount(async () => {
     // For govuk components. Must happen here.
     initAll();
+    authoritiesGj = await getAuthoritiesGeoJson();
+    if (
+      !authoritiesGj.features.some((f) => f.properties.full_name == authority)
+    ) {
+      window.location.href = `index.html?schema=${$schemaStore}&error=Authority name not found: ${authority}`;
+    }
   });
 
   function renameFile(filename: string) {
@@ -92,10 +101,9 @@
     window.location.href = getEditUrl(authority, filename, $schemaStore);
   }
 
-  async function loadFile(filename: string, text: string) {
+  function loadFile(filename: string, text: string) {
     try {
-      let authoritiesGj = await getAuthoritiesGeoJson();
-      window.location.href = importFile(filename, text, authoritiesGj);
+      window.location.href = importFile(filename, text, authoritiesGj!);
     } catch (err) {
       uploadErrorMessage = `Couldn't import file: ${err}`;
     }
@@ -132,7 +140,8 @@
       </nav>
 
       <p>
-        You're working on sketches in {describeAuthority(authority)}.
+        You're working on sketches in <b>{describeAuthority(authority)}</b>
+        .
       </p>
 
       <p>
@@ -142,7 +151,7 @@
       </p>
 
       {#if fileList.length > 0}
-        <h2>Manage existing files</h2>
+        <h2>Load existing files</h2>
         <table>
           <thead>
             <tr>
@@ -185,7 +194,9 @@
       <SecondaryButton on:click={newFile}>Create new file</SecondaryButton>
       <h2>Import a saved sketch</h2>
       <ErrorMessage errorMessage={uploadErrorMessage} />
-      <FileInput label={`Select a .geojson file`} onLoad={loadFile} />
+      {#if authoritiesGj}
+        <FileInput label={`Select a .geojson file`} onLoad={loadFile} />
+      {/if}
     </div>
   </div>
 </div>
