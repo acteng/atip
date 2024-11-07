@@ -112,7 +112,7 @@ export function importOldFiles(authority: string) {
 export function serializeSchemes(authority: string, gj: Schemes): Schemes {
   let copy = JSON.parse(JSON.stringify(gj));
   for (let feature of copy.features) {
-    delete feature.properties.hide_while_editing;
+    delete feature.properties?.hide_while_editing;
   }
   copy.authority = authority;
   copy.origin = "atip-v2";

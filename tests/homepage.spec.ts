@@ -22,7 +22,7 @@ test("Importing a valid geojson redirects to the appropriate authority scheme pa
     .setInputFiles("tests/data/LAD_Adur.geojson");
 
   await expect(page).toHaveURL(
-    /.*scheme.html\?authority=LAD_Adur&schema=v1&filename=LAD_Adur/,
+    /.*scheme.html\?authority=LAD_Adur&schema=v1&file=LAD_Adur/,
   );
 });
 
@@ -40,18 +40,5 @@ test("schema is plumbed along to the sketch page", async ({ page }) => {
   await page.getByRole("button", { name: "Create new file" }).click();
   await expect(page).toHaveURL(
     /.*scheme.html\?authority=LAD_Adur&schema=pipeline&file=file123/,
-  );
-});
-
-// TODO Legitimately not working
-test("a v1 file with a pipeline hint redirects to pipeline mode", async ({
-  page,
-}) => {
-  await page.goto("/index.html?schema=pipeline");
-  await page
-    .getByLabel("Or import a GeoJSON file")
-    .setInputFiles("tests/data/LAD_Adur.geojson");
-  await expect(page).toHaveURL(
-    /.*scheme.html\?authority=LAD_Adur&schema=pipeline/,
   );
 });

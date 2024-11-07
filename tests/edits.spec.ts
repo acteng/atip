@@ -77,7 +77,9 @@ test("the viewport changes only once when opening a form", async ({ page }) => {
   // Zoom in on the map without closing the form. The viewport should again
   // differ. Note that hover() picks the center by default, but a marker
   // is there, so we have to force somewhere on the side.
-  await page.getByRole("region", { name: "Map" }).hover({position: {x: 300, y: 300}});
+  await page
+    .getByRole("region", { name: "Map" })
+    .hover({ position: { x: 300, y: 300 } });
   await page.mouse.wheel(0, -100);
   // The above scroll doesn't auto-wait for anything
   await page.waitForTimeout(1000);

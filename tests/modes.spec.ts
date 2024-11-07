@@ -98,7 +98,6 @@ test("editing geometry of a area works", async ({ page }) => {
   await page.getByLabel("Description").click();
 });
 
-// TODO Flaky only on GH Actions
 test("adding interventions, then deleting one, then adding another", async ({
   page,
 }) => {
