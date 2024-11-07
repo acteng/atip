@@ -13,21 +13,18 @@
     NewFeatureForm,
   } from "scheme-sketcher-lib/draw";
   import {
-    appVersion,
     BaselayerSwitcher,
     Geocoder,
     getAuthoritiesGeoJson,
     LoggedIn,
     Alpha,
     MapLibreMap,
-    ZoomOutMap,
     Header,
   } from "lib/common";
   import { mode } from "scheme-sketcher-lib/draw/stores";
-  import { ButtonGroup, SecondaryButton } from "govuk-svelte";
+  import { SecondaryButton } from "govuk-svelte";
   import About from "lib/sketch/About.svelte";
   import FileManagement from "lib/sketch/FileManagement.svelte";
-  import Instructions from "lib/sketch/Instructions.svelte";
   import { ListMode, EditFeatureForm } from "scheme-sketcher-lib/sidebar";
   import { map, mapStyle, schema } from "stores";
   import { onMount } from "svelte";
@@ -35,16 +32,24 @@
   import { map as sketchMapStore } from "scheme-sketcher-lib/config";
   import { writable } from "svelte/store";
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
+  import { getKey } from "lib/common/files";
 
-  // When FileManagement loads, it'll load from local storage
+  // FileManagement will set this up
   let gjSchemes = writable(emptySchemes(cfg));
 
   let showAbout = false;
-  let showInstructions = false;
 
   let params = new URLSearchParams(window.location.search);
-  // TODO Add validation and some kind of error page
-  let authorityName: string = params.get("authority")!;
+  // If the authority is invalid, it'll be handled in onMount asynchronously
+  let authority = params.get("authority") || "";
+  let filename = params.get("file") || "";
+
+  if (window.localStorage.getItem(getKey(authority, filename)) == null) {
+    // If either the filename or authority is wrong, redirect to the very first
+    // page. This might be annoying if the authority is correct, but it's
+    // simpler. Unless a user copies a bad URL, this shouldn't happen anyway
+    window.location.href = `index.html?schema=${$schema}&error=File ${filename} in authority ${authority} not found`;
+  }
 
   mapStyle.set(params.get("style") || "streets");
 
@@ -54,16 +59,7 @@
   // releases.
   let routeSnapperUrl = `${
     import.meta.env.VITE_RESOURCE_BASE
-  }/route-snappers/v3/${authorityName}.bin.gz`;
-
-  function toggleAbout() {
-    showAbout = !showAbout;
-    showInstructions = false;
-  }
-  function toggleInstructions() {
-    showInstructions = !showInstructions;
-    showAbout = false;
-  }
+  }/route-snappers/v3/${authority}.bin.gz`;
 
   let boundaryGeojson: AuthorityBoundaries;
   onMount(async () => {
@@ -76,25 +72,12 @@
   async function loadAuthorityBoundary(): Promise<AuthorityBoundaries> {
     let geojson = await getAuthoritiesGeoJson();
     geojson.features = geojson.features.filter(
-      (feature) => feature.properties.full_name == authorityName,
+      (feature) => feature.properties.full_name == authority,
     );
     if (geojson.features.length === 0) {
-      window.location.href = `index.html?error=Authority name not found: ${authorityName}`;
+      window.location.href = `index.html?schema=${$schema}&error=Authority name not found: ${authority}`;
     }
     return geojson;
-  }
-
-  function authorityDescription(): string {
-    let parts = authorityName.split("_");
-    if (parts.length == 2) {
-      if (parts[0] == "LAD") {
-        return `${parts[1]} (LAD)`;
-      } else if (parts[0] == "TA") {
-        return `${parts[1]} (Transport Authority)`;
-      }
-    }
-    // Unexpected input, just return it
-    return authorityName;
   }
 
   $: if ($map) {
@@ -110,24 +93,17 @@
       <Alpha />
       <div style="border-bottom: 1px solid #b1b4b6">
         <LoggedIn />
-        <p>App version: {appVersion()}</p>
       </div>
 
       <div style="display: flex; justify-content: space-between">
-        <p>{authorityDescription()}</p>
-        <a href={`index.html?schema=${$schema}`}>Change area</a>
-        <ZoomOutMap {boundaryGeojson} />
-      </div>
-
-      <ButtonGroup>
-        <SecondaryButton on:click={toggleAbout}>About</SecondaryButton>
-        <SecondaryButton on:click={toggleInstructions}>
-          Instructions
+        <h2 style="margin-bottom: 0px">Scheme Sketcher</h2>
+        <SecondaryButton on:click={() => (showAbout = true)} noBottomMargin>
+          About
         </SecondaryButton>
-      </ButtonGroup>
+      </div>
     {/if}
 
-    <FileManagement {cfg} {gjSchemes} {authorityName} />
+    <FileManagement {gjSchemes} {authority} {filename} />
 
     {#if $mode.mode == "list" || $mode.mode == "split-route" || $mode.mode == "set-image" || $mode.mode == "streetview"}
       <ListMode {cfg} {gjSchemes} />
@@ -157,7 +133,6 @@
 </div>
 
 <About bind:open={showAbout} />
-<Instructions bind:open={showInstructions} />
 
 <style>
   * {

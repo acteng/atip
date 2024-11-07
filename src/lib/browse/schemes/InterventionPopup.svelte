@@ -4,10 +4,15 @@
   import { bbox } from "lib/maplibre";
   import { map } from "stores";
   import { prettyPrintMeters } from "lib/maplibre";
-  import { setLocalStorageItem } from "lib/common";
+  import {
+    getKey,
+    getEditUrl,
+    serializeSchemes,
+    setLocalStorage,
+  } from "lib/common/files";
   import DescribePipelineTiming from "./DescribePipelineTiming.svelte";
   import DescribePipelineBudget from "./DescribePipelineBudget.svelte";
-  import type { Schemes, SchemeData } from "types";
+  import type { Schema, Schemes, SchemeData } from "types";
   import { afterUpdate } from "svelte";
 
   export let source: string;
@@ -57,18 +62,27 @@
       schemes: {},
     };
     gj.schemes[scheme.scheme_reference] = scheme;
-    let filename = scheme.browse?.authority_or_region || "unknown authority";
-    let schema = scheme.pipeline ? "pipeline" : "v1";
-    if (schema == "pipeline") {
-      filename += "_pipeline";
+
+    // TODO Trust the authority set in there, or recalculate it?
+    let authority = scheme.browse?.authority_or_region;
+    if (!authority) {
+      window.alert(
+        "This scheme has no authority specified, you can't edit this",
+      );
+      return;
     }
 
-    // Put the file in local storage, so it'll be loaded from the next page
-    setLocalStorageItem(filename, JSON.stringify(gj));
-    window.open(
-      `scheme.html?authority=${scheme.browse?.authority_or_region}&schema=${schema}`,
-      "_blank",
+    let schema: Schema = scheme.pipeline ? "pipeline" : "v1";
+
+    // TODO Handle duplicate filenames
+    let filename = `browse_copy_${scheme.scheme_reference}`;
+
+    setLocalStorage(
+      getKey(authority, filename),
+      JSON.stringify(serializeSchemes(authority, gj)),
     );
+
+    window.open(getEditUrl(authority, filename, schema), "_blank");
   }
 </script>
 

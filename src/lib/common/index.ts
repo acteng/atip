@@ -14,7 +14,6 @@ export { default as LoggedIn } from "./LoggedIn.svelte";
 export { default as Popup } from "./Popup.svelte";
 export { default as MapLibreMap } from "./MapLibreMap.svelte";
 export { default as ZoomOutMap } from "./ZoomOutMap.svelte";
-export * from "./storage";
 export { HelpButton, Modal, WarningIcon } from "scheme-sketcher-lib/common";
 
 export async function getAuthoritiesGeoJson(): Promise<AuthorityBoundaries> {
@@ -86,6 +85,19 @@ export async function fetchWithProgress(
   }
 
   return allChunks;
+}
+
+export function describeAuthority(authority: string): string {
+  let parts = authority.split("_");
+  if (parts.length == 2) {
+    if (parts[0] == "LAD") {
+      return `${parts[1]} (LAD)`;
+    } else if (parts[0] == "TA") {
+      return `${parts[1]} (Transport Authority)`;
+    }
+  }
+  // Unexpected input, just return it
+  return authority;
 }
 
 // See .env

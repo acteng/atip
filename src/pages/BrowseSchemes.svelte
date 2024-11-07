@@ -7,7 +7,6 @@
   import { controls } from "lib/browse/stores";
   import { atfSchemesGj } from "lib/browse/schemes/stores";
   import {
-    appVersion,
     Geocoder,
     Layout,
     LoggedIn,
@@ -47,7 +46,6 @@
     <Alpha />
     <div style="border-bottom: 1px solid #b1b4b6">
       <LoggedIn />
-      <p>App version: {appVersion()}</p>
     </div>
 
     <div style="display: flex; justify-content: space-between">
