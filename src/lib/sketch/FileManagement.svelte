@@ -21,10 +21,11 @@
 
   let loaded = false;
 
-  // TODO Consider moving this logic to the main page, and having a separate little component in ListMode only (but then maybe it should live in ss-lib)
   onMount(() => {
     let contents = window.localStorage.getItem(key);
-    // The filename or authority is wrong; the top-level SketchSchemes component will redirect, but this code might run first. Just don't set `loaded`.
+    // The filename or authority is wrong; the top-level SketchSchemes
+    // component will redirect, but this code might run first. Just don't
+    // set `loaded`.
     if (contents == null) {
       return;
     }

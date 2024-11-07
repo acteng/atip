@@ -18,6 +18,7 @@
     getEditUrl,
     importFile,
     setLocalStorage,
+    serializeSchemes,
   } from "lib/common/files";
   import { Header, describeAuthority, getAuthoritiesGeoJson } from "lib/common";
   import { cfg } from "lib/sketch/config";
@@ -57,9 +58,6 @@
       setLocalStorage(getKey(authority, newName), contents);
       window.localStorage.removeItem(oldKey);
       fileList = listFilesInAuthority(authority);
-      /*if ($currentFile == filename) {
-        $currentFile = newName;
-      }*/
     }
   }
 
@@ -95,8 +93,7 @@
     Object.values(gj.schemes)[0].scheme_name = filename;
     setLocalStorage(
       getKey(authority, filename),
-      // TODO serializeSchemes?
-      JSON.stringify(gj),
+      JSON.stringify(serializeSchemes(authority, gj)),
     );
     window.location.href = getEditUrl(authority, filename, $schemaStore);
   }

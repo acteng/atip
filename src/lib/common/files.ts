@@ -80,8 +80,9 @@ export function downloadGeneratedFile(filename: string, textInput: string) {
   document.body.removeChild(element);
 }
 
-// Detects old sketch files and renames them
-// TODO Note this temporarily requires double the local storage space, which might be a problem.
+// Detects old sketch files from before November 2024 and renames them. There
+// used to only be one file per (authority, schema) pair.
+// Note this temporarily requires double the local storage space, which might be a problem.
 export function importOldFiles(authority: string) {
   let rename = [];
   for (let i = 0; i < window.localStorage.length; i++) {
@@ -89,9 +90,9 @@ export function importOldFiles(authority: string) {
     // We could attempt to scrape a scheme name as the filename, but it's
     // easier if users just manually rename this file
     if (key == authority) {
-      rename.push([key, getKey(authority, "old v1 sketch")]);
+      rename.push([key, getKey(authority, "v1 sketch")]);
     } else if (key == `${authority}_pipeline`) {
-      rename.push([key, getKey(authority, "old pipeline sketch")]);
+      rename.push([key, getKey(authority, "pipeline sketch")]);
     }
   }
 
@@ -140,7 +141,9 @@ export function detectSchema(gj: any): Schema {
   return "v1";
 }
 
-// Import a sketch file, autodetecting its authority and schema. Write it to local storage, and return the URL of the sketch page to edit it. Throws an exception if any of this fails.
+// Import a sketch file, autodetecting its authority and schema. Write it to
+// local storage, and return the URL of the sketch page to edit it. Throws an
+// exception if any of this fails.
 export function importFile(
   rawFilename: string,
   text: string,
@@ -160,7 +163,9 @@ export function importFile(
 
   let schema = detectSchema(gj);
 
-  // TODO backfill?? or only do that when the sketch is loaded?
+  // We could choose to backfill here, but right now, it's done instead when
+  // loading the sketch to edit. We could reconsider this to handle
+  // importing external files more carefully upfront.
 
   // TODO Handle duplicate filenames
   let filename = cleanImportedFilename(rawFilename);

@@ -149,5 +149,38 @@ test("loading a file produced by another tool shows fixable errors", async ({
   ).not.toBeVisible();
 });
 
+test("old local storage items are detected and renamed", async ({ page }) => {
+  // We have to go somewhere to set local storage
+  await page.goto("/");
+  // Set local storage items using the pre-November 2024 naming scheme
+  let v1 = await readFile("tests/data/LAD_Adur.geojson", { encoding: "utf8" });
+  let pipeline = await readFile(
+    "tests/data/pipeline_before_feb_fields.geojson",
+    { encoding: "utf8" },
+  );
+  await page.evaluate(
+    (contents) => window.localStorage.setItem("LAD_Adur", contents),
+    v1,
+  );
+  await page.evaluate(
+    (contents) => window.localStorage.setItem("LAD_Adur_pipeline", contents),
+    pipeline,
+  );
+
+  // Check the first file
+  await page.goto("/files.html?authority=LAD_Adur");
+  await page.getByRole("link", { name: "v1 sketch" }).click();
+  await expect(page).toHaveURL(
+    /.*scheme.html\?authority=LAD_Adur&schema=v1&file=v1\+sketch/,
+  );
+
+  // And the second
+  await page.goto("/files.html?authority=LAD_Adur");
+  await page.getByRole("link", { name: "pipeline sketch" }).click();
+  await expect(page).toHaveURL(
+    /.*scheme.html\?authority=LAD_Adur&schema=pipeline&file=pipeline\+sketch/,
+  );
+});
+
 // TODO Test schema detection
 // TODO Test loading broken files from the homepage
