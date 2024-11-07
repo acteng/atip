@@ -168,7 +168,7 @@ export function importFile(
   // importing external files more carefully upfront.
 
   // TODO Handle duplicate filenames
-  let filename = cleanImportedFilename(rawFilename);
+  let filename = cleanImportedFilename(gj.authority, rawFilename);
 
   setLocalStorage(
     getKey(gj.authority, filename),
@@ -190,11 +190,14 @@ export function measureLocalStorageSizes(): [string, number][] {
   return list;
 }
 
-function cleanImportedFilename(rawFilename: string): string {
+function cleanImportedFilename(authority: string, rawFilename: string): string {
   let filename = stripSuffix(stripSuffix(rawFilename, ".json"), ".geojson");
+  // Strip authority from the filename, in case it was included before by downloading the file
+  return stripPrefix(filename, `${authority}_`);
+}
 
-  // TODO Strip authority from the filename, in case it was included before
-  return filename;
+function stripPrefix(value: string, prefix: string): string {
+  return value.startsWith(prefix) ? value.slice(prefix.length) : value;
 }
 
 function stripSuffix(value: string, suffix: string): string {

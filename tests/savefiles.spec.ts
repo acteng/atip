@@ -1,6 +1,7 @@
 import { readFile } from "fs/promises";
 import { expect, test } from "@playwright/test";
-import { resetSketch } from "./shared.js";
+import { resetSketch, clickMap } from "./shared.js";
+import type { Readable } from "stream";
 
 test("loading a file with length displays the length", async ({ page }) => {
   await page.goto("/");
@@ -181,6 +182,45 @@ test("old local storage items are detected and renamed", async ({ page }) => {
     /.*scheme.html\?authority=LAD_Adur&schema=pipeline&file=pipeline\+sketch/,
   );
 });
+
+test("download a file and then reimport it", async ({ page }) => {
+  // Make a file
+  let filename = await resetSketch(page);
+  await page.getByRole("button", { name: "New point" }).click();
+  await page.getByLabel("Name").fill("Pointless");
+  await clickMap(page, 500, 500);
+  await page.getByRole("button", { name: "Finish" }).click();
+
+  // Download it, and check the filename
+  let downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export" }).click();
+  let download = await downloadPromise;
+  let fullFilename = `LAD_Adur_${filename}.geojson`;
+  expect(download.suggestedFilename()).toEqual(fullFilename);
+  let contents = await readStream(await download.createReadStream());
+
+  // Import it and check the filename is correct
+  await page.goto("/");
+  await page.getByLabel("Or import a GeoJSON file").setInputFiles({
+    name: fullFilename,
+    mimeType: "application/json",
+    buffer: Buffer.from(contents),
+  });
+  await expect(page).toHaveURL(
+    new RegExp(
+      String.raw`.*scheme.html\?authority=LAD_Adur&schema=v1&file=${filename}`,
+    ),
+  );
+  await expect(page.getByRole("link", { name: "Pointless" })).toBeVisible();
+});
+
+async function readStream(stream: Readable): Promise<string> {
+  let data = "";
+  for await (let chunk of stream) {
+    data += chunk;
+  }
+  return data;
+}
 
 // TODO Test schema detection
 // TODO Test loading broken files from the homepage
