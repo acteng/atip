@@ -87,3 +87,51 @@ function keepFeature(feature: Feature): boolean {
 
   return true;
 }
+
+// Combines all sketches in local storage into one big Schemes object
+export function importAllLocalSketches(): Schemes {
+  let result: Schemes = {
+    type: "FeatureCollection",
+    features: [],
+    schemes: {},
+    notes: [
+      "These schemes are everything you've drawn in this browser using Scheme Sketcher. The data source and accuracy depend on whatever files you imported, created, or edited yourself.",
+    ],
+  };
+
+  for (let i = 0; i < window.localStorage.length; i++) {
+    let key = window.localStorage.key(i)!;
+    let parts = key.split("/");
+    if (parts.length != 3 || parts[0] != "sketch") {
+      continue;
+    }
+    try {
+      let gj: Schemes = JSON.parse(window.localStorage.getItem(key)!);
+      // Skip empty sketches
+      if (gj.features.length == 0) {
+        continue;
+      }
+
+      // Set up browse data
+      for (let scheme of Object.values(gj.schemes)) {
+        scheme.browse = {
+          authority_or_region: parts[1],
+        };
+      }
+
+      // There's lots more validation we could do -- checking if every feature
+      // has a scheme, checking for duplicate scheme references, etc.
+
+      result.schemes = { ...result.schemes, ...gj.schemes };
+      result.features = [...result.features, ...gj.features];
+    } catch (err) {}
+  }
+
+  // Fix feature IDs
+  let id = 1;
+  for (let f of result.features) {
+    f.id = id++;
+  }
+
+  return result;
+}
