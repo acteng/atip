@@ -12,17 +12,16 @@
   } from "lib/common/files";
   import DescribePipelineTiming from "./DescribePipelineTiming.svelte";
   import DescribePipelineBudget from "./DescribePipelineBudget.svelte";
-  import type { Schema, Schemes, SchemeData } from "types";
+  import type { Schema, Schemes } from "types";
   import { afterUpdate } from "svelte";
 
   export let source: string;
   export let props: { [name: string]: any };
-  export let schemes: Map<string, SchemeData>;
   export let schemesGj: Schemes;
   export let filterSchemeText: string;
   export let filterInterventionText: string;
 
-  $: scheme = schemes.get(props.scheme_reference)!;
+  $: scheme = schemesGj.schemes[props.scheme_reference];
 
   let div: HTMLDivElement | undefined;
   afterUpdate(() => {

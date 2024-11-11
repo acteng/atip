@@ -20,12 +20,11 @@
     LineLayer,
   } from "svelte-maplibre";
   import InterventionPopup from "./InterventionPopup.svelte";
-  import type { Schemes, SchemeData } from "types";
+  import type { Schemes } from "types";
 
   export let source: string;
   export let show: boolean;
 
-  export let schemes: Map<string, SchemeData>;
   export let schemesGj: Schemes;
   export let filterSchemeText: string;
   export let filterInterventionText: string;
@@ -68,7 +67,6 @@
         {source}
         {props}
         {schemesGj}
-        {schemes}
         {filterSchemeText}
         {filterInterventionText}
       />
@@ -96,7 +94,6 @@
         {source}
         {props}
         {schemesGj}
-        {schemes}
         {filterSchemeText}
         {filterInterventionText}
       />
@@ -136,7 +133,6 @@
         {source}
         {props}
         {schemesGj}
-        {schemes}
         {filterSchemeText}
         {filterInterventionText}
       />

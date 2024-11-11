@@ -9,14 +9,13 @@
     AutocompleteTextInput,
   } from "govuk-svelte";
   import { Modal } from "lib/common";
-  import type { Feature, Schemes, SchemeData } from "types";
+  import type { Feature, Schemes } from "types";
   import {
     atfFundingProgrammes,
     currentMilestones as currentMilestoneColors,
   } from "./colors";
 
   export let source: string;
-  export let schemes: Map<string, SchemeData>;
   export let schemesGj: Schemes;
   export let filterSchemeText: string;
   export let filterInterventionText: string;
@@ -32,18 +31,16 @@
     currentMilestoneColors,
   ).map((x) => [x, x]);
 
-  $: authorities = getAuthorities(schemes);
+  $: authorities = getAuthorities(schemesGj);
   let filterAuthority = "";
   let filterFundingProgrammes = Object.fromEntries(
     Object.keys(atfFundingProgrammes).map((x) => [x, true]),
   );
   let filterCurrentMilestone = "";
 
-  function getAuthorities(
-    schemes: Map<string, SchemeData>,
-  ): [string, string][] {
+  function getAuthorities(schemesGj: Schemes): [string, string][] {
     let names: Set<string> = new Set();
-    for (let x of schemes.values()) {
+    for (let x of Object.values(schemesGj.schemes)) {
       if (x.browse?.authority_or_region) {
         names.add(x.browse.authority_or_region);
       }
@@ -77,7 +74,7 @@
         return false;
       }
 
-      let scheme = schemes.get(feature.properties.scheme_reference!)!;
+      let scheme = schemesGj.schemes[feature.properties.scheme_reference!];
       if (
         filterAuthority &&
         scheme.browse?.authority_or_region != filterAuthority
@@ -176,11 +173,9 @@
     filterSchemeText = "";
   }
 
-  function schemeAutocompleteOptions(
-    schemes: Map<string, SchemeData>,
-  ): [string, string][] {
+  function schemeAutocompleteOptions(schemesGj: Schemes): [string, string][] {
     let result = [] as [string, string][];
-    for (let scheme of schemes.values()) {
+    for (let scheme of Object.values(schemesGj.schemes)) {
       // TODO Consider not doing this for LCWIPs
       result.push([scheme.scheme_reference, scheme.scheme_reference]);
       if (scheme.scheme_name) {
@@ -228,7 +223,7 @@
         <AutocompleteTextInput
           label="Scheme name or reference"
           bind:value={filterSchemeText}
-          options={schemeAutocompleteOptions(schemes)}
+          options={schemeAutocompleteOptions(schemesGj)}
         />
 
         <Select
@@ -277,7 +272,7 @@
     <AutocompleteTextInput
       label="Scheme name or reference"
       bind:value={filterSchemeText}
-      options={schemeAutocompleteOptions(schemes)}
+      options={schemeAutocompleteOptions(schemesGj)}
     />
 
     <Select
