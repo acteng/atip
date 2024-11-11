@@ -86,6 +86,7 @@
       }
       if (
         source == "ATF" &&
+        scheme.browse!.funding_programme &&
         !filterFundingProgrammes[scheme.browse!.funding_programme]
       ) {
         return false;

@@ -5,10 +5,11 @@
     FileInput,
     Select,
     CheckboxGroup,
+    SecondaryButton,
   } from "govuk-svelte";
   import { appVersion, Legend, WarningIcon } from "lib/common";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
-  import { setupSchemes } from "./data";
+  import { importAllLocalSketches, setupSchemes } from "./data";
   import Filters from "./Filters.svelte";
   import {
     atfSchemesGj,
@@ -80,6 +81,13 @@
       // Should be impossible
       return ["red", []];
     }
+  }
+
+  function importFromSketch() {
+    setupSchemes(importAllLocalSketches());
+    $atfShow = true;
+    $lcwipShow = true;
+    errorMessage = "";
   }
 </script>
 
@@ -162,6 +170,10 @@
 
   <FileInput label="Load schemes from GeoJSON" onLoad={loadFile} />
   <ErrorMessage {errorMessage} />
+
+  <SecondaryButton on:click={importFromSketch}>
+    Show your sketches
+  </SecondaryButton>
 </CollapsibleCard>
 
 <InterventionLayer

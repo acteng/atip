@@ -152,10 +152,12 @@
         : {scheme.browse?.capital_scheme_id}
       </p>
     {/if}
-    <p>
-      <b>Funding programme</b>
-      : {scheme.browse?.funding_programme}
-    </p>
+    {#if scheme.browse?.funding_programme}
+      <p>
+        <b>Funding programme</b>
+        : {scheme.browse?.funding_programme}
+      </p>
+    {/if}
     {#if scheme.browse?.current_milestone}
       <p>
         <b>Current milestone</b>
