@@ -1,10 +1,5 @@
-import type { Feature, Schemes, SchemeData } from "types";
-import {
-  atfSchemesGj,
-  atfSchemes as atfSchemesStore,
-  lcwipSchemesGj,
-  lcwipSchemes as lcwipSchemesStore,
-} from "./stores";
+import type { Feature, Schemes } from "types";
+import { atfSchemesGj, lcwipSchemesGj } from "./stores";
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
 // Populates the two stores for each of ATF and LCWIP schemes.
@@ -16,7 +11,6 @@ export function setupSchemes(gj: Schemes) {
     // TODO For now, duplicate the notes between the two. Later, these will become two separate files
     notes: gj.notes,
   };
-  let atfSchemes: Map<string, SchemeData> = new Map();
 
   let lcwipGj: Schemes = {
     type: "FeatureCollection",
@@ -24,14 +18,11 @@ export function setupSchemes(gj: Schemes) {
     schemes: {},
     notes: gj.notes,
   };
-  let lcwipSchemes: Map<string, SchemeData> = new Map();
 
   for (let [scheme_reference, scheme] of Object.entries(gj.schemes)) {
     if (scheme.pipeline) {
-      lcwipSchemes.set(scheme_reference, scheme);
       lcwipGj.schemes[scheme_reference] = scheme;
     } else {
-      atfSchemes.set(scheme_reference, scheme);
       atfGj.schemes[scheme_reference] = scheme;
     }
   }
@@ -42,10 +33,11 @@ export function setupSchemes(gj: Schemes) {
     }
 
     let scheme_reference = feature.properties.scheme_reference;
-    let is_atf = atfSchemes.has(scheme_reference);
+    let is_atf = Object.hasOwn(atfGj.schemes, scheme_reference);
 
-    let schemes = is_atf ? atfSchemes : lcwipSchemes;
-    let scheme = schemes.get(scheme_reference)!;
+    let scheme = is_atf
+      ? atfGj.schemes[scheme_reference]
+      : lcwipGj.schemes[scheme_reference];
     if (scheme.browse) {
       // TODO For easy styling, copy one field from scheme to all its features.
       // As we have more cases like this, revisit what's most performant.
@@ -61,9 +53,7 @@ export function setupSchemes(gj: Schemes) {
   }
 
   atfSchemesGj.set(atfGj);
-  atfSchemesStore.set(atfSchemes);
   lcwipSchemesGj.set(lcwipGj);
-  lcwipSchemesStore.set(lcwipSchemes);
 }
 
 // These should ideally be fixed during upstream data validation processes.

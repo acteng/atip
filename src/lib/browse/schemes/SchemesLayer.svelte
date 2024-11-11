@@ -13,9 +13,7 @@
   import Filters from "./Filters.svelte";
   import {
     atfSchemesGj,
-    atfSchemes,
     lcwipSchemesGj,
-    lcwipSchemes,
     filterAtfSchemeText,
     filterAtfInterventionText,
     filterLcwipSchemeText,
@@ -97,7 +95,7 @@
   {/if}
 
   <CheckboxGroup small>
-    {#if $atfSchemes.size > 0}
+    {#if Object.entries($atfSchemesGj.schemes).length > 0}
       <LayerControl name={atfName} title={atfTitle} bind:show={$atfShow}>
         <span slot="help">
           <p>
@@ -115,7 +113,6 @@
           <Filters
             source="ATF"
             bind:schemesGj={$atfSchemesGj}
-            bind:schemes={$atfSchemes}
             bind:filterSchemeText={$filterAtfSchemeText}
             bind:filterInterventionText={$filterAtfInterventionText}
           />
@@ -134,7 +131,7 @@
       </LayerControl>
     {/if}
 
-    {#if $lcwipSchemes.size > 0}
+    {#if Object.entries($lcwipSchemesGj.schemes).length > 0}
       <LayerControl name={lcwipName} title={lcwipTitle} bind:show={$lcwipShow}>
         <span slot="help">
           <p>
@@ -152,7 +149,6 @@
           <Filters
             source="LCWIP"
             bind:schemesGj={$lcwipSchemesGj}
-            bind:schemes={$lcwipSchemes}
             bind:filterSchemeText={$filterLcwipSchemeText}
             bind:filterInterventionText={$filterLcwipInterventionText}
           />
@@ -180,7 +176,6 @@
   source="atf"
   show={$atfShow}
   schemesGj={$atfSchemesGj}
-  schemes={$atfSchemes}
   filterSchemeText={$filterAtfSchemeText}
   filterInterventionText={$filterAtfInterventionText}
   color={atfColor}
@@ -189,7 +184,6 @@
   source="lcwip"
   show={$lcwipShow}
   schemesGj={$lcwipSchemesGj}
-  schemes={$lcwipSchemes}
   filterSchemeText={$filterLcwipSchemeText}
   filterInterventionText={$filterLcwipInterventionText}
   color={lcwipColor}
