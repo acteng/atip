@@ -11,7 +11,7 @@
   <body>
     <div id="app"></div>
     <script type="module">
-      import LandingPage from "./src/pages/LandingPage.svelte";
+      import ChooseArea from "./src/pages/ChooseArea.svelte";
 
       // For govuk setup. For some reason, the initAll step doesn't work here.
       document.body.className +=
@@ -20,7 +20,7 @@
           ? " govuk-frontend-supported"
           : "");
 
-      new LandingPage({
+      new ChooseArea({
         target: document.getElementById("app"),
       });
     </script>
