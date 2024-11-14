@@ -15,11 +15,11 @@
   });
 
   function goToSketcher() {
-    window.location.href = "/choose_area.html"
+    window.location.href = "choose_area.html"
   }
 
   function goToBrowser() {
-    window.location.href = "/browse.html"
+    window.location.href = "browse.html"
   }
 </script>
 
