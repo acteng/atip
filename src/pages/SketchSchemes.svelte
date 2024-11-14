@@ -48,7 +48,7 @@
     // If either the filename or authority is wrong, redirect to the very first
     // page. This might be annoying if the authority is correct, but it's
     // simpler. Unless a user copies a bad URL, this shouldn't happen anyway
-    window.location.href = `index.html?schema=${$schema}&error=File ${filename} in authority ${authority} not found`;
+    window.location.href = `choose_area.html?schema=${$schema}&error=File ${filename} in authority ${authority} not found`;
   }
 
   mapStyle.set(params.get("style") || "streets");
@@ -75,7 +75,7 @@
       (feature) => feature.properties.full_name == authority,
     );
     if (geojson.features.length === 0) {
-      window.location.href = `index.html?schema=${$schema}&error=Authority name not found: ${authority}`;
+      window.location.href = `choose_area.html?schema=${$schema}&error=Authority name not found: ${authority}`;
     }
     return geojson;
   }

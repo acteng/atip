@@ -56,7 +56,7 @@
       <li class="govuk-breadcrumbs__list-item">
         <a
           class="govuk-breadcrumbs__link"
-          href={`index.html?scheme=${$schema}`}
+          href={`choose_area.html?scheme=${$schema}`}
         >
           Change area
         </a>
