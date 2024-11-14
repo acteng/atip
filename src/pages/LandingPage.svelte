@@ -37,7 +37,8 @@
     <h2>Browse existing sketches and geographic context:</h2>
 
     <p>
-        Once you have made some sketches you can look at them in existing geographic context, by viewing the sketches alongside layers like bus routes, hospital locations, and authority boundaries.
+        View scheme sketches alongside other contextual layers, like bus routes, hospital locations, and authority boundaries.
+
     </p>
     <DefaultButton on:click={goToBrowser}>Start</DefaultButton>
 </div>
