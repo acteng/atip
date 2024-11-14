@@ -31,7 +31,7 @@
 
     <h2>Sketch Your Scheme:</h2>
     <p>
-        This feature allows you to sketch planned active travel schemes, or anything you might want to make a high level geographic sketch of. These can then be exported as geojson files to be shared using this and other tools.
+        Sketch active travel schemes at a high-level. This tool produces GeoJSON files that can be shared with others using this tool or imported into other GIS software.
     </p>
     <DefaultButton on:click={goToSketcher}>Start</DefaultButton>
     <h2>Browse Existing Sketches and Georgraphic Context:</h2>
