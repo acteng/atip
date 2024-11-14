@@ -81,7 +81,7 @@ test("file started with v1 can be edited by adding", async ({ page }) => {
 test("file without new budget/timing forms can be edited by loading", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page
     .getByLabel("Or import a GeoJSON file")
     .setInputFiles("tests/data/pipeline_before_feb_fields.geojson");

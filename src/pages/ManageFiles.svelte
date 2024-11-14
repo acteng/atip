@@ -45,7 +45,7 @@
     if (
       !authoritiesGj.features.some((f) => f.properties.full_name == authority)
     ) {
-      window.location.href = `index.html?schema=${$schemaStore}&error=Authority name not found: ${authority}`;
+      window.location.href = `choose_area.html?schema=${$schemaStore}&error=Authority name not found: ${authority}`;
     }
   });
 
@@ -127,7 +127,7 @@
           <li class="govuk-breadcrumbs__list-item">
             <a
               class="govuk-breadcrumbs__link"
-              href={`index.html?scheme=${$schemaStore}`}
+              href={`choose_area.html?scheme=${$schemaStore}`}
             >
               Change area
             </a>

@@ -4,7 +4,9 @@
 </script>
 
 <div class="black-bar">
-  <img src={logoUrl} alt="Active Travel England logo" />
+  <a href="index.html">
+    <img src={logoUrl} alt="Active Travel England logo" />
+  </a>
 </div>
 
 <div class="green-bar" />
