@@ -3,7 +3,7 @@
 </script>
 
 <div class="black-bar">
-  <a href="/">
+  <a href="index.html">
     <img src={logoUrl} alt="Active Travel England logo" />
   </a>
 </div>
