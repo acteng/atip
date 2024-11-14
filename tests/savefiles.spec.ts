@@ -4,7 +4,7 @@ import { resetSketch, clickMap } from "./shared.js";
 import type { Readable } from "stream";
 
 test("loading a file with length displays the length", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page
     .getByLabel("Or import a GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");
@@ -19,7 +19,7 @@ test("loading a file with length displays the length", async ({ page }) => {
 });
 
 test("loading a legacy file with one scheme works", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page
     .getByLabel("Or import a GeoJSON file")
     .setInputFiles("tests/data/legacy_schemeless.geojson");
@@ -47,7 +47,7 @@ test("loading a file without length displays the length", async ({ page }) => {
   delete json.features[0].properties.length_meters;
   let uploadFile = JSON.stringify(json);
 
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page.getByLabel("Or import a GeoJSON file").setInputFiles({
     name: "LAD_Adur.geojson",
     mimeType: "application/json",
@@ -75,7 +75,7 @@ test("loading a file with null properties displays the length", async ({
   delete json.schemes;
   let uploadFile = JSON.stringify(json);
 
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page.getByLabel("Or import a GeoJSON file").setInputFiles({
     name: "LAD_Adur.geojson",
     mimeType: "application/json",
@@ -112,7 +112,7 @@ test("a saved file is loaded when the URL stays the same", async ({ page }) => {
 test("loading a file produced by another tool shows fixable errors", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page
     .getByLabel("Or import a GeoJSON file")
     .setInputFiles("tests/data/external_data.geojson");
@@ -152,7 +152,7 @@ test("loading a file produced by another tool shows fixable errors", async ({
 
 test("old local storage items are detected and renamed", async ({ page }) => {
   // We have to go somewhere to set local storage
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   // Set local storage items using the pre-November 2024 naming scheme
   let v1 = await readFile("tests/data/LAD_Adur.geojson", { encoding: "utf8" });
   let pipeline = await readFile(
@@ -200,7 +200,7 @@ test("download a file and then reimport it", async ({ page }) => {
   let contents = await readStream(await download.createReadStream());
 
   // Import it and check the filename is correct
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page.getByLabel("Or import a GeoJSON file").setInputFiles({
     name: fullFilename,
     mimeType: "application/json",

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("choosing a local authority and clicking start changes the url", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page
     .getByLabel("Select Transport Authority or Local Authority District")
     .fill("TA_West Yorkshire Combined Authority");
@@ -16,7 +16,7 @@ test("choosing a local authority and clicking start changes the url", async ({
 test("Importing a valid geojson redirects to the appropriate authority scheme page", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page
     .getByLabel("Or import a GeoJSON file")
     .setInputFiles("tests/data/LAD_Adur.geojson");

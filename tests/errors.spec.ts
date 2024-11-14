@@ -43,7 +43,7 @@ test("Redirected to homepage with error when incorrect params given", async ({
 });
 
 test("Import file with invalid boundary", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/choose_area.html");
   await page
     .getByLabel("Or import a GeoJSON file")
     .setInputFiles("tests/data/out_of_bounds.geojson");
