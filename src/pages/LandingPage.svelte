@@ -34,7 +34,8 @@
         Sketch active travel schemes at a high-level. This tool produces GeoJSON files that can be shared with others using this tool or imported into other GIS software.
     </p>
     <DefaultButton on:click={goToSketcher}>Start</DefaultButton>
-    <h2>Browse Existing Sketches and Georgraphic Context:</h2>
+    <h2>Browse existing sketches and geographic context:</h2>
+
     <p>
         Once you have made some sketches you can look at them in existing geographic context, by viewing the sketches alongside layers like bus routes, hospital locations, and authority boundaries.
     </p>
