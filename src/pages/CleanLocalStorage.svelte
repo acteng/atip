@@ -58,7 +58,9 @@
 
   <h1 style="margin-top: 30px">Manage local storage</h1>
 
-  <a href="choose_area.html" class="govuk-back-link">Return to the Scheme Sketcher</a>
+  <a href="choose_area.html" class="govuk-back-link">
+    Return to the Scheme Sketcher
+  </a>
 
   <p>
     All sketch files are stored in your browser's local storage. There's a 5MB
