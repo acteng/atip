@@ -27,7 +27,7 @@ test("Importing a valid geojson redirects to the appropriate authority scheme pa
 });
 
 test("schema is plumbed along to the sketch page", async ({ page }) => {
-  await page.goto("/index.html?schema=pipeline");
+  await page.goto("/choose_area.html?schema=pipeline");
   await page
     .getByLabel("Select Transport Authority or Local Authority District")
     .fill("LAD_Adur");
