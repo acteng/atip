@@ -49,6 +49,7 @@ export let layerZorder = [
   browse("pavement_widths"),
   browse("gradient"),
   browse("gradient_arrows"),
+  browse("rights_of_way"),
   // Then small point/polygon layers on top
   browse("education"),
   browse("hospitals"),
