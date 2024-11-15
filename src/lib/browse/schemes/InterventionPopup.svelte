@@ -200,15 +200,16 @@
       <DescribePipelineTiming props={p} />
     {/if}
 
-    <SecondaryButton on:click={showScheme}>
-      Zoom to show entire scheme
-    </SecondaryButton>
     <SecondaryButton on:click={editScheme}>
       {#if scheme.browse?.local_filename}
         Edit your existing version of this scheme
       {:else}
         Edit a copy of this scheme
       {/if}
+    </SecondaryButton>
+
+    <SecondaryButton on:click={showScheme}>
+      Zoom to show entire scheme
     </SecondaryButton>
   </div>
 {/key}
