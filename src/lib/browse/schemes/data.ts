@@ -1,9 +1,13 @@
 import type { Feature, Schemes } from "types";
-import { atfSchemesGj, lcwipSchemesGj } from "./stores";
+import type { Writable } from "svelte/store";
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
 // Populates the two stores for each of ATF and LCWIP schemes.
-export function setupSchemes(gj: Schemes) {
+export function setupSchemes(
+  gj: Schemes,
+  atfStore: Writable<Schemes>,
+  lcwipStore: Writable<Schemes>,
+) {
   let atfGj: Schemes = {
     type: "FeatureCollection",
     features: [],
@@ -52,8 +56,8 @@ export function setupSchemes(gj: Schemes) {
     gj.features.push(feature);
   }
 
-  atfSchemesGj.set(atfGj);
-  lcwipSchemesGj.set(lcwipGj);
+  atfStore.set(atfGj);
+  lcwipStore.set(lcwipGj);
 }
 
 // These should ideally be fixed during upstream data validation processes.
