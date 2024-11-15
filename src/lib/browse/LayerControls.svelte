@@ -12,6 +12,7 @@
   import ParliamentaryConstituenciesLayerControl from "./layers/areas/ParliamentaryConstituencies.svelte";
   import PollutionLayerControl from "./layers/areas/Pollution.svelte";
   import RoadNoiseLayerControl from "./layers/areas/RoadNoise.svelte";
+  import RightsOfWayLayerControl from "./layers/lines/RightsOfWay.svelte";
   import WardsLayerControl from "./layers/areas/Wards.svelte";
   import BusRoutesLayerControl from "./layers/lines/BusRoutes.svelte";
   import CyclePathsLayerControl from "./layers/lines/CyclePaths.svelte";
@@ -90,6 +91,7 @@
       <StrategicRoadNetworkLayerControl />
       <CycleParkingLayerControl />
       <CrossingsLayerControl />
+      <RightsOfWayLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
   <CollapsibleCard label="Public transport">

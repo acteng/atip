@@ -31,6 +31,13 @@ export const colors = {
     shared_use_unsegregated: "#E7E700",
   },
 
+  rights_of_way: {
+    footpath: "red",
+    bridleway: "green",
+    restricted_byway: "blue",
+    boat: "orange",
+  },
+
   // Color ramp from https://www.ons.gov.uk/census/maps/choropleth
   sequential_low_to_high: [
     "#CDE594",
