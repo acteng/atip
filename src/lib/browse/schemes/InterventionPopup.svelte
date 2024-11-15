@@ -83,10 +83,14 @@
       // TODO Handle duplicate filenames
       let filename = `browse_copy_${scheme.scheme_reference}`;
 
-      setLocalStorage(
-        getKey(authority, filename),
-        JSON.stringify(serializeSchemes(authority, gj)),
-      );
+      let copy = serializeSchemes(authority, gj);
+      // Clean up the per-feature properties used for display
+      for (let f of copy.features) {
+        delete f.properties.funding_programme;
+        delete f.properties.current_milestone;
+      }
+
+      setLocalStorage(getKey(authority, filename), JSON.stringify(copy));
 
       window.open(getEditUrl(authority, filename, schema), "_blank");
     }
