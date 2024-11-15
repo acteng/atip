@@ -22,7 +22,8 @@
   import InterventionPopup from "./InterventionPopup.svelte";
   import type { Schemes } from "types";
 
-  export let source: string;
+  export let name: string;
+  export let description: string;
   export let show: boolean;
 
   export let schemesGj: Schemes;
@@ -47,7 +48,7 @@
 
 <GeoJSON data={gj}>
   <CircleLayer
-    {...layerId(`${source}-interventions-points`)}
+    {...layerId(`${name}-interventions-points`)}
     filter={["all", isPoint, hideWhileEditing, notEndpoint]}
     manageHoverState
     eventsIfTopMost
@@ -64,7 +65,7 @@
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
-        {source}
+        {description}
         {props}
         {schemesGj}
         {filterSchemeText}
@@ -74,7 +75,7 @@
   </CircleLayer>
 
   <LineLayer
-    {...layerId(`${source}-interventions-lines`)}
+    {...layerId(`${name}-interventions-lines`)}
     filter={["all", isLine, hideWhileEditing]}
     manageHoverState
     eventsIfTopMost
@@ -91,7 +92,7 @@
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
-        {source}
+        {description}
         {props}
         {schemesGj}
         {filterSchemeText}
@@ -100,7 +101,7 @@
     </Popup>
   </LineLayer>
   <CircleLayer
-    {...layerId(`${source}-interventions-lines-endpoints`)}
+    {...layerId(`${name}-interventions-lines-endpoints`)}
     filter={["==", "endpoint", true]}
     paint={{
       "circle-radius": 0.5 * lineWidth,
@@ -114,7 +115,7 @@
   />
 
   <FillLayer
-    {...layerId(`${source}-interventions-polygons`)}
+    {...layerId(`${name}-interventions-polygons`)}
     filter={["all", isPolygon, hideWhileEditing]}
     manageHoverState
     eventsIfTopMost
@@ -130,7 +131,7 @@
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
-        {source}
+        {description}
         {props}
         {schemesGj}
         {filterSchemeText}
@@ -139,7 +140,7 @@
     </Popup>
   </FillLayer>
   <LineLayer
-    {...layerId(`${source}-interventions-polygons-outlines`)}
+    {...layerId(`${name}-interventions-polygons-outlines`)}
     filter={["all", isPolygon, hideWhileEditing]}
     paint={{
       "line-color": color,

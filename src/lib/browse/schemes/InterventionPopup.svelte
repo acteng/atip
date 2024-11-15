@@ -15,7 +15,7 @@
   import type { Schema, Schemes } from "types";
   import { afterUpdate } from "svelte";
 
-  export let source: string;
+  export let description: string;
   export let props: { [name: string]: any };
   export let schemesGj: Schemes;
   export let filterSchemeText: string;
@@ -131,7 +131,7 @@
 
     <hr />
 
-    <h2>{source.toUpperCase()} Scheme</h2>
+    <h2>{description}</h2>
 
     <p>
       <b>Scheme name</b>
