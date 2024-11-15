@@ -73,15 +73,23 @@
 
     let schema: Schema = scheme.pipeline ? "pipeline" : "v1";
 
-    // TODO Handle duplicate filenames
-    let filename = `browse_copy_${scheme.scheme_reference}`;
+    if (scheme.browse?.local_filename) {
+      // Edit the existing file where this scheme came from. There might be other schemes in the same file.
+      window.open(
+        getEditUrl(authority, scheme.browse?.local_filename, schema),
+        "_blank",
+      );
+    } else {
+      // TODO Handle duplicate filenames
+      let filename = `browse_copy_${scheme.scheme_reference}`;
 
-    setLocalStorage(
-      getKey(authority, filename),
-      JSON.stringify(serializeSchemes(authority, gj)),
-    );
+      setLocalStorage(
+        getKey(authority, filename),
+        JSON.stringify(serializeSchemes(authority, gj)),
+      );
 
-    window.open(getEditUrl(authority, filename, schema), "_blank");
+      window.open(getEditUrl(authority, filename, schema), "_blank");
+    }
   }
 </script>
 
@@ -192,7 +200,11 @@
       Zoom to show entire scheme
     </SecondaryButton>
     <SecondaryButton on:click={editScheme}>
-      Edit a copy of this scheme
+      {#if scheme.browse?.local_filename}
+        Edit your existing version of this scheme
+      {:else}
+        Edit a copy of this scheme
+      {/if}
     </SecondaryButton>
   </div>
 {/key}

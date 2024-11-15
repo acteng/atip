@@ -110,6 +110,7 @@ export function importAllLocalSketches(): Schemes {
       for (let scheme of Object.values(gj.schemes)) {
         scheme.browse = {
           authority_or_region: parts[1],
+          local_filename: parts[2],
         };
       }
 

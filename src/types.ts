@@ -82,6 +82,8 @@ export interface BrowseSchemeData {
   capital_scheme_id?: string;
   funding_programme?: string;
   current_milestone?: string;
+  // If this scheme was imported from local storage, track the original filename
+  local_filename?: string;
 }
 
 export type PipelineType =
