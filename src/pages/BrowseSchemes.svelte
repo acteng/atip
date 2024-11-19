@@ -5,7 +5,7 @@
   import ActiveLayersLegend from "lib/browse/layers/ActiveLayersLegend.svelte";
   import "../style/main.css";
   import { controls } from "lib/browse/stores";
-  import { mainAtfSchemes } from "lib/browse/schemes/stores";
+  import { atfSchemes } from "lib/browse/schemes/stores";
   import {
     Geocoder,
     Layout,
@@ -50,7 +50,7 @@
 
     <div style="display: flex; justify-content: space-between">
       <h1>Scheme Browser</h1>
-      <ZoomOutMap boundaryGeojson={$mainAtfSchemes} />
+      <ZoomOutMap boundaryGeojson={$atfSchemes} />
     </div>
 
     <div bind:this={sidebarDiv} />

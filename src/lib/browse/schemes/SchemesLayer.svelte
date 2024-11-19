@@ -12,18 +12,15 @@
   import { importAllLocalSketches, setupSchemes } from "./data";
   import Filters from "./Filters.svelte";
   import {
-    mainAtfSchemes,
-    mainLcwipSchemes,
-    filterMainAtfSchemeText,
-    filterMainAtfInterventionText,
-    filterMainLcwipSchemeText,
-    filterMainLcwipInterventionText,
-    localAtfSchemes,
-    localLcwipSchemes,
-    filterLocalAtfSchemeText,
-    filterLocalAtfInterventionText,
-    filterLocalLcwipSchemeText,
-    filterLocalLcwipInterventionText,
+    atfSchemes,
+    lcwipSchemes,
+    filterAtfSchemeText,
+    filterAtfInterventionText,
+    filterLcwipSchemeText,
+    filterLcwipInterventionText,
+    localSchemes,
+    filterLocalSchemeText,
+    filterLocalInterventionText,
   } from "./stores";
   import InterventionLayer from "./InterventionLayer.svelte";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
@@ -35,35 +32,28 @@
 
   let errorMessage = "";
 
-  let mainAtfName = "main_atf_schemes";
-  let mainAtfTitle = "ATF schemes";
-  let mainAtfShow = showHideLayer(mainAtfName);
-  let mainAtfStyle = "fundingProgramme";
-  $: [mainAtfColor, mainAtfLegend] = pickStyle(mainAtfStyle);
+  let atfName = "atf_schemes";
+  let atfTitle = "ATF schemes";
+  let atfShow = showHideLayer(atfName);
+  let atfStyle = "fundingProgramme";
+  $: [atfColor, atfLegend] = pickStyle(atfStyle);
 
-  let mainLcwipName = "main_lcwip_schemes";
-  let mainLcwipTitle = "LCWIP schemes";
-  let mainLcwipShow = showHideLayer(mainLcwipName);
-  let mainLcwipStyle = "interventionType";
-  $: [mainLcwipColor, mainLcwipLegend] = pickStyle(mainLcwipStyle);
+  let lcwipName = "lcwip_schemes";
+  let lcwipTitle = "LCWIP schemes";
+  let lcwipShow = showHideLayer(lcwipName);
+  let lcwipStyle = "interventionType";
+  $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
 
-  let localAtfName = "local_atf_schemes";
-  let localAtfTitle = "Your ATF schemes";
-  let localAtfShow = showHideLayer(localAtfName);
-  let localAtfStyle = "fundingProgramme";
-  $: [localAtfColor, localAtfLegend] = pickStyle(localAtfStyle);
-
-  let localLcwipName = "local_lcwip_schemes";
-  let localLcwipTitle = "Your LCWIP schemes";
-  let localLcwipShow = showHideLayer(localLcwipName);
-  let localLcwipStyle = "interventionType";
-  $: [localLcwipColor, localLcwipLegend] = pickStyle(localLcwipStyle);
+  let localName = "local_schemes";
+  let localTitle = "Your schemes";
+  let localShow = showHideLayer(localName);
+  $: [localColor, localLegend] = pickStyle("interventionType");
 
   function loadMainFile(filename: string, text: string) {
     try {
-      setupSchemes(JSON.parse(text), mainAtfSchemes, mainLcwipSchemes);
-      $mainAtfShow = true;
-      $mainLcwipShow = true;
+      setupSchemes(JSON.parse(text), atfSchemes, lcwipSchemes);
+      $atfShow = true;
+      $lcwipShow = true;
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
@@ -71,9 +61,8 @@
   }
 
   function importLocalSketches() {
-    setupSchemes(importAllLocalSketches(), localAtfSchemes, localLcwipSchemes);
-    $localAtfShow = true;
-    $localLcwipShow = true;
+    $localSchemes = importAllLocalSketches();
+    $localShow = true;
   }
 
   function pickStyle(
@@ -112,19 +101,15 @@
   {/if}
 
   <CheckboxGroup small>
-    {#if Object.entries($mainAtfSchemes.schemes).length > 0}
-      <LayerControl
-        name={mainAtfName}
-        title={mainAtfTitle}
-        bind:show={$mainAtfShow}
-      >
+    {#if Object.entries($atfSchemes.schemes).length > 0}
+      <LayerControl name={atfName} title={atfTitle} bind:show={$atfShow}>
         <span slot="help">
           <p>
             <WarningIcon text="Scheme data caveats" />Please note there are data
             quality caveats for all scheme data:
           </p>
           <ul>
-            {#each $mainAtfSchemes.notes ?? [] as note}
+            {#each $atfSchemes.notes ?? [] as note}
               <li><p>{note}</p></li>
             {/each}
           </ul>
@@ -133,9 +118,9 @@
         <div slot="controls" style="border: 1px solid black; padding: 8px;">
           <Filters
             source="ATF"
-            bind:schemesGj={$mainAtfSchemes}
-            bind:filterSchemeText={$filterMainAtfSchemeText}
-            bind:filterInterventionText={$filterMainAtfInterventionText}
+            bind:schemesGj={$atfSchemes}
+            bind:filterSchemeText={$filterAtfSchemeText}
+            bind:filterInterventionText={$filterAtfInterventionText}
           />
 
           <Select
@@ -145,26 +130,22 @@
               ["interventionType", "By intervention type"],
               ["currentMilestone", "By current milestone"],
             ]}
-            bind:value={mainAtfStyle}
+            bind:value={atfStyle}
           />
-          <Legend rows={mainAtfLegend} />
+          <Legend rows={atfLegend} />
         </div>
       </LayerControl>
     {/if}
 
-    {#if Object.entries($mainLcwipSchemes.schemes).length > 0}
-      <LayerControl
-        name={mainLcwipName}
-        title={mainLcwipTitle}
-        bind:show={$mainLcwipShow}
-      >
+    {#if Object.entries($lcwipSchemes.schemes).length > 0}
+      <LayerControl name={lcwipName} title={lcwipTitle} bind:show={$lcwipShow}>
         <span slot="help">
           <p>
             <WarningIcon text="Scheme data caveats" />Please note there are data
             quality caveats for all scheme data:
           </p>
           <ul>
-            {#each $mainLcwipSchemes.notes ?? [] as note}
+            {#each $lcwipSchemes.notes ?? [] as note}
               <li><p>{note}</p></li>
             {/each}
           </ul>
@@ -173,17 +154,17 @@
         <div slot="controls" style="border: 1px solid black; padding: 8px;">
           <Filters
             source="LCWIP"
-            bind:schemesGj={$mainLcwipSchemes}
-            bind:filterSchemeText={$filterMainLcwipSchemeText}
-            bind:filterInterventionText={$filterMainLcwipInterventionText}
+            bind:schemesGj={$lcwipSchemes}
+            bind:filterSchemeText={$filterLcwipSchemeText}
+            bind:filterInterventionText={$filterLcwipInterventionText}
           />
 
           <Select
             label="Colour interventions"
             choices={[["interventionType", "By intervention type"]]}
-            bind:value={mainLcwipStyle}
+            bind:value={lcwipStyle}
           />
-          <Legend rows={mainLcwipLegend} />
+          <Legend rows={lcwipLegend} />
         </div>
       </LayerControl>
     {/if}
@@ -199,19 +180,15 @@
   </SecondaryButton>
 
   <CheckboxGroup small>
-    {#if Object.entries($localAtfSchemes.schemes).length > 0}
-      <LayerControl
-        name={localAtfName}
-        title={localAtfTitle}
-        bind:show={$localAtfShow}
-      >
+    {#if Object.entries($localSchemes.schemes).length > 0}
+      <LayerControl name={localName} title={localTitle} bind:show={$localShow}>
         <span slot="help">
           <p>
             <WarningIcon text="Scheme data caveats" />Please note there are data
             quality caveats for all scheme data:
           </p>
           <ul>
-            {#each $localAtfSchemes.notes ?? [] as note}
+            {#each $localSchemes.notes ?? [] as note}
               <li><p>{note}</p></li>
             {/each}
           </ul>
@@ -219,58 +196,13 @@
 
         <div slot="controls" style="border: 1px solid black; padding: 8px;">
           <Filters
-            source="ATF"
-            bind:schemesGj={$localAtfSchemes}
-            bind:filterSchemeText={$filterLocalAtfSchemeText}
-            bind:filterInterventionText={$filterLocalAtfInterventionText}
+            source="Local"
+            bind:schemesGj={$localSchemes}
+            bind:filterSchemeText={$filterLocalSchemeText}
+            bind:filterInterventionText={$filterLocalInterventionText}
           />
 
-          <Select
-            label="Colour interventions"
-            choices={[
-              ["fundingProgramme", "By funding programme"],
-              ["interventionType", "By intervention type"],
-              ["currentMilestone", "By current milestone"],
-            ]}
-            bind:value={localAtfStyle}
-          />
-          <Legend rows={localAtfLegend} />
-        </div>
-      </LayerControl>
-    {/if}
-
-    {#if Object.entries($localLcwipSchemes.schemes).length > 0}
-      <LayerControl
-        name={localLcwipName}
-        title={localLcwipTitle}
-        bind:show={$localLcwipShow}
-      >
-        <span slot="help">
-          <p>
-            <WarningIcon text="Scheme data caveats" />Please note there are data
-            quality caveats for all scheme data:
-          </p>
-          <ul>
-            {#each $localLcwipSchemes.notes ?? [] as note}
-              <li><p>{note}</p></li>
-            {/each}
-          </ul>
-        </span>
-
-        <div slot="controls" style="border: 1px solid black; padding: 8px;">
-          <Filters
-            source="LCWIP"
-            bind:schemesGj={$localLcwipSchemes}
-            bind:filterSchemeText={$filterLocalLcwipSchemeText}
-            bind:filterInterventionText={$filterLocalLcwipInterventionText}
-          />
-
-          <Select
-            label="Colour interventions"
-            choices={[["interventionType", "By intervention type"]]}
-            bind:value={localLcwipStyle}
-          />
-          <Legend rows={localLcwipLegend} />
+          <Legend rows={localLegend} />
         </div>
       </LayerControl>
     {/if}
@@ -278,39 +210,31 @@
 </CollapsibleCard>
 
 <InterventionLayer
-  name="main_atf"
-  description={mainAtfTitle}
-  show={$mainAtfShow}
-  schemesGj={$mainAtfSchemes}
-  filterSchemeText={$filterMainAtfSchemeText}
-  filterInterventionText={$filterMainAtfInterventionText}
-  color={mainAtfColor}
-/>
-<InterventionLayer
-  name="main_lcwip"
-  description={mainLcwipTitle}
-  show={$mainLcwipShow}
-  schemesGj={$mainLcwipSchemes}
-  filterSchemeText={$filterMainLcwipSchemeText}
-  filterInterventionText={$filterMainLcwipInterventionText}
-  color={mainLcwipColor}
+  name="atf"
+  description={atfTitle}
+  show={$atfShow}
+  schemesGj={$atfSchemes}
+  filterSchemeText={$filterAtfSchemeText}
+  filterInterventionText={$filterAtfInterventionText}
+  color={atfColor}
 />
 
 <InterventionLayer
-  name="local_atf"
-  description={localAtfTitle}
-  show={$localAtfShow}
-  schemesGj={$localAtfSchemes}
-  filterSchemeText={$filterLocalAtfSchemeText}
-  filterInterventionText={$filterLocalAtfInterventionText}
-  color={localAtfColor}
+  name="lcwip"
+  description={lcwipTitle}
+  show={$lcwipShow}
+  schemesGj={$lcwipSchemes}
+  filterSchemeText={$filterLcwipSchemeText}
+  filterInterventionText={$filterLcwipInterventionText}
+  color={lcwipColor}
 />
+
 <InterventionLayer
-  name="local_lcwip"
-  description={localLcwipTitle}
-  show={$localLcwipShow}
-  schemesGj={$localLcwipSchemes}
-  filterSchemeText={$filterLocalLcwipSchemeText}
-  filterInterventionText={$filterLocalLcwipInterventionText}
-  color={localLcwipColor}
+  name="local"
+  description={localTitle}
+  show={$localShow}
+  schemesGj={$localSchemes}
+  filterSchemeText={$filterLocalSchemeText}
+  filterInterventionText={$filterLocalInterventionText}
+  color={localColor}
 />

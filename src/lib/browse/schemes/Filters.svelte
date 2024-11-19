@@ -15,7 +15,7 @@
     currentMilestones as currentMilestoneColors,
   } from "./colors";
 
-  export let source: string;
+  export let source: "ATF" | "LCWIP" | "Local";
   export let schemesGj: Schemes;
   export let filterSchemeText: string;
   export let filterInterventionText: string;
