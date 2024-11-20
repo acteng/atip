@@ -34,7 +34,7 @@
     "vite-tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
-    "@maptiler/geocoding-control": "1.2.3",
+    "@maptiler/geocoding-control": "^2.0.1",
     "@turf/area": "^7.0.0",
     "@turf/bbox": "^7.0.0",
     "@turf/boolean-contains": "^7.0.0",
