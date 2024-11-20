@@ -12,3 +12,4 @@ src/style/main.css.map
 public/assets
 public/layers
 public/private_layers
+backend/app.yaml

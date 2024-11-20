@@ -30,7 +30,7 @@ jobs:
         run: |
           npm ci
           npm run setup-govuk
-          VITE_RESOURCE_BASE="https://${PROJECT_ID}.ew.r.appspot.com/data" npm run build
+          VITE_RESOURCE_BASE="https://dev.plan.activetravelengland.gov.uk/data" npm run build
           cd backend
           rm -rf dist
           cp -R ../dist .
@@ -38,7 +38,7 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: '${{ secrets.GCP_DEV_CREDENTIALS }}'
+          credentials_json: '${{ secrets.GCP_PUBLIC_DEV_CREDENTIALS }}'
 
       - name: Deploy
         uses: google-github-actions/deploy-appengine@v1
