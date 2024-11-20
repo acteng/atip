@@ -71,8 +71,7 @@
       return;
     }
 
-    let schema: Schema = scheme.pipeline ? "pipeline" : "v1";
-    schema = scheme.v2 ? "v2" : schema;
+    let schema: Schema = scheme.pipeline ? "pipeline" : scheme.v2 ? "v2" : "v1";
 
     if (scheme.browse?.local_filename) {
       // Edit the existing file where this scheme came from. There might be other schemes in the same file.

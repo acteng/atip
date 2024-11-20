@@ -44,8 +44,8 @@ export interface PipelineScheme extends PipelineBudget, PipelineTiming {
   scheme_description: string;
 }
 
-export interface V2Scheme {
-}
+// Empty as a marker for detecting v2 and for future possible additions
+export interface V2Scheme {}
 
 export interface PipelineBudget {
   // GBP
@@ -117,7 +117,7 @@ export interface InterventionProps {
 
   // The schema is v1, unless a field here is present
   pipeline?: PipelineIntervention;
-  v2?: V2Intervention 
+  v2?: V2Intervention;
 }
 
 export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
@@ -130,9 +130,19 @@ export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
 }
 
 export interface V2Intervention {
-  // These 3 fields are v1 schema
-  intervention_type: "area" | "route" | "crossing" | "modal filter" | "junction treatment" | "other";
+  intervention_type:
+    | "area"
+    | "route"
+    | "crossing"
+    | "modal filter"
+    | "junction treatment"
+    | "other"
+    | "";
   for_cyclists: boolean;
-  for_pedestrians: boolean
-  work_type: "new" | "improvements to existing" | "existing, no changes planned";
+  for_pedestrians: boolean;
+  work_type:
+    | "new"
+    | "improvements to existing"
+    | "existing, no changes planned"
+    | "";
 }

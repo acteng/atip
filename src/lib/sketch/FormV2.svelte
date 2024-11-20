@@ -17,18 +17,13 @@
 
   export let gjSchemes: Writable<Schemes>;
   export let props: FeatureProps<InterventionProps>;
-  
-  console.log(props);
 
-  props.v2 = props.v2 || {
+  props.v2 ||= {
     intervention_type: "",
     for_cyclists: false,
     for_pedestrians: false,
     work_type: "",
-  }
-
-  let v2 = props.v2;
-  console.log(props);
+  };
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -62,34 +57,38 @@
   bind:value={props.scheme_reference}
 />
 
-<Radio
-  label="Type"
-  choices={[
-    ["area", "Area"],
-    ["route", "Route"],
-    ["crossing", "Crossing"],
-    ["modal filter", "Modal Filter"],
-    ["junction treatment", "Junction Treatment"],
-    ["other", "Other"],
-  ]}
-  inlineSmall
-  bind:value={v2.intervention_type}
-/>
+{#if props.v2}
+  <Radio
+    label="Type"
+    choices={[
+      ["area", "Area"],
+      ["route", "Route"],
+      ["crossing", "Crossing"],
+      ["modal filter", "Modal Filter"],
+      ["junction treatment", "Junction Treatment"],
+      ["other", "Other"],
+    ]}
+    inlineSmall
+    bind:value={props.v2.intervention_type}
+  />
 
-<TextArea label="Description" bind:value={props.description} />
+  <TextArea label="Description" bind:value={props.description} />
 
-<Checkbox checked={v2.for_cyclists}>Is this for cyclists?</Checkbox>
-<Checkbox checked={v2.for_pedestrians}>Is this for pedestrians?</Checkbox>
-<Radio
-  label="Is this work new, improvements to an existing scheme, or mapping something which already exists and will be unchanged?"
-  choices={[
-    ["new", "New"],
-    ["improvements to existing", "Improvements to existing"],
-    ["existing, no changes planned", "No changes planned"],
-  ]}
-  inlineSmall
-  bind:value={v2.work_type}
-/>
+  <Checkbox checked={props.v2.for_cyclists}>Is this for cyclists?</Checkbox>
+  <Checkbox checked={props.v2.for_pedestrians}>
+    Is this for pedestrians?
+  </Checkbox>
+  <Radio
+    label="Is this work new, improvements to an existing scheme, or mapping something which already exists and will be unchanged?"
+    choices={[
+      ["new", "New"],
+      ["improvements to existing", "Improvements to existing"],
+      ["existing, no changes planned", "No changes planned"],
+    ]}
+    inlineSmall
+    bind:value={props.v2.work_type}
+  />
+{/if}
 
 {#if props.length_meters}
   <p>Length: {prettyPrintMeters(props.length_meters)}</p>

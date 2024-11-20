@@ -89,7 +89,10 @@ export function backfill(json: any): Schemes {
 
     // Set a default for this v1 property if it's missing and not exposed by a
     // form the user can edit.
-    if ((schema == "pipeline" || schema == "v2") && !f.properties.intervention_type) {
+    if (
+      (schema == "pipeline" || schema == "v2") &&
+      !f.properties.intervention_type
+    ) {
       // Guess based on geometry
       f.properties.intervention_type =
         new Map([
@@ -166,9 +169,7 @@ export function backfill(json: any): Schemes {
           f.properties.pipeline.timescale ??= "";
         }
       }
-    }
-    
-    if (schema == "v2") {
+    } else if (schema == "v2") {
       scheme.v2 = {};
     }
   }
@@ -183,8 +184,7 @@ export function initializeEmptyScheme(
   let schema = get(schemaStore);
   if (schema == "pipeline") {
     scheme.pipeline = emptyPipelineScheme();
-  }
-  if (schema == "v2") {
+  } else if (schema == "v2") {
     scheme.v2 = {};
   }
   return scheme;
