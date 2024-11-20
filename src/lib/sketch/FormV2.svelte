@@ -17,13 +17,18 @@
 
   export let gjSchemes: Writable<Schemes>;
   export let props: FeatureProps<InterventionProps>;
+  
+  console.log(props);
 
   props.v2 = props.v2 || {
-    intervention_type: props.intervention_type,
+    intervention_type: "",
     for_cyclists: false,
     for_pedestrians: false,
-    work_type: "new",
+    work_type: "",
   }
+
+  let v2 = props.v2;
+  console.log(props);
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -68,14 +73,13 @@
     ["other", "Other"],
   ]}
   inlineSmall
-  required
-  bind:value={props.v2.intervention_type}
+  bind:value={v2.intervention_type}
 />
 
 <TextArea label="Description" bind:value={props.description} />
 
-<Checkbox checked={props.v2.for_cyclists}>Is this for cyclists?</Checkbox>
-<Checkbox checked={props.v2.for_pedestrians}>Is this for pedestrians?</Checkbox>
+<Checkbox checked={v2.for_cyclists}>Is this for cyclists?</Checkbox>
+<Checkbox checked={v2.for_pedestrians}>Is this for pedestrians?</Checkbox>
 <Radio
   label="Is this work new, improvements to an existing scheme, or mapping something which already exists and will be unchanged?"
   choices={[
@@ -84,8 +88,7 @@
     ["existing, no changes planned", "No changes planned"],
   ]}
   inlineSmall
-  required
-  bind:value={props.v2.work_type}
+  bind:value={v2.work_type}
 />
 
 {#if props.length_meters}

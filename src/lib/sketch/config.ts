@@ -89,7 +89,7 @@ export function backfill(json: any): Schemes {
 
     // Set a default for this v1 property if it's missing and not exposed by a
     // form the user can edit.
-    if (schema == "pipeline" && !f.properties.intervention_type) {
+    if ((schema == "pipeline" || schema == "v2") && !f.properties.intervention_type) {
       // Guess based on geometry
       f.properties.intervention_type =
         new Map([
@@ -167,6 +167,10 @@ export function backfill(json: any): Schemes {
         }
       }
     }
+    
+    if (schema == "v2") {
+      scheme.v2 = {};
+    }
   }
 
   return json;
@@ -179,6 +183,9 @@ export function initializeEmptyScheme(
   let schema = get(schemaStore);
   if (schema == "pipeline") {
     scheme.pipeline = emptyPipelineScheme();
+  }
+  if (schema == "v2") {
+    scheme.v2 = {};
   }
   return scheme;
 }
@@ -304,6 +311,20 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
     }
     if (Object.entries(copy.pipeline).length == 0) {
       delete copy.pipeline;
+    }
+  }
+
+  if (schema == "v2" && copy.v2) {
+    for (let key of [
+      "intervention_type",
+      "for_cyclists",
+      "for_pedestrians",
+      "work_type",
+    ]) {
+      delete copy.v2[key];
+    }
+    if (Object.entries(copy.v2).length == 0) {
+      delete copy.v2;
     }
   }
 
