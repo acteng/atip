@@ -37,11 +37,12 @@ Names and regions should match above.
 
 1.  Update `GCS_BUCKET` in `backend/app.yaml`
 2.  Run `gcloud projects describe $PROJECT | grep projectNumber` and use the result to update `PROJECT_NUMBER` in `backend/app.yaml`
-3.  Create the files to deploy: `VITE_RESOURCE_BASE="https://$PROJECT.ew.r.appspot.com/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
+3.  Set a env var for the vite resource base url, this depends if you're deploying to internal or public version. If public `BASE_URL=https://{env.}plan.activetravelengland.gov.uk`. If the internal version then `BASE_URL=https://$PROJECT.ew.r.appspot.com`. 
+4.  Create the files to deploy: `VITE_RESOURCE_BASE="$BASE_URL/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
 	- Note we could make Cloud Build do this, but we'd have to get `wasm-pack` and other things set up there first
 	- GH Actions will eventually trigger CI deployments for our test environment, and we've already done the work of configuring that build environment
-4.  `gcloud app --project=$PROJECT deploy --quiet` (takes a minute or two)
-5.  Try the result: `gcloud app browse --project=$PROJECT` or <https://$PROJECT.ew.r.appspot.com/browse.html>
+5.  `gcloud app --project=$PROJECT deploy --quiet` (takes a minute or two)
+6.  Try the result: `gcloud app browse --project=$PROJECT` or <https://$PROJECT.ew.r.appspot.com/browse.html>
 
 Useful debugging:
 
