@@ -35,7 +35,7 @@ Names and regions should match above.
 
 ### Deploy
 
-1.  Update `GCS_BUCKET` in `backend/app.yaml`
+1.  Create `backend/app.yaml` by copying e.g. `backend/app_public_dev.yaml` and setting the values according to your own project
 2.  Run `gcloud projects describe $PROJECT | grep projectNumber` and use the result to update `PROJECT_NUMBER` in `backend/app.yaml`
 3.  Set a env var for the vite resource base url, this depends if you're deploying to internal or public version. If public `BASE_URL=https://{env.}plan.activetravelengland.gov.uk`. If the internal version then `BASE_URL=https://$PROJECT.ew.r.appspot.com`. 
 4.  Create the files to deploy: `VITE_RESOURCE_BASE="$BASE_URL/data" npm run build && cd backend && rm -rf dist && cp -R ../dist .`
