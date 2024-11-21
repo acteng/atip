@@ -16,6 +16,10 @@
 
   // Workaround unused var warning
   cfg;
+
+  // If the feature has just been created, initialize the properties shared by all schemas
+  props.name ||= "";
+  props.description ||= "";
 </script>
 
 {#if id != null}
