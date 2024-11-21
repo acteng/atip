@@ -16,6 +16,7 @@
   import { afterUpdate } from "svelte";
 
   export let description: string;
+  // Note these come from maplibre, meaning nested fields (like pipeline) are stringified
   export let props: { [name: string]: any };
   export let schemesGj: Schemes;
   export let filterSchemeText: string;
@@ -121,7 +122,7 @@
     {/if}
 
     {#if props.pipeline}
-      {@const p = props.pipeline}
+      {@const p = JSON.parse(props.pipeline)}
       {#if p.atf4_type}
         <p>
           <b>ATF4 type</b>
