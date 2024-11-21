@@ -77,8 +77,8 @@
       <label class="govuk-label govuk-label--s" for={intendedUsersId}>
         Intended users
       </label>
-      <Checkbox checked={props.v2.for_cycling}>Is this for cyclists?</Checkbox>
-      <Checkbox checked={props.v2.for_walking_wheeling}>
+      <Checkbox bind:checked={props.v2.for_cycling}>Is this for cyclists?</Checkbox>
+      <Checkbox bind:checked={props.v2.for_walking_wheeling}>
         Is this for walking/wheeling?
       </Checkbox>
     </div>
