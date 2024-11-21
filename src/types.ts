@@ -138,7 +138,6 @@ export interface V2Intervention {
     | "junction treatment"
     | "other"
     | "";
-  for_cycling: boolean;
-  for_walking_wheeling: boolean;
+  intended_uses: "cycling" | "walking_wheeling" | "all" | "";
   work_type: "new" | "improvement" | "existing" | "";
 }

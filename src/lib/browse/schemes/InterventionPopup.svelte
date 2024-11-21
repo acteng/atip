@@ -157,12 +157,11 @@
         </p>
       {/if}
 
-      {#if p.for_cycling && props.v2.for_walking_wheeling}
-        <p>For cycling, walking, and wheeling</p>
-      {:else if p.for_cycling}
-        <p>Only for cycling</p>
-      {:else if p.for_walking_wheeling}
-        <p>Only for walking and wheeling</p>
+      {#if p.intended_uses}
+        <p>
+          <b>Intended uses</b>
+          : {p.intended_uses}
+        </p>
       {/if}
     {/if}
 

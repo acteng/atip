@@ -2,7 +2,6 @@
   import { v4 as uuidv4 } from "uuid";
   import { routeTool } from "scheme-sketcher-lib/draw/stores";
   import {
-    Checkbox,
     FormElement,
     Radio,
     SecondaryButton,
@@ -20,8 +19,7 @@
 
   props.v2 ||= {
     intervention_type: "",
-    for_cycling: false,
-    for_walking_wheeling: false,
+    intended_uses: "",
     work_type: "",
   };
 
@@ -36,7 +34,6 @@
   }
 
   let nameId = uuidv4();
-  let intendedUsersId = uuidv4();
 </script>
 
 <FormElement label="Name" id={nameId}>
@@ -72,17 +69,15 @@
     bind:value={props.v2.intervention_type}
   />
 
-  <fieldset class="govuk-fieldset" id={intendedUsersId}>
-    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-      <label class="govuk-label govuk-label--s" for={intendedUsersId}>
-        Intended users
-      </label>
-      <Checkbox bind:checked={props.v2.for_cycling}>Is this for cyclists?</Checkbox>
-      <Checkbox bind:checked={props.v2.for_walking_wheeling}>
-        Is this for walking/wheeling?
-      </Checkbox>
-    </div>
-  </fieldset>
+  <Radio
+    label="Intended uses"
+    choices={[
+      ["cycling", "Only cycling"],
+      ["walking_wheeling", "Only walking and wheeling"],
+      ["all", "Cyclists, walking, and wheeling"],
+    ]}
+    bind:value={props.v2.intended_uses}
+  />
 
   <Radio
     label="What infrastructure are you mapping?"

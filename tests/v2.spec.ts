@@ -8,7 +8,7 @@ test("v2 forms work", async ({ page }) => {
   await clickMap(page, 500, 500);
 
   await page.getByLabel("Modal Filter").check();
-  await page.getByLabel("Is this for cyclists?").check();
+  await page.getByLabel("Only cycling").check();
   await page.getByLabel("Something completely new").check();
   await page.getByLabel("Description").fill("Bus gate");
 
@@ -19,8 +19,7 @@ test("v2 forms work", async ({ page }) => {
   let feature = json.features[0] as any;
   expect(feature.properties.v2).toEqual({
     intervention_type: "modal filter",
-    for_cycling: true,
-    for_walking_wheeling: false,
+    intended_uses: "cycling",
     work_type: "new",
   });
   expect(feature.properties.description).toEqual("Bus gate");

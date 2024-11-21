@@ -315,12 +315,7 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
   }
 
   if (schema == "v2" && copy.v2) {
-    for (let key of [
-      "intervention_type",
-      "for_cycling",
-      "for_walking_wheeling",
-      "work_type",
-    ]) {
+    for (let key of ["intervention_type", "intended_uses", "work_type"]) {
       delete copy.v2[key];
     }
     if (Object.entries(copy.v2).length == 0) {
