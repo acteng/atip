@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { resetSketch, getLocalStorage } from "./shared.js";
+import { resetSketch, getLocalStorage, clickMap } from "./shared.js";
 
 test("scheme validations are updated", async ({ page }) => {
   let filename = await resetSketch(page, "pipeline");
@@ -131,4 +131,32 @@ test("file from another tool can be edited", async ({ page }) => {
   // This warning should't apppear, because it gets backfilled
   await expect(page.getByText("No intervention type")).not.toBeVisible();
   await expect(page.getByText("Accuracy not specified")).toBeVisible();
+});
+
+test("new feature has pipeline forms", async ({ page }) => {
+  let filename = await resetSketch(page, "pipeline");
+
+  await page.getByRole("button", { name: "New point" }).click();
+  await clickMap(page, 500, 500);
+  // Make sure pipeline fields like Accuracy show up immediately
+  await page.getByLabel("High").check();
+  await page.getByRole("button", { name: "Finish" }).click();
+
+  // Check the data in local storage
+  let json = await getLocalStorage(page, `sketch/LAD_Adur/${filename}`);
+  let feature = json.features[0] as any;
+  expect(feature.properties.pipeline).toEqual(
+    expect.objectContaining({
+      accuracy: "high",
+    }),
+  );
+
+  // Edit the point and make sure the forms are still there
+  await page.getByRole("link", { name: "Untitled point" }).click();
+  await page.getByLabel("Low").check();
+  await page.getByRole("button", { name: "Finish" }).click();
+
+  // Check the edit
+  await page.getByRole("link", { name: "Untitled point" }).click();
+  await expect(page.getByLabel("Low")).toBeChecked();
 });
