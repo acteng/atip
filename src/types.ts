@@ -4,7 +4,7 @@ import type {
   FeatureWithID,
 } from "scheme-sketcher-lib/draw/types";
 
-export type Schema = "v1" | "pipeline";
+export type Schema = "v1" | "pipeline" | "v2";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
@@ -20,6 +20,7 @@ export interface Schemes
 export interface OurSchemeData {
   scheme_name?: string;
   pipeline?: PipelineScheme;
+  v2?: V2Scheme;
   browse?: BrowseSchemeData;
 }
 
@@ -42,6 +43,9 @@ export interface PipelineScheme extends PipelineBudget, PipelineTiming {
   atf4_lead_type: PipelineType | "";
   scheme_description: string;
 }
+
+// Empty as a marker for detecting v2 and for future possible additions
+export interface V2Scheme {}
 
 export interface PipelineBudget {
   // GBP
@@ -113,6 +117,7 @@ export interface InterventionProps {
 
   // The schema is v1, unless a field here is present
   pipeline?: PipelineIntervention;
+  v2?: V2Intervention;
 }
 
 export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
@@ -122,4 +127,17 @@ export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
 
   // TODO new / existing / upgrade existing?
   // TODO for routes, ltn120 type: fully protected, light segregation, off-carriageway, shared-use, dedicated footpath. minimum width?
+}
+
+export interface V2Intervention {
+  intervention_type:
+    | "area"
+    | "route"
+    | "crossing"
+    | "modal filter"
+    | "junction treatment"
+    | "other"
+    | "";
+  intended_uses: "cycling" | "walking_wheeling" | "all" | "";
+  work_type: "new" | "improvement" | "existing" | "";
 }

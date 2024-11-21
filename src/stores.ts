@@ -17,7 +17,7 @@ export const mapStyle: Writable<string> = writable("dataviz");
 function defaultSchema(): Schema {
   let params = new URLSearchParams(window.location.search);
   let schema = params.get("schema");
-  if (schema && (schema == "v1" || schema == "pipeline")) {
+  if (schema && (schema == "v1" || schema == "pipeline" || schema == "v2")) {
     return schema;
   }
 
@@ -29,5 +29,5 @@ function defaultSchema(): Schema {
     return "pipeline";
   }
 
-  return "v1";
+  return "v2";
 }

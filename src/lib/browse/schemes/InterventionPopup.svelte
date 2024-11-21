@@ -72,7 +72,7 @@
       return;
     }
 
-    let schema: Schema = scheme.pipeline ? "pipeline" : "v1";
+    let schema: Schema = scheme.pipeline ? "pipeline" : scheme.v2 ? "v2" : "v1";
 
     if (scheme.browse?.local_filename) {
       // Edit the existing file where this scheme came from. There might be other schemes in the same file.
@@ -140,6 +140,28 @@
       {/if}
       <DescribePipelineBudget props={p} />
       <DescribePipelineTiming props={p} />
+    {/if}
+
+    {#if props.v2}
+      {@const p = JSON.parse(props.v2)}
+      {#if p.intervention_type}
+        <p>
+          <b>Type</b>
+          : {p.intervention_type}
+        </p>
+      {/if}
+      {#if p.work_type}
+        <p>
+          <b>What kind of infrastructure is mapped</b>
+          : {p.work_type}
+        </p>
+      {/if}
+      {#if p.intended_uses}
+        <p>
+          <b>Intended uses</b>
+          : {p.intended_uses}
+        </p>
+      {/if}
     {/if}
 
     <hr />
