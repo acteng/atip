@@ -156,7 +156,6 @@
           : {p.work_type}
         </p>
       {/if}
-
       {#if p.intended_uses}
         <p>
           <b>Intended uses</b>
