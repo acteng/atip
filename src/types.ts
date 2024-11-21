@@ -138,11 +138,7 @@ export interface V2Intervention {
     | "junction treatment"
     | "other"
     | "";
-  for_cyclists: boolean;
-  for_pedestrians: boolean;
-  work_type:
-    | "new"
-    | "improvements to existing"
-    | "existing, no changes planned"
-    | "";
+  for_cycling: boolean;
+  for_walking_wheeling: boolean;
+  work_type: "new" | "improvement" | "existing" | "";
 }

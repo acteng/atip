@@ -317,8 +317,8 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
   if (schema == "v2" && copy.v2) {
     for (let key of [
       "intervention_type",
-      "for_cyclists",
-      "for_pedestrians",
+      "for_cycling",
+      "for_walking_wheeling",
       "work_type",
     ]) {
       delete copy.v2[key];

@@ -20,8 +20,8 @@
 
   props.v2 ||= {
     intervention_type: "",
-    for_cyclists: false,
-    for_pedestrians: false,
+    for_cycling: false,
+    for_walking_wheeling: false,
     work_type: "",
   };
 
@@ -36,6 +36,7 @@
   }
 
   let nameId = uuidv4();
+  let intendedUsersId = uuidv4();
 </script>
 
 <FormElement label="Name" id={nameId}>
@@ -68,27 +69,34 @@
       ["junction treatment", "Junction Treatment"],
       ["other", "Other"],
     ]}
-    inlineSmall
     bind:value={props.v2.intervention_type}
   />
 
-  <TextArea label="Description" bind:value={props.description} />
+  <fieldset class="govuk-fieldset" id={intendedUsersId}>
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+      <label class="govuk-label govuk-label--s" for={intendedUsersId}>
+        Intended users
+      </label>
+      <Checkbox checked={props.v2.for_cycling}>Is this for cyclists?</Checkbox>
+      <Checkbox checked={props.v2.for_walking_wheeling}>
+        Is this for walking/wheeling?
+      </Checkbox>
+    </div>
+  </fieldset>
 
-  <Checkbox checked={props.v2.for_cyclists}>Is this for cyclists?</Checkbox>
-  <Checkbox checked={props.v2.for_pedestrians}>
-    Is this for pedestrians?
-  </Checkbox>
   <Radio
-    label="Is this work new, improvements to an existing scheme, or mapping something which already exists and will be unchanged?"
+    label="What infrastructure are you mapping?"
     choices={[
-      ["new", "New"],
-      ["improvements to existing", "Improvements to existing"],
-      ["existing, no changes planned", "No changes planned"],
+      ["new", "Something completely new"],
+      ["improvement", "Improvements to something already existing"],
+      ["existing", "Something existing with no changes planned"],
     ]}
     inlineSmall
     bind:value={props.v2.work_type}
   />
 {/if}
+
+<TextArea label="Description" bind:value={props.description} />
 
 {#if props.length_meters}
   <p>Length: {prettyPrintMeters(props.length_meters)}</p>
