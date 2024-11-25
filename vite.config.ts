@@ -13,6 +13,8 @@ export default defineConfig({
         nested1: resolve(__dirname, "files.html"),
         nested2: resolve(__dirname, "scheme.html"),
         nested3: resolve(__dirname, "browse.html"),
+        nested4: resolve(__dirname, "local_storage.html"),
+        nested5: resolve(__dirname, "accessibility.html"),
       },
     },
     /* To debug production builds:
