@@ -38,7 +38,11 @@
 
   <div slot="controls" style="border: 1px solid black; padding: 8px;">
     <FileInput label="Load your own GeoJSON file" onLoad={loadFile} />
-    <p><i>Note this file doesn't leave your computer; it's not uploaded anywhere</i></p>
+    <p>
+      <i>
+        Note this file doesn't leave your computer; it's not uploaded anywhere
+      </i>
+    </p>
     <p>Currently showing {data.features.length.toLocaleString()} features</p>
   </div>
 </LayerControl>

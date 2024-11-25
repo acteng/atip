@@ -7,8 +7,6 @@
     BoundaryLayer,
     ImageLayer,
     InterventionLayer,
-    PolygonToolLayer,
-    RouteSnapperLayer,
     Toolbox,
     NewFeatureForm,
   } from "scheme-sketcher-lib/draw";
@@ -107,7 +105,7 @@
 
     {#if $mode.mode == "list" || $mode.mode == "split-route" || $mode.mode == "set-image" || $mode.mode == "streetview"}
       <ListMode {cfg} {gjSchemes} />
-    {:else if $mode.mode == "new-point" || $mode.mode == "new-freehand-polygon" || $mode.mode == "new-snapped-polygon" || $mode.mode == "new-route"}
+    {:else if $mode.mode == "new-point" || $mode.mode == "new-area" || $mode.mode == "new-route"}
       <NewFeatureForm {cfg} {gjSchemes} />
     {:else if $mode.mode == "edit"}
       <EditFeatureForm {cfg} {gjSchemes} id={$mode.id} />
@@ -125,8 +123,6 @@
         <InterventionLayer {cfg} {gjSchemes} />
         <ImageLayer {cfg} />
         <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
-        <RouteSnapperLayer {cfg} />
-        <PolygonToolLayer {cfg} />
       {/if}
     </MapLibreMap>
   </div>
