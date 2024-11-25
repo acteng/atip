@@ -6,12 +6,12 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <title>Plan Your Active Travel Schemes - File Management</title>
+    <title>Plan Your Active Travel Schemes - Accessibility Statement</title>
   </head>
   <body>
     <div id="app"></div>
     <script type="module">
-      import ManageFiles from "./src/pages/ManageFiles.svelte";
+      import AccessibilityStatement from "./src/pages/AccessibilityStatement.svelte";
 
       // For govuk setup. For some reason, the initAll step doesn't work here.
       document.body.className +=
@@ -20,7 +20,7 @@
           ? " govuk-frontend-supported"
           : "");
 
-      new ManageFiles({
+      new AccessibilityStatement({
         target: document.getElementById("app"),
       });
     </script>

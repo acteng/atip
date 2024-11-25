@@ -24,7 +24,7 @@
   <Header />
   <AlphaBanner />
 
-  <h1 style="margin-top: 30px">Welcome to Plan.activetravelengland.gov.uk!</h1>
+  <h1 style="margin-top: 30px">Welcome to Plan Your Active Travel Schemes!</h1>
 
   <h2>Sketch Your Scheme:</h2>
   <p>
@@ -33,6 +33,7 @@
     GIS software.
   </p>
   <DefaultButton on:click={goToSketcher}>Start</DefaultButton>
+
   <h2>Browse existing sketches and geographic context:</h2>
 
   <p>
@@ -40,4 +41,7 @@
     hospital locations, and authority boundaries.
   </p>
   <DefaultButton on:click={goToBrowser}>Start</DefaultButton>
+
+  <h3>Accessibility</h3>
+  <p>Our accessibility statement can be found <a href="accessibility.html">here</a>.</p>
 </div>
