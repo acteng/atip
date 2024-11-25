@@ -15,8 +15,8 @@ test("creating a new point opens a form", async ({ page }) => {
   await page.getByRole("link", { name: "Point name" }).click();
 });
 
-test("creating a new freehand area opens a form", async ({ page }) => {
-  await page.getByRole("button", { name: "New area (freehand)" }).click();
+test("creating a new area opens a form", async ({ page }) => {
+  await page.getByRole("button", { name: "New area" }).click();
   await page.getByLabel("Name").fill("Area name");
   await page.getByLabel("Description").click();
 
@@ -28,10 +28,10 @@ test("creating a new freehand area opens a form", async ({ page }) => {
   await page.getByRole("link", { name: "Area name" }).click();
 });
 
-test("creating a new freehand area and canceling doesn't save anything", async ({
+test("creating a new area and canceling doesn't save anything", async ({
   page,
 }) => {
-  await page.getByRole("button", { name: "New area (freehand)" }).click();
+  await page.getByRole("button", { name: "New area" }).click();
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
   await clickMap(page, 400, 600);
@@ -43,19 +43,6 @@ test("creating a new freehand area and canceling doesn't save anything", async (
 });
 
 // TODO Repeat canceling for other draw tools
-
-test("creating a new snapped area opens a form", async ({ page }) => {
-  await page.getByRole("button", { name: "New area (snapped)" }).click();
-  await page.getByLabel("Name").fill("Area name");
-  await page.getByLabel("Description").click();
-
-  await clickMap(page, 500, 500);
-  await clickMap(page, 400, 500);
-  await clickMap(page, 400, 600);
-  await page.getByRole("button", { name: "Finish" }).click();
-
-  await page.getByRole("link", { name: "Area name" }).click();
-});
 
 test("creating a new route opens a form, and auto-fill sets its name", async ({
   page,
@@ -83,9 +70,9 @@ test("creating a new route opens a form, and auto-fill sets its name", async ({
   ).toBeVisible();
 });
 
-test("editing geometry of a area works", async ({ page }) => {
+test("editing geometry of an area works", async ({ page }) => {
   // Create an area
-  await page.getByRole("button", { name: "New area (snapped)" }).click();
+  await page.getByRole("button", { name: "New area" }).click();
   await clickMap(page, 241, 509);
   await clickMap(page, 235, 431);
   await clickMap(page, 465, 459);
@@ -135,8 +122,7 @@ test("escape key works from every mode", async ({ page }) => {
   // From each tool, make sure escape goes back to list mode
   for (let mode of [
     "New point",
-    "New area (freehand)",
-    "New area (snapped)",
+    "New area",
     "New route",
     "Split route",
     "StreetView",

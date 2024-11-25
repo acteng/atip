@@ -104,15 +104,7 @@ export let layerZorder = [
   // Problem points are one layer that should display on top of scheme data
   browse("problems"),
 
-  sketch("edit-polygon-fill"),
-  sketch("edit-polygon-lines"),
-  sketch("edit-polygon-vertices"),
-
   sketch("draw-split-route"),
-
-  sketch("route-points"),
-  sketch("route-lines"),
-  sketch("route-polygons"),
 
   // Draw most things beneath text road labels. These IDs come from the
   // MapTiler basemap, and there are different ones for each basemap. Note for

@@ -5,8 +5,8 @@ test.beforeEach(async ({ page }) => {
   await resetSketch(page);
 });
 
-test("edit a freehand area, then cancel", async ({ page }) => {
-  await page.getByRole("button", { name: "New area (freehand)" }).click();
+test("edit an area, then cancel", async ({ page }) => {
+  await page.getByRole("button", { name: "New area" }).click();
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
   await clickMap(page, 400, 600);
@@ -14,22 +14,6 @@ test("edit a freehand area, then cancel", async ({ page }) => {
 
   await page.getByRole("link", { name: "Untitled area" }).click();
   await clickMap(page, 430, 530);
-  // This button indicates the mode is working
-  await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
-
-  await page.keyboard.down("Escape");
-  await expectListMode(page);
-});
-
-test("edit a snapped area, then cancel", async ({ page }) => {
-  await page.getByRole("button", { name: "New area (snapped)" }).click();
-  await clickMap(page, 500, 500);
-  await clickMap(page, 400, 500);
-  await clickMap(page, 400, 600);
-  await page.getByRole("button", { name: "Finish" }).click();
-
-  await page.getByRole("link", { name: "Untitled area" }).click();
-  await clickMap(page, 430, 515);
   // This button indicates the mode is working
   await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
 

@@ -43,5 +43,10 @@
   <DefaultButton on:click={goToBrowser}>Start</DefaultButton>
 
   <h3>Accessibility</h3>
-  <p>Our accessibility statement can be found <a href="accessibility.html">here</a>.</p>
+  <p>
+    Our accessibility statement can be found <a href="accessibility.html">
+      here
+    </a>
+    .
+  </p>
 </div>
