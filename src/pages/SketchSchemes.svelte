@@ -22,7 +22,6 @@
     Header,
   } from "lib/common";
   import { mode } from "scheme-sketcher-lib/draw/stores";
-  import { SecondaryButton } from "govuk-svelte";
   import FileManagement from "lib/sketch/FileManagement.svelte";
   import { ListMode, EditFeatureForm } from "scheme-sketcher-lib/sidebar";
   import { map, mapStyle, schema } from "stores";

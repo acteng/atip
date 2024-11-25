@@ -7,7 +7,6 @@
     ErrorMessage,
     FileInput,
     Radio,
-    SecondaryButton,
     AutocompleteTextInput,
   } from "govuk-svelte";
   import { onMount } from "svelte";
