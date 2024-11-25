@@ -21,7 +21,6 @@
     Popup,
     describeAuthority,
   } from "lib/common";
-  import About from "lib/sketch/About.svelte";
   import { schema as schemaStore } from "stores";
   import {
     FillLayer,
@@ -42,7 +41,6 @@
     features: [],
   };
 
-  let showAbout = false;
   const params = new URLSearchParams(window.location.search);
   let pageErrorMessage = params.get("error") || "";
   let uploadErrorMessage = "";
@@ -97,13 +95,7 @@
         <LoggedIn />
       </div>
 
-      <div style="display: flex; justify-content: space-between">
-        <h1>Scheme Sketcher</h1>
-
-        <SecondaryButton on:click={() => (showAbout = !showAbout)}>
-          About
-        </SecondaryButton>
-      </div>
+      <h1>Scheme Sketcher</h1>
 
       <ErrorMessage errorMessage={pageErrorMessage} />
 
@@ -204,7 +196,6 @@
     </div>
   </div>
 </div>
-<About bind:open={showAbout} />
 
 <style>
   :global(body) {

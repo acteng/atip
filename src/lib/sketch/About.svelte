@@ -4,10 +4,10 @@
   export let open: boolean;
 </script>
 
-<Modal title="About the Active Travel Infrastructure Platform" bind:open>
+<Modal title="About Plan Your Active Travel Schemes" bind:open>
   <div class="govuk-prose">
     <p>
-      ATIP Scheme Sketcher v2 is an
+      Plan Your Active Travel Schemes is an
       <ExternalLink href="https://github.com/acteng/atip">
         open source project
       </ExternalLink> supported by Active Travel England and developed by:
@@ -38,13 +38,13 @@
         </ExternalLink>
       </li>
       <li>
-        With great thanks to ATIP's various users for feedback, testing, and
+        With great thanks to our various users for feedback, testing, and
         ideas
       </li>
     </ul>
 
     <p>
-      ATIP builds on
+      Plan Your Active Travel Schemes builds on
       <ExternalLink href="https://www.openstreetmap.org/about">
         OpenStreetMap
       </ExternalLink>
@@ -63,7 +63,7 @@
     </p>
 
     <p>
-      We want your feedback about ATIP! Please <ExternalLink
+      We want your feedback about Plan Your Active Travel Schemes! Please <ExternalLink
         href="https://github.com/acteng/atip/issues/new"
       >
         start an issue on Github
@@ -77,6 +77,10 @@
 
     <h2>Recent changes</h2>
     <ul>
+      <li>
+        <b>Public Beta</b>
+        launched December 2024, various UI/UX improvements, better integration of browse and sketch tools and most importantly public access.
+      </li>
       <li>
         <b>v2</b>
         launched on 2 June 2023. Changes: a complete UI rewrite, new draw tools,
