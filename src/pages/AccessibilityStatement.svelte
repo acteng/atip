@@ -2,7 +2,7 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { AlphaBanner, DefaultButton } from "govuk-svelte";
+  import { AlphaBanner } from "govuk-svelte";
   import { Header } from "lib/common";
   import { onMount } from "svelte";
 
@@ -69,8 +69,8 @@
 
   <h2>Feedback and contact information</h2>
   <p>
-    If you need information on this app or to provide further feedback on
-    issues: Email - <a
+    If you need information on this app or to provide further feedback on issues
+    please email <a
       href="mailto:plan-your-active-travel-schemes@activetravelengland.gov.uk"
     >
       plan-your-active-travel-schemes@activetravelengland.gov.uk
