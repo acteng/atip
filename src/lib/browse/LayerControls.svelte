@@ -35,6 +35,7 @@
   import Stats19LayerControl from "./layers/points/Stats19.svelte";
   import VehicleCountsLayerControl from "./layers/points/VehicleCounts.svelte";
   import ProblemsLayerControl from "./layers/points/Problems.svelte";
+  import UserDataLayerControl from "./layers/points/UserData.svelte";
   import SchemesLayer from "./schemes/SchemesLayer.svelte";
   import { interactiveMapLayersEnabled, controls } from "./stores";
   import { getRoadLayerNames } from "lib/maplibre";
@@ -75,6 +76,7 @@
 
 <div bind:this={$controls}>
   <SchemesLayer />
+
   <CollapsibleCard label="Trip generators">
     <CheckboxGroup small>
       <EducationLayerControl />
@@ -83,6 +85,7 @@
       <RailwayStationsLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Existing infrastructure">
     <CheckboxGroup small>
       <CyclePathsLayerControl />
@@ -94,6 +97,7 @@
       <RightsOfWayLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Public transport">
     <CheckboxGroup small>
       <BusRoutesLayerControl />
@@ -101,6 +105,7 @@
       <BusStopsLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Boundaries">
     <CheckboxGroup small>
       <ParliamentaryConstituenciesLayerControl />
@@ -110,12 +115,14 @@
       <LocalPlanningAuthoritiesLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Census">
     <CheckboxGroup small>
       <CensusOutputAreaLayerControl />
       <ImdLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Other">
     <CheckboxGroup small>
       <VehicleCountsLayerControl />
@@ -130,8 +137,10 @@
       {/if}
       <PollutionLayerControl />
       <RoadNoiseLayerControl />
+      <UserDataLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
+
   <CollapsibleCard label="Tools">
     <StreetViewTool {cfg} map={$map} bind:enabled={streetviewEnabled} />
     <LineMeasureTool />

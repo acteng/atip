@@ -35,6 +35,9 @@ export let layerZorder = [
   browse("imd-outline"),
   browse("pollution"),
   browse("road_noise"),
+  browse("user_data_polygons"),
+  browse("user_data_polygons-outline"),
+
   // Then optional linear layers
   browse("mrn"),
   browse("srn"),
@@ -50,6 +53,8 @@ export let layerZorder = [
   browse("gradient"),
   browse("gradient_arrows"),
   browse("rights_of_way"),
+  browse("user_data_lines"),
+
   // Then small point/polygon layers on top
   browse("education"),
   browse("hospitals"),
@@ -60,6 +65,7 @@ export let layerZorder = [
   browse("vehicle_counts"),
   browse("stats19"),
   browse("bus_stops"),
+  browse("user_data_points"),
 
   // Polygons are bigger than lines, which're bigger than points. When geometry
   // overlaps, put the smaller thing on top
