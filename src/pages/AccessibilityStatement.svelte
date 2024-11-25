@@ -78,7 +78,20 @@
     . We’ll consider your request and get back to you in 20 days.
   </p>
 
-  <h2>We’ll consider your request and get back to you in 20 days.</h2>
+  <h2>Enforcement procedure</h2>
+  <p>
+    The Equality and Human Rights Commission (EHRC) is responsible for enforcing
+    the Public Sector Bodies (Websites and Mobile Applications) (No. 2)
+    Accessibility Regulations 2018 (the ‘accessibility regulations’). If you’re
+    not happy with how we respond to your complaint, <a
+      href="https://www.equalityadvisoryservice.com/"
+    >
+      contact the Equality Advisory and Support Service (EASS)
+    </a>
+    .
+  </p>
+
+  <h2>Technical information about this website’s accessibility</h2>
   <p>
     Active Travel England is committed to making its website accessible, in
     accordance with the Public Sector Bodies (Websites and Mobile Applications)
