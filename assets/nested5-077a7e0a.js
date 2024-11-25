@@ -1,0 +1,26 @@
+import{S as se,i as ae,s as oe,e as i,c as X,a as n,b as le,d as re,f as ce,m as Z,g as t,q as ue,t as ee,h as te,j as pe,k as ie,o as he,n as de}from"./stores-05c702cb.js";import{A as me}from"./AlphaBanner-06bd132d.js";import{H as be}from"./Header-addc03f2.js";function fe(H){let e,a,W,o,M,l,q,c,_,u,N,p,L,h,I,d,P,m,Y,b,B,f,R,g,j,v,G,y,V,w,D,A,F,C,J,T,O,x,z,k,K,S,Q,$,U,E,r;return a=new be({}),o=new me({}),{c(){e=i("div"),X(a.$$.fragment),W=n(),X(o.$$.fragment),M=n(),l=i("h1"),l.textContent="Plan Your Active Travel Schemes Accessibility Statement",q=n(),c=i("p"),c.textContent=`This accessibility statement applies to the Plan Your Active Travel Schemes
+    tool, which is for sketching and viewing active travel schemes at various
+    stages of the bidding and development process.`,_=n(),u=i("p"),u.textContent=`This website is run by Active Travel England. It requires use of and
+    interactions with maps.`,N=n(),p=i("ul"),p.innerHTML=`<li>We include multiple options for basemap, allowing the user to decide what
+      works best for them</li> <li>We intend to add user-configurable colour choices for map layers such as
+      boundaries, sketched schemes and trip generators</li> <li><a href="https://mcmw.abilitynet.org.uk/">AbilityNet</a>
+       has advice on making your device easier to use if you have a disability</li>`,L=n(),h=i("h2"),h.textContent="How accessible this website is",I=n(),d=i("p"),d.textContent="We know some parts of the website are not fully accessible:",P=n(),m=i("p"),m.textContent=`This website is run by Active Travel England. It requires use of and
+    interactions with maps.`,Y=n(),b=i("ul"),b.innerHTML=`<li>You cannot navigate most of the website using just a keyboard</li> <li>You cannot navigate most of the website using speech recognition software</li> <li>You cannot listen to most of the website using a screen reader (including
+      the most recent versions of JAWS, NVDA and VoiceOver)</li> <li>Colour will be used to convey information such as road width and speed
+      limits, until this is configurable it might present an accessibility
+      issue.</li>`,B=n(),f=i("h2"),f.textContent="Feedback and contact information",R=n(),g=i("p"),g.innerHTML=`If you need information on this app or to provide further feedback on issues
+    please email <a href="mailto:plan-your-active-travel-schemes@activetravelengland.gov.uk">plan-your-active-travel-schemes@activetravelengland.gov.uk</a>
+    . We’ll consider your request and get back to you in 20 days.`,j=n(),v=i("h2"),v.textContent="Enforcement procedure",G=n(),y=i("p"),y.innerHTML=`The Equality and Human Rights Commission (EHRC) is responsible for enforcing
+    the Public Sector Bodies (Websites and Mobile Applications) (No. 2)
+    Accessibility Regulations 2018 (the ‘accessibility regulations’). If you’re
+    not happy with how we respond to your complaint, <a href="https://www.equalityadvisoryservice.com/">contact the Equality Advisory and Support Service (EASS)</a>
+    .`,V=n(),w=i("h2"),w.textContent="Technical information about this website’s accessibility",D=n(),A=i("p"),A.textContent=`Active Travel England is committed to making its website accessible, in
+    accordance with the Public Sector Bodies (Websites and Mobile Applications)
+    (No. 2) Accessibility Regulations 2018.`,F=n(),C=i("h2"),C.textContent="Compliance status",J=n(),T=i("p"),T.textContent=`This website is not compliant with the Web Content Accessibility Guidelines
+    version 2.2 AA standard, due to the non-compliances listed below.`,O=n(),x=i("ul"),x.innerHTML=`<li>The map information is necessarily visual and it cannot be converted into
+      text content</li> <li>Similarly many interactions with the map cannot be performed by keyboard
+      only</li> <li>Certain interactions with sketching require dragging with mouse or touch
+      pad</li>`,z=n(),k=i("h2"),k.textContent="Non-compliance with the accessibility regulations",K=n(),S=i("p"),S.textContent=`Navigation and accessing information: We use a map to provide proposed
+    infrastructure schemes to visually help ATE teams assess schemes. This is
+    not used for navigational purposes.`,Q=n(),$=i("h2"),$.textContent="Preparation of this accessibility statement",U=n(),E=i("p"),E.textContent=`This statement was prepared on 24th September 2024. We did an internal audit
+    against WCAG guidelines.`,le(l,"margin-top","30px"),re(e,"class","govuk-width-container govuk-prose")},m(s,ne){ce(s,e,ne),Z(a,e,null),t(e,W),Z(o,e,null),t(e,M),t(e,l),t(e,q),t(e,c),t(e,_),t(e,u),t(e,N),t(e,p),t(e,L),t(e,h),t(e,I),t(e,d),t(e,P),t(e,m),t(e,Y),t(e,b),t(e,B),t(e,f),t(e,R),t(e,g),t(e,j),t(e,v),t(e,G),t(e,y),t(e,V),t(e,w),t(e,D),t(e,A),t(e,F),t(e,C),t(e,J),t(e,T),t(e,O),t(e,x),t(e,z),t(e,k),t(e,K),t(e,S),t(e,Q),t(e,$),t(e,U),t(e,E),r=!0},p:ue,i(s){r||(ee(a.$$.fragment,s),ee(o.$$.fragment,s),r=!0)},o(s){te(a.$$.fragment,s),te(o.$$.fragment,s),r=!1},d(s){s&&pe(e),ie(a),ie(o)}}}function ge(H){return he(async()=>{de()}),[]}class ve extends se{constructor(e){super(),ae(this,e,ge,fe,oe,{})}}document.body.className+=" js-enabled"+("noModule"in HTMLScriptElement.prototype?" govuk-frontend-supported":"");new ve({target:document.getElementById("app")});
