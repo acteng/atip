@@ -1,5 +1,7 @@
 # ATIP GeoJSON specification
 
+NOTE: This document is out-of-date as of November 2024. If you're relying on this file format, please file a Github issue.
+
 This document describes the file format that ATIP creates and exports. It's helpful if you're writing software that consumes these files, or if you're trying to create one using other GIS software. Files produced by ATIP can be used with any GIS software handling GeoJSON files. If you're trying to load a GeoJSON file in ATIP, it won't work unless it fits the format described here.
 
 ## Specification

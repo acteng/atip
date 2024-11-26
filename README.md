@@ -1,20 +1,13 @@
-# Active Travel Infrastructure Platform
+# Plan Your Active Travel Schemes
 
-ATIP lets you design, modify and share active travel infrastructure plans.
+This repository contains the Scheme Sketcher and Scheme Browser, two tools for mapping active travel schemes and viewing them alongside contextual layers. The tools re developed by the Alan Turing Institute in collaboration with Active Travel England.
 
-It's developed by the Alan Turing Institute in collaboration with Active Travel England.
+## Usage
 
-## Using ATIP
+The development version is available for use at <https://acteng.github.io/atip>. Note this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of sketch files.
 
-The development version of ATIP with data for England is available for use at <https://acteng.github.io/atip>.
-Note: this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of ATIP files.
+See the [developer guide](docs/developer_guide.md) if you want to work on the code.
 
-## Development
+### Usage in other places
 
-See our current roadmap on the [Milestones](https://github.com/acteng/atip/milestones?direction=desc&sort=completeness&state=open) page. Issues, feature requests, and pull requests are welcome. Please open an issue if you're interested in contributing!
-
-See the [developer guide](docs/developer_guide.md) if you want to work on ATIP.
-
-### Using ATIP in other places
-
-You can set up the scheme sketcher in another place, using [the common library](https://github.com/acteng/scheme-sketcher-lib). You'll need technical experience to do this. Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation.
+You can set up the Scheme Sketcher for another country, using [the common library](https://github.com/acteng/scheme-sketcher-lib). You'll need technical experience to do this. Please [file an issue](https://github.com/acteng/atip/issues/new) to start a conversation.
