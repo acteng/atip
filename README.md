@@ -2,6 +2,8 @@
 
 This repository contains the Scheme Sketcher and Scheme Browser, two tools for mapping active travel schemes and viewing them alongside contextual layers. The tools are developed by the Alan Turing Institute in collaboration with Active Travel England.
 
+(Note this project used to be called ATIP, Active Travel Infrastructure Platform. This repo retains the old name.)
+
 ## Usage
 
 The development version is available for use at <https://acteng.github.io/atip>. Note this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of sketch files.
