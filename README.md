@@ -1,6 +1,6 @@
 # Plan Your Active Travel Schemes
 
-This repository contains the Scheme Sketcher and Scheme Browser, two tools for mapping active travel schemes and viewing them alongside contextual layers. The tools re developed by the Alan Turing Institute in collaboration with Active Travel England.
+This repository contains the Scheme Sketcher and Scheme Browser, two tools for mapping active travel schemes and viewing them alongside contextual layers. The tools are developed by the Alan Turing Institute in collaboration with Active Travel England.
 
 ## Usage
 
