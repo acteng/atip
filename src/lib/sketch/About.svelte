@@ -27,6 +27,12 @@
         </ExternalLink>
       </li>
       <li>
+        With UX design led by 
+        <ExternalLink href="https://www.linkedin.com/in/jadene-aderonmu-b4713771">
+          Jadene Aderonmu
+        </ExternalLink>
+      </li>
+      <li>
         With UX help from
         <ExternalLink href="https://www.linkedin.com/in/madison-wang-841977bb/">
           Madison Wang
@@ -54,9 +60,6 @@
         svelte-maplibre
       </ExternalLink>,
       <ExternalLink href="https://georust.org/">GeoRust</ExternalLink>,
-      <ExternalLink href="https://github.com/a-b-street/osm2streets">
-        osm2streets
-      </ExternalLink>,
       <ExternalLink href="https://material.io/resources/icons/">
         Material icons
       </ExternalLink>, and other open source projects.
@@ -79,7 +82,7 @@
     <ul>
       <li>
         <b>Public Beta</b>
-        launched December 2024, various UI/UX improvements, better integration of browse and sketch tools and most importantly public access.
+        launched December 2024, with various UI improvements, better integration of browse and sketch tools, and official public access.
       </li>
       <li>
         <b>v2</b>
