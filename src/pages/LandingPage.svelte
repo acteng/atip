@@ -35,7 +35,7 @@
   <About bind:open={showAbout} />
 
   <SecondaryButton on:click={() => (showPrivacyStatement = true)}>
-    PrivacyStatement
+    Privacy Statement
   </SecondaryButton>
   <PrivacyStatement bind:open={showPrivacyStatement} />
 
