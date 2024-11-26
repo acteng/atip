@@ -2,19 +2,17 @@
 
 ## Code overview
 
-This repository contains the Svelte ATIP app. Our tech stack is:
+This repository contains the Svelte app. Our tech stack is:
 
 - [Vite](https://vitejs.dev) as the build tool
 - [Svelte](https://svelte.dev) as the UI framework
 - [MapLibre GL](https://maplibre.org) as the map
 - [GOV.UK frontend](https://frontend.design-system.service.gov.uk) for styling
 
-There are some related repositorites also part of ATIP:
+There are some related repositorites:
 
-- [atip-data-prep](https://github.com/acteng/atip-data-prep) is a set of scripts to generate data files that ATIP loads
-- [route-snapper](https://github.com/dabreegster/route_snapper/) is a tool to draw routes snapped to existing roads
-- [osm2streets](https://github.com/a-b-street/osm2streets) is a library to process and query OpenStreetMap data
-
+- [atip-data-prep](https://github.com/acteng/atip-data-prep) is a set of scripts to generate data files that the Scheme Browser loads
+- [route-snapper](https://github.com/dabreegster/route_snapper/) is a tool to draw routes and areas snapped to existing roads
 
 ### Contributions to this doc
 
@@ -22,7 +20,7 @@ We have only included instructions or guidance for environments we've worked on:
 
 ### Background reading
 
-These are some resources to learn languages and libraries used in ATIP. Feel free to add more!
+These are some resources to learn languages and libraries used in this repo. Feel free to add more!
 
 - TypeScript
   - [Docs based on your background](https://www.typescriptlang.org/docs/)
@@ -46,7 +44,7 @@ To run locally you'll need [npm](https://docs.npmjs.com/downloading-and-installi
 
 - `npm install` to install dependencies
 - `npm run setup-govuk` to rerun Sass and generate GOV.UK styles
-- `npm run dev` to run ATIP locally (N.B. you need to run all the above commands before running this command)
+- `npm run dev` to run locally (N.B. you need to run all the above commands before running this command)
   - To mimic GCP deployment and see private layers locally, follow instructions in `.env` and run `VITE_RESOURCE_BASE="" VITE_MIMIC_GCP_LOCALLY="true" npm run dev`
 - `npm run fmt` to auto-format code
 - `npm run check` to see TypeScript errors
@@ -71,7 +69,7 @@ Once you've installed these you can:
 2. Press F1 to open input command at top of window
 3. Run `Dev Containers: Open Folder in Container`, and select the `atip` folder
 4. Press the plus on the top right of the terminal subwindow at the bottom of VSCode (by default) to open a terminal in your docker container
-5. Run `npm install`, `npm run dev`, and then you should have ATIP running on your docker image. VS Code should prompt you with a link to open it in your browser.
+5. Run `npm install`, `npm run dev`, and then you should have the web app running on your docker image. VS Code should prompt you with a link to open it in your browser.
 
 ### Monkey-patching dependencies
 
