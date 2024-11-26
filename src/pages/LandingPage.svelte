@@ -4,13 +4,11 @@
   import { initAll } from "govuk-frontend";
   import { DefaultButton } from "govuk-svelte";
   import About from "lib/common/About.svelte";
-  import PrivacyStatement from "lib/common/PrivacyStatement.svelte";
   import { SecondaryButton } from "govuk-svelte";
-  import { Beta, Header } from "lib/common";
+  import { Beta, ExternalLink, Header } from "lib/common";
   import { onMount } from "svelte";
 
   let showAbout = false;
-  let showPrivacyStatement = false;
 
   onMount(async () => {
     // For govuk components. Must happen here.
@@ -34,10 +32,6 @@
   <SecondaryButton on:click={() => (showAbout = true)}>About</SecondaryButton>
   <About bind:open={showAbout} />
 
-  <SecondaryButton on:click={() => (showPrivacyStatement = true)}>
-    Privacy Statement
-  </SecondaryButton>
-  <PrivacyStatement bind:open={showPrivacyStatement} />
 
   <h2>Sketch Your Scheme:</h2>
   <p>
@@ -61,5 +55,10 @@
       here
     </a>
     .
+  </p>
+
+  <h3>Privacy Statement</h3>
+  <p>
+    Plan Your Active Travel Schemes only stores your sketches, which contain no personal data. These sketches are stored in your browser's local storage and not sent over the network. We collect server-side logs to track usage and comply with auditing and security requirements. This tool uses MapTiler, an external service, for hosting maps and location search; please refer also to their <ExternalLink href="https://www.maptiler.com/privacy-policy/">privacy policy</ExternalLink>.
   </p>
 </div>
