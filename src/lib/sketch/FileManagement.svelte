@@ -76,11 +76,11 @@
   </nav>
 
   <div style="display: flex; justify-content: space-between">
-    <div>
+    <p>
       <b>You are editing</b>
       <br />
       <span>{filename}</span>
-    </div>
+    </p>
 
     <SecondaryButton
       on:click={() => exportFile(authority, filename, $gjSchemes)}

@@ -3,8 +3,12 @@
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import { AlphaBanner, DefaultButton } from "govuk-svelte";
+  import About from "lib/sketch/About.svelte";
+  import { SecondaryButton } from "govuk-svelte";
   import { Header } from "lib/common";
   import { onMount } from "svelte";
+
+  let showAbout = false;
 
   onMount(async () => {
     // For govuk components. Must happen here.
@@ -25,6 +29,10 @@
   <AlphaBanner />
 
   <h1 style="margin-top: 30px">Welcome to Plan Your Active Travel Schemes!</h1>
+  <SecondaryButton on:click={() => (showAbout = true)}>
+    About
+  </SecondaryButton>
+  <About bind:open={showAbout} />
 
   <h2>Sketch Your Scheme:</h2>
   <p>

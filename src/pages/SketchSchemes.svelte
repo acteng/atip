@@ -20,8 +20,6 @@
     Header,
   } from "lib/common";
   import { mode } from "scheme-sketcher-lib/draw/stores";
-  import { SecondaryButton } from "govuk-svelte";
-  import About from "lib/sketch/About.svelte";
   import FileManagement from "lib/sketch/FileManagement.svelte";
   import { ListMode, EditFeatureForm } from "scheme-sketcher-lib/sidebar";
   import { map, mapStyle, schema } from "stores";
@@ -34,8 +32,6 @@
 
   // FileManagement will set this up
   let gjSchemes = writable(emptySchemes(cfg));
-
-  let showAbout = false;
 
   let params = new URLSearchParams(window.location.search);
   // If the authority is invalid, it'll be handled in onMount asynchronously
@@ -93,12 +89,7 @@
         <LoggedIn />
       </div>
 
-      <div style="display: flex; justify-content: space-between">
-        <h2 style="margin-bottom: 0px">Scheme Sketcher</h2>
-        <SecondaryButton on:click={() => (showAbout = true)} noBottomMargin>
-          About
-        </SecondaryButton>
-      </div>
+      <h2 style="margin-bottom: 0px">Scheme Sketcher</h2>
     {/if}
 
     <FileManagement {gjSchemes} {authority} {filename} />
@@ -127,8 +118,6 @@
     </MapLibreMap>
   </div>
 </div>
-
-<About bind:open={showAbout} />
 
 <style>
   * {
