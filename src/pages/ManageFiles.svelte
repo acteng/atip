@@ -6,7 +6,6 @@
     FileInput,
     WarningButton,
     SecondaryButton,
-    AlphaBanner,
     ErrorMessage,
   } from "govuk-svelte";
   import {
@@ -20,7 +19,7 @@
     setLocalStorage,
     serializeSchemes,
   } from "lib/common/files";
-  import { Header, describeAuthority, getAuthoritiesGeoJson } from "lib/common";
+  import { Beta, Header, describeAuthority, getAuthoritiesGeoJson } from "lib/common";
   import { cfg } from "lib/sketch/config";
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
   import { onMount } from "svelte";
@@ -116,7 +115,7 @@
 
 <div class="govuk-width-container govuk-prose">
   <Header />
-  <AlphaBanner />
+  <Beta />
 
   <h1 style="margin-top: 30px">Manage my sketches</h1>
 

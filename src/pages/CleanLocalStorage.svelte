@@ -6,13 +6,12 @@
     SecondaryButton,
     ButtonGroup,
     WarningButton,
-    AlphaBanner,
   } from "govuk-svelte";
   import {
     downloadGeneratedFile,
     measureLocalStorageSizes,
   } from "lib/common/files";
-  import { Header } from "lib/common";
+  import { Beta, Header } from "lib/common";
   import { onMount } from "svelte";
 
   let items: [string, number][] = [];
@@ -54,7 +53,7 @@
 
 <div class="govuk-width-container govuk-prose">
   <Header />
-  <AlphaBanner />
+  <Beta />
 
   <h1 style="margin-top: 30px">Manage local storage</h1>
 

@@ -15,7 +15,7 @@
     Geocoder,
     getAuthoritiesGeoJson,
     LoggedIn,
-    Alpha,
+    Beta,
     MapLibreMap,
     Header,
   } from "lib/common";
@@ -84,7 +84,7 @@
     <Header />
 
     {#if $mode.mode == "list" || $mode.mode == "split-route" || $mode.mode == "set-image" || $mode.mode == "streetview"}
-      <Alpha />
+      <Beta />
       <div style="border-bottom: 1px solid #b1b4b6">
         <LoggedIn />
       </div>

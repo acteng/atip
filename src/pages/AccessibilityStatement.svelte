@@ -2,8 +2,7 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { AlphaBanner } from "govuk-svelte";
-  import { Header } from "lib/common";
+  import { Beta, Header } from "lib/common";
   import { onMount } from "svelte";
 
   onMount(async () => {
@@ -14,7 +13,7 @@
 
 <div class="govuk-width-container govuk-prose">
   <Header />
-  <AlphaBanner />
+  <Beta />
 
   <h1 style="margin-top: 30px">
     Plan Your Active Travel Schemes Accessibility Statement
