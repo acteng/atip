@@ -15,10 +15,10 @@
 
 {#if appVersion() != "Public Beta" && appVersion() != "Private (development)"}
   <WarningText>
-    NB this is a testing environment. Should you be using
+    This is a development version of this tool. You probably want to use
     <ExternalLink href="https://plan.activetravelengland.gov.uk/">
       plan.activetravelengland.gov.uk
-    </ExternalLink>?
+    </ExternalLink>.
   </WarningText>
 {/if}
 
@@ -42,10 +42,5 @@
     margin-left: 10px;
     margin-top: 15px;
     margin-bottom: 15px;
-  }
-
-  .test-env-warning {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
   }
 </style>
