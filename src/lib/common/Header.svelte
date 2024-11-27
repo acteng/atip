@@ -2,6 +2,7 @@
   import logoUrl from "../../../assets/ate_logo.png?url";
   import { appVersion } from "lib/common";
   import ExternalLink from "./ExternalLink.svelte";
+  import { WarningText } from "govuk-svelte";
 </script>
 
 <div class="black-bar">
@@ -13,17 +14,12 @@
 <div class="green-bar" />
 
 {#if appVersion() != "Public Beta" && appVersion() != "Private (development)"}
-  <p class="test-env-warning">
-    <strong>
-      <span style="color:red;">
-        NB this is a testing environment. 
-      </span>
-      Should you be using
-      <ExternalLink href="https://plan.activetravelengland.gov.uk/">
-        plan.activetravelengland.gov.uk
-      </ExternalLink>?
-    </strong>
-  </p>
+  <WarningText>
+    NB this is a testing environment. Should you be using
+    <ExternalLink href="https://plan.activetravelengland.gov.uk/">
+      plan.activetravelengland.gov.uk
+    </ExternalLink>?
+  </WarningText>
 {/if}
 
 <style>
