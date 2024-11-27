@@ -12,7 +12,7 @@
 
 <div class="green-bar" />
 
-{#if appVersion() == "Public Beta dev environment" || appVersion() == "Public Beta test environment"}
+{#if appVersion() != "Public Beta"}
   <p>
     <strong>
       NB this is a testing environment. Should you be using
