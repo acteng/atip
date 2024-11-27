@@ -1,5 +1,7 @@
 <script lang="ts">
   import logoUrl from "../../../assets/ate_logo.png?url";
+  import { appVersion } from "lib/common";
+  import ExternalLink from "./ExternalLink.svelte";
 </script>
 
 <div class="black-bar">
@@ -7,6 +9,17 @@
     <img src={logoUrl} alt="Active Travel England logo" />
   </a>
 </div>
+
+{#if appVersion() == "Public Beta dev environment" || appVersion() == "Public Beta test environment"}
+  <p>
+    <strong>
+      NB, this is a testing environment. Should you be using
+      <ExternalLink href="https://plan.activetravelengland.gov.uk/">
+        plan.activetravelengland.gov.uk
+      </ExternalLink>?
+    </strong>
+  </p>
+{/if}
 
 <div class="green-bar" />
 
