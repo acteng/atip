@@ -39,3 +39,10 @@ jobs:
     - name: Upload test results
       run: npx github-actions-ctrf ctrf/ctrf-report.json
       if: always()
+
+    - name: Upload test results for historical report
+      uses: actions/upload-artifact@v4
+      with:
+        name: ctrf-report
+        path: ctrf/ctrf-report.json
+      if: always()
