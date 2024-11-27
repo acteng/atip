@@ -27,8 +27,10 @@
         </ExternalLink>
       </li>
       <li>
-        With UX design led by 
-        <ExternalLink href="https://www.linkedin.com/in/jadene-aderonmu-b4713771">
+        With UX design led by
+        <ExternalLink
+          href="https://www.linkedin.com/in/jadene-aderonmu-b4713771"
+        >
           Jadene Aderonmu
         </ExternalLink>
       </li>
@@ -44,8 +46,7 @@
         </ExternalLink>
       </li>
       <li>
-        With great thanks to our various users for feedback, testing, and
-        ideas
+        With great thanks to our various users for feedback, testing, and ideas
       </li>
     </ul>
 
@@ -82,7 +83,8 @@
     <ul>
       <li>
         <b>Public Beta</b>
-        launched December 2024, with various UI improvements, better integration of browse and sketch tools, and official public access.
+        launched December 2024, with various UI improvements, better integration
+        of browse and sketch tools, and official public access.
       </li>
       <li>
         <b>v2</b>

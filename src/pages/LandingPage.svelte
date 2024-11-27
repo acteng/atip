@@ -29,9 +29,7 @@
   <AlphaBanner />
 
   <h1 style="margin-top: 30px">Welcome to Plan Your Active Travel Schemes!</h1>
-  <SecondaryButton on:click={() => (showAbout = true)}>
-    About
-  </SecondaryButton>
+  <SecondaryButton on:click={() => (showAbout = true)}>About</SecondaryButton>
   <About bind:open={showAbout} />
 
   <h2>Sketch Your Scheme:</h2>
