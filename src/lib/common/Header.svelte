@@ -15,7 +15,10 @@
 {#if appVersion() != "Public Beta" && appVersion() != "Private (development)"}
   <p class="test-env-warning">
     <strong>
-      NB this is a testing environment. Should you be using
+      <span style="color:red;">
+        NB this is a testing environment.
+      </span>
+       Should you be using
       <ExternalLink href="https://plan.activetravelengland.gov.uk/">
         plan.activetravelengland.gov.uk
       </ExternalLink>?
