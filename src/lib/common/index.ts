@@ -1,7 +1,7 @@
 import { fixBoundaries, type AuthorityBoundaries } from "boundaries";
 import authoritiesUrl from "../../../assets/authorities.geojson?url";
 
-export { default as Alpha } from "./Alpha.svelte";
+export { default as Beta } from "./Beta.svelte";
 export { default as BaselayerSwitcher } from "./BaselayerSwitcher.svelte";
 export { default as ColorLegend } from "./ColorLegend.svelte";
 export { default as ExternalLink } from "./ExternalLink.svelte";

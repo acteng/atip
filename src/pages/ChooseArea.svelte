@@ -15,7 +15,7 @@
   import {
     getAuthoritiesGeoJson,
     LoggedIn,
-    Alpha,
+    Beta,
     MapLibreMap,
     Popup,
     describeAuthority,
@@ -89,7 +89,7 @@
     <Header />
 
     <div class="left">
-      <Alpha />
+      <Beta />
       <div style="border-bottom: 1px solid #b1b4b6">
         <LoggedIn />
       </div>
