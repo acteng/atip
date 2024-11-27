@@ -13,7 +13,7 @@
 <div class="green-bar" />
 
 {#if appVersion() != "Public Beta" && appVersion() != "Private (development)"}
-  <p>
+  <p class="test-env-warning">
     <strong>
       NB this is a testing environment. Should you be using
       <ExternalLink href="https://plan.activetravelengland.gov.uk/">
@@ -43,5 +43,10 @@
     margin-left: 10px;
     margin-top: 15px;
     margin-bottom: 15px;
+  }
+
+  .test-env-warning {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
   }
 </style>
