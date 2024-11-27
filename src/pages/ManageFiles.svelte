@@ -19,7 +19,12 @@
     setLocalStorage,
     serializeSchemes,
   } from "lib/common/files";
-  import { Beta, Header, describeAuthority, getAuthoritiesGeoJson } from "lib/common";
+  import {
+    Beta,
+    Header,
+    describeAuthority,
+    getAuthoritiesGeoJson,
+  } from "lib/common";
   import { cfg } from "lib/sketch/config";
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
   import { onMount } from "svelte";
