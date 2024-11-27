@@ -6,4 +6,5 @@ export default defineConfig({
     port: 8080,
     reuseExistingServer: !process.env.CI,
   },
+  reporter: [["list"], ["playwright-ctrf-json-reporter", {}]],
 });

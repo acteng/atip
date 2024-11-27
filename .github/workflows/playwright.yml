@@ -34,11 +34,8 @@ jobs:
       run: npm run check
 
     - name: Run Playwright tests
-      run: npm test -- --reporter=html
+      run: npm test
 
-    - uses: actions/upload-artifact@v3
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+    - name: Upload test results
+      run: npx github-actions-ctrf ctrf/ctrf-report.json
+      if: always()
