@@ -2,9 +2,6 @@
 target/
 pkg/
 node_modules/
-/test-results/
-/playwright-report/
-/playwright/.cache/
 dist
 src/style/main.css
 src/style/main.css.map
@@ -13,3 +10,4 @@ public/assets
 public/layers
 public/private_layers
 backend/app.yaml
+ctrf
