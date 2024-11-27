@@ -43,6 +43,18 @@ export function appVersion(): string {
     return "Private (development)";
   }
 
+  if(window.location.hostname == "dev.plan.activetravelengland.gov.uk") {
+    return "Public Beta dev environment";
+  }
+
+  if(window.location.hostname == "test.plan.activetravelengland.gov.uk") {
+    return "Public Beta test environment";
+  }
+
+  if(window.location.hostname == "plan.activetravelengland.gov.uk") {
+    return "Public Beta";
+  }
+
   return "Unknown";
 }
 

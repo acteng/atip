@@ -1,5 +1,8 @@
 <script lang="ts">
   import logoUrl from "../../../assets/ate_logo.png?url";
+  import { appVersion } from "lib/common";
+  import ExternalLink from "./ExternalLink.svelte";
+  import { WarningText } from "govuk-svelte";
 </script>
 
 <div class="black-bar">
@@ -9,6 +12,15 @@
 </div>
 
 <div class="green-bar" />
+
+{#if appVersion() != "Public Beta" && appVersion() != "Private (development)"}
+  <WarningText>
+    This is a development version of this tool. You probably want to use
+    <ExternalLink href="https://plan.activetravelengland.gov.uk/">
+      plan.activetravelengland.gov.uk
+    </ExternalLink>.
+  </WarningText>
+{/if}
 
 <style>
   .black-bar {
