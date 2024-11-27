@@ -16,9 +16,9 @@
   <p class="test-env-warning">
     <strong>
       <span style="color:red;">
-        NB this is a testing environment.
+        NB this is a testing environment. 
       </span>
-       Should you be using
+      Should you be using
       <ExternalLink href="https://plan.activetravelengland.gov.uk/">
         plan.activetravelengland.gov.uk
       </ExternalLink>?
