@@ -12,7 +12,7 @@
 
 <div class="green-bar" />
 
-{#if appVersion() != "Public Beta"}
+{#if appVersion() != "Public Beta" && appVersion() != "Private (development)"}
   <p>
     <strong>
       NB this is a testing environment. Should you be using
