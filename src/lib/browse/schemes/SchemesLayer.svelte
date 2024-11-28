@@ -6,8 +6,10 @@
     Select,
     CheckboxGroup,
     SecondaryButton,
+    ButtonGroup,
   } from "govuk-svelte";
   import { appVersion, Legend, WarningIcon } from "lib/common";
+  import { downloadGeneratedFile } from "lib/common/files";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
   import { importAllLocalSketches, setupSchemes } from "./data";
   import Filters from "./Filters.svelte";
@@ -92,6 +94,13 @@
       // Should be impossible
       return ["red", []];
     }
+  }
+
+  function downloadLocalSchemes() {
+    downloadGeneratedFile(
+      "all_your_schemes.geojson",
+      JSON.stringify($localSchemes, null, "  "),
+    );
   }
 </script>
 
@@ -195,12 +204,17 @@
         </span>
 
         <div slot="controls" style="border: 1px solid black; padding: 8px;">
-          <Filters
-            source="Local"
-            bind:schemesGj={$localSchemes}
-            bind:filterSchemeText={$filterLocalSchemeText}
-            bind:filterInterventionText={$filterLocalInterventionText}
-          />
+          <ButtonGroup>
+            <Filters
+              source="Local"
+              bind:schemesGj={$localSchemes}
+              bind:filterSchemeText={$filterLocalSchemeText}
+              bind:filterInterventionText={$filterLocalInterventionText}
+            />
+            <SecondaryButton on:click={downloadLocalSchemes}>
+              Download all schemes
+            </SecondaryButton>
+          </ButtonGroup>
 
           <Legend rows={localLegend} />
         </div>
