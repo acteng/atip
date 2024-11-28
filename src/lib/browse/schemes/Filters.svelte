@@ -33,10 +33,21 @@
 
   $: authorities = getAuthorities(schemesGj);
   let filterAuthority = "";
+
   let filterFundingProgrammes = Object.fromEntries(
     Object.keys(atfFundingProgrammes).map((x) => [x, true]),
   );
   let filterCurrentMilestone = "";
+
+  let interventionTypes = [
+    ["route", "Routes"],
+    ["area", "Areas"],
+    ["crossing", "Crossings"],
+    ["other", "Other"],
+  ];
+  let filterInterventionTypes = Object.fromEntries(
+    interventionTypes.map(([x, _]) => [x, true]),
+  );
 
   function getAuthorities(schemesGj: Schemes): [string, string][] {
     let names: Set<string> = new Set();
@@ -57,6 +68,7 @@
     filterAuthority: string,
     filterFundingProgrammes: { [name: string]: boolean },
     filterCurrentMilestone: string,
+    filterInterventionTypes: { [name: string]: boolean },
   ) {
     let filterInterventionNormalized = filterInterventionTextCopy.toLowerCase();
     let filterSchemeNormalized = filterSchemeTextCopy.toLowerCase();
@@ -132,6 +144,12 @@
       ) {
         return false;
       }
+      if (
+        source == "ATF" &&
+        !filterInterventionTypes[feature.properties.intervention_type]
+      ) {
+        return false;
+      }
       return true;
     };
     for (let feature of schemesGj.features) {
@@ -157,6 +175,7 @@
     filterAuthority,
     filterFundingProgrammes,
     filterCurrentMilestone,
+    filterInterventionTypes,
   );
 
   function metersToMiles(x: number): number {
@@ -232,6 +251,13 @@
           emptyOption
           bind:value={filterAuthority}
         />
+
+        <Select
+          label="Current milestone"
+          choices={currentMilestones}
+          emptyOption
+          bind:value={filterCurrentMilestone}
+        />
       </div>
 
       <div class="govuk-grid-column-one-half">
@@ -245,12 +271,15 @@
           </CheckboxGroup>
         </FormElement>
 
-        <Select
-          label="Current milestone"
-          choices={currentMilestones}
-          emptyOption
-          bind:value={filterCurrentMilestone}
-        />
+        <FormElement label="Intervention types" id="filterInterventionTypes">
+          <CheckboxGroup small>
+            {#each interventionTypes as [x, label]}
+              <Checkbox bind:checked={filterInterventionTypes[x]}>
+                {label}
+              </Checkbox>
+            {/each}
+          </CheckboxGroup>
+        </FormElement>
       </div>
     </div>
   {:else}
