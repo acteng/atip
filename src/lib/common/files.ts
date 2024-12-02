@@ -139,6 +139,9 @@ export function detectSchema(gj: any): Schema {
     if (scheme && Object.hasOwn(scheme, "v2")) {
       return "v2";
     }
+    if (scheme && Object.hasOwn(scheme, "natn")) {
+      return "natn";
+    }
   } catch (err) {}
 
   return "v1";
