@@ -32,7 +32,6 @@
   <SecondaryButton on:click={() => (showAbout = true)}>About</SecondaryButton>
   <About bind:open={showAbout} />
 
-
   <h2>Sketch Your Scheme:</h2>
   <p>
     Sketch active travel schemes at a high-level. This tool produces GeoJSON
@@ -59,9 +58,7 @@
 
   <h3>Privacy</h3>
   <p>
-    Our privacy statement can be found <a href="privacy.html">
-      here
-    </a>
+    Our privacy statement can be found <a href="privacy.html">here</a>
     .
   </p>
 </div>
