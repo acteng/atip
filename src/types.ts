@@ -4,7 +4,7 @@ import type {
   FeatureWithID,
 } from "scheme-sketcher-lib/draw/types";
 
-export type Schema = "v1" | "pipeline" | "v2";
+export type Schema = "v1" | "pipeline" | "v2" | "natn";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
@@ -21,6 +21,7 @@ export interface OurSchemeData {
   scheme_name?: string;
   pipeline?: PipelineScheme;
   v2?: V2Scheme;
+  natn?: NATNScheme;
   browse?: BrowseSchemeData;
 }
 
@@ -46,6 +47,7 @@ export interface PipelineScheme extends PipelineBudget, PipelineTiming {
 
 // Empty as a marker for detecting v2 and for future possible additions
 export interface V2Scheme {}
+export interface NATNScheme {}
 
 export interface PipelineBudget {
   // GBP
@@ -118,6 +120,7 @@ export interface InterventionProps {
   // The schema is v1, unless a field here is present
   pipeline?: PipelineIntervention;
   v2?: V2Intervention;
+  natn?: NATNIntervention;
 }
 
 export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
@@ -140,4 +143,19 @@ export interface V2Intervention {
     | "";
   intended_uses: "cycling" | "walking_wheeling" | "all" | "";
   work_type: "new" | "improvement" | "existing" | "";
+}
+
+export interface NATNIntervention {
+  element:
+    | ""
+    | "urban corridor"
+    | "urban area"
+    | "urban crossing"
+    | "urban local route"
+    | "city centre footway"
+    | "rural path"
+    | "rural crossing"
+    | "quiet lane"
+    | "local placemaking"
+    | "standalone junction";
 }

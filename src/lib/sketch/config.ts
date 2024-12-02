@@ -35,15 +35,23 @@ export let cfg: Config<InterventionProps, OurSchemeData> = {
 
   newPointFeature: (f) => {
     f.properties.intervention_type = "other";
+    if (get(schemaStore) == "natn" && !f.properties.name) {
+      f.properties.name = f.properties.natn.element;
+    }
   },
   newPolygonFeature: (f) => {
     f.properties.intervention_type = "area";
     f.properties.is_coverage_polygon = false;
+    if (get(schemaStore) == "natn" && !f.properties.name) {
+      f.properties.name = f.properties.natn.element;
+    }
   },
   newLineStringFeature: (f) => {
     f.properties.intervention_type = "route";
     if (f.properties.route_name && !f.properties.name) {
-      if (get(schemaStore) != "pipeline") {
+      if (get(schemaStore) == "natn") {
+        f.properties.name = f.properties.natn.element;
+      } else if (get(schemaStore) != "pipeline") {
         f.properties.name = f.properties.route_name;
       }
     }
@@ -90,7 +98,7 @@ export function backfill(json: any): Schemes {
     // Set a default for this v1 property if it's missing and not exposed by a
     // form the user can edit.
     if (
-      (schema == "pipeline" || schema == "v2") &&
+      (schema == "pipeline" || schema == "v2" || schema == "natn") &&
       !f.properties.intervention_type
     ) {
       // Guess based on geometry
@@ -171,6 +179,8 @@ export function backfill(json: any): Schemes {
       }
     } else if (schema == "v2") {
       scheme.v2 = {};
+    } else if (schema == "natn") {
+      scheme.natn = {};
     }
   }
 
@@ -186,6 +196,8 @@ export function initializeEmptyScheme(
     scheme.pipeline = emptyPipelineScheme();
   } else if (schema == "v2") {
     scheme.v2 = {};
+  } else if (schema == "natn") {
+    scheme.natn = {};
   }
   return scheme;
 }
@@ -320,6 +332,15 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
     }
     if (Object.entries(copy.v2).length == 0) {
       delete copy.v2;
+    }
+  }
+
+  if (schema == "natn" && copy.natn) {
+    for (let key of ["element"]) {
+      delete copy.natn[key];
+    }
+    if (Object.entries(copy.natn).length == 0) {
+      delete copy.natn;
     }
   }
 

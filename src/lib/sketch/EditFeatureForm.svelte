@@ -1,6 +1,7 @@
 <script lang="ts">
   import FormV1 from "./FormV1.svelte";
   import FormV2 from "./FormV2.svelte";
+  import FormNATN from "./FormNATN.svelte";
   import PipelineForm from "./pipeline/PipelineForm.svelte";
   import { schema } from "stores";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
@@ -31,4 +32,6 @@
   <PipelineForm {gjSchemes} bind:props />
 {:else if $schema == "v2"}
   <FormV2 {gjSchemes} bind:props />
+{:else if $schema == "natn"}
+  <FormNATN {gjSchemes} bind:props />
 {/if}
