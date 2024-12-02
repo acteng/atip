@@ -15,6 +15,7 @@ export default defineConfig({
         nested3: resolve(__dirname, "browse.html"),
         nested4: resolve(__dirname, "local_storage.html"),
         nested5: resolve(__dirname, "accessibility.html"),
+        nested6: resolve(__dirname, "privacy.html"),
       },
     },
     /* To debug production builds:
