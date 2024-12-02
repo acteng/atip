@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Plan Your Active Travel Schemes - Privacy Statement</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import PrivacyStatement from "./src/pages/PrivacyStatement.svelte";
+
+      // For govuk setup. For some reason, the initAll step doesn't work here.
+      document.body.className +=
+        " js-enabled" +
+        ("noModule" in HTMLScriptElement.prototype
+          ? " govuk-frontend-supported"
+          : "");
+
+      new PrivacyStatement({
+        target: document.getElementById("app"),
+      });
+    </script>
+  </body>
+</html>
