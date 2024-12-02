@@ -5,7 +5,7 @@
   import { DefaultButton } from "govuk-svelte";
   import About from "lib/common/About.svelte";
   import { SecondaryButton } from "govuk-svelte";
-  import { Beta, ExternalLink, Header } from "lib/common";
+  import { Beta, Header } from "lib/common";
   import { onMount } from "svelte";
 
   let showAbout = false;

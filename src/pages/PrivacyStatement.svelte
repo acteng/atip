@@ -2,7 +2,7 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { /*Beta,*/ Header } from "lib/common";
+  import { Beta, Header, ExternalLink } from "lib/common";
   import { onMount } from "svelte";
 
   onMount(async () => {
@@ -13,7 +13,7 @@
 
 <div class="govuk-width-container govuk-prose">
   <Header />
-  <!-- <Beta /> -->
+  <Beta />
 
   <h1 style="margin-top: 30px">
     Plan Your Active Travel Schemes Privacy Statement
@@ -22,62 +22,47 @@
 
   <p>
     Plan Your Active Travel Schemes is an 
-    <a href="https://github.com/acteng/atip">open source project</a>
+    <ExternalLink href="https://github.com/acteng/atip">
+      open source project
+    </ExternalLink>
     supported by Active Travel England. The service allows you to sketch active travel
     schemes at a high level and produces GeoJSON files that can be shared with others
     using this tool or imported into other GIS software.
   </p>
+
+  <h2>What data we are collecting and how we will use it</h2>
+
   <p>
-    This website is run by Active Travel England. It requires use of and
-    interactions with maps.
+    Most of the data handled by the tool is your sketches. These are stored in
+    your browser's local storage and not sent over the network. Since it is not
+    personal data it will not be discussed further in this statement.
   </p>
+  <p>We are processing the following personal data:</p>
   <ul>
-    <li>
-      We include multiple options for basemap, allowing the user to decide what
-      works best for them
-    </li>
-    <li>
-      We intend to add user-configurable colour choices for map layers such as
-      boundaries, sketched schemes and trip generators
-    </li>
-    <li>
-      <a href="https://mcmw.abilitynet.org.uk/">AbilityNet</a>
-       has advice on making your device easier to use if you have a disability
-    </li>
+    <li>Your IP address</li>
   </ul>
-
-  <h2>How accessible this website is</h2>
-
-  <p>We know some parts of the website are not fully accessible:</p>
   <p>
-    This website is run by Active Travel England. It requires use of and
-    interactions with maps.
+    Personal data is required to collect server-side logs to track usage and
+    comply with auditing and security requirements.
   </p>
-  <ul>
-    <li>You cannot navigate most of the website using just a keyboard</li>
-    <li>
-      You cannot navigate most of the website using speech recognition software
-    </li>
-    <li>
-      You cannot listen to most of the website using a screen reader (including
-      the most recent versions of JAWS, NVDA and VoiceOver)
-    </li>
-    <li>
-      Colour will be used to convey information such as road width and speed
-      limits, until this is configurable it might present an accessibility
-      issue.
-    </li>
-  </ul>
 
-  <h2>Feedback and contact information</h2>
+  <h2>Our lawful basis for collecting your data</h2>
   <p>
-    If you need information on this app or to provide further feedback on issues
-    please email <a
-      href="mailto:plan-your-active-travel-schemes@activetravelengland.gov.uk"
+    Under data protection law, the lawful basis for processing your data is:
+  </p>
+
+  <p>
+    <ExternalLink
+      href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/public-task/"
     >
-      plan-your-active-travel-schemes@activetravelengland.gov.uk
-    </a>
-    . We’ll consider your request and get back to you in 20 days.
+      Article 6(1)(e)
+    </ExternalLink>
+     – public interest
+  </p>
+  <p>
+    Processing is necessary for the performance of a task carried out in the
+    public interest or in the exercise of official authority vested in the
+    controller.
   </p>
 
   <h2>Enforcement procedure</h2>
@@ -93,43 +78,28 @@
     .
   </p>
 
-  <h2>Technical information about this website’s accessibility</h2>
+  <h2>Data sharing</h2>
   <p>
-    Active Travel England is committed to making its website accessible, in
-    accordance with the Public Sector Bodies (Websites and Mobile Applications)
-    (No. 2) Accessibility Regulations 2018.
+    This tool uses MapTiler, an external service, for hosting maps and location
+    search; please refer also to their 
+    <ExternalLink href="https://www.maptiler.com/privacy-policy/">
+      privacy policy
+    </ExternalLink>.
   </p>
 
-  <h2>Compliance status</h2>
+  <h2>How long we retain the data</h2>
   <p>
-    This website is not compliant with the Web Content Accessibility Guidelines
-    version 2.2 AA standard, due to the non-compliances listed below.
-  </p>
-  <ul>
-    <li>
-      The map information is necessarily visual and it cannot be converted into
-      text content
-    </li>
-    <li>
-      Similarly many interactions with the map cannot be performed by keyboard
-      only
-    </li>
-    <li>
-      Certain interactions with sketching require dragging with mouse or touch
-      pad
-    </li>
-  </ul>
-
-  <h2>Non-compliance with the accessibility regulations</h2>
-  <p>
-    Navigation and accessing information: We use a map to provide proposed
-    infrastructure schemes to visually help ATE teams assess schemes. This is
-    not used for navigational purposes.
+    Your personal data will be kept securely by DfT and deleted after 1 year.
   </p>
 
-  <h2>Preparation of this accessibility statement</h2>
+  <h2>Further information</h2>
   <p>
-    This statement was prepared on 24th September 2024. We did an internal audit
-    against WCAG guidelines.
+    For more information about your rights in relation to your personal data,
+    how to complain or how to contact the DfT Data Protection Officer, view our 
+    <ExternalLink
+      href="https://www.gov.uk/government/organisations/active-travel-england/about/personal-information-charter"
+    >
+      Personal Information Charter
+    </ExternalLink>.
   </p>
 </div>
