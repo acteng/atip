@@ -57,8 +57,11 @@
     .
   </p>
 
-  <h3>Privacy Statement</h3>
+  <h3>Privacy</h3>
   <p>
-    Plan Your Active Travel Schemes only stores your sketches, which contain no personal data. These sketches are stored in your browser's local storage and not sent over the network. We collect server-side logs to track usage and comply with auditing and security requirements. This tool uses MapTiler, an external service, for hosting maps and location search; please refer also to their <ExternalLink href="https://www.maptiler.com/privacy-policy/">privacy policy</ExternalLink>.
+    Our privacy statement can be found <a href="privacy.html">
+      here
+    </a>
+    .
   </p>
 </div>
