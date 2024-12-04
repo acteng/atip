@@ -82,7 +82,9 @@
   <p>
     This tool uses MapTiler, an external service, for hosting maps and location
     search; here is their statement about 
-    <ExternalLink href="https://documentation.maptiler.com/hc/en-us/articles/4405446306961-Personal-data-in-MapTiler-Cloud/">
+    <ExternalLink
+      href="https://documentation.maptiler.com/hc/en-us/articles/4405446306961-Personal-data-in-MapTiler-Cloud/"
+    >
       personal data
     </ExternalLink>.
   </p>
