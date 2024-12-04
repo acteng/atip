@@ -96,7 +96,7 @@ test("file without new budget/timing forms can be edited by loading", async ({
   await page.getByRole("button", { name: "multiply by 1 million" }).click();
   await page.getByText("Is the construction fully funded?").check();
   await page.getByText("CRSTS").check();
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Check the data in local storage
   let json = await getLocalStorage(
@@ -140,7 +140,7 @@ test("new feature has pipeline forms", async ({ page }) => {
   await clickMap(page, 500, 500);
   // Make sure pipeline fields like Accuracy show up immediately
   await page.getByLabel("High").check();
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Check the data in local storage
   let json = await getLocalStorage(page, `sketch/LAD_Adur/${filename}`);

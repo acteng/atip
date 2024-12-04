@@ -102,7 +102,7 @@ test("a saved file is loaded when the URL stays the same", async ({ page }) => {
       y: 500,
     },
   });
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   await page.reload();
 
@@ -128,7 +128,7 @@ test("loading a file produced by another tool shows fixable errors", async ({
   await page.locator('input[type="text"]').fill("Square area");
   await expect(page.getByText("No intervention type")).toBeVisible();
   await page.getByText("Area", { exact: true }).click();
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
   await expect(
     page.getByText("There's a problem with one intervention below"),
   ).toBeVisible();
@@ -189,7 +189,7 @@ test("download a file and then reimport it", async ({ page }) => {
   await page.getByRole("button", { name: "New point" }).click();
   await page.getByLabel("Name").fill("Pointless");
   await clickMap(page, 500, 500);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Download it, and check the filename
   let downloadPromise = page.waitForEvent("download");
