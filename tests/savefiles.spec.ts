@@ -128,7 +128,10 @@ test("loading a file produced by another tool shows fixable errors", async ({
   await page.locator('input[type="text"]').fill("Square area");
   await expect(page.getByText("No intervention type")).toBeVisible();
   await page.getByText("Area", { exact: true }).click();
-  await page.getByRole("button", { name: "Finish" }).first().click();
+  // TODO Click Finish in the map controls, not on the sidebar. They should be
+  // the same, but the one on the sidebar appears to be flaky for unknown
+  // reasons.
+  await page.getByTestId("map").getByRole("button", { name: "Finish" }).click();
   await expect(
     page.getByText("There's a problem with one intervention below"),
   ).toBeVisible();

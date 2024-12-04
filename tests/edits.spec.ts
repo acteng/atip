@@ -15,7 +15,9 @@ test("edit an area, then cancel", async ({ page }) => {
   await page.getByRole("link", { name: "Untitled area" }).click();
   await clickMap(page, 430, 530);
   // This button indicates the mode is working
-  await expect(page.getByRole("button", { name: "Cancel" }).first()).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Cancel" }).first(),
+  ).toBeVisible();
 
   await page.keyboard.down("Escape");
   await expectListMode(page);
@@ -36,7 +38,9 @@ test("edit a route, then cancel", async ({ page }) => {
     .click();
   await clickMap(page, 442, 492);
   // This button indicates the mode is working
-  await expect(page.getByRole("button", { name: "Cancel" }).first()).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Cancel" }).first(),
+  ).toBeVisible();
 
   await page.keyboard.down("Escape");
   await expectListMode(page);
