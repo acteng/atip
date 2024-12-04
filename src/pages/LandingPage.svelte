@@ -3,7 +3,7 @@
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import { DefaultButton } from "govuk-svelte";
-  import About from "lib/sketch/About.svelte";
+  import About from "lib/common/About.svelte";
   import { SecondaryButton } from "govuk-svelte";
   import { Beta, Header } from "lib/common";
   import { onMount } from "svelte";
@@ -53,6 +53,12 @@
     Our accessibility statement can be found <a href="accessibility.html">
       here
     </a>
+    .
+  </p>
+
+  <h3>Privacy</h3>
+  <p>
+    Our privacy statement can be found <a href="privacy.html">here</a>
     .
   </p>
 </div>
