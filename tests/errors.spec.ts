@@ -25,7 +25,7 @@ test.skip("other tools work when route tool doesn't load", async ({ page }) => {
   await page.getByRole("button", { name: "New point" }).click();
   await page.getByLabel("Name").fill("Pointless");
   await clickMap(page, 500, 500);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   await expect(page.getByRole("link", { name: "Pointless" })).toBeVisible();
 });

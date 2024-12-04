@@ -10,7 +10,7 @@ test("edit an area, then cancel", async ({ page }) => {
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
   await clickMap(page, 400, 600);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   await page.getByRole("link", { name: "Untitled area" }).click();
   await clickMap(page, 430, 530);
@@ -29,7 +29,7 @@ test("edit a route, then cancel", async ({ page }) => {
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   await page
     .getByRole("link", { name: "Route from ??? and Beach Green to ???" })
@@ -48,7 +48,7 @@ test("the viewport changes only once when opening a form", async ({ page }) => {
   // Create a point, and make sure the viewport hasn't changed
   await page.getByRole("button", { name: "New point" }).click();
   await clickMap(page, 500, 500);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
   await expect.soft(new URL(page.url()).hash).toEqual(defaultViewport);
 
   // Open the form from the sidebar. The viewport should change

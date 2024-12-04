@@ -10,7 +10,7 @@ test("creating a new point opens a form", async ({ page }) => {
   await clickMap(page, 500, 500);
   await page.getByLabel("Name").fill("Point name");
   await page.getByLabel("Description").click();
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   await page.getByRole("link", { name: "Point name" }).click();
 });
@@ -23,7 +23,7 @@ test("creating a new area opens a form", async ({ page }) => {
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
   await clickMap(page, 400, 600);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   await page.getByRole("link", { name: "Area name" }).click();
 });
@@ -36,7 +36,7 @@ test("creating a new area and canceling doesn't save anything", async ({
   await clickMap(page, 400, 500);
   await clickMap(page, 400, 600);
 
-  await page.getByRole("button", { name: "Cancel" }).click();
+  await page.getByRole("button", { name: "Cancel" }).first().click();
   await expect(
     page.getByRole("link", { name: "Untitled area" }),
   ).not.toBeVisible();
@@ -50,7 +50,7 @@ test("creating a new route opens a form, and auto-fill sets its name", async ({
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // The route immediately has a name
   await page
@@ -59,12 +59,12 @@ test("creating a new route opens a form, and auto-fill sets its name", async ({
 
   // Change it
   await page.getByLabel("Name").fill("New route name");
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
   await page.getByRole("link", { name: "New route name" }).click();
 
   // Then auto-fill to change it back
   await page.getByText("Auto-fill").click();
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
   await expect(
     page.getByRole("link", { name: "Route from ??? and Beach Green to ???" }),
   ).toBeVisible();
@@ -76,7 +76,7 @@ test("editing geometry of an area works", async ({ page }) => {
   await clickMap(page, 241, 509);
   await clickMap(page, 235, 431);
   await clickMap(page, 465, 459);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Make sure the form is closed, back in list mode
   await expect(page.getByRole("link", { name: "Untitled area" })).toBeVisible();
@@ -91,7 +91,7 @@ test("adding interventions, then deleting one, then adding another", async ({
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 522, 468);
   await clickMap(page, 192, 513);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   await page
     .getByRole("link", {
@@ -103,7 +103,7 @@ test("adding interventions, then deleting one, then adding another", async ({
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 196, 375);
   await clickMap(page, 481, 399);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   await expect(
     page.getByRole("link", {
