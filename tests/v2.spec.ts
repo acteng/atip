@@ -12,7 +12,7 @@ test("v2 forms work", async ({ page }) => {
   await page.getByLabel("Something completely new").check();
   await page.getByLabel("Description").fill("Bus gate");
 
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Check the data in local storage
   let json = await getLocalStorage(page, `sketch/LAD_Adur/${filename}`);

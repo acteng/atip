@@ -154,7 +154,7 @@ test("new feature has pipeline forms", async ({ page }) => {
   // Edit the point and make sure the forms are still there
   await page.getByRole("link", { name: "Untitled point" }).click();
   await page.getByLabel("Low").check();
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Check the edit
   await page.getByRole("link", { name: "Untitled point" }).click();
