@@ -12,7 +12,7 @@ test("v2 forms work", async ({ page }) => {
   await page.getByLabel("Something completely new").check();
   await page.getByLabel("Description").fill("Bus gate");
 
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Check the data in local storage
   let json = await getLocalStorage(page, `sketch/LAD_Adur/${filename}`);
@@ -27,7 +27,7 @@ test("v2 forms work", async ({ page }) => {
   // Edit the point and make sure the forms are still there
   await page.getByRole("link", { name: "Untitled point" }).click();
   await page.getByLabel("Improvements to something already existing").check();
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Check the edit
   await page.getByRole("link", { name: "Untitled point" }).click();

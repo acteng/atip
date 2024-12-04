@@ -13,7 +13,7 @@ test("user can resolve running out of quota", async ({ page }) => {
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
 
   // Resolve the problem
   await expect(page).toHaveURL(/.*local_storage.html/);
@@ -29,7 +29,7 @@ test("user can resolve running out of quota", async ({ page }) => {
   await page.getByRole("button", { name: "New route" }).click();
   await clickMap(page, 500, 500);
   await clickMap(page, 400, 500);
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
   await page
     .getByRole("link", { name: "Route from ??? and Beach Green to ???" })
     .click();
