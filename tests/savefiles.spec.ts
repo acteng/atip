@@ -144,7 +144,7 @@ test("loading a file produced by another tool shows fixable errors", async ({
     .getByRole("button", { name: "Handle extra GeoJSON properties" })
     .click();
   await page.getByRole("button", { name: "Remove these properties" }).click();
-  await page.getByRole("button", { name: "Finish" }).click();
+  await page.getByRole("button", { name: "Finish" }).first().click();
   await expect(
     page.getByText("There's a problem with one intervention below"),
   ).not.toBeVisible();
