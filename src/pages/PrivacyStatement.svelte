@@ -81,9 +81,9 @@
   <h2>Data sharing</h2>
   <p>
     This tool uses MapTiler, an external service, for hosting maps and location
-    search; please refer also to their 
-    <ExternalLink href="https://www.maptiler.com/privacy-policy/">
-      privacy policy
+    search; here is their statement about 
+    <ExternalLink href="https://documentation.maptiler.com/hc/en-us/articles/4405446306961-Personal-data-in-MapTiler-Cloud/">
+      personal data
     </ExternalLink>.
   </p>
 
