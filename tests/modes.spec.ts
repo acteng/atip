@@ -112,21 +112,25 @@ test("adding interventions, then deleting one, then adding another", async ({
   ).toBeVisible();
 });
 
-test("escape key works from every mode", async ({ page }) => {
+test("escape key or cancel works from every mode", async ({ page }) => {
   // We start in list mode
   await expectListMode(page);
   // Pressing escape from there shouldn't do anything
   await page.keyboard.down("Escape");
   await expectListMode(page);
 
-  // From each tool, make sure escape goes back to list mode
-  for (let mode of [
-    "New point",
-    "New area",
-    "New route",
-    "Split route",
-    "StreetView",
-  ]) {
+  // Escape from the draw tools will trigger an alert, not exit
+  for (let mode of ["New point", "New area", "New route"]) {
+    await page.getByRole("button", { name: mode }).click();
+    await page.keyboard.down("Escape");
+    // There'll be an alert, but resetSketch already handles all dialogs, so
+    // we'll wind up back in the draw mode. Cancel otherwise
+    await page.getByRole("button", { name: "Cancel" }).first().click();
+    await expectListMode(page);
+  }
+
+  // Escape from the other tools will return to list mode
+  for (let mode of ["Split route", "StreetView"]) {
     await page.getByRole("button", { name: mode }).click();
     await page.keyboard.down("Escape");
     await expectListMode(page);
