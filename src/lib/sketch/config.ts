@@ -288,6 +288,8 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
     "hide_while_editing",
     "is_coverage_polygon",
     "scheme_reference",
+    "full_path",
+    "route_name",
   ]) {
     delete copy[key];
   }
