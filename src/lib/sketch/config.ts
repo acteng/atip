@@ -39,6 +39,8 @@ export let cfg: Config<InterventionProps, OurSchemeData> = {
   newPolygonFeature: (f) => {
     f.properties.intervention_type = "area";
     f.properties.is_coverage_polygon = false;
+    delete f.properties.route_name;
+    delete f.properties.full_path;
   },
   newLineStringFeature: (f) => {
     f.properties.intervention_type = "route";
@@ -288,8 +290,6 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
     "hide_while_editing",
     "is_coverage_polygon",
     "scheme_reference",
-    "full_path",
-    "route_name",
   ]) {
     delete copy[key];
   }
