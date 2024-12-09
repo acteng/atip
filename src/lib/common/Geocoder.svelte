@@ -6,9 +6,7 @@
   import { map } from "stores";
   import { onMount } from "svelte";
 
-  // TODO The position for the sketch page is very awkward, but there's
-  // seemingly no option to make the menu appear above the widget
-  export let position: "top-left" | "top-right" = "top-left";
+  export let position: "top-left" | "bottom-right";
 
   let mapController: MapController;
 
@@ -38,9 +36,16 @@
     left: 50px;
   }
 
-  .top-right {
+  .bottom-right {
     position: absolute;
-    top: 150px;
+    bottom: 50px;
     right: 10px;
   }
+
+/* Doesn't work with the Svelte component, because there's an auto-generated class name */
+:global(maplibregl-ctrl-geocoder) {
+  background: red;
+  top: auto;
+  bottom: calc(100% + 6px);
+}
 </style>

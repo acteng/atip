@@ -108,7 +108,7 @@
   </div>
   <div class="main">
     <MapLibreMap style={$mapStyle}>
-      <Geocoder position="top-right" />
+      <Geocoder position="bottom-right" />
       {#if $sketchMapStore}
         <BoundaryLayer {cfg} {boundaryGeojson} />
         <InterventionLayer {cfg} {gjSchemes} />

@@ -58,7 +58,7 @@
 
   <div slot="main">
     <MapLibreMap style={$mapStyle} startBounds={[-5.96, 49.89, 2.31, 55.94]}>
-      <Geocoder />
+      <Geocoder position="top-left" />
       {#if $sketchMapStore}
         <LayerControls />
       {/if}
