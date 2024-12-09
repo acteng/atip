@@ -33,6 +33,8 @@ export let layerZorder = [
   browse("census_output_areas-outline"),
   browse("imd"),
   browse("imd-outline"),
+  browse("ruc"),
+  browse("ruc-outline"),
   browse("pollution"),
   browse("road_noise"),
   browse("user_data_polygons"),
