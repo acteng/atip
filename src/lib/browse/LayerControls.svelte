@@ -7,6 +7,7 @@
   import CensusOutputAreaLayerControl from "./layers/areas/CensusOutputAreas.svelte";
   import CombinedAuthoritiesLayerControl from "./layers/areas/CombinedAuthorities.svelte";
   import ImdLayerControl from "./layers/areas/IMD.svelte";
+  import RuralUrbanLayerControl from "./layers/areas/RuralUrban.svelte";
   import LocalAuthorityDistrictsLayerControl from "./layers/areas/LocalAuthorityDistricts.svelte";
   import LocalPlanningAuthoritiesLayerControl from "./layers/areas/LocalPlanningAuthorities.svelte";
   import ParliamentaryConstituenciesLayerControl from "./layers/areas/ParliamentaryConstituencies.svelte";
@@ -120,6 +121,7 @@
     <CheckboxGroup small>
       <CensusOutputAreaLayerControl />
       <ImdLayerControl />
+      <RuralUrbanLayerControl />
     </CheckboxGroup>
   </CollapsibleCard>
 
