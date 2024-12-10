@@ -36,13 +36,13 @@
   let params = new URLSearchParams(window.location.search);
   // If the authority is invalid, it'll be handled in onMount asynchronously
   let authority = params.get("authority") || "";
-  let filename = params.get("file") || "";
+  let filename = decodeURIComponent(params.get("file") || "");
 
   if (window.localStorage.getItem(getKey(authority, filename)) == null) {
     // If either the filename or authority is wrong, redirect to the very first
     // page. This might be annoying if the authority is correct, but it's
     // simpler. Unless a user copies a bad URL, this shouldn't happen anyway
-    window.location.href = `choose_area.html?schema=${$schema}&error=File ${filename} in authority ${authority} not found`;
+    window.location.href = `choose_area.html?schema=${$schema}&error=File ${encodeURIComponent(filename)} in authority ${authority} not found`;
   }
 
   mapStyle.set(params.get("style") || "streets");
