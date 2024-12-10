@@ -12,13 +12,24 @@
 
   let mapController: MapController;
 
-  // TODO HMR is broken
   onMount(() => {
-    mapController = createMapLibreGlMapController($map, maplibregl);
+    let marker = true;
+    let showResultMarkers = true;
+    let flyToOptions = {
+      duration: 1000,
+    };
+    let fitBoundsOptions = {
+      duration: 1000,
+    };
+    mapController = createMapLibreGlMapController(
+      $map,
+      maplibregl,
+      marker,
+      showResultMarkers,
+      flyToOptions,
+      fitBoundsOptions,
+    );
   });
-
-  // TODO Show markers
-  // TODO Set the flyTo duration
 </script>
 
 {#if mapController}
@@ -27,6 +38,11 @@
       {mapController}
       apiKey={import.meta.env.VITE_MAPTILER_API_KEY}
       country="gb"
+      proximity={[
+        {
+          type: "map-center",
+        },
+      ]}
     />
   </div>
 {/if}
