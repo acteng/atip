@@ -25,14 +25,14 @@
   let colors = {
     "Urban major conurbation": "#fe2200",
     "Urban minor conurbation": "#ff6f00",
-    "Urban city and town": "#ffa602",
-    "Urban city and town in a sparse setting": "#ffe400",
-    "Rural hamlets and isolated dwellings": "#e5f5e0",
+    "Urban city and town in a sparse setting": "#ffa602",
+    "Urban city and town": "#ffe400",
+    "Rural town and fringe in a sparse setting": "#006100",
+    "Rural town and fringe": "#4a8a02",
+    "Rural village in a sparse setting": "#8cb503",
+    "Rural village": "#d6e601",
     "Rural hamlets and isolated dwellings in a sparse setting": "#a1d99b",
-    "Rural town and fringe": "#d6e601",
-    "Rural town and fringe in a sparse setting": "#8cb503",
-    "Rural village": "#4a8a02",
-    "Rural village in a sparse setting": "#006100",
+    "Rural hamlets and isolated dwellings": "#e5f5e0",
   };
 </script>
 
