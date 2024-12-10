@@ -2,10 +2,9 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { DefaultButton } from "govuk-svelte";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import About from "lib/common/About.svelte";
-  import { SecondaryButton } from "govuk-svelte";
-  import { Beta, Header } from "lib/common";
+  import { Beta, ExternalLink, Header } from "lib/common";
   import { onMount } from "svelte";
 
   let showAbout = false;
@@ -37,6 +36,13 @@
     Sketch active travel schemes at a high-level. This tool produces GeoJSON
     files that can be shared with others using this tool or imported into other
     GIS software.
+  </p>
+  <h3>Tutorial</h3>
+  <p>
+    <ExternalLink href="https://www.youtube.com/watch?v=6u2lK8xzQfM">
+      Here
+    </ExternalLink> is a tutorial explaining the use of the scheme sketcher for all
+    users, including guidance for those submitting sketches for ATE review.
   </p>
   <DefaultButton on:click={goToSketcher}>Start</DefaultButton>
 

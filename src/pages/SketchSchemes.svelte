@@ -29,6 +29,7 @@
   import { writable } from "svelte/store";
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
   import { getKey } from "lib/common/files";
+    import ExternalLink from "lib/common/ExternalLink.svelte";
 
   // FileManagement will set this up
   let gjSchemes = writable(emptySchemes(cfg));
@@ -90,6 +91,7 @@
       </div>
 
       <h2 style="margin-bottom: 0px">Scheme Sketcher</h2>
+      <ExternalLink href="https://www.youtube.com/watch?v=6u2lK8xzQfM">Tutorial</ExternalLink>
     {/if}
 
     <FileManagement {gjSchemes} {authority} {filename} />
