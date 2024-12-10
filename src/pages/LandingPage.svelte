@@ -42,7 +42,7 @@
     <ExternalLink href="https://www.youtube.com/watch?v=6u2lK8xzQfM">
       Here
     </ExternalLink> is a tutorial explaining the use of the scheme sketcher for all
-    users, including guidance at those submitting sketches for ATE review.
+    users, including guidance for those submitting sketches for ATE review.
   </p>
   <DefaultButton on:click={goToSketcher}>Start</DefaultButton>
 
