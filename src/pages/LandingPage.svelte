@@ -2,7 +2,7 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { DefaultButton, SecondaryButton } from "govuk-svelte";
+  import { DefaultButton, Footer, SecondaryButton } from "govuk-svelte";
   import About from "lib/common/About.svelte";
   import { Beta, ExternalLink, Header } from "lib/common";
   import { onMount } from "svelte";
@@ -65,3 +65,9 @@
     .
   </p>
 </div>
+
+<Footer
+  accessibilityHref="accessibility.html"
+  privacyHref="privacy.html"
+  cookiesHref={undefined}
+/>
