@@ -57,13 +57,6 @@
     About this tool
   </SecondaryButton>
   <About bind:open={showAbout} />
-
-  <p>
-    Refer to our <a href="accessibility.html">accessibility statement</a>
-    and
-    <a href="privacy.html">privacy statement</a>
-    .
-  </p>
 </div>
 
 <Footer
