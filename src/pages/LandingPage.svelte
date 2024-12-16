@@ -28,8 +28,6 @@
   <Beta />
 
   <h1 style="margin-top: 30px">Welcome to Plan Your Active Travel Schemes!</h1>
-  <SecondaryButton on:click={() => (showAbout = true)}>About</SecondaryButton>
-  <About bind:open={showAbout} />
 
   <h2>Sketch Your Scheme:</h2>
   <p>
@@ -37,14 +35,13 @@
     files that can be shared with others using this tool or imported into other
     GIS software.
   </p>
-  <h3>Tutorial</h3>
+  <DefaultButton on:click={goToSketcher}>Start sketching</DefaultButton>
   <p>
     <ExternalLink href="https://www.youtube.com/watch?v=6u2lK8xzQfM">
-      Here
-    </ExternalLink> is a tutorial explaining the use of the scheme sketcher for all
-    users, including guidance for those submitting sketches for ATE review.
+      Watch a tutorial
+    </ExternalLink> explaining the use of the scheme sketcher for all users, including
+    guidance for those submitting sketches for ATE review.
   </p>
-  <DefaultButton on:click={goToSketcher}>Start</DefaultButton>
 
   <h2>Browse existing sketches and geographic context:</h2>
 
@@ -52,19 +49,19 @@
     View scheme sketches alongside other contextual layers, like bus routes,
     hospital locations, and authority boundaries.
   </p>
-  <DefaultButton on:click={goToBrowser}>Start</DefaultButton>
+  <DefaultButton on:click={goToBrowser}>Start browsing</DefaultButton>
 
-  <h3>Accessibility</h3>
-  <p>
-    Our accessibility statement can be found <a href="accessibility.html">
-      here
-    </a>
-    .
-  </p>
+  <h3>Further information</h3>
 
-  <h3>Privacy</h3>
+  <SecondaryButton on:click={() => (showAbout = true)}>
+    About this tool
+  </SecondaryButton>
+  <About bind:open={showAbout} />
+
   <p>
-    Our privacy statement can be found <a href="privacy.html">here</a>
+    Refer to our <a href="accessibility.html">accessibility statement</a>
+    and
+    <a href="privacy.html">privacy statement</a>
     .
   </p>
 </div>

@@ -35,17 +35,6 @@
         </ExternalLink>
       </li>
       <li>
-        With UX help from
-        <ExternalLink href="https://www.linkedin.com/in/madison-wang-841977bb/">
-          Madison Wang
-        </ExternalLink> and <ExternalLink href="https://github.com/stuartlynn">
-          Stuart Lynn
-        </ExternalLink>, and CSS help from
-        <ExternalLink href="https://github.com/BudgieInWA">
-          Ben Ritter
-        </ExternalLink>
-      </li>
-      <li>
         With great thanks to our various users for feedback, testing, and ideas
       </li>
     </ul>
@@ -73,7 +62,11 @@
         start an issue on Github
       </ExternalLink>
       or email
-      <a href="mailto: dcarlino@turing.ac.uk">dcarlino@turing.ac.uk</a>
+      <a
+        href="mailto:plan-your-active-travel-schemes@activetravelengland.gov.uk"
+      >
+        plan-your-active-travel-schemes@activetravelengland.gov.uk
+      </a>
       .
     </p>
 
