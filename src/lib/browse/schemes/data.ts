@@ -1,5 +1,5 @@
-import type { Feature, Schemes } from "types";
 import type { Writable } from "svelte/store";
+import type { Feature, Schemes } from "types";
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
 // Populates the two stores for each of ATF and LCWIP schemes.

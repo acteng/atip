@@ -1,5 +1,5 @@
-import { writable, type Writable, get } from "svelte/store";
 import type { Map } from "maplibre-gl";
+import { get, writable, type Writable } from "svelte/store";
 
 export const attribution = writable("");
 export const googleKeys: Writable<[string, string] | null> = writable(null);

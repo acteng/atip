@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { resetSketch, clickMap } from "./shared.js";
+import { clickMap, resetSketch } from "./shared.js";
 
 test("user can resolve running out of quota", async ({ page }) => {
   let filename = await resetSketch(page);

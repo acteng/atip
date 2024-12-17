@@ -2,7 +2,8 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { Beta, Header, ExternalLink } from "lib/common";
+  import { Footer } from "govuk-svelte";
+  import { Beta, ExternalLink, Header } from "lib/common";
   import { onMount } from "svelte";
 
   onMount(async () => {
@@ -105,3 +106,9 @@
     </ExternalLink>.
   </p>
 </div>
+
+<Footer
+  aboutHref="about.html"
+  privacyHref="privacy.html"
+  accessibilityHref="accessibility.html"
+/>

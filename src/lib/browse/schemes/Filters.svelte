@@ -1,12 +1,12 @@
 <script lang="ts">
   import {
+    AutocompleteTextInput,
+    Checkbox,
+    CheckboxGroup,
     DefaultButton,
     FormElement,
     SecondaryButton,
     Select,
-    Checkbox,
-    CheckboxGroup,
-    AutocompleteTextInput,
   } from "govuk-svelte";
   import { Modal } from "lib/common";
   import type { Feature, Schemes } from "types";

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
-  import { Popup, privateResourceBaseUrl, Legend } from "lib/common";
-  import { layerId, constructMatchExpression } from "lib/maplibre";
+  import { Legend, Popup, privateResourceBaseUrl } from "lib/common";
+  import { constructMatchExpression, layerId } from "lib/maplibre";
   import { CircleLayer, GeoJSON } from "svelte-maplibre";
+  import LayerControl from "../LayerControl.svelte";
   import { showHideLayer } from "../url";
 
   let name = "problems";

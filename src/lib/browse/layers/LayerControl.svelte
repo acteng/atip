@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { Checkbox, CheckboxGroup, SecondaryButton } from "govuk-svelte";
   import { HelpButton } from "lib/common";
-  import { SecondaryButton, Checkbox, CheckboxGroup } from "govuk-svelte";
   import { onDestroy } from "svelte";
   import { activeLayers, layerLegends } from "./stores";
 

@@ -19,8 +19,8 @@
     hoverStateFilter,
     LineLayer,
   } from "svelte-maplibre";
-  import InterventionPopup from "./InterventionPopup.svelte";
   import type { Schemes } from "types";
+  import InterventionPopup from "./InterventionPopup.svelte";
 
   export let name: string;
   export let description: string;

@@ -1,7 +1,6 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
-  import { ExternalLink, Popup, privateResourceBaseUrl } from "lib/common";
   import { Radio } from "govuk-svelte";
+  import { ExternalLink, Popup, privateResourceBaseUrl } from "lib/common";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
@@ -9,6 +8,7 @@
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors, denseLineWidth } from "../../colors";
+  import LayerControl from "../LayerControl.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { customUrlState } from "../url";
 

@@ -1,9 +1,10 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
-  import { ExternalLink } from "lib/common";
+  // TODO Disabled due to CORS
   import { Select } from "govuk-svelte";
+  import { ExternalLink } from "lib/common";
   import { layerId } from "lib/maplibre";
   import { RasterLayer, RasterTileSource } from "svelte-maplibre";
+  import LayerControl from "../LayerControl.svelte";
   import OsOglLicense from "../OsOglLicense.svelte";
   import { customUrlState } from "../url";
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
   import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
@@ -9,6 +8,7 @@
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
+  import LayerControl from "../LayerControl.svelte";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { showHideLayer } from "../url";

@@ -1,7 +1,7 @@
 import { readFile } from "fs/promises";
-import { expect, test } from "@playwright/test";
-import { resetSketch, clickMap } from "./shared.js";
 import type { Readable } from "stream";
+import { expect, test } from "@playwright/test";
+import { clickMap, resetSketch } from "./shared.js";
 
 test("loading a file with length displays the length", async ({ page }) => {
   await page.goto("/choose_area.html");

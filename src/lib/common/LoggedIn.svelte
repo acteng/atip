@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { ErrorMessage } from "govuk-svelte";
   import Cookies from "js-cookie";
   import { appVersion } from "lib/common";
-  import { ErrorMessage } from "govuk-svelte";
 
   let email = Cookies.get("email");
 </script>

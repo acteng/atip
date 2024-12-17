@@ -1,36 +1,36 @@
 <script lang="ts">
   import {
+    ButtonGroup,
+    CheckboxGroup,
     CollapsibleCard,
     ErrorMessage,
     FileInput,
-    Select,
-    CheckboxGroup,
     SecondaryButton,
-    ButtonGroup,
+    Select,
   } from "govuk-svelte";
   import { appVersion, Legend, WarningIcon } from "lib/common";
   import { downloadGeneratedFile } from "lib/common/files";
-  import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
-  import { importAllLocalSketches, setupSchemes } from "./data";
-  import Filters from "./Filters.svelte";
-  import {
-    atfSchemes,
-    lcwipSchemes,
-    filterAtfSchemeText,
-    filterAtfInterventionText,
-    filterLcwipSchemeText,
-    filterLcwipInterventionText,
-    localSchemes,
-    filterLocalSchemeText,
-    filterLocalInterventionText,
-  } from "./stores";
-  import InterventionLayer from "./InterventionLayer.svelte";
-  import { colorInterventionsBySchema, schemaLegend } from "schemas";
-  import { currentMilestones, atfFundingProgrammes } from "./colors";
-  import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
   import { constructMatchExpression } from "lib/maplibre";
+  import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
+  import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import LayerControl from "../layers/LayerControl.svelte";
   import { showHideLayer } from "../layers/url";
+  import { atfFundingProgrammes, currentMilestones } from "./colors";
+  import { importAllLocalSketches, setupSchemes } from "./data";
+  import Filters from "./Filters.svelte";
+  import InterventionLayer from "./InterventionLayer.svelte";
+  import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
+  import {
+    atfSchemes,
+    filterAtfInterventionText,
+    filterAtfSchemeText,
+    filterLcwipInterventionText,
+    filterLcwipSchemeText,
+    filterLocalInterventionText,
+    filterLocalSchemeText,
+    lcwipSchemes,
+    localSchemes,
+  } from "./stores";
 
   let errorMessage = "";
 

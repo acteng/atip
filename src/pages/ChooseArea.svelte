@@ -3,23 +3,28 @@
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import {
+    AutocompleteTextInput,
     DefaultButton,
     ErrorMessage,
     FileInput,
     Radio,
-    AutocompleteTextInput,
   } from "govuk-svelte";
   import { onMount } from "svelte";
   import "maplibre-gl/dist/maplibre-gl.css";
   import { type AuthorityBoundaries } from "boundaries";
   import {
+    Beta,
+    describeAuthority,
     getAuthoritiesGeoJson,
     LoggedIn,
-    Beta,
     MapLibreMap,
     Popup,
-    describeAuthority,
   } from "lib/common";
+  import {
+    countFilesPerAuthority,
+    importFile,
+    importOldFiles,
+  } from "lib/common/files";
   import { schema as schemaStore } from "stores";
   import {
     FillLayer,
@@ -29,11 +34,6 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import Header from "./ChooseAreaHeader.svelte";
-  import {
-    importFile,
-    importOldFiles,
-    countFilesPerAuthority,
-  } from "lib/common/files";
 
   let authoritiesGj: AuthorityBoundaries = {
     type: "FeatureCollection",

@@ -2,12 +2,17 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { SecondaryButton, ButtonGroup, WarningButton } from "govuk-svelte";
+  import {
+    ButtonGroup,
+    Footer,
+    SecondaryButton,
+    WarningButton,
+  } from "govuk-svelte";
+  import { Beta, Header } from "lib/common";
   import {
     downloadGeneratedFile,
     measureLocalStorageSizes,
   } from "lib/common/files";
-  import { Beta, Header } from "lib/common";
   import { onMount } from "svelte";
 
   let items: [string, number][] = [];
@@ -110,3 +115,9 @@
     </table>
   </table>
 </div>
+
+<Footer
+  aboutHref="about.html"
+  privacyHref="privacy.html"
+  accessibilityHref="accessibility.html"
+/>

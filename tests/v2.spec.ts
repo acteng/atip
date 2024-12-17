@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { resetSketch, getLocalStorage, clickMap } from "./shared.js";
+import { clickMap, getLocalStorage, resetSketch } from "./shared.js";
 
 test("v2 forms work", async ({ page }) => {
   let filename = await resetSketch(page, "v2");

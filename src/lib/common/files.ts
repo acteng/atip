@@ -1,5 +1,5 @@
-import type { Schema, Schemes } from "types";
 import { findSmallestAuthority, type AuthorityBoundaries } from "boundaries";
+import type { Schema, Schemes } from "types";
 
 // Returns the local storage key for a file
 export function getKey(authority: string, filename: string): string {

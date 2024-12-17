@@ -1,22 +1,24 @@
-import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
-import { type Config } from "scheme-sketcher-lib/config";
-import EditFeatureForm from "./EditFeatureForm.svelte";
-import EditSchemeForm from "./EditSchemeForm.svelte";
-import { schema as schemaStore, mapStyle } from "stores";
-import { get } from "svelte/store";
-import { getRoadLayerNames, layerZorder } from "lib/maplibre";
 import length from "@turf/length";
 import { randomSchemeColor } from "colors";
+import { getRoadLayerNames, layerZorder } from "lib/maplibre";
+import { type Config } from "scheme-sketcher-lib/config";
 import type {
-  InterventionProps,
+  FeatureProps,
+  SchemeData as GenericSchemeData,
+} from "scheme-sketcher-lib/draw/types";
+import { mapStyle, schema as schemaStore } from "stores";
+import { get } from "svelte/store";
+import type {
   Feature,
   FundingSources,
+  InterventionProps,
+  OurSchemeData,
   PipelineScheme,
   Schemes,
-  OurSchemeData,
 } from "types";
-import type { SchemeData as GenericSchemeData } from "scheme-sketcher-lib/draw/types";
 import { v4 as uuidv4 } from "uuid";
+import EditFeatureForm from "./EditFeatureForm.svelte";
+import EditSchemeForm from "./EditSchemeForm.svelte";
 
 export let cfg: Config<InterventionProps, OurSchemeData> = {
   interventionName,

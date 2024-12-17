@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { v4 as uuidv4 } from "uuid";
-  import { routeTool } from "scheme-sketcher-lib/draw/stores";
   import {
     FormElement,
     Radio,
@@ -9,10 +7,12 @@
     TextArea,
   } from "govuk-svelte";
   import { prettyPrintMeters } from "lib/maplibre";
-  import type { InterventionProps, Schemes } from "types";
-  import { schemeName } from "./config";
-  import type { Writable } from "svelte/store";
+  import { routeTool } from "scheme-sketcher-lib/draw/stores";
   import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
+  import type { Writable } from "svelte/store";
+  import type { InterventionProps, Schemes } from "types";
+  import { v4 as uuidv4 } from "uuid";
+  import { schemeName } from "./config";
 
   export let gjSchemes: Writable<Schemes>;
   export let props: FeatureProps<InterventionProps>;

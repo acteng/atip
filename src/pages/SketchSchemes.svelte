@@ -4,32 +4,31 @@
   import "../style/main.css";
   import type { AuthorityBoundaries } from "boundaries";
   import {
+    BaselayerSwitcher,
+    Beta,
+    Geocoder,
+    getAuthoritiesGeoJson,
+    Header,
+    LoggedIn,
+    MapLibreMap,
+  } from "lib/common";
+  import ExternalLink from "lib/common/ExternalLink.svelte";
+  import { getKey } from "lib/common/files";
+  import { cfg } from "lib/sketch/config";
+  import FileManagement from "lib/sketch/FileManagement.svelte";
+  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
+  import {
     BoundaryLayer,
     ImageLayer,
     InterventionLayer,
-    Toolbox,
     NewFeatureForm,
+    Toolbox,
   } from "scheme-sketcher-lib/draw";
-  import {
-    BaselayerSwitcher,
-    Geocoder,
-    getAuthoritiesGeoJson,
-    LoggedIn,
-    Beta,
-    MapLibreMap,
-    Header,
-  } from "lib/common";
-  import { mode } from "scheme-sketcher-lib/draw/stores";
-  import FileManagement from "lib/sketch/FileManagement.svelte";
-  import { ListMode, EditFeatureForm } from "scheme-sketcher-lib/sidebar";
+  import { emptySchemes, mode } from "scheme-sketcher-lib/draw/stores";
+  import { EditFeatureForm, ListMode } from "scheme-sketcher-lib/sidebar";
   import { map, mapStyle, schema } from "stores";
   import { onMount } from "svelte";
-  import { cfg } from "lib/sketch/config";
-  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
   import { writable } from "svelte/store";
-  import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
-  import { getKey } from "lib/common/files";
-  import ExternalLink from "lib/common/ExternalLink.svelte";
 
   // FileManagement will set this up
   let gjSchemes = writable(emptySchemes(cfg));

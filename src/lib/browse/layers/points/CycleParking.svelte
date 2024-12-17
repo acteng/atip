@@ -1,9 +1,9 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
   import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId } from "lib/maplibre";
   import { SymbolLayer, VectorTileSource } from "svelte-maplibre";
   import cycleParking from "../../../../../assets/bicycle_parking.png?url";
+  import LayerControl from "../LayerControl.svelte";
   import OsmLicense from "../OsmLicense.svelte";
   import { showHideLayer } from "../url";
 
