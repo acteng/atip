@@ -2,6 +2,7 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
+    import { Footer } from "govuk-svelte";
   import { Beta, Header } from "lib/common";
   import { onMount } from "svelte";
 
@@ -130,3 +131,10 @@
     against WCAG guidelines.
   </p>
 </div>
+
+<Footer
+  aboutHref="about.html"
+  privacyHref="privacy.html"
+  accessibilityHref="accessibility.html"
+  cookiesHref={undefined}
+/>

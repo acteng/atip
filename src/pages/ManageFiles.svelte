@@ -7,6 +7,7 @@
     WarningButton,
     SecondaryButton,
     ErrorMessage,
+    Footer,
   } from "govuk-svelte";
   import {
     getKey,
@@ -201,6 +202,13 @@
     </div>
   </div>
 </div>
+
+<Footer
+  aboutHref="about.html"
+  privacyHref="privacy.html"
+  accessibilityHref="accessibility.html"
+  cookiesHref={undefined}
+/>
 
 <style>
   .green-bar {

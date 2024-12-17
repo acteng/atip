@@ -2,12 +2,9 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { DefaultButton, Footer, SecondaryButton } from "govuk-svelte";
-  import About from "lib/common/About.svelte";
+  import { DefaultButton, Footer } from "govuk-svelte";
   import { Beta, ExternalLink, Header } from "lib/common";
   import { onMount } from "svelte";
-
-  let showAbout = false;
 
   onMount(async () => {
     // For govuk components. Must happen here.
@@ -50,17 +47,11 @@
     hospital locations, and authority boundaries.
   </p>
   <DefaultButton on:click={goToBrowser}>Start browsing</DefaultButton>
-
-  <h3>Further information</h3>
-
-  <SecondaryButton on:click={() => (showAbout = true)}>
-    About this tool
-  </SecondaryButton>
-  <About bind:open={showAbout} />
 </div>
 
 <Footer
-  accessibilityHref="accessibility.html"
+  aboutHref="about.html"
   privacyHref="privacy.html"
+  accessibilityHref="accessibility.html"
   cookiesHref={undefined}
 />
