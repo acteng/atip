@@ -53,5 +53,4 @@
   aboutHref="about.html"
   privacyHref="privacy.html"
   accessibilityHref="accessibility.html"
-  cookiesHref={undefined}
 />
