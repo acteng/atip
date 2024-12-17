@@ -2,7 +2,12 @@
   import "../style/main.css";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
-  import { SecondaryButton, ButtonGroup, WarningButton, Footer } from "govuk-svelte";
+  import {
+    SecondaryButton,
+    ButtonGroup,
+    WarningButton,
+    Footer,
+  } from "govuk-svelte";
   import {
     downloadGeneratedFile,
     measureLocalStorageSizes,
