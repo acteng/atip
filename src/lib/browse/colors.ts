@@ -20,8 +20,6 @@ export const colors = {
   bus_route_with_lane: "#9362BA",
   bus_route_without_lane: "#C2A6D8",
   trams: "black",
-  signalized_crossing: "green",
-  other_crossing: "black",
 
   // Thanks to https://github.com/cyipt/cyipt-website/issues/23
   cycle_paths: {
