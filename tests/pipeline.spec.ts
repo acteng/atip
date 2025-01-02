@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { resetSketch, getLocalStorage, clickMap } from "./shared.js";
+import { clickMap, getLocalStorage, resetSketch } from "./shared.js";
 
 test("scheme validations are updated", async ({ page }) => {
   let filename = await resetSketch(page, "pipeline");

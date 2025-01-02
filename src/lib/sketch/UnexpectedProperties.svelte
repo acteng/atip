@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Modal } from "lib/common";
   import { ButtonGroup, SecondaryButton, WarningButton } from "govuk-svelte";
+  import { Modal } from "lib/common";
   import { getUnexpectedProperties } from "./config";
 
   export let props: { [name: string]: any };

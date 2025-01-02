@@ -1,11 +1,11 @@
 <script lang="ts">
-  import TimingForm from "./TimingForm.svelte";
-  import BudgetForm from "./BudgetForm.svelte";
   import { ErrorMessage, Radio, TextArea, TextInput } from "govuk-svelte";
-  import PipelineType from "./PipelineType.svelte";
-  import type { Schemes } from "types";
-  import type { Writable } from "svelte/store";
   import { onDestroy } from "svelte";
+  import type { Writable } from "svelte/store";
+  import type { Schemes } from "types";
+  import BudgetForm from "./BudgetForm.svelte";
+  import PipelineType from "./PipelineType.svelte";
+  import TimingForm from "./TimingForm.svelte";
 
   export let gjSchemes: Writable<Schemes>;
   export let scheme_reference: string;

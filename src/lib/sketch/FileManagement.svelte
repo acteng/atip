@@ -1,17 +1,17 @@
 <script lang="ts">
+  import { SecondaryButton } from "govuk-svelte";
   import {
+    exportFile,
     getKey,
     serializeSchemes,
-    exportFile,
     setLocalStorage,
   } from "lib/common/files";
   import { mode } from "scheme-sketcher-lib/draw/stores";
-  import { SecondaryButton } from "govuk-svelte";
-  import { onMount } from "svelte";
-  import { backfill } from "./config";
-  import type { Schemes } from "types";
-  import type { Writable } from "svelte/store";
   import { schema } from "stores";
+  import { onMount } from "svelte";
+  import type { Writable } from "svelte/store";
+  import type { Schemes } from "types";
+  import { backfill } from "./config";
 
   export let gjSchemes: Writable<Schemes>;
   export let authority: string;

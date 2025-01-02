@@ -1,15 +1,15 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
+  import { FileInput } from "govuk-svelte";
   import { layerId } from "lib/maplibre";
   import {
-    hoverStateFilter,
-    FillLayer,
-    LineLayer,
     CircleLayer,
+    FillLayer,
     GeoJSON,
+    hoverStateFilter,
+    LineLayer,
   } from "svelte-maplibre";
+  import LayerControl from "../LayerControl.svelte";
   import { showHideLayer } from "../url";
-  import { FileInput } from "govuk-svelte";
   import UserDataPopup from "./UserDataPopup.svelte";
 
   let name = "user_data";

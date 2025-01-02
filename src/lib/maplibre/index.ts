@@ -1,10 +1,11 @@
 import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
+import { layerId as libraryLayerId } from "scheme-sketcher-lib/maplibre";
+import { layerZorder } from "./zorder";
 
 export { getRoadLayerNames } from "./highlight_roads";
 export { getStyleChoices, getStyleSpecification } from "./styles";
 // TODO Syntax to do both isn't working?
 export { layerZorder } from "./zorder";
-import { layerZorder } from "./zorder";
 
 export {
   isPolygon,
@@ -15,7 +16,6 @@ export {
   bbox,
   addLineStringEndpoints,
 } from "scheme-sketcher-lib/maplibre";
-import { layerId as libraryLayerId } from "scheme-sketcher-lib/maplibre";
 
 // Helper for https://maplibre.org/maplibre-style-spec/expressions/#step.
 export function makeColorRamp(

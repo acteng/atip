@@ -3,16 +3,16 @@
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import {
-    SecondaryButton,
     ButtonGroup,
-    WarningButton,
     Footer,
+    SecondaryButton,
+    WarningButton,
   } from "govuk-svelte";
+  import { Beta, Header } from "lib/common";
   import {
     downloadGeneratedFile,
     measureLocalStorageSizes,
   } from "lib/common/files";
-  import { Beta, Header } from "lib/common";
   import { onMount } from "svelte";
 
   let items: [string, number][] = [];

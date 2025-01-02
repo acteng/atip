@@ -1,13 +1,13 @@
 <script lang="ts">
+  import type { Config } from "scheme-sketcher-lib/config";
+  import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
+  import { schema } from "stores";
+  import type { Writable } from "svelte/store";
+  import type { InterventionProps, OurSchemeData, Schemes } from "types";
   import FormV1 from "./FormV1.svelte";
   import FormV2 from "./FormV2.svelte";
   import PipelineForm from "./pipeline/PipelineForm.svelte";
-  import { schema } from "stores";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
-  import type { Config } from "scheme-sketcher-lib/config";
-  import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
-  import type { InterventionProps, OurSchemeData, Schemes } from "types";
-  import type { Writable } from "svelte/store";
 
   export let cfg: Config<InterventionProps, OurSchemeData>;
   export let gjSchemes: Writable<Schemes>;

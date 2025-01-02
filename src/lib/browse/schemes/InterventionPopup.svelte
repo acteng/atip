@@ -1,19 +1,18 @@
 <script lang="ts">
-  import { SecondaryButton } from "govuk-svelte";
   import type { FeatureCollection } from "geojson";
-  import { bbox } from "lib/maplibre";
-  import { map } from "stores";
-  import { prettyPrintMeters } from "lib/maplibre";
+  import { SecondaryButton } from "govuk-svelte";
   import {
-    getKey,
     getEditUrl,
+    getKey,
     serializeSchemes,
     setLocalStorage,
   } from "lib/common/files";
-  import DescribePipelineTiming from "./DescribePipelineTiming.svelte";
-  import DescribePipelineBudget from "./DescribePipelineBudget.svelte";
-  import type { Schema, Schemes } from "types";
+  import { bbox, prettyPrintMeters } from "lib/maplibre";
+  import { map } from "stores";
   import { afterUpdate } from "svelte";
+  import type { Schema, Schemes } from "types";
+  import DescribePipelineBudget from "./DescribePipelineBudget.svelte";
+  import DescribePipelineTiming from "./DescribePipelineTiming.svelte";
 
   export let description: string;
   // Note these come from maplibre, meaning nested fields (like pipeline) are stringified

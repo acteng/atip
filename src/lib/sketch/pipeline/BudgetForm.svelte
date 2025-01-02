@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { PipelineBudget, FundingSources } from "types";
   import { Checkbox, CheckboxGroup, MoneyInput, TextInput } from "govuk-svelte";
+  import type { FundingSources, PipelineBudget } from "types";
 
   export let data: PipelineBudget;
   // Svelte reactivity for fields modified by this component are invisible to

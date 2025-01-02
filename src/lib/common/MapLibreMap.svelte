@@ -8,15 +8,15 @@
   import { map as mapStore } from "stores";
   import { onMount, setContext } from "svelte";
   import {
+    MapEvents,
     MapLibre,
     NavigationControl,
     ScaleControl,
-    MapEvents,
   } from "svelte-maplibre";
   import cycleParking from "../../../assets/bicycle_parking.png?url";
   import chevron from "../../../assets/chevron.png?url";
-  import railwayStation from "../../../assets/railway_station.png?url";
   import googleLogo from "../../../assets/google_on_non_white_hdpi.png?url";
+  import railwayStation from "../../../assets/railway_station.png?url";
   import { attribution, getGoogleAttribution } from "../maplibre/attribution";
   import Attributions from "./Attributions.svelte";
 

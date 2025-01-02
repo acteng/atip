@@ -3,7 +3,7 @@
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import { Footer } from "govuk-svelte";
-  import { Beta, Header, ExternalLink } from "lib/common";
+  import { Beta, ExternalLink, Header } from "lib/common";
   import { onMount } from "svelte";
 
   onMount(async () => {

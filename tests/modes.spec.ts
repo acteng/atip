@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { resetSketch, clickMap } from "./shared.js";
+import { clickMap, resetSketch } from "./shared.js";
 
 test.beforeEach(async ({ page }) => {
   await resetSketch(page);

@@ -1,18 +1,18 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
+    Legend,
     Popup,
     publicResourceBaseUrl,
-    Legend,
   } from "lib/common";
-  import { layerId, constructMatchExpression } from "lib/maplibre";
+  import { constructMatchExpression, layerId } from "lib/maplibre";
   import {
     FillLayer,
     hoverStateFilter,
     LineLayer,
     VectorTileSource,
   } from "svelte-maplibre";
+  import LayerControl from "../LayerControl.svelte";
   import OsOglLicense from "../OsOglLicense.svelte";
   import { showHideLayer } from "../url";
 

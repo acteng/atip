@@ -4,20 +4,20 @@
   import LayerControls from "lib/browse/LayerControls.svelte";
   import ActiveLayersLegend from "lib/browse/layers/ActiveLayersLegend.svelte";
   import "../style/main.css";
-  import { controls } from "lib/browse/stores";
   import { atfSchemes } from "lib/browse/schemes/stores";
+  import { controls } from "lib/browse/stores";
   import {
+    Beta,
     Geocoder,
+    Header,
     Layout,
     LoggedIn,
-    Beta,
     MapLibreMap,
     ZoomOutMap,
-    Header,
   } from "lib/common";
+  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
   import { map, mapStyle } from "stores";
   import { onMount } from "svelte";
-  import { map as sketchMapStore } from "scheme-sketcher-lib/config";
 
   onMount(() => {
     // For govuk components. Must happen here.

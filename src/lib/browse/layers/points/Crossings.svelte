@@ -1,5 +1,4 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
   import {
     ExternalLink,
     Legend,
@@ -13,6 +12,7 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
+  import LayerControl from "../LayerControl.svelte";
   import OsmLicense from "../OsmLicense.svelte";
   import { showHideLayer } from "../url";
 

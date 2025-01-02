@@ -1,7 +1,7 @@
 import type {
-  Schemes as GenericSchemes,
-  SchemeData as GenericSchemeData,
   FeatureWithID,
+  SchemeData as GenericSchemeData,
+  Schemes as GenericSchemes,
 } from "scheme-sketcher-lib/draw/types";
 
 export type Schema = "v1" | "pipeline" | "v2";

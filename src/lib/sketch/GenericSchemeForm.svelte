@@ -1,7 +1,7 @@
 <script lang="ts">
   import { TextInput } from "govuk-svelte";
-  import type { Schemes } from "types";
   import type { Writable } from "svelte/store";
+  import type { Schemes } from "types";
 
   export let gjSchemes: Writable<Schemes>;
   export let scheme_reference: string;

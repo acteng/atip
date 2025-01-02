@@ -1,12 +1,11 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
+  import { Checkbox, CheckboxGroup } from "govuk-svelte";
   import {
     ExternalLink,
     Legend,
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { Checkbox, CheckboxGroup } from "govuk-svelte";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import type { ExpressionSpecification } from "maplibre-gl";
   import {
@@ -15,6 +14,7 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
+  import LayerControl from "../LayerControl.svelte";
   import OsOglLicense from "../OsOglLicense.svelte";
   import { customUrlState } from "../url";
 

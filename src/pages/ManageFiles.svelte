@@ -1,36 +1,36 @@
 <script lang="ts">
   import "../style/main.css";
+  import type { AuthorityBoundaries } from "boundaries";
   // @ts-expect-error no declarations
   import { initAll } from "govuk-frontend";
   import {
-    FileInput,
-    WarningButton,
-    SecondaryButton,
     ErrorMessage,
+    FileInput,
     Footer,
+    SecondaryButton,
+    WarningButton,
   } from "govuk-svelte";
   import {
-    getKey,
-    listFilesInAuthority,
-    downloadGeneratedFile,
-    importOldFiles,
-    exportFile,
-    getEditUrl,
-    importFile,
-    setLocalStorage,
-    serializeSchemes,
-  } from "lib/common/files";
-  import {
     Beta,
-    Header,
     describeAuthority,
     getAuthoritiesGeoJson,
+    Header,
   } from "lib/common";
+  import {
+    downloadGeneratedFile,
+    exportFile,
+    getEditUrl,
+    getKey,
+    importFile,
+    importOldFiles,
+    listFilesInAuthority,
+    serializeSchemes,
+    setLocalStorage,
+  } from "lib/common/files";
   import { cfg } from "lib/sketch/config";
   import { emptySchemes } from "scheme-sketcher-lib/draw/stores";
-  import { onMount } from "svelte";
   import { schema as schemaStore } from "stores";
-  import type { AuthorityBoundaries } from "boundaries";
+  import { onMount } from "svelte";
 
   let params = new URLSearchParams(window.location.search);
   // If the authority is invalid, it'll be handled in onMount asynchronously

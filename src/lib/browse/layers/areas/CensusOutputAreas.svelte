@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { Radio } from "govuk-svelte";
+  import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     FillLayer,
@@ -10,10 +10,10 @@
     type LayerClickInfo,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
+  import LayerControl from "../LayerControl.svelte";
   import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { customUrlState } from "../url";
-  import LayerControl from "../LayerControl.svelte";
 
   let name = "census_output_areas";
   let colorScale = colors.sequential_low_to_high;

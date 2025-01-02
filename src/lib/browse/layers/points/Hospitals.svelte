@@ -1,6 +1,10 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
-  import { ColorLegend, Popup, publicResourceBaseUrl } from "lib/common";
+  import {
+    ColorLegend,
+    ExternalLink,
+    Popup,
+    publicResourceBaseUrl,
+  } from "lib/common";
   import { layerId } from "lib/maplibre";
   import {
     FillLayer,
@@ -8,9 +12,9 @@
     VectorTileSource,
   } from "svelte-maplibre";
   import { colors } from "../../colors";
-  import { showHideLayer } from "../url";
-  import { ExternalLink } from "lib/common";
+  import LayerControl from "../LayerControl.svelte";
   import OsmLicense from "../OsmLicense.svelte";
+  import { showHideLayer } from "../url";
 
   let name = "hospitals";
   let title = "Hospitals";

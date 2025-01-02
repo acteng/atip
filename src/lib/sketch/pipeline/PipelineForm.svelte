@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { v4 as uuidv4 } from "uuid";
-  import { emptyFundingSources, schemeName } from "../config";
-  import { routeTool } from "scheme-sketcher-lib/draw/stores";
   import {
     Checkbox,
     FormElement,
@@ -11,12 +8,15 @@
     TextArea,
   } from "govuk-svelte";
   import { prettyPrintMeters } from "lib/maplibre";
+  import { routeTool } from "scheme-sketcher-lib/draw/stores";
+  import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
+  import type { Writable } from "svelte/store";
   import type { InterventionProps, Schemes } from "types";
+  import { v4 as uuidv4 } from "uuid";
+  import { emptyFundingSources, schemeName } from "../config";
+  import BudgetForm from "./BudgetForm.svelte";
   import PipelineType from "./PipelineType.svelte";
   import TimingForm from "./TimingForm.svelte";
-  import BudgetForm from "./BudgetForm.svelte";
-  import type { Writable } from "svelte/store";
-  import type { FeatureProps } from "scheme-sketcher-lib/draw/types";
 
   export let gjSchemes: Writable<Schemes>;
   export let props: FeatureProps<InterventionProps>;

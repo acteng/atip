@@ -1,9 +1,9 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
   import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId } from "lib/maplibre";
   import { GeoJSON, SymbolLayer } from "svelte-maplibre";
   import railwayStation from "../../../../../assets/railway_station.png?url";
+  import LayerControl from "../LayerControl.svelte";
   import OsmLicense from "../OsmLicense.svelte";
   import { showHideLayer } from "../url";
 

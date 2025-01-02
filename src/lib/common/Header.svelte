@@ -1,8 +1,8 @@
 <script lang="ts">
-  import logoUrl from "../../../assets/ate_logo.png?url";
-  import { appVersion } from "lib/common";
-  import ExternalLink from "./ExternalLink.svelte";
   import { WarningText } from "govuk-svelte";
+  import { appVersion } from "lib/common";
+  import logoUrl from "../../../assets/ate_logo.png?url";
+  import ExternalLink from "./ExternalLink.svelte";
 </script>
 
 <div class="black-bar">

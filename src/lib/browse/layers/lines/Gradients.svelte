@@ -1,19 +1,19 @@
 <script lang="ts">
-  import LayerControl from "../LayerControl.svelte";
-  import OsmLicense from "../OsmLicense.svelte";
-  import OsOglLicense from "../OsOglLicense.svelte";
   import { ExternalLink, Popup, publicResourceBaseUrl } from "lib/common";
   import { layerId, makeColorRamp } from "lib/maplibre";
   import {
     hoverStateFilter,
     LineLayer,
-    VectorTileSource,
     SymbolLayer,
+    VectorTileSource,
   } from "svelte-maplibre";
+  import chevron from "../../../../../assets/chevron.png?url";
   import { colors, denseLineWidth } from "../../colors";
+  import LayerControl from "../LayerControl.svelte";
+  import OsmLicense from "../OsmLicense.svelte";
+  import OsOglLicense from "../OsOglLicense.svelte";
   import SequentialLegend from "../SequentialLegend.svelte";
   import { showHideLayer } from "../url";
-  import chevron from "../../../../../assets/chevron.png?url";
 
   let name = "gradient";
   let title = "Gradients";
