@@ -41,7 +41,6 @@
     ["Toucan", "#87C55F"],
     ["Pegasus", "#9EB9F3"],
     ["Uncontrolled", "#FE88B1"],
-    ["UnknownSignalized", "#C9DB74"],
     ["Unknown", "red"],
   ];
 </script>
@@ -53,7 +52,7 @@
         href="https://wiki.openstreetmap.org/wiki/Key:crossing"
       >
         crossing
-      </ExternalLink> data from OpenStreetMap (as of 17 December 2024).
+      </ExternalLink> data from OpenStreetMap (as of 5 January 2025).
     </p>
     <OsmLicense />
   </span>
@@ -85,7 +84,7 @@
     on:click={onClick}
   >
     <Popup let:props>
-      <p>{props.class || "unknown"}</p>
+      <p>{props.class || "Unknown"} crossing</p>
     </Popup>
   </LineLayer>
 
@@ -119,7 +118,7 @@
     on:click={onClick}
   >
     <Popup let:props>
-      <p>{props.class || "unknown"}</p>
+      <p>{props.class || "Unknown"} crossing</p>
     </Popup>
   </CircleLayer>
 </VectorTileSource>
