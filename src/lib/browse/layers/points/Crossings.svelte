@@ -62,7 +62,7 @@
 </LayerControl>
 
 <VectorTileSource
-  url={`pmtiles://${publicResourceBaseUrl()}/v2/${name}.pmtiles`}
+  url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
   <LineLayer
     {...layerId("crossings-lines")}
