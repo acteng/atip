@@ -5,13 +5,18 @@
     Popup,
     publicResourceBaseUrl,
   } from "lib/common";
-  import { constructMatchExpression, layerId } from "lib/maplibre";
+  import {
+    constructMatchExpression,
+    isLine,
+    isPoint,
+    layerId,
+  } from "lib/maplibre";
   import {
     CircleLayer,
+    LineLayer,
     VectorTileSource,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import { colors } from "../../colors";
   import LayerControl from "../LayerControl.svelte";
   import OsmLicense from "../OsmLicense.svelte";
   import { showHideLayer } from "../url";
@@ -21,36 +26,22 @@
 
   let show = showHideLayer(name);
 
-  function tooltip(props: { [name: string]: any }): string {
-    let descriptions: Record<string, string> = {
-      no: "Location where crossing is impossible/illegal but where there is a clear desire line to cross",
-      traffic_signals: "Signalised crossing",
-      marked: "Crossing with no traffic signals",
-      uncontrolled: "Crossing with no traffic signals",
-      unmarked: "Crossing with no markings or signals",
-      zebra: "Zebra crossing",
-      island: "Crossing with an island",
-      informal:
-        "Informal crossing with an obvious desire line, but no official infrastructure to support it",
-    };
-    return (
-      descriptions[props.crossing] ??
-      `Unknown crossing type (${props.crossing})`
-    );
-  }
-
   function onClick(e: CustomEvent<LayerClickInfo>) {
     window.open(
-      `http://openstreetmap.org/node/${
-        e.detail.features[0].properties!.osm_id
-      }`,
+      `https://www.openstreetmap.org/${e.detail.features[0].properties!.osm}`,
       "_blank",
     );
   }
 
   let legend: [string, string][] = [
-    ["Signalized", colors.signalized_crossing],
-    ["Other", colors.other_crossing],
+    ["Zebra", "#66C5CC"],
+    ["Parallel", "#F6CF71"],
+    ["Pelican", "#F89C74"],
+    ["Puffin", "#DCB0F2"],
+    ["Toucan", "#87C55F"],
+    ["Pegasus", "#9EB9F3"],
+    ["Uncontrolled", "#FE88B1"],
+    ["Unknown", "red"],
   ];
 </script>
 
@@ -61,7 +52,7 @@
         href="https://wiki.openstreetmap.org/wiki/Key:crossing"
       >
         crossing
-      </ExternalLink> data from OpenStreetMap (as of 20 October 2024).
+      </ExternalLink> data from OpenStreetMap (as of 5 January 2025).
     </p>
     <OsmLicense />
   </span>
@@ -73,16 +64,39 @@
 <VectorTileSource
   url={`pmtiles://${publicResourceBaseUrl()}/v1/${name}.pmtiles`}
 >
-  <CircleLayer
-    {...layerId(name)}
+  <LineLayer
+    {...layerId("crossings-lines")}
     sourceLayer={name}
+    filter={isLine}
+    paint={{
+      "line-color": constructMatchExpression(
+        ["get", "class"],
+        Object.fromEntries(legend),
+        "red",
+      ),
+      "line-width": 3,
+    }}
+    layout={{
+      visibility: $show ? "visible" : "none",
+    }}
+    hoverCursor="pointer"
+    eventsIfTopMost
+    on:click={onClick}
+  >
+    <Popup let:props>
+      <p>{props.class || "Unknown"} crossing</p>
+    </Popup>
+  </LineLayer>
+
+  <CircleLayer
+    {...layerId("crossings-points")}
+    sourceLayer={name}
+    filter={isPoint}
     paint={{
       "circle-color": constructMatchExpression(
-        ["get", "crossing"],
-        {
-          traffic_signals: colors.signalized_crossing,
-        },
-        colors.other_crossing,
+        ["get", "class"],
+        Object.fromEntries(legend),
+        "red",
       ),
       "circle-radius": [
         "interpolate",
@@ -104,7 +118,7 @@
     on:click={onClick}
   >
     <Popup let:props>
-      <p>{tooltip(props)}</p>
+      <p>{props.class || "Unknown"} crossing</p>
     </Popup>
   </CircleLayer>
 </VectorTileSource>
