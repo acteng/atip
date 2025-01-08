@@ -47,7 +47,7 @@
     "govuk-svelte": "github:acteng/govuk-svelte",
     "humanize-string": "^3.0.0",
     "js-cookie": "^3.0.5",
-    "maplibre-gl": "^4.0.2",
+    "maplibre-gl": "^4.7.1",
     "scheme-sketcher-lib": "github:acteng/scheme-sketcher-lib",
     "svelte": "^4.2.10",
     "svelte-maplibre": "^0.9.7",
