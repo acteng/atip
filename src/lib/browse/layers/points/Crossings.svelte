@@ -41,6 +41,7 @@
     ["Toucan", "#87C55F"],
     ["Pegasus", "#9EB9F3"],
     ["Uncontrolled", "#FE88B1"],
+    ["Signalised", "#C9DB74"],
     ["Unknown", "red"],
   ];
 </script>
