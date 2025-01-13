@@ -46,6 +46,7 @@
   // Workaround for https://github.com/sveltejs/svelte/issues/7630
   $: streetviewEnabled = !$interactiveMapLayersEnabled;
   $: interactiveMapLayersEnabled.set(!streetviewEnabled);
+  const localStorageQuerystringKey = "browsepage-querystring";
 
   // When StreetView is on, disable interactive layers -- no hovering or
   // clicking behavior. Achieve this by enabling an invisible layer on top of
@@ -72,6 +73,28 @@
       return getRoadLayerNames(map, get(mapStyle));
     },
   };
+
+  const initialQueryParams = new URLSearchParams(window.location.search);
+
+  if (
+    !initialQueryParams ||
+    (initialQueryParams.size === 1 &&
+      initialQueryParams.keys().next().value == "style")
+  ) {
+    let url = new URL(window.location.href);
+    const previousSessionQueryString =
+      window.localStorage.getItem(localStorageQuerystringKey) || "";
+    const newQueryParams = new URLSearchParams(previousSessionQueryString);
+    // @ts-ignore typescript is convinced foreach doesn't exist but it's working?
+    newQueryParams.entries().forEach(([key, value]) => {
+      if (value == null) {
+        url.searchParams.delete(key);
+      } else {
+        url.searchParams.set(key, value);
+      }
+    });
+    window.history.replaceState(null, "", url.toString());
+  }
 </script>
 
 <div bind:this={$controls}>
