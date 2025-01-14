@@ -13,7 +13,6 @@
   import LocalAuthorityDistrictsLayerControl from "./layers/areas/LocalAuthorityDistricts.svelte";
   import LocalPlanningAuthoritiesLayerControl from "./layers/areas/LocalPlanningAuthorities.svelte";
   import ParliamentaryConstituenciesLayerControl from "./layers/areas/ParliamentaryConstituencies.svelte";
-  import PollutionLayerControl from "./layers/areas/Pollution.svelte";
   import RoadNoiseLayerControl from "./layers/areas/RoadNoise.svelte";
   import RuralUrbanLayerControl from "./layers/areas/RuralUrban.svelte";
   import WardsLayerControl from "./layers/areas/Wards.svelte";
@@ -136,7 +135,6 @@
         <RoadSpeedsLayerControl />
         <ProblemsLayerControl />
       {/if}
-      <PollutionLayerControl />
       <RoadNoiseLayerControl />
       <UserDataLayerControl />
     </CheckboxGroup>
