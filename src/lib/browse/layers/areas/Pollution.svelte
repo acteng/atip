@@ -53,16 +53,10 @@
   }
 
   function label(pollutant: string): string {
-    if (info === undefined) {
-      return "";
-    }
     return info![1];
   }
 
   function tilesUrl(pollutant: string): string {
-    if (info === undefined) {
-      return "";
-    }
     let params = new URLSearchParams({
       request: "GetMap",
       version: "1.3.0",
@@ -78,9 +72,6 @@
   }
 
   function legendUrl(pollutant: string): string {
-    if (info === undefined) {
-      return "";
-    }
     let params = new URLSearchParams({
       request: "GetLegendGraphic",
       version: "1.3.0",

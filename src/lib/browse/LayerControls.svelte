@@ -74,6 +74,7 @@
     },
   };
 
+  // Before any individual layers check the URL state for their initial setup, restore the query parameters to whatever was saved last time. If there are already query parameters besides the basemap style, then keep them.
   const initialQueryParams = new URLSearchParams(window.location.search);
 
   if (
@@ -85,14 +86,15 @@
     const previousSessionQueryString =
       window.localStorage.getItem(localStorageQuerystringKey) || "";
     const newQueryParams = new URLSearchParams(previousSessionQueryString);
-    // @ts-ignore typescript is convinced foreach doesn't exist but it's working?
-    newQueryParams.entries().forEach(([key, value]) => {
+    for (const entry in newQueryParams.entries) {
+      const key = entry[0];
+      const value = entry[1];
       if (value == null) {
         url.searchParams.delete(key);
       } else {
         url.searchParams.set(key, value);
       }
-    });
+    }
     window.history.replaceState(null, "", url.toString());
   }
 </script>
