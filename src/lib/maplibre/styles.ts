@@ -19,6 +19,7 @@ export function getStyleChoices(): [string, string][] {
     ["hybrid", "MapTiler Satellite"],
     ["dataviz", "MapTiler Dataviz"],
     ["uk-openzoomstack-light", "OS Open Zoomstack"],
+    ["openstreetmap", "OpenStreetMap"],
   ]);
 }
 
@@ -32,7 +33,8 @@ export async function getStyleSpecification(
     style == "streets" ||
     style == "hybrid" ||
     style == "dataviz" ||
-    style == "uk-openzoomstack-light"
+    style == "uk-openzoomstack-light" ||
+    style == "openstreetmap"
   ) {
     attributionStore.set("&copy; MapTiler &copy; OpenStreetMap contributors");
     return `https://api.maptiler.com/maps/${style}/style.json?key=${
