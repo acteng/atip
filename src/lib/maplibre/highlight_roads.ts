@@ -51,6 +51,18 @@ export function getRoadLayerNames(map: Map, mapStyle: string): string[] {
       )
       .map((layer) => layer.id);
   }
+  if (mapStyle == "openstreetmap") {
+    return map
+      .getStyle()
+      .layers.filter(
+        (layer) =>
+          // @ts-expect-error source-layer is present
+          layer["source-layer"] == "transportation" &&
+          layer.type == "line" &&
+          !layer.id.endsWith(" outline"),
+      )
+      .map((layer) => layer.id);
+  }
 
   // OS and Bluesky raster layers don't have anything we can use
   return [];
