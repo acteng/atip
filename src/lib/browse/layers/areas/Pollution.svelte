@@ -1,4 +1,5 @@
 <script lang="ts">
+  // TODO Disabled due to CORS
   import { Select } from "govuk-svelte";
   import { ExternalLink } from "lib/common";
   import { layerId } from "lib/maplibre";
