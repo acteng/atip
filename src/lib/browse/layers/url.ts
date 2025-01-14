@@ -16,6 +16,7 @@ export function showHideLayer(name: string): Writable<boolean> {
       url.searchParams.delete(name);
     }
     window.history.replaceState(null, "", url.toString());
+    window.localStorage.setItem(localStorageKey, url.searchParams.toString());
   });
   return store;
 }
