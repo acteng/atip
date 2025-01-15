@@ -45,6 +45,7 @@
   // Workaround for https://github.com/sveltejs/svelte/issues/7630
   $: streetviewEnabled = !$interactiveMapLayersEnabled;
   $: interactiveMapLayersEnabled.set(!streetviewEnabled);
+  const localStorageQuerystringKey = "browsepage-querystring";
 
   // When StreetView is on, disable interactive layers -- no hovering or
   // clicking behavior. Achieve this by enabling an invisible layer on top of
@@ -71,6 +72,28 @@
       return getRoadLayerNames(map, get(mapStyle));
     },
   };
+
+  // Before any individual layers check the URL state for their initial setup, restore the query parameters to whatever was saved last time. If there are already query parameters besides the basemap style, then keep them.
+  const initialQueryParams = new URLSearchParams(window.location.search);
+
+  if (
+    !initialQueryParams ||
+    (initialQueryParams.size === 1 &&
+      initialQueryParams.keys().next().value == "style")
+  ) {
+    let url = new URL(window.location.href);
+    const previousSessionQueryString =
+      window.localStorage.getItem(localStorageQuerystringKey) || "";
+    const newQueryParams = new URLSearchParams(previousSessionQueryString);
+    for (const [key, value] of newQueryParams) {
+      if (value == null) {
+        url.searchParams.delete(key);
+      } else {
+        url.searchParams.set(key, value);
+      }
+    }
+    window.history.replaceState(null, "", url.toString());
+  }
 </script>
 
 <div bind:this={$controls}>

@@ -1,5 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 
+const localStorageKey = "browsepage-querystring";
+
 // Create a store to represent whether a layer should be shown or hidden. The
 // state is synced as a URL query parameter.
 export function showHideLayer(name: string): Writable<boolean> {
@@ -14,6 +16,7 @@ export function showHideLayer(name: string): Writable<boolean> {
       url.searchParams.delete(name);
     }
     window.history.replaceState(null, "", url.toString());
+    window.localStorage.setItem(localStorageKey, url.searchParams.toString());
   });
   return store;
 }
@@ -50,6 +53,7 @@ export function customUrlState<T>(
       url.searchParams.set(name, value);
     }
     window.history.replaceState(null, "", url.toString());
+    window.localStorage.setItem(localStorageKey, url.searchParams.toString());
   });
   return store;
 }
