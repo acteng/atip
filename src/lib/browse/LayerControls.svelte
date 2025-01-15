@@ -86,9 +86,7 @@
     const previousSessionQueryString =
       window.localStorage.getItem(localStorageQuerystringKey) || "";
     const newQueryParams = new URLSearchParams(previousSessionQueryString);
-    for (const entry in newQueryParams.entries) {
-      const key = entry[0];
-      const value = entry[1];
+    for (const [key, value] of newQueryParams) {
       if (value == null) {
         url.searchParams.delete(key);
       } else {
