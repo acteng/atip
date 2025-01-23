@@ -33,6 +33,15 @@
   async function loadDataManually() {
     shouldLoad = true;
     await loadData();
+
+    // Remove the URL parameter that originally disabled this
+    let url = new URL(window.location.href);
+    url.searchParams.delete("disable_schemes");
+    window.history.replaceState(null, "", url.toString());
+    window.localStorage.setItem(
+      "browsepage-querystring",
+      url.searchParams.toString(),
+    );
   }
 </script>
 
