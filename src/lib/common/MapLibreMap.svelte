@@ -52,6 +52,7 @@
     let url = new URL(window.location.href);
     url.searchParams.set("style", newStyle);
     window.history.replaceState(null, "", url.toString());
+    // Note this isn't stored in cached browse page params
   }
   $: changeStyle(style);
 
