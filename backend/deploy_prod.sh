@@ -17,6 +17,8 @@ fi
 npm ci
 npm run setup-govuk
 VITE_RESOURCE_BASE="https://plan.activetravelengland.gov.uk/data" npm run build
+# On developer machines, there may be very large local copies of layers. Do not deploy these.
+rm -rfv dist/layers dist/private_layers
 
 # Deploy to app engine
 cd backend
