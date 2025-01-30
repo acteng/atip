@@ -1,0 +1,5 @@
+runtime: nodejs18
+env_variables:
+  GCS_BUCKET: "dft-rlg-schemes-gis-prod"
+  PROJECT_NUMBER: "1042091002892"
+  USE_IAP: "false"
