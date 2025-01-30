@@ -26,7 +26,7 @@ jobs:
       - name: Build all branches
         run: |
           mkdir deployme
-          for branch in $(git branch -r | sed 's/origin\///' | grep -v nobuild_); do
+          for branch in $(git branch -r | sed 's/origin\///' | grep -v nobuild_ | grep -v 'HEAD -> origin/main'); do
             if [ "$branch" == "gh-pages" ]; then
               continue
             fi
