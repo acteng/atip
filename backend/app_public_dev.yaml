@@ -1,4 +1,4 @@
-runtime: nodejs18
+runtime: nodejs22
 env_variables:
   GCS_BUCKET: "dft-rlg-schemes-gis-dev"
   PROJECT_NUMBER: "239567674839"
