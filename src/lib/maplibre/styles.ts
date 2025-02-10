@@ -36,8 +36,11 @@ export async function getStyleSpecification(
     style == "uk-openzoomstack-light" ||
     style == "openstreetmap"
   ) {
+    // For backwards compatibility, map the old URL query parameter to the new URL
+    let styleName = style == "streets" ? "streets-v2" : style;
+
     attributionStore.set("&copy; MapTiler &copy; OpenStreetMap contributors");
-    return `https://api.maptiler.com/maps/${style}/style.json?key=${
+    return `https://api.maptiler.com/maps/${styleName}/style.json?key=${
       import.meta.env.VITE_MAPTILER_API_KEY
     }`;
   }
