@@ -44,6 +44,7 @@ export let layerZorder = [
   browse("mrn"),
   browse("srn"),
   browse("bus_routes"),
+  browse("cycle_routes"),
   browse("trams"),
   browse("national_cycle_network"),
   browse("cycle_paths"),

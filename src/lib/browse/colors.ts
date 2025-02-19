@@ -17,6 +17,7 @@ export const colors = {
   combined_authorities: "cyan",
   local_authority_districts: "orange",
   local_planning_authorities: "red",
+  cycle_route: "green",
   bus_route_with_lane: "#9362BA",
   bus_route_without_lane: "#C2A6D8",
   trams: "black",
