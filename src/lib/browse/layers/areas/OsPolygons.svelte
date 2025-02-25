@@ -9,7 +9,6 @@
   import {
     FillLayer,
     hoverStateFilter,
-    LineLayer,
     VectorTileSource,
   } from "svelte-maplibre";
   import LayerControl from "../LayerControl.svelte";
@@ -44,10 +43,12 @@
       "fill-color": constructMatchExpression(
         ["get", "style_description"],
         {
-          "Road Or Track Fill": "green",
-          "Roadside Manmade Fill": "blue",
-          "Path Fill": "grey",
-          "Traffic Calming Fill": "yellow",
+          "Road Or Track Fill": "black",
+          "Traffic Calming Fill": "#3b3b3b",
+          "Roadside Manmade Fill": "grey",
+          "Roadside Natural Fill": "green",
+          "Path Fill": "brown",
+          "Track Fill": "brown",
         },
         "red",
       ),
@@ -59,19 +60,7 @@
     manageHoverState
   >
     <Popup let:props>
-      <p>{JSON.stringify(props)}</p>
+      <p>{props.style_description}</p>
     </Popup>
   </FillLayer>
-
-  <LineLayer
-    {...layerId(`${name}-outline`)}
-    sourceLayer="topographic_area"
-    paint={{
-      "line-color": color,
-      "line-width": 2.5,
-    }}
-    layout={{
-      visibility: $show ? "visible" : "none",
-    }}
-  />
 </VectorTileSource>
