@@ -12,6 +12,7 @@
   import ImdLayerControl from "./layers/areas/IMD.svelte";
   import LocalAuthorityDistrictsLayerControl from "./layers/areas/LocalAuthorityDistricts.svelte";
   import LocalPlanningAuthoritiesLayerControl from "./layers/areas/LocalPlanningAuthorities.svelte";
+  import OsPolygonsLayerControl from "./layers/areas/OsPolygons.svelte";
   import ParliamentaryConstituenciesLayerControl from "./layers/areas/ParliamentaryConstituencies.svelte";
   import RoadNoiseLayerControl from "./layers/areas/RoadNoise.svelte";
   import RuralUrbanLayerControl from "./layers/areas/RuralUrban.svelte";
@@ -155,6 +156,7 @@
       <PctLayerControl />
       <GradientsLayerControl />
       {#if appVersion() == "Private (development)"}
+        <OsPolygonsLayerControl />
         <RoadWidthsLayerControl />
         <PavementWidthsLayerControl />
         <RoadSpeedsLayerControl />

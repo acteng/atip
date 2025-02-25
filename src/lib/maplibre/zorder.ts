@@ -37,6 +37,8 @@ export let layerZorder = [
   browse("ruc-outline"),
   browse("pollution"),
   browse("road_noise"),
+  browse("osmm"),
+  browse("osmm-outline"),
   browse("user_data_polygons"),
   browse("user_data_polygons-outline"),
 
