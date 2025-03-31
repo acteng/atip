@@ -81,9 +81,11 @@ export let layerZorder = [
   sketch("hover-polygons"),
 
   browse("atf-interventions-polygons"),
+  browse("finalInspections-interventions-polygons"),
   browse("lcwip-interventions-polygons"),
   browse("local-interventions-polygons"),
   browse("atf-interventions-polygons-outlines"),
+  browse("finalInspections-interventions-polygons-outlines"),
   browse("lcwip-interventions-polygons-outlines"),
   browse("local-interventions-polygons-outlines"),
 
@@ -93,9 +95,11 @@ export let layerZorder = [
   sketch("interventions-lines-endpoints"),
 
   browse("atf-interventions-lines"),
+  browse("finalInspections-interventions-lines"),
   browse("lcwip-interventions-lines"),
   browse("local-interventions-lines"),
   browse("atf-interventions-lines-endpoints"),
+  browse("finalInspections-interventions-lines-endpoints"),
   browse("lcwip-interventions-lines-endpoints"),
   browse("local-interventions-lines-endpoints"),
 
@@ -103,6 +107,7 @@ export let layerZorder = [
   sketch("interventions-points"),
 
   browse("atf-interventions-points"),
+  browse("finalInspections-interventions-points"),
   browse("lcwip-interventions-points"),
   browse("local-interventions-points"),
 
