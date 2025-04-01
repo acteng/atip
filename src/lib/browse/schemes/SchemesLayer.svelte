@@ -71,7 +71,7 @@
       );
       $atfShow = true;
       $lcwipShow = true;
-      $finalInspectionsShow = false;
+      $finalInspectionsShow = true;
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;

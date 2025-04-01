@@ -4,6 +4,7 @@ export let atfFundingProgrammes = {
   ATF3: "#8da0cb",
   ATF4: "#e78ac3",
   ATF4E: "#a6d854",
+  ATF5: "purple",
 };
 
 export let currentMilestones = {
