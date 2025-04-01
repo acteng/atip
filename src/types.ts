@@ -88,6 +88,10 @@ export interface BrowseSchemeData {
   current_milestone?: string;
   // If this scheme was imported from local storage, track the original filename
   local_filename?: string;
+  sketch_source?:
+    | "ATF assessment"
+    | "LCWIP mapping"
+    | "Final inspection sketches";
 }
 
 export type PipelineType =

@@ -24,10 +24,13 @@
     atfSchemes,
     filterAtfInterventionText,
     filterAtfSchemeText,
+    filterFinalInspectionsInterventionText,
+    filterFinalInspectionsSchemeText,
     filterLcwipInterventionText,
     filterLcwipSchemeText,
     filterLocalInterventionText,
     filterLocalSchemeText,
+    finalInspectionsSchemes,
     lcwipSchemes,
     localSchemes,
   } from "./stores";
@@ -46,6 +49,13 @@
   let lcwipStyle = "interventionType";
   $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
 
+  let finalInspectionsName = "final_inspections_schemes";
+  let finalInspectionsTitle = "Final inspection schemes";
+  let finalInspectionsShow = showHideLayer(finalInspectionsName);
+  let finalInspectionsStyle = "interventionType";
+  $: [finalInspectionsColor, finalInspectionsLegend] =
+    pickStyle("interventionType");
+
   let localName = "local_schemes";
   let localTitle = "Your schemes";
   let localShow = showHideLayer(localName);
@@ -53,9 +63,15 @@
 
   function loadMainFile(filename: string, text: string) {
     try {
-      setupSchemes(JSON.parse(text), atfSchemes, lcwipSchemes);
+      setupSchemes(
+        JSON.parse(text),
+        atfSchemes,
+        lcwipSchemes,
+        finalInspectionsSchemes,
+      );
       $atfShow = true;
       $lcwipShow = true;
+      $finalInspectionsShow = true;
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
@@ -146,6 +162,42 @@
       </LayerControl>
     {/if}
 
+    {#if Object.entries($finalInspectionsSchemes.schemes).length > 0}
+      <LayerControl
+        name={finalInspectionsName}
+        title={finalInspectionsTitle}
+        bind:show={$finalInspectionsShow}
+      >
+        <span slot="help">
+          <p>
+            <WarningIcon text="Scheme data caveats" />Please note there are data
+            quality caveats for all scheme data:
+          </p>
+          <ul>
+            {#each $finalInspectionsSchemes.notes ?? [] as note}
+              <li><p>{note}</p></li>
+            {/each}
+          </ul>
+        </span>
+
+        <div slot="controls" style="border: 1px solid black; padding: 8px;">
+          <Filters
+            source="LCWIP"
+            bind:schemesGj={$finalInspectionsSchemes}
+            bind:filterSchemeText={$filterFinalInspectionsSchemeText}
+            bind:filterInterventionText={$filterFinalInspectionsInterventionText}
+          />
+
+          <Select
+            label="Colour interventions"
+            choices={[["interventionType", "By intervention type"]]}
+            bind:value={finalInspectionsStyle}
+          />
+          <Legend rows={finalInspectionsLegend} />
+        </div>
+      </LayerControl>
+    {/if}
+
     {#if Object.entries($lcwipSchemes.schemes).length > 0}
       <LayerControl name={lcwipName} title={lcwipTitle} bind:show={$lcwipShow}>
         <span slot="help">
@@ -231,6 +283,16 @@
   filterSchemeText={$filterAtfSchemeText}
   filterInterventionText={$filterAtfInterventionText}
   color={atfColor}
+/>
+
+<InterventionLayer
+  name="finalInspections"
+  description={finalInspectionsTitle}
+  show={$finalInspectionsShow}
+  schemesGj={$finalInspectionsSchemes}
+  filterSchemeText={$filterFinalInspectionsSchemeText}
+  filterInterventionText={$filterFinalInspectionsInterventionText}
+  color={finalInspectionsColor}
 />
 
 <InterventionLayer
