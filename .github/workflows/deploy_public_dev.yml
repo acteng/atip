@@ -6,9 +6,6 @@ on:
       - prod
   workflow_dispatch:
 
-env:
-  PROJECT_ID: dft-rlg-schemes-gis-dev
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,7 +28,7 @@ jobs:
         run: |
           npm ci
           npm run setup-govuk
-          VITE_RESOURCE_BASE="https://${PROJECT_ID}.ew.r.appspot.com/data" npm run build
+          VITE_RESOURCE_BASE="https://dev.plan.activetravelengland.gov.uk/data" npm run build
           cd backend
           rm -rf dist
           cp -R ../dist .
@@ -45,4 +42,4 @@ jobs:
         uses: google-github-actions/deploy-appengine@v1
         with:
           project_id: ${{ vars.PROJECT_ID }}
-          deliverables: backend/app_private_test.yaml
+          deliverables: backend/app_public_dev.yaml
