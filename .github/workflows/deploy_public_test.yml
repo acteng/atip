@@ -1,4 +1,4 @@
-name: Deploy to app engine (public dev env)
+name: Deploy to app engine (public test env)
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
         run: |
           npm ci
           npm run setup-govuk
-          VITE_RESOURCE_BASE="https://dev.plan.activetravelengland.gov.uk/data" npm run build
+          VITE_RESOURCE_BASE="https://test.plan.activetravelengland.gov.uk/data" npm run build
           cd backend
           rm -rf dist
           cp -R ../dist .
@@ -36,10 +36,10 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: '${{ secrets.GCP_PUBLIC_DEV_CREDENTIALS }}'
+          credentials_json: '${{ secrets.GCP_PUBLIC_test_CREDENTIALS }}'
 
       - name: Deploy
         uses: google-github-actions/deploy-appengine@v1
         with:
           project_id: ${{ vars.PROJECT_ID }}
-          deliverables: backend/app_public_dev.yaml
+          deliverables: backend/app_public_test.yaml
