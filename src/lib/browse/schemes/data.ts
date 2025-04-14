@@ -34,9 +34,9 @@ export function setupSchemes(
   for (let [scheme_reference, scheme] of Object.entries(gj.schemes)) {
     if (scheme.browse?.sketch_source === "LCWIP mapping") {
       lcwipGj.schemes[scheme_reference] = scheme;
-    } else if (scheme.browse?.sketch_source == "ATF assessment") {
+    } else if (scheme.browse?.sketch_source === "ATF assessment") {
       atfGj.schemes[scheme_reference] = scheme;
-    } else if (scheme.browse?.sketch_source == "Final inspection sketches") {
+    } else if (scheme.browse?.sketch_source === "Final inspection sketches") {
       finalInspectionsGj.schemes[scheme_reference] = scheme;
     }
   }
