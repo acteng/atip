@@ -12,6 +12,15 @@ export const atfSchemes: Writable<Schemes> = writable({
 export const filterAtfInterventionText: Writable<string> = writable("");
 export const filterAtfSchemeText: Writable<string> = writable("");
 
+export const finalInspectionsSchemes: Writable<Schemes> = writable({
+  type: "FeatureCollection",
+  features: [],
+  schemes: {},
+});
+export const filterFinalInspectionsInterventionText: Writable<string> =
+  writable("");
+export const filterFinalInspectionsSchemeText: Writable<string> = writable("");
+
 export const lcwipSchemes: Writable<Schemes> = writable({
   type: "FeatureCollection",
   features: [],
