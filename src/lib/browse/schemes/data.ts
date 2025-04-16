@@ -1,5 +1,14 @@
+import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 import type { Writable } from "svelte/store";
 import type { Feature, SchemeData, Schemes } from "types";
+
+export type SchemeTypeDetails = {
+  name: string,
+  title: string,
+  style: string,
+  colour: DataDrivenPropertyValueSpecification<string>,
+  legend: [string, string][],
+}
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
 // Populates the two stores for each of ATF and LCWIP schemes.
@@ -154,7 +163,7 @@ export function importAllLocalSketches(): Schemes {
 
       result.schemes = { ...result.schemes, ...gj.schemes };
       result.features = [...result.features, ...gj.features];
-    } catch (err) {}
+    } catch (err) { }
   }
 
   // Fix feature IDs

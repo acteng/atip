@@ -8,10 +8,7 @@
     isPolygon,
     layerId,
   } from "lib/maplibre";
-  import type {
-    DataDrivenPropertyValueSpecification,
-    ExpressionSpecification,
-  } from "maplibre-gl";
+  import type { ExpressionSpecification } from "maplibre-gl";
   import {
     CircleLayer,
     FillLayer,
@@ -20,16 +17,17 @@
     LineLayer,
   } from "svelte-maplibre";
   import type { Schemes } from "types";
+  import type { SchemeTypeDetails } from "./data";
   import InterventionPopup from "./InterventionPopup.svelte";
+    import type { Writable } from "svelte/store";
 
   export let name: string;
-  export let description: string;
-  export let show: boolean;
+  export let details: SchemeTypeDetails;
+  export let show: Writable<boolean>;
 
   export let schemesGj: Schemes;
   export let filterSchemeText: string;
   export let filterInterventionText: string;
-  export let color: DataDrivenPropertyValueSpecification<string>;
 
   $: gj = addLineStringEndpoints(schemesGj);
 
@@ -53,19 +51,19 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "circle-color": color,
+      "circle-color": details.colour,
       "circle-radius": circleRadius,
       "circle-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     hoverCursor="pointer"
   >
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
-        {description}
+        description={details.title}
         {props}
         {schemesGj}
         {filterSchemeText}
@@ -80,19 +78,19 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "line-color": color,
+      "line-color": details.colour,
       "line-width": lineWidth,
       "line-opacity": hoverStateFilter(1.0, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     hoverCursor="pointer"
   >
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
-        {description}
+        description={details.title}
         {props}
         {schemesGj}
         {filterSchemeText}
@@ -110,7 +108,7 @@
       "circle-stroke-width": 2.0,
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   />
 
@@ -120,18 +118,18 @@
     manageHoverState
     eventsIfTopMost
     paint={{
-      "fill-color": color,
+      "fill-color": details.colour,
       "fill-opacity": hoverStateFilter(0.2, 0.5),
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
     hoverCursor="pointer"
   >
     <Popup let:props popupClass="border-popup"><p>{props.name}</p></Popup>
     <Popup let:props openOn="click" popupClass="border-popup">
       <InterventionPopup
-        {description}
+        description={details.title}
         {props}
         {schemesGj}
         {filterSchemeText}
@@ -143,12 +141,12 @@
     {...layerId(`${name}-interventions-polygons-outlines`)}
     filter={["all", isPolygon, hideWhileEditing]}
     paint={{
-      "line-color": color,
+      "line-color": details.colour,
       "line-opacity": 0.5,
       "line-width": 0.7 * lineWidth,
     }}
     layout={{
-      visibility: show ? "visible" : "none",
+      visibility: $show ? "visible" : "none",
     }}
   />
 </GeoJSON>

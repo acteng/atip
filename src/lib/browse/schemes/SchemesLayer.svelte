@@ -13,13 +13,19 @@
   import { constructMatchExpression } from "lib/maplibre";
   import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
+  import type { Writable } from "svelte/store";
   import LayerControl from "../layers/LayerControl.svelte";
   import { showHideLayer } from "../layers/url";
   import { atfFundingProgrammes, currentMilestones } from "./colors";
-  import { importAllLocalSketches, setupSchemes } from "./data";
+  import {
+    importAllLocalSketches,
+    setupSchemes,
+    type SchemeTypeDetails,
+  } from "./data";
   import Filters from "./Filters.svelte";
   import InterventionLayer from "./InterventionLayer.svelte";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
+  import SchemesLayerControl from "./SchemesLayerControl.svelte";
   import {
     atfSchemes,
     filterAtfInterventionText,
@@ -37,24 +43,65 @@
 
   let errorMessage = "";
 
-  let atfName = "atf_schemes";
-  let atfTitle = "ATF schemes";
-  let atfShow = showHideLayer(atfName);
-  let atfStyle = "fundingProgramme";
-  $: [atfColor, atfLegend] = pickStyle(atfStyle);
+  const [atfColour, atfLegend] = pickStyle("fundingProgramme");
+  let atfDetails: SchemeTypeDetails = {
+    name: "atf_schemes",
+    title: "ATF schemes",
+    style: "fundingProgramme",
+    colour: atfColour,
+    legend: atfLegend,
+  };
+  const showAtf: Writable<boolean> = showHideLayer("atf_schemes");
 
-  let lcwipName = "lcwip_schemes";
-  let lcwipTitle = "LCWIP schemes";
-  let lcwipShow = showHideLayer(lcwipName);
-  let lcwipStyle = "interventionType";
-  $: [lcwipColor, lcwipLegend] = pickStyle(lcwipStyle);
+  $: {
+    const [atfColour, atfLegend] = pickStyle(atfDetails.style);
+    atfDetails.colour = atfColour;
+    atfDetails.legend = atfLegend;
+  }
 
-  let finalInspectionsName = "final_inspections_schemes";
-  let finalInspectionsTitle = "Final inspection schemes";
-  let finalInspectionsShow = showHideLayer(finalInspectionsName);
-  let finalInspectionsStyle = "interventionType";
-  $: [finalInspectionsColor, finalInspectionsLegend] =
-    pickStyle("interventionType");
+  const [lcwipColour, lcwipLegend] = pickStyle("fundingProgramme");
+  let lcwipDetails: SchemeTypeDetails = {
+    name: "lcwip_schemes",
+    title: "LCWIP schemes",
+    style: "fundingProgramme",
+    colour: lcwipColour,
+    legend: lcwipLegend,
+  };
+  const showLcwip: Writable<boolean> = showHideLayer("lcwip_schemes");
+
+  $: {
+    const [lcwipColour, lcwipLegend] = pickStyle(lcwipDetails.style);
+    lcwipDetails.colour = lcwipColour;
+    lcwipDetails.legend = lcwipLegend;
+  }
+
+  console.log(atfDetails);
+  console.log(JSON.stringify(atfDetails));
+  $: {
+    console.log(atfSchemes);
+    console.log($atfSchemes);
+    console.log(JSON.stringify(atfSchemes))
+  }
+
+  const [finalInspectionsColour, finalInspectionsLegend] =
+    pickStyle("fundingProgramme");
+  let finalInspectionsDetails: SchemeTypeDetails = {
+    name: "finalInspections_schemes",
+    title: "Final Inspections schemes",
+    style: "fundingProgramme",
+    colour: finalInspectionsColour,
+    legend: finalInspectionsLegend,
+  };
+  const showFinalInspections: Writable<boolean> = showHideLayer(
+    "finalInspections_schemes",
+  );
+  $: {
+    const [finalInspectionsColour, finalInspectionsLegend] = pickStyle(
+      finalInspectionsDetails.style,
+    );
+    finalInspectionsDetails.colour = finalInspectionsColour;
+    finalInspectionsDetails.legend = finalInspectionsLegend;
+  }
 
   let localName = "local_schemes";
   let localTitle = "Your schemes";
@@ -69,9 +116,9 @@
         lcwipSchemes,
         finalInspectionsSchemes,
       );
-      $atfShow = true;
-      $lcwipShow = true;
-      $finalInspectionsShow = true;
+      $showAtf = true;
+      $showLcwip = true;
+      $showFinalInspections = true;
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
@@ -126,108 +173,30 @@
   {/if}
 
   <CheckboxGroup small>
-    {#if Object.entries($atfSchemes.schemes).length > 0}
-      <LayerControl name={atfName} title={atfTitle} bind:show={$atfShow}>
-        <span slot="help">
-          <p>
-            <WarningIcon text="Scheme data caveats" />Please note there are data
-            quality caveats for all scheme data:
-          </p>
-          <ul>
-            {#each $atfSchemes.notes ?? [] as note}
-              <li><p>{note}</p></li>
-            {/each}
-          </ul>
-        </span>
+    {#if atfSchemes && finalInspectionsSchemes && lcwipSchemes}
+    <SchemesLayerControl
+      details={atfDetails},
+      show={showAtf},
+      schemes={atfSchemes},
+      filterSchemeText={$filterAtfSchemeText},
+      filterInterventionText={$filterAtfInterventionText},
+    />
 
-        <div slot="controls" style="border: 1px solid black; padding: 8px;">
-          <Filters
-            source="ATF"
-            bind:schemesGj={$atfSchemes}
-            bind:filterSchemeText={$filterAtfSchemeText}
-            bind:filterInterventionText={$filterAtfInterventionText}
-          />
+    <SchemesLayerControl
+      details={finalInspectionsDetails},
+      show={showFinalInspections},
+      schemes={finalInspectionsSchemes},
+      filterSchemeText={$filterFinalInspectionsSchemeText},
+      filterInterventionText={$filterFinalInspectionsInterventionText},
+    />
 
-          <Select
-            label="Colour interventions"
-            choices={[
-              ["fundingProgramme", "By funding programme"],
-              ["interventionType", "By intervention type"],
-              ["currentMilestone", "By current milestone"],
-            ]}
-            bind:value={atfStyle}
-          />
-          <Legend rows={atfLegend} />
-        </div>
-      </LayerControl>
-    {/if}
-
-    {#if Object.entries($finalInspectionsSchemes.schemes).length > 0}
-      <LayerControl
-        name={finalInspectionsName}
-        title={finalInspectionsTitle}
-        bind:show={$finalInspectionsShow}
-      >
-        <span slot="help">
-          <p>
-            <WarningIcon text="Scheme data caveats" />Please note there are data
-            quality caveats for all scheme data:
-          </p>
-          <ul>
-            {#each $finalInspectionsSchemes.notes ?? [] as note}
-              <li><p>{note}</p></li>
-            {/each}
-          </ul>
-        </span>
-
-        <div slot="controls" style="border: 1px solid black; padding: 8px;">
-          <Filters
-            source="LCWIP"
-            bind:schemesGj={$finalInspectionsSchemes}
-            bind:filterSchemeText={$filterFinalInspectionsSchemeText}
-            bind:filterInterventionText={$filterFinalInspectionsInterventionText}
-          />
-
-          <Select
-            label="Colour interventions"
-            choices={[["interventionType", "By intervention type"]]}
-            bind:value={finalInspectionsStyle}
-          />
-          <Legend rows={finalInspectionsLegend} />
-        </div>
-      </LayerControl>
-    {/if}
-
-    {#if Object.entries($lcwipSchemes.schemes).length > 0}
-      <LayerControl name={lcwipName} title={lcwipTitle} bind:show={$lcwipShow}>
-        <span slot="help">
-          <p>
-            <WarningIcon text="Scheme data caveats" />Please note there are data
-            quality caveats for all scheme data:
-          </p>
-          <ul>
-            {#each $lcwipSchemes.notes ?? [] as note}
-              <li><p>{note}</p></li>
-            {/each}
-          </ul>
-        </span>
-
-        <div slot="controls" style="border: 1px solid black; padding: 8px;">
-          <Filters
-            source="LCWIP"
-            bind:schemesGj={$lcwipSchemes}
-            bind:filterSchemeText={$filterLcwipSchemeText}
-            bind:filterInterventionText={$filterLcwipInterventionText}
-          />
-
-          <Select
-            label="Colour interventions"
-            choices={[["interventionType", "By intervention type"]]}
-            bind:value={lcwipStyle}
-          />
-          <Legend rows={lcwipLegend} />
-        </div>
-      </LayerControl>
+    <SchemesLayerControl
+      details={lcwipDetails},
+      show={showLcwip},
+      schemes={lcwipSchemes},
+      filterSchemeText={$filterLcwipSchemeText},
+      filterInterventionText={$filterLcwipInterventionText},
+    />
     {/if}
   </CheckboxGroup>
 
@@ -277,35 +246,32 @@
 
 <InterventionLayer
   name="atf"
-  description={atfTitle}
-  show={$atfShow}
+  details={atfDetails}
+  show={showAtf}
   schemesGj={$atfSchemes}
   filterSchemeText={$filterAtfSchemeText}
   filterInterventionText={$filterAtfInterventionText}
-  color={atfColor}
 />
 
 <InterventionLayer
   name="finalInspections"
-  description={finalInspectionsTitle}
-  show={$finalInspectionsShow}
+  details={finalInspectionsDetails}
+  show={showFinalInspections}
   schemesGj={$finalInspectionsSchemes}
   filterSchemeText={$filterFinalInspectionsSchemeText}
   filterInterventionText={$filterFinalInspectionsInterventionText}
-  color={finalInspectionsColor}
 />
 
 <InterventionLayer
   name="lcwip"
-  description={lcwipTitle}
-  show={$lcwipShow}
+  details={lcwipDetails}
+  show={showLcwip}
   schemesGj={$lcwipSchemes}
   filterSchemeText={$filterLcwipSchemeText}
   filterInterventionText={$filterLcwipInterventionText}
-  color={lcwipColor}
 />
 
-<InterventionLayer
+<!-- <InterventionLayer
   name="local"
   description={localTitle}
   show={$localShow}
@@ -313,4 +279,4 @@
   filterSchemeText={$filterLocalSchemeText}
   filterInterventionText={$filterLocalInterventionText}
   color={localColor}
-/>
+/> -->
