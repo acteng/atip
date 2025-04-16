@@ -1,5 +1,14 @@
+import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
 import type { Writable } from "svelte/store";
-import type { Feature, Schemes } from "types";
+import type { Feature, SchemeData, Schemes } from "types";
+
+export type SchemeTypeDetails = {
+  name: string,
+  title: string,
+  style: string,
+  colour: DataDrivenPropertyValueSpecification<string>,
+  legend: [string, string][],
+}
 
 // Takes a GeoJSON file representing a bunch of scheme files combined into one.
 // Populates the two stores for each of ATF and LCWIP schemes.
@@ -7,6 +16,7 @@ export function setupSchemes(
   gj: Schemes,
   atfStore: Writable<Schemes>,
   lcwipStore: Writable<Schemes>,
+  finalInspectionsStore: Writable<Schemes>,
 ) {
   let atfGj: Schemes = {
     type: "FeatureCollection",
@@ -23,11 +33,20 @@ export function setupSchemes(
     notes: gj.notes,
   };
 
+  let finalInspectionsGj: Schemes = {
+    type: "FeatureCollection",
+    features: [],
+    schemes: {},
+    notes: gj.notes,
+  };
+
   for (let [scheme_reference, scheme] of Object.entries(gj.schemes)) {
-    if (scheme.pipeline) {
+    if (scheme.browse?.sketch_source === "LCWIP mapping") {
       lcwipGj.schemes[scheme_reference] = scheme;
-    } else {
+    } else if (scheme.browse?.sketch_source === "ATF assessment") {
       atfGj.schemes[scheme_reference] = scheme;
+    } else if (scheme.browse?.sketch_source === "Final inspection sketches") {
+      finalInspectionsGj.schemes[scheme_reference] = scheme;
     }
   }
 
@@ -37,11 +56,36 @@ export function setupSchemes(
     }
 
     let scheme_reference = feature.properties.scheme_reference;
-    let is_atf = Object.hasOwn(atfGj.schemes, scheme_reference);
 
-    let scheme = is_atf
-      ? atfGj.schemes[scheme_reference]
-      : lcwipGj.schemes[scheme_reference];
+    // @ts-expect-error we will replace it shortly
+    let scheme: SchemeData = {};
+
+    let tempGJ: Schemes = {
+      type: "FeatureCollection",
+      features: [],
+      schemes: {},
+      notes: gj.notes,
+    };
+    if (
+      feature.properties.sketch_source === "ATF assessment" &&
+      Object.hasOwn(atfGj.schemes, scheme_reference)
+    ) {
+      scheme = atfGj.schemes[scheme_reference];
+      tempGJ = atfGj;
+    } else if (
+      feature.properties.sketch_source === "LCWIP mapping" &&
+      Object.hasOwn(lcwipGj.schemes, scheme_reference)
+    ) {
+      scheme = lcwipGj.schemes[scheme_reference];
+      tempGJ = lcwipGj;
+    } else if (
+      feature.properties.sketch_source === "Final inspection sketches" &&
+      Object.hasOwn(finalInspectionsGj.schemes, scheme_reference)
+    ) {
+      scheme = finalInspectionsGj.schemes[scheme_reference];
+      tempGJ = finalInspectionsGj;
+    }
+
     if (scheme.browse) {
       // TODO For easy styling, copy one field from scheme to all its features.
       // As we have more cases like this, revisit what's most performant.
@@ -50,14 +94,14 @@ export function setupSchemes(
       feature.properties.current_milestone = scheme.browse.current_milestone;
     }
 
-    let gj = is_atf ? atfGj : lcwipGj;
     // Force numeric IDs (skipping 0) for hovering to work
-    feature.id = gj.features.length + 1;
-    gj.features.push(feature);
+    feature.id = tempGJ.features.length + 1;
+    tempGJ.features.push(feature);
   }
 
   atfStore.set(atfGj);
   lcwipStore.set(lcwipGj);
+  finalInspectionsStore.set(finalInspectionsGj);
 }
 
 // These should ideally be fixed during upstream data validation processes.
@@ -119,7 +163,7 @@ export function importAllLocalSketches(): Schemes {
 
       result.schemes = { ...result.schemes, ...gj.schemes };
       result.features = [...result.features, ...gj.features];
-    } catch (err) {}
+    } catch (err) { }
   }
 
   // Fix feature IDs
