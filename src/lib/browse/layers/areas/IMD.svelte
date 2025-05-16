@@ -27,9 +27,9 @@
   <span slot="help">
     <p>
       The 2019 English IMD scores come from <ExternalLink
-        href="https://data-communities.opendata.arcgis.com/datasets/communities::indices-of-multiple-deprivation-imd-2019-1/explore"
+        href="https://communitiesopendata-communities.hub.arcgis.com/datasets/d473e9ad137240b6aa47c9e3f4bdd674_0/explore"
       >
-        DLUCH GIS
+        Ministry of Housing, Communities and Local Government (MHCLG) GIS
       </ExternalLink>. Note the LSOAs identified are from the 2011 census. A
       detailed breakdown of the score across different categories can be found <ExternalLink
         href="http://dclgapps.communities.gov.uk/imd/iod_index.html"
