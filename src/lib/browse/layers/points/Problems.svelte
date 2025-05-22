@@ -47,7 +47,7 @@
     </p>
     <p>
       This layer is manually copied from a copy of the DA Log. The data is
-      recent as of 10 June 2024.
+      recent as of 14 May 2025.
     </p>
   </span>
 
