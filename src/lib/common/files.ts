@@ -117,6 +117,7 @@ export function serializeSchemes(authority: string, gj: Schemes): Schemes {
   }
   copy.authority = authority;
   copy.origin = "atip-v2";
+  copy.sketch_exported = new Date().toISOString();
   return copy;
 }
 
