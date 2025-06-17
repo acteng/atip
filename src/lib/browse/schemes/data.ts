@@ -2,14 +2,11 @@ import type { Writable } from "svelte/store";
 import type { Feature, SchemeData, Schemes } from "types";
 
 export function isSingleSketchFile(gj: Schemes): boolean {
-  console.log(gj.schemes);
   const filteredSchemes = Object.entries(gj.schemes).filter(
     ([scheme_reference, scheme]) => {
-      console.log(scheme);
       return scheme.browse === undefined || scheme.browse === null;
     },
   );
-  console.log(filteredSchemes);
   return filteredSchemes.length > 0;
 }
 
