@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { json } from "stream/consumers";
   import {
     ButtonGroup,
     CheckboxGroup,
@@ -9,10 +8,14 @@
     SecondaryButton,
     Select,
   } from "govuk-svelte";
-  import { appVersion, Legend, WarningIcon } from "lib/common";
-  import { downloadGeneratedFile } from "lib/common/files";
+  import {
+    appVersion,
+    getAuthoritiesGeoJson,
+    Legend,
+    WarningIcon,
+  } from "lib/common";
+  import { downloadGeneratedFile, importFile } from "lib/common/files";
   import { constructMatchExpression } from "lib/maplibre";
-  import { schemeName } from "lib/sketch/config";
   import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import LayerControl from "../layers/LayerControl.svelte";
@@ -70,7 +73,9 @@
   function loadMainFile(filename: string, text: string) {
     try {
       const geojson = JSON.parse(text);
-      if (!isSingleSketchFile(geojson)) {
+      if (isSingleSketchFile(geojson)) {
+        loadSketchFile(filename, text);
+      } else {
         setupSchemes(
           geojson,
           atfSchemes,
@@ -81,19 +86,18 @@
         $lcwipShow = true;
         $finalInspectionsShow = true;
         errorMessage = "";
-      } else {
-        importAllLocalSketches();
-        $localSchemes.features.concat(geojson.features);
-        Object.entries(geojson.schemes).forEach(
-          ([scheme_reference, scheme]) => {
-            // @ts-expect-error we know that these will have the right shape because only we create files with the schemes field
-            $localSchemes.schemes[scheme_reference] = scheme;
-          },
-        );
       }
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
     }
+  }
+
+  async function loadSketchFile(filename: string, text: string) {
+    const authoritiesGj = await getAuthoritiesGeoJson();
+
+    importFile(filename, text, authoritiesGj);
+
+    importLocalSketches();
   }
 
   function importLocalSketches() {
