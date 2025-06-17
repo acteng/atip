@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { json } from "stream/consumers";
   import {
     ButtonGroup,
     CheckboxGroup,
@@ -11,12 +12,17 @@
   import { appVersion, Legend, WarningIcon } from "lib/common";
   import { downloadGeneratedFile } from "lib/common/files";
   import { constructMatchExpression } from "lib/maplibre";
+  import { schemeName } from "lib/sketch/config";
   import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import LayerControl from "../layers/LayerControl.svelte";
   import { showHideLayer } from "../layers/url";
   import { atfFundingProgrammes, currentMilestones } from "./colors";
-  import { importAllLocalSketches, setupSchemes } from "./data";
+  import {
+    importAllLocalSketches,
+    isSingleSketchFile,
+    setupSchemes,
+  } from "./data";
   import Filters from "./Filters.svelte";
   import InterventionLayer from "./InterventionLayer.svelte";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
@@ -63,16 +69,28 @@
 
   function loadMainFile(filename: string, text: string) {
     try {
-      setupSchemes(
-        JSON.parse(text),
-        atfSchemes,
-        lcwipSchemes,
-        finalInspectionsSchemes,
-      );
-      $atfShow = true;
-      $lcwipShow = true;
-      $finalInspectionsShow = true;
-      errorMessage = "";
+      const geojson = JSON.parse(text);
+      if (!isSingleSketchFile(geojson)) {
+        setupSchemes(
+          geojson,
+          atfSchemes,
+          lcwipSchemes,
+          finalInspectionsSchemes,
+        );
+        $atfShow = true;
+        $lcwipShow = true;
+        $finalInspectionsShow = true;
+        errorMessage = "";
+      } else {
+        importAllLocalSketches();
+        $localSchemes.features.concat(geojson.features);
+        Object.entries(geojson.schemes).forEach(
+          ([scheme_reference, scheme]) => {
+            // @ts-expect-error we know that these will have the right shape because only we create files with the schemes field
+            $localSchemes.schemes[scheme_reference] = scheme;
+          },
+        );
+      }
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
     }
