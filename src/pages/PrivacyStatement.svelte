@@ -111,4 +111,5 @@
   aboutHref="about.html"
   privacyHref="privacy.html"
   accessibilityHref="accessibility.html"
+  footerTopBarColour="#007161"
 />
