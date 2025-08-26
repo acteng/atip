@@ -24,10 +24,10 @@ export const colors = {
 
   // Thanks to https://github.com/cyipt/cyipt-website/issues/23
   cycle_paths: {
-    track: "#007e00ff",
-    lane: "#1100ffff",
-    shared_use_segregated: "#FF9900",
-    shared_use_unsegregated: "#E7E700",
+    track: "#56B4E9",
+    lane: "#CC79A7",
+    shared_use_segregated: "#F0E442",
+    shared_use_unsegregated: "#D55E00",
   },
 
   rights_of_way: {
