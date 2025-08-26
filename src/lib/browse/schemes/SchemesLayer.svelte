@@ -69,9 +69,6 @@
         lcwipSchemes,
         finalInspectionsSchemes,
       );
-      $atfShow = true;
-      $lcwipShow = true;
-      $finalInspectionsShow = true;
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
