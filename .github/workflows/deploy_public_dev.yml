@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  VITE_MAPTILER_API_KEY: '${{ secrets.MAPTILER_API_KEY }}'
+
 jobs:
   build:
     runs-on: ubuntu-latest
