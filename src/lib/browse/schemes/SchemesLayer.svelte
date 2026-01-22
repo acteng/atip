@@ -8,15 +8,24 @@
     SecondaryButton,
     Select,
   } from "govuk-svelte";
-  import { appVersion, Legend, WarningIcon } from "lib/common";
-  import { downloadGeneratedFile } from "lib/common/files";
+  import {
+    appVersion,
+    getAuthoritiesGeoJson,
+    Legend,
+    WarningIcon,
+  } from "lib/common";
+  import { downloadGeneratedFile, importFile } from "lib/common/files";
   import { constructMatchExpression } from "lib/maplibre";
   import type { DataDrivenPropertyValueSpecification } from "maplibre-gl";
   import { colorInterventionsBySchema, schemaLegend } from "schemas";
   import LayerControl from "../layers/LayerControl.svelte";
   import { showHideLayer } from "../layers/url";
   import { atfFundingProgrammes, currentMilestones } from "./colors";
-  import { importAllLocalSketches, setupSchemes } from "./data";
+  import {
+    importAllLocalSketches,
+    isSingleSketchFile,
+    setupSchemes,
+  } from "./data";
   import Filters from "./Filters.svelte";
   import InterventionLayer from "./InterventionLayer.svelte";
   import LoadRemoteSchemeData from "./LoadRemoteSchemeData.svelte";
@@ -63,16 +72,29 @@
 
   function loadMainFile(filename: string, text: string) {
     try {
-      setupSchemes(
-        JSON.parse(text),
-        atfSchemes,
-        lcwipSchemes,
-        finalInspectionsSchemes,
-      );
+      const geojson = JSON.parse(text);
+      if (isSingleSketchFile(geojson)) {
+        loadSketchFile(filename, text);
+      } else {
+        setupSchemes(
+          geojson,
+          atfSchemes,
+          lcwipSchemes,
+          finalInspectionsSchemes,
+        );
+      }
       errorMessage = "";
     } catch (err) {
       errorMessage = `The file you loaded is broken: ${err}`;
     }
+  }
+
+  async function loadSketchFile(filename: string, text: string) {
+    const authoritiesGj = await getAuthoritiesGeoJson();
+
+    importFile(filename, text, authoritiesGj);
+
+    importLocalSketches();
   }
 
   function importLocalSketches() {
