@@ -82,9 +82,6 @@
           lcwipSchemes,
           finalInspectionsSchemes,
         );
-        $atfShow = true;
-        $lcwipShow = true;
-        $finalInspectionsShow = true;
       }
       errorMessage = "";
     } catch (err) {
