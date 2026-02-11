@@ -21,6 +21,7 @@
     Popup,
   } from "lib/common";
   import {
+    checkThenExportAll,
     countFilesPerAuthority,
     importFile,
     importOldFiles,
@@ -63,6 +64,7 @@
     }
 
     filesPerAuthority = countFilesPerAuthority();
+    checkThenExportAll();
   });
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
