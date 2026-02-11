@@ -7,7 +7,8 @@ export async function resetSketch(
   schema: string = "v1",
 ): Promise<string> {
   page.on("dialog", (dialog) => {
-    if (dialog.message() === "What do you want to name your new file?") {
+    if (dialog.message() === "What do you want to name your new file?"
+      || dialog.message().includes("Really delete")) {
       dialog.accept(filename);
     } else {
       dialog.dismiss();
