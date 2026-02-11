@@ -6,10 +6,17 @@ export async function resetSketch(
   page: Page,
   schema: string = "v1",
 ): Promise<string> {
+  page.on("dialog", (dialog) => {
+    if (dialog.message() === "What do you want to name your new file?") {
+      dialog.accept(filename);
+    } else {
+      dialog.dismiss();
+    }
+  });
   await page.goto(`/files.html?authority=LAD_Adur&schema=${schema}`);
 
   let filename = uuidv4();
-  page.on("dialog", (dialog) => dialog.accept(filename));
+
   await page.getByRole("button", { name: "Create new file" }).click();
   await expect(page).toHaveURL(/.*scheme.html\?authority=LAD_Adur/);
 

@@ -19,6 +19,7 @@
   import {
     checkThenExportAll,
     downloadGeneratedFile,
+    exportFile,
     getEditUrl,
     getKey,
     importFile,
