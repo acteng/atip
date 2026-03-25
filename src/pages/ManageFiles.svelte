@@ -17,6 +17,7 @@
     Header,
   } from "lib/common";
   import {
+    checkThenExportAll,
     downloadGeneratedFile,
     exportFile,
     getEditUrl,
@@ -52,6 +53,8 @@
     ) {
       window.location.href = `choose_area.html?schema=${$schemaStore}&error=Authority name not found: ${authority}`;
     }
+
+    checkThenExportAll();
   });
 
   function renameFile(filename: string) {

@@ -1,4 +1,5 @@
 import { findSmallestAuthority, type AuthorityBoundaries } from "boundaries";
+import JSZip from "jszip";
 import type { Schema, Schemes } from "types";
 
 // Returns the local storage key for a file
@@ -130,6 +131,37 @@ export function exportFile(authority: string, filename: string, gj: Schemes) {
   );
 }
 
+export function checkThenExportAll() {
+  let today = getDateString();
+  let lastBackup =
+    window.localStorage.getItem("sketches-last-backup-prompt") ?? "";
+  if (today != lastBackup) {
+    if (
+      window.confirm(`Would you like to download a backup copy of your files?`)
+    ) {
+      exportAll();
+    }
+  }
+  window.localStorage.setItem("sketches-last-backup-prompt", getDateString());
+}
+
+// Downloads all sketches as .zip
+async function exportAll() {
+  let name = `scheme_sketch_backup_${getDateString()}`;
+  let zip = new JSZip();
+  let folder = zip.folder(name)!;
+
+  for (let key of getFileKeys()) {
+    folder.file(
+      `${key.replaceAll("/", "-")}.json`,
+      window.localStorage.getItem(key)!,
+    );
+  }
+
+  let bytes = await zip.generateAsync({ type: "arraybuffer" });
+  downloadBinaryFile(bytes, `${name}.zip`);
+}
+
 export function detectSchema(gj: any): Schema {
   // Blindly assume the input is valid, and let the try/catch handle otherwise
   try {
@@ -206,4 +238,38 @@ function stripPrefix(value: string, prefix: string): string {
 
 function stripSuffix(value: string, suffix: string): string {
   return value.endsWith(suffix) ? value.slice(0, -suffix.length) : value;
+}
+
+function getFileKeys(): string[] {
+  let results: string[] = [];
+  for (let i = 0; i < window.localStorage.length; i++) {
+    let key = window.localStorage.key(i)!;
+    if (key.startsWith("sketch")) {
+      results.push(key);
+    }
+  }
+  return results;
+}
+
+function getDateString(): string {
+  let today = new Date();
+  let day = today.getDate().toString().padStart(2, "0");
+  let month = (today.getMonth() + 1).toString().padStart(2, "0");
+  return `${day}_${month}_${today.getFullYear()}`;
+}
+
+function downloadBinaryFile(bytes: ArrayBuffer, filename: string) {
+  let blob = new Blob([bytes], { type: "application/octet-stream" });
+  let url = URL.createObjectURL(blob);
+
+  let link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.style.display = "none";
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }

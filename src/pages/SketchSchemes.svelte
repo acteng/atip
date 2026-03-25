@@ -13,7 +13,7 @@
     MapLibreMap,
   } from "lib/common";
   import ExternalLink from "lib/common/ExternalLink.svelte";
-  import { getKey } from "lib/common/files";
+  import { checkThenExportAll, getKey } from "lib/common/files";
   import { cfg } from "lib/sketch/config";
   import FileManagement from "lib/sketch/FileManagement.svelte";
   import { map as sketchMapStore } from "scheme-sketcher-lib/config";
@@ -61,6 +61,7 @@
     initAll();
 
     boundaryGeojson = await loadAuthorityBoundary();
+    checkThenExportAll();
   });
 
   async function loadAuthorityBoundary(): Promise<AuthorityBoundaries> {
