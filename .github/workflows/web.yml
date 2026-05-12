@@ -9,6 +9,9 @@ on:
 env:
   VITE_MAPTILER_API_KEY: '${{ secrets.MAPTILER_API_KEY }}'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
