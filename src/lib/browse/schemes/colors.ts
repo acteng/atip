@@ -1,11 +1,11 @@
 export let atfFundingProgrammes = {
-  ATF2: "#1b9e77",
-  "ATF2 or ATF3": "#d95f02",
-  ATF3: "#7570b3",
-  ATF4: "#e7298a",
-  ATF4E: "#66a61e",
-  ATF5: "#e6ab02",
-  CATF: "#a6761d",
+  ATF2: "#1B9E77",
+  "ATF2 or ATF3": "#D95F02",
+  ATF3: "#7570B3",
+  ATF4: "#E7298A",
+  ATF4E: "#66A61E",
+  ATF5: "#E6AB02",
+  CATF: "#A6761D",
   IST: "#666666",
 };
 
