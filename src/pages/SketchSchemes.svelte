@@ -22,6 +22,7 @@
     ImageLayer,
     InterventionLayer,
     NewFeatureForm,
+    StreetViewMode,
     Toolbox,
   } from "scheme-sketcher-lib/draw";
   import { emptySchemes, mode } from "scheme-sketcher-lib/draw/stores";
@@ -117,6 +118,7 @@
         <InterventionLayer {cfg} {gjSchemes} />
         <ImageLayer {cfg} />
         <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
+        <StreetViewMode {cfg} />
       {/if}
     </MapLibreMap>
   </div>
