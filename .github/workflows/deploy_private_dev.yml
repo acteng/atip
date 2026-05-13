@@ -48,4 +48,4 @@ jobs:
         with:
           project_id: ${{ vars.PROJECT_ID }}
           deliverables: backend/app_private_dev.yaml
-          flags: '--service-account=gh-builder-service-account@dft-rlg-atip-test.iam.gserviceaccount.com'
+          flags: '--service-account=gh-builder-service-account@dft-rlg-atip-dev.iam.gserviceaccount.com'
