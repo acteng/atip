@@ -2,8 +2,9 @@ name: Deploy to app engine (internal dev env)
 
 on:
   push:
-    branches:
-      - main
+    branches-ignore:
+      - 'gh-pages'
+      - 'nobuild_**'
   workflow_dispatch:
 
 env:
