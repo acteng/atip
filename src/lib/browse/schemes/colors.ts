@@ -6,7 +6,7 @@ export let atfFundingProgrammes = {
   ATF4E: "#66A61E",
   ATF5: "#E6AB02",
   CATF: "#A6761D",
-  IST: "#666666",
+  PLACEHOLDER: "#666666",
 };
 
 export let currentMilestones = {
