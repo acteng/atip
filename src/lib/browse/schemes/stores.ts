@@ -20,6 +20,14 @@ export const finalInspectionsSchemes: Writable<Schemes> = writable({
 export const filterFinalInspectionsInterventionText: Writable<string> =
   writable("");
 export const filterFinalInspectionsSchemeText: Writable<string> = writable("");
+export const istSchemes: Writable<Schemes> = writable({
+  type: "FeatureCollection",
+  features: [],
+  schemes: {},
+});
+export const filterISTInterventionText: Writable<string> =
+  writable("");
+export const filterISTSchemeText: Writable<string> = writable("");
 
 export const lcwipSchemes: Writable<Schemes> = writable({
   type: "FeatureCollection",
