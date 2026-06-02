@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "fmt": "npx prettier --write *.html tests/* src/* backend/*.js",
+    "fmt": "npm run prettier-format && npm run terraform-format",
     "test": "npx playwright test",
     "test-server": "node tests/test-server/server.js",
     "check": "svelte-check --tsconfig ./tsconfig.json",
+    "prettier-format": "npx prettier --write *.html tests/* src/* backend/*.js",
     "setup-govuk": "sass src/style/main.sass src/style/main.css; rm -rf public/assets; mkdir -p public/assets; cp -R node_modules/govuk-frontend/dist/govuk/assets/ public/",
+    "terraform-format": "terraform -chdir=cloud fmt -recursive",
     "generate-random-schemes": "npx ts-node --project tsconfig_tsnode.json --esm src/scripts/random_schemes.ts"
   },
   "devDependencies": {
