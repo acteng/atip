@@ -20,3 +20,7 @@ ctrf
 
 # playwright
 test-results
+
+# terraform
+.terraform/
+/cloud/browse/tf-backend/terraform.tfstate*
