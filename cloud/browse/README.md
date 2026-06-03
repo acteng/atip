@@ -11,3 +11,4 @@ This service is hosted on [Google Cloud Platform](https://console.cloud.google.c
 To provision the cloud infrastructure:
 
 1. Provision the [Terraform backend](tf-backend/README.md)
+2. Provision the [Docker repository](docker-repository/README.md)
