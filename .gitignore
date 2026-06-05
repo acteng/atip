@@ -11,3 +11,9 @@ public/layers
 public/private_layers
 backend/app.yaml
 ctrf
+
+# IDE
+.idea
+
+# env
+.env

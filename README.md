@@ -7,10 +7,28 @@ This repository contains the Scheme Sketcher and Scheme Browser, two tools for m
 ## Prerequisites
 
 1. Install Node 22
+1. Install [Bitwarden CLI](https://bitwarden.com/help/cli/#download-and-install)
 1. Install Google Cloud CLI and authenticate using ADCs:
    ```bash
    gcloud auth application-default login
    ```
+
+## Setup
+
+If you have an ATE Bitwarden account you'll need to login via the CLI and configure the application's environment
+variables by fetching secrets from Bitwarden.
+
+```bash
+./get-env.sh
+```
+
+You can also configure the application locally by setting the following environment variables:
+
+| Name                   | Value                                                                                                      |
+|------------------------|------------------------------------------------------------------------------------------------------------|
+| VITE_MAPTILER_API_KEY  | Maptiler API key                                                                                           |
+| VITE_RESOURCE_BASE     | Sets the path for all resource requests.                                                                   |
+| VITE_MIMIC_GCP_LOCALLY | Boolean value that configures whether to show private layers locally if set to true and local files exist. |
 
 ## Running locally
 
@@ -54,10 +72,16 @@ This repository contains the Scheme Sketcher and Scheme Browser, two tools for m
    npm install
    ```
 
+1. Authenticate with Google
+   
+   ```bash
+   gcloud auth application-default login
+   ```
+
 1. Run express app
 
    ```bash
-   USE_IAP=false npm start
+   GCS_BUCKET=dft-rlg-atip-dev USE_IAP=false npm start
    ```
 
 1. Open http://localhost:8080
