@@ -86,6 +86,50 @@ You can also configure the application locally by setting the following environm
 
 1. Open http://localhost:8080
 
+## Running locally using Docker
+
+To run the server as a container:
+
+1. Build the svelte app
+
+   ```bash
+   npm install && npm run build
+   ```
+
+2. Copy over the built svelte app
+
+   ```bash
+   cp -r dist backend/
+   ```
+
+1. Build the Docker image
+
+   ```bash
+   docker build -t plan .
+   ```
+
+1. Authenticate with Google
+   
+   ```bash
+   gcloud auth application-default login
+   ```
+   
+1. Run the Docker image
+
+   ```bash
+   ADC=~/.config/gcloud/application_default_credentials.json
+
+   docker run --rm -it \
+     -e GCS_BUCKET=dft-rlg-atip-dev \
+     -e USE_IAP=false \
+     -e GOOGLE_APPLICATION_CREDENTIALS=/tmp/keys/google_credentials.json \
+     -v ${ADC}:/tmp/keys/google_credentials.json:ro \
+     -p 8080:8080 \
+      plan
+   ```
+   
+1. Open http://127.0.0.1:8080
+
 
 ### Developing with Vite
 
