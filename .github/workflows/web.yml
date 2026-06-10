@@ -8,6 +8,7 @@ on:
 
 env:
   VITE_MAPTILER_API_KEY: '${{ secrets.MAPTILER_API_KEY }}'
+  VITE_RESOURCE_BASE: 'https://atip.uk'
 
 permissions:
   contents: write

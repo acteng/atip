@@ -57,6 +57,7 @@ app.get("/data/*", async (req, resp) => {
     // Return the whole file?
     if (!req.headers.range) {
       let stream = storage.bucket(bucket).file(path).createReadStream();
+      resp.setHeader("Content-Length", metadata.size)
       stream.pipe(resp);
       return;
     }

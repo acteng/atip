@@ -4,6 +4,89 @@ This repository contains the Scheme Sketcher and Scheme Browser, two tools for m
 
 (Note this project used to be called ATIP, Active Travel Infrastructure Platform. This repo retains the old name.)
 
+## Prerequisites
+
+1. Install Node 22
+1. Install [Bitwarden CLI](https://bitwarden.com/help/cli/#download-and-install)
+1. Install Google Cloud CLI and authenticate using ADCs:
+   ```bash
+   gcloud auth application-default login
+   ```
+
+## Setup
+
+If you have an ATE Bitwarden account you'll need to login via the CLI and configure the application's environment
+variables by fetching secrets from Bitwarden.
+
+```bash
+./get-env.sh
+```
+
+You can also configure the application locally by setting the following environment variables:
+
+| Name                   | Value                                                                                                      |
+|------------------------|------------------------------------------------------------------------------------------------------------|
+| VITE_MAPTILER_API_KEY  | Maptiler API key                                                                                           |
+| VITE_RESOURCE_BASE     | Sets the path for all resource requests.                                                                   |
+| VITE_MIMIC_GCP_LOCALLY | Boolean value that configures whether to show private layers locally if set to true and local files exist. |
+
+## Running locally
+
+### Build svelte app
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+1. Build web assets
+
+   ```bash
+   npm run setup-govuk
+   ```
+
+1. Build the svelte app
+
+   ```bash
+   npm run build
+   ```
+
+### Run express app
+
+1. With the svelte app built move into the `backend` directory
+
+   ```bash
+   cd backend
+   ```
+
+1. Copy over the build svelte app
+
+   ```bash
+   cp -r ../dist .
+   ```
+
+1. Install backend dependencies
+
+   ```bash
+   npm install
+   ```
+
+1. Authenticate with Google
+   
+   ```bash
+   gcloud auth application-default login
+   ```
+
+1. Run express app
+
+   ```bash
+   GCS_BUCKET=dft-rlg-atip-dev USE_IAP=false npm start
+   ```
+
+1. Open http://localhost:8080
+
+
 ## Usage
 
 The development version is available for use at <https://acteng.github.io/atip>. Note this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of sketch files.
