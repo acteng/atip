@@ -1,6 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
+  workers: 1,
   webServer: [
     {
     command: "npx vite --port 8080",
