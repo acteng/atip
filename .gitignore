@@ -17,3 +17,6 @@ ctrf
 
 # env
 .env
+
+# playwright
+test-results
