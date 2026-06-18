@@ -5,6 +5,11 @@ import wasmPack from "vite-plugin-wasm-pack";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  server: {
+    proxy: {
+      "/data": "http://localhost:8080"
+    }
+  },
   build: {
     rollupOptions: {
       input: {
