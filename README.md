@@ -87,6 +87,43 @@ You can also configure the application locally by setting the following environm
 1. Open http://localhost:8080
 
 
+### Developing with Vite
+
+When developing locally you may wish to use Vite to run the server locally for hot reloading.
+In order to ensure you can pull assets from GCP storage you will need to run the express app.
+
+1. Authenticate with Google
+   
+   ```bash
+   gcloud auth application-default login
+   ```
+
+1. Run express app
+
+   ```bash
+   cd backend
+   
+   GCS_BUCKET=dft-rlg-atip-dev USE_IAP=false npm start &
+   ```
+
+1. Run Vite development server
+
+   ```bash
+   cd ..
+   
+   npm run dev
+   ```
+
+1. Open http://localhost:5173
+
+1. After interrupting Vite tidy up the background Express app
+
+   ```bash
+   # presuming the job ID is 1
+   # you can check this by running $ jobs
+   kill %1
+   ```
+
 ## Usage
 
 The development version is available for use at <https://acteng.github.io/atip>. Note this is not a production service and we make no guarantees about the site's uptime or about backwards compatibility of sketch files.
