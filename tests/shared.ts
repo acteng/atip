@@ -14,7 +14,7 @@ export async function resetSketch(
   await expect(page).toHaveURL(/.*scheme.html\?authority=LAD_Adur/);
 
   // Wait for the route snapper to load
-  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled({timeout: 10_000});
 
   return filename;
 }

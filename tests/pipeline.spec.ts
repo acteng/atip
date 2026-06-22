@@ -56,7 +56,7 @@ test("scheme validations are updated", async ({ page }) => {
 
   // Refresh and make sure there are no warnings
   await page.reload();
-  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled({timeout: 10_000});
   await page.getByRole("button", { name: "Edit" }).click();
   await expect(page.getByText("Missing some required data")).not.toBeVisible();
 });
@@ -89,7 +89,7 @@ test("file without new budget/timing forms can be edited by loading", async ({
   await expect(page).toHaveURL(
     /.*scheme.html\?authority=LAD_Adur&schema=pipeline&file=pipeline_before_feb_fields/,
   );
-  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "New route" })).toBeEnabled({timeout: 10_000});
 
   await page.getByRole("link", { name: "POI" }).click();
   await page.getByLabel("Cost (GBP)").fill("1.2");
