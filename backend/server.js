@@ -27,7 +27,7 @@ app.use(express.static("dist"));
 
 // Proxy requests to /data to a private GCS bucket
 app.get("/data/*filepath", async (req, resp) => {
-  let path = req.params.filepath.join('/');
+  let path = req.params.filepath.join("/");
   console.log(`Proxying request for ${path} to GCS bucket ${bucket}`);
   let file = storage.bucket(bucket).file(path);
 
@@ -57,7 +57,7 @@ app.get("/data/*filepath", async (req, resp) => {
     // Return the whole file?
     if (!req.headers.range) {
       let stream = storage.bucket(bucket).file(path).createReadStream();
-      resp.setHeader("Content-Length", metadata.size)
+      resp.setHeader("Content-Length", metadata.size);
       stream.pipe(resp);
       return;
     }
@@ -97,7 +97,7 @@ async function checkIap(req, resp, next) {
       iapJwt,
       iapPublicKeys.pubkeys,
       expectedAudience,
-      ["https://cloud.google.com/iap"]
+      ["https://cloud.google.com/iap"],
     );
     // Plumb back the email to display in Svelte using session cookies
     // NOTE! This shouldn't be considered secure; the user can modify it. Only
