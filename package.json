@@ -53,6 +53,6 @@
     "scheme-sketcher-lib": "github:acteng/scheme-sketcher-lib",
     "svelte": "^4.2.10",
     "svelte-maplibre": "^0.9.7",
-    "uuid": "^9.0.1"
+    "uuid": "^14.0.0"
   }
 }
