@@ -26,8 +26,8 @@ if (process.env.USE_IAP !== "false") {
 app.use(express.static("dist"));
 
 // Proxy requests to /data to a private GCS bucket
-app.get("/data/*", async (req, resp) => {
-  let path = req.params[0];
+app.get("/data/*filepath", async (req, resp) => {
+  let path = req.params.filepath.join('/');
   console.log(`Proxying request for ${path} to GCS bucket ${bucket}`);
   let file = storage.bucket(bucket).file(path);
 
