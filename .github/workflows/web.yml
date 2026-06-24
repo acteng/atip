@@ -45,8 +45,6 @@ jobs:
               continue
             fi
 
-            
-
             if [[ $branch == deployme/* ]]; then
               echo "Skipping deployme dependabot branch $branch"
               continue
