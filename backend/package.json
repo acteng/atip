@@ -13,6 +13,6 @@
   "dependencies": {
     "@google-cloud/storage": "~7.21.0",
     "express": "~5.2.1",
-    "google-auth-library": "^9.0.0"
+    "google-auth-library": "~10.7.0"
   }
 }
