@@ -122,6 +122,7 @@ export interface InterventionProps {
   // The schema is v1, unless a field here is present
   pipeline?: PipelineIntervention;
   v2?: V2Intervention;
+  v3?: V3Intervention;
 }
 
 export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
@@ -134,6 +135,19 @@ export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
 }
 
 export interface V2Intervention {
+  intervention_type:
+    | "area"
+    | "route"
+    | "crossing"
+    | "modal filter"
+    | "junction treatment"
+    | "other"
+    | "";
+  intended_uses: "cycling" | "walking_wheeling" | "all" | "";
+  work_type: "new" | "improvement" | "existing" | "";
+}
+
+export interface V3Intervention {
   intervention_type:
     | "area"
     | "route"
