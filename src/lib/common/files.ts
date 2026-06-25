@@ -112,11 +112,12 @@ export function importOldFiles(authority: string) {
 // Converts the state into a ready-to-save form
 export function serializeSchemes(authority: string, gj: Schemes): Schemes {
   let copy = JSON.parse(JSON.stringify(gj));
+  console.log(JSON.stringify(gj));
   for (let feature of copy.features) {
     delete feature.properties?.hide_while_editing;
   }
   copy.authority = authority;
-  copy.origin = "atip-v2";
+  copy.origin = "PYATS-v3";
   copy.sketch_exported = new Date().toISOString();
   return copy;
 }

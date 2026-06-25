@@ -6,6 +6,7 @@
   import type { InterventionProps, OurSchemeData, Schemes } from "types";
   import FormV1 from "./FormV1.svelte";
   import FormV2 from "./FormV2.svelte";
+  import FormV3 from "./v3/FormV3.svelte";
   import PipelineForm from "./pipeline/PipelineForm.svelte";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
 
@@ -31,4 +32,6 @@
   <PipelineForm {gjSchemes} bind:props />
 {:else if $schema == "v2"}
   <FormV2 {gjSchemes} bind:props />
+{:else if $schema == "v3"}
+  <FormV3 {gjSchemes} bind:props />
 {/if}

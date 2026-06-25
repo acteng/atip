@@ -13,16 +13,20 @@
   import type { InterventionProps, Schemes } from "types";
   import { v4 as uuidv4 } from "uuid";
   import { schemeName } from "../config";
-    import FormCrossing from "./FormCrossing.svelte";
+  import FormCrossing from "./FormCrossing.svelte";
 
   export let gjSchemes: Writable<Schemes>;
   export let props: FeatureProps<InterventionProps>;
 
-  props.v2 ||= {
+  props.v3 ||= {
     intervention_type: "",
-    intended_uses: "",
-    work_type: "",
   };
+
+  $: {
+    if (props.v3?.intervention_type === "crossing") {
+      props.v3.crossing = props.v3.crossing || {};
+    }
+  }
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -70,29 +74,10 @@
     bind:value={props.v3.intervention_type}
   />
 
-  {#if props.v3.intervention_type === "crossing"}
-    <FormCrossing/>
+  {#if props.v3.intervention_type === "crossing" && props.v3.crossing}
+    <FormCrossing bind:props={props.v3.crossing}/>
     {:else}
-    <Radio
-      label="Intended uses"
-      choices={[
-        ["cycling", "Only cycling"],
-        ["walking_wheeling", "Only walking and wheeling"],
-        ["all", "Cyclists, walking, and wheeling"],
-      ]}
-      bind:value={props.v3.intended_uses}
-    />
-
-    <Radio
-      label="What infrastructure are you mapping?"
-      choices={[
-        ["new", "Something completely new"],
-        ["improvement", "Improvements to something already existing"],
-        ["existing", "Something existing with no changes planned"],
-      ]}
-      inlineSmall
-      bind:value={props.v3.work_type}
-    />
+    <p>nothing here yet</p>
   {/if}
 {/if}
 

@@ -4,7 +4,7 @@ import type {
   Schemes as GenericSchemes,
 } from "scheme-sketcher-lib/draw/types";
 
-export type Schema = "v1" | "pipeline" | "v2";
+export type Schema = "v1" | "pipeline" | "v2" | "v3";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
@@ -33,19 +33,19 @@ export type Feature = FeatureWithID<InterventionProps>;
 export interface PipelineScheme extends PipelineBudget, PipelineTiming {
   // TODO "intersection" is unclear
   scheme_type:
-    | "cycling route"
-    | "walking route"
-    | "shared-use route"
-    | "cycling and walking route"
-    | "area-based scheme"
-    | "intersection"
-    | "";
+  | "cycling route"
+  | "walking route"
+  | "shared-use route"
+  | "cycling and walking route"
+  | "area-based scheme"
+  | "intersection"
+  | "";
   atf4_lead_type: PipelineType | "";
   scheme_description: string;
 }
 
 // Empty as a marker for detecting v2 and for future possible additions
-export interface V2Scheme {}
+export interface V2Scheme { }
 
 export interface PipelineBudget {
   // GBP
@@ -58,12 +58,12 @@ export interface PipelineBudget {
 export interface PipelineTiming {
   // TODO Check with DB schema
   status:
-    | "aspiration"
-    | "planned"
-    | "in development"
-    | "in construction"
-    | "completed"
-    | "";
+  | "aspiration"
+  | "planned"
+  | "in development"
+  | "in construction"
+  | "completed"
+  | "";
   timescale: "short" | "medium" | "long" | "";
   timescale_year?: number;
   year_published?: number;
@@ -89,9 +89,9 @@ export interface BrowseSchemeData {
   // If this scheme was imported from local storage, track the original filename
   local_filename?: string;
   sketch_source?:
-    | "ATF assessment"
-    | "LCWIP mapping"
-    | "Final inspection sketches";
+  | "ATF assessment"
+  | "LCWIP mapping"
+  | "Final inspection sketches";
 }
 
 export type PipelineType =
@@ -136,26 +136,37 @@ export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
 
 export interface V2Intervention {
   intervention_type:
-    | "area"
-    | "route"
-    | "crossing"
-    | "modal filter"
-    | "junction treatment"
-    | "other"
-    | "";
+  | "area"
+  | "route"
+  | "crossing"
+  | "modal filter"
+  | "junction treatment"
+  | "other"
+  | "";
   intended_uses: "cycling" | "walking_wheeling" | "all" | "";
   work_type: "new" | "improvement" | "existing" | "";
 }
 
 export interface V3Intervention {
   intervention_type:
-    | "area"
-    | "route"
-    | "crossing"
-    | "modal filter"
-    | "junction treatment"
-    | "other"
-    | "";
-  intended_uses: "cycling" | "walking_wheeling" | "all" | "";
-  work_type: "new" | "improvement" | "existing" | "";
+  | "area"
+  | "route"
+  | "crossing"
+  | "modal filter"
+  | "junction treatment"
+  | "other"
+  | "";
+  crossing?: Crossing;
+}
+
+export interface Crossing {
+  type?: "marked_priority" | "parallel_zebra" | "ped-x" | "pegasus" | "pelican" | "puffin" | "sparrow" | "toucan" | "uncontrolled" | "zebra" | "";
+  location?: "at-junction" | "at-side-road" | "stand-alone" | "";
+  signalised?: "true" | "false" | "";
+  stage?: "early" | "detailed-design" | "";
+  detailed_design?: CrossingDetailedDesign;
+}
+
+export interface CrossingDetailedDesign {
+  pedestrian_priority?: "true" | "false" | "";
 }
