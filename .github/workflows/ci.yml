@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+env:
+  VITE_MAPTILER_API_KEY: '${{ secrets.MAPTILER_API_KEY }}'
+  IMAGE_PROJECT: dft-rlg-atip-dev
+  IMAGE_LOCATION: europe-west1
+  IMAGE_REPOSITORY_ID: docker
+  IMAGE_NAME: plan
+
+jobs:
+  build:
+    timeout-minutes: 60
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v6
+
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 22.x
+        cache: 'npm'
+
+    - name: Install wasm-pack
+      uses: jetli/wasm-pack-action@v0.4.0
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup GOV.UK
+      run: npm run setup-govuk
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+
+    - name: Run type-checker
+      run: npm run check
+
+    - name: Run Playwright tests
+      run: npm test
+
+    - name: Upload test results
+      run: npx github-actions-ctrf ctrf/ctrf-report.json
+      if: always()
+
+    - name: Upload test results for historical report
+      uses: actions/upload-artifact@v4
+      with:
+        name: ctrf-report
+        path: ctrf/ctrf-report.json
+      if: always()
+
+    - name: Build svelte app
+      run: npm run build
+
+    - id: auth
+      name: Authenticate with Google Cloud
+      uses: google-github-actions/auth@v3
+      with:
+        token_format: access_token
+        credentials_json: '${{ secrets.GCP_CREDENTIALS_PUSH }}'
+
+    - name: Login to Docker repository
+      uses: docker/login-action@v4
+      with:
+        registry: ${{ env.IMAGE_LOCATION }}-docker.pkg.dev
+        username: oauth2accesstoken
+        password: ${{ steps.auth.outputs.access_token }}
+
+    - id: meta
+      name: Extract metadata
+      uses: docker/metadata-action@v6
+      with:
+        images: ${{ env.IMAGE_LOCATION }}-docker.pkg.dev/${{ env.IMAGE_PROJECT }}/${{ env.IMAGE_REPOSITORY_ID }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=semver,pattern={{version}}
+          type=ref,event=branch,enable={{is_not_default_branch}}
+          type=ref,event=pr,enable={{is_not_default_branch}}
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push image
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        push: true
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: Dev
+      tag: ${{ needs.build.outputs.version }}
+    # only run deploy for CI runs on main
+    if: github.event_name != 'pull_request'
+    secrets:
+      GCP_CREDENTIALS_DEPLOY: ${{ secrets.GCP_CREDENTIALS_DEPLOY }}
