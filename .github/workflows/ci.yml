@@ -17,7 +17,7 @@ env:
   IMAGE_NAME: plan
 
 jobs:
-  check:
+  build:
     timeout-minutes: 60
     runs-on: ubuntu-22.04
     steps:
@@ -91,3 +91,14 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         push: true
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: Dev
+      tag: ${{ needs.build.outputs.version }}
+    # only run deploy for CI runs on main
+    if: github.event_name != 'pull_request'
+    secrets:
+      GCP_CREDENTIALS_DEPLOY: ${{ secrets.GCP_CREDENTIALS_DEPLOY }}
