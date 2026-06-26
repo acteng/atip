@@ -13,3 +13,4 @@ To provision the cloud infrastructure:
 1. Provision the [Terraform backend](tf-backend/README.md)
 2. Provision the [Docker repository](docker-repository/README.md)
 3. Provision the [storage bucket](storage-bucket/README.md)
+4. Provision the [service](service/README.md)
