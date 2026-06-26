@@ -47,6 +47,19 @@ export ENVIRONMENT=dev
    ```bash
    terraform apply
    ```
+## Configuring GitHub Actions
+
+For the Dev environment only, configure the [CI workflow](../../.github/workflows/ci.yml) with credentials to deploy
+images to the service:
+
+1. Obtain the Cloud Run service account private key:
+
+   ```bash
+   terraform output -raw github_action_deploy_private_key
+   ```
+   
+1. [Set the GitHub Actions environment secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-an-environment) `GCP_CREDENTIALS_DEPLOY` to the private key
+
 
 ## Destroying
 

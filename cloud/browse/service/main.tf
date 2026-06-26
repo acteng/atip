@@ -57,3 +57,10 @@ module "application" {
     google_project_service.run,
   ]
 }
+
+module "github_action_deploy" {
+  source                       = "./github-action-deploy"
+  project                      = local.project
+  docker_repository_project    = data.terraform_remote_state.docker_repository.outputs.project
+  cloud_run_service_account_id = module.application.service_account_id
+}
