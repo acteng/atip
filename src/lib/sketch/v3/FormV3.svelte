@@ -13,20 +13,21 @@
   import type { InterventionProps, Schemes } from "types";
   import { v4 as uuidv4 } from "uuid";
   import { schemeName } from "../config";
-  import FormCrossing from "./FormCrossing.svelte";
+  import { infrastructureFormInformation } from "./data";
+  import InfrastructureTypeSubform from "./InfrastructureTypeSubform.svelte";
 
   export let gjSchemes: Writable<Schemes>;
   export let props: FeatureProps<InterventionProps>;
 
   props.v3 ||= {
     intervention_type: "",
+    properties: {
+      intervention_subtype: "",
+      context: "",
+      measurements: [],
+      features: [],
+    },
   };
-
-  $: {
-    if (props.v3?.intervention_type === "crossing") {
-      props.v3.crossing = props.v3.crossing || {};
-    }
-  }
 
   // Sets the intervention name to "From {road1 and road2} to {road3 and
   // road4}". Only meant to be useful for routes currently.
@@ -39,6 +40,23 @@
   }
 
   let nameId = uuidv4();
+
+  function formatForDisplay(original: string): string {
+    const substrings: string[] = original.split("_");
+    const capitalisedSubsstrings: string[] = [];
+    substrings.forEach((uncapitalised) => {
+      const capitalised: string =
+        uncapitalised.slice(0, 1).toUpperCase() + uncapitalised.slice(1);
+      capitalisedSubsstrings.push(capitalised);
+    });
+    return capitalisedSubsstrings.join(" ");
+  }
+
+  const types: [string, string][] = Object.keys(
+    infrastructureFormInformation,
+  ).map((key) => {
+    return [key, formatForDisplay(key)];
+  });
 </script>
 
 <FormElement label="Name" id={nameId}>
@@ -61,23 +79,9 @@
 />
 
 {#if props.v3}
-  <Radio
-    label="Type"
-    choices={[
-      ["area", "Area"],
-      ["route", "Route"],
-      ["crossing", "Crossing"],
-      ["modal filter", "Modal Filter"],
-      ["junction treatment", "Junction Treatment"],
-      ["other", "Other"],
-    ]}
-    bind:value={props.v3.intervention_type}
-  />
-
-  {#if props.v3.intervention_type === "crossing" && props.v3.crossing}
-    <FormCrossing bind:props={props.v3.crossing}/>
-    {:else}
-    <p>nothing here yet</p>
+  <Radio label="Type" choices={types} bind:value={props.v3.intervention_type} />
+  {#if props.v3.intervention_type}
+    <InfrastructureTypeSubform bind:intervention={props.v3} />
   {/if}
 {/if}
 

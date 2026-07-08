@@ -1,0 +1,35 @@
+{
+    "types": ["signalised", "zebra", "ped-x", "etc."],
+    "contexts": ["at-side-road", "no-context", "etc."],
+    "signalised": {
+        "at-side-road": {
+            "questions": [
+                {
+                    "key": "Pedestrians have priority over traffic",
+                    "options": ["yes", "no"],
+                    "default": "no",
+                    "enabled": true,
+                }
+            , "etc."]
+        }
+    },
+    "zebra": {
+        "at-side-road": {
+            "questions": [
+                {
+                    "key": "Pedestrians have priority over traffic",
+                    "options": ["yes", "no"],
+                    "default": "yes",
+                    "enabled": false,
+                }
+            , 
+                {
+                    "key": "Is signalised",
+                    "options": ["yes", "no"],
+                    "default": "no",
+                    "enabled": false,
+                }
+                ,"etc."]
+        }
+    }
+}
