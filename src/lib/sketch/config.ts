@@ -328,10 +328,9 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
   }
 
   if (schema == "v3" && copy.v3) {
-    for (let key of ["intervention_type", "crossing"]) {
+    for (let key of ["intervention_type", "properties"]) {
       delete copy.v3[key];
     }
-    console.log(Object.entries(copy.v3))
     if (Object.entries(copy.v3).length == 0) {
       delete copy.v3;
     }

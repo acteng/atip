@@ -1,40 +1,33 @@
 <script lang="ts">
   import { Radio } from "govuk-svelte";
-  import type { V3Intervention } from "types";
+  import type {
+    InfrastructureFeature,
+    Measurement,
+    V3Intervention,
+  } from "types";
   import { infrastructureFormInformation } from "./data";
+  import FeatureSubform from "./FeatureSubform.svelte";
+  import MeasureSubform from "./MeasureSubform.svelte";
 
   export let intervention: V3Intervention;
   const intervention_type_options =
     infrastructureFormInformation[intervention.intervention_type].types;
 
-  $: {
-    pruneAndAddFeatures(
-      intervention.properties.intervention_subtype,
-      intervention.properties.context,
+  function getSubtypeObject(subtype: string): Object[] {
+    const filteredTypeOptions = intervention_type_options.filter(
+      (type_options) => {
+        return type_options.name === subtype;
+      },
     );
-    pruneAndAddMeasurements(
-      intervention.properties.intervention_subtype,
-      intervention.properties.context,
-    );
-  }
 
-  function pruneAndAddFeatures(subtype: string, context: string) {}
-
-  function pruneAndAddMeasurements(subtype: string, context: string) {}
-
-  function getSubtypeContexts(subtype: string): string[]{
-    const filteredTypeOptions = intervention_type_options.filter((type_options) => {return type_options.name === subtype});
-    console.log(intervention_type_options);
-    if(filteredTypeOptions.Length < 1) {
-        return []
+    if (filteredTypeOptions.Length < 1) {
+      return [];
     }
 
-    return filteredTypeOptions[0].possible_contexts.map((possible_context) => {
-        return possible_context.context;
-    });
+    return filteredTypeOptions[0];
   }
 
-  function formatForDisplay(original: string): string {
+  function formatForRadio(original: string): [string, string] {
     const substrings: string[] = original.split("_");
     const capitalisedSubsstrings: string[] = [];
     substrings.forEach((uncapitalised) => {
@@ -42,18 +35,112 @@
         uncapitalised.slice(0, 1).toUpperCase() + uncapitalised.slice(1);
       capitalisedSubsstrings.push(capitalised);
     });
-    return capitalisedSubsstrings.join(" ");
+    return [original, capitalisedSubsstrings.join(" ")];
   }
 
   const subtypes: [string, string][] = intervention_type_options.map(
     (type_options) => {
-      return [type_options.name, formatForDisplay(type_options.name)];
+      return formatForRadio(type_options.name);
     },
   );
-  $: contexts = getSubtypeContexts(intervention.properties.intervention_subtype).map((context) => {return [context, formatForDisplay(context)]});
-</script>
 
-{JSON.stringify(intervention)}
+  $: subtypeObject = getSubtypeObject(
+    intervention.properties.intervention_subtype,
+  );
+
+  function getContextObject(context: string) {
+    let subtypeObject = getSubtypeObject(
+      intervention.properties.intervention_subtype,
+    );
+    if (subtypeObject && subtypeObject.possible_contexts) {
+      const contextObjectsFiltered = subtypeObject.possible_contexts?.filter(
+        (contextObject) => {
+          return contextObject.context === context;
+        },
+      );
+      if (contextObjectsFiltered.length === 1) {
+        return contextObjectsFiltered[0];
+      }
+    }
+    return {};
+  }
+
+  $: contextObject = getContextObject(intervention.properties.context);
+
+  $: contexts = subtypeObject
+    ? subtypeObject.possible_contexts?.map((contextObject) => {
+        return formatForRadio(contextObject.context);
+      })
+    : [];
+
+  $: {
+    pruneAndAddFeatures(
+      intervention.properties.intervention_subtype,
+      intervention.properties.context,
+    );
+    pruneAndAddMeasurements(intervention.properties.intervention_subtype);
+  }
+
+  function pruneAndAddFeatures(subtype: string, context: string) {
+    const subtypeObject = getSubtypeObject(subtype);
+    const contextObject = getContextObject(context);
+
+    if (subtypeObject && contextObject && contextObject.possible_features) {
+      if (!intervention.properties.features) {
+        intervention.properties.features = [];
+      }
+      const newFeatures: InfrastructureFeature[] = [];
+
+      contextObject.possible_features.forEach((featureObject) => {
+        const indexInExistingList = intervention.properties.features.findIndex(
+          (infrastructureFeature) => {
+            return infrastructureFeature.name == featureObject.feature;
+          },
+        );
+        newFeatures.push(
+          indexInExistingList !== -1
+            ? intervention.properties.features[indexInExistingList]
+            : {
+                name: featureObject.feature,
+                value: "",
+              },
+        );
+      });
+
+      intervention.properties.features = newFeatures;
+    }
+  }
+
+  function pruneAndAddMeasurements(subtype: string) {
+    const subtypeObject = getSubtypeObject(subtype);
+
+    if (subtypeObject && subtypeObject.possible_measurements) {
+      if (!intervention.properties.features) {
+        intervention.properties.features = [];
+      }
+      const newMeasurements: Measurement[] = [];
+
+      subtypeObject.possible_measurements.forEach((featureMeasurement) => {
+        const indexInExistingList =
+          intervention.properties.measurements.findIndex(
+            (infrastructureMeasurement) => {
+              return infrastructureMeasurement.name == featureMeasurement.name;
+            },
+          );
+        newMeasurements.push(
+          indexInExistingList !== -1
+            ? intervention.properties.measurements[indexInExistingList]
+            : {
+                name: featureMeasurement.name,
+                unit: featureMeasurement.unit,
+              },
+        );
+      });
+
+      intervention.properties.measurements = newMeasurements;
+    }
+  }
+</script>
 
 <Radio
   label={"Intervention Subtype"}
@@ -65,8 +152,22 @@
   choices={contexts}
   bind:value={intervention.properties.context}
 />
-export let v3
-{#each intervention_type_options as type_options}
-  <p>{type_options.name}</p>
-  <p>{JSON.stringify(type_options.measurement)}</p>
-{/each}
+{#if subtypeObject.possible_measurements}
+  <h2>Measures</h2>
+  {#each subtypeObject.possible_measurements as measureObject, index}
+    <MeasureSubform
+      bind:interventionMeasure={intervention.properties.measurements[index]}
+    />
+  {/each}
+{/if}
+{#if contextObject.possible_features}
+  <h2>Features</h2>
+  {#each contextObject.possible_features as featureObject, index}
+    <FeatureSubform
+      featureOptions={featureObject.valid_options.map((option) => {
+        return formatForRadio(option.option);
+      })}
+      bind:interventionFeature={intervention.properties.features[index]}
+    />
+  {/each}
+{/if}

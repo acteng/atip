@@ -169,7 +169,7 @@ export interface V3InterventionProps {
 export interface Measurement {
   name: string;
   unit: string;
-  value: number;
+  value?: number;
 }
 
 export interface InfrastructureFeature {
