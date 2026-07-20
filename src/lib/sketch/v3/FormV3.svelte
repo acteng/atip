@@ -80,12 +80,11 @@
 
 {#if props.v3}
   <Radio label="Type" choices={types} bind:value={props.v3.intervention_type} />
+  <TextArea label="Description" bind:value={props.description} />
   {#if props.v3.intervention_type}
     <InfrastructureTypeSubform bind:intervention={props.v3} />
   {/if}
 {/if}
-
-<TextArea label="Description" bind:value={props.description} />
 
 {#if props.length_meters}
   <p>Length: {prettyPrintMeters(props.length_meters)}</p>

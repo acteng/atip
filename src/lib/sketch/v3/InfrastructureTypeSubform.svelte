@@ -1,7 +1,9 @@
 <script lang="ts">
   import { Radio } from "govuk-svelte";
   import type {
+    ContextDefinition,
     InfrastructureFeature,
+    InfrastructureSubtype,
     Measurement,
     V3Intervention,
   } from "types";
@@ -10,18 +12,22 @@
   import MeasureSubform from "./MeasureSubform.svelte";
 
   export let intervention: V3Intervention;
-  const intervention_type_options =
-    infrastructureFormInformation[intervention.intervention_type].types;
+  const intervention_type_options: InfrastructureSubtype[] =
+    intervention.intervention_type !== ""
+      ? infrastructureFormInformation[intervention.intervention_type].types
+      : [];
 
-  function getSubtypeObject(subtype: string): Object[] {
+  function getSubtypeObject(
+    subtype: string,
+  ): InfrastructureSubtype | undefined {
     const filteredTypeOptions = intervention_type_options.filter(
       (type_options) => {
         return type_options.name === subtype;
       },
     );
 
-    if (filteredTypeOptions.Length < 1) {
-      return [];
+    if (filteredTypeOptions.length < 1) {
+      return undefined;
     }
 
     return filteredTypeOptions[0];
@@ -48,7 +54,7 @@
     intervention.properties.intervention_subtype,
   );
 
-  function getContextObject(context: string) {
+  function getContextObject(context: string): ContextDefinition | undefined {
     let subtypeObject = getSubtypeObject(
       intervention.properties.intervention_subtype,
     );
@@ -62,7 +68,7 @@
         return contextObjectsFiltered[0];
       }
     }
-    return {};
+    return undefined;
   }
 
   $: contextObject = getContextObject(intervention.properties.context);
@@ -152,15 +158,15 @@
   choices={contexts}
   bind:value={intervention.properties.context}
 />
-{#if subtypeObject.possible_measurements}
+{#if subtypeObject && subtypeObject.possible_measurements}
   <h2>Measures</h2>
-  {#each subtypeObject.possible_measurements as measureObject, index}
+  {#each subtypeObject.possible_measurements as _measureObject, index}
     <MeasureSubform
       bind:interventionMeasure={intervention.properties.measurements[index]}
     />
   {/each}
 {/if}
-{#if contextObject.possible_features}
+{#if contextObject && contextObject.possible_features}
   <h2>Features</h2>
   {#each contextObject.possible_features as featureObject, index}
     <FeatureSubform

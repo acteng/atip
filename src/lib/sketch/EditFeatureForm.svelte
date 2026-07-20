@@ -6,9 +6,9 @@
   import type { InterventionProps, OurSchemeData, Schemes } from "types";
   import FormV1 from "./FormV1.svelte";
   import FormV2 from "./FormV2.svelte";
-  import FormV3 from "./v3/FormV3.svelte";
   import PipelineForm from "./pipeline/PipelineForm.svelte";
   import UnexpectedProperties from "./UnexpectedProperties.svelte";
+  import FormV3 from "./v3/FormV3.svelte";
 
   export let cfg: Config<InterventionProps, OurSchemeData>;
   export let gjSchemes: Writable<Schemes>;
