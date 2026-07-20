@@ -175,6 +175,8 @@ export function backfill(json: any): Schemes {
       }
     } else if (schema == "v2") {
       scheme.v2 = {};
+    } else if (schema === "v3") {
+      scheme.v3 = {};
     }
   }
 

@@ -132,7 +132,7 @@
           <li class="govuk-breadcrumbs__list-item">
             <a
               class="govuk-breadcrumbs__link"
-              href={`choose_area.html?scheme=${$schemaStore}`}
+              href={`choose_area.html?schema=${$schemaStore}`}
             >
               Change area
             </a>
