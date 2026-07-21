@@ -17,7 +17,7 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@playwright/test": "~1.60.0",
-    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "@sveltejs/vite-plugin-svelte": "^7.1.0",
     "@tsconfig/svelte": "^4.0.1",
     "@types/express": "^5.0.6",
     "@types/geojson": "^7946.0.14",
@@ -27,17 +27,17 @@
     "express": "^5.2.1",
     "playwright-ctrf-json-reporter": "^0.0.18",
     "prettier": "^3.2.5",
-    "prettier-plugin-svelte": "^3.1.2",
+    "prettier-plugin-svelte": "^4.1.1",
     "sass": "^1.70.0",
-    "svelte-check": "^3.6.4",
+    "svelte-check": "^4.7.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "vite": "^4.1.1",
+    "vite": "^8.0.0",
     "vite-plugin-wasm-pack": "0.1.11",
     "vite-tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
-    "@maptiler/geocoding-control": "^2.0.1",
+    "@maptiler/geocoding-control": "^3.0.0",
     "@turf/area": "^7.0.0",
     "@turf/bbox": "^7.0.0",
     "@turf/boolean-contains": "^7.0.0",
@@ -49,10 +49,10 @@
     "govuk-svelte": "github:acteng/govuk-svelte#svelte-5",
     "humanize-string": "^3.0.0",
     "js-cookie": "^3.0.5",
-    "maplibre-gl": "^4.7.1",
+    "maplibre-gl": "^5.0.0",
     "scheme-sketcher-lib": "github:acteng/scheme-sketcher-lib",
     "svelte": "^5.0.0",
-    "svelte-maplibre": "^0.9.7",
+    "svelte-maplibre": "^1.3.0",
     "uuid": "^9.0.1"
   }
 }
