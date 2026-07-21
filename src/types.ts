@@ -4,7 +4,7 @@ import type {
   Schemes as GenericSchemes,
 } from "scheme-sketcher-lib/draw/types";
 
-export type Schema = "v1" | "pipeline" | "v2";
+export type Schema = "v1" | "pipeline" | "v2" | "v3";
 
 // This describes the full structure of the GeoJSON we manage. We constrain the
 // default GeoJSON types and specify feature properties.
@@ -122,6 +122,7 @@ export interface InterventionProps {
   // The schema is v1, unless a field here is present
   pipeline?: PipelineIntervention;
   v2?: V2Intervention;
+  v3?: V3Intervention;
 }
 
 export interface PipelineIntervention extends PipelineBudget, PipelineTiming {
@@ -144,4 +145,68 @@ export interface V2Intervention {
     | "";
   intended_uses: "cycling" | "walking_wheeling" | "all" | "";
   work_type: "new" | "improvement" | "existing" | "";
+}
+
+export interface V3Intervention {
+  intervention_type: // | "area"
+  // | "route"
+  | "crossing"
+    // | "modal filter"
+    // | "junction treatment"
+    // | "other"
+    | "";
+  properties: V3InterventionProps;
+}
+
+export interface V3InterventionProps {
+  intervention_subtype: string;
+  context: string;
+  measurements: Measurement[];
+  features: InfrastructureFeature[];
+}
+
+export interface Measurement {
+  name: string;
+  unit: string;
+  value?: number;
+}
+
+export interface InfrastructureFeature {
+  name: string;
+  value: string;
+}
+
+export interface InfrastructureTaxonomyObject {
+  crossing: InfrastructureGroup;
+}
+
+export interface InfrastructureGroup {
+  group: string;
+  types: InfrastructureSubtype[];
+}
+
+export interface InfrastructureSubtype {
+  name: string;
+  possible_measurements: MeasurementDefinition[];
+  possible_contexts: ContextDefinition[];
+}
+
+export interface MeasurementDefinition {
+  name: string;
+  unit: string;
+  type: "output" | "contextual";
+}
+
+export interface ContextDefinition {
+  context: string;
+  possible_features: FeatureDefinition[];
+}
+
+export interface FeatureDefinition {
+  feature: string;
+  valid_options: FeatureOption[];
+}
+
+export interface FeatureOption {
+  option: string;
 }

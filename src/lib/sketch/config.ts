@@ -175,6 +175,8 @@ export function backfill(json: any): Schemes {
       }
     } else if (schema == "v2") {
       scheme.v2 = {};
+    } else if (schema === "v3") {
+      scheme.v3 = {};
     }
   }
 
@@ -324,6 +326,15 @@ export function getUnexpectedProperties(props: { [name: string]: any }): {
     }
     if (Object.entries(copy.v2).length == 0) {
       delete copy.v2;
+    }
+  }
+
+  if (schema == "v3" && copy.v3) {
+    for (let key of ["intervention_type", "properties"]) {
+      delete copy.v3[key];
+    }
+    if (Object.entries(copy.v3).length == 0) {
+      delete copy.v3;
     }
   }
 

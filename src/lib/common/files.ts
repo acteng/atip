@@ -116,7 +116,7 @@ export function serializeSchemes(authority: string, gj: Schemes): Schemes {
     delete feature.properties?.hide_while_editing;
   }
   copy.authority = authority;
-  copy.origin = "atip-v2";
+  copy.origin = "PYATS-v3";
   copy.sketch_exported = new Date().toISOString();
   return copy;
 }
@@ -139,6 +139,9 @@ export function detectSchema(gj: any): Schema {
     }
     if (scheme && Object.hasOwn(scheme, "v2")) {
       return "v2";
+    }
+    if (scheme && Object.hasOwn(scheme, "v3")) {
+      return "v3";
     }
   } catch (err) {}
 
