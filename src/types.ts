@@ -148,12 +148,13 @@ export interface V2Intervention {
 }
 
 export interface V3Intervention {
-  intervention_type: // | "area"
-  // | "route"
-  | "crossing"
-    // | "modal filter"
-    // | "junction treatment"
-    // | "other"
+  intervention_type:
+    | "amenity"
+    | "bus_stop_treatment"
+    | "crossing"
+    | "junction_treatment"
+    | "link_segment"
+    | "place-making"
     | "";
   properties: V3InterventionProps;
 }
@@ -177,7 +178,13 @@ export interface InfrastructureFeature {
 }
 
 export interface InfrastructureTaxonomyObject {
+  amenity: InfrastructureGroup;
+  bus_stop_treatment: InfrastructureGroup;
   crossing: InfrastructureGroup;
+  junction_treatment: InfrastructureGroup;
+  link_segment: InfrastructureGroup;
+  modal_filter: InfrastructureGroup;
+  "place-making": InfrastructureGroup;
 }
 
 export interface InfrastructureGroup {
