@@ -24,7 +24,7 @@ locals {
 data "terraform_remote_state" "docker_repository" {
   backend = "gcs"
   config = {
-    bucket = "${var.project_prefix}-dev-tf-backend"
+    bucket = "dft-rlg-schemes-gis-dev-tf-backend"
     prefix = "docker-repository"
   }
 }
