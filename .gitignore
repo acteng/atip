@@ -24,3 +24,4 @@ test-results
 # terraform
 .terraform/
 /cloud/browse/tf-backend/terraform.tfstate*
+/cloud/plan/tf-backend/terraform.tfstate*
