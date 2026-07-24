@@ -11,7 +11,7 @@ permissions:
 
 env:
   VITE_MAPTILER_API_KEY: '${{ secrets.MAPTILER_API_KEY }}'
-  IMAGE_PROJECT: dft-rlg-atip-dev
+  IMAGE_PROJECT: dft-rlg-schemes-gis-dev
   IMAGE_LOCATION: europe-west1
   IMAGE_REPOSITORY_ID: docker
   IMAGE_NAME: plan

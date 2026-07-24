@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "dft-rlg-atip-dev-tf-backend"
+    bucket = "dft-rlg-schemes-gis-dev-tf-backend"
     prefix = "docker-repository"
   }
 }

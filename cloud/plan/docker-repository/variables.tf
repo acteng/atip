@@ -1,7 +1,7 @@
 variable "project" {
   description = "GCP project"
   type        = string
-  default     = "dft-rlg-atip-dev"
+  default     = "dft-rlg-schemes-gis-dev"
 }
 
 variable "location" {
