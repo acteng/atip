@@ -63,6 +63,7 @@
     }
 
     filesPerAuthority = countFilesPerAuthority();
+    // I need to do somethign here soateaetdgasd
   });
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
