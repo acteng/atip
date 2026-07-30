@@ -183,7 +183,7 @@
     bind:value={intervention.properties.context}
   />
 {/if}
-{#if subtypeObject && subtypeObject.possible_measurements}
+{#if subtypeObject && subtypeObject.possible_measurements && subtypeObject.possible_measurements.length > 0}
   <h2>Measures</h2>
   {#each subtypeObject.possible_measurements as _measureObject, index}
     <MeasureSubform
@@ -191,7 +191,7 @@
     />
   {/each}
 {/if}
-{#if contextObject && contextObject.possible_features}
+{#if contextObject && contextObject.possible_features && contextObject.possible_features.length > 0}
   <h2>Features</h2>
   {#each contextObject.possible_features as featureObject, index}
     <FeatureSubform
