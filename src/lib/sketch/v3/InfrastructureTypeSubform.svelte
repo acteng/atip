@@ -12,10 +12,24 @@
   import MeasureSubform from "./MeasureSubform.svelte";
 
   export let intervention: V3Intervention;
-  const intervention_type_options: InfrastructureSubtype[] =
-    intervention.intervention_type !== ""
-      ? infrastructureFormInformation[intervention.intervention_type].types
+  $: intervention_type_options = getInterventionTypeOptions(
+    intervention.intervention_type,
+  );
+
+  function getInterventionTypeOptions(
+    interventionType:
+      | "amenity"
+      | "bus_stop_treatment"
+      | "crossing"
+      | "junction_treatment"
+      | "link_segment"
+      | "place-making"
+      | "",
+  ): InfrastructureSubtype[] {
+    return interventionType !== ""
+      ? infrastructureFormInformation[interventionType].types
       : [];
+  }
 
   function getSubtypeObject(
     subtype: string,
@@ -44,11 +58,18 @@
     return [original, capitalisedSubsstrings.join(" ")];
   }
 
-  const subtypes: [string, string][] = intervention_type_options.map(
-    (type_options) => {
-      return formatForRadio(type_options.name);
-    },
-  );
+  $: subtypes = getSubtypes(intervention_type_options);
+
+  function getSubtypes(
+    interventionTypeOptions: InfrastructureSubtype[],
+  ): [string, string][] {
+    if (!interventionTypeOptions) {
+      return [];
+    }
+    return interventionTypeOptions.map((type_option) => {
+      return formatForRadio(type_option.name);
+    });
+  }
 
   $: subtypeObject = getSubtypeObject(
     intervention.properties.intervention_subtype,
@@ -148,17 +169,21 @@
   }
 </script>
 
-<Radio
-  label={"Intervention Subtype"}
-  choices={subtypes}
-  bind:value={intervention.properties.intervention_subtype}
-/>
-<Radio
-  label={"Context"}
-  choices={contexts}
-  bind:value={intervention.properties.context}
-/>
-{#if subtypeObject && subtypeObject.possible_measurements}
+{#if subtypes.length > 0}
+  <Radio
+    label={"Intervention Subtype"}
+    choices={subtypes}
+    bind:value={intervention.properties.intervention_subtype}
+  />
+{/if}
+{#if contexts.length > 0}
+  <Radio
+    label={"Context"}
+    choices={contexts}
+    bind:value={intervention.properties.context}
+  />
+{/if}
+{#if subtypeObject && subtypeObject.possible_measurements && subtypeObject.possible_measurements.length > 0}
   <h2>Measures</h2>
   {#each subtypeObject.possible_measurements as _measureObject, index}
     <MeasureSubform
@@ -166,7 +191,7 @@
     />
   {/each}
 {/if}
-{#if contextObject && contextObject.possible_features}
+{#if contextObject && contextObject.possible_features && contextObject.possible_features.length > 0}
   <h2>Features</h2>
   {#each contextObject.possible_features as featureObject, index}
     <FeatureSubform
