@@ -52,8 +52,7 @@
 <LayerControl {name} {title} bind:show={$state.show}>
   <span slot="help">
     <p>
-      This shows different places of education according to OpenStreetMap (as of
-      20 October 2024).
+      This shows different places of education according to OpenStreetMap (as of 23 July 2026).
     </p>
     <OsmLicense />
   </span>
