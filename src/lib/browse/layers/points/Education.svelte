@@ -53,7 +53,7 @@
   <span slot="help">
     <p>
       This shows different places of education according to OpenStreetMap (as of
-      20 October 2024).
+      23 July 2026).
     </p>
     <OsmLicense />
   </span>
