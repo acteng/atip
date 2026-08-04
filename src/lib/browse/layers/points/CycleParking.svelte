@@ -21,8 +21,8 @@
         href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking"
       >
         OpenStreetMap
-      </ExternalLink> (as of 23 July 2026). The type of parking, public/private
-      access, and whether it's covered are not shown.
+      </ExternalLink> (as of 23 July 2026). The type of parking, public/private access,
+      and whether it's covered are not shown.
     </p>
     <p>
       Icon from <ExternalLink

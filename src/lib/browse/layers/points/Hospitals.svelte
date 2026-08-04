@@ -30,8 +30,8 @@
         href="https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital"
       >
         hospital
-      </ExternalLink> data from OpenStreetMap (as of 23 July 2026). It doesn't
-      include outpatient clinics or individual doctor's offices.
+      </ExternalLink> data from OpenStreetMap (as of 23 July 2026). It doesn't include
+      outpatient clinics or individual doctor's offices.
     </p>
     <OsmLicense />
   </span>
