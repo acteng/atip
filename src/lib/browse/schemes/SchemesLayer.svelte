@@ -39,7 +39,10 @@
     filterLcwipSchemeText,
     filterLocalInterventionText,
     filterLocalSchemeText,
+    filterISTInterventionText,
+    filterISTSchemeText,
     finalInspectionsSchemes,
+    istSchemes,
     lcwipSchemes,
     localSchemes,
   } from "./stores";
@@ -65,6 +68,13 @@
   $: [finalInspectionsColor, finalInspectionsLegend] =
     pickStyle("interventionType");
 
+  let istName = "ist_schemes";
+  let istTitle = "IST schemes";
+  let istShow = showHideLayer(istName);
+  let istStyle = "interventionType";
+  $: [istColor, istLegend] =
+    pickStyle("interventionType");
+
   let localName = "local_schemes";
   let localTitle = "Your schemes";
   let localShow = showHideLayer(localName);
@@ -81,6 +91,7 @@
           atfSchemes,
           lcwipSchemes,
           finalInspectionsSchemes,
+          istSchemes,
         );
       }
       errorMessage = "";
@@ -177,6 +188,42 @@
             bind:value={atfStyle}
           />
           <Legend rows={atfLegend} />
+        </div>
+      </LayerControl>
+    {/if}
+
+    {#if Object.entries($finalInspectionsSchemes.schemes).length > 0}
+      <LayerControl
+        name={finalInspectionsName}
+        title={finalInspectionsTitle}
+        bind:show={$finalInspectionsShow}
+      >
+        <span slot="help">
+          <p>
+            <WarningIcon text="Scheme data caveats" />Please note there are data
+            quality caveats for all scheme data:
+          </p>
+          <ul>
+            {#each $finalInspectionsSchemes.notes ?? [] as note}
+              <li><p>{note}</p></li>
+            {/each}
+          </ul>
+        </span>
+
+        <div slot="controls" style="border: 1px solid black; padding: 8px;">
+          <Filters
+            source="LCWIP"
+            bind:schemesGj={$finalInspectionsSchemes}
+            bind:filterSchemeText={$filterFinalInspectionsSchemeText}
+            bind:filterInterventionText={$filterFinalInspectionsInterventionText}
+          />
+
+          <Select
+            label="Colour interventions"
+            choices={[["interventionType", "By intervention type"]]}
+            bind:value={finalInspectionsStyle}
+          />
+          <Legend rows={finalInspectionsLegend} />
         </div>
       </LayerControl>
     {/if}
