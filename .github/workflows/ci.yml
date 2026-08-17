@@ -102,11 +102,22 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         push: true
 
-  deploy:
+  deploy_plan:
     needs: build
     uses: ./.github/workflows/deploy.yml
     with:
       environment: Dev
+      tag: ${{ needs.build.outputs.version }}
+    # only run deploy for CI runs on main
+    if: github.event_name != 'pull_request'
+    secrets:
+      GCP_CREDENTIALS_DEPLOY: ${{ secrets.GCP_CREDENTIALS_DEPLOY }}
+
+  deploy_browse:
+    needs: build
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: Dev - browse
       tag: ${{ needs.build.outputs.version }}
     # only run deploy for CI runs on main
     if: github.event_name != 'pull_request'
