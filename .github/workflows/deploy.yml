@@ -14,10 +14,6 @@ on:
         type: string
         required: true
 
-    secrets:
-      GCP_CREDENTIALS_DEPLOY:
-        required: true
-
   workflow_dispatch:
     inputs:
       environment:
