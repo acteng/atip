@@ -17,8 +17,6 @@
     "isolatedModules": true,
     "types": ["node", "vite/client"],
     "strict": true,
-    /* Necessary for Playwright tests */
-    "allowImportingTsExtensions": true,
     "noUnusedLocals": true,
     "baseUrl": "./src"
   },
