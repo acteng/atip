@@ -1,11 +1,11 @@
 import path from "path";
-import express from "express";
+import express, {type Express, type Request, type Response, type NextFunction} from "express";
 
-let app = express();
+let app: Express = express();
 
-app.use(async (req, resp, next) => {
+app.use(async (req: Request, resp: Response, next: NextFunction) => {
   resp.setHeader("Access-Control-Allow-Origin", "*");
-  next();
+  next()
 });
 
 app.use(
@@ -13,11 +13,11 @@ app.use(
   express.static(path.join(import.meta.dirname, "route-snappers")),
 );
 
-app.get("/", async (req, resp, next) => {
+app.get("/", async (req: Request, resp: Response) => {
   resp.send("hello");
 });
 
-let port = process.env.PORT || 8001;
+let port: string = process.env.PORT || "8001";
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "fmt": "npx prettier --write *.html tests/* src/* backend/*.js",
     "test": "npx playwright test",
-    "test-server": "node tests/test-server/server.js",
+    "test-server": "node tests/test-server/server.ts",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "setup-govuk": "sass src/style/main.sass src/style/main.css; rm -rf public/assets; mkdir -p public/assets; cp -R node_modules/govuk-frontend/dist/govuk/assets/ public/",
     "generate-random-schemes": "npx ts-node --project tsconfig_tsnode.json --esm src/scripts/random_schemes.ts"
