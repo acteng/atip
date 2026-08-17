@@ -39,8 +39,6 @@ env:
   IMAGE_LOCATION: europe-west1
   IMAGE_REPOSITORY_ID: docker
   IMAGE_NAME: plan
-  SERVICE_LOCATION: europe-west1
-  SERVICE_NAME: browse-page
 
 jobs:
 
@@ -56,6 +54,6 @@ jobs:
       - name: Deploy image
         uses: google-github-actions/deploy-cloudrun@v3
         with:
-          service: ${{ env.SERVICE_NAME }}
+          service: ${{ vars.SERVICE_NAME }}
           image: ${{ env.IMAGE_LOCATION }}-docker.pkg.dev/${{ env.IMAGE_PROJECT }}/${{ env.IMAGE_REPOSITORY_ID }}/${{ env.IMAGE_NAME }}:${{ inputs.tag }}
-          region: ${{ env.SERVICE_LOCATION }}
+          region: ${{ vars.SERVICE_LOCATION }}

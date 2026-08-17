@@ -49,8 +49,10 @@ export ENVIRONMENT=dev
    ```
 ## Configuring GitHub Actions
 
-For the Dev environment only, configure the [CI workflow](../../.github/workflows/ci.yml) with credentials to deploy
-images to the service:
+For deployments from GitHub actions you will need to create a GitHub environment e.g. `Dev` add the following:
+
+1. Add [GitHub Environment specific environment variables](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments#environment-variables)
+for [`SERVICE_NAME`](application/main.tf#L2) and [`SERVICE_LOCATION`](application/main.tf#L4).
 
 1. Obtain the Cloud Run service account private key:
 
