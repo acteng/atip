@@ -20,6 +20,8 @@ jobs:
   build:
     timeout-minutes: 60
     runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
     steps:
     - uses: actions/checkout@v6
 
