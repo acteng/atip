@@ -30,7 +30,14 @@ jobs:
           cache: 'npm'
 
       - name: Install wasm-pack
-        uses: jetli/wasm-pack-action@v0.4.0
+        run: |
+          FOLDER=wasm-pack-v0.15.0-x86_64-unknown-linux-musl
+          BINARY=wasm-pack
+          TARGET_FOLDER=~/.cargo/bin
+          curl -LO "https://github.com/wasm-bindgen/wasm-pack/releases/download/v0.15.0/${FOLDER}.tar.gz"
+          tar -xzf "${FOLDER}.tar.gz"
+          mkdir -p "${TARGET_FOLDER}"
+          mv "${FOLDER}/${BINARY}" "${TARGET_FOLDER}/${BINARY}"
 
       - name: Build all branches
         run: |
