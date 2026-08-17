@@ -1,11 +1,16 @@
 import path from "path";
-import express, {type Express, type Request, type Response, type NextFunction} from "express";
+import express, {
+  type Express,
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
 
 let app: Express = express();
 
 app.use(async (req: Request, resp: Response, next: NextFunction) => {
   resp.setHeader("Access-Control-Allow-Origin", "*");
-  next()
+  next();
 });
 
 app.use(
