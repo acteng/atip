@@ -18,6 +18,16 @@ locals {
       keep_idle = false
       domain    = "dev.plan.activetravelengland.gov.uk"
     }
+    test = {
+      use_iap   = false
+      keep_idle = false
+      domain    = "test.plan.activetravelengland.gov.uk"
+    }
+    prod = {
+      use_iap   = false
+      keep_idle = false
+      domain    = "plan.activetravelengland.gov.uk"
+    }
   }
 }
 
