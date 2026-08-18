@@ -16,6 +16,7 @@ locals {
     dev = {
       use_iap   = false
       keep_idle = false
+      domain    = "dev.plan.activetravelengland.gov.uk"
     }
   }
 }
@@ -63,4 +64,77 @@ module "github_action_deploy" {
   project                      = local.project
   docker_repository_project    = data.terraform_remote_state.docker_repository.outputs.project
   cloud_run_service_account_id = module.application.service_account_id
+}
+
+module "load_balancer" {
+  source             = "./load-balancer"
+  project            = local.project
+  region             = var.location
+  domain             = local.config[local.env].domain
+  security_policy_id = module.web_application_firewall.security_policy_id
+}
+
+import {
+  id = "projects/${local.project}/global/addresses/plan-${terraform.workspace}"
+  to = module.load_balancer.google_compute_global_address.main
+}
+
+import {
+  id = "projects/${local.project}/global/sslCertificates/plan"
+  to = module.load_balancer.google_compute_managed_ssl_certificate.main
+}
+
+import {
+  id = "projects/${local.project}/regions/${var.location}/networkEndpointGroups/plan"
+  to = module.load_balancer.google_compute_region_network_endpoint_group.main
+}
+
+import {
+  id = "projects/${local.project}/global/backendServices/plan"
+  to = module.load_balancer.google_compute_backend_service.main
+}
+
+import {
+  id = "projects/${local.project}/global/urlMaps/plan"
+  to = module.load_balancer.google_compute_url_map.main
+}
+
+import {
+  id = "projects/${local.project}/global/sslPolicies/plan"
+  to = module.load_balancer.google_compute_ssl_policy.main
+}
+
+import {
+  id = "projects/${local.project}/global/targetHttpsProxies/plan-https"
+  to = module.load_balancer.google_compute_target_https_proxy.https
+}
+
+import {
+  id = "projects/${local.project}/global/forwardingRules/plan-https"
+  to = module.load_balancer.google_compute_global_forwarding_rule.https
+}
+
+import {
+  id = "projects/${local.project}/global/urlMaps/plan-https-redirect"
+  to = module.load_balancer.google_compute_url_map.https_redirect
+}
+
+import {
+  id = "projects/${local.project}/global/targetHttpProxies/plan-http"
+  to = module.load_balancer.google_compute_target_http_proxy.http
+}
+
+import {
+  id = "projects/${local.project}/global/forwardingRules/plan-http"
+  to = module.load_balancer.google_compute_global_forwarding_rule.http
+}
+
+module "web_application_firewall" {
+  source  = "./web-application-firewall"
+  project = local.project
+}
+
+import {
+  id = "projects/${local.project}/global/securityPolicies/plan"
+  to = module.web_application_firewall.google_compute_security_policy.main
 }
