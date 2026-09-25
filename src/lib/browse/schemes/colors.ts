@@ -1,11 +1,12 @@
 export let atfFundingProgrammes = {
-  ATF2: "#66c2a5",
-  "ATF2 or ATF3": "#fc8d62",
-  ATF3: "#8da0cb",
-  ATF4: "#e78ac3",
-  ATF4E: "#a6d854",
-  ATF5: "#ffd92f",
-  CATF: "#e5c494",
+  ATF2: "#1B9E77",
+  "ATF2 or ATF3": "#D95F02",
+  ATF3: "#7570B3",
+  ATF4: "#E7298A",
+  ATF4E: "#66A61E",
+  ATF5: "#E6AB02",
+  CATF: "#A6761D",
+  PLACEHOLDER: "#666666",
 };
 
 export let currentMilestones = {

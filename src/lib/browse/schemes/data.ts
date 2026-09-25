@@ -17,6 +17,7 @@ export function setupSchemes(
   atfStore: Writable<Schemes>,
   lcwipStore: Writable<Schemes>,
   finalInspectionsStore: Writable<Schemes>,
+  istStore: Writable<Schemes>,
 ) {
   let atfGj: Schemes = {
     type: "FeatureCollection",
