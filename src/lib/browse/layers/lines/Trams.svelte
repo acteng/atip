@@ -30,8 +30,8 @@
   <span slot="help">
     <p>
       This shows all trams and light rail lines, according to OpenStreetMap (as
-      of 20 October 2024). When these are close to a scheme, interactions
-      between the modes must be designed carefully.
+      of 23 July 2026). When these are close to a scheme, interactions between
+      the modes must be designed carefully.
     </p>
     <OsmLicense />
   </span>
